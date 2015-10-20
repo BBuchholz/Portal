@@ -1,4 +1,5 @@
-﻿using System;
+﻿using NineWorldsDeep.Reflection;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -21,7 +22,8 @@ namespace NineWorldsDeep
     /// </summary>
     public partial class MainWindow : Window
     {
-        private string @namespace = "NineWorldsDeep";
+        private Reflector reflector =
+            new Reflector();
 
         public MainWindow()
         {
@@ -30,20 +32,17 @@ namespace NineWorldsDeep
 
         private void MenuItem_Click(object sender, RoutedEventArgs e)
         {
-
-            var q = from t in Assembly.GetExecutingAssembly().GetTypes()
-                    where t.IsClass && t.Namespace == @namespace && t.IsPublic && !t.IsSubclassOf(typeof(Application))
-                    select t;
-            q.ToList().ForEach(t => lvMain.Items.Add(t.Name));
+            DisplayTypeList(reflector.Reflection1());
         }
 
         private void MenuItem2_Click(object sender, RoutedEventArgs e)
         {
-            AppDomain.CurrentDomain.GetAssemblies()
-                                   .SelectMany(t => t.GetTypes())
-                                   .Where(t => t.IsClass && t.Namespace == @namespace)
-                                   .ToList()
-                                   .ForEach(t => lvMain.Items.Add(t.Name));
+            DisplayTypeList(reflector.Reflection2());
+        }
+
+        private void DisplayTypeList(IEnumerable<Type> ie)
+        {
+            lvMain.ItemsSource = ie;
         }
     }
 }
