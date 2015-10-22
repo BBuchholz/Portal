@@ -46,11 +46,22 @@ namespace NineWorldsDeep
         private void DemoDynamicMenus()
         {
             fmw.AddMenuItem("Dynamic Menu Item", Test_Click);
+            fmw.AddMenuItem("Prompt For Text File", Prompt_Click);
         }
 
         private void Test_Click(object sender, RoutedEventArgs e)
         {
             MessageBox.Show("Testing");
+        }
+
+        private void Prompt_Click(object sender, RoutedEventArgs e)
+        {
+            string selected = Prompt.ForTextFile("C:\\Users");
+            if(selected == null)
+            {
+                selected = "nothing selected";
+            }
+            MessageBox.Show(selected);
         }
     }
 
