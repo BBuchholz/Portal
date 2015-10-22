@@ -15,8 +15,8 @@
                           Click="MenuItem2_Click"/>
             </MenuItem>
             <MenuItem Header="Windows">
-                <MenuItem Header="ListViewDetail"
-                          Click="MenuItemListViewDetail_Click"/>
+                <MenuItem Header="FragmentMetaWindow"
+                          Click="MenuItemFragmentMetaWindow_Click"/>
             </MenuItem>
         </Menu>
         <Grid>

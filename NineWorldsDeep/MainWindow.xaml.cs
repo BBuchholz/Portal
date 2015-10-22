@@ -45,9 +45,13 @@ namespace NineWorldsDeep
             lvMain.ItemsSource = ie;
         }
 
-        private void MenuItemListViewDetail_Click(object sender, RoutedEventArgs e)
+        private void MenuItemFragmentMetaWindow_Click(object sender, RoutedEventArgs e)
         {
-            new FragmentMetaWindow().Show();
+            FragmentMetaWindow fmw =
+                new FragmentMetaWindow();
+            DemoController dc = new DemoController();
+            dc.Configure(fmw);
+            fmw.Show();
         }
     }
 }

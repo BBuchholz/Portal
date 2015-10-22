@@ -10,8 +10,6 @@
         <Menu DockPanel.Dock="Top">
             <MenuItem Header="Options"
                       x:Name="menuItemOptions">
-                <MenuItem Header="Demo"
-                          Click="MenuItemDemo_Click"/>
             </MenuItem>
         </Menu>
         <Grid>

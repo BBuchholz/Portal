@@ -52,7 +52,7 @@ namespace NineWorldsDeep
                 return _meta[DisplayKey];
             }
 
-            return "[display key not specified]";
+            return "[" + DisplayKey + " not specified]";
         }
     }
 }

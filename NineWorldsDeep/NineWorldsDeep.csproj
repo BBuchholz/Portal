@@ -55,10 +55,12 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="DemoController.cs" />
     <Compile Include="Fragment.cs" />
     <Compile Include="FragmentMetaWindow.xaml.cs">
       <DependentUpon>FragmentMetaWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Prompt.cs" />
     <Compile Include="Reflection\Reflector.cs" />
     <Page Include="FragmentMetaWindow.xaml">
       <SubType>Designer</SubType>

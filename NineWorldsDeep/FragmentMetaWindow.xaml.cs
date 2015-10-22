@@ -24,20 +24,6 @@ namespace NineWorldsDeep
             InitializeComponent();
         }
 
-        private void DemoFragments()
-        {
-            List<Fragment> lst = new List<Fragment>();
-
-            for (int i = 1; i < 10; i++)
-            {
-                Fragment f = new Fragment("frg" + i);
-                f.SetMeta("DemoKey", "demo value for frg" + i);
-                lst.Add(f);
-            }
-
-            SetItemsSource(lst);
-        }
-
         public void SetItemsSource(IEnumerable<Fragment> fragments)
         {
             lvItems.ItemsSource = fragments;
@@ -68,22 +54,6 @@ namespace NineWorldsDeep
             }
 
             return lst;
-        }
-
-        private void MenuItemDemo_Click(object sender, RoutedEventArgs e)
-        {
-            DemoFragments();
-            DemoDynamicMenus();
-        }
-
-        private void Test_Click(object sender, RoutedEventArgs e)
-        {
-            MessageBox.Show("Testing");
-        }
-
-        private void DemoDynamicMenus()
-        {
-            AddMenuItem("Dynamic Menu Item", Test_Click);
         }
 
         public void AddMenuItem(MenuItem mi)
