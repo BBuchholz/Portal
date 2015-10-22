@@ -24,7 +24,7 @@ namespace NineWorldsDeep
             InitializeComponent();
         }
 
-        private void LoadDemo()
+        private void DemoFragments()
         {
             List<Fragment> lst = new List<Fragment>();
 
@@ -41,11 +41,31 @@ namespace NineWorldsDeep
         public void SetItemsSource(IEnumerable<Fragment> fragments)
         {
             lvItems.ItemsSource = fragments;
+            lvDetail.ItemsSource = null;
         }
 
         private void MenuItemDemo_Click(object sender, RoutedEventArgs e)
         {
-            LoadDemo();
+            DemoFragments();
+            DemoDynamicMenus();
+        }
+
+        private void Test_Click(object sender, RoutedEventArgs e)
+        {
+            MessageBox.Show("Testing");
+        }
+
+        private void DemoDynamicMenus()
+        {
+            MenuItem mi = new MenuItem();
+            mi.Header = "Demo Dynamic Menu Item";
+            mi.Click += Test_Click;
+            AddMenuItem(mi);
+        }
+
+        public void AddMenuItem(MenuItem mi)
+        {
+            menuItemOptions.Items.Add(mi);
         }
 
         private void lvItems_SelectionChanged(object sender, SelectionChangedEventArgs e)
