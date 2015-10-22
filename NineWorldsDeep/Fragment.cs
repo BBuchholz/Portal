@@ -81,7 +81,8 @@ namespace NineWorldsDeep
 
         public override string ToString()
         {
-            if (_meta.ContainsKey(DisplayKey))
+            if (_meta.ContainsKey(DisplayKey) &&
+                _meta[DisplayKey] != null)
             {
                 return _meta[DisplayKey];
             }

@@ -42,7 +42,12 @@ namespace NineWorldsDeep
         {
             lvItems.ItemsSource = fragments;
             lvDetail.ItemsSource = null;
-            cmbDisplayKey.ItemsSource = GetMetaKeys(fragments);
+            RefreshMetaKeys();
+        }
+
+        public void RefreshMetaKeys()
+        {
+            cmbDisplayKey.ItemsSource = GetMetaKeys(GetFragments());
         }
 
         public void RefreshFragmentList()
