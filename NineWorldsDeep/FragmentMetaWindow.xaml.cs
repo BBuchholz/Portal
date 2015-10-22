@@ -22,6 +22,20 @@ namespace NineWorldsDeep
         public FragmentMetaWindow()
         {
             InitializeComponent();
+            AddMenuItem("Review Flagged Fragments", ReviewFlaggedFragments);
+        }
+
+        public IEnumerable<Fragment> GetFragments()
+        {
+            IEnumerable<Fragment> ie = 
+                (IEnumerable<Fragment>)lvItems.ItemsSource;
+
+            if(ie == null)
+            {
+                ie = new List<Fragment>();
+            }
+
+            return ie;
         }
 
         public void SetItemsSource(IEnumerable<Fragment> fragments)
@@ -33,7 +47,7 @@ namespace NineWorldsDeep
 
         public void RefreshFragmentList()
         {
-            IEnumerable<Fragment> frgs = (IEnumerable<Fragment>)lvItems.ItemsSource;
+            IEnumerable<Fragment> frgs = GetFragments();
             lvItems.ItemsSource = null;           
             lvItems.ItemsSource = frgs.OrderBy(s => s);
         }
@@ -88,6 +102,17 @@ namespace NineWorldsDeep
                     f.DisplayKey = selected;
                 }
                 RefreshFragmentList();
+            }
+        }
+
+        private void ReviewFlaggedFragments(object sender, RoutedEventArgs e)
+        {
+            foreach (Fragment f in GetFragments())
+            {
+                if (f.IsFlagged)
+                {
+                    MessageBox.Show(f.ToMultiLineString());
+                }
             }
         }
     }

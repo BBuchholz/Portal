@@ -9,6 +9,7 @@ namespace NineWorldsDeep
     public class Fragment : IComparable
     {
         private const string name_key = "Name";
+        private const string flag_verify_key = "FlagForVerification";
 
         private Dictionary<string, string> _meta =
             new Dictionary<string, string>();
@@ -32,11 +33,34 @@ namespace NineWorldsDeep
             get { return _meta.ToList(); }
         }
 
+        public string ToMultiLineString()
+        {
+            string output = "";
+            foreach(KeyValuePair<string, string> kv in Meta)
+            {
+                output += kv.Key + ": " + kv.Value + System.Environment.NewLine;
+            }
+            return output;
+        }
+
         public IEnumerable<string> MetaKeys
         {
             get
             {
                 return _meta.Keys;
+            }
+        }
+
+        public bool IsFlagged
+        {
+            get
+            {
+                string val = GetMeta(flag_verify_key);
+                return val != null && val.Equals("True");
+            }
+            set
+            {
+                SetMeta(flag_verify_key, value.ToString());
             }
         }
 
