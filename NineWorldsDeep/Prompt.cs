@@ -25,5 +25,18 @@ namespace NineWorldsDeep
 
             return null;
         }
+
+        public static string ForFolder(string defaultPath)
+        {
+            var dlg = new System.Windows.Forms.FolderBrowserDialog();
+            dlg.SelectedPath = defaultPath;
+            System.Windows.Forms.DialogResult result = dlg.ShowDialog();
+            if (result == System.Windows.Forms.DialogResult.OK)
+            {
+                return dlg.SelectedPath;
+            }
+
+            return null;
+        }
     }
 }
