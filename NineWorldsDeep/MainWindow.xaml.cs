@@ -44,5 +44,10 @@ namespace NineWorldsDeep
         {
             lvMain.ItemsSource = ie;
         }
+
+        private void MenuItemListViewDetail_Click(object sender, RoutedEventArgs e)
+        {
+            new FragmentMetaWindow().Show();
+        }
     }
 }
