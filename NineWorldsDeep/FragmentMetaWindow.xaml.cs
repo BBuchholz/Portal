@@ -57,15 +57,20 @@ namespace NineWorldsDeep
 
         private void DemoDynamicMenus()
         {
-            MenuItem mi = new MenuItem();
-            mi.Header = "Demo Dynamic Menu Item";
-            mi.Click += Test_Click;
-            AddMenuItem(mi);
+            AddMenuItem("Dynamic Menu Item", Test_Click);
         }
 
         public void AddMenuItem(MenuItem mi)
         {
             menuItemOptions.Items.Add(mi);
+        }
+
+        public void AddMenuItem(string header, RoutedEventHandler onClick)
+        {
+            MenuItem mi = new MenuItem();
+            mi.Header = header;
+            mi.Click += onClick;
+            AddMenuItem(mi);
         }
 
         private void lvItems_SelectionChanged(object sender, SelectionChangedEventArgs e)
