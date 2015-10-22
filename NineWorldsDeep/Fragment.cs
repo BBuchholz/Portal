@@ -14,13 +14,30 @@ namespace NineWorldsDeep
             new Dictionary<string, string>();
 
         public Fragment(string name)
+            : this(name_key, name)
         {
-            SetMeta(name_key, name);
+            //chained constructor (do nothing here)
         }
+
+        public Fragment(string key, string value)
+        {
+            SetMeta(key, value);
+            DisplayKey = key;
+        }
+
+        public string DisplayKey { get; set; }
 
         public IEnumerable<KeyValuePair<string,string>> Meta
         {
             get { return _meta.ToList(); }
+        }
+
+        public IEnumerable<string> MetaKeys
+        {
+            get
+            {
+                return _meta.Keys;
+            }
         }
 
         public void SetMeta(string key, string value)
@@ -30,12 +47,12 @@ namespace NineWorldsDeep
 
         public override string ToString()
         {
-            if (_meta.ContainsKey(name_key))
+            if (_meta.ContainsKey(DisplayKey))
             {
-                return _meta[name_key];
+                return _meta[DisplayKey];
             }
 
-            return "[unnamed fragment]";
+            return "[display key not specified]";
         }
     }
 }

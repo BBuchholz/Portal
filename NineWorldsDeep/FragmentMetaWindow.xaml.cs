@@ -42,6 +42,32 @@ namespace NineWorldsDeep
         {
             lvItems.ItemsSource = fragments;
             lvDetail.ItemsSource = null;
+            cmbDisplayKey.ItemsSource = GetMetaKeys(fragments);
+        }
+
+        public void RefreshFragmentList()
+        {
+            IEnumerable<Fragment> frgs = (IEnumerable<Fragment>)lvItems.ItemsSource;
+            lvItems.ItemsSource = null;
+            lvItems.ItemsSource = frgs;
+        }
+
+        private IEnumerable<string> GetMetaKeys(IEnumerable<Fragment> fragments)
+        {
+            List<string> lst = new List<string>();
+
+            foreach(Fragment f in fragments)
+            {
+                foreach(string key in f.MetaKeys)
+                {
+                    if (!lst.Contains(key))
+                    {
+                        lst.Add(key);
+                    }
+                }
+            }
+
+            return lst;
         }
 
         private void MenuItemDemo_Click(object sender, RoutedEventArgs e)
@@ -79,6 +105,19 @@ namespace NineWorldsDeep
             if(frg != null)
             {
                 lvDetail.ItemsSource = frg.Meta;
+            }
+        }
+
+        private void cmbDisplayKey_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            string selected = (string)cmbDisplayKey.SelectedItem;
+            if(selected != null)
+            {
+                foreach (Fragment f in lvItems.Items)
+                {
+                    f.DisplayKey = selected;
+                }
+                RefreshFragmentList();
             }
         }
     }

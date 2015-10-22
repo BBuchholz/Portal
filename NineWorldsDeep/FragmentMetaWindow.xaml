@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:NineWorldsDeep"
         mc:Ignorable="d"
-        Title="ListViewDetail" Height="300" Width="300">
+        Title="FragmentMetaWindow" Height="600" Width="600">
     <DockPanel LastChildFill="True">
         <Menu DockPanel.Dock="Top">
             <MenuItem Header="Options"
@@ -15,16 +15,26 @@
             </MenuItem>
         </Menu>
         <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="50"/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition/>
                 <ColumnDefinition/>
             </Grid.ColumnDefinitions>
             <ListView x:Name="lvItems"
-                      SelectionChanged="lvItems_SelectionChanged">
+                      SelectionChanged="lvItems_SelectionChanged"
+                      Grid.RowSpan="2">
                 
             </ListView>
+            <ComboBox x:Name="cmbDisplayKey"
+                      Grid.Column="1"
+                      Grid.Row="0"
+                      SelectionChanged="cmbDisplayKey_SelectionChanged"/>
             <ListView x:Name="lvDetail"
-                      Grid.Column="1">
+                      Grid.Column="1"
+                      Grid.Row="1">
                 <ListView.ItemTemplate>
                     <DataTemplate>
                         <WrapPanel>
