@@ -34,8 +34,8 @@ namespace NineWorldsDeep
         public void RefreshFragmentList()
         {
             IEnumerable<Fragment> frgs = (IEnumerable<Fragment>)lvItems.ItemsSource;
-            lvItems.ItemsSource = null;
-            lvItems.ItemsSource = frgs;
+            lvItems.ItemsSource = null;           
+            lvItems.ItemsSource = frgs.OrderBy(s => s);
         }
 
         private IEnumerable<string> GetMetaKeys(IEnumerable<Fragment> fragments)

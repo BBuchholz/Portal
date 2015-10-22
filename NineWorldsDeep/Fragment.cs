@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace NineWorldsDeep
 {
-    public class Fragment
+    public class Fragment : IComparable
     {
         private const string name_key = "Name";
 
@@ -63,6 +63,17 @@ namespace NineWorldsDeep
             }
 
             return "[" + DisplayKey + " not specified]";
+        }
+
+        public int CompareTo(object obj)
+        {
+            if (obj == null) return 1;
+
+            Fragment otherFragment = obj as Fragment;
+            if (otherFragment != null)
+                return this.ToString().CompareTo(otherFragment.ToString());
+            else
+                throw new ArgumentException("Object is not a Fragment");
         }
     }
 }
