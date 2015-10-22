@@ -45,6 +45,16 @@ namespace NineWorldsDeep
             _meta[key] = value;
         }
 
+        public string GetMeta(string key)
+        {
+            if (_meta.ContainsKey(key))
+            {
+                return _meta[key];
+            }
+
+            return null;
+        }
+
         public override string ToString()
         {
             if (_meta.ContainsKey(DisplayKey))

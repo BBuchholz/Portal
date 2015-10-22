@@ -48,7 +48,7 @@ namespace NineWorldsDeep
             fmw.AddMenuItem("Dynamic Menu Item", Test_Click);
             fmw.AddMenuItem("Prompt For Text File", Prompt_Click);
         }
-
+        
         private void Test_Click(object sender, RoutedEventArgs e)
         {
             MessageBox.Show("Testing");
@@ -63,6 +63,8 @@ namespace NineWorldsDeep
             }
             MessageBox.Show(selected);
         }
+
+        
     }
 
     
