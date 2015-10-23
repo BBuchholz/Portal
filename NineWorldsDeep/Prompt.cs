@@ -38,5 +38,12 @@ namespace NineWorldsDeep
 
             return null;
         }
+
+        public static bool Confirm(string message)
+        {
+            DialogResult result =
+                MessageBox.Show(message, "Confirm", MessageBoxButtons.YesNo);
+            return result == DialogResult.Yes;
+        }
     }
 }
