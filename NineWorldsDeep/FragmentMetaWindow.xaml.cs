@@ -31,6 +31,14 @@ namespace NineWorldsDeep
             _menu.Configure(mainMenu);
             new FragmentMenuController().Configure(this);
         }
+
+        public Fragment Selected
+        {
+            get
+            {
+                return (Fragment)lvItems.SelectedItem;
+            }
+        }
                 
         public IEnumerable<Fragment> GetFragments()
         {

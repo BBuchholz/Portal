@@ -64,6 +64,20 @@ namespace NineWorldsDeep
             }
         }
 
+        public string DisplayValue
+        {
+            get
+            {
+                if (_meta.ContainsKey(DisplayKey) &&
+                _meta[DisplayKey] != null)
+                {
+                    return _meta[DisplayKey];
+                }
+
+                return "[" + DisplayKey + " not specified]";
+            }
+        }
+
         public void SetMeta(string key, string value)
         {
             _meta[key] = value;
@@ -81,13 +95,7 @@ namespace NineWorldsDeep
 
         public override string ToString()
         {
-            if (_meta.ContainsKey(DisplayKey) &&
-                _meta[DisplayKey] != null)
-            {
-                return _meta[DisplayKey];
-            }
-
-            return "[" + DisplayKey + " not specified]";
+            return DisplayValue;
         }
 
         public int CompareTo(object obj)
