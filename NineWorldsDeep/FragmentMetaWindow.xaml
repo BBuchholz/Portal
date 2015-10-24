@@ -7,10 +7,9 @@
         mc:Ignorable="d"
         Title="FragmentMetaWindow" Height="600" Width="600">
     <DockPanel LastChildFill="True">
-        <Menu DockPanel.Dock="Top">
-            <MenuItem Header="Options"
-                      x:Name="menuItemOptions">
-            </MenuItem>
+        <Menu DockPanel.Dock="Top"
+              IsMainMenu="True"
+              x:Name="mainMenu">
         </Menu>
         <Grid>
             <Grid.RowDefinitions>

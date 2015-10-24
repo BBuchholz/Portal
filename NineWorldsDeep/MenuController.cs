@@ -10,24 +10,48 @@ namespace NineWorldsDeep
 {
     public class MenuController
     {
-        private MenuItem menuItemOptions;
-
-        public void Configure(MenuItem optionsMenu)
+        private Menu mainMenu;
+        
+        public void Configure(Menu mainMenu)
         {
-            menuItemOptions = optionsMenu;
+            this.mainMenu = mainMenu;
+        }
+        
+        public void AddMenuItem(string menuHeader, MenuItem mi)
+        {
+            EnsureMenu(menuHeader).Items.Add(mi);
         }
 
-        public void AddMenuItem(MenuItem mi)
-        {
-            menuItemOptions.Items.Add(mi);
-        }
-
-        public void AddMenuItem(string header, RoutedEventHandler onClick)
+        public void AddMenuItem(string menuHeader, 
+                                string header, 
+                                RoutedEventHandler onClick)
         {
             MenuItem mi = new MenuItem();
             mi.Header = header;
             mi.Click += onClick;
-            AddMenuItem(mi);
+            AddMenuItem(menuHeader, mi);
+        }
+
+        private MenuItem EnsureMenu(string header)
+        {
+            MenuItem found = null;
+
+            foreach(MenuItem mi in mainMenu.Items)
+            {
+                if (mi.Header.Equals(header))
+                {
+                    found = mi;
+                }
+            }
+
+            if(found == null)
+            {
+                found = new MenuItem();
+                found.Header = header;
+                mainMenu.Items.Add(found);
+            }
+
+            return found;
         }
     }
 }

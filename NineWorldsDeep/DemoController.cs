@@ -14,7 +14,9 @@ namespace NineWorldsDeep
         public void Configure(FragmentMetaWindow fmw)
         {
             this.fmw = fmw;
-            this.fmw.Menu.AddMenuItem("Demo", MenuItemDemo_Click);
+            this.fmw.Menu.AddMenuItem("Demo", 
+                                      "Load Demo Frags", 
+                                      MenuItemDemo_Click);
         }
 
         private void MenuItemDemo_Click(object sender, RoutedEventArgs e)
@@ -45,8 +47,8 @@ namespace NineWorldsDeep
 
         private void DemoDynamicMenus()
         {
-            fmw.Menu.AddMenuItem("Dynamic Menu Item", Test_Click);
-            fmw.Menu.AddMenuItem("Prompt For Text File", Prompt_Click);
+            fmw.Menu.AddMenuItem("Demo", "Dynamic Menu Item", Test_Click);
+            fmw.Menu.AddMenuItem("Demo", "Prompt For Text File", Prompt_Click);
         }
         
         private void Test_Click(object sender, RoutedEventArgs e)

@@ -17,10 +17,11 @@ namespace NineWorldsDeep
         public void Configure(FragmentMetaWindow w)
         {
             window = w;
-            window.Menu.AddMenuItem("Review Flagged Fragments", 
+            window.Menu.AddMenuItem("Fragments",
+                                    "Review Flagged Fragments", 
                                      ReviewFlaggedFragments);
-            window.Menu.AddMenuItem("Save To Xml", SaveToXml);
-            window.Menu.AddMenuItem("Load From Xml", LoadFromXml);
+            window.Menu.AddMenuItem("Fragments", "Save To Xml", SaveToXml);
+            window.Menu.AddMenuItem("Fragments", "Load From Xml", LoadFromXml);
         }
 
         private void LoadFromXml(object sender, RoutedEventArgs e)

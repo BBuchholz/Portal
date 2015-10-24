@@ -28,7 +28,7 @@ namespace NineWorldsDeep
         {
             InitializeComponent();
             _menu = new MenuController();
-            _menu.Configure(menuItemOptions);
+            _menu.Configure(mainMenu);
             new FragmentMenuController().Configure(this);
         }
                 
@@ -87,18 +87,13 @@ namespace NineWorldsDeep
         [Obsolete("Please use FragmentMetaWindow.Menu.AddMenuItem")]
         public void AddMenuItem(MenuItem mi)
         {
-            //menuItemOptions.Items.Add(mi);
-            Menu.AddMenuItem(mi);
+            Menu.AddMenuItem("Misc", mi);
         }
 
         [Obsolete("Please use FragmentMetaWindow.Menu.AddMenuItem")]
         public void AddMenuItem(string header, RoutedEventHandler onClick)
         {
-            //MenuItem mi = new MenuItem();
-            //mi.Header = header;
-            //mi.Click += onClick;
-            //AddMenuItem(mi);
-            Menu.AddMenuItem(header, onClick);
+            Menu.AddMenuItem("Misc", header, onClick);
         }
 
         private void lvItems_SelectionChanged(object sender, SelectionChangedEventArgs e)
