@@ -1,5 +1,8 @@
-﻿using System;
+﻿using NineWorldsDeep.Xml;
+using NineWorldsDeep.Xml.Adapters;
+using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -23,8 +26,32 @@ namespace NineWorldsDeep
         {
             InitializeComponent();
             AddMenuItem("Review Flagged Fragments", ReviewFlaggedFragments);
+            AddMenuItem("Save To Xml", SaveToXml);
+            AddMenuItem("Load From Xml", LoadFromXml);
         }
 
+        private void LoadFromXml(object sender, RoutedEventArgs e)
+        {
+            XmlHandler xh = new XmlHandler();
+
+            //TODO: replace hardcoded value with centralized configuration
+            string path = Prompt.ForXmlFileLoad(@"C:\NWD\fragments");
+            if (path != null && File.Exists(path)) { 
+                FragmentXmlAdapter template = new FragmentXmlAdapter(null);
+                SetItemsSource(FragmentXmlAdapter.UnWrapAll(xh.Load(path, template)));
+            }
+        }
+
+        private void SaveToXml(object sender, RoutedEventArgs e)
+        {
+            XmlHandler xh = new XmlHandler();
+            
+            //TODO: replace hardcoded value with centralized configuration
+            string path = Prompt.ForXmlFileSave(@"C:\NWD\fragments");
+            if(path != null)
+                xh.Save(FragmentXmlAdapter.WrapAll(GetFragments()), path);
+        }
+        
         public IEnumerable<Fragment> GetFragments()
         {
             IEnumerable<Fragment> ie = 
