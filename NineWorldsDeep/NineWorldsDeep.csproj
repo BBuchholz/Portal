@@ -86,9 +86,11 @@
     </ApplicationDefinition>
     <Compile Include="DemoController.cs" />
     <Compile Include="Fragment.cs" />
+    <Compile Include="FragmentMenuController.cs" />
     <Compile Include="FragmentMetaWindow.xaml.cs">
       <DependentUpon>FragmentMetaWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="MenuController.cs" />
     <Compile Include="Prompt.cs" />
     <Compile Include="Reflection\Reflector.cs" />
     <Compile Include="Xml\Adapters\FragmentXmlAdapter.cs" />

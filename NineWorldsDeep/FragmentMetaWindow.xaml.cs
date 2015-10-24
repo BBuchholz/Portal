@@ -22,36 +22,16 @@ namespace NineWorldsDeep
     /// </summary>
     public partial class FragmentMetaWindow : Window
     {
+        private MenuController _menu;
+
         public FragmentMetaWindow()
         {
             InitializeComponent();
-            AddMenuItem("Review Flagged Fragments", ReviewFlaggedFragments);
-            AddMenuItem("Save To Xml", SaveToXml);
-            AddMenuItem("Load From Xml", LoadFromXml);
+            _menu = new MenuController();
+            _menu.Configure(menuItemOptions);
+            new FragmentMenuController().Configure(this);
         }
-
-        private void LoadFromXml(object sender, RoutedEventArgs e)
-        {
-            XmlHandler xh = new XmlHandler();
-
-            //TODO: replace hardcoded value with centralized configuration
-            string path = Prompt.ForXmlFileLoad(@"C:\NWD\fragments");
-            if (path != null && File.Exists(path)) { 
-                FragmentXmlAdapter template = new FragmentXmlAdapter(null);
-                SetItemsSource(FragmentXmlAdapter.UnWrapAll(xh.Load(path, template)));
-            }
-        }
-
-        private void SaveToXml(object sender, RoutedEventArgs e)
-        {
-            XmlHandler xh = new XmlHandler();
-            
-            //TODO: replace hardcoded value with centralized configuration
-            string path = Prompt.ForXmlFileSave(@"C:\NWD\fragments");
-            if(path != null)
-                xh.Save(FragmentXmlAdapter.WrapAll(GetFragments()), path);
-        }
-        
+                
         public IEnumerable<Fragment> GetFragments()
         {
             IEnumerable<Fragment> ie = 
@@ -102,17 +82,23 @@ namespace NineWorldsDeep
             return lst;
         }
 
+        public MenuController Menu { get { return _menu; } }
+
+        [Obsolete("Please use FragmentMetaWindow.Menu.AddMenuItem")]
         public void AddMenuItem(MenuItem mi)
         {
-            menuItemOptions.Items.Add(mi);
+            //menuItemOptions.Items.Add(mi);
+            Menu.AddMenuItem(mi);
         }
 
+        [Obsolete("Please use FragmentMetaWindow.Menu.AddMenuItem")]
         public void AddMenuItem(string header, RoutedEventHandler onClick)
         {
-            MenuItem mi = new MenuItem();
-            mi.Header = header;
-            mi.Click += onClick;
-            AddMenuItem(mi);
+            //MenuItem mi = new MenuItem();
+            //mi.Header = header;
+            //mi.Click += onClick;
+            //AddMenuItem(mi);
+            Menu.AddMenuItem(header, onClick);
         }
 
         private void lvItems_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -135,17 +121,6 @@ namespace NineWorldsDeep
                 }
                 RefreshFragmentList();
             }
-        }
-
-        private void ReviewFlaggedFragments(object sender, RoutedEventArgs e)
-        {
-            foreach (Fragment f in GetFragments())
-            {
-                if (f.IsFlagged)
-                {
-                    MessageBox.Show(f.ToMultiLineString());
-                }
-            }
-        }
+        }        
     }
 }
