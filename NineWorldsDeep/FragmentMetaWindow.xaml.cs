@@ -30,7 +30,7 @@ namespace NineWorldsDeep
             _menu = new MenuController();
             _menu.Configure(mainMenu);
             new FragmentMenuController().Configure(this);
-            new WorkbenchWindowController().Configure(this);
+            WorkbenchWindowController.Instance.Configure(this);
         }
 
         public Fragment Selected

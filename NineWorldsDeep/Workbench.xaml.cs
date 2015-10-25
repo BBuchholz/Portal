@@ -59,7 +59,7 @@ namespace NineWorldsDeep
             _menu = new MenuController();
             _menu.Configure(mainMenu);
             this.Closing += Workbench_Closing;
-            new WorkbenchWindowController().ConfigureClosingEvent(this);
+            WorkbenchWindowController.Instance.ConfigureClosingEvent(this);
             new WorkbenchController().Configure(this);
         }
         

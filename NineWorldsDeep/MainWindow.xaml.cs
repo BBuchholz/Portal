@@ -28,7 +28,7 @@ namespace NineWorldsDeep
         public MainWindow()
         {
             InitializeComponent();
-            new WorkbenchWindowController().ConfigureClosingEvent(this);
+            WorkbenchWindowController.Instance.ConfigureClosingEvent(this);
             //just for testing
             ShowFragmentMetaWindow();
         }

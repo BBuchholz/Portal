@@ -10,6 +10,28 @@ namespace NineWorldsDeep
     public class WorkbenchWindowController
     {
         private FragmentMetaWindow window;
+        private List<Window> registeredWindows =
+            new List<Window>();
+
+        private static WorkbenchWindowController instance;
+
+        private WorkbenchWindowController()
+        {
+            //singleton private constructor
+        }
+
+        public static WorkbenchWindowController Instance
+        {
+            get
+            {
+                if(instance == null)
+                {
+                    instance = new WorkbenchWindowController();
+                }
+
+                return instance;
+            }
+        }
 
         public void Configure(FragmentMetaWindow w)
         {
@@ -23,65 +45,42 @@ namespace NineWorldsDeep
         public void ConfigureClosingEvent(Window w)
         {
             w.Closing += TargetWindowClosing;
+            if (WindowIsNotWorkbench(w))
+            {
+                registeredWindows.Add(w);
+            }
         }
 
         private void TargetWindowClosing(object sender, System.ComponentModel.CancelEventArgs e)
         {
-            if (CheckOpenWindowsForClose(sender))
+            if (CloseAppAfterDeRegistering(sender))
             {
                 Application.Current.Shutdown();
-            }
-            
+            }            
         }
 
-        //just for testing purposes
-        private bool CheckOpenWindowsForClose(object sender)
+        private bool WindowIsNotWorkbench(Window w)
         {
-            //testing to determine if explicit application shutdown should be called
-            //for when workbench is hidden but all other windows close.
-            string msg = "";
-            bool testing = false; //set this to true for testing
-
-            if (testing) { 
-                msg += "sender: " + sender.GetType().Name + Environment.NewLine;
-                msg += "windows open: " + Environment.NewLine;
-            }
-
-            bool senderFound = false;
-            bool workbenchFound = false;
-            string senderName = sender.GetType().Name;
-            string workbenchName = typeof(Workbench).Name;
-            int windowCount = Application.Current.Windows.Count;
-
-            foreach (Window w in Application.Current.Windows)
-            {
-                if(testing)
-                    msg += w.GetType().Name + Environment.NewLine;
-
-                if(w.GetType().Name.Equals(senderName))
-                    senderFound = true;
-
-                if (w.GetType().Name.Equals(workbenchName))
-                    workbenchFound = true;
-            }
-
-            if(testing)
-                MessageBox.Show(msg);
-
-            //just sender and workbench open, close app
-            if (senderFound && workbenchFound && 
-                windowCount == 2 && !senderName.Equals(workbenchName))
-                return true;
-
-            //just sender open, close app
-            if (senderFound && windowCount == 1)
-                return true;
-            
-            //more windows are open than just sender and workbench, keep open
-            return false;
-            
+            return !w.GetType().Equals(typeof(Workbench));
         }
 
+        private bool CloseAppAfterDeRegistering(object sender)
+        {
+            Window w = (Window)sender;
+                        
+            if (WindowIsNotWorkbench(w))
+            {
+                registeredWindows.Remove(w);
+            }
+            
+            if(registeredWindows.Count == 0)
+            {
+                return true;
+            }
+            
+            return false;
+        }
+        
         private void SendToWorkbench(object sender, RoutedEventArgs e)
         {
             Workbench w = Workbench.Instance;
