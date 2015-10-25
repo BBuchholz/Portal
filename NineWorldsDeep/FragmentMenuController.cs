@@ -26,7 +26,7 @@ namespace NineWorldsDeep
                                     "Filter By Selected DisplayKey Value",
                                     FilterBySelected);
         }
-
+        
         private void FilterBySelected(object sender, RoutedEventArgs e)
         {
             string selectedValue = window.Selected.DisplayValue;

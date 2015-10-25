@@ -28,6 +28,7 @@ namespace NineWorldsDeep
         public MainWindow()
         {
             InitializeComponent();
+            new WorkbenchController().ConfigureClosingEvent(this);
         }
 
         private void MenuItem_Click(object sender, RoutedEventArgs e)
