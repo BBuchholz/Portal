@@ -28,7 +28,9 @@ namespace NineWorldsDeep
         public MainWindow()
         {
             InitializeComponent();
-            new WorkbenchController().ConfigureClosingEvent(this);
+            new WorkbenchWindowController().ConfigureClosingEvent(this);
+            //just for testing
+            ShowFragmentMetaWindow();
         }
 
         private void MenuItem_Click(object sender, RoutedEventArgs e)
@@ -47,6 +49,11 @@ namespace NineWorldsDeep
         }
 
         private void MenuItemFragmentMetaWindow_Click(object sender, RoutedEventArgs e)
+        {
+            ShowFragmentMetaWindow();
+        }
+
+        private void ShowFragmentMetaWindow()
         {
             FragmentMetaWindow fmw =
                 new FragmentMetaWindow();

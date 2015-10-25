@@ -6,7 +6,12 @@
         xmlns:local="clr-namespace:NineWorldsDeep"
         mc:Ignorable="d"
         Title="Workbench" Height="300" Width="300">
-    <Grid x:Name="mainGrid">
-        
-    </Grid>
+    <DockPanel LastChildFill="True">
+        <Menu DockPanel.Dock="Top"
+              IsMainMenu="True"
+              x:Name="mainMenu"/>
+        <Grid x:Name="mainGrid">
+
+        </Grid>
+    </DockPanel>
 </Window>

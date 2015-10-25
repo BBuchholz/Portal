@@ -9,84 +9,80 @@ namespace NineWorldsDeep
 {
     public class WorkbenchController
     {
-        private FragmentMetaWindow window;
+        Workbench w;
 
-        public void Configure(FragmentMetaWindow w)
+        public void Configure(Workbench w)
         {
-            window = w;
-            window.Menu.AddMenuItem("Workbench",
-                                    "Send To Workbench",
-                                    SendToWorkbench);
-            ConfigureClosingEvent(window);
+            this.w = w;
+            w.Menu.AddMenuItem("List Operations",
+                               "Union {x, y} => z",
+                               UnionXYtoZ); //TODO: rename this (I honestly don't know what to call it just following a scent)
+            w.Menu.AddMenuItem("List Operations",
+                               "Remove Last",
+                               RemoveLast);
+            w.Menu.AddMenuItem("List Operations",
+                               "Remove First",
+                               RemoveFirst);
         }
 
-        public void ConfigureClosingEvent(Window w)
+        private void RemoveFirst(object sender, RoutedEventArgs e)
         {
-            w.Closing += TargetWindowClosing;
+            w.RemoveFirst();
         }
 
-        private void TargetWindowClosing(object sender, System.ComponentModel.CancelEventArgs e)
+        private void RemoveLast(object sender, RoutedEventArgs e)
         {
-            if (CheckOpenWindowsForClose(sender))
+            w.RemoveLast();
+        }
+
+        private void UnionXYtoZ(object sender, RoutedEventArgs e)
+        {
+            IEnumerable<Fragment> listX = w.GetFragments(0);
+            IEnumerable<Fragment> listY = w.GetFragments(1);
+            List<Fragment> listZ = new List<Fragment>();
+            
+            if(listX != null && listY != null)
             {
-                Application.Current.Shutdown();
+                //process here and store in listZ
+                foreach(Fragment f in listX)
+                {
+                    Fragment listZFragment = 
+                        new Fragment("listX", f.DisplayValue);
+
+                    string bestMatchValue = "";
+                    double bestPercentMatch = 
+                        f.DisplayValue.PercentMatchTo(bestMatchValue);
+
+                    foreach(Fragment f2 in listY)
+                    {
+                        string currentMatchValue = f2.DisplayValue;
+                        double currentPercentMatch =
+                            f.DisplayValue.PercentMatchTo(currentMatchValue);
+                        
+                        if(currentPercentMatch > bestPercentMatch)
+                        {
+                            bestMatchValue = currentMatchValue;
+                            bestPercentMatch = currentPercentMatch;
+                        }
+
+                    }
+
+                    listZFragment.SetMeta("bestMatchValue", bestMatchValue);
+                    listZFragment.SetMeta("bestPercentMatch", 
+                                           bestPercentMatch.ToString());
+
+                    string concatenated = f.DisplayValue + 
+                        " => " + bestMatchValue + " ("
+                        + bestPercentMatch.ToString() + ")";
+
+                    listZFragment.SetMeta("concatenated", concatenated);
+                    listZFragment.DisplayKey = "concatenated";
+
+                    listZ.Add(listZFragment);
+                }
             }
-            
-        }
 
-        //just for testing purposes
-        private bool CheckOpenWindowsForClose(object sender)
-        {
-            //testing to determine if explicit application shutdown should be called
-            //for when workbench is hidden but all other windows close.
-            string msg = "";
-            bool testing = false; //set this to true for testing
-
-            if (testing) { 
-                msg += "sender: " + sender.GetType().Name + Environment.NewLine;
-                msg += "windows open: " + Environment.NewLine;
-            }
-
-            bool senderFound = false;
-            bool workbenchFound = false;
-            string senderName = sender.GetType().Name;
-            string workbenchName = typeof(Workbench).Name;
-            int windowCount = Application.Current.Windows.Count;
-
-            foreach (Window w in Application.Current.Windows)
-            {
-                if(testing)
-                    msg += w.GetType().Name + Environment.NewLine;
-
-                if(w.GetType().Name.Equals(senderName))
-                    senderFound = true;
-
-                if (w.GetType().Name.Equals(workbenchName))
-                    workbenchFound = true;
-            }
-
-            if(testing)
-                MessageBox.Show(msg);
-
-            //just sender and workbench open, close app
-            if (senderFound && workbenchFound && 
-                windowCount == 2 && !senderName.Equals(workbenchName))
-                return true;
-
-            //just sender open, close app
-            if (senderFound && windowCount == 1)
-                return true;
-            
-            //more windows are open than just sender and workbench, keep open
-            return false;
-            
-        }
-
-        private void SendToWorkbench(object sender, RoutedEventArgs e)
-        {
-            Workbench w = Workbench.Instance;
-            w.Receive(window.GetFragments());
-            w.Show();
+            w.Receive(listZ); //adds result to workbench
         }
     }
 }
