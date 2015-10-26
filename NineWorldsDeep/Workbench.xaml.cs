@@ -74,15 +74,28 @@ namespace NineWorldsDeep
         public MenuController Menu {  get { return _menu; } }
 
         public void Receive(IEnumerable<Fragment> ie)
-        {
+        {            
             mainGrid.ColumnDefinitions.Add(new ColumnDefinition());
             int colsCount = mainGrid.ColumnDefinitions.Count();
             
             ListView lv = new ListView();
             lv.SetValue(Grid.ColumnProperty, colsCount - 1);
             mainGrid.Children.Add(lv);
-            lv.ItemsSource = ie;
+            //create a fresh copy
+            lv.ItemsSource = DeepCopy(ie); 
             listViews.Insert(colsCount - 1, lv);
+        }
+
+        private IEnumerable<Fragment> DeepCopy(IEnumerable<Fragment> ie)
+        {
+            List<Fragment> lst = new List<Fragment>();
+
+            foreach(Fragment f in ie)
+            {
+                lst.Add(f.DeepCopy());
+            }
+
+            return lst;
         }
         
         public void RemoveLast()
@@ -114,5 +127,6 @@ namespace NineWorldsDeep
                 }
             }
         }
+        
     }
 }

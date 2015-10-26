@@ -8,11 +8,24 @@ namespace NineWorldsDeep
 {
     public class SegmentProcessor
     {
-        private string processed_tags_key;
+        private string processed_key;
 
         public SegmentProcessor(string processedTagsKey)
         {
-            processed_tags_key = processedTagsKey;
+            processed_key = processedTagsKey;
+        }
+
+        public void MarkUnprocessed(IEnumerable<Fragment> ie)
+        {
+            foreach (Fragment f in ie)
+            {
+                f.SetMeta(processed_key, "False");
+            }
+        }
+
+        public void MarkProcessed(Fragment f)
+        {
+            f.SetMeta(processed_key, "True");
         }
 
         public IEnumerable<Fragment> 
@@ -24,7 +37,7 @@ namespace NineWorldsDeep
 
             foreach (Fragment f in ie)
             {
-                string processed = f.GetMeta(processed_tags_key);
+                string processed = f.GetMeta(processed_key);
                 if (processed == null || processed.Equals("False"))
                 {
                     lst.Add(f);
@@ -38,6 +51,11 @@ namespace NineWorldsDeep
             }
 
             return lst;
+        }
+
+        public IEnumerable<Fragment> GetProcessed(IEnumerable<Fragment> ie)
+        {
+            return ie.Where(x => x.GetMeta(processed_key).Equals("True"));
         }
     }
 }

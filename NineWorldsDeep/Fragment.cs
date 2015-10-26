@@ -13,7 +13,7 @@ namespace NineWorldsDeep
 
         private Dictionary<string, string> _meta =
             new Dictionary<string, string>();
-
+        
         public Fragment(string name)
             : this(name_key, name)
         {
@@ -107,6 +107,25 @@ namespace NineWorldsDeep
                 return this.ToString().CompareTo(otherFragment.ToString());
             else
                 throw new ArgumentException("Object is not a Fragment");
+        }
+
+        public Fragment DeepCopy()
+        {
+            Fragment f = null;
+            
+            foreach(KeyValuePair<string, string> kv in _meta)
+            {
+                if(f == null)
+                {
+                    f = new Fragment(kv.Key, kv.Value);
+                }
+
+                f.SetMeta(kv.Key, kv.Value);
+            }
+
+            f.DisplayKey = this.DisplayKey;
+
+            return f;
         }
     }
 }
