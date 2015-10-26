@@ -7,7 +7,7 @@ using System.Windows.Controls;
 
 namespace NineWorldsDeep
 {
-    public class WorkbenchController
+    public class WorkbenchListViewsController
     {
         private Grid mainGrid;
 
@@ -99,6 +99,19 @@ namespace NineWorldsDeep
             lv.ItemsSource = frgs.OrderBy(s => s);
         }
 
+        public void SendFirst()
+        {
+            if(mainGrid != null)
+            {
+                if(listViews.Count > 0)
+                {
+                    FragmentMetaWindow fmw = new FragmentMetaWindow();
+                    fmw.Receive(GetFragments(listViews.First()).DeepCopy());
+                    fmw.Show();
+                }
+            }
+        }        
+
         public void RemoveLast()
         {
             if(mainGrid != null)
@@ -114,7 +127,7 @@ namespace NineWorldsDeep
                 }
             }            
         }
-
+        
         public void RemoveFirst()
         {
             if (mainGrid != null)
@@ -138,6 +151,15 @@ namespace NineWorldsDeep
                     }
                 }
             }            
+        }
+
+        public void RefreshMetaKeys(int index)
+        {
+            if(index < listViews.Count)
+            {
+                ListView lv = listViews[index];
+                RefreshMetaKeys(mapListViewComboBox[lv], lv);
+            }
         }
     }
 }

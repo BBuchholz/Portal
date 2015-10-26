@@ -94,12 +94,11 @@
     <Compile Include="MenuController.cs" />
     <Compile Include="Prompt.cs" />
     <Compile Include="Reflection\Reflector.cs" />
-    <Compile Include="SegmentProcessor.cs" />
     <Compile Include="ExtensionsString.cs" />
     <Compile Include="WorkbenchWindow.xaml.cs">
       <DependentUpon>WorkbenchWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="WorkbenchController.cs" />
+    <Compile Include="WorkbenchListViewsController.cs" />
     <Compile Include="WorkbenchMenuController.cs" />
     <Compile Include="WorkbenchWindowController.cs" />
     <Compile Include="Xml\Adapters\FragmentXmlAdapter.cs" />

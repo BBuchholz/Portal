@@ -54,7 +54,7 @@ namespace NineWorldsDeep
             return ie;
         }
 
-        public void SetItemsSource(IEnumerable<Fragment> fragments)
+        public void Receive(IEnumerable<Fragment> fragments)
         {
             lvItems.ItemsSource = fragments;
             lvDetail.ItemsSource = null;

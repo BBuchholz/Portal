@@ -40,7 +40,7 @@ namespace NineWorldsDeep
                 }
             }
 
-            window.SetItemsSource(lst);
+            window.Receive(lst);
         }
 
         private void LoadFromXml(object sender, RoutedEventArgs e)
@@ -52,7 +52,7 @@ namespace NineWorldsDeep
             if (path != null && File.Exists(path))
             {
                 FragmentXmlAdapter template = new FragmentXmlAdapter(null);
-                window.SetItemsSource(
+                window.Receive(
                     FragmentXmlAdapter.UnWrapAll(xh.Load(path, template)));
             }
         }

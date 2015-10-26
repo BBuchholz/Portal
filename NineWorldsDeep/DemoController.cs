@@ -42,7 +42,7 @@ namespace NineWorldsDeep
                 lst.Add(f);
             }
 
-            fmw.SetItemsSource(lst);
+            fmw.Receive(lst);
         }
 
         private void DemoDynamicMenus()

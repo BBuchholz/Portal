@@ -20,7 +20,7 @@ namespace NineWorldsDeep
     public partial class WorkbenchWindow : Window
     {
         private MenuController _menu;
-        private WorkbenchController _controller;
+        private WorkbenchListViewsController _controller;
 
         //singleton implementation
         private static WorkbenchWindow instance;
@@ -44,7 +44,7 @@ namespace NineWorldsDeep
         private WorkbenchWindow()
         {
             InitializeComponent();
-            _controller = new WorkbenchController();
+            _controller = new WorkbenchListViewsController();
             _controller.Configure(mainGrid);
             _menu = new MenuController();
             _menu.Configure(mainMenu);
