@@ -61,7 +61,7 @@ namespace NineWorldsDeep
 
         private bool WindowIsNotWorkbench(Window w)
         {
-            return !w.GetType().Equals(typeof(Workbench));
+            return !w.GetType().Equals(typeof(WorkbenchWindow));
         }
 
         private bool CloseAppAfterDeRegistering(object sender)
@@ -83,8 +83,8 @@ namespace NineWorldsDeep
         
         private void SendToWorkbench(object sender, RoutedEventArgs e)
         {
-            Workbench w = Workbench.Instance;
-            w.Receive(window.GetFragments());
+            WorkbenchWindow w = WorkbenchWindow.Instance;
+            w.Receive(window.GetFragments().DeepCopy());
             w.Show();
         }
     }

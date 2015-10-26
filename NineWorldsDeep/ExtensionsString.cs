@@ -15,7 +15,7 @@ namespace NineWorldsDeep
     /// code from the site is marked with the region
     /// "code from stackoverflow"
     /// </summary>
-    public static class StringExtensions
+    public static class ExtensionsString
     {
         #region "code from stackoverflow"
         /// <summary>

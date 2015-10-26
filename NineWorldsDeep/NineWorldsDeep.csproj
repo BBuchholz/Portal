@@ -85,6 +85,7 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="DemoController.cs" />
+    <Compile Include="ExtensionsFragment.cs" />
     <Compile Include="Fragment.cs" />
     <Compile Include="FragmentMenuController.cs" />
     <Compile Include="FragmentMetaWindow.xaml.cs">
@@ -94,11 +95,12 @@
     <Compile Include="Prompt.cs" />
     <Compile Include="Reflection\Reflector.cs" />
     <Compile Include="SegmentProcessor.cs" />
-    <Compile Include="StringExtensions.cs" />
-    <Compile Include="Workbench.xaml.cs">
-      <DependentUpon>Workbench.xaml</DependentUpon>
+    <Compile Include="ExtensionsString.cs" />
+    <Compile Include="WorkbenchWindow.xaml.cs">
+      <DependentUpon>WorkbenchWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="WorkbenchController.cs" />
+    <Compile Include="WorkbenchMenuController.cs" />
     <Compile Include="WorkbenchWindowController.cs" />
     <Compile Include="Xml\Adapters\FragmentXmlAdapter.cs" />
     <Compile Include="Xml\IXmlTransportable.cs" />
@@ -119,7 +121,7 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Page Include="Workbench.xaml">
+    <Page Include="WorkbenchWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

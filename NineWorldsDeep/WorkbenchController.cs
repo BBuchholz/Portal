@@ -3,144 +3,141 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using System.Windows;
+using System.Windows.Controls;
 
 namespace NineWorldsDeep
 {
     public class WorkbenchController
     {
-        Workbench w;
+        private Grid mainGrid;
 
-        public void Configure(Workbench w)
+        private List<ListView> listViews =
+            new List<ListView>();
+
+        private Dictionary<ListView, ComboBox> mapListViewComboBox =
+            new Dictionary<ListView, ComboBox>();
+        private Dictionary<ComboBox, ListView> mapComboBoxListView =
+            new Dictionary<ComboBox, ListView>();
+
+        public void Configure(Grid g)
         {
-            this.w = w;
-            w.Menu.AddMenuItem("List Operations",
-                               "Union {x, y} => z",
-                               UnionXYtoZ); //TODO: rename this
-            w.Menu.AddMenuItem("List Operations",
-                               "Union {x, y} => x++",
-                               UnionXYtoXpp); //TODO: rename this
-            w.Menu.AddMenuItem("List Operations",
-                               "Remove Last",
-                               RemoveLast);
-            w.Menu.AddMenuItem("List Operations",
-                               "Remove First",
-                               RemoveFirst);
+            this.mainGrid = g;
         }
 
-        private void RemoveFirst(object sender, RoutedEventArgs e)
+        public IEnumerable<Fragment> GetFragments(int index)
         {
-            w.RemoveFirst();
-        }
-
-        private void RemoveLast(object sender, RoutedEventArgs e)
-        {
-            w.RemoveLast();
-        }
-
-        private void UnionXYtoXpp(object sender, RoutedEventArgs e)
-        {
-            IEnumerable<Fragment> listX = w.GetFragments(0);
-            IEnumerable<Fragment> listY = w.GetFragments(1);
-            //List<Fragment> listZ = new List<Fragment>();
-            SegmentProcessor sp = 
-                new SegmentProcessor("stringSimilarityProcessed");
-            int segmentSize = 10;
-
-            if (listX != null && listY != null)
+            if (index < listViews.Count)
             {
-                //process here and store in listZ
-                foreach (Fragment f in sp.GetUnprocessedSegment(listX, 
-                                                                segmentSize))
-                {
-                    //Fragment listZFragment =
-                    //    new Fragment("listX", f.DisplayValue);
-
-                    string bestMatchValue = "";
-                    double bestPercentMatch =
-                        f.DisplayValue.PercentMatchTo(bestMatchValue);
-
-                    foreach (Fragment f2 in listY)
-                    {
-                        string currentMatchValue = f2.DisplayValue;
-                        double currentPercentMatch =
-                            f.DisplayValue.PercentMatchTo(currentMatchValue);
-
-                        if (currentPercentMatch > bestPercentMatch)
-                        {
-                            bestMatchValue = currentMatchValue;
-                            bestPercentMatch = currentPercentMatch;
-                        }
-
-                    }
-
-                    f.SetMeta("bestMatchValue", bestMatchValue);
-                    f.SetMeta("bestPercentMatch",
-                                           bestPercentMatch.ToString());
-
-                    string concatenated = f.DisplayValue +
-                        " => " + bestMatchValue + " ("
-                        + bestPercentMatch.ToString() + ")";
-
-                    f.SetMeta("concatenated", concatenated);
-                    
-                    //listZFragment.DisplayKey = "concatenated";
-
-                    //listZ.Add(listZFragment);
-                }
-            }
-            
-            w.Receive(listX); //adds result to workbench
-        }
-
-        private void UnionXYtoZ(object sender, RoutedEventArgs e)
-        {
-            IEnumerable<Fragment> listX = w.GetFragments(0);
-            IEnumerable<Fragment> listY = w.GetFragments(1);
-            List<Fragment> listZ = new List<Fragment>();
-            
-            if(listX != null && listY != null)
-            {
-                //process here and store in listZ
-                foreach(Fragment f in listX)
-                {
-                    Fragment listZFragment = 
-                        new Fragment("listX", f.DisplayValue);
-
-                    string bestMatchValue = "";
-                    double bestPercentMatch = 
-                        f.DisplayValue.PercentMatchTo(bestMatchValue);
-
-                    foreach(Fragment f2 in listY)
-                    {
-                        string currentMatchValue = f2.DisplayValue;
-                        double currentPercentMatch =
-                            f.DisplayValue.PercentMatchTo(currentMatchValue);
-                        
-                        if(currentPercentMatch > bestPercentMatch)
-                        {
-                            bestMatchValue = currentMatchValue;
-                            bestPercentMatch = currentPercentMatch;
-                        }
-
-                    }
-
-                    listZFragment.SetMeta("bestMatchValue", bestMatchValue);
-                    listZFragment.SetMeta("bestPercentMatch", 
-                                           bestPercentMatch.ToString());
-
-                    string concatenated = f.DisplayValue + 
-                        " => " + bestMatchValue + " ("
-                        + bestPercentMatch.ToString() + ")";
-
-                    listZFragment.SetMeta("concatenated", concatenated);
-                    listZFragment.DisplayKey = "concatenated";
-
-                    listZ.Add(listZFragment);
-                }
+                return GetFragments(listViews[index]);
             }
 
-            w.Receive(listZ); //adds result to workbench
+            return null;
+        }
+
+        private IEnumerable<Fragment> GetFragments(ListView lv)
+        {
+            return (IEnumerable<Fragment>)lv.ItemsSource;
+        }
+
+        private void Associate(ListView lv, ComboBox cmb)
+        {
+            mapListViewComboBox[lv] = cmb;
+            mapComboBoxListView[cmb] = lv;
+        }
+
+        public void RefreshMetaKeys(ComboBox cmb, ListView lv)
+        {
+            cmb.ItemsSource = GetFragments(lv).GetMetaKeys();
+        }
+
+        public void AddListView(IEnumerable<Fragment> ie)
+        {
+            if(mainGrid != null) { 
+
+                mainGrid.ColumnDefinitions.Add(new ColumnDefinition());
+                int colsCount = mainGrid.ColumnDefinitions.Count();
+
+                ListView lv = new ListView();
+                lv.SetValue(Grid.ColumnProperty, colsCount - 1);
+                lv.SetValue(Grid.RowProperty, 1);
+
+                ComboBox cmb = new ComboBox();
+                cmb.SetValue(Grid.ColumnProperty, colsCount - 1);
+                cmb.SetValue(Grid.RowProperty, 0);
+                cmb.SelectionChanged += Cmb_SelectionChanged;
+                Associate(lv, cmb);
+
+                mainGrid.Children.Add(cmb);
+                mainGrid.Children.Add(lv);
+
+                lv.ItemsSource = ie;
+                listViews.Insert(colsCount - 1, lv);
+                RefreshMetaKeys(cmb, lv);
+            }
+        }
+
+        private void Cmb_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            ComboBox cmb = (ComboBox)sender;
+            string selected = (string)cmb.SelectedItem;
+
+            if(selected != null)
+            {
+                ListView lv = mapComboBoxListView[cmb];
+                foreach (Fragment f in lv.Items)
+                {
+                    f.DisplayKey = selected;
+                }
+                RefreshFragmentList(lv);
+            }
+        }
+
+        public void RefreshFragmentList(ListView lv)
+        {
+            IEnumerable<Fragment> frgs = GetFragments(lv);
+            lv.ItemsSource = null;
+            lv.ItemsSource = frgs.OrderBy(s => s);
+        }
+
+        public void RemoveLast()
+        {
+            if(mainGrid != null)
+            {
+                if (listViews.Count > 0)
+                {
+                    ListView last = listViews.Last();
+                    mainGrid.Children.Remove(last);
+                    mainGrid.Children.Remove(mapListViewComboBox[last]);
+                    ColumnDefinition lastCol = mainGrid.ColumnDefinitions.Last();
+                    mainGrid.ColumnDefinitions.Remove(lastCol);
+                    listViews.Remove(last);
+                }
+            }            
+        }
+
+        public void RemoveFirst()
+        {
+            if (mainGrid != null)
+            {
+                if (listViews.Count > 0)
+                {
+                    ListView first = listViews.First();
+                    mainGrid.Children.Remove(first);
+                    mainGrid.Children.Remove(mapListViewComboBox[first]);
+                    ColumnDefinition firstCol = mainGrid.ColumnDefinitions.First();
+                    mainGrid.ColumnDefinitions.Remove(firstCol);
+                    listViews.Remove(first);
+                    foreach (ListView lv in listViews)
+                    {
+                        //shift all cols over one
+                        int newColProp = 
+                            (int)lv.GetValue(Grid.ColumnProperty) - 1;
+                        lv.SetValue(Grid.ColumnProperty, newColProp);
+                        mapListViewComboBox[lv].SetValue(Grid.ColumnProperty,
+                                                         newColProp);
+                    }
+                }
+            }            
         }
     }
 }

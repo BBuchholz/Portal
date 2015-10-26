@@ -63,7 +63,7 @@ namespace NineWorldsDeep
 
         public void RefreshMetaKeys()
         {
-            cmbDisplayKey.ItemsSource = GetMetaKeys(GetFragments());
+            cmbDisplayKey.ItemsSource = GetFragments().GetMetaKeys();
         }
 
         public void RefreshFragmentList()
@@ -71,24 +71,6 @@ namespace NineWorldsDeep
             IEnumerable<Fragment> frgs = GetFragments();
             lvItems.ItemsSource = null;           
             lvItems.ItemsSource = frgs.OrderBy(s => s);
-        }
-
-        private IEnumerable<string> GetMetaKeys(IEnumerable<Fragment> fragments)
-        {
-            List<string> lst = new List<string>();
-
-            foreach(Fragment f in fragments)
-            {
-                foreach(string key in f.MetaKeys)
-                {
-                    if (!lst.Contains(key))
-                    {
-                        lst.Add(key);
-                    }
-                }
-            }
-
-            return lst;
         }
 
         public MenuController Menu { get { return _menu; } }
