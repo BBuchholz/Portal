@@ -51,19 +51,6 @@ namespace NineWorldsDeep
             }
         }
 
-        public bool IsFlagged
-        {
-            get
-            {
-                string val = GetMeta(flag_verify_key);
-                return val != null && val.Equals("True");
-            }
-            set
-            {
-                SetMeta(flag_verify_key, value.ToString());
-            }
-        }
-
         public string DisplayValue
         {
             get
@@ -78,9 +65,54 @@ namespace NineWorldsDeep
             }
         }
 
+        public bool IsFlagged
+        {
+            get
+            {
+                string val = GetMeta(flag_verify_key);
+                return val != null && val.Equals("True");
+            }
+            private set
+            {
+                SetMeta(flag_verify_key, value.ToString());
+            }
+        }
+        
+        public string KeyToReview
+        {
+            get
+            {
+                return GetMeta("KeyToReview");
+            }
+            private set
+            {
+                SetMeta("KeyToReview", value);
+            }
+        }
+
+        public void FlagForReview(string keyToReview)
+        {
+            IsFlagged = true;
+            KeyToReview = keyToReview;
+        }
+
+        public void ProcessReviewed(string keyToReview)
+        {
+            IsFlagged = false;
+            RemoveMeta(keyToReview);
+        }
+        
         public void SetMeta(string key, string value)
         {
             _meta[key] = value;
+        }
+
+        public void RemoveMeta(string key)
+        {
+            if (_meta.ContainsKey(key))
+            {
+                _meta.Remove(key);
+            }
         }
 
         public string GetMeta(string key)

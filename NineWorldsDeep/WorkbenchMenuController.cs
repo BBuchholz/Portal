@@ -106,46 +106,67 @@ namespace NineWorldsDeep
             IEnumerable<Fragment> listX = wc.GetFragments(0);
             IEnumerable<Fragment> listY = wc.GetFragments(1);
             //TODO: segment size should be stored in a modifiable configuration
-            IEnumerable<Fragment> listXSegment =
-                listX.GetUnprocessedSegment(10, processedTag);
 
-            if (listX != null && listY != null)
+            do
             {
-                //process here and store in listZ
-                foreach (Fragment f in listXSegment)
+                int segmentSize = 1;
+                bool parseSucceeded = false;
+
+                do
                 {
-                    
-                    string bestMatchValue = "[no match found]";
-                    double bestPercentMatch =
-                        f.DisplayValue.PercentMatchTo(bestMatchValue);
+                    parseSucceeded =
+                        Int32.TryParse(Prompt.Input("Enter integer segment size"), 
+                                       out segmentSize);
 
-                    foreach (Fragment f2 in listY)
+                } while (!parseSucceeded);
+
+                IEnumerable<Fragment> listXSegment =
+                listX.GetUnprocessedSegment(segmentSize, processedTag);
+
+                if (listX != null && listY != null)
+                {
+                    //process here and store in listZ
+                    foreach (Fragment f in listXSegment)
                     {
-                        string currentMatchValue = f2.DisplayValue;
-                        double currentPercentMatch =
-                            f.DisplayValue.PercentMatchTo(currentMatchValue);
 
-                        if (currentPercentMatch > bestPercentMatch)
+                        string bestMatchValue = "[no match found]";
+                        double bestPercentMatch =
+                            f.DisplayValue.PercentMatchTo(bestMatchValue);
+
+                        foreach (Fragment f2 in listY)
                         {
-                            bestMatchValue = currentMatchValue;
-                            bestPercentMatch = currentPercentMatch;
+                            string currentMatchValue = f2.DisplayValue;
+                            double currentPercentMatch =
+                                f.DisplayValue.PercentMatchTo(currentMatchValue);
+
+                            if (currentPercentMatch > bestPercentMatch)
+                            {
+                                bestMatchValue = currentMatchValue;
+                                bestPercentMatch = currentPercentMatch;
+                            }
+
                         }
 
+                        f.SetMeta("bestMatchValue", bestMatchValue);
+                        f.SetMeta("bestPercentMatch",
+                                  bestPercentMatch.ToString());
+
+                        string concatenated = f.DisplayValue +
+                            " => " + bestMatchValue + " ("
+                            + bestPercentMatch.ToString() + ")";
+
+                        f.SetMeta("concatenated", concatenated);
+                        f.SetProcessed(processedTag);
+
+                        if(Double.Parse(f.GetMeta("bestPercentMatch")) < 1)
+                        {
+                            f.FlagForReview("concatenated");
+                        }
                     }
-
-                    f.SetMeta("bestMatchValue", bestMatchValue);
-                    f.SetMeta("bestPercentMatch",
-                              bestPercentMatch.ToString());
-
-                    string concatenated = f.DisplayValue +
-                        " => " + bestMatchValue + " ("
-                        + bestPercentMatch.ToString() + ")";
-
-                    f.SetMeta("concatenated", concatenated);
-                    f.SetProcessed(processedTag);
                 }
-            }
 
+            } while (Prompt.Confirm("Process another segment?"));
+            
             w.Receive(listX.GetProcessed(processedTag).DeepCopy());
             wc.RefreshMetaKeys(0); 
         }

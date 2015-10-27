@@ -71,10 +71,20 @@ namespace NineWorldsDeep
         private void ReviewFlaggedFragments(object sender, RoutedEventArgs e)
         {
             foreach (Fragment f in window.GetFragments())
-            {
+            {                
                 if (f.IsFlagged)
                 {
-                    MessageBox.Show(f.ToMultiLineString());
+                    if(f.KeyToReview != null)
+                    {
+                        if(Prompt.Confirm(f.GetMeta(f.KeyToReview), true))
+                        {
+                            f.ProcessReviewed(f.KeyToReview);
+                        }
+                    }
+                    else
+                    {
+                        MessageBox.Show(f.ToMultiLineString());
+                    }
                 }
             }
         }

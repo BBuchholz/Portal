@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.VisualBasic;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -72,11 +73,31 @@ namespace NineWorldsDeep
             return null;
         }
         
-        public static bool Confirm(string message)
+        public static bool Confirm(string message, bool defaultNo = false)
         {
+            MessageBoxDefaultButton defaultButton;
+
+            if (defaultNo)
+            {
+                defaultButton = MessageBoxDefaultButton.Button2;
+            }
+            else
+            {
+                defaultButton = MessageBoxDefaultButton.Button1;
+            }
+
             DialogResult result =
-                MessageBox.Show(message, "Confirm", MessageBoxButtons.YesNo);
+                MessageBox.Show(message, 
+                                "Confirm", 
+                                MessageBoxButtons.YesNo, 
+                                MessageBoxIcon.Question, defaultButton);
+
             return result == DialogResult.Yes;
+        }
+
+        public static string Input(string promptMsg)
+        {
+            return Interaction.InputBox(promptMsg);
         }
     }
 }
