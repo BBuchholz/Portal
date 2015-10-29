@@ -92,10 +92,15 @@
     <Compile Include="FragmentMetaWindow.xaml.cs">
       <DependentUpon>FragmentMetaWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="IProgressBarCompatible.cs" />
     <Compile Include="MenuController.cs" />
     <Compile Include="Prompt.cs" />
     <Compile Include="Reflection\Reflector.cs" />
     <Compile Include="ExtensionsString.cs" />
+    <Compile Include="SimpleProgressBarWindow.xaml.cs">
+      <DependentUpon>SimpleProgressBarWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="TimeStamp.cs" />
     <Compile Include="WorkbenchWindow.xaml.cs">
       <DependentUpon>WorkbenchWindow.xaml</DependentUpon>
     </Compile>
@@ -121,6 +126,10 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="SimpleProgressBarWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="WorkbenchWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

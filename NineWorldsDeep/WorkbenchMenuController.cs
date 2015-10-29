@@ -241,6 +241,11 @@ namespace NineWorldsDeep
                         {
                             f.FlagForReview("concatenated", metaKeyToSet, bestValueToSet);
                         }
+                        else if(Double.Parse(f.GetMeta("bestPercentMatch")) == 1) 
+                        {
+                            //no need to flag for review, perfect match, just set
+                            f.SetMeta(metaKeyToSet, bestValueToSet);
+                        }
                     }
                 }
 

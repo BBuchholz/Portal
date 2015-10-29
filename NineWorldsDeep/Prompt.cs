@@ -99,5 +99,10 @@ namespace NineWorldsDeep
         {
             return Interaction.InputBox(promptMsg);
         }
+
+        public static string Input(string promptMsg, string defaultValue)
+        {
+            return Interaction.InputBox(promptMsg, "Input", defaultValue);
+        }
     }
 }

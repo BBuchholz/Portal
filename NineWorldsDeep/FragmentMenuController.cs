@@ -25,6 +25,12 @@ namespace NineWorldsDeep
             window.Menu.AddMenuItem("Fragments",
                                     "Filter By Selected DisplayKey Value",
                                     FilterBySelected);
+            window.Menu.AddMenuItem("Fragments",
+                                    "Extract By Keys",
+                                    ExtractByKeys);
+            window.Menu.AddMenuItem("Fragments",
+                                    "Trim Prefix To New Key",
+                                    TrimPrefixToNewKey);
             window.Menu.AddMenuItem("Workbench",
                                     "Send To Workbench First",
                                     SendToWorkbenchFirst);
@@ -87,6 +93,100 @@ namespace NineWorldsDeep
             }
 
             window.Receive(lst);
+        }
+
+        private void ExtractByKeys(object sender, RoutedEventArgs e)
+        {
+            List<string> keys = new List<string>();
+            List<Fragment> fragments = new List<Fragment>();
+
+            string key = "";
+
+            do
+            {
+                key = Prompt.Input("Enter key to extract, or press enter to continue");
+                if (!string.IsNullOrWhiteSpace(key))
+                {
+                    keys.Add(key);
+                }
+
+            } while (!string.IsNullOrWhiteSpace(key));
+
+            bool keysVerified = true;
+
+            foreach(Fragment f in window.GetFragments())
+            {
+                //break nested loop if key verification fails
+                if (!keysVerified)
+                {
+                    break;
+                }
+
+                Fragment newFragment = null;
+                
+                foreach(string k in keys)
+                {
+                    string v = f.GetMeta(k);
+                    if(v != null)
+                    {
+                        if(newFragment == null)
+                        {
+                            newFragment = new Fragment(k, v);
+                        }
+                        else
+                        {
+                            newFragment.SetMeta(k, v);
+                        }
+
+                    }else
+                    {
+                        keysVerified = false;
+                        break;
+                    }
+                }
+
+                fragments.Add(newFragment);
+            }
+
+            if (keysVerified)
+            {
+                window.Receive(fragments);
+            }
+            else
+            {
+                MessageBox.Show("keys could not be verified, one or more fragments missing specified keys");
+            }
+        }
+
+        private void TrimPrefixToNewKey(object sender, RoutedEventArgs e)
+        {
+            string key = Prompt.Input("Enter Key To Trim");
+            if (!string.IsNullOrWhiteSpace(key))
+            {
+                string firstVal = window.GetFragments().First().GetMeta(key);
+                if (!string.IsNullOrWhiteSpace(firstVal))
+                {
+                    string prefix = Prompt.Input("Select/Enter prefix to trim", firstVal);
+                    string newKey = Prompt.Input("Enter new key to set");
+
+                    if(!string.IsNullOrWhiteSpace(prefix) && !string.IsNullOrWhiteSpace(newKey))
+                    {
+                        foreach(Fragment f in window.GetFragments())
+                        {
+                            string newVal = f.GetMeta(key);
+                            if (newVal.StartsWith(prefix))
+                            {
+                                newVal = newVal.Remove(0, prefix.Length);
+                            }
+                            f.SetMeta(newKey, newVal);
+                        }
+                    }
+                    else
+                    {
+                        MessageBox.Show("prefix and new key must be specified.");
+                    }
+                }
+            }
         }
 
         private void LoadFromXml(object sender, RoutedEventArgs e)
