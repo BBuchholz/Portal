@@ -8,6 +8,11 @@ namespace NineWorldsDeep
 {
     public static class ExtensionsFragment
     {
+        public static List<Fragment> ToList(this Fragment f)
+        {
+            return new Fragment[] { f.DeepCopy() }.ToList();
+        }
+
         public static void MarkUnprocessed(this IEnumerable<Fragment> ie,
                                            string processedKey)
         {

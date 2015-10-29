@@ -78,7 +78,7 @@ namespace NineWorldsDeep
                     {
                         if(Prompt.Confirm(f.GetMeta(f.KeyToReview), true))
                         {
-                            f.ProcessReviewed(f.KeyToReview);
+                            f.ProcessReviewed();
                         }
                     }
                     else

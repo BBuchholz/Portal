@@ -37,10 +37,14 @@ namespace NineWorldsDeep
         {
             window = w;
             window.Menu.AddMenuItem("Workbench",
-                                    "Send To Workbench",
+                                    "Send To Workbench Last",
                                     SendToWorkbench);
+            window.Menu.AddMenuItem("Workbench",
+                                    "Send To Workbench First",
+                                    SendToWorkbenchFirst);
             ConfigureClosingEvent(window);
         }
+
 
         public void ConfigureClosingEvent(Window w)
         {
@@ -85,6 +89,13 @@ namespace NineWorldsDeep
         {
             WorkbenchWindow w = WorkbenchWindow.Instance;
             w.Receive(window.GetFragments().DeepCopy());
+            w.Show();
+        }
+        
+        private void SendToWorkbenchFirst(object sender, RoutedEventArgs e)
+        {
+            WorkbenchWindow w = WorkbenchWindow.Instance;
+            w.ReceiveFirst(window.GetFragments().DeepCopy());
             w.Show();
         }
     }

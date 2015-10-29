@@ -67,6 +67,10 @@ namespace NineWorldsDeep
         {
             _controller.AddListView(ie);
         }
-       
+
+        public void ReceiveFirst(IEnumerable<Fragment> ie)
+        {
+            _controller.AddListViewFirst(ie);
+        }
     }
 }

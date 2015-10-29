@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Controls;
 
 namespace NineWorldsDeep
@@ -52,17 +53,20 @@ namespace NineWorldsDeep
 
         public void AddListView(IEnumerable<Fragment> ie)
         {
-            if(mainGrid != null) { 
+            mainGrid.ColumnDefinitions.Add(new ColumnDefinition());
+            AddListView(ie, mainGrid.ColumnDefinitions.Count() - 1);
+        }
 
-                mainGrid.ColumnDefinitions.Add(new ColumnDefinition());
-                int colsCount = mainGrid.ColumnDefinitions.Count();
-
+        public void AddListView(IEnumerable<Fragment> ie, int colIndex)
+        {
+            if (mainGrid != null)
+            {                
                 ListView lv = new ListView();
-                lv.SetValue(Grid.ColumnProperty, colsCount - 1);
+                lv.SetValue(Grid.ColumnProperty, colIndex);
                 lv.SetValue(Grid.RowProperty, 1);
 
                 ComboBox cmb = new ComboBox();
-                cmb.SetValue(Grid.ColumnProperty, colsCount - 1);
+                cmb.SetValue(Grid.ColumnProperty, colIndex);
                 cmb.SetValue(Grid.RowProperty, 0);
                 cmb.SelectionChanged += Cmb_SelectionChanged;
                 Associate(lv, cmb);
@@ -71,9 +75,47 @@ namespace NineWorldsDeep
                 mainGrid.Children.Add(lv);
 
                 lv.ItemsSource = ie;
-                listViews.Insert(colsCount - 1, lv);
+                listViews.Insert(colIndex, lv);
                 RefreshMetaKeys(cmb, lv);
+                lv.UpdateLayout();
             }
+        }
+
+        public void AddListViewFirst(IEnumerable<Fragment> ie)
+        {
+            mainGrid.ColumnDefinitions.Add(new ColumnDefinition());
+            ShiftListViews(1);
+            AddListView(ie, 0);            
+        }
+
+        public Fragment GetSelectedFragment(int index)
+        {
+            if (index < listViews.Count)
+            {
+                return (Fragment)listViews[index].SelectedItem;
+            }
+
+            return null;
+        }
+
+        public string GetDisplayValue(int index)
+        {
+            Fragment f = GetSelectedFragment(index);
+            if(f != null)
+            {
+                return f.DisplayValue;
+            }
+            return null;
+        }
+
+        public string GetDisplayKey(int index)
+        {
+            Fragment f = GetSelectedFragment(index);
+            if (f != null)
+            {
+                return f.DisplayKey;
+            }
+            return null;
         }
 
         private void Cmb_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -101,16 +143,26 @@ namespace NineWorldsDeep
 
         public void SendFirst()
         {
-            if(mainGrid != null)
+            Send(listViews.First());
+        }
+
+        private void Send(ListView lv)
+        {
+            if (mainGrid != null)
             {
-                if(listViews.Count > 0)
+                if (listViews.Count > 0)
                 {
                     FragmentMetaWindow fmw = new FragmentMetaWindow();
-                    fmw.Receive(GetFragments(listViews.First()).DeepCopy());
+                    fmw.Receive(GetFragments(lv).DeepCopy());
                     fmw.Show();
                 }
             }
-        }        
+        }
+
+        public void SendLast()
+        {
+            Send(listViews.Last());
+        }
 
         public void RemoveLast()
         {
@@ -140,17 +192,22 @@ namespace NineWorldsDeep
                     ColumnDefinition firstCol = mainGrid.ColumnDefinitions.First();
                     mainGrid.ColumnDefinitions.Remove(firstCol);
                     listViews.Remove(first);
-                    foreach (ListView lv in listViews)
-                    {
-                        //shift all cols over one
-                        int newColProp = 
-                            (int)lv.GetValue(Grid.ColumnProperty) - 1;
-                        lv.SetValue(Grid.ColumnProperty, newColProp);
-                        mapListViewComboBox[lv].SetValue(Grid.ColumnProperty,
-                                                         newColProp);
-                    }
+                    ShiftListViews(-1);       
                 }
             }            
+        }
+
+        public void ShiftListViews(int indexShift)
+        {
+            foreach (ListView lv in listViews)
+            {
+                //shift all cols over one
+                int newColProp =
+                    (int)lv.GetValue(Grid.ColumnProperty) + indexShift;
+                lv.SetValue(Grid.ColumnProperty, newColProp);
+                mapListViewComboBox[lv].SetValue(Grid.ColumnProperty,
+                                                 newColProp);
+            }
         }
 
         public void RefreshMetaKeys(int index)

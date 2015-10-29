@@ -96,10 +96,10 @@ namespace NineWorldsDeep
             KeyToReview = keyToReview;
         }
 
-        public void ProcessReviewed(string keyToReview)
+        public void ProcessReviewed()
         {
             IsFlagged = false;
-            RemoveMeta(keyToReview);
+            RemoveMeta("KeyToReview");
         }
         
         public void SetMeta(string key, string value)
