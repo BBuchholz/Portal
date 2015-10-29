@@ -25,8 +25,54 @@ namespace NineWorldsDeep
             window.Menu.AddMenuItem("Fragments",
                                     "Filter By Selected DisplayKey Value",
                                     FilterBySelected);
+            window.Menu.AddMenuItem("Workbench",
+                                    "Send To Workbench First",
+                                    SendToWorkbenchFirst);
+            window.Menu.AddMenuItem("Workbench",
+                                    "Send To Workbench Last",
+                                    SendToWorkbench);
+            window.Menu.AddMenuItem("Meta",
+                                    "Remove Selected Meta",
+                                    RemoveSelectedMeta);
         }
-        
+
+        private void RemoveSelectedMeta(object sender, RoutedEventArgs e)
+        {
+            string output = "remove the following meta data?" +
+                Environment.NewLine;
+            Fragment f = window.GetSelectedFragment();
+            if(f != null)
+            {
+                IEnumerable<KeyValuePair<string, string>> selectedMeta = window.GetSelectedMeta();
+                foreach (KeyValuePair<string, string> kv in selectedMeta)
+                {
+                    output += Environment.NewLine + kv.Key + ": " + kv.Value;
+                }
+
+                if (Prompt.Confirm(output))
+                {
+                    foreach(KeyValuePair<string, string> kv in selectedMeta)
+                    {
+                        f.RemoveMeta(kv.Key);
+                    }
+                }
+            }            
+        }
+
+        private void SendToWorkbench(object sender, RoutedEventArgs e)
+        {
+            WorkbenchWindow w = WorkbenchWindow.Instance;
+            w.Receive(window.GetFragments().DeepCopy());
+            w.Show();
+        }
+
+        private void SendToWorkbenchFirst(object sender, RoutedEventArgs e)
+        {
+            WorkbenchWindow w = WorkbenchWindow.Instance;
+            w.ReceiveFirst(window.GetFragments().DeepCopy());
+            w.Show();
+        }
+
         private void FilterBySelected(object sender, RoutedEventArgs e)
         {
             string selectedValue = window.Selected.DisplayValue;

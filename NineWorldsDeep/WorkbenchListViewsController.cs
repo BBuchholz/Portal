@@ -20,6 +20,14 @@ namespace NineWorldsDeep
         private Dictionary<ComboBox, ListView> mapComboBoxListView =
             new Dictionary<ComboBox, ListView>();
 
+        public int ColumnCount
+        {
+            get
+            {
+                return listViews.Count;
+            }
+        }
+
         public void Configure(Grid g)
         {
             this.mainGrid = g;

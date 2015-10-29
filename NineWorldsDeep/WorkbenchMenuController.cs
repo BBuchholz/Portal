@@ -18,9 +18,6 @@ namespace NineWorldsDeep
         {
             this.w = w;
             this.wc = wc;
-            //w.Menu.AddMenuItem("List Operations",
-            //                   "Fuzzy Intersection {x, y} => z",
-            //                   FuzzyIntersectionXYtoZ);
             w.Menu.AddMenuItem("List Operations",
                                "Fuzzy Intersection {x, y} => x++",
                                FuzzyIntersectionXYtoXpp);
@@ -31,28 +28,68 @@ namespace NineWorldsDeep
                                "Merge {x, y, z1, z2} => {x, y, z}",
                                MergeXYZZtoXYZ);
             w.Menu.AddMenuItem("List Operations",
-                               "Send First",
-                               SendFirst);
-            w.Menu.AddMenuItem("List Operations",
-                               "Send Last",
-                               SendLast);
-            w.Menu.AddMenuItem("List Operations",
-                               "Remove Last",
-                               RemoveLast);
-            w.Menu.AddMenuItem("List Operations",
-                               "Remove First",
-                               RemoveFirst);
-            w.Menu.AddMenuItem("List Operations",
                                "Mark Fuzzy Intersection Unprocessed {x}",
                                MarkFuzzyIntersectionUnprocessed);
+            w.Menu.AddMenuItem("Workbench",
+                               "Send First",
+                               SendFirst);
+            w.Menu.AddMenuItem("Workbench",
+                               "Send Last",
+                               SendLast);
+            w.Menu.AddMenuItem("Workbench",
+                               "Remove Last",
+                               RemoveLast);
+            w.Menu.AddMenuItem("Workbench",
+                               "Remove First",
+                               RemoveFirst);
+            w.Menu.AddMenuItem("Fragment",
+                               "Display Selected {x}",
+                               DisplayFragmentX);
+            w.Menu.AddMenuItem("Fragment",
+                               "Display Selected {y}",
+                               DisplayFragmentY);
+            w.Menu.AddMenuItem("Fragment",
+                               "Display Selected {z}",
+                               DisplayFragmentZ);
+        }
+
+        private void DisplayFragment(Fragment f)
+        {
+            if(f != null)
+            {
+                MessageBox.Show(f.ToMultiLineString());
+            }
+            else
+            {
+                MessageBox.Show("fragment null");
+            }
+        }
+        private void DisplayFragmentZ(object sender, RoutedEventArgs e)
+        {
+            DisplayFragment(wc.GetSelectedFragment(2));
+        }
+
+        private void DisplayFragmentY(object sender, RoutedEventArgs e)
+        {
+            DisplayFragment(wc.GetSelectedFragment(1));
+        }
+
+        private void DisplayFragmentX(object sender, RoutedEventArgs e)
+        {
+            DisplayFragment(wc.GetSelectedFragment(0));
         }
 
         private void MergeXYZZtoXYZ(object sender, RoutedEventArgs e)
         {
+            MergeXYZZtoXYZ();
+        }
+
+        private void MergeXYZZtoXYZ()
+        {
             IEnumerable<Fragment> listZ1 = wc.GetFragments(2);
             IEnumerable<Fragment> listZ2 = wc.GetFragments(3);
 
-            if(listZ1 == null || listZ2 == null)
+            if (listZ1 == null || listZ2 == null)
             {
                 MessageBox.Show("Merge is for combining result sets," +
                                 " indexes 2 and 3 must be populated.");
@@ -61,12 +98,12 @@ namespace NineWorldsDeep
             {
                 List<Fragment> listZFinal = new List<Fragment>();
 
-                foreach(Fragment f in listZ1)
+                foreach (Fragment f in listZ1)
                 {
                     listZFinal.Add(f);
                 }
 
-                foreach(Fragment f in listZ2)
+                foreach (Fragment f in listZ2)
                 {
                     listZFinal.Add(f);
                 }
@@ -95,6 +132,14 @@ namespace NineWorldsDeep
             {
                 f.SetMeta(displayKeyY, selectedValueY);
                 w.Receive(f.ToList());
+
+                if(wc.ColumnCount > 3)
+                {
+                    if(Prompt.Confirm("Auto-merge results?"))
+                    {
+                        MergeXYZZtoXYZ();
+                    }
+                }
             }
         }
 
@@ -135,6 +180,8 @@ namespace NineWorldsDeep
             IEnumerable<Fragment> listX = wc.GetFragments(0);
             IEnumerable<Fragment> listY = wc.GetFragments(1);
 
+            string metaKeyToSet = Prompt.Input("Key to set on confirm?");
+
             do
             {
                 int segmentSize = 1;
@@ -152,13 +199,13 @@ namespace NineWorldsDeep
                 listX.GetUnprocessedSegment(segmentSize, fuzzyIntersectionProcessedTag);
 
                 if (listX != null && listY != null)
-                {
-                    //process here and store in listZ
+                {                    
                     foreach (Fragment f in listXSegment)
                     {
 
                         string bestMatchValue = "[no match found]";
                         string bestMatchKey = "[no match found]";
+                        string bestValueToSet = "[no match found]";
                         double bestPercentMatch =
                             f.DisplayValue.PercentMatchTo(bestMatchValue);
 
@@ -174,6 +221,7 @@ namespace NineWorldsDeep
                                 bestMatchKey = currentMatchKey;
                                 bestMatchValue = currentMatchValue;
                                 bestPercentMatch = currentPercentMatch;
+                                bestValueToSet = f2.GetMeta(metaKeyToSet);
                             }
 
                         }
@@ -191,7 +239,7 @@ namespace NineWorldsDeep
 
                         if(Double.Parse(f.GetMeta("bestPercentMatch")) < 1)
                         {
-                            f.FlagForReview("concatenated");
+                            f.FlagForReview("concatenated", metaKeyToSet, bestValueToSet);
                         }
                     }
                 }

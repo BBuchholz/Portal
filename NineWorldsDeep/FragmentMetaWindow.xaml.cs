@@ -61,6 +61,16 @@ namespace NineWorldsDeep
             RefreshMetaKeys();
         }
 
+        public Fragment GetSelectedFragment()
+        {
+            return (Fragment)lvItems.SelectedItem;
+        }
+
+        public IEnumerable<KeyValuePair<string,string>> GetSelectedMeta()
+        {
+            return (IEnumerable<KeyValuePair<string,string>>)lvDetail.SelectedItems;
+        }
+
         public void RefreshMetaKeys()
         {
             cmbDisplayKey.ItemsSource = GetFragments().GetMetaKeys();

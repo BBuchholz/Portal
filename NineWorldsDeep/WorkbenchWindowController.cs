@@ -9,7 +9,6 @@ namespace NineWorldsDeep
 {
     public class WorkbenchWindowController
     {
-        private FragmentMetaWindow window;
         private List<Window> registeredWindows =
             new List<Window>();
 
@@ -35,14 +34,7 @@ namespace NineWorldsDeep
 
         public void Configure(FragmentMetaWindow w)
         {
-            window = w;
-            window.Menu.AddMenuItem("Workbench",
-                                    "Send To Workbench Last",
-                                    SendToWorkbench);
-            window.Menu.AddMenuItem("Workbench",
-                                    "Send To Workbench First",
-                                    SendToWorkbenchFirst);
-            ConfigureClosingEvent(window);
+            ConfigureClosingEvent(w);
         }
 
 
@@ -85,18 +77,6 @@ namespace NineWorldsDeep
             return false;
         }
         
-        private void SendToWorkbench(object sender, RoutedEventArgs e)
-        {
-            WorkbenchWindow w = WorkbenchWindow.Instance;
-            w.Receive(window.GetFragments().DeepCopy());
-            w.Show();
-        }
-        
-        private void SendToWorkbenchFirst(object sender, RoutedEventArgs e)
-        {
-            WorkbenchWindow w = WorkbenchWindow.Instance;
-            w.ReceiveFirst(window.GetFragments().DeepCopy());
-            w.Show();
-        }
+
     }
 }

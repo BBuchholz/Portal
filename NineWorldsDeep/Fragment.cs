@@ -90,16 +90,47 @@ namespace NineWorldsDeep
             }
         }
 
-        public void FlagForReview(string keyToReview)
+        public string KeyToSetOnReview
+        {
+            get
+            {
+                return GetMeta("KeyToSetOnReview");
+            }
+            private set
+            {
+                SetMeta("KeyToSetOnReview", value);
+            }
+        }
+
+        public string ValueToSetOnReview
+        {
+            get
+            {
+                return GetMeta("ValueToSetOnReview");
+            }
+            private set
+            {
+                SetMeta("ValueToSetOnReview", value);
+            }
+        }
+
+        public void FlagForReview(string keyToReview, 
+                                  string keyToSetOnReview, 
+                                  string valueToSetOnReview)
         {
             IsFlagged = true;
             KeyToReview = keyToReview;
+            KeyToSetOnReview = keyToSetOnReview;
+            ValueToSetOnReview = valueToSetOnReview;
         }
 
         public void ProcessReviewed()
         {
             IsFlagged = false;
             RemoveMeta("KeyToReview");
+            SetMeta(KeyToSetOnReview, ValueToSetOnReview);
+            RemoveMeta("KeyToSetOnReview");
+            RemoveMeta("ValueToSetOnReview");
         }
         
         public void SetMeta(string key, string value)
