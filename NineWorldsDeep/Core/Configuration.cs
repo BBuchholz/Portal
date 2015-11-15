@@ -12,6 +12,9 @@ namespace NineWorldsDeep.Core
 
         public static string AbletonProjectsFolder { get { return @"C:\NWD-AUX\abletonProjects"; } }
         public static string AudacityProjectsFolder { get { return @"C:\NWD-AUX\audacityProjects"; } }
+
+        public static string AudacityWavExportsFolder { get { return @"C:\NWD-AUX\audacityWavExports"; } }
+
         public static string CubaseProjectsFolder { get { return @"C:\NWD-AUX\cubaseProjects"; } }
         public static string FLStudioProjectsFolder { get { return @"C:\NWD-AUX\flStudioProjects"; } }
 
@@ -23,11 +26,43 @@ namespace NineWorldsDeep.Core
             }
         }
 
+        public static string PhoneSyncSynergyArchivedFolder
+        {
+            get
+            {
+                return @"C:\NWD-SYNC\phone\NWD\synergy\archived";
+            }
+        }
+
+        public static string PhoneSyncSynergyFolder
+        {
+            get
+            {
+                return @"C:\NWD-SYNC\phone\NWD\synergy";
+            }
+        }
+
         public static string VisualStudioProjectsFolder
         {
             get
             {
                 return @"C:\Users\Brent\Documents\Visual Studio 2015\Projects";
+            }
+        }
+
+        public static string VoiceMemosFolder
+        {
+            get
+            {
+                return @"C:\NWD-AUX\voicememos";
+            }
+        }
+
+        public static string VoiceMemoTagFilePath
+        {
+            get
+            {
+                return VoiceMemosFolder + @"\fileTags.xml";
             }
         }
     }
