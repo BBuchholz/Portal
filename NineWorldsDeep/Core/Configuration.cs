@@ -18,6 +18,8 @@ namespace NineWorldsDeep.Core
         public static string CubaseProjectsFolder { get { return @"C:\NWD-AUX\cubaseProjects"; } }
         public static string FLStudioProjectsFolder { get { return @"C:\NWD-AUX\flStudioProjects"; } }
 
+        public static string ImagesFolder { get { return "c:\\NWD-AUX\\images"; } }
+
         public static string MySqlProjectsFolder
         {
             get
@@ -42,12 +44,22 @@ namespace NineWorldsDeep.Core
             }
         }
 
+        public static string GetPhoneSyncSynergyFilePath(string listName)
+        {
+            return PhoneSyncSynergyFolder + "\\" + listName + ".txt";
+        }
+
         public static string VisualStudioProjectsFolder
         {
             get
             {
                 return @"C:\Users\Brent\Documents\Visual Studio 2015\Projects";
             }
+        }
+
+        public static string GetTagFilePath(string folderPath)
+        {
+            return folderPath + "\\fileTags.xml";
         }
 
         public static string VoiceMemosFolder
