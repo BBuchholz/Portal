@@ -1,4 +1,5 @@
-﻿using NineWorldsDeep.Xml;
+﻿using NineWorldsDeep.Core;
+using NineWorldsDeep.Xml;
 using NineWorldsDeep.Xml.Adapters;
 using System;
 using System.Collections.Generic;
@@ -82,9 +83,9 @@ namespace NineWorldsDeep
         private void FilterBySelected(object sender, RoutedEventArgs e)
         {
             string selectedValue = window.Selected.DisplayValue;
-            List<Fragment> lst = new List<Fragment>();
+            List<Core.Fragment> lst = new List<Core.Fragment>();
 
-            foreach(Fragment f in window.GetFragments())
+            foreach(Core.Fragment f in window.GetFragments())
             {
                 if (f.DisplayValue.Equals(selectedValue))
                 {
@@ -98,7 +99,7 @@ namespace NineWorldsDeep
         private void ExtractByKeys(object sender, RoutedEventArgs e)
         {
             List<string> keys = new List<string>();
-            List<Fragment> fragments = new List<Fragment>();
+            List<Core.Fragment> fragments = new List<Core.Fragment>();
 
             string key = "";
 
@@ -114,7 +115,7 @@ namespace NineWorldsDeep
 
             bool keysVerified = true;
 
-            foreach(Fragment f in window.GetFragments())
+            foreach(Core.Fragment f in window.GetFragments())
             {
                 //break nested loop if key verification fails
                 if (!keysVerified)
@@ -122,7 +123,7 @@ namespace NineWorldsDeep
                     break;
                 }
 
-                Fragment newFragment = null;
+                Core.Fragment newFragment = null;
                 
                 foreach(string k in keys)
                 {
@@ -131,7 +132,7 @@ namespace NineWorldsDeep
                     {
                         if(newFragment == null)
                         {
-                            newFragment = new Fragment(k, v);
+                            newFragment = new Core.Fragment(k, v);
                         }
                         else
                         {
@@ -171,7 +172,7 @@ namespace NineWorldsDeep
 
                     if(!string.IsNullOrWhiteSpace(prefix) && !string.IsNullOrWhiteSpace(newKey))
                     {
-                        foreach(Fragment f in window.GetFragments())
+                        foreach(Core.Fragment f in window.GetFragments())
                         {
                             string newVal = f.GetMeta(key);
                             if (newVal.StartsWith(prefix))
@@ -216,7 +217,7 @@ namespace NineWorldsDeep
         
         private void ReviewFlaggedFragments(object sender, RoutedEventArgs e)
         {
-            foreach (Fragment f in window.GetFragments())
+            foreach (ReviewableFragment f in window.GetFragments().ToReviewables())
             {                
                 if (f.IsFlagged)
                 {

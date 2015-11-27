@@ -69,11 +69,11 @@ namespace NineWorldsDeep
 
         private void DemoFragments()
         {
-            List<Fragment> lst = new List<Fragment>();
+            List<Core.Fragment> lst = new List<Core.Fragment>();
 
             for (int i = 1; i < 10; i++)
             {
-                Fragment f = new Fragment("frg" + i);
+                Core.Fragment f = new Core.Fragment("frg" + i);
                 f.SetMeta("DemoKey", "demo value for frg" + i);
 
                 if(i % 2 == 0)

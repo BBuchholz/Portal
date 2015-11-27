@@ -9,13 +9,14 @@ namespace NineWorldsDeep.Xml.Adapters
 {
     public class FragmentXmlAdapter : IXmlTransportable
     {
-        private Fragment fragment;
+        private Core.Fragment fragment;
 
-        public static IEnumerable<FragmentXmlAdapter> WrapAll(IEnumerable<Fragment> ie)
+        public static IEnumerable<FragmentXmlAdapter> 
+            WrapAll(IEnumerable<Core.Fragment> ie)
         {
             List<FragmentXmlAdapter> lst = new List<FragmentXmlAdapter>();
 
-            foreach(Fragment f in ie)
+            foreach(Core.Fragment f in ie)
             {
                 lst.Add(new FragmentXmlAdapter(f));
             }
@@ -23,9 +24,9 @@ namespace NineWorldsDeep.Xml.Adapters
             return lst;
         }
 
-        public static IEnumerable<Fragment> UnWrapAll(IEnumerable<IXmlTransportable> ie)
+        public static IEnumerable<Core.Fragment> UnWrapAll(IEnumerable<IXmlTransportable> ie)
         {
-            List<Fragment> lst = new List<Fragment>();
+            List<Core.Fragment> lst = new List<Core.Fragment>();
 
             foreach(IXmlTransportable ixt in ie)
             {
@@ -36,7 +37,7 @@ namespace NineWorldsDeep.Xml.Adapters
             return lst;
         }
 
-        public FragmentXmlAdapter(Fragment f)
+        public FragmentXmlAdapter(Core.Fragment f)
         {
             fragment = f;
         }
@@ -80,13 +81,13 @@ namespace NineWorldsDeep.Xml.Adapters
 
         public IXmlTransportable FromXElement(XElement x)
         {
-            Fragment f = null;
+            Core.Fragment f = null;
 
             foreach(var metaElement in x.Elements("meta"))
             {
                 if (f == null) { 
-                    f = new Fragment(metaElement.Element("key").Value,
-                                     metaElement.Element("value").Value);
+                    f = new Core.Fragment(metaElement.Element("key").Value,
+                                          metaElement.Element("value").Value);
                 }
 
                 f.SetMeta(metaElement.Element("key").Value,

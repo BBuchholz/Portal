@@ -1,4 +1,5 @@
-﻿using System;
+﻿using NineWorldsDeep.Core;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,11 +9,13 @@ namespace NineWorldsDeep
 {
     public static class ExtensionsFragment
     {
+        [Obsolete("use Core.Fragment.ToList")]
         public static List<Fragment> ToList(this Fragment f)
         {
             return new Fragment[] { f.DeepCopy() }.ToList();
         }
 
+        //TODO: move to ProcessableFragment (and remove processedKey as parameter)
         public static void MarkUnprocessed(this IEnumerable<Fragment> ie,
                                            string processedKey)
         {
@@ -22,20 +25,22 @@ namespace NineWorldsDeep
             }
         }
 
-        public static void SetProcessed(this Fragment f, string processedKey)
+        [Obsolete("use Core.ProcessableFragment")]
+        public static void SetProcessed(this Deprecated.Fragment f, string processedKey)
         {
             f.SetMeta(processedKey, "True");
         }
 
-        public static IEnumerable<Fragment> 
-            GetUnprocessedSegment(this IEnumerable<Fragment> ie,
+        [Obsolete("use IEnumerable<ProcessableFragment>.GetUnprocessedSegment()")]
+        public static IEnumerable<Deprecated.Fragment> 
+            GetUnprocessedSegment(this IEnumerable<Deprecated.Fragment> ie,
                                   int segmentSize,
                                   string processedKey)
         {
             int segmentSizeRemaining = segmentSize;
-            List<Fragment> lst = new List<Fragment>();
+            List<Deprecated.Fragment> lst = new List<Deprecated.Fragment>();
 
-            foreach (Fragment f in ie)
+            foreach (Deprecated.Fragment f in ie)
             {
                 string processed = f.GetMeta(processedKey);
                 if (processed == null || processed.Equals("False"))
@@ -53,13 +58,45 @@ namespace NineWorldsDeep
             return lst;
         }
 
+        public static IEnumerable<ProcessableFragment>
+            GetUnprocessedSegment(this IEnumerable<ProcessableFragment> ie,
+                                  int segmentSize)
+        {
+            int segmentSizeRemaining = segmentSize;
+            List<ProcessableFragment> lst = new List<ProcessableFragment>();
+
+            foreach (ProcessableFragment f in ie)
+            {
+                if (!f.IsProcessed())
+                {
+                    lst.Add(f);
+                    segmentSizeRemaining -= 1;
+
+                    if (segmentSizeRemaining < 1)
+                    {
+                        break;
+                    }
+                }
+            }
+
+            return lst;
+        }
+
+        [Obsolete("use IEnumerable<ProcessableFragment>.GetProcessed()")]
         public static IEnumerable<Fragment> 
             GetProcessed(this IEnumerable<Fragment> ie,
                          string processedKey)
         {
             return ie.Where(x => x.IsProcessed(processedKey));
         }
-        
+
+        public static IEnumerable<ProcessableFragment>
+            GetProcessed(this IEnumerable<ProcessableFragment> ie)
+        {
+            return ie.Where(x => x.IsProcessed());
+        }
+
+        [Obsolete("use Core.ProcessableFragment")]
         public static bool IsProcessed(this Fragment f, string processedKey)
         {
             string val = f.GetMeta(processedKey);
@@ -67,11 +104,11 @@ namespace NineWorldsDeep
         }
 
         public static IEnumerable<string> 
-            GetMetaKeys(this IEnumerable<Fragment> fragments)
+            GetMetaKeys(this IEnumerable<Core.Fragment> fragments)
         {
             List<string> lst = new List<string>();
 
-            foreach (Fragment f in fragments)
+            foreach (Core.Fragment f in fragments)
             {
                 foreach (string key in f.MetaKeys)
                 {
@@ -85,11 +122,37 @@ namespace NineWorldsDeep
             return lst;
         }
 
-        public static IEnumerable<Fragment> DeepCopy(this IEnumerable<Fragment> ie)
+        public static IEnumerable<ReviewableFragment>
+            ToReviewables(this IEnumerable<Core.Fragment> ie)
         {
-            List<Fragment> lst = new List<Fragment>();
+            List<ReviewableFragment> lst = new List<ReviewableFragment>();
+
+            foreach(Core.Fragment f in ie)
+            {
+                lst.Add(new ReviewableFragment(f));
+            }
+
+            return lst;
+        }
+
+        public static IEnumerable<ProcessableFragment>
+            ToProcessables(this IEnumerable<Fragment> ie, string processedKey)
+        {
+            List<ProcessableFragment> lst = new List<ProcessableFragment>();
 
             foreach (Fragment f in ie)
+            {
+                lst.Add(new ProcessableFragment(f, processedKey));
+            }
+
+            return lst;
+        }
+
+        public static IEnumerable<Core.Fragment> DeepCopy(this IEnumerable<Core.Fragment> ie)
+        {
+            List<Core.Fragment> lst = new List<Core.Fragment>();
+
+            foreach (Core.Fragment f in ie)
             {
                 lst.Add(f.DeepCopy());
             }

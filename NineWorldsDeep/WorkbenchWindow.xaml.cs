@@ -63,12 +63,12 @@ namespace NineWorldsDeep
 
         public MenuController Menu {  get { return _menu; } }
 
-        public void Receive(IEnumerable<Fragment> ie)
+        public void Receive(IEnumerable<Core.Fragment> ie)
         {
             _controller.AddListView(ie);
         }
 
-        public void ReceiveFirst(IEnumerable<Fragment> ie)
+        public void ReceiveFirst(IEnumerable<Core.Fragment> ie)
         {
             _controller.AddListViewFirst(ie);
         }

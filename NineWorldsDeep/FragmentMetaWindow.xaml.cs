@@ -1,4 +1,5 @@
-﻿using NineWorldsDeep.Xml;
+﻿using NineWorldsDeep.Core;
+using NineWorldsDeep.Xml;
 using NineWorldsDeep.Xml.Adapters;
 using System;
 using System.Collections.Generic;
@@ -41,20 +42,20 @@ namespace NineWorldsDeep
             }
         }
                 
-        public IEnumerable<Fragment> GetFragments()
+        public IEnumerable<Core.Fragment> GetFragments()
         {
-            IEnumerable<Fragment> ie = 
-                (IEnumerable<Fragment>)lvItems.ItemsSource;
+            IEnumerable<Core.Fragment> ie = 
+                (IEnumerable<Core.Fragment>)lvItems.ItemsSource;
 
             if(ie == null)
             {
-                ie = new List<Fragment>();
+                ie = new List<Core.Fragment>();
             }
 
             return ie;
         }
 
-        public void Receive(IEnumerable<Fragment> fragments)
+        public void Receive(IEnumerable<Core.Fragment> fragments)
         {
             lvItems.ItemsSource = fragments;
             lvDetail.ItemsSource = null;
@@ -78,7 +79,7 @@ namespace NineWorldsDeep
 
         public void RefreshFragmentList()
         {
-            IEnumerable<Fragment> frgs = GetFragments();
+            IEnumerable<Core.Fragment> frgs = GetFragments();
             lvItems.ItemsSource = null;           
             lvItems.ItemsSource = frgs.OrderBy(s => s);
         }

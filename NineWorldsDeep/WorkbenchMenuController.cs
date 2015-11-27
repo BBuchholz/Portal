@@ -1,4 +1,5 @@
-﻿using System;
+﻿using NineWorldsDeep.Core;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -177,8 +178,11 @@ namespace NineWorldsDeep
 
         private void FuzzyIntersectionXYtoXpp(object sender, RoutedEventArgs e)
         {
-            IEnumerable<Fragment> listX = wc.GetFragments(0);
-            IEnumerable<Fragment> listY = wc.GetFragments(1);
+            IEnumerable<ProcessableFragment> listX = 
+                wc.GetFragments(0).ToProcessables(fuzzyIntersectionProcessedTag);
+
+            IEnumerable<ProcessableFragment> listY = 
+                wc.GetFragments(1).ToProcessables(fuzzyIntersectionProcessedTag);
 
             string metaKeyToSet = Prompt.Input("Key to set on confirm?");
 
@@ -195,12 +199,12 @@ namespace NineWorldsDeep
 
                 } while (!parseSucceeded);
 
-                IEnumerable<Fragment> listXSegment =
-                listX.GetUnprocessedSegment(segmentSize, fuzzyIntersectionProcessedTag);
+                IEnumerable<ProcessableFragment> listXSegment =
+                    listX.GetUnprocessedSegment(segmentSize);
 
                 if (listX != null && listY != null)
                 {                    
-                    foreach (Fragment f in listXSegment)
+                    foreach (ProcessableFragment f in listXSegment)
                     {
 
                         string bestMatchValue = "[no match found]";
@@ -235,11 +239,16 @@ namespace NineWorldsDeep
                             + bestPercentMatch.ToString() + ")";
 
                         f.SetMeta("concatenated", concatenated);
-                        f.SetProcessed(fuzzyIntersectionProcessedTag);
+                        //f.SetProcessed(fuzzyIntersectionProcessedTag);
+                        f.SetProcessed();
 
                         if(Double.Parse(f.GetMeta("bestPercentMatch")) < 1)
                         {
-                            f.FlagForReview("concatenated", metaKeyToSet, bestValueToSet);
+                            //this is a hackish solution just for now
+                            ReviewableFragment temp =
+                                new ReviewableFragment(f);
+                            temp.FlagForReview("concatenated", metaKeyToSet, bestValueToSet);
+                            f.Merge(temp, ConflictMergeAction.SkipConflicts);
                         }
                         else if(Double.Parse(f.GetMeta("bestPercentMatch")) == 1) 
                         {
@@ -251,7 +260,7 @@ namespace NineWorldsDeep
 
             } while (Prompt.Confirm("Process another segment?"));
             
-            w.Receive(listX.GetProcessed(fuzzyIntersectionProcessedTag).DeepCopy());
+            w.Receive(listX.GetProcessed().DeepCopy());
             wc.RefreshMetaKeys(0); 
         }
     }

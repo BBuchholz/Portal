@@ -4,8 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace NineWorldsDeep
+namespace NineWorldsDeep.Deprecated
 {
+    [Obsolete("Use Core.Fragment or Core.ReviewableFragment")]
     public class Fragment : IComparable
     {
         private const string name_key = "Name";

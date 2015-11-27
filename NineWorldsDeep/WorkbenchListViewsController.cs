@@ -1,4 +1,5 @@
-﻿using System;
+﻿using NineWorldsDeep.Core;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -33,7 +34,7 @@ namespace NineWorldsDeep
             this.mainGrid = g;
         }
 
-        public IEnumerable<Fragment> GetFragments(int index)
+        public IEnumerable<Core.Fragment> GetFragments(int index)
         {
             if (index < listViews.Count)
             {
@@ -43,9 +44,9 @@ namespace NineWorldsDeep
             return null;
         }
 
-        private IEnumerable<Fragment> GetFragments(ListView lv)
+        private IEnumerable<Core.Fragment> GetFragments(ListView lv)
         {
-            return (IEnumerable<Fragment>)lv.ItemsSource;
+            return (IEnumerable<Core.Fragment>)lv.ItemsSource;
         }
 
         private void Associate(ListView lv, ComboBox cmb)
@@ -59,13 +60,13 @@ namespace NineWorldsDeep
             cmb.ItemsSource = GetFragments(lv).GetMetaKeys();
         }
 
-        public void AddListView(IEnumerable<Fragment> ie)
+        public void AddListView(IEnumerable<Core.Fragment> ie)
         {
             mainGrid.ColumnDefinitions.Add(new ColumnDefinition());
             AddListView(ie, mainGrid.ColumnDefinitions.Count() - 1);
         }
 
-        public void AddListView(IEnumerable<Fragment> ie, int colIndex)
+        public void AddListView(IEnumerable<Core.Fragment> ie, int colIndex)
         {
             if (mainGrid != null)
             {                
@@ -144,7 +145,7 @@ namespace NineWorldsDeep
 
         public void RefreshFragmentList(ListView lv)
         {
-            IEnumerable<Fragment> frgs = GetFragments(lv);
+            IEnumerable<Core.Fragment> frgs = GetFragments(lv);
             lv.ItemsSource = null;
             lv.ItemsSource = frgs.OrderBy(s => s);
         }
