@@ -5,6 +5,8 @@ VisualStudioVersion = 14.0.23107.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NineWorldsDeep", "NineWorldsDeep\NineWorldsDeep.csproj", "{97BCED53-A775-4995-9EF3-D55C5CBB3970}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NwdUnitTestProject", "NwdUnitTestProject\NwdUnitTestProject.csproj", "{474E8731-CC6B-463B-B21E-79FA4BF1ACF1}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{97BCED53-A775-4995-9EF3-D55C5CBB3970}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{97BCED53-A775-4995-9EF3-D55C5CBB3970}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{97BCED53-A775-4995-9EF3-D55C5CBB3970}.Release|Any CPU.Build.0 = Release|Any CPU
+		{474E8731-CC6B-463B-B21E-79FA4BF1ACF1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{474E8731-CC6B-463B-B21E-79FA4BF1ACF1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{474E8731-CC6B-463B-B21E-79FA4BF1ACF1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{474E8731-CC6B-463B-B21E-79FA4BF1ACF1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
