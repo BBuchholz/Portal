@@ -176,6 +176,18 @@ namespace NineWorldsDeep
             wc.RemoveLast();
         }
 
+        /// <summary>
+        /// Allows user to populate a specified field of listX with a value from
+        /// the same field in listY based on a matching algorithm using
+        /// the current display values of both lists. The matching is done using 
+        /// a percent match, and if a less than 100% match is given,
+        /// the suggested value will be stored under the keys bestMatchKey and bestMatchValue
+        /// with the percent value stored in bestMatchPercent, the fragment will
+        /// be flagged for review, so a visual user confirmation can be performed. If a 100% match
+        /// is found, the value will automatically be set without flagging the fragment for review.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void FuzzyIntersectionXYtoXpp(object sender, RoutedEventArgs e)
         {
             IEnumerable<ProcessableFragment> listX = 

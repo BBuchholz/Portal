@@ -99,7 +99,7 @@ namespace NineWorldsDeep
         private void ExtractByKeys(object sender, RoutedEventArgs e)
         {
             List<string> keys = new List<string>();
-            List<Core.Fragment> fragments = new List<Core.Fragment>();
+            List<Fragment> fragments = new List<Fragment>();
 
             string key = "";
 
@@ -115,7 +115,7 @@ namespace NineWorldsDeep
 
             bool keysVerified = true;
 
-            foreach(Core.Fragment f in window.GetFragments())
+            foreach(Fragment f in window.GetFragments())
             {
                 //break nested loop if key verification fails
                 if (!keysVerified)
@@ -123,7 +123,7 @@ namespace NineWorldsDeep
                     break;
                 }
 
-                Core.Fragment newFragment = null;
+                Fragment newFragment = null;
                 
                 foreach(string k in keys)
                 {
@@ -132,7 +132,7 @@ namespace NineWorldsDeep
                     {
                         if(newFragment == null)
                         {
-                            newFragment = new Core.Fragment(k, v);
+                            newFragment = new Fragment(k, v);
                         }
                         else
                         {
@@ -217,7 +217,10 @@ namespace NineWorldsDeep
         
         private void ReviewFlaggedFragments(object sender, RoutedEventArgs e)
         {
-            foreach (ReviewableFragment f in window.GetFragments().ToReviewables())
+            IEnumerable<ReviewableFragment> reviewables =
+                window.GetFragments().ToReviewables();
+
+            foreach (ReviewableFragment f in reviewables)
             {                
                 if (f.IsFlagged)
                 {
@@ -234,6 +237,8 @@ namespace NineWorldsDeep
                     }
                 }
             }
+
+            window.Receive(reviewables);
         }
     }
 }

@@ -146,7 +146,10 @@ namespace NineWorldsDeep.Core
                     //no conflicts, just copy regardless of ConflictMergeAction
                     SetMeta(kv.Key, kv.Value);
                 }
+
             }
+
+            DisplayKey = f.DisplayKey;
         }
 
         public List<Fragment> ToList()

@@ -77,5 +77,21 @@ namespace NineWorldsDeep.Core
                 return VoiceMemosFolder + @"\fileTags.xml";
             }
         }
+
+        public static string PhoneSyncDisplayNameIndexFile
+        {
+            get
+            {
+                return @"C:\NWD-SYNC\phone\NWD\config\DisplayNameIndex.txt";
+            }
+        }
+
+        public static string PhoneSyncFileHashIndexFile
+        {
+            get
+            {
+                return @"C:\NWD-SYNC\phone\NWD\config\FileHashIndex.txt";
+            }
+        }
     }
 }
