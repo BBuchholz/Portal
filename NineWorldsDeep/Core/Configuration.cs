@@ -8,6 +8,8 @@ namespace NineWorldsDeep.Core
 {
     public class Configuration
     {
+        private static bool _testMode = false;
+
         //TODO: hard-coded values need to be transformed into config files and defaults
 
         public static string AbletonProjectsFolder { get { return @"C:\NWD-AUX\abletonProjects"; } }
@@ -32,15 +34,29 @@ namespace NineWorldsDeep.Core
         {
             get
             {
-                return @"C:\NWD-SYNC\phone\NWD\synergy\archived";
+                return ProcessTestMode(@"NWD-SYNC\phone\NWD\synergy\archived");
             }
+        }
+
+        private static string ProcessTestMode(string pathWithoutRoot)
+        {
+            string path = @"C:\";
+
+            if (TestMode)
+            {
+                path += @"NWD-SNDBX\";
+            }
+
+            path += pathWithoutRoot;
+
+            return path;
         }
 
         public static string PhoneSyncSynergyFolder
         {
             get
             {
-                return @"C:\NWD-SYNC\phone\NWD\synergy";
+                return ProcessTestMode(@"NWD-SYNC\phone\NWD\synergy");
             }
         }
 
@@ -91,6 +107,18 @@ namespace NineWorldsDeep.Core
             get
             {
                 return @"C:\NWD-SYNC\phone\NWD\config\FileHashIndex.txt";
+            }
+        }
+
+        public static bool TestMode
+        {
+            get
+            {
+                return _testMode;
+            }
+            set
+            {
+                _testMode = value;
             }
         }
     }
