@@ -6,12 +6,93 @@ using System.Threading.Tasks;
 
 namespace NineWorldsDeep.Parser
 {
-    //TODO: this is cut and paste java from NwdParserLibrary, need to port to c#
     public class Parser
     {
+        /// <summary>
+        /// A string fragment is atomic if all mixed content is contained 
+        /// within one or more keyVal structure(s) (eg. thisExample={is atomic}).
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
+        public bool IsAtomic(string input)
+        {
+            string temp = input;
+
+            while(temp.Length > 0 && StartsWithKeyValTag(temp))
+            {
+                string key = GetFirstKey(temp);
+                temp = TrimKeyVal(key, temp);
+            }
+
+            return temp.Trim().Length == 0;
+        }
+
+        /// <summary>
+        /// Trims first occurance of key and its internal value from the given
+        /// string. Extraneous whitespace is also trimmed from the copy
+        /// that is returned. Original string is unchanged. NOTE: this will
+        /// strip tags internal to mixed content, so use with caution. Primarily
+        /// intended to be used in conjuntion with GetFirstKey() 
+        /// to process and remove keyVals one by one.
+        /// </summary>
+        /// <param name="keyValPair">the key of the keyVal to trim</param>
+        /// <param name="input">the string to trim the first instance from</param>
+        /// <returns></returns>
+        public string TrimKeyVal(string key, string input)
+        {
+            string value = Extract(key, input);
+            string keyVal = key + "={" + value + "}";
+            string temp = input.Replace(keyVal, " ");
+            
+            //clear any double spaces that result
+            while(temp.Contains("  "))
+            {
+                temp = temp.Replace("  ", " ");
+            }
+
+            return temp.Trim();
+        }
+
+        /// <summary>
+        /// returns first key found sequentially, irrespective of 
+        /// node depth, whether input is atomic or mixed content.
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
+        public string GetFirstKey(string input)
+        {
+            if (!input.Contains("={"))
+            {
+                return null;
+            }
+
+            string firstSegment = input.Split(new string[] { "={" }, 
+                StringSplitOptions.None)[0];
+
+            string lastWord = firstSegment.Split(' ').Last();
+
+            return lastWord.Trim();
+        }
+
+        private bool StartsWithKeyValTag(string input)
+        {
+            string trimmed = input.Trim();
+
+            if (trimmed.IndexOf("={") < 0)
+            {
+                return false;
+            }
+
+            if (trimmed.IndexOf(" ") < 0)
+            {
+                return true;
+            }
+
+            return trimmed.IndexOf("={") < trimmed.IndexOf(" ");
+        }
+
         public string Extract(String nestedKey, String input)
         {
-
             if (validateNestedKey(nestedKey) && validate(input))
             {
 

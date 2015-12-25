@@ -8,6 +8,19 @@ namespace NwdUnitTestProject
     [TestClass]
     public class ParserTest
     {
+        private Parser p;
+
+        private String mixedContentPre;
+        private String mixedContentPost;
+        private String mixedContentOutside;
+        private String mixedContentInside;
+        
+        private String atomicContentPre;
+        private String atomicContentPost;
+        private String atomicContentOutside;
+        private String atomicContentInside;
+        private String atomicMultiple;
+
         private String inputBasic;
         private String inputNested;
         private String inputNestedAlphaNumeric;
@@ -27,6 +40,27 @@ namespace NwdUnitTestProject
     
         public ParserTest()
         {
+            mixedContentPre = 
+                "testing some text before aTag={something}";            
+            mixedContentPost = 
+                "aTag={something} with text appearing after it";
+            mixedContentOutside = 
+                "some text surrounding aTag={something} with " +
+                "text on either side";
+            mixedContentInside = 
+                "aTag={with something} surrounding content " +
+                "along with anotherTag={on the other side}";
+
+            atomicContentPre = "atomic={testing some text before " +
+                "aTag={something}}";
+            atomicContentPost = "atomic={aTag={something} with " +
+                "text appearing after it}";
+            atomicContentOutside = "atomic={some text surrounding " +
+                "aTag={something} with text on either side}";
+            atomicContentInside = "atomic={aTag={with something} " +
+                "surrounding content along with anotherTag={on " +
+                "the other side}}";
+            atomicMultiple = "atomic1={something} atomic2={something}";
 
             inputBasic = "tags={some tag, another tag}";
             inputNested = "displayName={tags={some tag, another tag}}";
@@ -39,21 +73,50 @@ namespace NwdUnitTestProject
 
             nestedKeyEmptyKeyNode = "grandparent//child/grandchild";
 
-            inputMissingBraces1 = "displayName={tags={some tag, another tag}";
-            inputMissingBraces2 = "displayName={tags=some tag, another tag}}";
-            inputMissingEquals1 = "displayName={tags{some tag, another tag}}";
-            inputMissingEquals2 = "displayName{tags={some tag, another tag}}";
-            inputSpacedEquals1 = "displayName ={tags={some tag, another tag}}";
-            inputSpacedEquals2 = "displayName= {tags={some tag, another tag}}";
-            inputSpacedEquals3 = "displayName = {tags={some tag, another tag}}";
+            inputMissingBraces1 = 
+                "displayName={tags={some tag, another tag}";
+            inputMissingBraces2 = 
+                "displayName={tags=some tag, another tag}}";
+            inputMissingEquals1 = 
+                "displayName={tags{some tag, another tag}}";
+            inputMissingEquals2 = 
+                "displayName{tags={some tag, another tag}}";
+            inputSpacedEquals1 = 
+                "displayName ={tags={some tag, another tag}}";
+            inputSpacedEquals2 = 
+                "displayName= {tags={some tag, another tag}}";
+            inputSpacedEquals3 = 
+                "displayName = {tags={some tag, another tag}}";
 
+        }
+
+        [TestInitialize]
+        public void TestInitialize()
+        {
+            p = new Parser();
         }
         
         [TestMethod]
-        public void testValidateMatchBraces()
-        {            
-            Parser p = new Parser();
+        public void TestGetFirstKey()
+        {
+            Assert.IsNull(p.GetFirstKey("not a key to be found"));
+            Assert.AreEqual(p.GetFirstKey(mixedContentOutside), "aTag");
+            Assert.AreEqual(p.GetFirstKey(atomicContentInside), "atomic");
+        }
 
+        [TestMethod]
+        public void TestTrimKeyVal()
+        {
+            Assert.AreEqual(p.TrimKeyVal("aTag", mixedContentOutside), 
+                "some text surrounding with text on either side");
+            Assert.AreEqual(p.TrimKeyVal("aTag", mixedContentInside), 
+                "surrounding content along with anotherTag={on the other side}");
+            Assert.AreEqual(p.TrimKeyVal("atomic", atomicContentPre), "");
+        }
+
+        [TestMethod]
+        public void testValidateMatchBraces()
+        {   
             //valid inputs
             Assert.IsTrue(p.validateMatchBraces(inputBasic));
             Assert.IsTrue(p.validateMatchBraces(inputNested));
@@ -68,10 +131,8 @@ namespace NwdUnitTestProject
          * Test of validateOpenKeyFormat method, of class Parser.
          */
         [TestMethod]
-    public void testValidateOpenKeyFormat()
-        {            
-            Parser p = new Parser();
-
+        public void testValidateOpenKeyFormat()
+        {   
             //valid inputs for this test
             Assert.IsTrue(p.validateOpenKeyFormat(inputBasic));
             Assert.IsTrue(p.validateOpenKeyFormat(inputNested));
@@ -92,9 +153,20 @@ namespace NwdUnitTestProject
          * Test of validate method, of class Parser.
          */
         [TestMethod]
-    public void testValidate()
+        public void TestValidate()
         {
-            Parser p = new Parser();
+            //mixed content
+            Assert.IsTrue(p.validate(mixedContentPre));
+            Assert.IsTrue(p.validate(mixedContentPost));
+            Assert.IsTrue(p.validate(mixedContentOutside));
+            Assert.IsTrue(p.validate(mixedContentInside));
+            
+            //atomic content
+            Assert.IsTrue(p.validate(atomicContentPre));
+            Assert.IsTrue(p.validate(atomicContentPost));
+            Assert.IsTrue(p.validate(atomicContentOutside));
+            Assert.IsTrue(p.validate(atomicContentInside));
+            Assert.IsTrue(p.validate(atomicMultiple));
 
             //valid input
             Assert.IsTrue(p.validate(inputBasic));
@@ -113,10 +185,23 @@ namespace NwdUnitTestProject
         }
 
         [TestMethod]
-        public void testExtract()
+        public void TestIsAtomic()
         {
-            Parser p = new Parser();
+            Assert.IsFalse(p.IsAtomic(mixedContentPre));
+            Assert.IsFalse(p.IsAtomic(mixedContentPost));
+            Assert.IsFalse(p.IsAtomic(mixedContentOutside));
+            Assert.IsFalse(p.IsAtomic(mixedContentInside));
 
+            Assert.IsTrue(p.IsAtomic(atomicContentPre));
+            Assert.IsTrue(p.IsAtomic(atomicContentPost));
+            Assert.IsTrue(p.IsAtomic(atomicContentOutside));
+            Assert.IsTrue(p.IsAtomic(atomicContentInside));
+            Assert.IsTrue(p.IsAtomic(atomicMultiple));
+        }
+
+        [TestMethod]
+        public void TestExtract()
+        {
             String key = "tags";
             String expResult = "some tag, another tag";
             String result = p.Extract(key, inputBasic);
@@ -155,9 +240,7 @@ namespace NwdUnitTestProject
          */
         [TestMethod]
         public void testValidateNestedKey()
-        {            
-            Parser p = new Parser();
-
+        {   
             Assert.IsTrue(p.validateNestedKey(nestedKey));
             Assert.IsTrue(p.validateNestedKey(nestedKeyAlphaNumeric));
             Assert.IsFalse(p.validateNestedKey(nestedKeyEmptyKeyNode));
@@ -165,9 +248,7 @@ namespace NwdUnitTestProject
 
         [TestMethod]
         public void testGetInvertedKeyStack()
-        {            
-            Parser p = new Parser();
-
+        {  
             Stack<string> expResult = new Stack<string>();
 
             expResult.Push("grandchild");
@@ -191,8 +272,6 @@ namespace NwdUnitTestProject
         [TestMethod]
     public void testValidateNonEmptyKeyNodes()
         {
-            Parser p = new Parser();
-
             Assert.IsTrue(p.validateNonEmptyKeyNodes(nestedKey));
             Assert.IsTrue(p.validateNonEmptyKeyNodes(nestedKeyAlphaNumeric));
             Assert.IsFalse(p.validateNonEmptyKeyNodes(nestedKeyEmptyKeyNode));
@@ -204,8 +283,6 @@ namespace NwdUnitTestProject
         [TestMethod]
         public void testExtractOne()
         {
-            Parser p = new Parser();
-
             String key = "tags";
             String expResult = "some tag, another tag";
             String result = p.extractOne(key, inputBasic);
