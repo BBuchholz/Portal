@@ -18,13 +18,50 @@ namespace NineWorldsDeep
     public static class ExtensionsString
     {
         #region "code from stackoverflow"
+
+        /// <summary>
+        /// Replaces first instance of search string with replace string
+        /// </summary>
+        /// <param name="search"></param>
+        /// <param name="replace"></param>
+        /// <returns></returns>
+        public static string ReplaceFirst(this string text, string search, string replace)
+        {
+            //Source: http://stackoverflow.com/questions/141045/how-do-i-replace-the-first-instance-of-a-string-in-net
+
+            int pos = text.IndexOf(search);
+            if (pos < 0)
+            {
+                return text;
+            }
+            return text.Substring(0, pos) + replace + text.Substring(pos + search.Length);
+        }
+
+        /// <summary>
+        /// Replaces last instance of search string with replace string
+        /// </summary>
+        /// <param name="text"></param>
+        /// <param name="search"></param>
+        /// <param name="replace"></param>
+        /// <returns></returns>
+        public static string ReplaceLast(this string text, string search, string replace)
+        {
+            int pos = text.LastIndexOf(search);
+            if (pos < 0)
+            {
+                return text;
+            }
+            return text.Substring(0, pos) + replace + text.Substring(pos + search.Length);
+        }
+
         /// <summary>
         /// This class implements string comparison algorithm
         /// based on character pair similarity
-        /// Source: http://www.catalysoft.com/articles/StrikeAMatch.html
         /// </summary>
         public static double PercentMatchTo(this string str1, string str2)
         {
+            //Source: http://www.catalysoft.com/articles/StrikeAMatch.html
+
             List<string> pairs1 = WordLetterPairs(str1.ToUpper());
             List<string> pairs2 = WordLetterPairs(str2.ToUpper());
 
@@ -100,5 +137,7 @@ namespace NineWorldsDeep
         }
 
         #endregion
+
+
     }
 }

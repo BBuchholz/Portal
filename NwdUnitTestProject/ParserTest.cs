@@ -37,7 +37,17 @@ namespace NwdUnitTestProject
         private String inputSpacedEquals1;
         private String inputSpacedEquals2;
         private String inputSpacedEquals3;
-    
+
+        private string inputMultiTag = "Some text mentioning completedAt={} " +
+            "more than once, like completedAt={} again, " +
+            "with a timestamp appended completedAt={20151226133500}";
+        private string inputMultiTagExpectedTrimLastKeyResult = 
+            "Some text mentioning completedAt={} " +
+            "more than once, like completedAt={} again, with a timestamp appended";
+        //This is a nonsense example, but verifies that the first key is trimmed leaving the second
+        private string inputMultiTagExpectedTrimKeyResult = "Some text mentioning " +
+            "more than once, like completedAt={} again, with a timestamp appended completedAt={20151226133500}";
+
         public ParserTest()
         {
             mixedContentPre = 
@@ -95,7 +105,21 @@ namespace NwdUnitTestProject
         {
             p = new Parser();
         }
-        
+
+        [TestMethod]
+        public void TestTrimLastKeyVal()
+        {
+            Assert.AreEqual(inputMultiTagExpectedTrimLastKeyResult,
+                p.TrimLastKeyVal("completedAt", inputMultiTag));
+        }
+
+        [TestMethod]
+        public void TestTrimKeyValMultiTag()
+        {
+            Assert.AreEqual(inputMultiTagExpectedTrimKeyResult,
+                p.TrimKeyVal("completedAt", inputMultiTag));
+        }
+
         [TestMethod]
         public void TestGetFirstKey()
         {
@@ -115,7 +139,7 @@ namespace NwdUnitTestProject
         }
 
         [TestMethod]
-        public void testValidateMatchBraces()
+        public void TestValidateMatchBraces()
         {   
             //valid inputs
             Assert.IsTrue(p.validateMatchBraces(inputBasic));
@@ -131,7 +155,7 @@ namespace NwdUnitTestProject
          * Test of validateOpenKeyFormat method, of class Parser.
          */
         [TestMethod]
-        public void testValidateOpenKeyFormat()
+        public void TestValidateOpenKeyFormat()
         {   
             //valid inputs for this test
             Assert.IsTrue(p.validateOpenKeyFormat(inputBasic));
@@ -155,6 +179,9 @@ namespace NwdUnitTestProject
         [TestMethod]
         public void TestValidate()
         {
+            //multiTag
+            Assert.IsTrue(p.validate(inputMultiTag));
+
             //mixed content
             Assert.IsTrue(p.validate(mixedContentPre));
             Assert.IsTrue(p.validate(mixedContentPost));
@@ -285,15 +312,15 @@ namespace NwdUnitTestProject
         {
             String key = "tags";
             String expResult = "some tag, another tag";
-            String result = p.extractOne(key, inputBasic);
+            String result = p.ExtractOne(key, inputBasic);
             Assert.AreEqual(expResult, result);
 
             key = "displayName";
-            result = p.extractOne(key, inputNested);
+            result = p.ExtractOne(key, inputNested);
             expResult = "tags={some tag, another tag}";
             Assert.AreEqual(expResult, result);
 
-            result = p.extractOne(key, inputNestedAlphaNumeric);
+            result = p.ExtractOne(key, inputNestedAlphaNumeric);
             expResult = "tags1={some tag} tags2={another tag}";
             Assert.AreEqual(expResult, result);
         }

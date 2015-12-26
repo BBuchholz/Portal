@@ -42,10 +42,36 @@ namespace NineWorldsDeep.Parser
         {
             string value = Extract(key, input);
             string keyVal = key + "={" + value + "}";
-            string temp = input.Replace(keyVal, " ");
+            string temp = input.ReplaceFirst(keyVal, " ");
             
             //clear any double spaces that result
             while(temp.Contains("  "))
+            {
+                temp = temp.Replace("  ", " ");
+            }
+
+            return temp.Trim();
+        }
+
+        /// <summary>
+        /// Trims last occurance of key and its internal value from the given
+        /// string. Extraneous whitespace is also trimmed from the copy
+        /// that is returned. Original string is unchanged. NOTE: this will
+        /// strip tags internal to mixed content, so use with caution. Primarily
+        /// intended to be used in conjuntion with appended tags
+        /// such as completedAt={} .
+        /// </summary>
+        /// <param name="key"></param>
+        /// <param name="input"></param>
+        /// <returns></returns>
+        public string TrimLastKeyVal(string key, string input)
+        {
+            string value = ExtractLastOne(key, input);
+            string keyVal = key + "={" + value + "}";
+            string temp = input.ReplaceLast(keyVal, " ");
+
+            //clear any double spaces that result
+            while (temp.Contains("  "))
             {
                 temp = temp.Replace("  ", " ");
             }
@@ -106,7 +132,7 @@ namespace NineWorldsDeep.Parser
                     string key = keyStack.Pop();
 
                     currentNestedLevelString =
-                            extractOne(key, currentNestedLevelString);
+                            ExtractOne(key, currentNestedLevelString);
                 }
 
                 return currentNestedLevelString;
@@ -119,7 +145,54 @@ namespace NineWorldsDeep.Parser
             }
         }
 
-        public string extractOne(string key, string input)
+        public string ExtractLastOne(string key, string input)
+        {
+
+            string openKey = key + "={";
+
+            int startIndex = input.LastIndexOf(openKey);
+
+            if (startIndex > -1)
+            {
+
+                int innerContentStartIndex =
+                    startIndex + openKey.Length;
+                int innerContentEndIndex =
+                        input.Length - 1; //just a temp value
+
+                int nestingLevel = 0;
+                bool closed = false;
+
+                for (int i = startIndex; !closed; i++)
+                {
+
+                    if ('{'.CompareTo(input[i]) == 0)
+                    {
+
+                        nestingLevel++;
+                    }
+
+                    if ('}'.CompareTo(input[i]) == 0)
+                    {
+
+                        nestingLevel--;
+
+                        if (nestingLevel == 0)
+                        {
+                            closed = true;
+                            innerContentEndIndex = i;
+                        }
+                    }
+                }
+
+                return input.Substring(innerContentStartIndex,
+                                       innerContentEndIndex - innerContentStartIndex);
+            }
+
+            return null;
+        }
+
+        public string ExtractOne(string key, string input)
         {
 
             string openKey = key + "={";
