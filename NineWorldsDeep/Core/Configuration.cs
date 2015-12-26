@@ -60,6 +60,11 @@ namespace NineWorldsDeep.Core
             }
         }
 
+        public static string GetPhoneSyncSynergyArchiveFilePath(string listName)
+        {
+            return PhoneSyncSynergyArchivedFolder + "\\" + listName + ".txt";
+        }
+
         public static string GetPhoneSyncSynergyFilePath(string listName)
         {
             return PhoneSyncSynergyFolder + "\\" + listName + ".txt";

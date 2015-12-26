@@ -60,5 +60,22 @@ namespace NwdUnitTestProject
             Assert.AreEqual(Configuration.GetPhoneSyncSynergyFilePath("Test"),
                 @"C:\NWD-SNDBX\NWD-SYNC\phone\NWD\synergy\Test.txt");
         }
+
+        [TestMethod]
+        public void TestGetPhoneSyncSynergyArchiveFilePathTestMode()
+        {
+            Configuration.TestMode = true;
+
+            Assert.AreEqual(Configuration.GetPhoneSyncSynergyArchiveFilePath("Test"),
+                @"C:\NWD-SNDBX\NWD-SYNC\phone\NWD\synergy\archived\Test.txt");
+        }
+
+
+        [TestMethod]
+        public void TestGetPhoneSyncSynergyArchiveFilePath()
+        {
+            Assert.AreEqual(Configuration.GetPhoneSyncSynergyArchiveFilePath("Test"),
+                @"C:\NWD-SYNC\phone\NWD\synergy\archived\Test.txt");
+        }
     }
 }
