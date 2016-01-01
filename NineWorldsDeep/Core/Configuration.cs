@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -21,6 +22,15 @@ namespace NineWorldsDeep.Core
         public static string FLStudioProjectsFolder { get { return @"C:\NWD-AUX\flStudioProjects"; } }
 
         public static string ImagesFolder { get { return "c:\\NWD-AUX\\images"; } }
+
+        public static void EnsureDirectories()
+        {
+            //make sure directories exist
+            Directory.CreateDirectory(Configuration.PhoneSyncSynergyFolder);
+            Directory.CreateDirectory(Configuration.PhoneSyncSynergyArchivedFolder);
+            Directory.CreateDirectory(Configuration.TabletSyncSynergyFolder);
+            Directory.CreateDirectory(Configuration.TabletSyncSynergyArchivedFolder);
+        }
 
         public static string MySqlProjectsFolder
         {
