@@ -52,6 +52,22 @@ namespace NineWorldsDeep.Core
             return path;
         }
 
+        public static string TabletSyncSynergyArchivedFolder
+        {
+            get
+            {
+                return ProcessTestMode(@"NWD-SYNC\tablet\NWD\synergy\archived");
+            }
+        }
+
+        public static string TabletSyncSynergyFolder
+        {
+            get
+            {
+                return ProcessTestMode(@"NWD-SYNC\tablet\NWD\synergy");
+            }
+        }
+
         public static string PhoneSyncSynergyFolder
         {
             get
@@ -68,6 +84,16 @@ namespace NineWorldsDeep.Core
         public static string GetPhoneSyncSynergyFilePath(string listName)
         {
             return PhoneSyncSynergyFolder + "\\" + listName + ".txt";
+        }
+
+        public static string GetTabletSyncSynergyFilePath(string listName)
+        {
+            return TabletSyncSynergyFolder + "\\" + listName + ".txt";
+        }
+
+        public static string GetTabletSyncSynergyArchiveFilePath(string listName)
+        {
+            return TabletSyncSynergyArchivedFolder + "\\" + listName + ".txt";
         }
 
         public static string VisualStudioProjectsFolder
@@ -126,5 +152,6 @@ namespace NineWorldsDeep.Core
                 _testMode = value;
             }
         }
+
     }
 }
