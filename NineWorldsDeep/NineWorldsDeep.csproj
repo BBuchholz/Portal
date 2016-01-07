@@ -64,6 +64,10 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Microsoft.VisualBasic" />
+    <Reference Include="MySql.Data, Version=6.9.8.0, Culture=neutral, PublicKeyToken=c5687fc88969c44d, processorArchitecture=MSIL">
+      <HintPath>..\packages\MySql.Data.6.9.8\lib\net45\MySql.Data.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Windows.Forms" />
@@ -107,7 +111,13 @@
     <Compile Include="SimpleProgressBarWindow.xaml.cs">
       <DependentUpon>SimpleProgressBarWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Tagger\FileElement.cs" />
+    <Compile Include="Tagger\ITaggerDb.cs" />
+    <Compile Include="Tagger\TaggerDbAdapter.cs" />
     <Compile Include="TimeStamp.cs" />
+    <Compile Include="UI\FileElementBrowserWindow.xaml.cs">
+      <DependentUpon>FileElementBrowserWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="WorkbenchWindow.xaml.cs">
       <DependentUpon>WorkbenchWindow.xaml</DependentUpon>
     </Compile>
@@ -137,6 +147,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="UI\FileElementBrowserWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="WorkbenchWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -161,6 +175,7 @@
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <None Include="NineWorldsDeep_TemporaryKey.pfx" />
+    <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
