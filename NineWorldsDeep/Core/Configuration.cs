@@ -23,6 +23,8 @@ namespace NineWorldsDeep.Core
 
         public static string ImagesFolder { get { return ProcessTestMode(@"NWD-AUX\images"); } }
 
+        public static string CameraFolder { get { return ProcessTestMode(@"NWD-AUX\camera"); } }
+
         public static void EnsureDirectories()
         {
             //make sure directories exist
