@@ -93,6 +93,7 @@
     <Compile Include="Core\Fragment.cs" />
     <Compile Include="Core\FragmentMergeAction.cs" />
     <Compile Include="Core\FragmentMergeException.cs" />
+    <Compile Include="Core\MultiMap.cs" />
     <Compile Include="Core\ProcessableFragment.cs" />
     <Compile Include="Core\ReviewableFragment.cs" />
     <Compile Include="DemoController.cs" />

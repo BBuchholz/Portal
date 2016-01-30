@@ -21,7 +21,7 @@ namespace NineWorldsDeep.Core
         public static string CubaseProjectsFolder { get { return @"C:\NWD-AUX\cubaseProjects"; } }
         public static string FLStudioProjectsFolder { get { return @"C:\NWD-AUX\flStudioProjects"; } }
 
-        public static string ImagesFolder { get { return "c:\\NWD-AUX\\images"; } }
+        public static string ImagesFolder { get { return ProcessTestMode(@"NWD-AUX\images"); } }
 
         public static void EnsureDirectories()
         {
@@ -30,6 +30,19 @@ namespace NineWorldsDeep.Core
             Directory.CreateDirectory(Configuration.PhoneSyncSynergyArchivedFolder);
             Directory.CreateDirectory(Configuration.TabletSyncSynergyFolder);
             Directory.CreateDirectory(Configuration.TabletSyncSynergyArchivedFolder);
+        }
+
+        public static string GetPhoneSyncConfigFilePath(string fileNameWithoutExtension)
+        {
+            return PhoneSyncConfigFolder + "\\" + fileNameWithoutExtension + ".txt";
+        }
+
+        public static string PhoneSyncConfigFolder
+        {
+            get
+            {
+                return ProcessTestMode(@"NWD-SYNC\phone\NWD\config");
+            }
         }
 
         public static string MySqlProjectsFolder
