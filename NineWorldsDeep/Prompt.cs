@@ -104,5 +104,27 @@ namespace NineWorldsDeep
         {
             return Interaction.InputBox(promptMsg, "Input", defaultValue);
         }
+
+        public static string ForNwdUri()
+        {
+            return ForNwdUri("Enter Nwd Uri: ");
+        }
+
+        public static string ForNwdUri(string message)
+        {           
+            string uri = Input(message);
+
+            Parser.Parser p = new Parser.Parser();
+
+            while (!p.validateNestedKey(uri))
+            {
+                string newMsg = "Invalid NWD URI. " +
+                    message;
+
+                uri = Input(newMsg);
+            }
+
+            return uri;
+        }
     }
 }

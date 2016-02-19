@@ -257,14 +257,25 @@ namespace NineWorldsDeep.Parser
 
         public bool validateNestedKey(string nestedKey)
         {
+            return validateNonEmptyKeyNodes(nestedKey) &&
+                ValidateForwardSlashKeyNotation(nestedKey) &&
+                ValidateNonEmptyKey(nestedKey);
+        }
 
-            return validateNonEmptyKeyNodes(nestedKey);
+        public bool ValidateForwardSlashKeyNotation(string nestedKey)
+        {
+            return !nestedKey.Contains(@"\");
         }
 
         public bool validateNonEmptyKeyNodes(string nestedKey)
         {
 
             return !nestedKey.Contains("//");
+        }
+
+        public bool ValidateNonEmptyKey(string nestedKey)
+        {
+            return nestedKey.Replace("/", "").Trim().Count() > 0;
         }
 
         public bool validate(string input)
@@ -329,6 +340,20 @@ namespace NineWorldsDeep.Parser
             }
 
             return openBracesCount == closingBracesCount;
+        }
+
+        /// <summary>
+        /// returns the key node at the specified index in 
+        /// a given uri. returns null if index is too large.
+        /// eg: "NWD/config/warehouse" index 1 returns "config",
+        /// while index 5 would return null;
+        /// </summary>
+        /// <param name="keyNodeIndex"></param>
+        /// <param name="uri"></param>
+        public string GetKeyNode(int keyNodeIndex, string uri)
+        {
+            char[] delimiters = { '/' };
+            return uri.Split(delimiters, StringSplitOptions.None)[keyNodeIndex];
         }
     }
 }

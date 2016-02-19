@@ -14,6 +14,11 @@ namespace NineWorldsDeep.Core
             _dict = new Dictionary<K, List<V>>(iec);
         }
 
+        public MultiMap()
+        {
+            _dict = new Dictionary<K, List<V>>();
+        }
+
         /// <summary>
         /// adds key value pair to the multimap, a null value for a key 
         /// will ensure key

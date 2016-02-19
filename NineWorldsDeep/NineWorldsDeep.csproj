@@ -105,6 +105,7 @@
     </Compile>
     <Compile Include="IProgressBarCompatible.cs" />
     <Compile Include="MenuController.cs" />
+    <Compile Include="Parser\NwdUri.cs" />
     <Compile Include="Parser\Parser.cs" />
     <Compile Include="Prompt.cs" />
     <Compile Include="Reflection\Reflector.cs" />
