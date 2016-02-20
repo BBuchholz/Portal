@@ -43,5 +43,20 @@ namespace NineWorldsDeep.Parser
         {
             return invertedKeyStack.Count > 0;
         }
+
+        public static bool MatchNodeName(string nodeName, string nameToMatch)
+        {
+            if (nodeName.EndsWith("[*]"))
+            {
+                //match using "StartsWith"
+                string startPattern = nodeName.Substring(0, nodeName.IndexOf("[*]"));
+                return nameToMatch.StartsWith(startPattern);
+            }
+            else
+            {
+                //look for exact match
+                return nameToMatch.Equals(nodeName);
+            }
+        }
     }
 }
