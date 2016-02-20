@@ -6,9 +6,8 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace NineWorldsDeep
+namespace NineWorldsDeep.UI
 {
-    [Obsolete("use NineWorldsDeep.UI.Prompt")]
     public class Prompt
     {
         public static string ForXmlFileSave(string defaultPath)
@@ -43,7 +42,7 @@ namespace NineWorldsDeep
 
             return null;
         }
-        
+
         private static string ForFileOpen(string defaultPath, string filter)
         {
             var dlg = new System.Windows.Forms.OpenFileDialog();
@@ -73,7 +72,7 @@ namespace NineWorldsDeep
 
             return null;
         }
-        
+
         public static bool Confirm(string message, bool defaultNo = false)
         {
             MessageBoxDefaultButton defaultButton;
@@ -88,9 +87,9 @@ namespace NineWorldsDeep
             }
 
             DialogResult result =
-                MessageBox.Show(message, 
-                                "Confirm", 
-                                MessageBoxButtons.YesNo, 
+                MessageBox.Show(message,
+                                "Confirm",
+                                MessageBoxButtons.YesNo,
                                 MessageBoxIcon.Question, defaultButton);
 
             return result == DialogResult.Yes;
@@ -112,7 +111,7 @@ namespace NineWorldsDeep
         }
 
         public static string ForNwdUri(string message)
-        {           
+        {
             string uri = Input(message);
 
             Parser.Parser p = new Parser.Parser();

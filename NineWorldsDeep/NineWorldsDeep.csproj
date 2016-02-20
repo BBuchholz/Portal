@@ -117,9 +117,14 @@
     <Compile Include="Tagger\ITaggerDb.cs" />
     <Compile Include="Tagger\TaggerDbAdapter.cs" />
     <Compile Include="TimeStamp.cs" />
+    <Compile Include="UI\Display.cs" />
+    <Compile Include="UI\DisplayGridWindow.xaml.cs">
+      <DependentUpon>DisplayGridWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="UI\FileElementBrowserWindow.xaml.cs">
       <DependentUpon>FileElementBrowserWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="UI\Prompt.cs" />
     <Compile Include="WorkbenchWindow.xaml.cs">
       <DependentUpon>WorkbenchWindow.xaml</DependentUpon>
     </Compile>
@@ -146,6 +151,10 @@
       <SubType>Code</SubType>
     </Compile>
     <Page Include="SimpleProgressBarWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\DisplayGridWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

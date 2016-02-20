@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using NineWorldsDeep.Parser;
 
 namespace NineWorldsDeep.Core
 {
@@ -178,5 +179,42 @@ namespace NineWorldsDeep.Core
             }
         }
 
+        public static string PlaylistsFolder
+        {
+            get
+            {
+                return ProcessTestMode(@"NWD\playlists");
+            }
+        }
+
+        /// <summary>
+        /// converts path in the NWD folder hierarchy to an NwdUri
+        /// supports both forward and backward slash, does not
+        /// support paths outside of the NWD hierarchy
+        /// eg: "/storage/0/NWD/config" and "C:\NWD\config"
+        /// will both return "NWD/config" as a NwdUri object
+        /// but "/storage/0/SomeOtherFolder/config" will
+        /// return null
+        /// </summary>
+        /// <param name="path">path containing 'NWD' 
+        /// (supports 'NWD-MEDIA', 'NWD-AUX', 'NWD-SNDBX', &c.)</param>
+        /// <returns>a new NwdUri if the path is valid, null if the path is invalid</returns>
+        public static NwdUri NwdPathToNwdUri(string path)
+        {
+            if (!path.Contains("NWD"))
+            {
+                return null;
+            }
+
+            string trimmedPath = path.Substring(path.IndexOf("NWD"));
+
+            //convert backslash style to forward slash notation
+            if (trimmedPath.Contains(@"\"))
+            {
+                trimmedPath = trimmedPath.Replace(@"\", "/");
+            }
+
+            return new NwdUri(trimmedPath);
+        }
     }
 }

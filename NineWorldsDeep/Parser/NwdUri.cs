@@ -17,6 +17,11 @@ namespace NineWorldsDeep.Parser
             ResetStack();
         }
 
+        public string URI
+        {
+            get { return uri; }
+        }
+
         public void ResetStack()
         {
             invertedKeyStack = new Stack<string>();
