@@ -109,5 +109,16 @@ namespace NineWorldsDeep.Core
         {
             return this._dict.ContainsKey(key);
         }
+
+        public void AddAll(MultiMap<K, V> anotherMultiMap)
+        {
+            foreach(K key in anotherMultiMap.Keys)
+            {
+                foreach(V val in anotherMultiMap[key])
+                {
+                    Add(key, val);
+                }
+            }
+        }
     }
 }

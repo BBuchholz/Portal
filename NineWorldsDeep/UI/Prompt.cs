@@ -126,5 +126,18 @@ namespace NineWorldsDeep.UI
 
             return uri;
         }
+
+        public static int ForInteger(string message)
+        {
+            string input = Input(message);
+            int output;
+
+            while(!Int32.TryParse(input, out output))
+            {
+                input = Input("Invalid integer. " + message);
+            }
+
+            return output;
+        }
     }
 }

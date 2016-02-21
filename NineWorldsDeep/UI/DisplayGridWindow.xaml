@@ -29,7 +29,8 @@
                     Margin="20"
                     Padding="10 2"
                     Visibility="Collapsed"
-                    Click="ButtonShowSecondList_Click"/>
+                    Click="ButtonShowSecondList_Click"
+                    IsDefault="True"/>
         </Grid>
         <DataGrid x:Name="dataGrid"
                   Grid.Row="1"

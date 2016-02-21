@@ -10,6 +10,7 @@ namespace NineWorldsDeep.Parser
     {
         private Stack<string> invertedKeyStack;
         private string uri;
+        private string currentTraversalUri;
 
         public NwdUri(string uri)
         {
@@ -22,9 +23,15 @@ namespace NineWorldsDeep.Parser
             get { return uri; }
         }
 
+        public string CurrentTraversalUri
+        {
+            get { return currentTraversalUri; }
+        }
+
         public void ResetStack()
         {
             invertedKeyStack = new Stack<string>();
+            currentTraversalUri = "";
 
             string[] keys = uri.Split('/');
 
@@ -41,7 +48,17 @@ namespace NineWorldsDeep.Parser
                 return null;
             }
 
-            return invertedKeyStack.Pop();
+            string nodeName = invertedKeyStack.Pop();
+
+            if(currentTraversalUri.Length > 0 &&
+                !currentTraversalUri.EndsWith("/"))
+            {
+                currentTraversalUri += "/";
+            }
+
+            currentTraversalUri += nodeName;
+
+            return nodeName;
         }
 
         public bool HasNodeKeysInStack()
