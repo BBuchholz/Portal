@@ -11,6 +11,11 @@ namespace NineWorldsDeep.Core
     public class Configuration
     {
         private static bool _testMode = false;
+        
+        static Configuration()
+        {
+            EnsureDirectories();
+        }
 
         //TODO: hard-coded values need to be transformed into config files and defaults
 
@@ -33,6 +38,7 @@ namespace NineWorldsDeep.Core
             Directory.CreateDirectory(Configuration.PhoneSyncSynergyArchivedFolder);
             Directory.CreateDirectory(Configuration.TabletSyncSynergyFolder);
             Directory.CreateDirectory(Configuration.TabletSyncSynergyArchivedFolder);
+            Directory.CreateDirectory(Configuration.MtpSynergySyncPath);
         }
 
         public static string GetPhoneSyncConfigFilePath(string fileNameWithoutExtension)
@@ -215,6 +221,20 @@ namespace NineWorldsDeep.Core
             }
 
             return new NwdUri(trimmedPath);
+        }
+
+        /// <summary>
+        /// gets filePath for file with specified name in the 
+        /// mtp synergy sync folder
+        /// </summary>
+        /// <param name="name">file name with extension</param>
+        /// <returns></returns>
+        public static string MtpSynergySyncPath
+        {
+            get
+            {
+                return ProcessTestMode(@"NWD-SYNC\mtp\NWD\synergy");
+            }
         }
     }
 }
