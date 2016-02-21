@@ -20,9 +20,18 @@ namespace NineWorldsDeep.UI
     /// </summary>
     public partial class DisplayGridWindow : Window
     {
+        private IEnumerable secondItemsSource;
+
         public DisplayGridWindow()
         {
             InitializeComponent();
+        }
+
+        public DisplayGridWindow(IEnumerable secondItemsSource)
+            : this()
+        {
+            this.secondItemsSource = secondItemsSource;
+            btnShowSecondList.Visibility = Visibility.Visible;            
         }
 
         public MessageBoxResult Result { get; private set; }
@@ -40,10 +49,31 @@ namespace NineWorldsDeep.UI
             }
         }
 
+        public string Message
+        {
+            get
+            {
+                return tbMessage.Text;
+            }
+
+            internal set
+            {
+                tbMessage.Text = value;
+            }
+        }
+
         private void ButtonOk_Click(object sender, RoutedEventArgs e)
         {
             Result = MessageBoxResult.OK;
             Close();                
+        }
+
+        private void ButtonShowSecondList_Click(object sender, RoutedEventArgs e)
+        {
+            if(secondItemsSource != null)
+            {
+                Display.Grid(Message, secondItemsSource);
+            }
         }
     }
 }

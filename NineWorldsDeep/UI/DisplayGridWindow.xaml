@@ -12,11 +12,25 @@
             <RowDefinition Height="*"/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
-        <TextBlock x:Name="tbMessage" 
-                   Grid.Row="0"
-                   Text="Message Here"
-                   Margin="20"
-                   HorizontalAlignment="Center"/>
+        <Grid Grid.Row="0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            <TextBlock x:Name="tbMessage" 
+                Grid.Row="0"
+                Text="Message Here"
+                TextWrapping="Wrap"
+                Margin="20"
+                HorizontalAlignment="Center"/>
+            <Button x:Name="btnShowSecondList"
+                    Content="Show"
+                    Grid.Column="1"
+                    Margin="20"
+                    Padding="10 2"
+                    Visibility="Collapsed"
+                    Click="ButtonShowSecondList_Click"/>
+        </Grid>
         <DataGrid x:Name="dataGrid"
                   Grid.Row="1"
                   Margin="5"/>

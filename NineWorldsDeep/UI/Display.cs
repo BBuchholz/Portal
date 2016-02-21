@@ -10,14 +10,29 @@ namespace NineWorldsDeep.UI
 {
     public class Display
     {
-        public static MessageBoxResult Grid(string message, IEnumerable itemsSource)
+        public static MessageBoxResult Grid(string message, 
+            IEnumerable itemsSource, IEnumerable secondItemsSource)
         {
-            DisplayGridWindow dgw = new DisplayGridWindow();
-            dgw.tbMessage.Text = message;
+            DisplayGridWindow dgw;
+            if (secondItemsSource != null)
+            {
+                dgw = new DisplayGridWindow(secondItemsSource);
+            }
+            else
+            {
+                dgw = new DisplayGridWindow();
+            }
+
+            dgw.Message = message;
             dgw.ItemsSource = itemsSource;
             dgw.ShowDialog();
 
             return dgw.Result;
+        }
+
+        public static MessageBoxResult Grid(string message, IEnumerable itemsSource)            
+        {
+            return Grid(message, itemsSource, null);
         }
     }
 }
