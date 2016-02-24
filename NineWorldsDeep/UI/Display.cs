@@ -34,5 +34,22 @@ namespace NineWorldsDeep.UI
         {
             return Grid(message, itemsSource, null);
         }
+
+        public static void Exception(Exception ex)
+        {
+            //TODO: make this more dope eventually
+            MessageBox.Show("Error: " + ex.Message);
+        }
+
+        public static void Message(string msg)
+        {
+            //TODO: we could make Display take different configurations
+            // so that these methods would be handled differently 
+            // in different cases (like this could be configured to 
+            // display to a status bar
+            // or a message box, but all code could call this method)
+
+            MessageBox.Show(msg);
+        }
     }
 }

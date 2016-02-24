@@ -207,6 +207,26 @@ namespace NineWorldsDeep.Core
         /// <returns>a new NwdUri if the path is valid, null if the path is invalid</returns>
         public static NwdUri NwdPathToNwdUri(string path)
         {
+            //TODO: remember to allow looking in folders outside of 
+            //  NWD-MEDIA, using a list of top level folder uris to check 
+            //  in addition to the NWD paths
+            //  eg. Find(List<NwdUri> uris) 
+            //  where uris = new List({new NwdUri("Pictures/Skitch"), &c.})
+            //  this should be passed to the NwdUri method to prevent
+            //  errors being thrown for URIs that don't start with
+            //  'NWD' (this allows the programmer to specify, yes this
+            //  folder is outside the ecosystem, I am intentionally including
+            //  it).
+            //  Maybe store the list of valid external paths in Configuration
+            //  so it can be set once, system wide (to eventually be a 
+            //  Configurable value, like all Properties in Configuration should
+            //  eventually be)
+            //
+            //  INCLUDE THESE NOTES IN WHEREVER THIS GETS IMPLEMENTED 
+            //  (copied verbatim from elsewhere, may need editing, 
+            //   I wasn't sure on the referenced method names, but 
+            //   you get the idea)
+
             if (!path.Contains("NWD"))
             {
                 return null;
@@ -235,6 +255,24 @@ namespace NineWorldsDeep.Core
             {
                 return ProcessTestMode(@"NWD-SYNC\mtp\NWD\synergy");
             }
+        }
+
+        public static string NwdUriToLocalPath(string uri)
+        {
+            if (!uri.Contains("NWD"))
+            {
+                return null;
+            }
+
+            string trimmedPath = uri.Substring(uri.IndexOf("NWD"));
+
+            //convert forward slash notation to backslash style
+            if (trimmedPath.Contains("/"))
+            {
+                trimmedPath = trimmedPath.Replace("/", @"\");
+            }
+
+            return ProcessTestMode(trimmedPath);
         }
     }
 }
