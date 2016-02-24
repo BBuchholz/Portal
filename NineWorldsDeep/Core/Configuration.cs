@@ -244,6 +244,73 @@ namespace NineWorldsDeep.Core
         }
 
         /// <summary>
+        /// converts path in the NWD folder hierarchy to an NwdUri
+        /// supports both forward and backward slash, does 
+        /// support paths outside of the NWD hierarchy if they are 
+        /// explicitly passed to the constructor
+        /// eg: "/storage/0/NWD/config" and "C:\NWD\config"
+        /// will both return "NWD/config" as a NwdUri object
+        /// but "/storage/0/SomeOtherFolder/config" will
+        /// return null unless "SomeOtherFolder" is in the 
+        /// externalFolderNames
+        /// </summary>
+        /// <param name="path">path containing 'NWD' 
+        /// (supports 'NWD-MEDIA', 'NWD-AUX', 'NWD-SNDBX', &c.) or
+        /// one of the folder names specified in external folder names</param>
+        /// <param name="containsValues">a list of foldernames or 
+        /// prefixes ("MtpSandbox" and "MtpDocumentation" will both match "Mtp")
+        /// to permit that are outside the NWD hierarchy. Note: the entries are 
+        /// matched in List order, so those with lower indexes will take 
+        /// precedence over those with higher indexes. eg. if you wanted to match
+        /// Pictures/Screenshots over Pictures/, you should have Pictures added
+        /// to the list after the Screenshots, so that Screenshots takes precedence
+        /// but Pictures will still be matched.</param>
+        /// <returns>a new NwdUri if the path is valid, null if the path is invalid</returns>
+        public static NwdUri NwdPathToNwdUri(string path, List<string> containsValues)
+        {
+            //TODO: Maybe store the list of valid external paths in Configuration
+            //  so it can be set once, system wide (to eventually be a 
+            //  Configurable value, like all Properties in Configuration should
+            //  eventually be)
+
+            if (!path.Contains("NWD") && !path.ContainsAny(containsValues))
+            {
+                return null;
+            }
+
+            string folderPrefix = null;
+
+            //give precedence to NWD folders (so NWD/Pictures would find 
+            //NWD not Pictures if Pictures/Screenshots was also an authorized folder
+            if (path.Contains("NWD"))
+            {
+                folderPrefix = "NWD";
+            }
+
+            while(folderPrefix == null)
+            {
+                int idx = 0;
+
+                if (path.Contains(containsValues[idx]))
+                {
+                    folderPrefix = containsValues[idx];
+                }
+
+                idx++;
+            }
+
+            string trimmedPath = path.Substring(path.IndexOf(folderPrefix));
+
+            //convert backslash style to forward slash notation
+            if (trimmedPath.Contains(@"\"))
+            {
+                trimmedPath = trimmedPath.Replace(@"\", "/");
+            }
+
+            return new NwdUri(trimmedPath);
+        }
+
+        /// <summary>
         /// gets filePath for file with specified name in the 
         /// mtp synergy sync folder
         /// </summary>

@@ -38,6 +38,26 @@ namespace NineWorldsDeep
         }
 
         /// <summary>
+        /// performs a Contains(value) on string s for all values in containsParams.
+        /// returns true if any of them are contained in given string
+        /// </summary>
+        /// <param name="s"></param>
+        /// <param name="containsParams"></param>
+        /// <returns></returns>
+        public static bool ContainsAny(this string s, IEnumerable<string> containsParams)
+        {
+            foreach(string parm in containsParams)
+            {
+                if (s.Contains(parm))
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        /// <summary>
         /// Replaces last instance of search string with replace string
         /// </summary>
         /// <param name="text"></param>
