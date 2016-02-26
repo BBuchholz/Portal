@@ -20,6 +20,13 @@ namespace NineWorldsDeep.Core
         //TODO: hard-coded values need to be transformed into config files and defaults
 
         public static string AbletonProjectsFolder { get { return @"C:\NWD-AUX\abletonProjects"; } }
+
+        public static string GetSqliteDbPath(string dbNameWithoutExtension)
+        {
+            string dbName = dbNameWithoutExtension + ".sqlite";
+            return Path.Combine(ProcessTestMode("NWD/sqlite"), dbName);
+        }
+
         public static string AudacityProjectsFolder { get { return @"C:\NWD-AUX\audacityProjects"; } }
 
         public static string AudacityWavExportsFolder { get { return @"C:\NWD-AUX\audacityWavExports"; } }

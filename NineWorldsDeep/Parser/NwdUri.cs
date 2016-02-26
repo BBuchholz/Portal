@@ -28,6 +28,9 @@ namespace NineWorldsDeep.Parser
             get { return currentTraversalUri; }
         }
 
+        public string Hash { get; set; }
+        public string Path { get; set; }
+
         public void ResetStack()
         {
             invertedKeyStack = new Stack<string>();
