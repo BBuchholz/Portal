@@ -294,10 +294,10 @@ namespace NineWorldsDeep.Core
                 folderPrefix = "NWD";
             }
 
+            int idx = 0;
+
             while(folderPrefix == null)
             {
-                int idx = 0;
-
                 if (path.Contains(containsValues[idx]))
                 {
                     folderPrefix = containsValues[idx];
