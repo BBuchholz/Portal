@@ -17,9 +17,9 @@ namespace NineWorldsDeep.Mtp
             Refresh();
         }
 
-        public new string FriendlyName { get; private set; }
-        public new string Model { get; private set; }
-        public new string DeviceType { get; private set; }
+        public new string FriendlyName { get; set; }
+        public new string Model { get; set; }
+        public new string DeviceType { get; set; }
         public NwdPortableDeviceFolder RootFolder { get; private set; }
         public bool IsConnected { get { return _isConnected; } }
 

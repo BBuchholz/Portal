@@ -181,7 +181,7 @@ namespace NineWorldsDeep.Db
                 string cmdStr = "SELECT DeviceDescription, " +
                                        "DeviceFriendlyName, " +
                                        "DeviceModel, " +
-                                       "DeviceType " +
+                                       "DeviceType, " +
                                        "DeviceId " +
                                 "FROM Device";
 
@@ -212,6 +212,11 @@ namespace NineWorldsDeep.Db
 
         private NwdPortableDeviceKey ToDeviceKey(NwdPortableDevice device)
         {
+            if(device == null)
+            {
+                throw new Exception("NwdPortableDevice null in method ToDeviceKey()");
+            }
+        
             return new NwdPortableDeviceKey()
             {
                 Description = device.Description,
@@ -294,6 +299,9 @@ namespace NineWorldsDeep.Db
                     {
                         if (device != null)
                         {
+                            //convert null values to empty strings
+                            ConvertNullsToEmptyStrings(device);
+
                             cmd.CommandText =
                                 "INSERT OR IGNORE INTO Device " +
                                     "(DeviceDescription, " +
@@ -320,6 +328,29 @@ namespace NineWorldsDeep.Db
                     " seconds to insert one device.");
 
                 conn.Close();
+            }
+        }
+
+        private void ConvertNullsToEmptyStrings(NwdPortableDevice device)
+        {
+            if(device.Description == null)
+            {
+                device.Description = "";
+            }
+
+            if (device.Model == null)
+            {
+                device.Model = "";
+            }
+
+            if (device.DeviceType == null)
+            {
+                device.DeviceType = "";
+            }
+
+            if (device.FriendlyName == null)
+            {
+                device.FriendlyName = "";
             }
         }
     }
