@@ -27,11 +27,15 @@ namespace NineWorldsDeep.Parser
             set { pdo = value; }
         }
 
+        public NwdPortableDevice PortableDevice { get; set; }
+
         public NwdUri NwdUri { get { return nwdUri; } }
 
         public string Path { get { return nwdUri.Path; } }
         public string Hash { get { return nwdUri.Hash; } }
 
+        //database ids
+        public int DeviceId { get; set; }
         public int PathId { get; set; }
         public int HashId { get; set; }
     }

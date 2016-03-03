@@ -1,4 +1,5 @@
 ﻿using NineWorldsDeep.Core;
+using NineWorldsDeep.Mtp;
 using NineWorldsDeep.Parser;
 using NineWorldsDeep.UI;
 using System;
@@ -13,6 +14,9 @@ namespace NineWorldsDeep.Db
 {
     public class SqliteDbAdapter
     {
+        private Dictionary<NwdPortableDeviceKey, int> deviceIds =
+            new Dictionary<NwdPortableDeviceKey, int>();
+
         public SqliteDbAdapter()
         {
         }
@@ -95,7 +99,7 @@ namespace NineWorldsDeep.Db
         {
             Dictionary<string, int> hashes =
                 new Dictionary<string, int>();
-
+            
             Dictionary<string, int> paths =
                 new Dictionary<string, int>();
 
@@ -122,7 +126,7 @@ namespace NineWorldsDeep.Db
                 }
 
                 Display.Message(stopwatch.Elapsed.TotalSeconds +
-                    " seconds with one transaction.");
+                    " seconds for hash ids.");
 
                 stopwatch = new Stopwatch();
                 stopwatch.Start();
@@ -141,13 +145,15 @@ namespace NineWorldsDeep.Db
                 }
 
                 Display.Message(stopwatch.Elapsed.TotalSeconds +
-                    " seconds with one transaction.");
-
+                    " seconds for path ids.");
+                
                 conn.Close();
             }
 
             foreach (var pe in lst)
             {
+                EnsureAndPopulateDeviceId(pe);
+                
                 if (!string.IsNullOrWhiteSpace(pe.Path) &&
                     paths.ContainsKey(pe.Path))
                 {
@@ -162,6 +168,72 @@ namespace NineWorldsDeep.Db
             }
         }
 
+        private void RefreshDeviceIds()
+        {
+            using (var conn = new SQLiteConnection(
+                @"Data Source=" + Configuration.GetSqliteDbPath("nwd")))
+            {
+                conn.Open();
+
+                var stopwatch = new Stopwatch();
+                stopwatch.Start();
+
+                string cmdStr = "SELECT DeviceDescription, " +
+                                       "DeviceFriendlyName, " +
+                                       "DeviceModel, " +
+                                       "DeviceType " +
+                                       "DeviceId " +
+                                "FROM Device";
+
+                using (var cmd = new SQLiteCommand(cmdStr, conn))
+                {
+                    using (var rdr = cmd.ExecuteReader())
+                    {
+                        while (rdr.Read())
+                        {
+                            string desc = rdr.GetString(0);
+                            string friendlyName = rdr.GetString(1);
+                            string model = rdr.GetString(2);
+                            string deviceType = rdr.GetString(3);
+
+                            deviceIds.Add(new NwdPortableDeviceKey() {
+                                Description = desc,
+                                FriendlyName = friendlyName,
+                                Model = model,
+                                DeviceType = deviceType
+                            }, rdr.GetInt32(4));                                                        
+                        }
+                    }
+                }
+
+                conn.Close();
+            }
+        }
+
+        private NwdPortableDeviceKey ToDeviceKey(NwdPortableDevice device)
+        {
+            return new NwdPortableDeviceKey()
+            {
+                Description = device.Description,
+                FriendlyName = device.FriendlyName,
+                Model = device.Model,
+                DeviceType = device.DeviceType
+            };
+        }
+
+        private void EnsureAndPopulateDeviceId(NwdUriProcessEntry pe)
+        {
+            var key = ToDeviceKey(pe.PortableDevice);
+
+            if (!deviceIds.ContainsKey(key))
+            {
+                StoreDevice(pe.PortableDevice);
+                RefreshDeviceIds();
+            }
+
+            pe.DeviceId = deviceIds[key];
+        }
+        
         public void StoreHashPathJunctions(List<NwdUriProcessEntry> lst)
         {
             //if both hash and path ids are populated, INSERT OR IGNORE each
@@ -183,7 +255,8 @@ namespace NineWorldsDeep.Db
                                 !string.IsNullOrWhiteSpace(pe.Path))
                             {
                                 cmd.CommandText =
-                                    "INSERT OR IGNORE INTO File (DeviceId, PathId, HashId) VALUES (1, @pathId, @hashId)";
+                                    "INSERT OR IGNORE INTO File (DeviceId, PathId, HashId) VALUES (@deviceId, @pathId, @hashId)";
+                                cmd.Parameters.AddWithValue("@deviceId", pe.DeviceId);
                                 cmd.Parameters.AddWithValue("@pathId", pe.PathId);
                                 cmd.Parameters.AddWithValue("@hashId", pe.HashId);
                                 cmd.ExecuteNonQuery();
@@ -196,6 +269,55 @@ namespace NineWorldsDeep.Db
 
                 Display.Message(stopwatch.Elapsed.TotalSeconds +
                     " seconds with one transaction.");
+
+                conn.Close();
+            }
+        }
+
+        /// <summary>
+        /// executes an INSERT OR IGNORE statement for supplied device
+        /// </summary>
+        /// <param name="device"></param>
+        public void StoreDevice(NwdPortableDevice device)
+        {
+            using (var conn = new SQLiteConnection(
+                @"Data Source=" + Configuration.GetSqliteDbPath("nwd")))
+            {
+                conn.Open();
+
+                var stopwatch = new Stopwatch();
+                stopwatch.Start();
+
+                using (var cmd = new SQLiteCommand(conn))
+                {
+                    using (var transaction = conn.BeginTransaction())
+                    {
+                        if (device != null)
+                        {
+                            cmd.CommandText =
+                                "INSERT OR IGNORE INTO Device " +
+                                    "(DeviceDescription, " +
+                                    "DeviceFriendlyName, " +
+                                    "DeviceModel, " +
+                                    "DeviceType) " +
+                                "VALUES (@deviceDescription, " +
+                                        "@deviceFriendlyName, " +
+                                        "@deviceModel, " +
+                                        "@deviceType)";
+
+                            cmd.Parameters.AddWithValue("@deviceDescription", device.Description);
+                            cmd.Parameters.AddWithValue("@deviceFriendlyName", device.FriendlyName);
+                            cmd.Parameters.AddWithValue("@deviceModel", device.Model);
+                            cmd.Parameters.AddWithValue("@deviceType", device.DeviceType);
+                            cmd.ExecuteNonQuery();
+                        }
+                        
+                        transaction.Commit();
+                    }
+                }
+
+                Display.Message(stopwatch.Elapsed.TotalSeconds +
+                    " seconds to insert one device.");
 
                 conn.Close();
             }
