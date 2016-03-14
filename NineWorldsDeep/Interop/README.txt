@@ -41,3 +41,14 @@ ever breaks. This was the method that got the library working for me :)
 
 7) Remove original reference to PortableDeviceApiLib and add
    a reference for the new one you just assembled
+
+
+Additional note (updated): I was getting a warning from the 
+compiler about assembly mislabeled as a file or something
+(its gone now so I can't exactly remembered), but changing
+Build Action from "Content" to "None" and changing
+Copy To Output Directory from "Do not copy" to "Copy if newer"
+made the warnings go away.
+
+Noting it here in case the values need to go back, as they were
+compiling albeit with warnings.

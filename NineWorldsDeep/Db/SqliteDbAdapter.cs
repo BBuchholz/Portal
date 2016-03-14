@@ -16,9 +16,78 @@ namespace NineWorldsDeep.Db
     {
         private Dictionary<NwdPortableDeviceKey, int> deviceIds =
             new Dictionary<NwdPortableDeviceKey, int>();
+        private Dictionary<string, int> hashIds =
+            new Dictionary<string, int>();
+        private Dictionary<string, int> pathIds =
+            new Dictionary<string, int>();
 
         public SqliteDbAdapter()
         {
+        }
+
+        /// <summary>
+        /// assumes conn opened and closed outside this method
+        /// </summary>
+        /// <param name="lst"></param>
+        /// <param name="conn"></param>
+        public void StoreHashes(List<string> lst, SQLiteConnection conn)
+        {
+            //INSERT OR IGNORE            
+            using (var cmd = new SQLiteCommand(conn))
+            {
+                using (var transaction = conn.BeginTransaction())
+                {
+                    foreach (var hash in lst)
+                    {
+                        if (!string.IsNullOrWhiteSpace(hash))
+                        {
+                            cmd.CommandText =
+                                "INSERT OR IGNORE INTO Hash (HashValue) VALUES (@hashValue)";
+                            cmd.Parameters.AddWithValue("@hashValue", hash);
+                            cmd.ExecuteNonQuery();
+                        }
+                    }
+
+                    transaction.Commit();
+                }
+            }
+        }
+
+        /// <summary>
+        /// assumes conn opened and closed outside this method
+        /// </summary>
+        /// <param name="lst"></param>
+        /// <param name="conn"></param>
+        public void StoreTags(List<string> lst, SQLiteConnection conn)
+        {
+            //INSERT OR IGNORE            
+            using (var cmd = new SQLiteCommand(conn))
+            {
+                using (var transaction = conn.BeginTransaction())
+                {
+                    foreach (var tag in lst)
+                    {
+                        if (!string.IsNullOrWhiteSpace(tag))
+                        {
+                            throw new NotImplementedException("create tag table in db then implement");
+                            //cmd.CommandText =
+                            //    "INSERT OR IGNORE INTO Hash (HashValue) VALUES (@hashValue)";
+                            //cmd.Parameters.AddWithValue("@hashValue", hash);
+                            //cmd.ExecuteNonQuery();
+                        }
+                    }
+
+                    transaction.Commit();
+                }
+            }
+        }
+        
+        public void SaveToDb()
+        {
+
+            //ensure tags
+            //ensure paths
+            //link all
         }
 
         public void StoreHashes(List<NwdUriProcessEntry> lst)
@@ -53,6 +122,65 @@ namespace NineWorldsDeep.Db
 
                 Display.Message(stopwatch.Elapsed.TotalSeconds +
                     " seconds with one transaction.");
+
+                conn.Close();
+            }
+        }
+
+        /// <summary>
+        /// assumes conn opened and closed outside of this method
+        /// </summary>
+        /// <param name="lst"></param>
+        /// <param name="conn"></param>
+        public void StorePaths(List<string> lst, SQLiteConnection conn)
+        {
+            //INSERT OR IGNORE            
+            using (var cmd = new SQLiteCommand(conn))
+            {
+                using (var transaction = conn.BeginTransaction())
+                {
+                    foreach (var path in lst)
+                    {
+                        if (!string.IsNullOrWhiteSpace(path))
+                        {
+                            cmd.CommandText =
+                                "INSERT OR IGNORE INTO Path (PathValue) VALUES (@pathValue)";
+                            cmd.Parameters.AddWithValue("@pathValue", path);
+                            cmd.ExecuteNonQuery();
+                        }
+                    }
+
+                    transaction.Commit();
+                }
+            }
+        }
+
+        public void StorePaths(List<string> lst)
+        {
+            //INSERT OR IGNORE
+            using (var conn = new SQLiteConnection(
+                @"Data Source=" + Configuration.GetSqliteDbPath("nwd")))
+            {
+                conn.Open();
+                
+                using (var cmd = new SQLiteCommand(conn))
+                {
+                    using (var transaction = conn.BeginTransaction())
+                    {
+                        foreach (var path in lst)
+                        {
+                            if (!string.IsNullOrWhiteSpace(path))
+                            {
+                                cmd.CommandText =
+                                    "INSERT OR IGNORE INTO Path (PathValue) VALUES (@pathValue)";
+                                cmd.Parameters.AddWithValue("@pathValue", path);
+                                cmd.ExecuteNonQuery();
+                            }
+                        }
+
+                        transaction.Commit();
+                    }
+                }
 
                 conn.Close();
             }
@@ -95,6 +223,97 @@ namespace NineWorldsDeep.Db
             }
         }
 
+        /// <summary>
+        /// uses conn for chaining multiple id refreshes with one 
+        /// connection. requires conn be opened before 
+        /// passing to method, and leaves conn open when
+        /// done (to be used by other refresh methods).
+        /// 
+        /// Be sure to close connection when finished (including
+        /// all refresh statements in a single using block
+        /// is the intended usage)
+        /// </summary>
+        /// <param name="conn"></param>
+        public void RefreshHashIds(SQLiteConnection conn)
+        {
+            string cmdStr = "SELECT HashValue, HashId FROM Hash";
+
+            using (var cmd = new SQLiteCommand(cmdStr, conn))
+            {
+                using (var rdr = cmd.ExecuteReader())
+                {
+                    while (rdr.Read())
+                    {
+                        hashIds.Add(rdr.GetString(0), rdr.GetInt32(1));
+                    }
+                }
+            }
+        }
+
+        /// <summary>
+        /// uses conn for chaining multiple id refreshes with one 
+        /// connection. requires conn be opened before 
+        /// passing to method, and leaves conn open when
+        /// done (to be used by other refresh methods).
+        /// 
+        /// Be sure to close connection when finished (including
+        /// all refresh statements in a single using block
+        /// is the intended usage)
+        /// </summary>
+        /// <param name="conn"></param>
+        public void RefreshPathIds(SQLiteConnection conn)
+        {
+            string cmdStr = "SELECT PathValue, PathId FROM Path";
+
+            using (var cmd = new SQLiteCommand(cmdStr, conn))
+            {
+                using (var rdr = cmd.ExecuteReader())
+                {
+                    while (rdr.Read())
+                    {
+                        pathIds.Add(rdr.GetString(0), rdr.GetInt32(1));
+                    }
+                }
+            }
+        }
+
+        /// <summary>
+        /// uses conn for chaining multiple id refreshes with one 
+        /// connection. requires conn be opened before 
+        /// passing to method, and leaves conn open when
+        /// done (to be used by other refresh methods).
+        /// 
+        /// Be sure to close connection when finished (including
+        /// all refresh statements in a single using block
+        /// is the intended usage)
+        /// </summary>
+        /// <param name="conn"></param>
+        public void PopulateIds(List<NwdUriProcessEntry> lst, 
+                                SQLiteConnection conn)
+        {
+            RefreshHashIds(conn);
+
+            RefreshPathIds(conn);
+
+            foreach (var pe in lst)
+            {
+                EnsureAndPopulateDeviceId(pe);
+
+                if (!string.IsNullOrWhiteSpace(pe.Path) &&
+                    pathIds.ContainsKey(pe.Path))
+                {
+                    pe.PathId = pathIds[pe.Path];
+                }
+
+                if (!string.IsNullOrWhiteSpace(pe.Hash) &&
+                    hashIds.ContainsKey(pe.Hash))
+                {
+                    pe.HashId = hashIds[pe.Hash];
+                }
+            }
+        }
+        
+        [Obsolete("use PopulateIds(List<NwdUriProcessEntry, SQLiteConnection)")]
         public void PopulateIds(List<NwdUriProcessEntry> lst)
         {
             Dictionary<string, int> hashes =
@@ -166,6 +385,49 @@ namespace NineWorldsDeep.Db
                     pe.HashId = hashes[pe.Hash];
                 }
             }
+        }
+
+        /// <summary>
+        /// used for chaining multiple id refreshes with one 
+        /// connection. requires conn be opened before 
+        /// passing to method, and leaves conn open when
+        /// done (to be used by other refresh methods).
+        /// 
+        /// Be sure to close connection when finished (including
+        /// all refresh statements in a single using block
+        /// is the intended usage)
+        /// </summary>
+        /// <param name="conn"></param>
+        private void RefreshDeviceIds(SQLiteConnection conn)
+        {            
+            string cmdStr = "SELECT DeviceDescription, " +
+                                    "DeviceFriendlyName, " +
+                                    "DeviceModel, " +
+                                    "DeviceType, " +
+                                    "DeviceId " +
+                            "FROM Device";
+
+            using (var cmd = new SQLiteCommand(cmdStr, conn))
+            {
+                using (var rdr = cmd.ExecuteReader())
+                {
+                    while (rdr.Read())
+                    {
+                        string desc = rdr.GetString(0);
+                        string friendlyName = rdr.GetString(1);
+                        string model = rdr.GetString(2);
+                        string deviceType = rdr.GetString(3);
+
+                        deviceIds.Add(new NwdPortableDeviceKey()
+                        {
+                            Description = desc,
+                            FriendlyName = friendlyName,
+                            Model = model,
+                            DeviceType = deviceType
+                        }, rdr.GetInt32(4));
+                    }
+                }
+            }                
         }
 
         private void RefreshDeviceIds()
@@ -276,6 +538,56 @@ namespace NineWorldsDeep.Db
                     " seconds with one transaction.");
 
                 conn.Close();
+            }
+        }
+
+        /// <summary>
+        /// executes an INSERT OR IGNORE statement for supplied device info,
+        /// intended for use with device nodes not meeting the standard NwdPortableDevice
+        /// format (laptops, desktops, remote servers, &c.)
+        /// 
+        /// Assumes conn opened and closed outside of method for bulk chaining
+        /// 
+        /// Any null or whitespace values will result in no database changes
+        /// </summary>
+        /// <param name="device"></param>
+        public void StoreDevice(string description,
+                                string friendlyName,
+                                string model,
+                                string deviceType,
+                                SQLiteConnection conn)
+        {
+            using (var cmd = new SQLiteCommand(conn))
+            {
+                using (var transaction = conn.BeginTransaction())
+                {
+                    //TODO: change this to default each to "" if null or whitespace, change method summary when you do so (it currently mentions this limitation)
+                    if (!string.IsNullOrWhiteSpace(description) &&
+                        !string.IsNullOrWhiteSpace(friendlyName) &&
+                        !string.IsNullOrWhiteSpace(model) &&
+                        !string.IsNullOrWhiteSpace(deviceType))
+                    {                        
+                        cmd.CommandText =
+                            "INSERT OR IGNORE INTO Device " +
+                                "(DeviceDescription, " +
+                                "DeviceFriendlyName, " +
+                                "DeviceModel, " +
+                                "DeviceType) " +
+                            "VALUES (@deviceDescription, " +
+                                    "@deviceFriendlyName, " +
+                                    "@deviceModel, " +
+                                    "@deviceType)";
+
+                        cmd.Parameters.AddWithValue("@deviceDescription", description);
+                        cmd.Parameters.AddWithValue("@deviceFriendlyName", friendlyName);
+                        cmd.Parameters.AddWithValue("@deviceModel", model);
+                        cmd.Parameters.AddWithValue("@deviceType", deviceType);
+                        cmd.ExecuteNonQuery();
+                    }
+
+                    transaction.Commit();
+                }
+
             }
         }
 

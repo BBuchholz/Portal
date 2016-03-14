@@ -126,6 +126,7 @@
     <Compile Include="Core\ProcessableFragment.cs" />
     <Compile Include="Core\ReviewableFragment.cs" />
     <Compile Include="Db\NwdPortableDeviceKey.cs" />
+    <Compile Include="Db\PathToTagMapping.cs" />
     <Compile Include="Db\SqliteDbAdapter.cs" />
     <Compile Include="DemoController.cs" />
     <Compile Include="ExtensionsFragment.cs" />
@@ -250,7 +251,9 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Interop\Interop.PortableDeviceApiLib.dll" />
+    <None Include="Interop\Interop.PortableDeviceApiLib.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <Resource Include="Interop\README.txt" />
   </ItemGroup>
   <ItemGroup>

@@ -100,7 +100,7 @@ namespace NineWorldsDeep
 
         private void Prompt_Click(object sender, RoutedEventArgs e)
         {
-            string selected = Prompt.ForTextFile("C:\\Users");
+            string selected = UI.Prompt.ForTextFile("C:\\Users");
             if(selected == null)
             {
                 selected = "nothing selected";

@@ -136,7 +136,7 @@ namespace NineWorldsDeep
 
                 if(wc.ColumnCount > 3)
                 {
-                    if(Prompt.Confirm("Auto-merge results?"))
+                    if(UI.Prompt.Confirm("Auto-merge results?"))
                     {
                         MergeXYZZtoXYZ();
                     }
@@ -196,7 +196,7 @@ namespace NineWorldsDeep
             IEnumerable<ProcessableFragment> listY = 
                 wc.GetFragments(1).ToProcessables(fuzzyIntersectionProcessedTag);
 
-            string metaKeyToSet = Prompt.Input("Key to set on confirm?");
+            string metaKeyToSet = UI.Prompt.Input("Key to set on confirm?");
 
             do
             {
@@ -206,7 +206,7 @@ namespace NineWorldsDeep
                 do
                 {
                     parseSucceeded =
-                        Int32.TryParse(Prompt.Input("Enter integer segment size"), 
+                        Int32.TryParse(UI.Prompt.Input("Enter integer segment size"), 
                                        out segmentSize);
 
                 } while (!parseSucceeded);
@@ -270,7 +270,7 @@ namespace NineWorldsDeep
                     }
                 }
 
-            } while (Prompt.Confirm("Process another segment?"));
+            } while (UI.Prompt.Confirm("Process another segment?"));
             
             w.Receive(listX.GetProcessed().DeepCopy());
             wc.RefreshMetaKeys(0); 

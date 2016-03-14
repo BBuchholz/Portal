@@ -56,7 +56,7 @@ namespace NineWorldsDeep
                     output += Environment.NewLine + kv.Key + ": " + kv.Value;
                 }
 
-                if (Prompt.Confirm(output))
+                if (UI.Prompt.Confirm(output))
                 {
                     foreach(KeyValuePair<string, string> kv in selectedMeta)
                     {
@@ -105,7 +105,7 @@ namespace NineWorldsDeep
 
             do
             {
-                key = Prompt.Input("Enter key to extract, or press enter to continue");
+                key = UI.Prompt.Input("Enter key to extract, or press enter to continue");
                 if (!string.IsNullOrWhiteSpace(key))
                 {
                     keys.Add(key);
@@ -161,14 +161,14 @@ namespace NineWorldsDeep
 
         private void TrimPrefixToNewKey(object sender, RoutedEventArgs e)
         {
-            string key = Prompt.Input("Enter Key To Trim");
+            string key = UI.Prompt.Input("Enter Key To Trim");
             if (!string.IsNullOrWhiteSpace(key))
             {
                 string firstVal = window.GetFragments().First().GetMeta(key);
                 if (!string.IsNullOrWhiteSpace(firstVal))
                 {
-                    string prefix = Prompt.Input("Select/Enter prefix to trim", firstVal);
-                    string newKey = Prompt.Input("Enter new key to set");
+                    string prefix = UI.Prompt.Input("Select/Enter prefix to trim", firstVal);
+                    string newKey = UI.Prompt.Input("Enter new key to set");
 
                     if(!string.IsNullOrWhiteSpace(prefix) && !string.IsNullOrWhiteSpace(newKey))
                     {
@@ -195,7 +195,7 @@ namespace NineWorldsDeep
             XmlHandler xh = new XmlHandler();
 
             //TODO: replace hardcoded value with centralized configuration
-            string path = Prompt.ForXmlFileLoad(@"C:\NWD\fragments");
+            string path = UI.Prompt.ForXmlFileLoad(@"C:\NWD\fragments");
             if (path != null && File.Exists(path))
             {
                 FragmentXmlAdapter template = new FragmentXmlAdapter(null);
@@ -209,7 +209,7 @@ namespace NineWorldsDeep
             XmlHandler xh = new XmlHandler();
 
             //TODO: replace hardcoded value with centralized configuration
-            string path = Prompt.ForXmlFileSave(@"C:\NWD\fragments");
+            string path = UI.Prompt.ForXmlFileSave(@"C:\NWD\fragments");
             if (path != null)
                 xh.Save(
                     FragmentXmlAdapter.WrapAll(window.GetFragments()), path);
@@ -226,7 +226,7 @@ namespace NineWorldsDeep
                 {
                     if(f.KeyToReview != null)
                     {
-                        if(Prompt.Confirm(f.GetMeta(f.KeyToReview), true))
+                        if(UI.Prompt.Confirm(f.GetMeta(f.KeyToReview), true))
                         {
                             f.ProcessReviewed();
                         }
