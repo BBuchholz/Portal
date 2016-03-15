@@ -10,5 +10,7 @@ namespace NineWorldsDeep.Db
     {
         public int PathId { get; set; }
         public int TagId { get; set; }
+        public int DeviceId { get; set; }
+        public int FileId { get; set; }
     }
 }

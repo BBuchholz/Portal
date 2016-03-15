@@ -43,6 +43,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -125,7 +126,7 @@
     <Compile Include="Core\MultiMap.cs" />
     <Compile Include="Core\ProcessableFragment.cs" />
     <Compile Include="Core\ReviewableFragment.cs" />
-    <Compile Include="Db\NwdPortableDeviceKey.cs" />
+    <Compile Include="Db\NwdDeviceKey.cs" />
     <Compile Include="Db\PathToTagMapping.cs" />
     <Compile Include="Db\SqliteDbAdapter.cs" />
     <Compile Include="DemoController.cs" />

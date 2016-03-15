@@ -14,8 +14,8 @@ namespace NineWorldsDeep.Db
 {
     public class SqliteDbAdapter
     {
-        private Dictionary<NwdPortableDeviceKey, int> deviceIds =
-            new Dictionary<NwdPortableDeviceKey, int>();
+        private Dictionary<NwdDeviceKey, int> deviceIds =
+            new Dictionary<NwdDeviceKey, int>();
         private Dictionary<string, int> hashIds =
             new Dictionary<string, int>();
         private Dictionary<string, int> pathIds =
@@ -81,7 +81,38 @@ namespace NineWorldsDeep.Db
                 }
             }
         }
-        
+
+        public void StoreTags(List<string> lst)
+        {
+            //INSERT OR IGNORE
+            using (var conn = new SQLiteConnection(
+                @"Data Source=" + Configuration.GetSqliteDbPath("nwd")))
+            {
+                conn.Open();
+
+                using (var cmd = new SQLiteCommand(conn))
+                {
+                    using (var transaction = conn.BeginTransaction())
+                    {
+                        foreach (var tag in lst)
+                        {
+                            if (!string.IsNullOrWhiteSpace(tag))
+                            {
+                                cmd.CommandText =
+                                    "INSERT OR IGNORE INTO Tag (TagValue) VALUES (@tagValue)";
+                                cmd.Parameters.AddWithValue("@tagValue", tag);
+                                cmd.ExecuteNonQuery();
+                            }
+                        }
+
+                        transaction.Commit();
+                    }
+                }
+
+                conn.Close();
+            }
+        }
+
         public void SaveToDb()
         {
 
@@ -245,6 +276,196 @@ namespace NineWorldsDeep.Db
                     while (rdr.Read())
                     {
                         hashIds.Add(rdr.GetString(0), rdr.GetInt32(1));
+                    }
+                }
+            }
+        }
+
+        public void PopulatePathIds(Dictionary<string, int> pathsToIds)
+        {
+            using (var conn = new SQLiteConnection(
+                @"Data Source=" + Configuration.GetSqliteDbPath("nwd")))
+            {
+                conn.Open();
+
+                string cmdStr = "SELECT PathValue, PathId FROM Path";
+
+                using (var cmd = new SQLiteCommand(cmdStr, conn))
+                {
+                    using (var rdr = cmd.ExecuteReader())
+                    {
+                        while (rdr.Read())
+                        {
+                            string pathVal = rdr.GetString(0);
+                            int pathId = rdr.GetInt32(1);
+
+                            //only store those we are looking for
+                            if (pathsToIds.ContainsKey(pathVal))
+                            {
+                                pathsToIds[pathVal] = pathId;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        public void StoreFileTags(List<PathToTagMapping> mappings)
+        {
+            //INSERT OR IGNORE
+            using (var conn = new SQLiteConnection(
+                @"Data Source=" + Configuration.GetSqliteDbPath("nwd")))
+            {
+                conn.Open();
+
+                using (var cmd = new SQLiteCommand(conn))
+                {
+                    using (var transaction = conn.BeginTransaction())
+                    {
+                        foreach (var mapping in mappings)
+                        {
+                            cmd.CommandText =
+                                "INSERT OR IGNORE INTO junction_File_Tag (FileId, TagId) VALUES (@fileId, @tagId)";
+                            cmd.Parameters.AddWithValue("@fileId", mapping.FileId);
+                            cmd.Parameters.AddWithValue("@tagId", mapping.TagId);
+                            cmd.ExecuteNonQuery();
+                        }
+
+                        transaction.Commit();
+                    }
+                }
+
+                conn.Close();
+            }
+        }
+
+        public void StoreDeviceFiles(List<PathToTagMapping> mappings)
+        {
+            //INSERT OR IGNORE
+            using (var conn = new SQLiteConnection(
+                @"Data Source=" + Configuration.GetSqliteDbPath("nwd")))
+            {
+                conn.Open();
+
+                using (var cmd = new SQLiteCommand(conn))
+                {
+                    using (var transaction = conn.BeginTransaction())
+                    {
+                        foreach (var mapping in mappings)
+                        {
+                            cmd.CommandText =
+                                "INSERT OR IGNORE INTO File (DeviceId, PathId) VALUES (@deviceId, @pathId)";
+                            cmd.Parameters.AddWithValue("@deviceId", mapping.DeviceId);
+                            cmd.Parameters.AddWithValue("@pathId", mapping.PathId);
+                            cmd.ExecuteNonQuery();
+                        }
+
+                        transaction.Commit();
+                    }
+                }
+
+                conn.Close();
+            }
+        }
+
+        public void StorePathToTagMappings(List<PathToTagMapping> mappings)
+        {
+            StoreDeviceFiles(mappings);
+            PopulateFileIds(mappings);
+            StoreFileTags(mappings);
+        }
+
+        private void PopulateFileIds(List<PathToTagMapping> mappings)
+        {
+            using (var conn = new SQLiteConnection(
+                @"Data Source=" + Configuration.GetSqliteDbPath("nwd")))
+            {
+                conn.Open();
+
+                string cmdStr = "SELECT FileId, DeviceId, PathId FROM File";
+
+                using (var cmd = new SQLiteCommand(cmdStr, conn))
+                {
+                    using (var rdr = cmd.ExecuteReader())
+                    {
+                        while (rdr.Read())
+                        {
+                            int fileId = rdr.GetInt32(0);
+                            int deviceId = rdr.GetInt32(1);
+                            int pathId = rdr.GetInt32(2);
+
+                            //if this is too slow, we could implement
+                            //a dictionary with a File entity type or something
+                            //for now, this might be good enough
+                            foreach(var m in mappings)
+                            {
+                                if(m.DeviceId == deviceId &&
+                                    m.PathId == pathId)
+                                {
+                                    m.FileId = fileId;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        /// <summary>
+        /// returns device database id if found, -1 if not found
+        /// </summary>
+        /// <param name="description"></param>
+        /// <param name="friendlyName"></param>
+        /// <param name="model"></param>
+        /// <param name="deviceType"></param>
+        /// <returns></returns>
+        public int GetDeviceId(string description,
+                               string friendlyName,
+                               string model,
+                               string deviceType)
+        {
+            RefreshDeviceIds();
+
+            NwdDeviceKey deviceKey =
+                new NwdDeviceKey(description,
+                                 friendlyName,
+                                 model,
+                                 deviceType);
+
+            if (deviceIds.ContainsKey(deviceKey))
+            {
+                return deviceIds[deviceKey];
+            }
+
+            return -1;
+        }
+
+        public void PopulateTagIds(Dictionary<string, int> tagsToIds)
+        {
+            using (var conn = new SQLiteConnection(
+                @"Data Source=" + Configuration.GetSqliteDbPath("nwd")))
+            {
+                conn.Open();
+                
+                string cmdStr = "SELECT TagValue, TagId FROM Tag";
+
+                using (var cmd = new SQLiteCommand(cmdStr, conn))
+                {
+                    using (var rdr = cmd.ExecuteReader())
+                    {
+                        while (rdr.Read())
+                        {
+                            string tagVal = rdr.GetString(0);
+                            int tagId = rdr.GetInt32(1);
+
+                            //only store those we are looking for
+                            if (tagsToIds.ContainsKey(tagVal))
+                            {
+                                //store as lowercase for case-insensitivity
+                                //TODO: encapsulate tag in class so comparision can be case-insensitive?
+                                tagsToIds[tagVal.ToLower()] = tagId;
+                            }
+                        }
                     }
                 }
             }
@@ -418,7 +639,7 @@ namespace NineWorldsDeep.Db
                         string model = rdr.GetString(2);
                         string deviceType = rdr.GetString(3);
 
-                        deviceIds.Add(new NwdPortableDeviceKey()
+                        deviceIds.Add(new NwdDeviceKey()
                         {
                             Description = desc,
                             FriendlyName = friendlyName,
@@ -458,7 +679,7 @@ namespace NineWorldsDeep.Db
                             string model = rdr.GetString(2);
                             string deviceType = rdr.GetString(3);
 
-                            deviceIds.Add(new NwdPortableDeviceKey() {
+                            deviceIds.Add(new NwdDeviceKey() {
                                 Description = desc,
                                 FriendlyName = friendlyName,
                                 Model = model,
@@ -472,14 +693,14 @@ namespace NineWorldsDeep.Db
             }
         }
 
-        private NwdPortableDeviceKey ToDeviceKey(NwdPortableDevice device)
+        private NwdDeviceKey ToDeviceKey(NwdPortableDevice device)
         {
             if(device == null)
             {
                 throw new Exception("NwdPortableDevice null in method ToDeviceKey()");
             }
         
-            return new NwdPortableDeviceKey()
+            return new NwdDeviceKey()
             {
                 Description = device.Description,
                 FriendlyName = device.FriendlyName,
@@ -588,6 +809,58 @@ namespace NineWorldsDeep.Db
                     transaction.Commit();
                 }
 
+            }
+        }
+
+        /// <summary>
+        /// executes an INSERT OR IGNORE statement for supplied device info,
+        /// intended for use with device nodes not meeting the standard NwdPortableDevice
+        /// format (laptops, desktops, remote servers, &c.)
+        /// 
+        /// Any null or whitespace values will result in no database changes
+        /// </summary>
+        /// <param name="device"></param>
+        public void StoreDevice(string description,
+                                string friendlyName,
+                                string model,
+                                string deviceType)
+        {
+            using (var conn = new SQLiteConnection(
+                @"Data Source=" + Configuration.GetSqliteDbPath("nwd")))
+            {
+                conn.Open();
+
+                using (var cmd = new SQLiteCommand(conn))
+                {
+                    using (var transaction = conn.BeginTransaction())
+                    {
+                        //TODO: change this to default each to "" if null or whitespace, change method summary when you do so (it currently mentions this limitation)
+                        if (!string.IsNullOrWhiteSpace(description) &&
+                            !string.IsNullOrWhiteSpace(friendlyName) &&
+                            !string.IsNullOrWhiteSpace(model) &&
+                            !string.IsNullOrWhiteSpace(deviceType))
+                        {
+                            cmd.CommandText =
+                                "INSERT OR IGNORE INTO Device " +
+                                    "(DeviceDescription, " +
+                                    "DeviceFriendlyName, " +
+                                    "DeviceModel, " +
+                                    "DeviceType) " +
+                                "VALUES (@deviceDescription, " +
+                                        "@deviceFriendlyName, " +
+                                        "@deviceModel, " +
+                                        "@deviceType)";
+
+                            cmd.Parameters.AddWithValue("@deviceDescription", description);
+                            cmd.Parameters.AddWithValue("@deviceFriendlyName", friendlyName);
+                            cmd.Parameters.AddWithValue("@deviceModel", model);
+                            cmd.Parameters.AddWithValue("@deviceType", deviceType);
+                            cmd.ExecuteNonQuery();
+                        }
+
+                        transaction.Commit();
+                    }
+                }
             }
         }
 
