@@ -127,6 +127,7 @@
     <Compile Include="Core\ProcessableFragment.cs" />
     <Compile Include="Core\ReviewableFragment.cs" />
     <Compile Include="Db\NwdDeviceKey.cs" />
+    <Compile Include="Db\PathTagLink.cs" />
     <Compile Include="Db\PathToTagMapping.cs" />
     <Compile Include="Db\SqliteDbAdapter.cs" />
     <Compile Include="DemoController.cs" />

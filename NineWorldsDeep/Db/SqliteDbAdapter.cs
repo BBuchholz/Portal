@@ -281,6 +281,68 @@ namespace NineWorldsDeep.Db
             }
         }
 
+        /// <summary>
+        /// will retrieve load all paths and tags for those paths
+        /// where the path begins with filePathTopFolder
+        /// 
+        /// any level of hierarchy is supported (i.e. "C:\NWD-AUX\" 
+        /// will work, as will "C:\NWD-AUX\voicememos", with
+        /// the first one including the results from the second
+        /// one, thus respecting hierarchy)
+        /// 
+        /// Also note, passing "" as a parameter will match
+        /// all paths for which tags have been stored
+        /// </summary>
+        /// <param name="filePathTopFolder"></param>
+        public List<PathTagLink> GetPathTagLinks(string filePathTopFolder)
+        {
+            List<PathTagLink> lst = new List<PathTagLink>();
+
+            using (var conn = new SQLiteConnection(
+                @"Data Source=" + Configuration.GetSqliteDbPath("nwd")))
+            {
+                conn.Open();
+                
+                //TODO: may be able to move path filter into a LIKE clause
+                //but should test which is faster, for now just
+                //filtering in code
+                string cmdStr = "SELECT PathValue, " +
+                                       "TagValue " +
+                                "FROM Path " +
+                                "JOIN File " +
+                                "ON Path.PathId = File.PathId " +
+                                "JOIN junction_File_Tag " +
+                                "ON File.FileId = junction_File_Tag.FileId " +
+                                "JOIN Tag " +
+                                "ON junction_File_Tag.TagId = Tag.TagId";
+
+                using (var cmd = new SQLiteCommand(cmdStr, conn))
+                {
+                    using (var rdr = cmd.ExecuteReader())
+                    {
+                        while (rdr.Read())
+                        {
+                            string pathVal = rdr.GetString(0);
+                            string tagVal = rdr.GetString(1);
+
+                            if (pathVal.ToLower().StartsWith(filePathTopFolder.ToLower()))
+                            {
+                                //TODO: may be able to move this into a LIKE clause
+                                //but should test which is faster, for now just
+                                //filtering in code
+                                lst.Add(new PathTagLink() {
+                                    PathValue = pathVal,
+                                    TagValue = tagVal
+                                });
+                            }                            
+                        }
+                    }
+                }
+            }
+
+            return lst;
+        }
+
         public void PopulatePathIds(Dictionary<string, int> pathsToIds)
         {
             using (var conn = new SQLiteConnection(
