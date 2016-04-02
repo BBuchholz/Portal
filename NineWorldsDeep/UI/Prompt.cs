@@ -62,8 +62,14 @@ namespace NineWorldsDeep.UI
 
         public static string ForFolder(string defaultPath)
         {
+            return ForFolder(defaultPath, "Select Folder");
+        }
+
+        public static string ForFolder(string defaultPath, string description)
+        {
             var dlg = new System.Windows.Forms.FolderBrowserDialog();
             dlg.SelectedPath = defaultPath;
+            dlg.Description = description;
             System.Windows.Forms.DialogResult result = dlg.ShowDialog();
             if (result == System.Windows.Forms.DialogResult.OK)
             {
@@ -73,6 +79,13 @@ namespace NineWorldsDeep.UI
             return null;
         }
 
+        /// <summary>
+        /// if defaultNo is set to true, the default response
+        /// will be 'no', if false, default is 'yes'
+        /// </summary>
+        /// <param name="message"></param>
+        /// <param name="defaultNo"></param>
+        /// <returns></returns>
         public static bool Confirm(string message, bool defaultNo = false)
         {
             MessageBoxDefaultButton defaultButton;

@@ -21,6 +21,11 @@ namespace NineWorldsDeep.Core
 
         public static string AbletonProjectsFolder { get { return @"C:\NWD-AUX\abletonProjects"; } }
 
+        public static string SyncRoot(string _name)
+        {
+            return ProcessTestMode(@"NWD-SYNC\" + _name);
+        }
+
         public static string GetSqliteDbPath(string dbNameWithoutExtension)
         {
             string dbName = dbNameWithoutExtension + ".sqlite";
@@ -328,6 +333,14 @@ namespace NineWorldsDeep.Core
             get
             {
                 return ProcessTestMode(@"NWD-SYNC\mtp\NWD\synergy");
+            }
+        }
+
+        public static string NwdAuxFolder
+        {
+            get
+            {
+                return ProcessTestMode(@"NWD-AUX");
             }
         }
 

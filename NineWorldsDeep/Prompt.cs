@@ -61,6 +61,12 @@ namespace NineWorldsDeep
             return null;
         }
 
+        /// <summary>
+        /// starts in defaultFolder for folder selection
+        /// returns selected folder, or null if cancelled
+        /// </summary>
+        /// <param name="defaultPath"></param>
+        /// <returns></returns>
         public static string ForFolder(string defaultPath)
         {
             var dlg = new System.Windows.Forms.FolderBrowserDialog();
