@@ -150,6 +150,7 @@
     <Compile Include="Mtp\PortableDeviceFolder.cs" />
     <Compile Include="Mtp\PortableDeviceObject.cs" />
     <Compile Include="Parser\NwdUri.cs" />
+    <Compile Include="Parser\NwdUriConverter.cs" />
     <Compile Include="Parser\NwdUriProcessEntry.cs" />
     <Compile Include="Parser\Parser.cs" />
     <Compile Include="Prompt.cs" />
