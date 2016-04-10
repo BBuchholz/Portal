@@ -36,6 +36,15 @@ namespace NineWorldsDeep.Parser
             //(just by trimming, I'm not referring to a Contains() test)
             //this will get folders like Pictures/Screenshots and DCIM/camera
 
+            //a side note: should ignore any "roots" that start with another
+            //root (will need to cycle through roots after all have been collected)
+            //to prevent "storage/0/Pictures/NWD" from including a root
+            //"storage/0/Pictures" (it should be cancelled out by "storage/0/"
+            //inevitably found elsewhere in a large enough list)
+            //this should work for any volume that has an NWD filesystem root
+            //(NWD/ and zero or more of NWD-AUX/, NWD-MEDIA/, NWD-SYNC, and NWD-SNDBX)
+            //installed on it.
+
             throw new NotImplementedException();
         }
 
