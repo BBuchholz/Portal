@@ -21,15 +21,26 @@ namespace NineWorldsDeep.Core
 
         public static string AbletonProjectsFolder { get { return @"C:\NWD-AUX\abletonProjects"; } }
 
-        public static string SyncRoot(string _name)
+        public static string SyncRoot(string name)
         {
-            return ProcessTestMode(@"NWD-SYNC\" + _name);
+            return ProcessTestMode(@"NWD-SYNC\" + name);
+        }
+
+        public static string SyncRootConfigFile(string syncRoot, string fileNameWithoutExtension)
+        {
+            string fileName = fileNameWithoutExtension + ".txt";
+            return Path.Combine(SyncRootConfigFolder(syncRoot), fileName);
         }
 
         public static string GetSqliteDbPath(string dbNameWithoutExtension)
         {
             string dbName = dbNameWithoutExtension + ".sqlite";
             return Path.Combine(ProcessTestMode("NWD/sqlite"), dbName);
+        }
+
+        public static string SyncRootConfigFolder(string name)
+        {
+            return Path.Combine(SyncRoot(name), "config");
         }
 
         public static string AudacityProjectsFolder { get { return @"C:\NWD-AUX\audacityProjects"; } }
