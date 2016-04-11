@@ -40,7 +40,7 @@ namespace NineWorldsDeep.Core
 
         public static string SyncRootConfigFolder(string name)
         {
-            return Path.Combine(SyncRoot(name), "config");
+            return Path.Combine(SyncRoot(name), "NWD/config");
         }
 
         public static string AudacityProjectsFolder { get { return @"C:\NWD-AUX\audacityProjects"; } }
