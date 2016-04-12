@@ -26,10 +26,10 @@ namespace NineWorldsDeep.Core
             return ProcessTestMode(@"NWD-SYNC\" + name);
         }
 
-        public static string SyncRootConfigFile(string syncRoot, string fileNameWithoutExtension)
+        public static string SyncRootConfigFile(string profileName, string fileNameWithoutExtension)
         {
             string fileName = fileNameWithoutExtension + ".txt";
-            return Path.Combine(SyncRootConfigFolder(syncRoot), fileName);
+            return Path.Combine(SyncRootConfigFolder(profileName), fileName);
         }
 
         public static string GetSqliteDbPath(string dbNameWithoutExtension)
