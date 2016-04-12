@@ -51,5 +51,17 @@ namespace NineWorldsDeep.UI
 
             MessageBox.Show(msg);
         }
+
+        public static MessageBoxResult Multiline(string summaryText, string multiLineText)
+        {
+            DisplayMultiLineWindow dmlw = new DisplayMultiLineWindow();
+
+            dmlw.SummaryText = summaryText;
+            dmlw.Text = multiLineText;
+
+            dmlw.ShowDialog();
+
+            return dmlw.Result;
+        }
     }
 }

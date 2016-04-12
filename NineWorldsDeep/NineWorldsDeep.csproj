@@ -167,6 +167,9 @@
     <Compile Include="UI\DisplayGridWindow.xaml.cs">
       <DependentUpon>DisplayGridWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="UI\DisplayMultiLineWindow.xaml.cs">
+      <DependentUpon>DisplayMultiLineWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="UI\FileElementBrowserWindow.xaml.cs">
       <DependentUpon>FileElementBrowserWindow.xaml</DependentUpon>
     </Compile>
@@ -201,6 +204,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="UI\DisplayGridWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\DisplayMultiLineWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
