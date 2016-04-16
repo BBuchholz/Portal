@@ -1,0 +1,47 @@
+﻿<Window x:Class="NineWorldsDeep.Hierophant.VisualKabbalisticTreeTestHarness"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:NineWorldsDeep.Hierophant"
+        mc:Ignorable="d"
+        Title="VisualKabbalisticTreeTestHarness" Height="600" Width="600">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="350"></ColumnDefinition>
+            <ColumnDefinition Width="*"></ColumnDefinition>
+        </Grid.ColumnDefinitions>
+        <local:VisualKabbalisticTree Grid.Column="0"
+                                     x:Name="kabbalisticTree"
+                                     Margin="0"/>
+        <Grid Grid.Column="1">
+            <Grid.RowDefinitions>
+                <RowDefinition></RowDefinition>
+                <RowDefinition></RowDefinition>
+                <RowDefinition></RowDefinition>
+                <RowDefinition></RowDefinition>
+                <RowDefinition></RowDefinition>
+                <RowDefinition></RowDefinition>
+                <RowDefinition></RowDefinition>
+                <RowDefinition></RowDefinition>
+                <RowDefinition></RowDefinition>
+            </Grid.RowDefinitions>
+            <Button Grid.Row="0"
+                    x:Name="ToggleButton"
+                    Margin="10"
+                    Content="Toggle All"/>
+            <Button Grid.Row="1" 
+                    x:Name="ClearButton"
+                    Margin="10"
+                    Content="Clear"/>
+            <Button Grid.Row="2"
+                    x:Name="TestGetButton"
+                    Margin="10"
+                    Content="Test Get"/>
+            <Button Grid.Row="3"
+                    x:Name="TestSetButton"
+                    Margin="10"
+                    Content="Test Set"/>
+        </Grid>
+    </Grid>
+</Window>

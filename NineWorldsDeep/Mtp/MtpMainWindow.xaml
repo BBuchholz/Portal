@@ -1,0 +1,107 @@
+﻿<Window x:Class="NineWorldsDeep.Mtp.MtpMainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:NineWorldsDeep.Mtp"
+        mc:Ignorable="d"
+        Title="MtpMainWindow" Height="650" Width="825">
+    <DockPanel LastChildFill="True">
+        <Menu IsMainMenu="True" DockPanel.Dock="Top">
+            <MenuItem Header="WPD Examples">
+                <MenuItem Header="Enumerate Devices"
+                          Click="MenuItemEnumerateDevices_Click"/>
+                <MenuItem Header="Enumerate Content"
+                          Click="MenuItemEnumerateContent_Click"/>
+                <MenuItem Header="Transferring Content"
+                          Click="MenuItemTransferringContent_Click"/>
+                <MenuItem Header="Deleting Resources"
+                          Click="MenuItemDeletingResources_Click"/>
+                <MenuItem Header="Transferring Content To Device"
+                          Click="MenuItemTransferringContentToDevice_Click"/>
+            </MenuItem>
+            <MenuItem Header="WPD Experiments">
+                <MenuItem Header="Get Devices"                          
+                          Click="MenuItemGetDevices_Click"/>
+                <MenuItem Header="Find Top Level Folder"                          
+                          Click="MenuItemFindTopLevelFolder_Click"/>
+                <MenuItem Header="Find By Uri"                          
+                          Click="MenuItemFindByUri_Click"/>
+                <MenuItem Header="Retrieve By Uri List"                          
+                          Click="MenuItemRetrieveByUriList_Click"/>
+                <MenuItem Header="Find ToBeRemoved Playlist"                          
+                          Click="MenuItemFindToBeRemovedPlayList_Click"/>
+                <MenuItem Header="Find Synergy Files"                          
+                          Click="MenuItemFindSynergyFiles_Click"/>
+                <MenuItem Header="Find Hashed Media Files"                          
+                          Click="MenuItemFindHashedMediaFiles_Click"/>
+            </MenuItem>
+            <MenuItem Header="Delegate Based Processing">
+                <MenuItem Header="Find Synergy Files (delegate)"
+                          Click="MenuItemFindSynergyFilesDelegate_Click"/>
+            </MenuItem>
+            <MenuItem Header="DevLab">
+                <MenuItem Header="Tree View Challenge"
+                          Click="MenuItemTreeViewChallenge_Click"/>
+            </MenuItem>
+            <MenuItem Header="Demo">
+                <MenuItem Header="Test Toggle View"
+                          Click="MenuItemTestToggleView_Click"/>
+            </MenuItem>
+        </Menu>
+        <Grid>
+            <ContentControl x:Name="ccParentChild"
+                        Grid.Row="1"
+                        Visibility="Collapsed">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+                    <ListView x:Name="lvParent" 
+                              SelectionChanged="lvParent_SelectionChanged">
+                        <ListView.ContextMenu>
+                            <ContextMenu>
+                                <MenuItem Header="Download"
+                                          Click="MenuItemListViewParentDownload_Click"/>
+                                <MenuItem Header="Delete"
+                                          Click="MenuItemListViewParentDelete_Click"/>
+                                <MenuItem Header="Transfer File"
+                                          Click="MenuItemParentTransferFile_Click"/>
+                            </ContextMenu>
+                        </ListView.ContextMenu>
+                    </ListView>
+                    <ListView x:Name="lvChild" 
+                              Grid.Column="1"
+                              SelectionChanged="lvChild_SelectionChanged">
+                        <ListView.ContextMenu>
+                            <ContextMenu>
+                                <MenuItem Header="Download"
+                                          Click="MenuItemListViewChildDownload_Click"/>
+                                <MenuItem Header="Delete"
+                                          Click="MenuItemListViewChildDelete_Click"/>
+                                <MenuItem Header="Transfer File"
+                                          Click="MenuItemChildTransferFile_Click"/>
+                            </ContextMenu>
+                        </ListView.ContextMenu>
+                    </ListView>
+                </Grid>
+            </ContentControl>
+            <ContentControl x:Name="ccTextBoxListView"
+                        Grid.Row="1">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+                    <TextBox x:Name="txtBox"
+                     Grid.Column="0"
+                     HorizontalScrollBarVisibility="Auto"
+                     VerticalScrollBarVisibility="Auto"/>
+                    <ListView x:Name="lvItems"
+                      Grid.Column="1"/>
+                </Grid>
+            </ContentControl>
+        </Grid>
+    </DockPanel>
+</Window>

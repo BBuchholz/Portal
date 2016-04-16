@@ -1,0 +1,32 @@
+﻿<Window x:Class="NineWorldsDeep.Hierophant.HierophantMainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:NineWorldsDeep.Hierophant"
+        mc:Ignorable="d"
+        Title="HierophantMainWindow" Height="350" Width="525">
+    <DockPanel LastChildFill="True">
+        <Menu DockPanel.Dock="Top"
+              IsMainMenu="True">
+            <MenuItem Header="File">
+                <MenuItem Header="Load From File" 
+                          Click="MenuItemFileLoad_Click" />
+                <MenuItem Header="Save To File" 
+                          Click="MenuItemFileSave_Click" />
+            </MenuItem>
+            <MenuItem Header="DB">
+                <MenuItem Header="Load From DB" 
+                          Click="MenuItemDBLoad_Click" />
+                <MenuItem Header="Save To DB" 
+                          Click="MenuItemDBSave_Click" />
+            </MenuItem>
+            <MenuItem Header="Visual Tools">
+                <MenuItem Header="Visual Tree of Life">
+                    <MenuItem Header="Test Harness"
+                              Click="MenuItemVisualTree_Click"/>
+                </MenuItem>
+            </MenuItem>
+        </Menu>
+    </DockPanel>
+</Window>

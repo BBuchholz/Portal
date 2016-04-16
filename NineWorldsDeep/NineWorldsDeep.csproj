@@ -157,8 +157,21 @@
     <Compile Include="FragmentMetaWindow.xaml.cs">
       <DependentUpon>FragmentMetaWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Hierophant\HierophantMainWindow.xaml.cs">
+      <DependentUpon>HierophantMainWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Hierophant\VisualKabbalisticTree.xaml.cs">
+      <DependentUpon>VisualKabbalisticTree.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Hierophant\VisualKabbalisticTreeTestHarness.xaml.cs">
+      <DependentUpon>VisualKabbalisticTreeTestHarness.xaml</DependentUpon>
+    </Compile>
     <Compile Include="IProgressBarCompatible.cs" />
     <Compile Include="MenuController.cs" />
+    <Compile Include="Mtp\Extensions.cs" />
+    <Compile Include="Mtp\MtpMainWindow.xaml.cs">
+      <DependentUpon>MtpMainWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Mtp\NwdPortableDevice.cs" />
     <Compile Include="Mtp\NwdPortableDeviceCollection.cs" />
     <Compile Include="Mtp\NwdPortableDeviceFile.cs" />
@@ -175,6 +188,8 @@
     <Compile Include="Prompt.cs" />
     <Compile Include="Reflection\Reflector.cs" />
     <Compile Include="ExtensionsString.cs" />
+    <Compile Include="SandBox\Class1.cs" />
+    <Compile Include="SandBox\Test1.cs" />
     <Compile Include="SimpleProgressBarWindow.xaml.cs">
       <DependentUpon>SimpleProgressBarWindow.xaml</DependentUpon>
     </Compile>
@@ -265,6 +280,18 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Hierophant\HierophantMainWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Hierophant\VisualKabbalisticTree.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Hierophant\VisualKabbalisticTreeTestHarness.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -277,6 +304,10 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="Mtp\MtpMainWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="SimpleProgressBarWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

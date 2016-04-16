@@ -37,5 +37,26 @@ namespace NineWorldsDeep.Tapestry
 
             fcmw.Show();
         }
+
+        private void MenuItemNwdStudio_Click(object sender, RoutedEventArgs e)
+        {
+            Studio.StudioMainWindow smw =
+                new Studio.StudioMainWindow();
+            smw.Show();
+        }
+
+        private void MenuItemNwdHierophant_Click(object sender, RoutedEventArgs e)
+        {
+            Hierophant.HierophantMainWindow hmw =
+                new Hierophant.HierophantMainWindow();
+            hmw.Show();
+        }
+
+        private void MenuItemMtpSandbox_Click(object sender, RoutedEventArgs e)
+        {
+            Mtp.MtpMainWindow mmw =
+                new Mtp.MtpMainWindow();
+            mmw.Show();
+        }
     }
 }

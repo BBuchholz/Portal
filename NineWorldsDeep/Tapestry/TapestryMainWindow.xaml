@@ -16,6 +16,12 @@
                           Click="MenuItemOriginalWindow_Click"/>
                 <MenuItem Header="NwdFragmentCloud"
                           Click="MenuItemNwdFragmentCloud_Click"/>
+                <MenuItem Header="NwdStudio"
+                          Click="MenuItemNwdStudio_Click"/>
+                <MenuItem Header="NwdHierophant"
+                          Click="MenuItemNwdHierophant_Click"/>
+                <MenuItem Header="MtpSandbox"
+                          Click="MenuItemMtpSandbox_Click"/>
             </MenuItem>
 
         </Menu>
