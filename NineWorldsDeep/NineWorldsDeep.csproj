@@ -134,6 +134,25 @@
     <Compile Include="DemoController.cs" />
     <Compile Include="ExtensionsFragment.cs" />
     <Compile Include="Deprecated\Fragment.cs" />
+    <Compile Include="FragmentCloud\Converter.cs" />
+    <Compile Include="FragmentCloud\ElementCloud.cs" />
+    <Compile Include="FragmentCloud\ElementCloudItem.cs" />
+    <Compile Include="FragmentCloud\ElementCloudItemSize.cs" />
+    <Compile Include="FragmentCloud\FileSystemFragment.cs" />
+    <Compile Include="FragmentCloud\Fragment.cs" />
+    <Compile Include="FragmentCloud\FragmentClickedEventArgs.cs" />
+    <Compile Include="FragmentCloud\FragmentCloud.xaml.cs">
+      <DependentUpon>FragmentCloud.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="FragmentCloud\FragmentCloudMainWindow.xaml.cs">
+      <DependentUpon>FragmentCloudMainWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="FragmentCloud\FragmentNodeDisplay.xaml.cs">
+      <DependentUpon>FragmentNodeDisplay.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="FragmentCloud\NwdUriResolver.cs" />
+    <Compile Include="FragmentCloud\RootFragment.cs" />
+    <Compile Include="FragmentCloud\RotationType.cs" />
     <Compile Include="FragmentMenuController.cs" />
     <Compile Include="FragmentMetaWindow.xaml.cs">
       <DependentUpon>FragmentMetaWindow.xaml</DependentUpon>
@@ -162,6 +181,9 @@
     <Compile Include="Tagger\FileElement.cs" />
     <Compile Include="Tagger\ITaggerDb.cs" />
     <Compile Include="Tagger\TaggerDbAdapter.cs" />
+    <Compile Include="Tapestry\TapestryMainWindow.xaml.cs">
+      <DependentUpon>TapestryMainWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="TimeStamp.cs" />
     <Compile Include="UI\Display.cs" />
     <Compile Include="UI\DisplayGridWindow.xaml.cs">
@@ -183,6 +205,18 @@
     <Compile Include="Xml\Adapters\FragmentXmlAdapter.cs" />
     <Compile Include="Xml\IXmlTransportable.cs" />
     <Compile Include="Xml\XmlHandler.cs" />
+    <Page Include="FragmentCloud\FragmentCloud.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="FragmentCloud\FragmentCloudMainWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="FragmentCloud\FragmentNodeDisplay.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="FragmentMetaWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -200,6 +234,10 @@
       <SubType>Code</SubType>
     </Compile>
     <Page Include="SimpleProgressBarWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Tapestry\TapestryMainWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

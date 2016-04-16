@@ -33,6 +33,15 @@ namespace NineWorldsDeep
             ShowFragmentMetaWindow();
         }
 
+        public MainWindow(Window w)
+        {
+            InitializeComponent();
+            WorkbenchWindowController.Instance.ConfigureClosingEvent(this);
+            WorkbenchWindowController.Instance.ConfigureClosingEvent(w);
+            //just for testing
+            ShowFragmentMetaWindow();
+        }
+
         private void MenuItem_Click(object sender, RoutedEventArgs e)
         {
             DisplayTypeList(reflector.Reflection1());
