@@ -46,13 +46,14 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
+    <PlatformTarget>x64</PlatformTarget>
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <PropertyGroup>
     <ManifestCertificateThumbprint>998B1EFECCEEAE2C706CBD206C5AD206AF277821</ManifestCertificateThumbprint>
@@ -255,6 +256,23 @@
       <DependentUpon>FileElementBrowserWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="UI\Prompt.cs" />
+    <Compile Include="Warehouse\Extensions.cs" />
+    <Compile Include="Warehouse\Hashes.cs" />
+    <Compile Include="Warehouse\ObservableCollectionWithItemNotify.cs" />
+    <Compile Include="Warehouse\SqliteDbAdapter.cs" />
+    <Compile Include="Warehouse\SyncDirection.cs" />
+    <Compile Include="Warehouse\SyncItem.cs" />
+    <Compile Include="Warehouse\SyncItemCollection.cs" />
+    <Compile Include="Warehouse\SyncMap.cs" />
+    <Compile Include="Warehouse\SyncMapCollection.cs" />
+    <Compile Include="Warehouse\SyncMapWindow.xaml.cs">
+      <DependentUpon>SyncMapWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Warehouse\SyncProfile.cs" />
+    <Compile Include="Warehouse\Tags.cs" />
+    <Compile Include="Warehouse\WarehouseMainWindow.xaml.cs">
+      <DependentUpon>WarehouseMainWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="WorkbenchWindow.xaml.cs">
       <DependentUpon>WorkbenchWindow.xaml</DependentUpon>
     </Compile>
@@ -353,6 +371,14 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="UI\FileElementBrowserWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Warehouse\SyncMapWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Warehouse\WarehouseMainWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

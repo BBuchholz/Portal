@@ -20,8 +20,10 @@
                           Click="MenuItemNwdStudio_Click"/>
                 <MenuItem Header="NwdHierophant"
                           Click="MenuItemNwdHierophant_Click"/>
-                <MenuItem Header="MtpSandbox"
+                <MenuItem Header="MtpSandBox"
                           Click="MenuItemMtpSandbox_Click"/>
+                <MenuItem Header="NwdWareHouse"
+                          Click="MenuItemNwdWareHouse_Click"/>
             </MenuItem>
 
         </Menu>

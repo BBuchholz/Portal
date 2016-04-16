@@ -1,0 +1,123 @@
+﻿<Window x:Class="NineWorldsDeep.Warehouse.WarehouseMainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:NineWorldsDeep.Warehouse"
+        mc:Ignorable="d"
+        Title="WarehouseMainWindow" Height="300" Width="300">
+
+    <Window.Resources>
+
+        <local:SyncItemCollection x:Key="colSyncItems"/>
+
+        <CollectionViewSource 
+            x:Key="cvsSyncItems"
+            Source="{StaticResource colSyncItems}"
+            Filter="CollectionsViewSource_Filter"/>
+
+    </Window.Resources>
+
+    <DockPanel LastChildFill="True">
+
+        <Menu DockPanel.Dock="Top" 
+              IsMainMenu="True"
+              x:Name="mainMenu">
+
+            <MenuItem Header="Windows">
+                <MenuItem Header="SyncMappings"
+                          Click="MenuItemSyncMappingsWindow_Click"/>
+                <MenuItem Header="Add Profile"
+                          Click="MenuItemAddProfile_Click"/>
+                <MenuItem Header="Refresh Profiles"
+                          Click="MenuItemRefreshProfiles_Click"/>
+            </MenuItem>
+            <MenuItem Header="Db">
+                <MenuItem Header="Raw Def"
+                          Click="MenuItemRawDef_Click"/>
+            </MenuItem>
+
+        </Menu>
+
+        <!--main grid-->
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="40"/>
+                <RowDefinition/>
+                <RowDefinition Height="40"/>
+            </Grid.RowDefinitions>
+
+            <!--selection grid-->
+            <Grid Grid.Row="0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+
+                <ComboBox Grid.Column="0"
+                          x:Name="cmbSyncProfile"
+                          Margin="5"
+                          SelectionChanged="cmbSyncProfile_SelectionChanged"/>
+
+                <ComboBox Grid.Column="1"
+                          x:Name="cmbDirection"
+                          Margin="5"
+                          SelectionChanged="cmbDirection_SelectionChanged"/>
+
+                <!--Button Grid-->
+                <Grid Grid.Column="2">
+
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+
+                    <Button x:Name="btnPrepare"
+                            Grid.Column="0"
+                            Margin="5"
+                            Content="Prepare"
+                            Click="btnPrepare_Click"/>
+                    <Button x:Name="btnCancel"
+                            Grid.Column="0"
+                            Margin="5"
+                            Content="Cancel"
+                            Visibility="Collapsed"
+                            Click="btnCancel_Click"/>
+                    <Button x:Name="btnExecute"
+                            Grid.Column="1"
+                            Margin="5"
+                            Content="Execute"
+                            IsEnabled="False"
+                            Click="btnExecute_Click"/>
+                    <Button x:Name="btnVerify"
+                            Grid.Column="1"
+                            Margin="5"
+                            Content="Verify"
+                            Visibility="Collapsed"
+                            Click="btnVerify_Click"/>
+
+                </Grid>
+
+            </Grid>
+
+            <!--grid for datagrid-->
+            <Grid Grid.Row="1">
+                <DataGrid 
+                    x:Name="dataGrid"
+                    ItemsSource="{Binding Source={StaticResource cvsSyncItems}}"
+                    CanUserAddRows="False" AutoGeneratingColumn="dataGrid_AutoGeneratingColumn"/>
+            </Grid>
+
+            <!--status grid-->
+            <Grid Grid.Row="2">
+                <Grid.ColumnDefinitions>
+
+                </Grid.ColumnDefinitions>
+            </Grid>
+
+        </Grid>
+
+    </DockPanel>
+
+</Window>

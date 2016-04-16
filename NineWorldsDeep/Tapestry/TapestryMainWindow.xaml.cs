@@ -58,5 +58,12 @@ namespace NineWorldsDeep.Tapestry
                 new Mtp.MtpMainWindow();
             mmw.Show();
         }
+
+        private void MenuItemNwdWareHouse_Click(object sender, RoutedEventArgs e)
+        {
+            Warehouse.WarehouseMainWindow wmw =
+                new Warehouse.WarehouseMainWindow();
+            wmw.Show();
+        }
     }
 }
