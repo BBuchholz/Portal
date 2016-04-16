@@ -1,0 +1,57 @@
+﻿<Window x:Class="NineWorldsDeep.Studio.LyricMatrixGridTestHarness"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:NineWorldsDeep.Studio"
+        mc:Ignorable="d"
+        Title="LyricMatrixGridTestHarness" Height="300" Width="300">
+    <DockPanel LastChildFill="True">
+        <Menu DockPanel.Dock="Top"
+              IsMainMenu="True">
+            <MenuItem Header="File">
+                <MenuItem Header="Load"
+                          Click="MenuItemLoad_Click"/>
+                <MenuItem Header="Save"
+                          Click="MenuItemSave_Click"/>
+            </MenuItem>
+            <MenuItem Header="Lyric Bit">
+                <MenuItem Header="New"
+                          Click="MenuItemNewLyricBit_Click"/>
+            </MenuItem>
+        </Menu>
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            <TextBlock x:Name="tbSelectedLyric"/>
+            <TextBox x:Name="txtLyricEdit"
+                     Grid.Row="1"
+                     TextWrapping="Wrap"
+                     AcceptsReturn="True"/>
+            <local:LyricMatrixGrid x:Name="lyricMatrixGrid"
+                                   Grid.Column="1"/>
+            <Grid Grid.Column="1"
+                  Grid.Row="1">
+                <Grid.RowDefinitions>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+                <Button x:Name="UpdateButton"
+                        Content="Update"
+                        Margin="10" 
+                        Click="UpdateButton_Click"/>
+                <TextBlock x:Name="tbStatus"
+                           Text="Ready"
+                           Grid.Row="1"
+                           HorizontalAlignment="Center"
+                           VerticalAlignment="Center"/>
+            </Grid>
+        </Grid>
+    </DockPanel>
+</Window>

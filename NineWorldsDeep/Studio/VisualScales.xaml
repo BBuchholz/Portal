@@ -1,0 +1,57 @@
+﻿<Window x:Class="NineWorldsDeep.Studio.VisualScales"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:NineWorldsDeep.Studio"
+        mc:Ignorable="d"
+        Title="VisualScales" Height="300" Width="300">
+    <Grid>
+
+        <Grid.RowDefinitions>
+            <RowDefinition/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+            <ColumnDefinition Width="200"/>
+        </Grid.ColumnDefinitions>
+
+        <local:VisualKeyboard Grid.Column="0" 
+                              Grid.Row="0"
+                              Margin="20"
+                              x:Name="keyboard1"/>
+
+        <local:VisualKeyboard Grid.Column="0" 
+                              Grid.Row="1"
+                              Margin="20"
+                              x:Name="keyboard2"/>
+
+        <Grid Grid.Column="1"
+              Grid.Row="0">
+
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="4*"/>
+            </Grid.RowDefinitions>
+
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="3*"/>
+            </Grid.ColumnDefinitions>
+
+            <ComboBox Grid.Row="0"
+                      Grid.Column="0"
+                      x:Name="cmbRoot1"
+                      SelectionChanged="cmbRoot1_SelectionChanged"/>
+
+            <ComboBox Grid.Row="0"
+                      Grid.Column="1"
+                      x:Name="cmbScale1"
+                      SelectionChanged="cmbScale1_SelectionChanged"/>
+
+        </Grid>
+
+    </Grid>
+</Window>

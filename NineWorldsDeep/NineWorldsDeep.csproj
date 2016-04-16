@@ -178,6 +178,50 @@
     <Compile Include="SimpleProgressBarWindow.xaml.cs">
       <DependentUpon>SimpleProgressBarWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Studio\AbletonProject.cs" />
+    <Compile Include="Studio\AbletonProjects.cs" />
+    <Compile Include="Studio\AudacityProject.cs" />
+    <Compile Include="Studio\AudacityProjects.cs" />
+    <Compile Include="Studio\AudioVignette.cs" />
+    <Compile Include="Studio\CubaseProject.cs" />
+    <Compile Include="Studio\CubaseProjects.cs" />
+    <Compile Include="Studio\FileElement.cs" />
+    <Compile Include="Studio\FLStudioProject.cs" />
+    <Compile Include="Studio\FLStudioProjects.cs" />
+    <Compile Include="Studio\InvalidNoteParseException.cs" />
+    <Compile Include="Studio\InvalidScaleParseException.cs" />
+    <Compile Include="Studio\LyricBit.cs" />
+    <Compile Include="Studio\LyricMatrix.cs" />
+    <Compile Include="Studio\LyricMatrixGrid.xaml.cs">
+      <DependentUpon>LyricMatrixGrid.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Studio\LyricMatrixGridTestHarness.xaml.cs">
+      <DependentUpon>LyricMatrixGridTestHarness.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Studio\Note.cs" />
+    <Compile Include="Studio\PatternSignature.cs" />
+    <Compile Include="Studio\ProjectsWindow.xaml.cs">
+      <DependentUpon>ProjectsWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Studio\ProjectType.cs" />
+    <Compile Include="Studio\ProjectTypeInstance.cs" />
+    <Compile Include="Studio\Scale.cs" />
+    <Compile Include="Studio\StudioMainWindow.xaml.cs">
+      <DependentUpon>StudioMainWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Studio\TwoOctaveNoteArray.cs" />
+    <Compile Include="Studio\VisualKey.cs" />
+    <Compile Include="Studio\VisualKeyboard.xaml.cs">
+      <DependentUpon>VisualKeyboard.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Studio\VisualKeyboardTestHarness.xaml.cs">
+      <DependentUpon>VisualKeyboardTestHarness.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Studio\VisualScales.xaml.cs">
+      <DependentUpon>VisualScales.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Studio\VisualStudioProject.cs" />
+    <Compile Include="Studio\VisualStudioProjects.cs" />
     <Compile Include="Tagger\FileElement.cs" />
     <Compile Include="Tagger\ITaggerDb.cs" />
     <Compile Include="Tagger\TaggerDbAdapter.cs" />
@@ -234,6 +278,34 @@
       <SubType>Code</SubType>
     </Compile>
     <Page Include="SimpleProgressBarWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Studio\LyricMatrixGrid.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Studio\LyricMatrixGridTestHarness.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Studio\ProjectsWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Studio\StudioMainWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Studio\VisualKeyboard.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Studio\VisualKeyboardTestHarness.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Studio\VisualScales.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
