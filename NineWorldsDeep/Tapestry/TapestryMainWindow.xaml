@@ -28,6 +28,8 @@
                           Click="MenuItemNwdSynergy_Click"/>
                 <MenuItem Header="NwdImageBrowser"
                           Click="MenuItemNwdImageBrowser_Click"/>
+                <MenuItem Header="NwdAudioBrowser"
+                          Click="MenuItemNwdAudioBrowser_Click"/>
             </MenuItem>
 
         </Menu>

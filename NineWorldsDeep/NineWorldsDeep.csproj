@@ -120,6 +120,13 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="AudioBrowser\AudioBrowserMainWindow.xaml.cs">
+      <DependentUpon>AudioBrowserMainWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="AudioBrowser\ConditionalPlayAction.cs" />
+    <Compile Include="AudioBrowser\FileElementTagExtractionAction.cs" />
+    <Compile Include="AudioBrowser\FileNameTagExtractor.cs" />
+    <Compile Include="AudioBrowser\PlayAction.cs" />
     <Compile Include="Core\Configuration.cs" />
     <Compile Include="Core\Fragment.cs" />
     <Compile Include="Core\FragmentMergeAction.cs" />
@@ -278,6 +285,9 @@
     <Compile Include="Tagger\FileElementActionSubscriber.cs" />
     <Compile Include="Tagger\FileElementTimestampExtractionAction.cs" />
     <Compile Include="Tagger\FilePathFilter.cs" />
+    <Compile Include="Tagger\HorizontalTaggerGrid.xaml.cs">
+      <DependentUpon>HorizontalTaggerGrid.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Tagger\IFolderLoadStrategy.cs" />
     <Compile Include="Tagger\ITaggerDb.cs" />
     <Compile Include="Tagger\ITaggerGrid.cs" />
@@ -332,6 +342,10 @@
     <Compile Include="Xml\Adapters\FragmentXmlAdapter.cs" />
     <Compile Include="Xml\IXmlTransportable.cs" />
     <Compile Include="Xml\XmlHandler.cs" />
+    <Page Include="AudioBrowser\AudioBrowserMainWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="FragmentCloud\FragmentCloud.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -429,6 +443,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Synergy\SynergyMainWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Tagger\HorizontalTaggerGrid.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

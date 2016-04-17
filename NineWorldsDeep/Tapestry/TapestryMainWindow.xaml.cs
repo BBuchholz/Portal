@@ -79,5 +79,12 @@ namespace NineWorldsDeep.Tapestry
                 new ImageBrowser.ImageBrowserMainWindow();
             ibmw.Show();
         }
+
+        private void MenuItemNwdAudioBrowser_Click(object sender, RoutedEventArgs e)
+        {
+            AudioBrowser.AudioBrowserMainWindow abmw =
+                new AudioBrowser.AudioBrowserMainWindow();
+            abmw.Show();
+        }
     }
 }
