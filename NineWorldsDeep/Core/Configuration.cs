@@ -131,9 +131,21 @@ namespace NineWorldsDeep.Core
             }
         }
 
+        public static string SyncFolderSynergy(string profileName)
+        {
+            return Path.Combine(ProcessTestMode("NWD-SYNC"), profileName, @"NWD\synergy");
+        }
+
         public static string GetPhoneSyncSynergyArchiveFilePath(string listName)
         {
             return PhoneSyncSynergyArchivedFolder + "\\" + listName + ".txt";
+        }
+
+        public static string SyncFileSynergyPath(string profileName, string listName)
+        {
+            return Path.Combine(ProcessTestMode("NWD-SYNC"), 
+                                profileName, 
+                                @"NWD\synergy\" + listName + ".txt");
         }
 
         public static string GetPhoneSyncSynergyFilePath(string listName)

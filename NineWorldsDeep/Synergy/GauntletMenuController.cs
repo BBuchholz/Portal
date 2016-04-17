@@ -110,11 +110,11 @@ namespace NineWorldsDeep.Synergy
 
             Configuration.EnsureDirectories();
 
-            //foreach (ToDoList lst in db.GetActiveListItems())
             foreach (ToDoList lst in db.GetLists(true))
             {
                 string phoneListPath = Configuration.GetPhoneSyncSynergyFilePath(lst.Name);
                 string tabletListPath = Configuration.GetTabletSyncSynergyFilePath(lst.Name);
+                string logosListPath = Configuration.SyncFileSynergyPath("logos", lst.Name);
 
                 if (!File.Exists(phoneListPath))
                 {
@@ -128,6 +128,15 @@ namespace NineWorldsDeep.Synergy
                 if (!File.Exists(tabletListPath))
                 {
                     File.WriteAllLines(tabletListPath, lst.Items.ToStringArray());
+                }
+                else
+                {
+                    foundCount++;
+                }
+
+                if (!File.Exists(logosListPath))
+                {
+                    File.WriteAllLines(logosListPath, lst.Items.ToStringArray());
                 }
                 else
                 {
@@ -410,10 +419,19 @@ namespace NineWorldsDeep.Synergy
             if (Directory.Exists(Configuration.TabletSyncSynergyFolder))
             {
                 IEnumerable<string> tabletFilePaths =
-                Directory.GetFiles(Configuration.TabletSyncSynergyFolder,
-                                   "*.txt", SearchOption.TopDirectoryOnly);
+                    Directory.GetFiles(Configuration.TabletSyncSynergyFolder,
+                                       "*.txt", SearchOption.TopDirectoryOnly);
 
                 filePaths.AddRange(tabletFilePaths);
+            }
+
+            if (Directory.Exists(Configuration.SyncFolderSynergy("logos")))
+            {
+                IEnumerable<string> logosFilePaths =
+                    Directory.GetFiles(Configuration.SyncFolderSynergy("logos"),
+                                       "*.txt", SearchOption.TopDirectoryOnly);
+
+                filePaths.AddRange(logosFilePaths);
             }
 
             return filePaths;
