@@ -15,6 +15,8 @@
     <WarningLevel>4</WarningLevel>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <IsWebBootstrapper>false</IsWebBootstrapper>
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
     <PublishUrl>C:\Users\Brent\Google Drive\Backups\ClickOncePublish\NineWorldsDeep\</PublishUrl>
     <Install>true</Install>
     <InstallFrom>Disk</InstallFrom>
@@ -25,13 +27,11 @@
     <UpdatePeriodically>false</UpdatePeriodically>
     <UpdateRequired>false</UpdateRequired>
     <MapFileExtensions>true</MapFileExtensions>
-    <ApplicationRevision>1</ApplicationRevision>
+    <ApplicationRevision>3</ApplicationRevision>
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <PublishWizardCompleted>true</PublishWizardCompleted>
     <BootstrapperEnabled>true</BootstrapperEnabled>
-    <NuGetPackageImportStamp>
-    </NuGetPackageImportStamp>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -167,6 +167,12 @@
     <Compile Include="Hierophant\VisualKabbalisticTreeTestHarness.xaml.cs">
       <DependentUpon>VisualKabbalisticTreeTestHarness.xaml</DependentUpon>
     </Compile>
+    <Compile Include="ImageBrowser\DisplayImageAction.cs" />
+    <Compile Include="ImageBrowser\ImageBrowserMainWindow.xaml.cs">
+      <DependentUpon>ImageBrowserMainWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="ImageBrowser\ImageFileFilter.cs" />
+    <Compile Include="ImageBrowser\LoadImagesStrategy.cs" />
     <Compile Include="IProgressBarCompatible.cs" />
     <Compile Include="MenuController.cs" />
     <Compile Include="Mtp\Extensions.cs" />
@@ -269,8 +275,22 @@
     <Compile Include="Synergy\ToDoItem.cs" />
     <Compile Include="Synergy\ToDoList.cs" />
     <Compile Include="Tagger\FileElement.cs" />
+    <Compile Include="Tagger\FileElementActionSubscriber.cs" />
+    <Compile Include="Tagger\FileElementTimestampExtractionAction.cs" />
+    <Compile Include="Tagger\FilePathFilter.cs" />
+    <Compile Include="Tagger\IFolderLoadStrategy.cs" />
     <Compile Include="Tagger\ITaggerDb.cs" />
+    <Compile Include="Tagger\ITaggerGrid.cs" />
+    <Compile Include="Tagger\MultiMap.cs" />
+    <Compile Include="Tagger\NwdDb.cs" />
+    <Compile Include="Tagger\SyncTools.cs" />
     <Compile Include="Tagger\TaggerDbAdapter.cs" />
+    <Compile Include="Tagger\TagMatrix.cs" />
+    <Compile Include="Tagger\TagString.cs" />
+    <Compile Include="Tagger\TimeStampExtractor.cs" />
+    <Compile Include="Tagger\VerticalTaggerGrid.xaml.cs">
+      <DependentUpon>VerticalTaggerGrid.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Tapestry\TapestryMainWindow.xaml.cs">
       <DependentUpon>TapestryMainWindow.xaml</DependentUpon>
     </Compile>
@@ -340,6 +360,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="ImageBrowser\ImageBrowserMainWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -405,6 +429,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Synergy\SynergyMainWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Tagger\VerticalTaggerGrid.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -495,7 +523,11 @@
       <EmbedInteropTypes>False</EmbedInteropTypes>
     </COMReference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Content Include="SQLite.Interop.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\System.Data.SQLite.Core.1.0.99.0\build\net451\System.Data.SQLite.Core.targets" Condition="Exists('..\packages\System.Data.SQLite.Core.1.0.99.0\build\net451\System.Data.SQLite.Core.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

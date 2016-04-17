@@ -355,6 +355,30 @@ namespace NineWorldsDeep.Core
             }
         }
 
+        public static string NwdMediaFolder
+        {
+            get
+            {
+                return ProcessTestMode(@"NWD-MEDIA");
+            }
+        }
+
+        public static string ImageStagingFolder
+        {
+            get
+            {
+                return Path.Combine(NwdMediaFolder, "exportStaging/images");
+            }
+        }
+
+        public static string VoiceMemoStagingFolder
+        {
+            get
+            {
+                return Path.Combine(NwdMediaFolder, "exportStaging/audio/voicememos");
+            }
+        }
+
         public static string NwdUriToLocalPath(string uri)
         {
             if (!uri.Contains("NWD"))

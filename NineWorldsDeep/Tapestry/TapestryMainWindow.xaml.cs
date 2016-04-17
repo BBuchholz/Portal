@@ -72,5 +72,12 @@ namespace NineWorldsDeep.Tapestry
                 new Synergy.SynergyMainWindow();
             smw.Show();
         }
+
+        private void MenuItemNwdImageBrowser_Click(object sender, RoutedEventArgs e)
+        {
+            ImageBrowser.ImageBrowserMainWindow ibmw =
+                new ImageBrowser.ImageBrowserMainWindow();
+            ibmw.Show();
+        }
     }
 }

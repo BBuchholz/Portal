@@ -206,7 +206,14 @@ namespace NineWorldsDeep.Synergy
         private void MenuItemLoadFromSqlite_Click(object sender, RoutedEventArgs e)
         {
             _lists.Clear();
-            _gauntletMenuController.LoadFromSqlite();
+            try
+            {
+                _gauntletMenuController.LoadFromSqlite();
+            }
+            catch(Exception ex)
+            {
+                Display.Exception(ex);
+            }
         }
 
         private void MenuItemCompleteSelected_Click(object sender, RoutedEventArgs e)
