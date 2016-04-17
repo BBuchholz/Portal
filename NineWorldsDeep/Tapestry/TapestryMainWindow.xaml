@@ -24,6 +24,8 @@
                           Click="MenuItemMtpSandbox_Click"/>
                 <MenuItem Header="NwdWareHouse"
                           Click="MenuItemNwdWareHouse_Click"/>
+                <MenuItem Header="NwdSynergy"
+                          Click="MenuItemNwdSynergy_Click"/>
             </MenuItem>
 
         </Menu>

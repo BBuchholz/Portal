@@ -65,5 +65,12 @@ namespace NineWorldsDeep.Tapestry
                 new Warehouse.WarehouseMainWindow();
             wmw.Show();
         }
+
+        private void MenuItemNwdSynergy_Click(object sender, RoutedEventArgs e)
+        {
+            Synergy.SynergyMainWindow smw =
+                new Synergy.SynergyMainWindow();
+            smw.Show();
+        }
     }
 }

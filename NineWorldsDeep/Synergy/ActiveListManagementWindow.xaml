@@ -1,0 +1,67 @@
+﻿<Window x:Class="NineWorldsDeep.Synergy.ActiveListManagementWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:NineWorldsDeep.Synergy"
+        mc:Ignorable="d"
+        Title="ActiveListManagementWindow" Height="300" Width="300">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="40"/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+        <TextBlock Grid.Row="0"
+                   x:Name="tbDbName"
+                   Text="Database Name Here"
+                   TextAlignment="Center"
+                   VerticalAlignment="Center"/>
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="4*"/>
+                <ColumnDefinition/>
+                <ColumnDefinition Width="4*"/>
+            </Grid.ColumnDefinitions>
+            <ListView x:Name="lvActive"
+                      Grid.Column="0"/>
+            <StackPanel Orientation="Vertical"
+                        VerticalAlignment="Center"
+                        Grid.Column="1">
+                <Button Content="&lt;&lt;"
+                        Click="MoveAllToActive_Click"/>
+                <Button Content="&lt;"
+                        Click="MoveSelectedToActive_Click"/>
+                <Button Click="RefreshMySql_Click">
+                    <TextBlock TextWrapping="Wrap"
+                               TextAlignment="Center"
+                               Text="Refresh MySQL"/>
+                </Button>
+                <Button Click="RefreshSqlite_Click">
+                    <TextBlock TextWrapping="Wrap"
+                               TextAlignment="Center"
+                               Text="Refresh SQLite"/>
+                </Button>
+                <Button x:Name="btnUpdateMySql"
+                        Click="UpdateMySql_Click"
+                        IsEnabled="False">
+                    <TextBlock TextWrapping="Wrap"
+                               TextAlignment="Center"
+                               Text="Update MySQL"/>
+                </Button>
+                <Button x:Name="btnUpdateSqlite"
+                        Click="UpdateSqlite_Click"
+                        IsEnabled="False">
+                    <TextBlock TextWrapping="Wrap"
+                               TextAlignment="Center"
+                               Text="Update SQLite"/>
+                </Button>
+                <Button Content="&gt;"
+                        Click="MoveSelectedToInactive_Click"/>
+                <Button Content="&gt;&gt;"
+                        Click="MoveAllToInactive_Click"/>
+            </StackPanel>
+            <ListView x:Name="lvInactive"
+                      Grid.Column="2"/>
+        </Grid>
+    </Grid>
+</Window>
