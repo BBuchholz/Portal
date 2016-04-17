@@ -7,3 +7,5 @@ It aims to achieve this through facilitating the storage and retrieval of "hyper
 All projects with the Nwd prefix are a part of this ecosystem (eg. NwdWarehouse, NwdSynergy, NwdImageBrowser, &c.)
 
 I am currently aiming to pull all of the separate projects into this main one, as various issues such as .dll conflicts occasionally creep up and valuable time is wasted maintaining so many different code bases. The major focus is functionality, so the projects remain divided for now, but the eventual goal is unification.
+
+UPDATE: All component projects have been absorbed into this one. I will rewrite the above text when I'm feeling a bit more eloquent.
