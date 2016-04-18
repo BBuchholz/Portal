@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:NineWorldsDeep.Synergy"
         mc:Ignorable="d"
-        Title="SynergyMainWindow" Height="300" Width="300">
+        Title="SynergyMainWindow" Height="600" Width="800">
     <DockPanel LastChildFill="True">
         <Menu DockPanel.Dock="Top" 
               IsMainMenu="True"
@@ -40,11 +40,11 @@
                 <ColumnDefinition/>
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
-                <RowDefinition Height="40"></RowDefinition>
+                <!--<RowDefinition Height="40"></RowDefinition>-->
                 <RowDefinition Height="*"></RowDefinition>
                 <RowDefinition Height="50"></RowDefinition>
             </Grid.RowDefinitions>
-            <ComboBox x:Name="cmbLists"
+            <!--<ComboBox x:Name="cmbLists"
                   Margin="30,9"
                   VerticalAlignment="Center"
                   IsEditable="True"
@@ -52,41 +52,67 @@
                   SelectedItem="{Binding SelectedList}"
                   Text="{Binding NewList, UpdateSourceTrigger=Explicit}"
                   KeyUp="cmbLists_KeyUp" 
-                  SelectionChanged="cmbLists_SelectionChanged"/>
-            <ListView x:Name="lvItems"
-                  Grid.Row="1"
-                  Margin="30,10">
-                <ListView.ItemTemplate>
-                    <DataTemplate>
-                        <StackPanel Orientation="Vertical">
-                            <WrapPanel>
-                                <TextBlock Text="Desc: " FontWeight="Bold" />
-                                <TextBlock Text="{Binding Description}" />
-                            </WrapPanel>
-                            <WrapPanel>
-                                <TextBlock Text="Completed: " FontWeight="Bold" />
-                                <TextBlock Text="{Binding Completed}" />
-                            </WrapPanel>
-                            <WrapPanel>
-                                <TextBlock Text="Archived: " FontWeight="Bold" />
-                                <TextBlock Text="{Binding Archived}" />
-                            </WrapPanel>
-                        </StackPanel>
-                    </DataTemplate>
-                </ListView.ItemTemplate>
-            </ListView>
-            <Grid Grid.Row="2"
-              Margin="30,10">
+                  SelectionChanged="cmbLists_SelectionChanged"/>-->
+            <Grid Margin="0, 15, 0, 0">
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*"></ColumnDefinition>
+                    <ColumnDefinition Width="250"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="50"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    <TextBox x:Name="txtListName"
+                             Margin="30, 10, 10, 10"
+                             HorizontalContentAlignment="Center"
+                             VerticalContentAlignment="Center"
+                             Text="{Binding NewList, UpdateSourceTrigger=Explicit}"
+                             KeyUp="txtListName_KeyUp"/>
+                    <ListView x:Name="lvLists"
+                          Grid.Row="1"
+                          Margin="30, 10, 10, 10"
+                          ItemsSource="{Binding Lists}"
+                          SelectedItem="{Binding SelectedList}"
+                          SelectionChanged="lvLists_SelectionChanged"/>
+                </Grid>
+                <ListView x:Name="lvItems"
+                      Grid.Column="1"
+                      Margin="10, 10, 30, 10">
+                    <ListView.ItemTemplate>
+                        <DataTemplate>
+                            <StackPanel Orientation="Vertical">
+                                <WrapPanel>
+                                    <TextBlock Text="Desc: " FontWeight="Bold" />
+                                    <TextBlock Text="{Binding Description}" />
+                                </WrapPanel>
+                                <WrapPanel>
+                                    <TextBlock Text="Completed: " FontWeight="Bold" />
+                                    <TextBlock Text="{Binding Completed}" />
+                                </WrapPanel>
+                                <WrapPanel>
+                                    <TextBlock Text="Archived: " FontWeight="Bold" />
+                                    <TextBlock Text="{Binding Archived}" />
+                                </WrapPanel>
+                            </StackPanel>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
+            </Grid>
+            <Grid Grid.Row="2"
+              Margin="30, 10">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="465*"></ColumnDefinition>
+                    <ColumnDefinition Width="187*"/>
                     <ColumnDefinition Width="100"></ColumnDefinition>
                 </Grid.ColumnDefinitions>
                 <TextBox x:Name="tbInput"
                      Grid.Column="0"
-                     KeyUp="tbInput_KeyUp"></TextBox>
+                     KeyUp="tbInput_KeyUp" Grid.ColumnSpan="2"></TextBox>
                 <Button x:Name="AddButton"
-                    Grid.Column="1" 
-                    Click="AddButton_Click">Add</Button>
+                        Grid.Column="2" 
+                        Margin="15, 0, 0, 0"
+                        Click="AddButton_Click">Add</Button>
             </Grid>
         </Grid>
     </DockPanel>

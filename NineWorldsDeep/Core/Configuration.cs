@@ -43,6 +43,11 @@ namespace NineWorldsDeep.Core
             return Path.Combine(SyncRoot(name), "NWD/config");
         }
 
+        public static string SyncFolderMedia(string profileName, string mediaFolderName)
+        {
+            return Path.Combine(SyncRoot(profileName), "NWD-MEDIA", mediaFolderName);
+        }
+
         public static string AudacityProjectsFolder { get { return @"C:\NWD-AUX\audacityProjects"; } }
 
         public static string AudacityWavExportsFolder { get { return @"C:\NWD-AUX\audacityWavExports"; } }

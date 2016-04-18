@@ -54,6 +54,7 @@ namespace NineWorldsDeep.ImageBrowser
         private void LoadFolder(bool fileInsteadOfDb, string folderPath)
         {
             currentImageFolder = folderPath;
+            tbFolder.Text = currentImageFolder;
             tgrGrid.Clear();
             tgrGrid.AddFolder(currentImageFolder);
 

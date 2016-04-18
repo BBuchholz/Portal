@@ -87,7 +87,8 @@ namespace NineWorldsDeep.Synergy
                 {
                     ToDoList lst = EnsureList(value);
                     SelectedList = lst;
-                    cmbLists.SelectedItem = lst;
+                    //cmbLists.SelectedItem = lst;
+                    lvLists.SelectedItem = lst;
                 }
             }
         }
@@ -103,16 +104,64 @@ namespace NineWorldsDeep.Synergy
 
         public event PropertyChangedEventHandler PropertyChanged;
 
-        private void cmbLists_KeyUp(object sender, KeyEventArgs e)
+        //private void cmbLists_KeyUp(object sender, KeyEventArgs e)
+        //{
+        //    if (e.Key == Key.Enter)
+        //    {
+        //        BindingExpression exp = this.cmbLists.GetBindingExpression(ComboBox.TextProperty);
+        //        exp.UpdateSource();
+        //    }
+        //}
+
+        private void txtListName_KeyUp(object sender, KeyEventArgs e)
         {
+            //TODO: we can add predictive text without losing our current bevior, 
+            //but it will take a bit more time than I have at the moment
+            //heres how I'm thinking: as we type (second block below)
+            //instead of GetListByName() we call GetFirstListThatStartsWith(listNamePartial)
+            //which still returns null if nothing is found, but otherwise returns
+            //the first list that starts with the current value
+            //then we populate the textbox with that list's name, but
+            //we set selection on all letters that are not included in the original entry
+            //(eg. if we type "Tes" and there is a list called "Testing" it would
+            //set txtListName to "Test" with the final "t" highlighted, so if
+            //a user keeps typing, it is overwritten with the next letter and the 
+            //process starts all over again to match another list if it exists
+            //
+            //NB: if enter is pressed, make sure it doesn't erase the highlighted text
+
+
             if (e.Key == Key.Enter)
             {
-                BindingExpression exp = this.cmbLists.GetBindingExpression(ComboBox.TextProperty);
+                txtListName.Text = SynergyUtils.ProcessListName(txtListName.Text);
+                BindingExpression exp = this.txtListName.GetBindingExpression(TextBox.TextProperty);
                 exp.UpdateSource();
+                txtListName.Text = "";
+            }
+            else
+            {
+                //check as we type
+                string listName = SynergyUtils.ProcessListName(txtListName.Text);
+
+                ToDoList tdi = GetListByName(listName);
+
+                if(tdi != null)
+                {
+                    SelectedList = tdi;
+                }
+                else
+                {
+                    SelectedList = null;
+                }
             }
         }
 
-        private void cmbLists_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        //private void cmbLists_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        //{
+        //    ReLoadListItems();
+        //}
+
+        private void lvLists_SelectionChanged(object sender, RoutedEventArgs e)
         {
             ReLoadListItems();
         }
@@ -121,7 +170,8 @@ namespace NineWorldsDeep.Synergy
         {
             lvItems.ItemsSource = null;
 
-            ToDoList lst = (ToDoList)cmbLists.SelectedItem;
+            //ToDoList lst = (ToDoList)cmbLists.SelectedItem;
+            ToDoList lst = (ToDoList)lvLists.SelectedItem;
             if (lst != null)
             {
                 lvItems.ItemsSource = lst.Items;
@@ -135,7 +185,8 @@ namespace NineWorldsDeep.Synergy
 
         private void AddEnteredItem()
         {
-            ToDoList lst = (ToDoList)cmbLists.SelectedItem;
+            //ToDoList lst = (ToDoList)cmbLists.SelectedItem;
+            ToDoList lst = (ToDoList)lvLists.SelectedItem;
             if (lst != null)
             {
                 string item = tbInput.Text.Trim();
@@ -167,7 +218,12 @@ namespace NineWorldsDeep.Synergy
             //    new ListMatrixXmlAdapter(this).LoadFromFile(toDoListsFile);
         }
 
-        public ToDoList EnsureList(string listName)
+        /// <summary>
+        /// returns null if not found
+        /// </summary>
+        /// <param name="listName"></param>
+        /// <returns></returns>
+        public ToDoList GetListByName(string listName)
         {
             ToDoList tdi = null;
 
@@ -178,6 +234,23 @@ namespace NineWorldsDeep.Synergy
                     tdi = lst;
                 }
             }
+
+            return tdi;
+        }
+
+        public ToDoList EnsureList(string listName)
+        {
+            //ToDoList tdi = null;
+
+            //foreach (ToDoList lst in Lists)
+            //{
+            //    if (lst.Name.Equals(listName))
+            //    {
+            //        tdi = lst;
+            //    }
+            //}
+
+            ToDoList tdi = GetListByName(listName);
 
             if (tdi == null)
             {

@@ -31,14 +31,18 @@ namespace NineWorldsDeep.Warehouse
             }
 
             //for any node to be a proper NWD node,
-            //it must have an NWD/ root and zero or
-            //more of NWD-AUX/, NWD-MEDIA/, NWD-SYNC,
-            //and NWD-SNDBX
+            //it must have an NWD/ root and an NWD-MEDIA/intake 
+            //folder for warehouse support
 
             _syncRoot = Configuration.SyncRoot(Name);
 
-            //NWD/ should always have a config folder
+            //NWD/ should always have a config folder (will create sync root also)
             Directory.CreateDirectory(Configuration.SyncRootConfigFolder(Name));
+
+            //create NWD-MEDIA root and media folders
+            Directory.CreateDirectory(Configuration.SyncFolderMedia(Name, "audio"));
+            Directory.CreateDirectory(Configuration.SyncFolderMedia(Name, "images"));
+            Directory.CreateDirectory(Configuration.SyncFolderMedia(Name, "pdfs"));
         }
 
         public SyncMapCollection SyncMaps
