@@ -1138,16 +1138,23 @@ namespace NineWorldsDeep.Mtp
 
                                     if (pdo is NwdPortableDeviceFile)
                                     {
-                                        NwdPortableDeviceFile pdf =
-                                            (NwdPortableDeviceFile)pdo;
+                                        try
+                                        {
+                                            NwdPortableDeviceFile pdf =
+                                                (NwdPortableDeviceFile)pdo;
 
-                                        device.DeleteFile(pdf);
-                                        deletionCount++;
+                                            device.DeleteFile(pdf);
+                                            deletionCount++;
+                                            MessageBox.Show(deletionCount + " files deleted");
+                                        }
+                                        catch(Exception ex)
+                                        {
+                                            Display.Exception(ex);
+                                        }
                                     }
                                 }
                             }
 
-                            MessageBox.Show(deletionCount + " files deleted");
 
                             if (unprocessedDeletions.Count < 1 && toBeRemoved != null)
                             {

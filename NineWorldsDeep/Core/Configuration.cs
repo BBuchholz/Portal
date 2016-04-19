@@ -19,7 +19,8 @@ namespace NineWorldsDeep.Core
 
         //TODO: hard-coded values need to be transformed into config files and defaults
 
-        public static string AbletonProjectsFolder { get { return @"C:\NWD-AUX\abletonProjects"; } }
+        //public static string AbletonProjectsFolder { get { return @"C:\NWD-AUX\abletonProjects"; } }
+        public static string AbletonProjectsFolder { get { return ProcessTestMode(@"NWD-AUX\abletonProjects"); } }
 
         public static string SyncRoot(string name)
         {
@@ -47,6 +48,8 @@ namespace NineWorldsDeep.Core
         {
             return Path.Combine(SyncRoot(profileName), "NWD-MEDIA", mediaFolderName);
         }
+
+        //TODO: find all paths with a hard coded root and replace with ProcessTestMode(string)
 
         public static string AudacityProjectsFolder { get { return @"C:\NWD-AUX\audacityProjects"; } }
 

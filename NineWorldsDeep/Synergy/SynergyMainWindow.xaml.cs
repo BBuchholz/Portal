@@ -129,6 +129,12 @@ namespace NineWorldsDeep.Synergy
             //process starts all over again to match another list if it exists
             //
             //NB: if enter is pressed, make sure it doesn't erase the highlighted text
+            //
+            //NB: re: listNameExists/StartsWith(): for any camel cased letters in the input, 
+            //insert spaces prior to processing. Spaces are the expected separator, but 
+            //if type ahead is used, the list names populating it will be PascalCase. A 
+            //conversion is one way to ensure uniformity of behavior, for both input cases.
+
 
 
             if (e.Key == Key.Enter)
