@@ -30,7 +30,12 @@ namespace NineWorldsDeep.Parser
         /// <summary>
         /// Trims first occurance of key and its internal value from the given
         /// string. Extraneous whitespace is also trimmed from the copy
-        /// that is returned. Original string is unchanged. NOTE: this will
+        /// that is returned. Original string is unchanged. 
+        /// 
+        /// output example: input of "item={something} item2={something else}"
+        /// will return "item2={something else}"
+        /// 
+        /// NOTE: this will
         /// strip tags internal to mixed content, so use with caution. Primarily
         /// intended to be used in conjuntion with GetFirstKey() 
         /// to process and remove keyVals one by one.
@@ -82,6 +87,7 @@ namespace NineWorldsDeep.Parser
         /// <summary>
         /// returns first key found sequentially, irrespective of 
         /// node depth, whether input is atomic or mixed content.
+        /// (eg. input of "item={something}" will return "item"
         /// </summary>
         /// <param name="input"></param>
         /// <returns></returns>
@@ -119,7 +125,7 @@ namespace NineWorldsDeep.Parser
 
         public string Extract(String nestedKey, String input)
         {
-            if (validateNestedKey(nestedKey) && validate(input))
+            if (validateNestedKey(nestedKey) && Validate(input))
             {
 
                 Stack<string> keyStack = GetInvertedKeyStack(nestedKey);
@@ -278,13 +284,19 @@ namespace NineWorldsDeep.Parser
             return nestedKey.Replace("/", "").Trim().Count() > 0;
         }
 
-        public bool validate(string input)
+        /// <summary>
+        /// returns true if a string is a valid fragment
+        ///  
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
+        public bool Validate(string input)
         {
-            return validateOpenKeyFormat(input) &&
-                    validateMatchBraces(input);
+            return ValidateOpenKeyFormat(input) &&
+                    ValidateMatchBraces(input);
         }
 
-        public bool validateOpenKeyFormat(string input)
+        public bool ValidateOpenKeyFormat(string input)
         {
 
             List<int> openBraceIndexes = new List<int>();
@@ -324,7 +336,7 @@ namespace NineWorldsDeep.Parser
             return valid;
         }
 
-        public bool validateMatchBraces(string input)
+        public bool ValidateMatchBraces(string input)
         {
 
             int openBracesCount = 0;

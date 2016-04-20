@@ -104,6 +104,29 @@ namespace NineWorldsDeep.Synergy
             new ActiveListManagementWindow(sqliteDb).Show();
         }
 
+        private void WriteListToPath(ToDoList lst, string path, int foundCount)
+        {
+            if (!File.Exists(path))
+            {
+                //we can switch things here
+                //fdgadf;
+                bool newVersion = true;
+
+                if (newVersion)
+                {
+                    File.WriteAllLines(path, lst.Items.ToFragmentArray());
+                }
+                else
+                {
+                    File.WriteAllLines(path, lst.Items.ToStringArray());
+                }
+            }
+            else
+            {
+                foundCount++;
+            }
+        }
+
         private void ExportActiveLists(IGauntletDbAdapter db)
         {
             int foundCount = 0;
@@ -116,32 +139,36 @@ namespace NineWorldsDeep.Synergy
                 string tabletListPath = Configuration.GetTabletSyncSynergyFilePath(lst.Name);
                 string logosListPath = Configuration.SyncFileSynergyPath("logos", lst.Name);
 
-                if (!File.Exists(phoneListPath))
-                {
-                    File.WriteAllLines(phoneListPath, lst.Items.ToStringArray());
-                }
-                else
-                {
-                    foundCount++;
-                }
+                WriteListToPath(lst, phoneListPath, foundCount);
+                WriteListToPath(lst, tabletListPath, foundCount);
+                WriteListToPath(lst, logosListPath, foundCount);
 
-                if (!File.Exists(tabletListPath))
-                {
-                    File.WriteAllLines(tabletListPath, lst.Items.ToStringArray());
-                }
-                else
-                {
-                    foundCount++;
-                }
+                //if (!File.Exists(phoneListPath))
+                //{
+                //    File.WriteAllLines(phoneListPath, lst.Items.ToFragmentArray());
+                //}
+                //else
+                //{
+                //    foundCount++;
+                //}
 
-                if (!File.Exists(logosListPath))
-                {
-                    File.WriteAllLines(logosListPath, lst.Items.ToStringArray());
-                }
-                else
-                {
-                    foundCount++;
-                }
+                //if (!File.Exists(tabletListPath))
+                //{
+                //    File.WriteAllLines(tabletListPath, lst.Items.ToFragmentArray());
+                //}
+                //else
+                //{
+                //    foundCount++;
+                //}
+
+                //if (!File.Exists(logosListPath))
+                //{
+                //    File.WriteAllLines(logosListPath, lst.Items.ToFragmentArray());
+                //}
+                //else
+                //{
+                //    foundCount++;
+                //}
             }
 
             if (foundCount > 0)

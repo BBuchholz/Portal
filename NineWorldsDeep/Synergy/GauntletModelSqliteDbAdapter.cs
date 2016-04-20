@@ -21,10 +21,10 @@ namespace NineWorldsDeep.Synergy
         /// <returns></returns>
         public List<ToDoList> GetLists(bool active)
         {
-            Dictionary<string, Dictionary<int, ToDoItem>> listItemStatuses =
+            Dictionary<string, Dictionary<int, ToDoItem>> listItems =
                 new Dictionary<string, Dictionary<int, ToDoItem>>();
-
-            List<string> listNamesDesired = new List<string>();
+            Dictionary<string, Dictionary<int, string>> itemFragments =
+                new Dictionary<string, Dictionary<int, string>>();
 
             try
             {
@@ -45,7 +45,8 @@ namespace NineWorldsDeep.Synergy
                                        "Item.ItemValue, " +
                                        "Status.StatusValue, " +
                                        "junction_List_Item_Status.StampedAt, " +
-                                       "List.ListName " +
+                                       "List.ListName, " +
+                                       "Fragment.FragmentValue " +
                                 "FROM List " +
                                 "JOIN junction_List_Item_Status " +
                                 "ON List.ListId = junction_List_Item_Status.ListId " +
@@ -53,10 +54,10 @@ namespace NineWorldsDeep.Synergy
                                 "ON junction_List_Item_Status.ItemId = Item.ItemId " +
                                 "JOIN Status " +
                                 "ON junction_List_Item_Status.StatusId = Status.StatusId " +
-                                "WHERE List.ListName IN " +
-                                    "(SELECT List.ListName " +
-                                     "FROM List " +
-                                     "WHERE List.ListActive = @active)";
+                                "LEFT JOIN Fragment " +
+                                "ON Fragment.ListId = List.ListId " +
+                                "AND Fragment.ItemId = Item.ItemId " +
+                                "WHERE List.ListActive = @active";
 
                             cmd.Parameters.AddWithValue("@active", active);
 
@@ -70,6 +71,12 @@ namespace NineWorldsDeep.Synergy
                                     string statusValue = rdr.GetString(3);
                                     string stampedAt = rdr.GetString(4);
                                     string listName = rdr.GetString(5);
+                                    string fragmentVal = "";
+
+                                    if (!rdr.IsDBNull(6))
+                                    {
+                                        fragmentVal = rdr.GetString(6);
+                                    }
 
                                     Status status =
                                         new Status()
@@ -85,25 +92,31 @@ namespace NineWorldsDeep.Synergy
                                     //    listNameToId.Add(listName, listId);
                                     //}
 
-                                    if (!listItemStatuses.ContainsKey(listName))
+                                    if (!listItems.ContainsKey(listName))
                                     {
-                                        listItemStatuses.Add(listName,
+                                        listItems.Add(listName,
                                             new Dictionary<int, ToDoItem>());
+                                        itemFragments.Add(listName,
+                                            new Dictionary<int, string>());
                                     }
 
-                                    if (!listItemStatuses[listName].ContainsKey(itemId))
+                                    if (!listItems[listName].ContainsKey(itemId))
                                     {
-                                        listItemStatuses[listName][itemId] =
+                                        listItems[listName][itemId] =
                                             new ToDoItem()
                                             {
                                                 ListId = listId,
                                                 ItemId = itemId,
-                                                ItemValue = itemValue,
+                                                ItemValue = itemValue                                                
                                             };
                                     }
 
-                                    listItemStatuses[listName][itemId].Statuses.AddWithMerge(status);
+                                    listItems[listName][itemId].Statuses.AddWithMerge(status);
 
+                                    if (!string.IsNullOrWhiteSpace(fragmentVal))
+                                    {
+                                        itemFragments[listName][itemId] = fragmentVal;
+                                    }
                                 }
                             }
 
@@ -122,13 +135,13 @@ namespace NineWorldsDeep.Synergy
 
             List<ToDoList> lst = new List<ToDoList>();
 
-            foreach (string listName in listItemStatuses.Keys)
+            foreach (string listName in listItems.Keys)
             {
                 ToDoList tdl = new ToDoList() { Name = listName };
 
-                foreach (int itemId in listItemStatuses[listName].Keys)
+                foreach (int itemId in listItems[listName].Keys)
                 {
-                    ToDoItem tdi = listItemStatuses[listName][itemId];
+                    ToDoItem tdi = listItems[listName][itemId];
 
                     if (!tdi.Statuses.ContainsNonActiveStatuses())
                     {
@@ -182,13 +195,10 @@ namespace NineWorldsDeep.Synergy
                                     //EnsureIdForItemValue
                                     int itemId = EnsureIdForItemValue(tdi.Description, cmd);
 
-                                    //Store Fragments
-                                    foreach (Fragment frg in tdi.Fragments)
-                                    {
-                                        string timeStamp = NwdUtils.GetTimeStamp_yyyyMMddHHmmss();
-                                        EnsureFragment(listId, itemId, frg.FragmentValue, timeStamp, cmd);
-                                    }
-
+                                    //Store Fragment
+                                    string timeStamp = NwdUtils.GetTimeStamp_yyyyMMddHHmmss();
+                                    EnsureFragment(listId, itemId, tdi.Fragment.FragmentValue, timeStamp, cmd);
+                                    
                                     //EnsureListItem
                                     ToDoItem dbTdi = EnsureListItem(listId, itemId, cmd);
                                     bool archivedIsDirty = false;

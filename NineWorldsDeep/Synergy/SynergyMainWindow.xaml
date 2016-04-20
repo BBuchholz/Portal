@@ -94,6 +94,10 @@
                                     <TextBlock Text="Archived: " FontWeight="Bold" />
                                     <TextBlock Text="{Binding Archived}" />
                                 </WrapPanel>
+                                <WrapPanel>
+                                    <TextBlock Text="FragmentString: " FontWeight="Bold" />
+                                    <TextBlock Text="{Binding FragmentString}" />
+                                </WrapPanel>
                             </StackPanel>
                         </DataTemplate>
                     </ListView.ItemTemplate>

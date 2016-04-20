@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace NineWorldsDeep.Synergy
 {
@@ -6,8 +8,7 @@ namespace NineWorldsDeep.Synergy
     {
         private List<Status> _statuses =
             new List<Status>();
-        private List<Fragment> _fragments =
-            new List<Fragment>();
+        private Fragment _fragment = null;
         private bool _completed = false;
         private bool _archived = false;
 
@@ -52,6 +53,26 @@ namespace NineWorldsDeep.Synergy
             }
         }
 
+        public void Add(IEnumerable<Fragment> fragments)
+        {
+            foreach(Fragment f in fragments)
+            {
+                Add(f);
+            }
+        }
+
+        public void Add(Fragment fragment)
+        {
+            if(_fragment == null)
+            {
+                _fragment = fragment;
+            }
+            else
+            {
+                _fragment.Merge(fragment);
+            }
+        }
+
         public int ListId { get; internal set; }
         public int ItemId { get; internal set; }
         public string ItemValue { get; set; }
@@ -77,6 +98,14 @@ namespace NineWorldsDeep.Synergy
             }
         }
 
-        public List<Fragment> Fragments { get { return _fragments; } }
+        public Fragment Fragment { get { return _fragment; } }
+
+        public string FragmentString
+        {
+            get
+            {
+                return Fragment.FragmentValue;
+            }
+        }
     }
 }

@@ -43,5 +43,17 @@ namespace NineWorldsDeep.Synergy
 
             return lst.ToArray();
         }
+
+        public static string[] ToFragmentArray(this IEnumerable<ToDoItem> ie)
+        {
+            List<string> lst = new List<string>();
+
+            foreach (ToDoItem tdi in ie)
+            {
+                lst.Add(tdi.FragmentString);
+            }
+
+            return lst.ToArray();
+        }
     }
 }

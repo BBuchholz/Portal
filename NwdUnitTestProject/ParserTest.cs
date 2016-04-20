@@ -142,13 +142,13 @@ namespace NwdUnitTestProject
         public void TestValidateMatchBraces()
         {   
             //valid inputs
-            Assert.IsTrue(p.validateMatchBraces(inputBasic));
-            Assert.IsTrue(p.validateMatchBraces(inputNested));
-            Assert.IsTrue(p.validateMatchBraces(inputNestedAlphaNumeric));
+            Assert.IsTrue(p.ValidateMatchBraces(inputBasic));
+            Assert.IsTrue(p.ValidateMatchBraces(inputNested));
+            Assert.IsTrue(p.ValidateMatchBraces(inputNestedAlphaNumeric));
 
             //invalid inputs
-            Assert.IsFalse(p.validateMatchBraces(inputMissingBraces1));
-            Assert.IsFalse(p.validateMatchBraces(inputMissingBraces2));
+            Assert.IsFalse(p.ValidateMatchBraces(inputMissingBraces1));
+            Assert.IsFalse(p.ValidateMatchBraces(inputMissingBraces2));
         }
 
         /**
@@ -158,18 +158,18 @@ namespace NwdUnitTestProject
         public void TestValidateOpenKeyFormat()
         {   
             //valid inputs for this test
-            Assert.IsTrue(p.validateOpenKeyFormat(inputBasic));
-            Assert.IsTrue(p.validateOpenKeyFormat(inputNested));
-            Assert.IsTrue(p.validateOpenKeyFormat(inputMissingBraces1));
-            Assert.IsTrue(p.validateOpenKeyFormat(inputMissingBraces2));
-            Assert.IsTrue(p.validateOpenKeyFormat(inputNestedAlphaNumeric));
+            Assert.IsTrue(p.ValidateOpenKeyFormat(inputBasic));
+            Assert.IsTrue(p.ValidateOpenKeyFormat(inputNested));
+            Assert.IsTrue(p.ValidateOpenKeyFormat(inputMissingBraces1));
+            Assert.IsTrue(p.ValidateOpenKeyFormat(inputMissingBraces2));
+            Assert.IsTrue(p.ValidateOpenKeyFormat(inputNestedAlphaNumeric));
 
             //invalid inputs for this test
-            Assert.IsFalse(p.validateOpenKeyFormat(inputMissingEquals1));
-            Assert.IsFalse(p.validateOpenKeyFormat(inputMissingEquals2));
-            Assert.IsFalse(p.validateOpenKeyFormat(inputSpacedEquals1));
-            Assert.IsFalse(p.validateOpenKeyFormat(inputSpacedEquals2));
-            Assert.IsFalse(p.validateOpenKeyFormat(inputSpacedEquals3));
+            Assert.IsFalse(p.ValidateOpenKeyFormat(inputMissingEquals1));
+            Assert.IsFalse(p.ValidateOpenKeyFormat(inputMissingEquals2));
+            Assert.IsFalse(p.ValidateOpenKeyFormat(inputSpacedEquals1));
+            Assert.IsFalse(p.ValidateOpenKeyFormat(inputSpacedEquals2));
+            Assert.IsFalse(p.ValidateOpenKeyFormat(inputSpacedEquals3));
 
         }
 
@@ -180,34 +180,34 @@ namespace NwdUnitTestProject
         public void TestValidate()
         {
             //multiTag
-            Assert.IsTrue(p.validate(inputMultiTag));
+            Assert.IsTrue(p.Validate(inputMultiTag));
 
             //mixed content
-            Assert.IsTrue(p.validate(mixedContentPre));
-            Assert.IsTrue(p.validate(mixedContentPost));
-            Assert.IsTrue(p.validate(mixedContentOutside));
-            Assert.IsTrue(p.validate(mixedContentInside));
+            Assert.IsTrue(p.Validate(mixedContentPre));
+            Assert.IsTrue(p.Validate(mixedContentPost));
+            Assert.IsTrue(p.Validate(mixedContentOutside));
+            Assert.IsTrue(p.Validate(mixedContentInside));
             
             //atomic content
-            Assert.IsTrue(p.validate(atomicContentPre));
-            Assert.IsTrue(p.validate(atomicContentPost));
-            Assert.IsTrue(p.validate(atomicContentOutside));
-            Assert.IsTrue(p.validate(atomicContentInside));
-            Assert.IsTrue(p.validate(atomicMultiple));
+            Assert.IsTrue(p.Validate(atomicContentPre));
+            Assert.IsTrue(p.Validate(atomicContentPost));
+            Assert.IsTrue(p.Validate(atomicContentOutside));
+            Assert.IsTrue(p.Validate(atomicContentInside));
+            Assert.IsTrue(p.Validate(atomicMultiple));
 
             //valid input
-            Assert.IsTrue(p.validate(inputBasic));
-            Assert.IsTrue(p.validate(inputNested));
-            Assert.IsTrue(p.validate(inputNestedAlphaNumeric));
+            Assert.IsTrue(p.Validate(inputBasic));
+            Assert.IsTrue(p.Validate(inputNested));
+            Assert.IsTrue(p.Validate(inputNestedAlphaNumeric));
 
             //invalid input
-            Assert.IsFalse(p.validate(inputMissingBraces1));
-            Assert.IsFalse(p.validate(inputMissingBraces2));
-            Assert.IsFalse(p.validate(inputMissingEquals1));
-            Assert.IsFalse(p.validate(inputMissingEquals2));
-            Assert.IsFalse(p.validate(inputSpacedEquals1));
-            Assert.IsFalse(p.validate(inputSpacedEquals2));
-            Assert.IsFalse(p.validate(inputSpacedEquals3));
+            Assert.IsFalse(p.Validate(inputMissingBraces1));
+            Assert.IsFalse(p.Validate(inputMissingBraces2));
+            Assert.IsFalse(p.Validate(inputMissingEquals1));
+            Assert.IsFalse(p.Validate(inputMissingEquals2));
+            Assert.IsFalse(p.Validate(inputSpacedEquals1));
+            Assert.IsFalse(p.Validate(inputSpacedEquals2));
+            Assert.IsFalse(p.Validate(inputSpacedEquals3));
 
         }
 

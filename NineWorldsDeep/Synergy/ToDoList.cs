@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.Linq;
 
 namespace NineWorldsDeep.Synergy
@@ -40,7 +41,7 @@ namespace NineWorldsDeep.Synergy
                 Archived = archived
             };
 
-            tdi.Fragments.Add(new Fragment(item));
+            tdi.Add(new Fragment(item));
 
             AddWithMerge(tdi);
         }
@@ -87,8 +88,11 @@ namespace NineWorldsDeep.Synergy
                     }
 
                     tdi.Statuses.AddWithMerge(item.Statuses);
-                    tdi.Fragments.AddWithMerge(item.Fragments);
 
+                    Stopwatch sw = new Stopwatch();
+                    sw.Start();
+                    tdi.Add(item.Fragment);
+                    sw.Stop();
                     found = true;
                 }
             }
