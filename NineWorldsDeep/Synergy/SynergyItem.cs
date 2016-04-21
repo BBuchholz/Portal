@@ -146,5 +146,31 @@ namespace NineWorldsDeep.Synergy
                 _fragmentReadyForUpdating = true;
             }
         }
+
+        /// <summary>
+        /// fragment updates after every property
+        /// change. this method will turn off
+        /// updating so multiple properties can be set
+        /// at one time without triggering the update
+        /// over and over. Be sure to use
+        /// TurnOnFragmentUpdatingAndUpdate() when
+        /// done or fragment will not update in future.
+        /// </summary>
+        public void TurnOffFragmentUpdating()
+        {
+            _fragmentReadyForUpdating = false;
+        }
+
+        /// <summary>
+        /// used in conjunction with TurnOffFragmentUpdating()
+        /// will turn updating back on, and perform an
+        /// update so all attributes will propagate to
+        /// the fragment value
+        /// </summary>
+        public void TurnOnFragmentUpdatingAndUpdate()
+        {
+            _fragmentReadyForUpdating = true;
+            UpdateFragment();
+        }
     }
 }

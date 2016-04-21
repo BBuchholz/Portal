@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -101,29 +102,64 @@ namespace NineWorldsDeep.Synergy
             return sl;
         }
 
-        #region "File Menu Methods"
+        #region "File Menu Methods - TESTED"
 
         private void MenuItemLoadFromSqlite_Click(object sender, RoutedEventArgs e)
         {
-            Display.Message("need to alter database structure for V4 before implementing");
+            ClearAll();
+
+            Stopwatch sw = Stopwatch.StartNew();
+
+            foreach(SynergyList sl in _db.GetActiveLists())
+            {
+                _lists.Add(sl);
+            }
+
+            sw.Stop();
+            string time = sw.Elapsed.ToString("mm\\:ss\\.fff");
+
+            statusBar.StatusBarText = "Active Lists Loaded: " + time;
         }
 
         private void MenuItemSaveToSqlite_Click(object sender, RoutedEventArgs e)
-        {
-            Display.Message("need to alter database structure for V4 before implementing");
+        {          
+            Stopwatch sw = Stopwatch.StartNew();
+            try
+            {
+                _db.Save(_lists);
+                sw.Stop();
+            }
+            catch(Exception ex)
+            {
+                Display.Exception(ex);
+                sw.Stop();
+
+                //in case it throws multiple errors(eg. an error for every row)
+                return;
+            }
+
+            string time = sw.Elapsed.ToString("mm\\:ss\\.fff");
+            statusBar.StatusBarText = "Current Lists Saved: " + time;
+            _sh.DbSavePending = false;
         }
 
         private void MenuItemClearAll_Click(object sender, RoutedEventArgs e)
         {
+            ClearAll();
+        }
+
+        private void ClearAll()
+        {
             _lists.Clear();
             SelectedList = null;
+            txtInput.Text = "";
             ReLoadListItems(); //will clear list because selected list is null
             statusBar.StatusBarText = "All Lists Cleared.";
         }
         
         #endregion
 
-        #region "Items Menu Methods - READY FOR TESTING"
+        #region "Items Menu Methods - TESTED"
 
         private void MenuItemCompleteSelected_Click(object sender, RoutedEventArgs e)
         {
@@ -276,7 +312,7 @@ namespace NineWorldsDeep.Synergy
 
         #endregion
 
-        #region "Event Methods - READY FOR TESTING"
+        #region "Event Methods - TESTED"
 
         private void txtListName_KeyUp(object sender, KeyEventArgs e)
         {
@@ -363,7 +399,7 @@ namespace NineWorldsDeep.Synergy
             }
         }
 
-        private void tbInput_KeyUp(object sender, KeyEventArgs e)
+        private void txtInput_KeyUp(object sender, KeyEventArgs e)
         {
             if (e.Key == Key.Enter)
             {
@@ -381,7 +417,7 @@ namespace NineWorldsDeep.Synergy
             SynergyList lst = (SynergyList)lvLists.SelectedItem;
             if (lst != null)
             {
-                string item = tbInput.Text.Trim();
+                string item = txtInput.Text.Trim();
                 if (!string.IsNullOrWhiteSpace(item))
                 {
                     //lst.AddWithMerge(new SynergyItem() { Description = item, Completed = false });
@@ -389,7 +425,7 @@ namespace NineWorldsDeep.Synergy
                     {
                         Item = item
                     });
-                    tbInput.Text = "";
+                    txtInput.Text = "";
                     ReLoadListItems();
                 }
             }

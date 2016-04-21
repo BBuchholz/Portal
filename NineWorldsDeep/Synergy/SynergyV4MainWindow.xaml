@@ -109,9 +109,9 @@
                     <ColumnDefinition Width="187*"/>
                     <ColumnDefinition Width="100"></ColumnDefinition>
                 </Grid.ColumnDefinitions>
-                <TextBox x:Name="tbInput"
+                <TextBox x:Name="txtInput"
                      Grid.Column="0"
-                     KeyUp="tbInput_KeyUp" Grid.ColumnSpan="2"></TextBox>
+                     KeyUp="txtInput_KeyUp" Grid.ColumnSpan="2"></TextBox>
                 <Button x:Name="AddButton"
                         Grid.Column="2" 
                         Margin="15, 0, 0, 0"
