@@ -86,5 +86,10 @@ namespace NineWorldsDeep.Tapestry
                 new AudioBrowser.AudioBrowserMainWindow();
             abmw.Show();
         }
+
+        private void MenuItemSynergyV4_Click(object sender, RoutedEventArgs e)
+        {
+            new Synergy.SynergyV4MainWindow().Show();
+        }
     }
 }

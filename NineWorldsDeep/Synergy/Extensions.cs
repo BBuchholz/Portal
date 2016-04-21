@@ -8,6 +8,43 @@ namespace NineWorldsDeep.Synergy
 {
     public static class Extensions
     {
+        public static string[] ToFragmentArray(this IEnumerable<SynergyItem> ie)
+        {
+            List<string> lst = new List<string>();
+
+            foreach (SynergyItem si in ie)
+            {
+                lst.Add(si.Fragment);
+            }
+
+            return lst.ToArray();
+        }
+
+        public static SynergyList EnsureList(this List<SynergyList> lst, string listName)
+        {
+            SynergyList found = null;
+
+            foreach(SynergyList sl in lst)
+            {
+                if (sl.Name.Equals(listName))
+                {
+                    found = sl;
+                }
+            }
+
+            if(found == null)
+            {
+                found = new SynergyList()
+                {
+                    Name = listName
+                };
+
+                lst.Add(found);
+            }
+
+            return found;
+        }
+
         public static List<StringListItem> ToListItems(this List<string> lst)
         {
             List<StringListItem> newLst = new List<StringListItem>();

@@ -195,6 +195,7 @@
     <Compile Include="Mtp\PortableDeviceFile.cs" />
     <Compile Include="Mtp\PortableDeviceFolder.cs" />
     <Compile Include="Mtp\PortableDeviceObject.cs" />
+    <Compile Include="Parser\NwdParser.cs" />
     <Compile Include="Parser\NwdUri.cs" />
     <Compile Include="Parser\NwdUriConverter.cs" />
     <Compile Include="Parser\NwdUriProcessEntry.cs" />
@@ -275,11 +276,21 @@
       <DependentUpon>StoryboardStatusBar.xaml</DependentUpon>
     </Compile>
     <Compile Include="Synergy\StringListItem.cs" />
+    <Compile Include="Synergy\SyncHandler.cs" />
+    <Compile Include="Synergy\SynergyItem.cs" />
+    <Compile Include="Synergy\SynergyList.cs" />
+    <Compile Include="Synergy\SynergyListManagementWindow.xaml.cs">
+      <DependentUpon>SynergyListManagementWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Synergy\SynergyMainWindow.xaml.cs">
       <DependentUpon>SynergyMainWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Synergy\SynergyRowObject.cs" />
+    <Compile Include="Synergy\SynergySqliteDbAdapter.cs" />
     <Compile Include="Synergy\SynergyUtils.cs" />
+    <Compile Include="Synergy\SynergyV4MainWindow.xaml.cs">
+      <DependentUpon>SynergyV4MainWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Synergy\ToDoItem.cs" />
     <Compile Include="Synergy\ToDoList.cs" />
     <Compile Include="Tagger\FileElement.cs" />
@@ -443,7 +454,15 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Synergy\SynergyListManagementWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Synergy\SynergyMainWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Synergy\SynergyV4MainWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

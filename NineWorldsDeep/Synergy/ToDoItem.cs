@@ -8,7 +8,7 @@ namespace NineWorldsDeep.Synergy
     {
         private List<Status> _statuses =
             new List<Status>();
-        private Fragment _fragment = null;
+        //private Fragment _fragment = null;
         private bool _completed = false;
         private bool _archived = false;
 
@@ -53,25 +53,25 @@ namespace NineWorldsDeep.Synergy
             }
         }
 
-        public void Add(IEnumerable<Fragment> fragments)
-        {
-            foreach(Fragment f in fragments)
-            {
-                Add(f);
-            }
-        }
+        //public void Add(IEnumerable<Fragment> fragments)
+        //{
+        //    foreach(Fragment f in fragments)
+        //    {
+        //        Add(f);
+        //    }
+        //}
 
-        public void Add(Fragment fragment)
-        {
-            if(_fragment == null)
-            {
-                _fragment = fragment;
-            }
-            else
-            {
-                _fragment.Merge(fragment);
-            }
-        }
+        //public void Add(Fragment fragment)
+        //{
+        //    if(_fragment == null)
+        //    {
+        //        _fragment = fragment;
+        //    }
+        //    else
+        //    {
+        //        _fragment.Merge(fragment);
+        //    }
+        //}
 
         public int ListId { get; internal set; }
         public int ItemId { get; internal set; }
@@ -98,14 +98,14 @@ namespace NineWorldsDeep.Synergy
             }
         }
 
-        public Fragment Fragment { get { return _fragment; } }
+        //public Fragment Fragment { get { return _fragment; } }
 
-        public string FragmentString
-        {
-            get
-            {
-                return Fragment.FragmentValue;
-            }
-        }
+        //public string FragmentString
+        //{
+        //    get
+        //    {
+        //        return Fragment.FragmentValue;
+        //    }
+        //}
     }
 }

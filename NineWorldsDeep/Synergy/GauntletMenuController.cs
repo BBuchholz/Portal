@@ -108,18 +108,7 @@ namespace NineWorldsDeep.Synergy
         {
             if (!File.Exists(path))
             {
-                //we can switch things here
-                //fdgadf;
-                bool newVersion = true;
-
-                if (newVersion)
-                {
-                    File.WriteAllLines(path, lst.Items.ToFragmentArray());
-                }
-                else
-                {
-                    File.WriteAllLines(path, lst.Items.ToStringArray());
-                }
+                File.WriteAllLines(path, lst.Items.ToStringArray());                
             }
             else
             {

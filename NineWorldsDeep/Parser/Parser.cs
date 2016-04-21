@@ -125,7 +125,7 @@ namespace NineWorldsDeep.Parser
 
         public string Extract(String nestedKey, String input)
         {
-            if (validateNestedKey(nestedKey) && Validate(input))
+            if (ValidateNestedKey(nestedKey) && Validate(input))
             {
 
                 Stack<string> keyStack = GetInvertedKeyStack(nestedKey);
@@ -150,7 +150,7 @@ namespace NineWorldsDeep.Parser
                 return null;
             }
         }
-
+        
         public string ExtractLastOne(string key, string input)
         {
 
@@ -261,9 +261,9 @@ namespace NineWorldsDeep.Parser
             return s;
         }
 
-        public bool validateNestedKey(string nestedKey)
+        public bool ValidateNestedKey(string nestedKey)
         {
-            return validateNonEmptyKeyNodes(nestedKey) &&
+            return ValidateNonEmptyKeyNodes(nestedKey) &&
                 ValidateForwardSlashKeyNotation(nestedKey) &&
                 ValidateNonEmptyKey(nestedKey);
         }
@@ -273,7 +273,7 @@ namespace NineWorldsDeep.Parser
             return !nestedKey.Contains(@"\");
         }
 
-        public bool validateNonEmptyKeyNodes(string nestedKey)
+        public bool ValidateNonEmptyKeyNodes(string nestedKey)
         {
 
             return !nestedKey.Contains("//");

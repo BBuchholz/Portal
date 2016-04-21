@@ -3,6 +3,7 @@ using System.Collections.Generic;
 
 namespace NineWorldsDeep.Synergy
 {
+    [Obsolete("use SynergyItem")]
     public class Fragment
     {
         Dictionary<string, string> keyVals =

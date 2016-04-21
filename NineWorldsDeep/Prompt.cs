@@ -123,7 +123,7 @@ namespace NineWorldsDeep
 
             Parser.Parser p = new Parser.Parser();
 
-            while (!p.validateNestedKey(uri))
+            while (!p.ValidateNestedKey(uri))
             {
                 string newMsg = "Invalid NWD URI. " +
                     message;

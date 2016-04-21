@@ -332,5 +332,6 @@ namespace NineWorldsDeep.Synergy
             _lists.Clear();
             _gauntletMenuController.LoadFromMySql(true);
         }
+        
     }
 }

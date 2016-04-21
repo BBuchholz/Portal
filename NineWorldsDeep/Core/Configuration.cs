@@ -144,6 +144,11 @@ namespace NineWorldsDeep.Core
             return Path.Combine(ProcessTestMode("NWD-SYNC"), profileName, @"NWD\synergy");
         }
 
+        public static string SyncFolderSynergyArchive(string profileName)
+        {
+            return Path.Combine(SyncFolderSynergy(profileName), "archive");
+        }
+
         public static string GetPhoneSyncSynergyArchiveFilePath(string listName)
         {
             return PhoneSyncSynergyArchivedFolder + "\\" + listName + ".txt";

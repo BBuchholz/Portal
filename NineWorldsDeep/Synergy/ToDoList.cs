@@ -41,7 +41,7 @@ namespace NineWorldsDeep.Synergy
                 Archived = archived
             };
 
-            tdi.Add(new Fragment(item));
+            //tdi.Add(new Fragment(item));
 
             AddWithMerge(tdi);
         }
@@ -89,10 +89,10 @@ namespace NineWorldsDeep.Synergy
 
                     tdi.Statuses.AddWithMerge(item.Statuses);
 
-                    Stopwatch sw = new Stopwatch();
-                    sw.Start();
-                    tdi.Add(item.Fragment);
-                    sw.Stop();
+                    //Stopwatch sw = new Stopwatch();
+                    //sw.Start();
+                    //tdi.Add(item.Fragment);
+                    //sw.Stop();
                     found = true;
                 }
             }

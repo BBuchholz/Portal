@@ -26,6 +26,8 @@
                           Click="MenuItemNwdWareHouse_Click"/>
                 <MenuItem Header="NwdSynergy"
                           Click="MenuItemNwdSynergy_Click"/>
+                <MenuItem Header="SynergyV4"
+                          Click="MenuItemSynergyV4_Click"/>
                 <MenuItem Header="NwdImageBrowser"
                           Click="MenuItemNwdImageBrowser_Click"/>
                 <MenuItem Header="NwdAudioBrowser"

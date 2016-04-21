@@ -268,9 +268,9 @@ namespace NwdUnitTestProject
         [TestMethod]
         public void testValidateNestedKey()
         {   
-            Assert.IsTrue(p.validateNestedKey(nestedKey));
-            Assert.IsTrue(p.validateNestedKey(nestedKeyAlphaNumeric));
-            Assert.IsFalse(p.validateNestedKey(nestedKeyEmptyKeyNode));
+            Assert.IsTrue(p.ValidateNestedKey(nestedKey));
+            Assert.IsTrue(p.ValidateNestedKey(nestedKeyAlphaNumeric));
+            Assert.IsFalse(p.ValidateNestedKey(nestedKeyEmptyKeyNode));
         }
 
         [TestMethod]
@@ -299,9 +299,9 @@ namespace NwdUnitTestProject
         [TestMethod]
     public void testValidateNonEmptyKeyNodes()
         {
-            Assert.IsTrue(p.validateNonEmptyKeyNodes(nestedKey));
-            Assert.IsTrue(p.validateNonEmptyKeyNodes(nestedKeyAlphaNumeric));
-            Assert.IsFalse(p.validateNonEmptyKeyNodes(nestedKeyEmptyKeyNode));
+            Assert.IsTrue(p.ValidateNonEmptyKeyNodes(nestedKey));
+            Assert.IsTrue(p.ValidateNonEmptyKeyNodes(nestedKeyAlphaNumeric));
+            Assert.IsFalse(p.ValidateNonEmptyKeyNodes(nestedKeyEmptyKeyNode));
         }
 
         /**
