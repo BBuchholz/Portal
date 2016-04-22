@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Globalization;
 using System.IO;
 
 namespace NineWorldsDeep.Warehouse
@@ -136,18 +137,41 @@ namespace NineWorldsDeep.Warehouse
             string fileName = Path.GetFileName(path);
             string toFilePath = "";
 
-            if (SyncAction == SyncAction.MoveAndStamp)
+            if (SyncAction == SyncAction.MoveAndStamp ||
+                SyncAction == SyncAction.CopyAndStamp)
             {
-                string timestamp =
-                    DateTime.Now.ToString("yyyyMMddHHmmss");
-
-                fileName = timestamp + "-" + fileName;
+                fileName = PrepareTimeStampedPath(fileName);
             }
 
             toFilePath = Path.Combine(_syncMap.Destination,
                                       fileName);
 
             return toFilePath;
+        }
+
+        private string PrepareTimeStampedPath(string fileName)
+        {
+            string firstPart = fileName.Split('-')[0];
+
+            DateTime foundDate;
+
+            if(DateTime.TryParseExact(firstPart,
+                                      "yyyyMMddHHmmss",
+                                      new CultureInfo("en-US"),
+                                      DateTimeStyles.None,
+                                      out foundDate))
+            {
+                string toStrip = foundDate.ToString("yyyyMMddHHmmss") + "-";
+
+                fileName = fileName.ReplaceFirst(toStrip, "");
+            }
+
+            string timestamp =
+                        DateTime.Now.ToString("yyyyMMddHHmmss");
+
+            fileName = timestamp + "-" + fileName;
+
+            return fileName;
         }
 
         /// <summary>
@@ -239,7 +263,11 @@ namespace NineWorldsDeep.Warehouse
                             //(move ops will delete original 
                             // AFTER verification)
 
-                            if (!File.Exists(ExtPath))
+                            if (string.IsNullOrWhiteSpace(ExtPath))
+                            {
+                                return false;
+                            }
+                            else if (!File.Exists(ExtPath))
                             {
                                 File.Copy(HostPath, ExtPath);
                             }
@@ -273,7 +301,11 @@ namespace NineWorldsDeep.Warehouse
                             //(move ops will delete original 
                             // AFTER verification)
 
-                            if (!File.Exists(HostPath))
+                            if (string.IsNullOrWhiteSpace(HostPath))
+                            {
+                                return false;
+                            }
+                            else if (!File.Exists(HostPath))
                             {
                                 File.Copy(ExtPath, HostPath);
                             }
@@ -339,6 +371,7 @@ namespace NineWorldsDeep.Warehouse
     {
         MoveAndStamp,
         Move,
+        CopyAndStamp,
         Copy,
         Ignore
     }

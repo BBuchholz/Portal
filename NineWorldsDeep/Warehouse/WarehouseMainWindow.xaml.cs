@@ -31,6 +31,7 @@ namespace NineWorldsDeep.Warehouse
             cmbDirection.Items.Add(SyncDirection.Export);
 
             cmbActionDefault.Items.Add(SyncAction.Ignore);
+            cmbActionDefault.Items.Add(SyncAction.CopyAndStamp);
             cmbActionDefault.Items.Add(SyncAction.Copy);
             cmbActionDefault.Items.Add(SyncAction.MoveAndStamp);
             cmbActionDefault.Items.Add(SyncAction.Move);
@@ -279,13 +280,12 @@ namespace NineWorldsDeep.Warehouse
             }
         }
 
-        private void IgnoreAndRevertNonExecuted(ExecStatus setStatusTo)
+        private void RevertNonExecuted(ExecStatus setStatusTo)
         {
             foreach (SyncItem si in SyncItems)
             {
                 if (!si.Executed)
                 {
-                    si.SyncAction = SyncAction.Ignore;
                     si.Revert();
                 }
             }
@@ -295,7 +295,7 @@ namespace NineWorldsDeep.Warehouse
 
         private void btnCancel_Click(object sender, RoutedEventArgs e)
         {
-            IgnoreAndRevertNonExecuted(ExecStatus.Ready);
+            RevertNonExecuted(ExecStatus.Ready);
         }
 
         private void btnExecute_Click(object sender, RoutedEventArgs e)
@@ -306,6 +306,9 @@ namespace NineWorldsDeep.Warehouse
             {
                 if (!si.Execute())
                 {
+                    //exclude from pending verifications
+                    si.SyncAction = SyncAction.Ignore;
+
                     switch (si.SyncDirection)
                     {
                         case SyncDirection.Export:
@@ -338,12 +341,12 @@ namespace NineWorldsDeep.Warehouse
                 if (failingPaths.Count == SyncItems.Count)
                 {
                     //all failed, nothing to verify
-                    IgnoreAndRevertNonExecuted(ExecStatus.Ready);
+                    RevertNonExecuted(ExecStatus.Ready);
                 }
                 else
                 {
                     //some succeeded, move onto verify stage (failed will be ignored)
-                    IgnoreAndRevertNonExecuted(ExecStatus.Executed);
+                    RevertNonExecuted(ExecStatus.Executed);
                 }
             }
         }
@@ -356,6 +359,8 @@ namespace NineWorldsDeep.Warehouse
             }
 
             VerifyAllAndCleanup();
+
+            ProcessSyncDirection(); //will reload SyncItems
 
             SetExecutionStatus(ExecStatus.Verified);
         }
