@@ -26,9 +26,16 @@ namespace NineWorldsDeep.Warehouse
         public WarehouseMainWindow()
         {
             InitializeComponent();
-
+            
             cmbDirection.Items.Add(SyncDirection.Import);
             cmbDirection.Items.Add(SyncDirection.Export);
+
+            cmbActionDefault.Items.Add(SyncAction.Ignore);
+            cmbActionDefault.Items.Add(SyncAction.Copy);
+            cmbActionDefault.Items.Add(SyncAction.MoveAndStamp);
+            cmbActionDefault.Items.Add(SyncAction.Move);
+
+            cmbActionDefault.SelectedItem = SyncAction.Ignore;
 
             try
             {
@@ -130,6 +137,18 @@ namespace NineWorldsDeep.Warehouse
                         PopulateExports(CurrentProfile);
                         break;
                 }
+            }
+
+            ProcessActionDefault();
+        }
+
+        private void ProcessActionDefault()
+        {
+            var sa = (SyncAction)cmbActionDefault.SelectedItem;
+
+            foreach (var si in SyncItems)
+            {
+                si.SyncAction = sa;
             }
         }
 
@@ -455,6 +474,11 @@ namespace NineWorldsDeep.Warehouse
             string output = db.GetErdRawSource();
 
             Display.Multiline("SQLite ERD Raw Source", output);
+        }
+
+        private void cmbActionDefault_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            ProcessActionDefault();         
         }
     }
 }

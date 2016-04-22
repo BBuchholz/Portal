@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:NineWorldsDeep.Warehouse"
         mc:Ignorable="d"
-        Title="WarehouseMainWindow" Height="300" Width="300">
+        Title="WarehouseMainWindow" Height="500" Width="1200">
 
     <Window.Resources>
 
@@ -51,22 +51,35 @@
             <Grid Grid.Row="0">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition/>
-                    <ColumnDefinition/>
-                    <ColumnDefinition/>
+                    <ColumnDefinition Width="500"/>
                 </Grid.ColumnDefinitions>
 
-                <ComboBox Grid.Column="0"
+                <Grid Grid.Column="0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+                    
+                    <ComboBox Grid.Column="0"
                           x:Name="cmbSyncProfile"
-                          Margin="5"
+                          Margin="30 5"
                           SelectionChanged="cmbSyncProfile_SelectionChanged"/>
 
-                <ComboBox Grid.Column="1"
+                    <ComboBox Grid.Column="1"
                           x:Name="cmbDirection"
-                          Margin="5"
+                          Margin="30 5"
                           SelectionChanged="cmbDirection_SelectionChanged"/>
 
+                    <ComboBox Grid.Column="2"
+                          x:Name="cmbActionDefault"
+                          Margin="30 5"
+                          SelectionChanged="cmbActionDefault_SelectionChanged"/>
+
+                </Grid>
+                
                 <!--Button Grid-->
-                <Grid Grid.Column="2">
+                <Grid Grid.Column="1">
 
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition/>

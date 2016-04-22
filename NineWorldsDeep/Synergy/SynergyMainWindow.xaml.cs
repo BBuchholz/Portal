@@ -40,6 +40,14 @@ namespace NineWorldsDeep.Synergy
             {
                 InitializeComponent();
                 this.DataContext = this;
+
+                string deprecationMessage =
+                    "This version of NwdSynergy is slated for retirement " +
+                    "5/21/2016, when db tables related to the previous version " +
+                    "will be dropped. You should be using SynergyV4 instead.";
+
+                Display.Message(deprecationMessage);
+
                 _menu = new MenuController();
                 _menu.Configure(mainMenu);
 
