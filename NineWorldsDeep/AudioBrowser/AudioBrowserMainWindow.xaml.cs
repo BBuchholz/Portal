@@ -106,35 +106,52 @@ namespace NineWorldsDeep.AudioBrowser
             }
         }
 
-        private void MenuItemCopyToVoiceMemoStaging_Click(object sender, RoutedEventArgs e)
+        private string CopyToVoiceMemoStaging(FileElement fe)
+        {
+            string vmStagingFolderPath = Configuration.VoiceMemoStagingFolder;
+
+            //ensure directory exists
+            Directory.CreateDirectory(vmStagingFolderPath);
+
+            //create destination file path
+            string fName = System.IO.Path.GetFileName(fe.Path);
+            string destFilePath = System.IO.Path.Combine(vmStagingFolderPath, fName);
+
+            //copy if !exists, else message                
+            if (!File.Exists(destFilePath))
+            {
+                File.Copy(fe.Path, destFilePath);
+                return "copied to: " + destFilePath;
+            }
+            else
+            {
+                return "file exists: " + destFilePath;
+            }
+        }
+
+        private void MenuItemCopySelectedItemToVoiceMemoStaging_Click(object sender, RoutedEventArgs e)
         {
             if (tgrGrid.SelectedFileElement != null)
             {
                 FileElement fe = (FileElement)tgrGrid.SelectedFileElement;
-                string vmStagingFolderPath = Configuration.VoiceMemoStagingFolder;
-
-                //ensure directory exists
-                Directory.CreateDirectory(vmStagingFolderPath);
-
-                //create destination file path
-                string fName = System.IO.Path.GetFileName(fe.Path);
-                string destFilePath = System.IO.Path.Combine(vmStagingFolderPath, fName);
-
-                //copy if !exists, else message                
-                if (!File.Exists(destFilePath))
-                {
-                    File.Copy(fe.Path, destFilePath);
-                    Display.Message("copied to: " + destFilePath);
-                }
-                else
-                {
-                    Display.Message("file exists: " + destFilePath);
-                }
+                Display.Message(CopyToVoiceMemoStaging(fe));
             }
             else
             {
                 Display.Message("nothing selected");
             }
+        }
+
+        private void MenuItemCopyMultipleToVoiceMemoStaging_Click(object sender, RoutedEventArgs e)
+        {
+            int count = UI.Prompt.ForInteger("How many items would you like to copy?");
+
+            foreach (FileElement fe in tgrGrid.FileElements.Take(count))
+            {
+                CopyToVoiceMemoStaging(fe);
+            }
+
+            Display.Message(count + " items copied.");
         }
     }
 }

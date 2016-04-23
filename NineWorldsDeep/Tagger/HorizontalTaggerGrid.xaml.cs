@@ -95,6 +95,13 @@ namespace NineWorldsDeep.Tagger
             }
         }
 
+        public IEnumerable<FileElement> FileElements
+        {
+            get
+            {
+                return lvFileElements.Items.Cast<FileElement>().ToList();
+            }
+        }
 
         public void LoadFileElementsFromDb()
         {

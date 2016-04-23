@@ -48,9 +48,11 @@
                           IsCheckable="True"
                           x:Name="chkPlayOnSelectionChange"/>
             </MenuItem>
-            <MenuItem Header="Selected Item">
-                <MenuItem Header="Copy To VoiceMemo Staging"
-                          Click="MenuItemCopyToVoiceMemoStaging_Click"/>
+            <MenuItem Header="Items">
+                <MenuItem Header="Copy Selected Item To VoiceMemo Staging"
+                          Click="MenuItemCopySelectedItemToVoiceMemoStaging_Click"/>
+                <MenuItem Header="Copy Multiple Items To VoiceMemo Staging"
+                          Click="MenuItemCopyMultipleToVoiceMemoStaging_Click"/>
             </MenuItem>
         </Menu>
         <Grid>
