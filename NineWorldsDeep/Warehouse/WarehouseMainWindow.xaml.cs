@@ -184,7 +184,7 @@ namespace NineWorldsDeep.Warehouse
                     string exportRootPath = sm.Source;
 
                     //get files
-                    foreach (string filePath in Directory.GetFiles(exportRootPath))
+                    foreach (string filePath in Directory.GetFiles(exportRootPath, "*.*", SearchOption.TopDirectoryOnly))
                     {
                         string hash = Hashes.SHA1(filePath);
                         string path = filePath;
@@ -214,7 +214,7 @@ namespace NineWorldsDeep.Warehouse
                     string importRootPath = sm.Source;
 
                     //get files
-                    foreach (string filePath in Directory.GetFiles(importRootPath))
+                    foreach (string filePath in Directory.GetFiles(importRootPath, "*.*", SearchOption.TopDirectoryOnly))
                     {
                         string hash = Hashes.SHA1(filePath);
                         string path = filePath;
