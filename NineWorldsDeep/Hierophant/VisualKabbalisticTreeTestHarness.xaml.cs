@@ -25,6 +25,15 @@ namespace NineWorldsDeep.Hierophant
             InitializeComponent();
             kabbalisticTree.SephirahClicked += 
                 new EventHandler(EventHandler_SephirahClicked);
+            kabbalisticTree.PathClicked +=
+                new EventHandler(EventHandler_PathClicked);
+        }
+
+        private void EventHandler_PathClicked(object sender, EventArgs e)
+        {
+            KabbalisticPath path = (KabbalisticPath)sender;
+
+            Display.Message("Event Handler triggered for: " + path.Description);
         }
 
         public void EventHandler_SephirahClicked(object sender, EventArgs e)

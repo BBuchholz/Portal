@@ -27,7 +27,7 @@
     <UpdatePeriodically>false</UpdatePeriodically>
     <UpdateRequired>false</UpdateRequired>
     <MapFileExtensions>true</MapFileExtensions>
-    <ApplicationRevision>10</ApplicationRevision>
+    <ApplicationRevision>11</ApplicationRevision>
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <PublishWizardCompleted>true</PublishWizardCompleted>
@@ -168,6 +168,7 @@
     <Compile Include="Hierophant\HierophantMainWindow.xaml.cs">
       <DependentUpon>HierophantMainWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Hierophant\KabbalisticPath.cs" />
     <Compile Include="Hierophant\Sephirah.cs" />
     <Compile Include="Hierophant\VisualKabbalisticTree.xaml.cs">
       <DependentUpon>VisualKabbalisticTree.xaml</DependentUpon>

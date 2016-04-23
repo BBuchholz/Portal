@@ -23,6 +23,8 @@ namespace NineWorldsDeep.Hierophant
     {
         private Dictionary<Ellipse, Sephirah> sephiroth =
             new Dictionary<Ellipse, Sephirah>();
+        private List<KabbalisticPath> paths =
+            new List<KabbalisticPath>();
 
         public VisualKabbalisticTree()
         {
@@ -55,26 +57,91 @@ namespace NineWorldsDeep.Hierophant
             return new Point(centerX, centerY);
         }
 
+        private void StyleLine(Line line, Visibility visibility)
+        {
+            line.Visibility = visibility;
+            line.StrokeThickness = 3;
+            line.Stroke = System.Windows.Media.Brushes.Black;
+
+            Panel.SetZIndex(line, 0);
+        }
+
+        private Line CreateCenterLine(Point from, Point to)
+        {
+
+            Line line = new Line()
+            {
+                X1 = from.X,
+                Y1 = from.Y,
+                X2 = to.X,
+                Y2 = to.Y
+            };
+
+            StyleLine(line, Visibility.Hidden);
+
+            return line;
+        }
+
         private void DrawPath(Ellipse from, Ellipse to)
         {
             Point fromCenter = GetCenter(from);
             Point toCenter = GetCenter(to);
+            
+            Line line = CreateCenterLine(fromCenter, toCenter);
+            Line lineAbove = CreateOffsetLine(line, 10.0);
+            Line lineBelow = CreateOffsetLine(line, -10.0);
+
+            KabbalisticPath path =
+                new KabbalisticPath()
+                {
+                    LineCenter = line,
+                    LineAbove = lineAbove,
+                    LineBelow = lineBelow
+                };
+
+            Sephirah fromSeph = sephiroth[from];
+            Sephirah toSeph = sephiroth[to];
+
+            path.Sephiroth[fromSeph.Name] = fromSeph;
+            path.Sephiroth[toSeph.Name] = toSeph;
+
+            paths.Add(path);
+
+            canvas.Children.Add(line);
+            canvas.Children.Add(lineAbove);
+            canvas.Children.Add(lineBelow);
+        }
+
+        private Line CreateOffsetLine(Line originalLine, double offsetPixels)
+        {
+            //from: http://stackoverflow.com/questions/2825412/draw-a-parallel-line
+
+            double x1 = originalLine.X1, 
+                x2 = originalLine.X2, 
+                y1 = originalLine.Y1, 
+                y2 = originalLine.Y2;
+
+            var L = Math.Sqrt((x1 - x2) * (x1 - x2) + (y1 - y2) * (y1 - y2));
+
+            //var offsetPixels = 10.0;
+
+            // This is the second line
+            var x1p = x1 + offsetPixels * (y2 - y1) / L;
+            var x2p = x2 + offsetPixels * (y2 - y1) / L;
+            var y1p = y1 + offsetPixels * (x1 - x2) / L;
+            var y2p = y2 + offsetPixels * (x1 - x2) / L;
 
             Line line = new Line()
             {
-                X1 = fromCenter.X,
-                Y1 = fromCenter.Y,
-                X2 = toCenter.X,
-                Y2 = toCenter.Y
+                X1 = x1p,
+                X2 = x2p,
+                Y1 = y1p,
+                Y2 = y2p
             };
 
-            line.Visibility = System.Windows.Visibility.Visible;
-            line.StrokeThickness = 4;
-            line.Stroke = System.Windows.Media.Brushes.Black;
+            StyleLine(line, Visibility.Visible);
 
-            Panel.SetZIndex(line, 0);
-
-            canvas.Children.Add(line);
+            return line;
         }
 
         private void DrawPaths()
@@ -136,6 +203,7 @@ namespace NineWorldsDeep.Hierophant
         private void Sephirah_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
             HandleSephirothClick(sender);
+            e.Handled = true; 
         }
 
         public event EventHandler SephirahClicked;
@@ -183,6 +251,19 @@ namespace NineWorldsDeep.Hierophant
             // values are to the left or to the right.
 
             return false;
+        }
+
+        private int clickCountForTesting = 0;
+
+        private void Canvas_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            Display.Message(paths[clickCountForTesting].Description);
+            clickCountForTesting++;
+
+            if(clickCountForTesting > 21)
+            {
+                clickCountForTesting = 0;
+            }
         }
     }
 }
