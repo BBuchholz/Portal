@@ -21,8 +21,8 @@ namespace NineWorldsDeep.Hierophant
     /// </summary>
     public partial class VisualKabbalisticTree : UserControl
     {
-        private Dictionary<Ellipse, string> sephiroth =
-            new Dictionary<Ellipse, string>();
+        private Dictionary<Ellipse, Sephirah> sephiroth =
+            new Dictionary<Ellipse, Sephirah>();
 
         public VisualKabbalisticTree()
         {
@@ -33,16 +33,16 @@ namespace NineWorldsDeep.Hierophant
 
         private void IndexSephiroth()
         {
-            sephiroth[elKether] = "Kether";
-            sephiroth[elChokmah] = "Chokmah";
-            sephiroth[elBinah] = "Binah";
-            sephiroth[elChesed] = "Chesed";
-            sephiroth[elGeburah] = "Geburah";
-            sephiroth[elTipareth] = "Tipareth";
-            sephiroth[elNetzach] = "Netzach";
-            sephiroth[elHod] = "Hod";
-            sephiroth[elYesod] = "Yesod";
-            sephiroth[elMalkuth] = "Malkuth";
+            sephiroth[elKether] = new Sephirah("Kether");
+            sephiroth[elChokmah] = new Sephirah("Chokmah");
+            sephiroth[elBinah] = new Sephirah("Binah");
+            sephiroth[elChesed] = new Sephirah("Chesed");
+            sephiroth[elGeburah] = new Sephirah("Geburah");
+            sephiroth[elTipareth] = new Sephirah("Tipareth");
+            sephiroth[elNetzach] = new Sephirah("Netzach");
+            sephiroth[elHod] = new Sephirah("Hod");
+            sephiroth[elYesod] = new Sephirah("Yesod");
+            sephiroth[elMalkuth] = new Sephirah("Malkuth");
         }
 
         private Point GetCenter(Ellipse el)
@@ -135,10 +135,12 @@ namespace NineWorldsDeep.Hierophant
 
         private void Sephirah_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
-            Display.Message(HandleSephirothClick(sender));
+            HandleSephirothClick(sender);
         }
 
-        private string HandleSephirothClick(object sender)
+        public event EventHandler SephirahClicked;
+
+        private void HandleSephirothClick(object sender)
         {
             Ellipse clicked = (Ellipse)sender;
             
@@ -146,15 +148,19 @@ namespace NineWorldsDeep.Hierophant
             {
                 if (sephiroth.ContainsKey(clicked))
                 {
-                    return sephiroth[clicked];
+                    if(SephirahClicked != null)
+                    {
+                        SephirahClicked(sephiroth[clicked], new EventArgs());
+                    }
                 }
             }
-
-            return "not found";
         }
 
-        private bool HitTestForPaths()
+        public event EventHandler PathClicked;
+
+        private bool HandlePathClick()
         {
+            //TODO: replace with raising event (see HandleSephirothClick())
             Display.Message("path testing not implemented yet");
 
             // We need to store lines for paths in pairs, and use

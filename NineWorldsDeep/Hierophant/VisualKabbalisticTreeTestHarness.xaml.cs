@@ -1,4 +1,5 @@
-﻿using System;
+﻿using NineWorldsDeep.UI;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -22,6 +23,15 @@ namespace NineWorldsDeep.Hierophant
         public VisualKabbalisticTreeTestHarness()
         {
             InitializeComponent();
+            kabbalisticTree.SephirahClicked += 
+                new EventHandler(EventHandler_SephirahClicked);
+        }
+
+        public void EventHandler_SephirahClicked(object sender, EventArgs e)
+        {
+            Sephirah seph = (Sephirah)sender;
+
+            Display.Message("Event Handler triggered for: " + seph.Name);
         }
     }
 }

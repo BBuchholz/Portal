@@ -168,6 +168,7 @@
     <Compile Include="Hierophant\HierophantMainWindow.xaml.cs">
       <DependentUpon>HierophantMainWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Hierophant\Sephirah.cs" />
     <Compile Include="Hierophant\VisualKabbalisticTree.xaml.cs">
       <DependentUpon>VisualKabbalisticTree.xaml</DependentUpon>
     </Compile>
