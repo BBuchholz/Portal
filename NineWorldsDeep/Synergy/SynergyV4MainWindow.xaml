@@ -54,7 +54,7 @@
             </Grid.RowDefinitions>
             <Grid Margin="0, 15, 0, 0">
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="250"/>
+                    <ColumnDefinition Width="300"/>
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
                 <Grid>
@@ -77,25 +77,26 @@
                 </Grid>
                 <ListView x:Name="lvItems"
                       Grid.Column="1"
-                      Margin="10, 10, 30, 10">
+                      Margin="10, 10, 30, 10"
+                          ScrollViewer.HorizontalScrollBarVisibility="Disabled">
                     <ListView.ItemTemplate>
                         <DataTemplate>
                             <StackPanel Orientation="Vertical">
-                                <WrapPanel>
+                                <WrapPanel Orientation="Horizontal">
                                     <TextBlock Text="Item: " FontWeight="Bold" />
-                                    <TextBlock Text="{Binding Item}" />
+                                    <TextBlock Text="{Binding Item}" TextWrapping="WrapWithOverflow"/>
                                 </WrapPanel>
-                                <WrapPanel>
+                                <WrapPanel Orientation="Horizontal">
                                     <TextBlock Text="CompletedAt: " FontWeight="Bold" />
                                     <TextBlock Text="{Binding CompletedAt}" />
                                 </WrapPanel>
-                                <WrapPanel>
+                                <WrapPanel Orientation="Horizontal">
                                     <TextBlock Text="ArchivedAt: " FontWeight="Bold" />
                                     <TextBlock Text="{Binding ArchivedAt}" />
                                 </WrapPanel>
-                                <WrapPanel>
+                                <WrapPanel Orientation="Horizontal">
                                     <TextBlock Text="Fragment: " FontWeight="Bold" />
-                                    <TextBlock Text="{Binding Fragment}" />
+                                    <TextBlock Text="{Binding Fragment}" TextWrapping="WrapWithOverflow"/>
                                 </WrapPanel>
                             </StackPanel>
                         </DataTemplate>
