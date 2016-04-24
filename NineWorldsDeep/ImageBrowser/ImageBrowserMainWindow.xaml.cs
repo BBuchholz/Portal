@@ -39,7 +39,9 @@ namespace NineWorldsDeep.ImageBrowser
         private string GetFolderWithLeastNonZeroUntaggedCount()
         {
             return tgrGrid.GetFolderWithLeastNonZeroUntaggedCount(
-                Configuration.ImagesFolder, new ImageFileFilter());
+                Configuration.ImagesFolder, 
+                new ImageFileFilter(),
+                lastLoadedFromFileInsteadOfDb);
         }
 
         private string TagFilePath

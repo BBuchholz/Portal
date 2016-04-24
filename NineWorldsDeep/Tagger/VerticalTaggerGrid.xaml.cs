@@ -35,13 +35,22 @@ namespace NineWorldsDeep.Tagger
             new List<FileElementActionSubscriber>();
 
         public string GetFolderWithLeastNonZeroUntaggedCount(string folderPath,
-                                                             FilePathFilter fpf)
+                                                             FilePathFilter fpf,
+                                                             bool fileInsteadOfDb)
         {
             //we are going to be going through multiple folders, 
             //we don't want to load all of them to our main matrix
             TagMatrix temp = new TagMatrix();
             temp.AddFolder(folderPath);
-            temp.LoadFromXml(Configuration.GetTagFilePath(folderPath));
+
+            if (fileInsteadOfDb)
+            {
+                temp.LoadFromXml(Configuration.GetTagFilePath(folderPath));
+            }
+            else
+            {
+                temp.LoadFromDb(folderPath);
+            }
 
             string leastPath = folderPath;
             int leastCount =
@@ -51,7 +60,14 @@ namespace NineWorldsDeep.Tagger
             {
                 temp.Clear();
                 temp.AddFolder(path);
-                temp.LoadFromXml(Configuration.GetTagFilePath(path));
+                if (fileInsteadOfDb)
+                {
+                    temp.LoadFromXml(Configuration.GetTagFilePath(path));
+                }
+                else
+                {
+                    temp.LoadFromDb(path);
+                }
                 int count =
                     temp.GetFilesForTag(TagMatrix.TAG_UNTAGGED, fpf).Count();
 

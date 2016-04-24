@@ -50,7 +50,9 @@ namespace NineWorldsDeep.Tagger
             foreach (string tag in tags)
             {
                 if (TagString.IsMetaTag(tag) &&
-                    TagString.ExtractTagNameFromMetaTag(tag).Equals("TimeStamp"))
+                    TagString.ExtractTagNameFromMetaTag(tag)
+                             .Equals("TimeStamp", 
+                                     StringComparison.CurrentCultureIgnoreCase))
                 {
                     //ignore
                 }
