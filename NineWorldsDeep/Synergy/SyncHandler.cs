@@ -91,7 +91,7 @@ namespace NineWorldsDeep.Synergy
                             si.ArchiveNow();
                         }
 
-                        Lists.EnsureList(listName).Items.Add(si);
+                        Lists.EnsureList(listName).AddItem(si);
                     }
                 }
 

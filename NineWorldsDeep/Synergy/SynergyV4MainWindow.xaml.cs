@@ -101,18 +101,18 @@ namespace NineWorldsDeep.Synergy
 
             return sl;
         }
-
+        
         #region "File Menu Methods - TESTED"
 
         private void MenuItemLoadFromSqlite_Click(object sender, RoutedEventArgs e)
         {
             ClearAll();
-
+                        
             Stopwatch sw = Stopwatch.StartNew();
 
             foreach(SynergyList sl in _db.GetActiveLists())
             {
-                _lists.Add(sl);
+                EnsureList(sl.Name).True(sl);
             }
 
             sw.Stop();
@@ -126,7 +126,7 @@ namespace NineWorldsDeep.Synergy
             Stopwatch sw = Stopwatch.StartNew();
             try
             {
-                _db.Save(_lists);
+                _db.Save(Lists);
                 sw.Stop();
             }
             catch(Exception ex)
@@ -217,6 +217,22 @@ namespace NineWorldsDeep.Synergy
             }
         }
 
+        private void MenuItemArchiveAllSelectedLists_Click(object sender, RoutedEventArgs e)
+        {
+            if(UI.Prompt.Confirm("Are you sure you want to archive ALL ITEMS in ALL SELECTED LISTS? This cannot be undone.", true)){
+
+                foreach(var v in lvLists.SelectedItems)
+                {
+                    SynergyList lst = (SynergyList)v;
+
+                    foreach(var si in lst.Items)
+                    {
+                        si.ArchiveNow();
+                    }
+                }
+            }
+        }
+
         #endregion
 
         #region "Sync Menu Methods - READY FOR TESTING"
@@ -251,7 +267,7 @@ namespace NineWorldsDeep.Synergy
 
                 foreach (var sl in _sh.Lists)
                 {
-                    _lists.Add(sl);
+                    EnsureList(sl.Name).True(sl);
                 }
             }
             catch (Exception ex)
@@ -268,7 +284,7 @@ namespace NineWorldsDeep.Synergy
 
                 foreach (var sl in _sh.Lists)
                 {
-                    _lists.Add(sl);
+                    EnsureList(sl.Name).True(sl);
                 }
                 
                 statusBar.StatusBarText = "Active Synergy Files Imported.";
@@ -372,7 +388,7 @@ namespace NineWorldsDeep.Synergy
         {
             SynergyList sl = null;
 
-            foreach (SynergyList lst in _lists)
+            foreach (SynergyList lst in Lists)
             {
                 if (lst.Name.Equals(listName))
                 {
@@ -421,7 +437,7 @@ namespace NineWorldsDeep.Synergy
                 if (!string.IsNullOrWhiteSpace(item))
                 {
                     //lst.AddWithMerge(new SynergyItem() { Description = item, Completed = false });
-                    lst.Items.Add(new SynergyItem()
+                    lst.AddItem(new SynergyItem()
                     {
                         Item = item
                     });

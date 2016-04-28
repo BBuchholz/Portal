@@ -18,11 +18,39 @@ namespace NineWorldsDeep.Synergy
             return Name;
         }
 
-        public List<SynergyItem> Items
+        public void AddItem(SynergyItem si)
+        {
+            bool found = false;
+
+            foreach(SynergyItem item in _items)
+            {
+                if(si.Item.Equals(item.Item, 
+                    StringComparison.CurrentCultureIgnoreCase))
+                {
+                    item.True(si);
+                    found = true;
+                }
+            }
+
+            if (!found)
+            {
+                _items.Add(si);
+            }
+        }
+
+        public IEnumerable<SynergyItem> Items
         {
             get
             {
                 return _items;
+            }
+        }
+
+        public void True(SynergyList sl)
+        {
+            foreach(SynergyItem si in sl.Items)
+            {
+                AddItem(si);
             }
         }
     }

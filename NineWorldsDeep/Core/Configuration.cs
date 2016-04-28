@@ -146,7 +146,7 @@ namespace NineWorldsDeep.Core
 
         public static string SyncFolderSynergyArchive(string profileName)
         {
-            return Path.Combine(SyncFolderSynergy(profileName), "archive");
+            return Path.Combine(SyncFolderSynergy(profileName), "archived");
         }
 
         public static string GetPhoneSyncSynergyArchiveFilePath(string listName)

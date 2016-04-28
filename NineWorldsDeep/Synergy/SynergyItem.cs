@@ -33,6 +33,24 @@ namespace NineWorldsDeep.Synergy
             _dictionaryReadyForUpdating = true;
         }
 
+        /// <summary>
+        /// ensures the two items are brought into agreement
+        /// regarding common boolean properties
+        /// </summary>
+        /// <param name="si"></param>
+        public void True(SynergyItem si)
+        {
+            if (string.IsNullOrWhiteSpace(ArchivedAt))
+            {
+                ArchivedAt = si.ArchivedAt;
+            }
+
+            if (string.IsNullOrWhiteSpace(CompletedAt))
+            {
+                CompletedAt = si.CompletedAt;
+            }
+        }
+
         public string Fragment
         {
             get

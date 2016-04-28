@@ -75,7 +75,7 @@ namespace NineWorldsDeep.Synergy
                                     si.ArchivedAt = archivedAt;
                                     si.TurnOnFragmentUpdatingAndUpdate();
 
-                                    lists[listName].Items.Add(si);
+                                    lists[listName].AddItem(si);
                                 }                                
                             }
 

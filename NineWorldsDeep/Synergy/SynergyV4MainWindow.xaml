@@ -42,6 +42,8 @@
                           Click="MenuItemUndoCompletionForSelected_Click"/>
                 <MenuItem Header="Undo Archival For Selected" 
                           Click="MenuItemUndoArchivalForSelected_Click"/>
+                <MenuItem Header="Archive All Selected Lists"
+                          Click="MenuItemArchiveAllSelectedLists_Click"/>
             </MenuItem>
             <MenuItem Header="Sync">
                 <MenuItem Header="Export Active Lists"
