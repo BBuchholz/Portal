@@ -47,37 +47,37 @@ namespace NwdUnitTestProject
         }
 
         //TABLET SYNC FOLDER TESTS
-        [TestMethod]
-        public void TestTabletSyncSynergyArchivedFolder()
-        {
-            Assert.AreEqual(Configuration.TabletSyncSynergyArchivedFolder,
-                @"C:\NWD-SYNC\tablet\NWD\synergy\archived");
-        }
+        //[TestMethod]
+        //public void TestTabletSyncSynergyArchivedFolder()
+        //{
+        //    Assert.AreEqual(Configuration.TabletSyncSynergyArchivedFolder,
+        //        @"C:\NWD-SYNC\tablet\NWD\synergy\archived");
+        //}
 
-        [TestMethod]
-        public void TestTabletSyncSynergyArchivedFolderTestMode()
-        {
-            Configuration.TestMode = true;
+        //[TestMethod]
+        //public void TestTabletSyncSynergyArchivedFolderTestMode()
+        //{
+        //    Configuration.TestMode = true;
 
-            Assert.AreEqual(Configuration.TabletSyncSynergyArchivedFolder,
-                @"C:\NWD-SNDBX\NWD-SYNC\tablet\NWD\synergy\archived");
-        }
+        //    Assert.AreEqual(Configuration.TabletSyncSynergyArchivedFolder,
+        //        @"C:\NWD-SNDBX\NWD-SYNC\tablet\NWD\synergy\archived");
+        //}
 
-        [TestMethod]
-        public void TestTabletSyncSynergyFolder()
-        {
-            Assert.AreEqual(Configuration.TabletSyncSynergyFolder,
-                @"C:\NWD-SYNC\tablet\NWD\synergy");
-        }
+        //[TestMethod]
+        //public void TestTabletSyncSynergyFolder()
+        //{
+        //    Assert.AreEqual(Configuration.TabletSyncSynergyFolder,
+        //        @"C:\NWD-SYNC\tablet\NWD\synergy");
+        //}
 
-        [TestMethod]
-        public void TestTabletSyncSynergyFolderTestMode()
-        {
-            Configuration.TestMode = true;
+        //[TestMethod]
+        //public void TestTabletSyncSynergyFolderTestMode()
+        //{
+        //    Configuration.TestMode = true;
 
-            Assert.AreEqual(Configuration.TabletSyncSynergyFolder,
-                @"C:\NWD-SNDBX\NWD-SYNC\tablet\NWD\synergy");
-        }
+        //    Assert.AreEqual(Configuration.TabletSyncSynergyFolder,
+        //        @"C:\NWD-SNDBX\NWD-SYNC\tablet\NWD\synergy");
+        //}
 
         //PHONE SYNC FILE PATH TESTS
         [TestMethod]
@@ -113,39 +113,22 @@ namespace NwdUnitTestProject
                 @"C:\NWD-SYNC\phone\NWD\synergy\archived\Test.txt");
         }
 
-        //TABLET SYNC FILE PATH TESTS
-        [TestMethod]
-        public void TestGetTabletSyncSynergyFilePath()
-        {
-            Assert.AreEqual(Configuration.GetTabletSyncSynergyFilePath("Test"),
-                @"C:\NWD-SYNC\tablet\NWD\synergy\Test.txt");
-        }
+        ////TABLET SYNC FILE PATH TESTS
+        //[TestMethod]
+        //public void TestGetTabletSyncSynergyFilePath()
+        //{
+        //    Assert.AreEqual(Configuration.GetTabletSyncSynergyFilePath("Test"),
+        //        @"C:\NWD-SYNC\tablet\NWD\synergy\Test.txt");
+        //}
 
-        [TestMethod]
-        public void TestGetTabletSyncSynergyFilePathTestMode()
-        {
-            Configuration.TestMode = true;
+        //[TestMethod]
+        //public void TestGetTabletSyncSynergyFilePathTestMode()
+        //{
+        //    Configuration.TestMode = true;
 
-            Assert.AreEqual(Configuration.GetTabletSyncSynergyFilePath("Test"),
-                @"C:\NWD-SNDBX\NWD-SYNC\tablet\NWD\synergy\Test.txt");
-        }
-
-        [TestMethod]
-        public void TestGetTabletSyncSynergyArchiveFilePathTestMode()
-        {
-            Configuration.TestMode = true;
-
-            Assert.AreEqual(Configuration.GetTabletSyncSynergyArchiveFilePath("Test"),
-                @"C:\NWD-SNDBX\NWD-SYNC\tablet\NWD\synergy\archived\Test.txt");
-        }
-
-
-        [TestMethod]
-        public void TestGetTabletSyncSynergyArchiveFilePath()
-        {
-            Assert.AreEqual(Configuration.GetTabletSyncSynergyArchiveFilePath("Test"),
-                @"C:\NWD-SYNC\tablet\NWD\synergy\archived\Test.txt");
-        }
+        //    Assert.AreEqual(Configuration.GetTabletSyncSynergyFilePath("Test"),
+        //        @"C:\NWD-SNDBX\NWD-SYNC\tablet\NWD\synergy\Test.txt");
+        //}
 
     }
 }

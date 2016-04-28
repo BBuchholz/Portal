@@ -13,9 +13,11 @@ namespace NineWorldsDeep.Warehouse
 
         public SyncProfile(string name)
         {
-            //remove all non-alphanumeric characters 
-            //(profile name is used for folder name)
-            Regex rgx = new Regex("[^a-zA-Z0-9]");
+            // remove all non-alphanumeric characters
+            // other than hyphens 
+            // (profile name is used for folder name)
+
+            Regex rgx = new Regex("[^a-zA-Z0-9-]");
             _name = rgx.Replace(name, string.Empty);
 
             EnsureSyncRoot();

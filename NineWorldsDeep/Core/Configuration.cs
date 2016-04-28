@@ -67,8 +67,8 @@ namespace NineWorldsDeep.Core
             //make sure directories exist
             Directory.CreateDirectory(Configuration.PhoneSyncSynergyFolder);
             Directory.CreateDirectory(Configuration.PhoneSyncSynergyArchivedFolder);
-            Directory.CreateDirectory(Configuration.TabletSyncSynergyFolder);
-            Directory.CreateDirectory(Configuration.TabletSyncSynergyArchivedFolder);
+            //Directory.CreateDirectory(Configuration.TabletSyncSynergyFolder);
+            //Directory.CreateDirectory(Configuration.TabletSyncSynergyArchivedFolder);
             Directory.CreateDirectory(Configuration.MtpSynergySyncPath);
         }
 
@@ -115,6 +115,7 @@ namespace NineWorldsDeep.Core
             return path;
         }
 
+        [Obsolete("hard-coded entry for deactivated device")]
         public static string TabletSyncSynergyArchivedFolder
         {
             get
@@ -123,6 +124,7 @@ namespace NineWorldsDeep.Core
             }
         }
 
+        [Obsolete("hard-coded entry for deactivated device")]
         public static string TabletSyncSynergyFolder
         {
             get
@@ -166,11 +168,13 @@ namespace NineWorldsDeep.Core
             return PhoneSyncSynergyFolder + "\\" + listName + ".txt";
         }
 
+        [Obsolete("hard-coded entry for deactivated device")]
         public static string GetTabletSyncSynergyFilePath(string listName)
         {
             return TabletSyncSynergyFolder + "\\" + listName + ".txt";
         }
 
+        [Obsolete("hard-coded entry for deactivated device")]
         public static string GetTabletSyncSynergyArchiveFilePath(string listName)
         {
             return TabletSyncSynergyArchivedFolder + "\\" + listName + ".txt";

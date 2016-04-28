@@ -125,7 +125,7 @@ namespace NineWorldsDeep.Synergy
             foreach (ToDoList lst in db.GetLists(true))
             {
                 string phoneListPath = Configuration.GetPhoneSyncSynergyFilePath(lst.Name);
-                string tabletListPath = Configuration.GetTabletSyncSynergyFilePath(lst.Name);
+                string tabletListPath = Configuration.SyncFileSynergyPath("galaxy-a", lst.Name);
                 string logosListPath = Configuration.SyncFileSynergyPath("logos", lst.Name);
 
                 WriteListToPath(lst, phoneListPath, foundCount);
@@ -257,14 +257,14 @@ namespace NineWorldsDeep.Synergy
                 filePaths.AddRange(phoneFilePaths);
             }
 
-            if (Directory.Exists(Configuration.TabletSyncSynergyArchivedFolder))
-            {
-                List<string> tabletFilePaths =
-                    Directory.GetFiles(Configuration.TabletSyncSynergyArchivedFolder,
-                                       "*.txt", SearchOption.TopDirectoryOnly).ToList();
+            //if (Directory.Exists(Configuration.TabletSyncSynergyArchivedFolder))
+            //{
+            //    List<string> tabletFilePaths =
+            //        Directory.GetFiles(Configuration.TabletSyncSynergyArchivedFolder,
+            //                           "*.txt", SearchOption.TopDirectoryOnly).ToList();
 
-                filePaths.AddRange(tabletFilePaths);
-            }
+            //    filePaths.AddRange(tabletFilePaths);
+            //}
 
             return filePaths;
         }
@@ -432,10 +432,10 @@ namespace NineWorldsDeep.Synergy
                 filePaths.AddRange(phoneFilePaths);
             }
 
-            if (Directory.Exists(Configuration.TabletSyncSynergyFolder))
+            if (Directory.Exists(Configuration.SyncFolderSynergy("galaxy-a")))
             {
                 IEnumerable<string> tabletFilePaths =
-                    Directory.GetFiles(Configuration.TabletSyncSynergyFolder,
+                    Directory.GetFiles(Configuration.SyncFolderSynergy("galaxy-a"),
                                        "*.txt", SearchOption.TopDirectoryOnly);
 
                 filePaths.AddRange(tabletFilePaths);

@@ -34,7 +34,7 @@ namespace NineWorldsDeep.Synergy
             foreach (SynergyList lst in lists)
             {
                 string phoneListPath = Configuration.GetPhoneSyncSynergyFilePath(lst.Name);
-                string tabletListPath = Configuration.GetTabletSyncSynergyFilePath(lst.Name);
+                string tabletListPath = Configuration.SyncFileSynergyPath("galaxy-a", lst.Name);
                 string logosListPath = Configuration.SyncFileSynergyPath("logos", lst.Name);
 
                 WriteListToPath(lst, phoneListPath, ignoredCount);
@@ -113,10 +113,10 @@ namespace NineWorldsDeep.Synergy
                 filePaths.AddRange(phoneFilePaths);
             }
 
-            if (Directory.Exists(Configuration.TabletSyncSynergyFolder))
+            if (Directory.Exists(Configuration.SyncFolderSynergy("galaxy-a")))
             {
                 IEnumerable<string> tabletFilePaths =
-                    Directory.GetFiles(Configuration.TabletSyncSynergyFolder,
+                    Directory.GetFiles(Configuration.SyncFolderSynergy("galaxy-a"),
                                        "*.txt", SearchOption.TopDirectoryOnly);
 
                 filePaths.AddRange(tabletFilePaths);
@@ -152,13 +152,13 @@ namespace NineWorldsDeep.Synergy
                 filePaths.AddRange(phoneFilePaths);
             }
 
-            if (Directory.Exists(Configuration.TabletSyncSynergyArchivedFolder))
+            if (Directory.Exists(Configuration.SyncFolderSynergyArchive("galaxy-a")))
             {
-                List<string> tabletFilePaths =
-                    Directory.GetFiles(Configuration.TabletSyncSynergyArchivedFolder,
+                List<string> galaxyFilePaths =
+                    Directory.GetFiles(Configuration.SyncFolderSynergyArchive("galaxy-a"),
                                        "*.txt", SearchOption.TopDirectoryOnly).ToList();
 
-                filePaths.AddRange(tabletFilePaths);
+                filePaths.AddRange(galaxyFilePaths);
             }
             
             if (Directory.Exists(Configuration.SyncFolderSynergyArchive("logos")))
