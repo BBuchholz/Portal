@@ -41,6 +41,17 @@ namespace NineWorldsDeep.Warehouse
             }
         }
 
+        public string HostTags
+        {
+            get { return _hostTags; }
+
+            set
+            {
+                _hostTags = value;
+                OnPropertyChanged("HostTags");
+            }
+        }
+
         public string ExtHash
         {
             get { return _extHash; }
@@ -52,20 +63,15 @@ namespace NineWorldsDeep.Warehouse
             }
         }
 
-        public string ExtPath
+        public string HostHash
         {
-            get { return _extPath; }
+            get { return _hostHash; }
 
             set
             {
-                _extPath = value;
-                OnPropertyChanged("ExtPath");
+                _hostHash = value;
+                OnPropertyChanged("HostHash");
             }
-        }
-
-        public SyncDirection SyncDirection
-        {
-            get { return _syncDirection; }
         }
 
         public SyncAction SyncAction
@@ -79,25 +85,19 @@ namespace NineWorldsDeep.Warehouse
             }
         }
 
-        public string HostTags
+        public SyncDirection SyncDirection
         {
-            get { return _hostTags; }
-
-            set
-            {
-                _hostTags = value;
-                OnPropertyChanged("HostTags");
-            }
+            get { return _syncDirection; }
         }
 
-        public string HostHash
+        public string ExtPath
         {
-            get { return _hostHash; }
+            get { return _extPath; }
 
             set
             {
-                _hostHash = value;
-                OnPropertyChanged("HostHash");
+                _extPath = value;
+                OnPropertyChanged("ExtPath");
             }
         }
 
