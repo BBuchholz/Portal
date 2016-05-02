@@ -15,6 +15,24 @@ namespace NineWorldsDeep.Warehouse
         /// <param name="sp"></param>
         public static void ExportTagsForProfile(SyncProfile sp, string sha1Hash)
         {
+            ////load if exists, will just be empty otherwise
+            //Dictionary<string, string> hashToTags = LoadFromHashToTagsIndex(sp);
+
+            //hashToTags[sha1Hash] = FromHash(sp, SyncDirection.Export, sha1Hash);
+
+            //List<string> lst = hashToTags.Select(x => "sha1Hash={" + x.Key + "} tags={" + x.Value + "}").ToList();
+
+            //File.WriteAllLines(HashToTagsIndexPath(sp), lst);
+
+            //for now, supporting both formats (though one gets 
+            //lost on sync depending on the sequence, which is 
+            //why this new way is being phased in)
+            ExportTagsForProfileToPath(sp, sha1Hash, true);
+            ExportTagsForProfileToPath(sp, sha1Hash, false);
+        }
+
+        public static void ExportTagsForProfileToPath(SyncProfile sp, string sha1Hash, bool timeStampList)
+        {
             //load if exists, will just be empty otherwise
             Dictionary<string, string> hashToTags = LoadFromHashToTagsIndex(sp);
 
@@ -22,12 +40,19 @@ namespace NineWorldsDeep.Warehouse
 
             List<string> lst = hashToTags.Select(x => "sha1Hash={" + x.Key + "} tags={" + x.Value + "}").ToList();
 
-            File.WriteAllLines(HashToTagsIndexPath(sp), lst);
+            File.WriteAllLines(HashToTagsIndexPath(sp, timeStampList), lst);
         }
 
-        public static string HashToTagsIndexPath(SyncProfile sp)
+        public static string HashToTagsIndexPath(SyncProfile sp, bool timeStampList)
         {
-            return Configuration.SyncRootConfigFile(sp.Name, "HashToTagsIndex");
+            string name = "HashToTagsIndex";
+
+            if (timeStampList)
+            {
+                name = NwdUtils.GetTimeStamp_yyyyMMddHHmmss() + "-" + name;
+            }
+
+            return Configuration.SyncRootConfigFile(sp.Name, name);
         }
 
         public static Dictionary<string, string> LoadFromHashToTagsIndex(SyncProfile sp)
@@ -36,7 +61,7 @@ namespace NineWorldsDeep.Warehouse
             Parser.Parser p = new Parser.Parser();
 
             //use syncprofile to load an existing one if it is there
-            string exportedTagsIndexPath = HashToTagsIndexPath(sp);
+            string exportedTagsIndexPath = HashToTagsIndexPath(sp, false);
 
             if (File.Exists(exportedTagsIndexPath))
             {

@@ -46,6 +46,8 @@ namespace NineWorldsDeep.Synergy
                     "5/21/2016, when db tables related to the previous version " +
                     "will be dropped. You should be using SynergyV4 instead.";
 
+                //NB: when this goes, drop table junction_List_Item_Status (after searching for any remaining usages, of course)
+
                 Display.Message(deprecationMessage);
 
                 _menu = new MenuController();
