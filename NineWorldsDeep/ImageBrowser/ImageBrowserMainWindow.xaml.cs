@@ -79,18 +79,6 @@ namespace NineWorldsDeep.ImageBrowser
             tgrGrid.LoadFromFile(TagFilePath);
         }
 
-        private void BrowseButton_Click(object sender, RoutedEventArgs e)
-        {
-            FolderBrowserDialog dlg = new FolderBrowserDialog();
-            dlg.SelectedPath = currentImageFolder;
-
-            if (dlg.ShowDialog() == System.Windows.Forms.DialogResult.OK)
-            {
-                string selected = dlg.SelectedPath;
-                LoadFolder(lastLoadedFromFileInsteadOfDb, selected);
-            }
-        }
-
         private void Rotate0Button_Click(object sender, RoutedEventArgs e)
         {
             ImageControl.RenderTransform = new RotateTransform(0);
@@ -205,6 +193,30 @@ namespace NineWorldsDeep.ImageBrowser
             {
                 Display.Message("nothing selected");
             }
+        }
+        
+        private void BrowseButton_Click(object sender, RoutedEventArgs e)
+        {
+            FolderBrowserDialog dlg = new FolderBrowserDialog();
+            dlg.SelectedPath = currentImageFolder;
+
+            if (dlg.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+            {
+                string selected = dlg.SelectedPath;
+                LoadFolder(lastLoadedFromFileInsteadOfDb, selected);
+            }
+        }
+
+        private void AllButton_Click(object sender, RoutedEventArgs e)
+        {
+            LoadFolder(lastLoadedFromFileInsteadOfDb,
+                       Configuration.ImagesFolder);
+        }
+
+        private void LeastButton_Click(object sender, RoutedEventArgs e)
+        {
+            LoadFolder(lastLoadedFromFileInsteadOfDb,
+                GetFolderWithLeastNonZeroUntaggedCount());
         }
     }
 }
