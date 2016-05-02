@@ -5,8 +5,51 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:NineWorldsDeep.Synergy"
         mc:Ignorable="d"
-        Title="SynergyListManagementWindow" Height="300" Width="300">
+        Title="SynergyListManagementWindow" Height="600" Width="800">
     <Grid>
-        
+        <Grid.RowDefinitions>
+            <RowDefinition Height="40"/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+        <TextBlock Grid.Row="0"
+                   x:Name="tbDbName"
+                   Text="Database Name Here"
+                   TextAlignment="Center"
+                   VerticalAlignment="Center"/>
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="4*"/>
+                <ColumnDefinition/>
+                <ColumnDefinition Width="4*"/>
+            </Grid.ColumnDefinitions>
+            <ListView x:Name="lvActive"
+                      Grid.Column="0"/>
+            <StackPanel Orientation="Vertical"
+                        VerticalAlignment="Center"
+                        Grid.Column="1">
+                <Button Content="&lt;&lt;"
+                        Click="MoveAllToActive_Click"/>
+                <Button Content="&lt;"
+                        Click="MoveSelectedToActive_Click"/>
+                <Button Click="RefreshSqlite_Click">
+                    <TextBlock TextWrapping="Wrap"
+                               TextAlignment="Center"
+                               Text="Refresh"/>
+                </Button>
+                <Button x:Name="btnUpdateSqlite"
+                        Click="UpdateSqlite_Click"
+                        IsEnabled="False">
+                    <TextBlock TextWrapping="Wrap"
+                               TextAlignment="Center"
+                               Text="Update"/>
+                </Button>
+                <Button Content="&gt;"
+                        Click="MoveSelectedToInactive_Click"/>
+                <Button Content="&gt;&gt;"
+                        Click="MoveAllToInactive_Click"/>
+            </StackPanel>
+            <ListView x:Name="lvInactive"
+                      Grid.Column="2"/>
+        </Grid>
     </Grid>
 </Window>

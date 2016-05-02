@@ -11,6 +11,11 @@ namespace NineWorldsDeep.Synergy
     {
         public IEnumerable<SynergyList> GetActiveLists()
         {
+            return GetLists(true);
+        }
+
+        public IEnumerable<SynergyList> GetLists(bool active)
+        {
             Dictionary<string, SynergyList> lists =
                 new Dictionary<string, SynergyList>();
 
@@ -34,12 +39,14 @@ namespace NineWorldsDeep.Synergy
                                 "FROM List l " +
                                 "JOIN Fragment f ON l.ListId = f.ListId " +
                                 "JOIN Item i ON f.ItemId = i.ItemId " +
-                                "WHERE l.ListActive = 1 " +
+                                "WHERE l.ListActive = @active " +
                                 "AND (f.CompletedAt IS NULL OR " +
                                      "f.CompletedAt = '') " +
                                 "AND (f.ArchivedAt IS NULL OR " +
                                      "f.ArchivedAt = '')";
-                            
+
+                            cmd.Parameters.AddWithValue("@active", active);
+
                             using(var rdr = cmd.ExecuteReader())
                             {
                                 while (rdr.Read())
@@ -136,6 +143,54 @@ namespace NineWorldsDeep.Synergy
                 //lets just throw it for now, but put something here eventually
                 throw ex;
             }
+        }
+
+        public void UpdateActiveInactive(IEnumerable<SynergyList> setToActive, IEnumerable<SynergyList> setToInactive)
+        {
+            try
+            {
+                using (var conn =
+                    new SQLiteConnection(@"Data Source=" +
+                        Configuration.GetSqliteDbPath("nwd")))
+                {
+                    conn.Open();
+
+                    using (var cmd = new SQLiteCommand(conn))
+                    {
+                        using (var transaction = conn.BeginTransaction())
+                        {
+                            foreach (SynergyList sl in setToActive)
+                            {
+                                SetActive(sl.Name, true, cmd);
+                            }
+
+                            foreach (SynergyList sl in setToInactive)
+                            {
+                                SetActive(sl.Name, false, cmd);
+                            }
+
+                            transaction.Commit();
+                        }
+                    }
+
+                    conn.Close();
+                }
+            }
+            catch (Exception ex)
+            {
+                //lets just throw it for now, but put something here eventually
+                throw ex;
+            }
+        }
+
+        private void SetActive(string listName, bool active, SQLiteCommand cmd)
+        {
+            cmd.Parameters.Clear();
+            cmd.CommandText =
+                "UPDATE List SET ListActive = @active WHERE ListName = @listName";
+            cmd.Parameters.AddWithValue("@active", active);
+            cmd.Parameters.AddWithValue("@listName", listName);
+            cmd.ExecuteNonQuery();
         }
 
         private void UpsertFragment(int listId, int itemId, SynergyItem si, SQLiteCommand cmd)
