@@ -33,6 +33,8 @@ namespace NineWorldsDeep.ImageBrowser
             InitializeComponent();
             tgrGrid.SetFolderLoadStrategy(new LoadImagesStrategy());
             tgrGrid.AddSelectionChangedListener(new DisplayImageAction(ImageControl));
+            tgrGrid.AddSelectionChangedListener(
+                new FileElementTimestampExtractionAction(tgrGrid.GetTagMatrix(), tgrGrid, chkParseTimeStamps));
             //LoadFolder(lastLoadedFromFileInsteadOfDb, GetFolderWithLeastNonZeroUntaggedCount());
         }
 
@@ -95,13 +97,7 @@ namespace NineWorldsDeep.ImageBrowser
             //tgw.Show();
             Display.Message("not included in migration");
         }
-
-        private void MenuItemOriginalVersion_Click(object sender, RoutedEventArgs e)
-        {
-            MainWindow mw = new MainWindow();
-            mw.Show();
-        }
-
+        
         private void MenuItemSaveToXml_Click(object sender, RoutedEventArgs e)
         {
             tgrGrid.SaveToFile(TagFilePath);

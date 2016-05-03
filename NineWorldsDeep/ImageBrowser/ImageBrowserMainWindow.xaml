@@ -22,8 +22,9 @@
                           Click="MenuItemClearAll_Click"/>
             </MenuItem>
             <MenuItem Header="Options">
-                <MenuItem Header="Original Version"
-            		Click="MenuItemOriginalVersion_Click"/>
+                <MenuItem Header="Parse TimeStamps From FileNames"
+                          x:Name="chkParseTimeStamps"
+                          IsCheckable="True"/>
                 <MenuItem Header="Load From Smallest Folder"
             		Click="MenuItemLoadFromSmallest_Click"/>
             </MenuItem>

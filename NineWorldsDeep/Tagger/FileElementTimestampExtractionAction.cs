@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Controls;
 
 namespace NineWorldsDeep.Tagger
 {
@@ -11,6 +12,7 @@ namespace NineWorldsDeep.Tagger
     {
         private TagMatrix masterTagMatrix;
         private ITaggerGrid tgrGrid;
+        private MenuItem enabled;
 
         public FileElementTimestampExtractionAction(TagMatrix tm, ITaggerGrid tg)
         {
@@ -18,9 +20,17 @@ namespace NineWorldsDeep.Tagger
             tgrGrid = tg;
         }
 
+        public FileElementTimestampExtractionAction(TagMatrix tm, ITaggerGrid tg, MenuItem enabled)
+        {
+            masterTagMatrix = tm;
+            tgrGrid = tg;
+            this.enabled = enabled;
+        }
+
         public void PerformAction(FileElement fe)
         {
-            if (!masterTagMatrix.FileElementHasMetaTag(fe, "timestamp"))
+            if (enabled.IsCheckable && enabled.IsChecked && 
+                !masterTagMatrix.FileElementHasMetaTag(fe, "timestamp"))
             {
                 TimeStampExtractor tse = new TimeStampExtractor();
                 string timeStamp = null;

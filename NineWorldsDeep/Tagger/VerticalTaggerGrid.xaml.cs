@@ -26,8 +26,6 @@ namespace NineWorldsDeep.Tagger
         {
             InitializeComponent();
             tagFile = taggerConfigFolderPath + "\\fileTags.xml";
-            AddSelectionChangedListener(
-                new FileElementTimestampExtractionAction(tagMatrix, this));
         }
 
         private TagMatrix tagMatrix = new TagMatrix();
