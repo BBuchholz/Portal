@@ -214,9 +214,9 @@ namespace NineWorldsDeep.Synergy
                 "SET CompletedAt = @completedAt " +
                 "WHERE ListId = @listId " +
                 "AND ItemId = @itemId " +
-                "AND CompletedAt IS NOT @completedAt";
-                //"AND (CompletedAt IS NULL " +
-                //     "OR CompletedAt = '')";
+                "AND CompletedAt IS NOT @completedAt " +
+                "AND (CompletedAt IS NULL " +
+                     "OR CompletedAt = '') ";
 
             cmd.Parameters.AddWithValue("@completedAt", si.CompletedAt);
             cmd.Parameters.AddWithValue("@listId", listId);
@@ -230,9 +230,9 @@ namespace NineWorldsDeep.Synergy
                 "SET ArchivedAt = @archivedAt " +
                 "WHERE ListId = @listId " +
                 "AND ItemId = @itemId " +
-                "AND ArchivedAt IS NOT @archivedAt";
-            //"AND (ArchivedAt IS NULL " +
-            //     "OR ArchivedAt = '')";
+                "AND ArchivedAt IS NOT @archivedAt " +
+                "AND (ArchivedAt IS NULL " +
+                     "OR ArchivedAt = '') ";
 
             cmd.Parameters.AddWithValue("@archivedAt", si.ArchivedAt);
             cmd.Parameters.AddWithValue("@listId", listId);
