@@ -20,7 +20,7 @@ namespace NineWorldsDeep.Studio
 
             if (!Directory.Exists(folderToCheck))
             {
-                if (Prompt.Confirm("Create folder " + folderToCheck + "?"))
+                if (UI.Prompt.Confirm("Create folder " + folderToCheck + "?"))
                 {
                     Directory.CreateDirectory(folderToCheck);
                 }

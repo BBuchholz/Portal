@@ -177,40 +177,40 @@ namespace NineWorldsDeep.Synergy
             }
         }
 
-        public static bool ContainsFragment(this IEnumerable<Fragment> ie, Fragment f)
-        {
-            bool found = false;
+        //public static bool ContainsFragment(this IEnumerable<Fragment> ie, Fragment f)
+        //{
+        //    bool found = false;
 
-            foreach (Fragment frg in ie)
-            {
-                if (found == false &&
-                    f.FragmentValue.Equals(frg.FragmentValue,
-                        StringComparison.CurrentCultureIgnoreCase))
-                {
-                    found = true;
-                }
-            }
+        //    foreach (Fragment frg in ie)
+        //    {
+        //        if (found == false &&
+        //            f.FragmentValue.Equals(frg.FragmentValue,
+        //                StringComparison.CurrentCultureIgnoreCase))
+        //        {
+        //            found = true;
+        //        }
+        //    }
 
-            return found;
-        }
+        //    return found;
+        //}
 
-        public static void
-            AddWithMerge(this ICollection<Fragment> col, Fragment f)
-        {
-            if (!col.ContainsFragment(f))
-            {
-                col.Add(f);
-            }
-        }
+        //public static void
+        //    AddWithMerge(this ICollection<Fragment> col, Fragment f)
+        //{
+        //    if (!col.ContainsFragment(f))
+        //    {
+        //        col.Add(f);
+        //    }
+        //}
 
-        public static void
-            AddWithMerge(this ICollection<Fragment> col,
-                              IEnumerable<Fragment> fragments)
-        {
-            foreach (Fragment f in fragments)
-            {
-                col.AddWithMerge(f);
-            }
-        }
+        //public static void
+        //    AddWithMerge(this ICollection<Fragment> col,
+        //                      IEnumerable<Fragment> fragments)
+        //{
+        //    foreach (Fragment f in fragments)
+        //    {
+        //        col.AddWithMerge(f);
+        //    }
+        //}
     }
 }

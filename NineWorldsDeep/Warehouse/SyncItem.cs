@@ -12,8 +12,8 @@ namespace NineWorldsDeep.Warehouse
 
         private SyncMap _syncMap;
 
-        private string _extTags, _extHash, _extPath,
-                       _hostTags, _hostHash, _hostPath;
+        private string _extDisplayName, _extTags, _extHash, _extPath,
+                       _hostDisplayName, _hostTags, _hostHash, _hostPath;
 
         private bool _executed;
 
@@ -28,6 +28,28 @@ namespace NineWorldsDeep.Warehouse
             _syncAction = parent.DefaultSyncAction;
             _syncDirection = parent.SyncDirection;
             Executed = false;
+        }
+
+        public string ExtDisplayName
+        {
+            get { return _extDisplayName; }
+
+            set
+            {
+                _extDisplayName = value;
+                OnPropertyChanged("ExtDisplayName");
+            }
+        }
+
+        public string HostDisplayName
+        {
+            get { return _hostDisplayName; }
+
+            set
+            {
+                _hostDisplayName = value;
+                OnPropertyChanged("HostDisplayName");
+            }
         }
 
         public string ExtTags
@@ -291,6 +313,7 @@ namespace NineWorldsDeep.Warehouse
                             }
 
                             Tags.ExportTagsForProfile(_syncMap.Profile, HostHash);
+                            DisplayNames.ExportNamesForProfile(_syncMap.Profile, HostHash);
 
                             break;
 

@@ -99,7 +99,7 @@ namespace NineWorldsDeep.AudioBrowser
                 string msg = "There are pending changes " +
                     "not yet saved, are you sure you want to close?";
 
-                if (!Prompt.Confirm(msg, true))
+                if (!UI.Prompt.Confirm(msg, true))
                 {
                     e.Cancel = true;
                 }

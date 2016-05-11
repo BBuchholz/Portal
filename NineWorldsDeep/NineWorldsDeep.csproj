@@ -330,6 +330,7 @@
       <DependentUpon>FileElementBrowserWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="UI\Prompt.cs" />
+    <Compile Include="Warehouse\DisplayNames.cs" />
     <Compile Include="Warehouse\Extensions.cs" />
     <Compile Include="Warehouse\Hashes.cs" />
     <Compile Include="Warehouse\ObservableCollectionWithItemNotify.cs" />

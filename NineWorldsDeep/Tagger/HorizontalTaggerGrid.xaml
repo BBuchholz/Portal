@@ -6,6 +6,26 @@
              xmlns:local="clr-namespace:NineWorldsDeep.Tagger"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
+    <UserControl.Resources>
+        <Style x:Key="RoundButtonTemplate" TargetType="Button">
+            <Setter Property="Background" Value="White"/>
+            <Setter Property="Foreground" Value="Black" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border CornerRadius="12" 
+                                Background="{TemplateBinding Background}"
+                                BorderThickness="1">
+                            <ContentPresenter HorizontalAlignment="Center" 
+                                              VerticalAlignment="Center">
+
+                            </ContentPresenter>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </UserControl.Resources>
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="*"></RowDefinition>
@@ -72,6 +92,7 @@
             <Button Grid.Row="0"
                     Grid.Column="2"
                     Margin="10, 2" 
+                    Style="{StaticResource RoundButtonTemplate}"
                     Click="UpdateButton_Click">Update</Button>
             <TextBlock x:Name="tbStatus"
                        Grid.Row="2"

@@ -287,7 +287,7 @@ namespace NineWorldsDeep.Synergy
                     EnsureList(sl.Name).True(sl);
                 }
                 
-                statusBar.StatusBarText = "Active Synergy Files Imported.";
+                statusBar.StatusBarText = "Synergy Archive Files Imported.";
             }
             catch (Exception ex)
             {

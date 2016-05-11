@@ -146,10 +146,23 @@ namespace NineWorldsDeep.Warehouse
         private void ProcessActionDefault()
         {
             var sa = (SyncAction)cmbActionDefault.SelectedItem;
+            var objDirection = cmbDirection.SelectedItem;            
 
             foreach (var si in SyncItems)
             {
                 si.SyncAction = sa;
+
+                //by default, just copy all untagged imports
+                if (cmbDirection.SelectedItem != null)
+                {
+                    var sd = (SyncDirection)cmbDirection.SelectedItem;
+
+                    if (sd == SyncDirection.Import &&
+                        string.IsNullOrWhiteSpace(si.ExtTags))
+                    {
+                        si.SyncAction = SyncAction.Copy;
+                    }
+                }
             }
         }
 
@@ -189,12 +202,14 @@ namespace NineWorldsDeep.Warehouse
                         string hash = Hashes.SHA1(filePath);
                         string path = filePath;
                         string tags = Tags.FromHash(sp, sm.SyncDirection, hash);
+                        string displayName = DisplayNames.FromHash(sp, sm.SyncDirection, hash);
 
                         SyncItems.Add(new SyncItem(sm)
                         {
                             HostHash = hash,
                             HostPath = path,
-                            HostTags = tags
+                            HostTags = tags,
+                            HostDisplayName = displayName
                         });
                     }
                 }
@@ -219,12 +234,14 @@ namespace NineWorldsDeep.Warehouse
                         string hash = Hashes.SHA1(filePath);
                         string path = filePath;
                         string tags = Tags.FromHash(sp, sm.SyncDirection, hash);
+                        string displayName = DisplayNames.FromHash(sp, sm.SyncDirection, hash);
 
                         SyncItems.Add(new SyncItem(sm)
                         {
                             ExtHash = hash,
                             ExtPath = path,
-                            ExtTags = tags
+                            ExtTags = tags,
+                            ExtDisplayName = displayName
                         });
                     }
                 }
@@ -455,7 +472,7 @@ namespace NineWorldsDeep.Warehouse
         {
             SqliteDbAdapter db = new SqliteDbAdapter();
 
-            string name = Prompt.Input("Profile Name?");
+            string name = UI.Prompt.Input("Profile Name?");
 
             if (!string.IsNullOrWhiteSpace(name))
             {

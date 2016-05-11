@@ -228,7 +228,7 @@ namespace NineWorldsDeep.Warehouse
         {
             SyncMap sm = (SyncMap)dataGrid.SelectedItem;
 
-            if (sm != null && Prompt.Confirm("Are you sure you want to delete the selected SyncMap?", true))
+            if (sm != null && UI.Prompt.Confirm("Are you sure you want to delete the selected SyncMap?", true))
             {
                 SqliteDbAdapter db = new SqliteDbAdapter();
                 Display.Message(db.Delete(sm));

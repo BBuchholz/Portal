@@ -115,7 +115,7 @@ namespace NineWorldsDeep.Studio
 
         private void MenuItemCreate_Click(object sender, RoutedEventArgs e)
         {
-            string name = Prompt.Input("Name for new Audio Vignette?", TimeStamp.Now());
+            string name = UI.Prompt.Input("Name for new Audio Vignette?", TimeStamp.Now());
             if (!string.IsNullOrWhiteSpace(name))
             {
                 CreateAudioVignette(name);
