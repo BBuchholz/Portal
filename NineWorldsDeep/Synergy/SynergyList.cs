@@ -22,7 +22,7 @@ namespace NineWorldsDeep.Synergy
         {
             bool found = false;
 
-            foreach(SynergyItem item in _items)
+            foreach (SynergyItem item in _items)
             {
                 if(si.Item.Equals(item.Item, 
                     StringComparison.CurrentCultureIgnoreCase))
@@ -32,7 +32,9 @@ namespace NineWorldsDeep.Synergy
                 }
             }
 
-            if (!found)
+            if (!found && 
+                !string.IsNullOrWhiteSpace(si.Item) &&
+                !si.Fragment.Contains("item={}")) //HACK: trying to fix a bug causing "item={item={}}"
             {
                 _items.Add(si);
             }
