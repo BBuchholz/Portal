@@ -20,6 +20,7 @@ namespace NineWorldsDeep.Synergy
     /// <summary>
     /// Interaction logic for SynergyMainWindow.xaml
     /// </summary>
+    [Obsolete("dropping junction_List_Item_Status")]
     public partial class SynergyMainWindow : Window, INotifyPropertyChanged, IListMatrix
     {
 

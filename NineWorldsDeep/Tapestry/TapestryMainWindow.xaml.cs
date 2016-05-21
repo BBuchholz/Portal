@@ -66,12 +66,13 @@ namespace NineWorldsDeep.Tapestry
             wmw.Show();
         }
 
-        private void MenuItemNwdSynergy_Click(object sender, RoutedEventArgs e)
-        {
-            Synergy.SynergyMainWindow smw =
-                new Synergy.SynergyMainWindow();
-            smw.Show();
-        }
+        //[Obsolete("dropping junction_List_Item_Status")]
+        //private void MenuItemNwdSynergy_Click(object sender, RoutedEventArgs e)
+        //{
+        //    Synergy.SynergyMainWindow smw =
+        //        new Synergy.SynergyMainWindow();
+        //    smw.Show();
+        //}
 
         private void MenuItemNwdImageBrowser_Click(object sender, RoutedEventArgs e)
         {

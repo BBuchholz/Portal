@@ -7,6 +7,7 @@ using System.Linq;
 
 namespace NineWorldsDeep.Synergy
 {
+    [Obsolete("dropping junction_List_Item_Status")]
     class GauntletModelSqliteDbAdapter : IGauntletDbAdapter
     {
         public List<ToDoList> GetActiveListItems()
@@ -19,6 +20,7 @@ namespace NineWorldsDeep.Synergy
         /// </summary>
         /// <param name="active"></param>
         /// <returns></returns>
+        [Obsolete("dropping junction_List_Item_Status")]
         public List<ToDoList> GetLists(bool active)
         {
             Dictionary<string, Dictionary<int, ToDoItem>> listItems =
@@ -54,7 +56,7 @@ namespace NineWorldsDeep.Synergy
                                 "JOIN Status " +
                                 "ON junction_List_Item_Status.StatusId = Status.StatusId " +
                                 "WHERE List.ListActive = @active";
-
+                            
                             cmd.Parameters.AddWithValue("@active", active);
 
                             using (var rdr = cmd.ExecuteReader())
@@ -331,6 +333,7 @@ namespace NineWorldsDeep.Synergy
             }
         }
 
+        [Obsolete("dropping junction_List_Item_Status")]
         private void MarkStatus(int listId, int itemId,
             string statusValue, SQLiteCommand cmd)
         {
@@ -338,6 +341,7 @@ namespace NineWorldsDeep.Synergy
             string timeStamp = NwdUtils.GetTimeStamp_yyyyMMddHHmmss();
 
             cmd.Parameters.Clear();
+            
             cmd.CommandText =
                 "INSERT OR IGNORE INTO junction_List_Item_Status (ListId, " +
                                                                  "ItemId, " +
@@ -351,6 +355,7 @@ namespace NineWorldsDeep.Synergy
             cmd.ExecuteNonQuery();
         }
 
+        [Obsolete("dropping junction_List_Item_Status")]
         private ToDoItem EnsureListItem(int listId, int itemId, SQLiteCommand cmd)
         {
             //select value
@@ -386,6 +391,7 @@ namespace NineWorldsDeep.Synergy
 
             //select value
             cmd.Parameters.Clear(); //since we will be reusing command
+
             cmd.CommandText =
                 "SELECT List.ListId, Item.ItemId, ItemValue, StatusValue " +
                 "FROM List " +
