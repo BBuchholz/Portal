@@ -1,5 +1,7 @@
 # NineWorldsDeep
 
+Developers Note: "NineWorldsDeep" and "Gauntlet" are working development names, specifically tied to the organic growth of these projects. The current, though subject to change, working title on public release will be "messaround", reflecting the general tone of the ecosystem.
+
 NineWorldsDeep is a node based ecosystem created with the intent of practicing and exploring interconnected disciplines.
 
 It aims to achieve this through facilitating the storage and retrieval of "hyperlinkable", "taggable", "hashable" holonic fragments of creative and investigative works in progress.
