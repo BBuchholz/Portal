@@ -103,9 +103,13 @@ namespace NineWorldsDeep.Warehouse
                             string path = p.Extract("path", lineItem);
                             string hash = p.Extract("sha1Hash", lineItem);
 
-                            if (hash.Equals(sha1Hash, StringComparison.CurrentCultureIgnoreCase))
+                            if(!string.IsNullOrWhiteSpace(path) &&
+                                !string.IsNullOrWhiteSpace(hash))
                             {
-                                paths.Add(path);
+                                if (hash.Equals(sha1Hash, StringComparison.CurrentCultureIgnoreCase))
+                                {
+                                    paths.Add(path);
+                                }
                             }
                         }
 
