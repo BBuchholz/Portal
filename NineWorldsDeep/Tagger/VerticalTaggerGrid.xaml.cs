@@ -242,11 +242,16 @@ namespace NineWorldsDeep.Tagger
         private void lvFileElements_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             FileElement fe = (FileElement)lvFileElements.SelectedItem;
-
-            txtTags.Text = tagMatrix.GetTagString(fe);
-
+            
             if (fe != null)
             {
+                if (string.IsNullOrWhiteSpace(fe.TagString))
+                {
+                    fe.TagString = tagMatrix.GetTagString(fe.Path);
+                }
+
+                txtTags.Text = fe.TagString;
+
                 foreach (FileElementActionSubscriber feas in selectionChangedListeners)
                 {
                     feas.PerformAction(fe);
@@ -262,11 +267,13 @@ namespace NineWorldsDeep.Tagger
 
             foreach (string file in pathList)
             {
-                feLst.Add(new FileElement()
-                {
-                    Name = System.IO.Path.GetFileName(file),
-                    Path = file
-                });
+                //feLst.Add(new FileElement()
+                //{
+                //    Name = System.IO.Path.GetFileName(file),
+                //    Path = file
+                //});
+
+                feLst.Add(FileElement.FromPath(file, tagMatrix));
             }
 
             return feLst;

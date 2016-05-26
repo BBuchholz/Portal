@@ -158,6 +158,9 @@ namespace NineWorldsDeep.Tagger
 
                 //prune unused tags
                 PruneTagList();
+
+                //update file element
+                fe.TagString = tagString;
             }
         }
 
@@ -236,18 +239,18 @@ namespace NineWorldsDeep.Tagger
 
             return tags;
         }
+        
+        //public string GetTagString(FileElement fe)
+        //{
+        //    string tagString = "";
 
-        public string GetTagString(FileElement fe)
-        {
-            string tagString = "";
+        //    if (fe != null)
+        //    {
+        //        tagString = TagString.Parse(fileTagsMap[fe.Path]);
+        //    }
 
-            if (fe != null)
-            {
-                tagString = TagString.Parse(fileTagsMap[fe.Path]);
-            }
-
-            return tagString;
-        }
+        //    return tagString;
+        //}
 
         public string GetTagString(string filePath)
         {

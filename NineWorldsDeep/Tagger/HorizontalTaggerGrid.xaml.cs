@@ -202,10 +202,15 @@ namespace NineWorldsDeep.Tagger
         private void lvFileElements_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             FileElement fe = (FileElement)lvFileElements.SelectedItem;
-            
-            txtTags.Text = tagMatrix.GetTagString(fe);
 
-            if(fe != null)
+            if (string.IsNullOrWhiteSpace(fe.TagString))
+            {
+                fe.TagString = tagMatrix.GetTagString(fe.Path);
+            }
+
+            txtTags.Text = fe.TagString;
+
+            if (fe != null)
             {
                 foreach (FileElementActionSubscriber feas in selectionChangedListeners)
                 {

@@ -42,6 +42,10 @@
                             <TextBlock Text="Path: " />
                             <TextBlock Text="{Binding Path}" FontWeight="Bold" />
                         </WrapPanel>
+                        <WrapPanel>
+                            <TextBlock Text="TagString: " />
+                            <TextBlock Text="{Binding TagString}" FontWeight="Bold" />
+                        </WrapPanel>
                     </StackPanel>
                 </DataTemplate>
             </ListView.ItemTemplate>

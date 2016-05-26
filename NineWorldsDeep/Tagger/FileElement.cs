@@ -2,6 +2,31 @@
 {
     public class FileElement
     {
+        /// <summary>
+        /// will return a file element with tag string, 
+        /// path, and name populated from supplied
+        /// TagMatrix
+        /// </summary>
+        /// <param name="path"></param>
+        /// <param name="matrix"></param>
+        /// <returns></returns>
+        public static FileElement FromPath(string path, TagMatrix matrix)
+        {
+            return new FileElement
+            {
+                Path = path,
+                Name = System.IO.Path.GetFileName(path),
+                TagString = matrix.GetTagString(path)
+            };
+        }
+
+        /// <summary>
+        /// will return a file element with path and 
+        /// name populated, TagString will remain empty
+        /// </summary>
+        /// <param name="path"></param>
+        /// <param name="matrix"></param>
+        /// <returns></returns>
         public static FileElement FromPath(string path)
         {
             return new FileElement
@@ -11,8 +36,14 @@
             };
         }
 
+        public void PopulateTagString(TagMatrix tm)
+        {
+            TagString = tm.GetTagString(Path);
+        }
+
         public string Path { get; set; }
         public string Name { get; set; }
+        public string TagString { get; set; }
 
         public override bool Equals(object obj)
         {
