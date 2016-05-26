@@ -6,7 +6,9 @@
              xmlns:local="clr-namespace:NineWorldsDeep.Tagger"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
+    
     <UserControl.Resources>
+        
         <Style x:Key="RoundButtonTemplate" TargetType="Button">
             <Setter Property="Background" Value="White"/>
             <Setter Property="Foreground" Value="Black" />
@@ -25,16 +27,23 @@
                 </Setter.Value>
             </Setter>
         </Style>
+
+        <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
+        
     </UserControl.Resources>
     <Grid>
         <Grid.RowDefinitions>
+            <RowDefinition Height="100"/>
             <RowDefinition Height="*"></RowDefinition>
             <RowDefinition Height="100"></RowDefinition>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition></ColumnDefinition>
         </Grid.ColumnDefinitions>
-        <Grid>
+        <Grid Grid.Row="0">
+            <!--<CheckBox x:Name="chkShowPath" IsChecked="True"--> 
+        </Grid>
+        <Grid Grid.Row="1">
             <Grid.RowDefinitions>
                 <RowDefinition></RowDefinition>
             </Grid.RowDefinitions>
@@ -59,9 +68,13 @@
                                 <TextBlock Text="Name: " />
                                 <TextBlock Text="{Binding Name}" FontWeight="Bold" />
                             </WrapPanel>
-                            <WrapPanel>
+                            <WrapPanel x:Name="uiItemTemplatePathPanel">
                                 <TextBlock Text="Path: " />
                                 <TextBlock Text="{Binding Path}" FontWeight="Bold" />
+                            </WrapPanel>
+                            <WrapPanel>
+                                <TextBlock Text="TagString: " />
+                                <TextBlock Text="{Binding TagString}" FontWeight="Bold" />
                             </WrapPanel>
                         </StackPanel>
                     </DataTemplate>
@@ -73,7 +86,7 @@
                       SelectionChanged="lvTags_SelectionChanged">
             </ListView>
         </Grid>
-        <Grid Grid.Row="1">
+        <Grid Grid.Row="2">
             <Grid.RowDefinitions>
                 <RowDefinition></RowDefinition>
                 <RowDefinition></RowDefinition>

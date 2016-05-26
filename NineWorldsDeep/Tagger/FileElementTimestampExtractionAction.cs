@@ -29,7 +29,9 @@ namespace NineWorldsDeep.Tagger
 
         public void PerformAction(FileElement fe)
         {
-            if (enabled.IsCheckable && enabled.IsChecked && 
+            if (enabled != null && 
+                enabled.IsCheckable && 
+                enabled.IsChecked && 
                 !masterTagMatrix.FileElementHasMetaTag(fe, "timestamp"))
             {
                 TimeStampExtractor tse = new TimeStampExtractor();
