@@ -39,7 +39,7 @@ namespace NineWorldsDeep.Tagger
             else
             {
                 //default behavior, get all
-                files = Directory.GetFiles(folderPath);
+                files = Directory.GetFiles(folderPath, "*.*", SearchOption.AllDirectories);
             }
 
             foreach (string filePath in files)

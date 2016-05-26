@@ -18,7 +18,7 @@ namespace NineWorldsDeep.ImageBrowser
             //                s.ToLower().EndsWith(".png") ||
             //                s.ToLower().EndsWith(".tiff"));            
 
-            return iff.Filter(Directory.GetFiles(path, "*.*"));
+            return iff.Filter(Directory.GetFiles(path, "*.*", SearchOption.AllDirectories));
         }
 
     }
