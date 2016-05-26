@@ -33,15 +33,20 @@
     </UserControl.Resources>
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="100"/>
+            <RowDefinition Height="30"/>
             <RowDefinition Height="*"></RowDefinition>
             <RowDefinition Height="100"></RowDefinition>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition></ColumnDefinition>
         </Grid.ColumnDefinitions>
-        <Grid Grid.Row="0">
-            <!--<CheckBox x:Name="chkShowPath" IsChecked="True"--> 
+        <Grid Grid.Row="0"
+              HorizontalAlignment="Center"
+              VerticalAlignment="Center">
+            <StackPanel Orientation="Horizontal">
+                <CheckBox x:Name="chkShowPath" IsChecked="True" Margin="5">Show Path</CheckBox>
+                <CheckBox x:Name="chkShowLabels" IsChecked="True" Margin="5,5,5,0" Height="15" VerticalAlignment="Top">Show Labels</CheckBox>
+            </StackPanel>
         </Grid>
         <Grid Grid.Row="1">
             <Grid.RowDefinitions>
@@ -65,15 +70,24 @@
                     <DataTemplate>
                         <StackPanel Orientation="Vertical">
                             <WrapPanel>
-                                <TextBlock Text="Name: " />
+                                <TextBlock Text="Name: " Visibility="{Binding Source={x:Reference Name=chkShowLabels}, 
+                                                                              Path=IsChecked, 
+                                                                              Converter={StaticResource BooleanToVisibilityConverter}}" />
                                 <TextBlock Text="{Binding Name}" FontWeight="Bold" />
                             </WrapPanel>
-                            <WrapPanel x:Name="uiItemTemplatePathPanel">
-                                <TextBlock Text="Path: " />
+                            <WrapPanel Visibility="{Binding Source={x:Reference 
+                                                                Name=chkShowPath}, 
+                                                            Path=IsChecked, 
+                                                            Converter={StaticResource BooleanToVisibilityConverter}}">
+                                <TextBlock Text="Path: " Visibility="{Binding Source={x:Reference Name=chkShowLabels}, 
+                                                                              Path=IsChecked, 
+                                                                              Converter={StaticResource BooleanToVisibilityConverter}}" />
                                 <TextBlock Text="{Binding Path}" FontWeight="Bold" />
                             </WrapPanel>
                             <WrapPanel>
-                                <TextBlock Text="TagString: " />
+                                <TextBlock Text="TagString: " Visibility="{Binding Source={x:Reference Name=chkShowLabels}, 
+                                                                              Path=IsChecked, 
+                                                                              Converter={StaticResource BooleanToVisibilityConverter}}" />
                                 <TextBlock Text="{Binding TagString}" FontWeight="Bold" />
                             </WrapPanel>
                         </StackPanel>
