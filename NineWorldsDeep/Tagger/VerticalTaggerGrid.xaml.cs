@@ -94,6 +94,7 @@ namespace NineWorldsDeep.Tagger
             tbStatus.Foreground = b;
         }
 
+        //TODO: this should be moved to Configuration
         private string taggerConfigFolderPath = "C:\\NWD\\config\\tagger";
 
         public List<string> GetTagsForCurrentSelection()
@@ -282,11 +283,15 @@ namespace NineWorldsDeep.Tagger
         private void LoadFileElementList(IEnumerable<string> pathList)
         {
             lvFileElements.ItemsSource = ToFileElementList(pathList);
+            if(pathList.Count() > 0)
+            {
+                lvFileElements.SelectedIndex = 0;
+            }
         }
 
         private void PopulateTagListView()
         {
-            lvTags.ItemsSource = tagMatrix.GetTags();
+            lvTags.ItemsSource = tagMatrix.GetTags(txtFilter.Text);
         }
 
         public void LoadFromFileWithPrompt()
@@ -389,6 +394,11 @@ namespace NineWorldsDeep.Tagger
         public TagMatrix GetTagMatrix()
         {
             return tagMatrix;
+        }
+
+        private void txtFilter_KeyUp(object sender, KeyEventArgs e)
+        {
+            PopulateTagListView();
         }
     }
 }

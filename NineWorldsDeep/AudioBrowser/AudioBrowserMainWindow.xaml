@@ -46,7 +46,7 @@
                           Click="MenuItemOriginal_Click"/>
                 <MenuItem Header="Play On Selection Change"
                           IsCheckable="True"
-                          x:Name="chkPlayOnSelectionChange"/>
+                          x:Name="chkPlayOnSelectionChange"/>                
             </MenuItem>
             <MenuItem Header="Items">
                 <MenuItem Header="Copy Selected Item To VoiceMemo Staging"

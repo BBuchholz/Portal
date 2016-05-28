@@ -38,7 +38,7 @@ namespace NineWorldsDeep.AudioBrowser
             InitializeComponent();
             this.voiceMemoFolderPath = voiceMemoFolderPath;
             this.tagFilePath = tagFilePath;
-            tgrGrid.DoubleClickListener = new PlayAction();
+            tgrGrid.DoubleClickListener = new PlayAction(tgrGrid.StopAudioButton);
             tgrGrid.AddSelectionChangedListener(new FileElementTagExtractionAction(tgrGrid));
             tgrGrid.AddSelectionChangedListener(new ConditionalPlayAction(chkPlayOnSelectionChange));
             tgrGrid.SetStatusForegroundColor(Brushes.White);

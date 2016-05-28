@@ -8,21 +8,31 @@
              d:DesignHeight="600" d:DesignWidth="300">
     <Grid>
         <Grid.RowDefinitions>
+            <RowDefinition Height="40"></RowDefinition>
             <RowDefinition Height="*"></RowDefinition>
             <RowDefinition Height="*"></RowDefinition>
             <RowDefinition Height="50"></RowDefinition>
             <RowDefinition Height="50"></RowDefinition>
             <RowDefinition Height="50"></RowDefinition>
         </Grid.RowDefinitions>
+        
+        <TextBox Grid.Row="0"                
+                 x:Name="txtFilter"
+                 Margin="10 10 10 5"
+                 HorizontalContentAlignment="Center"
+                 VerticalContentAlignment="Center"
+                 KeyUp="txtFilter_KeyUp">
 
+        </TextBox>
+        
         <ListView x:Name="lvTags"
-                  Grid.Row="0"
+                  Grid.Row="1"
                   Margin="10" 
                   SelectionChanged="lvTags_SelectionChanged">
         </ListView>
 
         <ListView x:Name="lvFileElements"
-                  Grid.Row="1"
+                  Grid.Row="2"
                   Margin="10" 
                   SelectionChanged="lvFileElements_SelectionChanged">
             <ListView.Resources>
@@ -52,13 +62,13 @@
         </ListView>
 
         <TextBox x:Name="txtTags"
-                 Grid.Row="2"
+                 Grid.Row="3"
                  Margin="10, 2, 10, 4"></TextBox>
-        <Button Grid.Row="3"
+        <Button Grid.Row="4"
                 Margin="10, 2" 
                 Click="UpdateButton_Click">Update</Button>
 
-        <Grid Grid.Row="4">
+        <Grid Grid.Row="5">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition/>
             </Grid.ColumnDefinitions>

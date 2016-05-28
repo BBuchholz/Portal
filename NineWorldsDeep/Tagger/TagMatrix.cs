@@ -229,8 +229,14 @@ namespace NineWorldsDeep.Tagger
 
         public IEnumerable<string> GetTags()
         {
+            return GetTags("");
+        }
 
+        public IEnumerable<string> GetTags(string filter)
+        {
             List<string> tags = tagFilesMap.Keys.ToList<string>();
+
+            tags = tags.Where(tag => tag.ToLower().Contains(filter.ToLower())).ToList();
 
             tags.Sort();
 
