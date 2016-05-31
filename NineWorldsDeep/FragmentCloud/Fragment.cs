@@ -47,7 +47,6 @@ namespace NineWorldsDeep.FragmentCloud
             int shortNameLength = 15;
             string name = Converter.NwdUriNodeName(URI);
 
-            //HACK: to remove extension
             name = System.IO.Path.GetFileNameWithoutExtension(name);
 
             if (name.Length > shortNameLength)

@@ -40,6 +40,15 @@ namespace NineWorldsDeep.Synergy
         /// <param name="si"></param>
         public void True(SynergyItem si)
         {
+            if(!GauntletUtils.TrimCategory(Item).Equals(
+                GauntletUtils.TrimCategory(si.Item), 
+                StringComparison.CurrentCultureIgnoreCase))
+            {
+                throw new ArgumentException(
+                    "SyncItem.True() failed for items: [" + 
+                    Item + "] and [" + si.Item + "]");
+            }
+
             if (string.IsNullOrWhiteSpace(ArchivedAt))
             {
                 ArchivedAt = si.ArchivedAt;

@@ -267,6 +267,44 @@ namespace NineWorldsDeep.Synergy
 
                 foreach (var sl in _sh.Lists)
                 {
+                    //TODO: needs testing
+                    //make sure categorized items make it
+                    //back into their source lists
+
+                    var catItems = 
+                        new Dictionary<SynergyItem, string>();
+                    var toBeRemoved =
+                        new List<SynergyItem>();
+
+                    foreach(var si in sl.Items)
+                    {
+                        if (GauntletUtils.IsCategorizedItem(si.Item))
+                        {
+                            string cat = 
+                                GauntletUtils.ParseCategory(si.Item);
+                            string trimmedItem = 
+                                GauntletUtils.TrimCategory(si.Item);
+
+                            SynergyItem newItem =
+                                new SynergyItem();
+                            newItem.Item = trimmedItem;
+                            newItem.True(si);
+
+                            catItems.Add(newItem, cat);
+                            toBeRemoved.Add(si);
+                        }
+                    }
+
+                    foreach(SynergyItem si in catItems.Keys)
+                    {
+                        EnsureList(catItems[si]).AddItem(si);
+                    }
+
+                    foreach(SynergyItem si in toBeRemoved)
+                    {
+                        sl.RemoveItem(si);
+                    }
+
                     EnsureList(sl.Name).True(sl);
                 }
             }

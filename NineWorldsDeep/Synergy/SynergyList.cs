@@ -48,6 +48,11 @@ namespace NineWorldsDeep.Synergy
             }
         }
 
+        public void RemoveItem(SynergyItem si)
+        {
+            _items.Remove(si);
+        }
+
         public void True(SynergyList sl)
         {
             foreach(SynergyItem si in sl.Items)

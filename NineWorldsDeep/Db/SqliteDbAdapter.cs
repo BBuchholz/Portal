@@ -21,6 +21,9 @@ namespace NineWorldsDeep.Db
         private Dictionary<string, int> pathIds =
             new Dictionary<string, int>();
 
+        //TODO: consolidate all db logic from all of NWD into one class with a private constructor (singleton)
+        //TODO: in the db singleton, enable the foreign key pragma when opening sqlite db
+
         public SqliteDbAdapter()
         {
         }
