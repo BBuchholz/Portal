@@ -33,6 +33,7 @@ namespace NineWorldsDeep.Tapestry
             FragmentClickedEventArgs e)
         {
             txtUri.Text = e.Fragment.URI;
+            txtUri.Focus();
             ResolveContentControlForUri(e.Fragment);
         }
 
