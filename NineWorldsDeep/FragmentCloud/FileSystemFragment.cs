@@ -1,4 +1,5 @@
-﻿using System;
+﻿using NineWorldsDeep.UI;
+using System;
 using System.Collections.Generic;
 using System.IO;
 
@@ -17,6 +18,8 @@ namespace NineWorldsDeep.FragmentCloud
                 InitializeChildren();
             }
         }
+
+        public string Path { get; private set; }
 
         protected override IEnumerable<Fragment> GetChildren()
         {
@@ -115,8 +118,6 @@ namespace NineWorldsDeep.FragmentCloud
             return mimeType;
         }
 
-        public string Path { get; private set; }
-
         private void InitializeChildren()
         {
             ClearChildren();
@@ -157,6 +158,35 @@ namespace NineWorldsDeep.FragmentCloud
             Fragment f = new FileSystemFragment(frgUri, true);
 
             return f;
+        }
+
+        public override void PerformSelectionAction()
+        {
+            if (Directory.Exists(Path))
+            {
+                //do nothing
+            }
+
+            if (File.Exists(Path))
+            {
+                Display.Message("open containing folder in explorer goes here");
+            }
+        }
+
+        public override string GetShortName()
+        {
+            int shortNameLength = 15;
+            string name = Converter.NwdUriNodeName(URI);
+
+            name = System.IO.Path.GetFileNameWithoutExtension(name);
+
+            if (name.Length > shortNameLength)
+            {
+                name = name.Substring(0, shortNameLength - 6) + "..." +
+                    name.Substring(name.Length - 3, 3);
+            }
+
+            return name;
         }
     }
 }

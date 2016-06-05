@@ -32,6 +32,8 @@
                           Click="MenuItemNwdImageBrowser_Click"/>
                 <MenuItem Header="NwdAudioBrowser"
                           Click="MenuItemNwdAudioBrowser_Click"/>
+                <MenuItem Header="Tapestry Node Browser"
+                          Click="MenuItemTapestryNodeBrowser_Click"/>
             </MenuItem>
 
         </Menu>

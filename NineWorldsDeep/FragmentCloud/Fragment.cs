@@ -1,9 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace NineWorldsDeep.FragmentCloud
 {
-    public class Fragment
+    public abstract class Fragment
     {
         private Dictionary<string, Fragment> uriToChildFragments =
            new Dictionary<string, Fragment>();
@@ -32,6 +33,8 @@ namespace NineWorldsDeep.FragmentCloud
             }
         }
 
+        public abstract void PerformSelectionAction();
+
         public virtual string ToMultiLineDetail()
         {
             string detail = Converter.NwdUriNodeName(URI) +
@@ -42,21 +45,21 @@ namespace NineWorldsDeep.FragmentCloud
             return detail;
         }
 
-        public virtual string GetShortName()
-        {
-            int shortNameLength = 15;
-            string name = Converter.NwdUriNodeName(URI);
+        public abstract string GetShortName();
+        //{
+        //    int shortNameLength = 15;
+        //    string name = Converter.NwdUriNodeName(URI);
 
-            name = System.IO.Path.GetFileNameWithoutExtension(name);
+        //    name = System.IO.Path.GetFileNameWithoutExtension(name);
 
-            if (name.Length > shortNameLength)
-            {
-                name = name.Substring(0, shortNameLength - 6) + "..." +
-                    name.Substring(name.Length - 3, 3);
-            }
+        //    if (name.Length > shortNameLength)
+        //    {
+        //        name = name.Substring(0, shortNameLength - 6) + "..." +
+        //            name.Substring(name.Length - 3, 3);
+        //    }
 
-            return name;
-        }
+        //    return name;
+        //}
 
         public void ClearChildren()
         {

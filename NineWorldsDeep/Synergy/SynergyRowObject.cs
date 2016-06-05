@@ -2,7 +2,7 @@
 using System.ComponentModel;
 
 namespace NineWorldsDeep.Synergy
-{
+{//TODO: LICENSE NOTES
     //from: http://stackoverflow.com/questions/1315621/implementing-inotifypropertychanged-does-a-better-way-exist
     internal class SynergyRowObject : INotifyPropertyChanged
     {

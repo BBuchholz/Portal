@@ -9,7 +9,7 @@ namespace NineWorldsDeep.Warehouse
         public static string SHA1(string filePath)
         {
             if (File.Exists(filePath))
-            {
+            {//TODO: LICENSE NOTES
                 //from: http://stackoverflow.com/questions/1993903/how-do-i-do-a-sha1-file-checksum-in-c
                 using (FileStream fs = new FileStream(filePath, FileMode.Open))
                 using (BufferedStream bs = new BufferedStream(fs))

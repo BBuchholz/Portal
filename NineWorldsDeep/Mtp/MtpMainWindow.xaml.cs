@@ -23,7 +23,7 @@ namespace NineWorldsDeep.Mtp
         private Stack<NwdUriProcessEntry> unprocessedSynergyFiles;
         private Stack<NwdUriProcessEntry> unprocessedHashedMedia;
         private NwdPortableDeviceFile toBeRemoved;
-
+        //TODO: LICENSE NOTES
         //marshalling fix: http://www.andrewt.com/blog/post/2013/06/15/Fun-with-MTP-in-C.aspx
 
         public MtpMainWindow()
@@ -95,7 +95,7 @@ namespace NineWorldsDeep.Mtp
         }
 
         private void MenuItemEnumerateDevices_Click(object sender, RoutedEventArgs e)
-        {
+        {//TODO: LICENSE NOTES
             //enumerating devices: https://cgeers.wordpress.com/2011/05/22/enumerating-windows-portable-devices/
             DisplayTextViewList();
 
@@ -164,7 +164,7 @@ namespace NineWorldsDeep.Mtp
 
 
         private void MenuItemEnumerateContent_Click(object sender, RoutedEventArgs e)
-        {
+        {//TODO: LICENSE NOTES
             //enumerating content: https://cgeers.wordpress.com/2011/06/05/wpd-enumerating-content/
             DisplayTextViewList();
 
@@ -227,7 +227,7 @@ namespace NineWorldsDeep.Mtp
         }
 
         private void MenuItemDeletingResources_Click(object sender, RoutedEventArgs e)
-        {
+        {//TODO: LICENSE NOTES
             //deleting resources: https://cgeers.wordpress.com/2012/04/15/wpd-deleting-resources/
             DisplayTextViewList();
 
@@ -236,7 +236,7 @@ namespace NineWorldsDeep.Mtp
         }
 
         private void MenuItemTransferringContent_Click(object sender, RoutedEventArgs e)
-        {
+        {//TODO: LICENSE NOTES
             //transferring content: https://cgeers.wordpress.com/2011/08/13/wpd-transferring-content/
             DisplayTextViewList();
 

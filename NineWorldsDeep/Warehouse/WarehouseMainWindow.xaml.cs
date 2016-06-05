@@ -104,10 +104,10 @@ namespace NineWorldsDeep.Warehouse
             //TODO: filtering, grouping, and sorting
             //some reference for datagrid grouping and sorting
             //https://msdn.microsoft.com/en-us/library/ff407126(v=vs.100).aspx
-
+            //TODO: LICENSE NOTES
             //TODO: images for "move", "move and stamp", and "copy"
             //http://stackoverflow.com/questions/14066601/displaying-images-based-on-column-value-in-wpf-datagrid
-
+            //TODO: LICENSE NOTES
         }
 
         private void MenuItemSyncMappingsWindow_Click(object sender, RoutedEventArgs e)

@@ -10,6 +10,7 @@ namespace NineWorldsDeep
     /// <summary>
     /// This class holds extension methods for string
     /// similarity ranking found at:
+    /// TODO: LICENSE NOTES
     /// http://stackoverflow.com/questions/653157/a-better-similarity-ranking-algorithm-for-variable-length-strings
     /// 
     /// code from the site is marked with the region
@@ -27,6 +28,7 @@ namespace NineWorldsDeep
         /// <returns></returns>
         public static string ReplaceFirst(this string text, string search, string replace)
         {
+            //TODO: LICENSE NOTES
             //Source: http://stackoverflow.com/questions/141045/how-do-i-replace-the-first-instance-of-a-string-in-net
 
             int pos = text.IndexOf(search);
@@ -79,7 +81,7 @@ namespace NineWorldsDeep
         /// based on character pair similarity
         /// </summary>
         public static double PercentMatchTo(this string str1, string str2)
-        {
+        {//TODO: LICENSE NOTES
             //Source: http://www.catalysoft.com/articles/StrikeAMatch.html
 
             List<string> pairs1 = WordLetterPairs(str1.ToUpper());

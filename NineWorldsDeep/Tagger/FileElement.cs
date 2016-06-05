@@ -57,7 +57,7 @@
         }
 
         public override int GetHashCode()
-        {
+        {//TODO: LICENSE NOTES
             //from: http://stackoverflow.com/questions/1008633/gethashcode-problem-using-xor
 
             int hash = 23;

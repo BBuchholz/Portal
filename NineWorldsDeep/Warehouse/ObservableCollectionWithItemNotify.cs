@@ -4,7 +4,7 @@ using System.Collections.Specialized;
 using System.ComponentModel;
 
 namespace NineWorldsDeep.Warehouse
-{
+{//TODO: LICENSE NOTES
     //from: http://stackoverflow.com/questions/901921/observablecollection-and-item-propertychanged
     public class ObservableCollectionWithItemNotify<T> : ObservableCollection<T> where T : INotifyPropertyChanged
     {

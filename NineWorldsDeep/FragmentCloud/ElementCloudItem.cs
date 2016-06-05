@@ -7,6 +7,7 @@ using System.Windows.Media.Media3D;
 namespace NineWorldsDeep.FragmentCloud
 {
     // This code is from, with only minor adaptations (comments and variable names):
+    //TODO: LICENSE NOTES
     // http://www.codeproject.com/Articles/191026/WPF-Elements-Cloud
     // license at: http://www.codeproject.com/info/cpol10.aspx
 
@@ -18,6 +19,7 @@ namespace NineWorldsDeep.FragmentCloud
     // this link:
     // http://stackoverflow.com/questions/7437004/how-to-make-a-user-control-property-of-type-collectionmyclass-editable-in-form
     // maybe able to solve the issue where the tutorial says:
+    //TODO: LICENSE NOTES
     //
     //   "...ElementCloud extends Grid but not UserControl. You should 
     //       not use UserControl class if you want to make a control 

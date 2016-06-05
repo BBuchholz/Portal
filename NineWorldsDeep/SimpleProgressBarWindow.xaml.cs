@@ -19,7 +19,7 @@ namespace NineWorldsDeep
     /// Interaction logic for SimpleProgressBarWindow.xaml
     /// </summary>
     public partial class SimpleProgressBarWindow : Window
-    {
+    {//TODO: LICENSE NOTES
         //adapted from: http://stackoverflow.com/questions/19334583/how-to-correctly-implement-a-backgroundworker-with-progressbar-updates
 
         private BackgroundWorker backgroundWorker = new BackgroundWorker();

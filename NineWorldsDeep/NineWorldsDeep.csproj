@@ -27,7 +27,7 @@
     <UpdatePeriodically>false</UpdatePeriodically>
     <UpdateRequired>false</UpdateRequired>
     <MapFileExtensions>true</MapFileExtensions>
-    <ApplicationRevision>28</ApplicationRevision>
+    <ApplicationRevision>29</ApplicationRevision>
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <PublishWizardCompleted>true</PublishWizardCompleted>
@@ -142,6 +142,7 @@
     <Compile Include="DemoController.cs" />
     <Compile Include="ExtensionsFragment.cs" />
     <Compile Include="Deprecated\Fragment.cs" />
+    <Compile Include="FragmentCloud\AudioBrowserFragment.cs" />
     <Compile Include="FragmentCloud\Converter.cs" />
     <Compile Include="FragmentCloud\ElementCloud.cs" />
     <Compile Include="FragmentCloud\ElementCloudItem.cs" />
@@ -158,9 +159,16 @@
     <Compile Include="FragmentCloud\FragmentNodeDisplay.xaml.cs">
       <DependentUpon>FragmentNodeDisplay.xaml</DependentUpon>
     </Compile>
+    <Compile Include="FragmentCloud\HierophantFragment.cs" />
+    <Compile Include="FragmentCloud\ImageBrowserFragment.cs" />
+    <Compile Include="FragmentCloud\MtpFragment.cs" />
     <Compile Include="FragmentCloud\NwdUriResolver.cs" />
+    <Compile Include="FragmentCloud\GardenFragment.cs" />
     <Compile Include="FragmentCloud\RootFragment.cs" />
     <Compile Include="FragmentCloud\RotationType.cs" />
+    <Compile Include="FragmentCloud\StudioFragment.cs" />
+    <Compile Include="FragmentCloud\SynergyFragment.cs" />
+    <Compile Include="FragmentCloud\WareHouseFragment.cs" />
     <Compile Include="FragmentMenuController.cs" />
     <Compile Include="FragmentMetaWindow.xaml.cs">
       <DependentUpon>FragmentMetaWindow.xaml</DependentUpon>
@@ -317,6 +325,9 @@
     </Compile>
     <Compile Include="Tapestry\TapestryMainWindow.xaml.cs">
       <DependentUpon>TapestryMainWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Tapestry\TapestryNodeBrowserWindow.xaml.cs">
+      <DependentUpon>TapestryNodeBrowserWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="TimeStamp.cs" />
     <Compile Include="UI\Display.cs" />
@@ -478,6 +489,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Tapestry\TapestryMainWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Tapestry\TapestryNodeBrowserWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

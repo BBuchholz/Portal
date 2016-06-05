@@ -7,7 +7,7 @@ using System.IO;
 namespace NineWorldsDeep.Warehouse
 {
     public class SyncItem : INotifyPropertyChanged
-    {
+    {//TODO: LICENSE NOTES
         //OnPropertyChanged reference: https://msdn.microsoft.com/en-us/library/ms743695(v=vs.100).aspx
 
         private SyncMap _syncMap;

@@ -114,6 +114,7 @@ namespace NineWorldsDeep.Hierophant
 
         private Line CreateOffsetLine(Line originalLine, double offsetPixels)
         {
+            //TODO: LICENSE NOTES
             //from: http://stackoverflow.com/questions/2825412/draw-a-parallel-line
 
             double x1 = originalLine.X1, 
@@ -235,7 +236,7 @@ namespace NineWorldsDeep.Hierophant
             // this formula to determine which side of both lines
             // the click is on, if they're different sides, it's
             // between (otherwise they'd both be left or right)
-
+            //TODO: LICENSE NOTES
             // from: http://stackoverflow.com/questions/1560492/how-to-tell-whether-a-point-is-to-the-right-or-left-side-of-a-line
             // (its a downvoted answer, but only because it is a copy of the accepted 
             //  answer, I copied it because the explanation is more clear to me)

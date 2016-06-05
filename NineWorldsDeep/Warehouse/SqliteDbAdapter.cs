@@ -495,7 +495,7 @@ namespace NineWorldsDeep.Warehouse
         {
             /////////see link answers below accepted answer
             //http://stackoverflow.com/questions/15277373/sqlite-upsert-update-or-insert
-
+            //TODO: LICENSE NOTES
             // need to do an UPDATE or IGNORE followed by an INSERT or IGNORE, so the
             // update attempts first (to change default action id for example), and
             // if not found, gets ignored, so the insert would then fire.
@@ -930,7 +930,7 @@ namespace NineWorldsDeep.Warehouse
         {
             /////////see link answers below accepted answer
             //http://stackoverflow.com/questions/15277373/sqlite-upsert-update-or-insert
-
+            //TODO: LICENSE NOTES
             // need to do an UPDATE or IGNORE followed by an INSERT or IGNORE, so the
             // update attempts first (to change default action id for example), and
             // if not found, gets ignored, so the insert would then fire.

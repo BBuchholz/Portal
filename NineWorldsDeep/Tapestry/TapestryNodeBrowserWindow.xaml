@@ -1,0 +1,32 @@
+﻿<Window x:Class="NineWorldsDeep.Tapestry.TapestryNodeBrowserWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:NineWorldsDeep.Tapestry"
+        xmlns:frgCloud="clr-namespace:NineWorldsDeep.FragmentCloud"
+        mc:Ignorable="d"
+        Title="TapestryNodeBrowser" Height="700" Width="700"
+        KeyDown="Window_KeyDown">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="30"/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+        <TextBox x:Name="txtUri" 
+                 Grid.Row="0"
+                 Margin="5"
+                 KeyDown="txtUri_KeyDown"
+                 HorizontalContentAlignment="Center"
+                 Text="Enter NWD URI Here"/>
+        <ContentControl x:Name="ccBranch"
+                        Grid.Row="1"
+                        Visibility="Collapsed">
+            <frgCloud:FragmentCloud x:Name="fragmentCloud" />
+        </ContentControl>
+        <ContentControl x:Name="ccLeaf"
+                        Grid.Row="1">
+            <frgCloud:FragmentNodeDisplay x:Name="nodeDisplay" />
+        </ContentControl>
+    </Grid>
+</Window>

@@ -137,7 +137,7 @@ namespace NineWorldsDeep.Mtp
             {
                 return new NwdPortableDeviceFolder(objectId, name);
             }
-
+            //TODO: LICENSE NOTES
             //begin test edit
             //per: http://stackoverflow.com/questions/18059234/get-full-name-of-a-file-on-a-windows-portable-device
             property.fmtid = new Guid(0xEF6B490D, 0x5CD8, 0x437A,
@@ -212,7 +212,7 @@ namespace NineWorldsDeep.Mtp
                 targetStream.Close();
 
             }
-
+            //TODO: LICENSE NOTES
             //see comments on: https://cgeers.wordpress.com/2011/08/13/wpd-transferring-content/
             Marshal.ReleaseComObject(sourceStream);
             Marshal.ReleaseComObject(wpdStream);

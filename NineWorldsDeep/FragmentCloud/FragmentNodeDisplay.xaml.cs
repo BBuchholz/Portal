@@ -28,6 +28,8 @@ namespace NineWorldsDeep.FragmentCloud
         public void Display(Fragment frg)
         {
             txtMultiLine.Text = frg.ToMultiLineDetail();
+            
+            frg.PerformSelectionAction();
         }
     }
 }

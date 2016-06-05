@@ -67,7 +67,7 @@ namespace NineWorldsDeep.Tagger
 
         [Obsolete("use AddNewFileElementsToDb(List<FileElement>)")]
         public void AddFileElementsToDb(List<FileElement> feLst)
-        {
+        {//TODO: LICENSE NOTES
             //from http://dev.mysql.com/doc/connector-net/en/connector-net-programming-prepared-preparing.html
 
             MySqlConnection conn = new MySqlConnection(connectionString);
@@ -100,7 +100,7 @@ namespace NineWorldsDeep.Tagger
         }
 
         public List<FileElement> GetFileElementsFromDb()
-        {
+        {//TODO: LICENSE NOTES
             //working from http://stackoverflow.com/questions/11070434/using-prepared-statement-in-c-sharp-with-mysql
 
             List<FileElement> feList = new List<FileElement>();

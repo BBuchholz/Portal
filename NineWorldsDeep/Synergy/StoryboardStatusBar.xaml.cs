@@ -19,13 +19,13 @@ namespace NineWorldsDeep.Synergy
     /// Interaction logic for StoryboardStatusBar.xaml
     /// </summary>
     public partial class StoryboardStatusBar : UserControl
-    {
+    {//TODO: LICENSE NOTES
         //ADAPTED FROM: 
         //http://stackoverflow.com/questions/3970986/wpf-fade-out-status-bar-text-after-x-seconds
 
         //MODIFICATIONS MADE FROM SUGGESTION HERE: 
         //http://stackoverflow.com/questions/17955833/binding-usercontrol-to-its-own-dependencyproperty-doesnt-work
-
+        //TODO: LICENSE NOTES
         public StoryboardStatusBar()
         {
             InitializeComponent();

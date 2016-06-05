@@ -92,5 +92,10 @@ namespace NineWorldsDeep.Tapestry
         {
             new Synergy.SynergyV4MainWindow().Show();
         }
+
+        private void MenuItemTapestryNodeBrowser_Click(object sender, RoutedEventArgs e)
+        {
+            new Tapestry.TapestryNodeBrowserWindow().Show();
+        }
     }
 }
