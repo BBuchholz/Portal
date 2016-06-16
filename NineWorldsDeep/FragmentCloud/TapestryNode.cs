@@ -4,14 +4,14 @@ using System.Linq;
 
 namespace NineWorldsDeep.FragmentCloud
 {
-    public abstract class Fragment
+    public abstract class TapestryNode
     {
-        private Dictionary<string, Fragment> uriToChildFragments =
-           new Dictionary<string, Fragment>();
+        private Dictionary<string, TapestryNode> uriToChildFragments =
+           new Dictionary<string, TapestryNode>();
 
         public string URI { get; private set; }
 
-        public IEnumerable<Fragment> Children
+        public IEnumerable<TapestryNode> Children
         {
             get
             {
@@ -19,15 +19,15 @@ namespace NineWorldsDeep.FragmentCloud
             }
         }
 
-        protected virtual IEnumerable<Fragment> GetChildren()
+        protected virtual IEnumerable<TapestryNode> GetChildren()
         {
             return uriToChildFragments.Values;
         }
 
-        public Fragment(string uri, params Fragment[] children)
+        public TapestryNode(string uri, params TapestryNode[] children)
         {
             this.URI = Converter.SanitizeUri(uri);
-            foreach (Fragment frg in children)
+            foreach (TapestryNode frg in children)
             {
                 AddChild(frg);
             }
@@ -74,7 +74,7 @@ namespace NineWorldsDeep.FragmentCloud
         /// </summary>
         /// <param name="frg">the fragment to add as child to this fragment</param>
         /// <returns>true if Add was successful, false if not</returns>
-        public bool AddChild(Fragment frg)
+        public bool AddChild(TapestryNode frg)
         {
             if (!uriToChildFragments.ContainsKey(frg.URI))
             {
@@ -91,7 +91,7 @@ namespace NineWorldsDeep.FragmentCloud
         /// same URI as the given fragment
         /// </summary>
         /// <param name="frg">the fragment to add as child, overwriting URI key if necessary</param>
-        public void SetChild(Fragment frg)
+        public void SetChild(TapestryNode frg)
         {
             uriToChildFragments[frg.URI] = frg;
         }

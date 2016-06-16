@@ -25,7 +25,7 @@ namespace NineWorldsDeep.FragmentCloud
             InitializeComponent();
         }
 
-        public void Display(Fragment frg)
+        public void Display(TapestryNode frg)
         {
             txtMultiLine.Text = frg.ToMultiLineDetail();
             

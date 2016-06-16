@@ -20,22 +20,22 @@ namespace NineWorldsDeep.FragmentCloud
     /// </summary>
     public partial class FragmentCloud : UserControl
     {
-        Dictionary<Button, Fragment> mappings =
-            new Dictionary<Button, Fragment>();
+        Dictionary<Button, TapestryNode> mappings =
+            new Dictionary<Button, TapestryNode>();
 
         public FragmentCloud()
         {
             InitializeComponent();
         }
 
-        public void Display(Fragment frg)
+        public void Display(TapestryNode frg)
         {
             ClearMappings();
 
             List<ElementCloudItem> lst =
                 new List<ElementCloudItem>();
 
-            foreach (Fragment f in frg.Children)
+            foreach (TapestryNode f in frg.Children)
             {
                 lst.Add(ConvertToEci(f));
             }
@@ -58,7 +58,7 @@ namespace NineWorldsDeep.FragmentCloud
             elementCloud.Run();
         }
 
-        private ElementCloudItem ConvertToEci(Fragment f)
+        private ElementCloudItem ConvertToEci(TapestryNode f)
         {
             ElementCloudItem eci = new ElementCloudItem();
             eci.Height = 60;
@@ -82,7 +82,7 @@ namespace NineWorldsDeep.FragmentCloud
 
             if (btn != null && mappings.ContainsKey(btn))
             {
-                Fragment f = mappings[btn];
+                TapestryNode f = mappings[btn];
                 FragmentClickedEventArgs args =
                     new FragmentClickedEventArgs(f);
                 OnFragmentClicked(args);

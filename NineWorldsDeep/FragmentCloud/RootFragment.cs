@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace NineWorldsDeep.FragmentCloud
 {
-    class RootFragment : Fragment
+    class RootFragment : TapestryNode
     {
         public RootFragment() 
             : base("")

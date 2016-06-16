@@ -3,16 +3,16 @@ using System;
 
 namespace NineWorldsDeep.FragmentCloud
 {
-    public class StudioFragment : Fragment
+    public class StudioFragment : TapestryNode
     {
         public StudioFragment()
             : base("Studio")
         {
-            AddChild(new StudioMainFragment());
-            AddChild(new StudioProjectsFragment());
-            AddChild(new StudioLyricsFragment());
-            AddChild(new StudioScalesFragment());
-            AddChild(new StudioKeyboardFragment());
+            AddChild(new StudioMainNode());
+            AddChild(new StudioProjectsNode());
+            AddChild(new StudioLyricsNode());
+            AddChild(new StudioScalesNode());
+            AddChild(new StudioKeyboardNode());
         }
 
         public override string GetShortName()

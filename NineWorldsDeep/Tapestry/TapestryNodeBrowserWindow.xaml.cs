@@ -50,7 +50,7 @@ namespace NineWorldsDeep.Tapestry
             ResolveContentControlForUri(ur.Resolve(txtUri.Text));
         }
 
-        private void ResolveContentControlForUri(Fragment frg)
+        private void ResolveContentControlForUri(TapestryNode frg)
         {
             if (frg.Children.Count() > 0)
             {

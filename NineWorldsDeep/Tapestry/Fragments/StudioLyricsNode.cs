@@ -7,21 +7,21 @@ using NineWorldsDeep.FragmentCloud;
 
 namespace NineWorldsDeep.Tapestry.Fragments
 {
-    public class StudioScalesFragment : FragmentCloud.Fragment
+    public class StudioLyricsNode : FragmentCloud.TapestryNode
     {
-        public StudioScalesFragment()
-            : base("Studio/Scales")
+        public StudioLyricsNode()
+            : base("Studio/Lyrics")
         {
         }
 
         public override string GetShortName()
         {
-            return "Studio Scales";
+            return "Studio Lyrics";
         }
 
         public override void PerformSelectionAction()
         {
-            var window = new Studio.VisualScales();
+            var window = new Studio.LyricMatrixGridTestHarness();
             window.Show();
         }
     }

@@ -2,7 +2,7 @@
 
 namespace NineWorldsDeep.FragmentCloud
 {
-    internal class MtpFragment : Fragment
+    internal class MtpFragment : TapestryNode
     {
         public MtpFragment()
             : base("Mtp")

@@ -148,7 +148,7 @@
     <Compile Include="FragmentCloud\ElementCloudItem.cs" />
     <Compile Include="FragmentCloud\ElementCloudItemSize.cs" />
     <Compile Include="FragmentCloud\FileSystemFragment.cs" />
-    <Compile Include="FragmentCloud\Fragment.cs" />
+    <Compile Include="FragmentCloud\TapestryNode.cs" />
     <Compile Include="FragmentCloud\FragmentClickedEventArgs.cs" />
     <Compile Include="FragmentCloud\FragmentCloud.xaml.cs">
       <DependentUpon>FragmentCloud.xaml</DependentUpon>
@@ -324,11 +324,11 @@
     <Compile Include="Tagger\VerticalTaggerGrid.xaml.cs">
       <DependentUpon>VerticalTaggerGrid.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Tapestry\Fragments\StudioKeyboardFragment.cs" />
-    <Compile Include="Tapestry\Fragments\StudioLyricsFragment.cs" />
-    <Compile Include="Tapestry\Fragments\StudioMainFragment.cs" />
-    <Compile Include="Tapestry\Fragments\StudioProjectsFragment.cs" />
-    <Compile Include="Tapestry\Fragments\StudioScalesFragment.cs" />
+    <Compile Include="Tapestry\Fragments\StudioKeyboardNode.cs" />
+    <Compile Include="Tapestry\Fragments\StudioLyricsNode.cs" />
+    <Compile Include="Tapestry\Fragments\StudioMainNode.cs" />
+    <Compile Include="Tapestry\Fragments\StudioProjectsNode.cs" />
+    <Compile Include="Tapestry\Fragments\StudioScalesNode.cs" />
     <Compile Include="Tapestry\TapestryMainWindow.xaml.cs">
       <DependentUpon>TapestryMainWindow.xaml</DependentUpon>
     </Compile>

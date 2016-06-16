@@ -1,27 +1,27 @@
-﻿using NineWorldsDeep.FragmentCloud;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using NineWorldsDeep.FragmentCloud;
 
 namespace NineWorldsDeep.Tapestry.Fragments
 {
-    public class StudioMainFragment : Fragment
+    public class StudioScalesNode : FragmentCloud.TapestryNode
     {
-        public StudioMainFragment() 
-            : base("Studio/Main")
+        public StudioScalesNode()
+            : base("Studio/Scales")
         {
         }
 
         public override string GetShortName()
         {
-            return "Studio Main";
+            return "Studio Scales";
         }
 
         public override void PerformSelectionAction()
         {
-            var window = new Studio.StudioMainWindow();
+            var window = new Studio.VisualScales();
             window.Show();
         }
     }

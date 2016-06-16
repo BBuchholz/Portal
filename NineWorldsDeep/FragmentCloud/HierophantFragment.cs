@@ -2,7 +2,7 @@
 
 namespace NineWorldsDeep.FragmentCloud
 {
-    internal class HierophantFragment : Fragment
+    internal class HierophantFragment : TapestryNode
     {
         public HierophantFragment()
             : base("Hierophant")

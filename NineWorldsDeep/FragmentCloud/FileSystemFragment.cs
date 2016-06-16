@@ -5,11 +5,11 @@ using System.IO;
 
 namespace NineWorldsDeep.FragmentCloud
 {
-    public class FileSystemFragment : Fragment
+    public class FileSystemFragment : TapestryNode
     {
         private bool initialized = false;
 
-        public FileSystemFragment(string uri, bool lazyLoadChildren, params Fragment[] children)
+        public FileSystemFragment(string uri, bool lazyLoadChildren, params TapestryNode[] children)
             : base(uri, children)
         {
             Path = Converter.NwdUriToFileSystemPath(uri);
@@ -21,7 +21,7 @@ namespace NineWorldsDeep.FragmentCloud
 
         public string Path { get; private set; }
 
-        protected override IEnumerable<Fragment> GetChildren()
+        protected override IEnumerable<TapestryNode> GetChildren()
         {
             //if (base.GetChildren().Count() == 0)
             if (!initialized)
@@ -128,14 +128,14 @@ namespace NineWorldsDeep.FragmentCloud
                 //directories
                 foreach (string dirPath in Directory.EnumerateDirectories(Path))
                 {
-                    Fragment f = PathToFileSystemFragment(dirPath);
+                    TapestryNode f = PathToFileSystemFragment(dirPath);
                     AddChild(f);
                 }
 
                 //files
                 foreach (string filePath in Directory.EnumerateFiles(Path))
                 {
-                    Fragment f = PathToFileSystemFragment(filePath);
+                    TapestryNode f = PathToFileSystemFragment(filePath);
                     AddChild(f);
                 }
             }
@@ -143,7 +143,7 @@ namespace NineWorldsDeep.FragmentCloud
             initialized = true;
         }
 
-        private Fragment PathToFileSystemFragment(string path)
+        private TapestryNode PathToFileSystemFragment(string path)
         {
             string fileOrDirName = System.IO.Path.GetFileName(path);
             string frgUri = this.URI;
@@ -155,7 +155,7 @@ namespace NineWorldsDeep.FragmentCloud
 
             frgUri += fileOrDirName;
 
-            Fragment f = new FileSystemFragment(frgUri, true);
+            TapestryNode f = new FileSystemFragment(frgUri, true);
 
             return f;
         }

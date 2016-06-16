@@ -2,7 +2,7 @@
 
 namespace NineWorldsDeep.FragmentCloud
 {
-    public class GardenFragment : Fragment
+    public class GardenFragment : TapestryNode
     {
         public GardenFragment()
             : base("")

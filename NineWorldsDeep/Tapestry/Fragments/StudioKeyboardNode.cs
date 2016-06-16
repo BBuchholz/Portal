@@ -7,21 +7,21 @@ using NineWorldsDeep.FragmentCloud;
 
 namespace NineWorldsDeep.Tapestry.Fragments
 {
-    public class StudioLyricsFragment : FragmentCloud.Fragment
+    public class StudioKeyboardNode : FragmentCloud.TapestryNode
     {
-        public StudioLyricsFragment()
-            : base("Studio/Lyrics")
+        public StudioKeyboardNode() 
+            : base("Studio/Keyboard")
         {
         }
 
         public override string GetShortName()
         {
-            return "Studio Lyrics";
+            return "Studio Keyboard";
         }
 
         public override void PerformSelectionAction()
         {
-            var window = new Studio.LyricMatrixGridTestHarness();
+            var window = new Studio.VisualKeyboardTestHarness();
             window.Show();
         }
     }
