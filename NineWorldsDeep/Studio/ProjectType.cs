@@ -21,10 +21,21 @@ namespace NineWorldsDeep.Studio
             return displayName;
         }
 
+        public String DisplayName
+        {
+            get { return displayName; }
+        }
+
         public IEnumerable<string> GetProjectFiles()
         {
             return Directory.GetFiles(folderPath, "*.*", SearchOption.AllDirectories)
                 .Where(s => s.ToLower().EndsWith(projectFileExtension));
+        }
+
+        public List<ProjectListEntry> GetProjectNames()
+        {
+            return GetProjectFiles()
+                .Select(x => new ProjectListEntry(x)).ToList();
         }
 
         public abstract ProjectTypeInstance InstantiateForPath(String filePath);

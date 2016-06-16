@@ -1,4 +1,5 @@
-﻿using System;
+﻿using NineWorldsDeep.UI;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
@@ -62,5 +63,20 @@ namespace NineWorldsDeep.Studio
             }
         }
 
+        private void MenuItemExportProjectList_Click(object sender, RoutedEventArgs e)
+        {
+            ProjectType pt = (ProjectType)cmbFolders.SelectedItem;
+            if (pt != null)
+            {
+                String projectType = pt.DisplayName;
+                List<ProjectListEntry> projectNameList = pt.GetProjectNames();
+
+                Display.Grid(projectType + " projects:", projectNameList);
+            }
+            else
+            {
+                Display.Message("project type empty");
+            }
+        }
     }
 }

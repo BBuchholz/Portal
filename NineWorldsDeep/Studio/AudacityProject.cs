@@ -4,17 +4,16 @@ using System.IO;
 namespace NineWorldsDeep.Studio
 {
     internal class AudacityProject : ProjectTypeInstance
-    {
-        private string filePath;
-
+    {        
         public AudacityProject(string filePath)
+            : base(filePath)
         {
-            this.filePath = filePath;
+
         }
 
         public override void PreProcessing()
         {
-            string fName = Path.GetFileNameWithoutExtension(filePath);
+            string fName = Path.GetFileNameWithoutExtension(FilePath);
             string dir = Configuration.AudacityWavExportsFolder;
             string folderToCheck = Path.Combine(dir, fName);
 

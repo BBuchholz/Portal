@@ -2,11 +2,11 @@
 {
     internal class VisualStudioProject : ProjectTypeInstance
     {
-        private string filePath;
 
         public VisualStudioProject(string filePath)
+            : base(filePath)
         {
-            this.filePath = filePath;
+
         }
 
         public override void PreProcessing()

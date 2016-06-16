@@ -2,11 +2,10 @@
 {
     internal class CubaseProject : ProjectTypeInstance
     {
-        private string filePath;
 
         public CubaseProject(string filePath)
+            : base(filePath)
         {
-            this.filePath = filePath;
         }
 
         public override void PreProcessing()

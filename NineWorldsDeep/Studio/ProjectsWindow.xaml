@@ -5,10 +5,12 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:NineWorldsDeep.Studio"
         mc:Ignorable="d"
-        Title="ProjectsWindow" Height="300" Width="300">
+        Title="ProjectsWindow" Height="600" Width="800">
     <DockPanel LastChildFill="True">
         <Menu IsMainMenu="True" DockPanel.Dock="Top">
-            <MenuItem Header="File">
+            <MenuItem Header="Projects">
+                <MenuItem Header="Export Current To Text List"
+                          Click="MenuItemExportProjectList_Click"/>
             </MenuItem>
         </Menu>
         <Grid>

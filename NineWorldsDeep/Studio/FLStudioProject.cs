@@ -2,11 +2,9 @@
 {
     internal class FLStudioProject : ProjectTypeInstance
     {
-        private string filePath;
-
         public FLStudioProject(string filePath)
+            : base(filePath)
         {
-            this.filePath = filePath;
         }
 
         public override void PreProcessing()

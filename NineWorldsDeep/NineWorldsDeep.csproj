@@ -240,6 +240,7 @@
     </Compile>
     <Compile Include="Studio\Note.cs" />
     <Compile Include="Studio\PatternSignature.cs" />
+    <Compile Include="Studio\ProjectListEntry.cs" />
     <Compile Include="Studio\ProjectsWindow.xaml.cs">
       <DependentUpon>ProjectsWindow.xaml</DependentUpon>
     </Compile>
@@ -323,6 +324,11 @@
     <Compile Include="Tagger\VerticalTaggerGrid.xaml.cs">
       <DependentUpon>VerticalTaggerGrid.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Tapestry\Fragments\StudioKeyboardFragment.cs" />
+    <Compile Include="Tapestry\Fragments\StudioLyricsFragment.cs" />
+    <Compile Include="Tapestry\Fragments\StudioMainFragment.cs" />
+    <Compile Include="Tapestry\Fragments\StudioProjectsFragment.cs" />
+    <Compile Include="Tapestry\Fragments\StudioScalesFragment.cs" />
     <Compile Include="Tapestry\TapestryMainWindow.xaml.cs">
       <DependentUpon>TapestryMainWindow.xaml</DependentUpon>
     </Compile>
