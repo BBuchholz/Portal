@@ -151,7 +151,8 @@ namespace NineWorldsDeep.Warehouse
                     var sd = (SyncDirection)cmbDirection.SelectedItem;
 
                     if (sd == SyncDirection.Import &&
-                        string.IsNullOrWhiteSpace(si.ExtTags))
+                        string.IsNullOrWhiteSpace(si.ExtTags) &&
+                        chkOverrideDefaultAction.IsChecked != true)
                     {
                         si.SyncAction = SyncAction.Copy;
                     }
@@ -497,6 +498,11 @@ namespace NineWorldsDeep.Warehouse
         private void btnReload_Click(object sender, RoutedEventArgs e)
         {
             ProcessSyncDirection(); //will reload SyncItems
+        }
+
+        private void chkOverrideDefaultAction_checkToggled(object sender, RoutedEventArgs e)
+        {
+            ProcessActionDefault();
         }
     }
 }

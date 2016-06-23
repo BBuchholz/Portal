@@ -43,6 +43,7 @@
         <Grid>
             <Grid.RowDefinitions>
                 <RowDefinition Height="40"/>
+                <RowDefinition Height="20"/>
                 <RowDefinition/>
                 <RowDefinition Height="40"/>
             </Grid.RowDefinitions>
@@ -53,7 +54,7 @@
                     <ColumnDefinition/>
                     <ColumnDefinition Width="500"/>
                 </Grid.ColumnDefinitions>
-
+                
                 <Grid Grid.Column="0">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition/>
@@ -64,17 +65,17 @@
                     
                     <ComboBox Grid.Column="0"
                           x:Name="cmbSyncProfile"
-                          Margin="30 5"
+                          Margin="10 5"
                           SelectionChanged="cmbSyncProfile_SelectionChanged"/>
 
                     <ComboBox Grid.Column="1"
                           x:Name="cmbDirection"
-                          Margin="30 5"
+                          Margin="10 5"
                           SelectionChanged="cmbDirection_SelectionChanged"/>
 
                     <ComboBox Grid.Column="2"
                           x:Name="cmbActionDefault"
-                          Margin="30 5"
+                          Margin="10 5"
                           SelectionChanged="cmbActionDefault_SelectionChanged"/>
 
                     <Button x:Name="btnReload"
@@ -115,13 +116,31 @@
                             Content="Verify"
                             Visibility="Collapsed"
                             Click="btnVerify_Click"/>
-
                 </Grid>
-
             </Grid>
 
-            <!--grid for datagrid-->
             <Grid Grid.Row="1">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+
+                <Grid Grid.Column="0">
+
+                    <CheckBox Content="Override Default Action"
+                              x:Name="chkOverrideDefaultAction"
+                              HorizontalAlignment="Center"
+                              VerticalAlignment="Center"
+                              IsChecked="False"
+                              Unchecked="chkOverrideDefaultAction_checkToggled"
+                              Checked="chkOverrideDefaultAction_checkToggled"/>
+
+                </Grid>
+                
+            </Grid>
+            
+            <!--grid for datagrid-->
+            <Grid Grid.Row="2">
                 <DataGrid 
                     x:Name="dataGrid"
                     ItemsSource="{Binding Source={StaticResource cvsSyncItems}}"
@@ -129,7 +148,7 @@
             </Grid>
 
             <!--status grid-->
-            <Grid Grid.Row="2">
+            <Grid Grid.Row="3">
                 <Grid.ColumnDefinitions>
 
                 </Grid.ColumnDefinitions>
