@@ -40,7 +40,6 @@ namespace NineWorldsDeep.Warehouse
 
             try
             {
-                //LoadDefaultProfiles();
                 RefreshProfiles();
             }
             catch (Exception ex)
@@ -101,13 +100,7 @@ namespace NineWorldsDeep.Warehouse
 
         private void CollectionsViewSource_Filter(object sender, FilterEventArgs e)
         {
-            //TODO: filtering, grouping, and sorting
-            //some reference for datagrid grouping and sorting
-            //https://msdn.microsoft.com/en-us/library/ff407126(v=vs.100).aspx
-            //TODO: LICENSE NOTES
-            //TODO: images for "move", "move and stamp", and "copy"
-            //http://stackoverflow.com/questions/14066601/displaying-images-based-on-column-value-in-wpf-datagrid
-            //TODO: LICENSE NOTES
+            //not used currently
         }
 
         private void MenuItemSyncMappingsWindow_Click(object sender, RoutedEventArgs e)
@@ -376,9 +369,7 @@ namespace NineWorldsDeep.Warehouse
             }
 
             VerifyAllAndCleanup();
-
-            ProcessSyncDirection(); //will reload SyncItems
-
+            
             SetExecutionStatus(ExecStatus.Verified);
         }
 
@@ -501,6 +492,11 @@ namespace NineWorldsDeep.Warehouse
         private void cmbActionDefault_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             ProcessActionDefault();         
+        }
+
+        private void btnReload_Click(object sender, RoutedEventArgs e)
+        {
+            ProcessSyncDirection(); //will reload SyncItems
         }
     }
 }

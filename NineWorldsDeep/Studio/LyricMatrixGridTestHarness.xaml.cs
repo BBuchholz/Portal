@@ -23,8 +23,6 @@ namespace NineWorldsDeep.Studio
         public LyricMatrixGridTestHarness()
         {
             InitializeComponent();
-            lyricMatrixGrid.RegisterDisplay(tbSelectedLyric);
-            lyricMatrixGrid.RegisterEditor(txtLyricEdit);
         }
 
         private void MenuItemLoad_Click(object sender, RoutedEventArgs e)
@@ -37,18 +35,5 @@ namespace NineWorldsDeep.Studio
             lyricMatrixGrid.Save();
         }
 
-        private void MenuItemNewLyricBit_Click(object sender, RoutedEventArgs e)
-        {
-            lyricMatrixGrid.CreateNewLyricBit();
-        }
-
-        private void UpdateButton_Click(object sender, RoutedEventArgs e)
-        {
-            if (lyricMatrixGrid.Selected != null)
-            {
-                lyricMatrixGrid.Selected.Update(txtLyricEdit.Text);
-                lyricMatrixGrid.RefreshDisplay();
-            }
-        }
     }
 }

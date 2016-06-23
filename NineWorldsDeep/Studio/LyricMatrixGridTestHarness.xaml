@@ -16,11 +16,11 @@
                           Click="MenuItemSave_Click"/>
             </MenuItem>
             <MenuItem Header="Lyric Bit">
-                <MenuItem Header="New"
-                          Click="MenuItemNewLyricBit_Click"/>
+                <MenuItem Header="New"/>
             </MenuItem>
         </Menu>
-        <Grid>
+        <local:LyricMatrixGrid x:Name="lyricMatrixGrid"/>
+        <!--<Grid>
             <Grid.RowDefinitions>
                 <RowDefinition/>
                 <RowDefinition/>
@@ -52,6 +52,6 @@
                            HorizontalAlignment="Center"
                            VerticalAlignment="Center"/>
             </Grid>
-        </Grid>
+        </Grid>-->
     </DockPanel>
 </Window>

@@ -59,6 +59,7 @@
                         <ColumnDefinition/>
                         <ColumnDefinition/>
                         <ColumnDefinition/>
+                        <ColumnDefinition/>
                     </Grid.ColumnDefinitions>
                     
                     <ComboBox Grid.Column="0"
@@ -76,6 +77,11 @@
                           Margin="30 5"
                           SelectionChanged="cmbActionDefault_SelectionChanged"/>
 
+                    <Button x:Name="btnReload"
+                            Grid.Column="3"
+                            Margin="5"
+                            Content="Reload"
+                            Click="btnReload_Click"/>
                 </Grid>
                 
                 <!--Button Grid-->
