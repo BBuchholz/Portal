@@ -218,6 +218,10 @@
     <Compile Include="SimpleProgressBarWindow.xaml.cs">
       <DependentUpon>SimpleProgressBarWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Sqlite\Model\FileModelItem.cs" />
+    <Compile Include="Sqlite\Model\HashModelItem.cs" />
+    <Compile Include="Sqlite\Model\LocalConfigModelItem.cs" />
+    <Compile Include="Sqlite\NwdContract.cs" />
     <Compile Include="Studio\AbletonProject.cs" />
     <Compile Include="Studio\AbletonProjects.cs" />
     <Compile Include="Studio\AudacityProject.cs" />
@@ -373,7 +377,9 @@
     <Compile Include="WorkbenchWindowController.cs" />
     <Compile Include="Xml\Adapters\FragmentXmlAdapter.cs" />
     <Compile Include="Xml\IXmlTransportable.cs" />
+    <Compile Include="Xml\XmlExporter.cs" />
     <Compile Include="Xml\XmlHandler.cs" />
+    <Compile Include="Xml\XmlImporter.cs" />
     <Page Include="AudioBrowser\AudioBrowserMainWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -591,6 +597,7 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\System.Data.SQLite.Core.1.0.99.0\build\net451\System.Data.SQLite.Core.targets" Condition="Exists('..\packages\System.Data.SQLite.Core.1.0.99.0\build\net451\System.Data.SQLite.Core.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

@@ -123,6 +123,8 @@
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition/>
                     <ColumnDefinition/>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
                 </Grid.ColumnDefinitions>
 
                 <Grid Grid.Column="0">
@@ -136,7 +138,19 @@
                               Checked="chkOverrideDefaultAction_checkToggled"/>
 
                 </Grid>
-                
+
+                <Grid Grid.Column="1">
+
+                    <CheckBox Content="Load Tags From XML Instead Of KeyVal File"
+                              x:Name="chkTagsFromXmlNotKeyVal"
+                              HorizontalAlignment="Center"
+                              VerticalAlignment="Center"
+                              IsChecked="False"
+                              Unchecked="chkTagsFromXmlNotKeyVal_checkToggled"
+                              Checked="chkTagsFromXmlNotKeyVal_checkToggled"/>
+
+                </Grid>
+
             </Grid>
             
             <!--grid for datagrid-->

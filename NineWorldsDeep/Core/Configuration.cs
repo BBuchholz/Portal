@@ -5,6 +5,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using NineWorldsDeep.Parser;
+using System.Text.RegularExpressions;
+using NineWorldsDeep.Warehouse;
 
 namespace NineWorldsDeep.Core
 {
@@ -33,6 +35,43 @@ namespace NineWorldsDeep.Core
             return Path.Combine(SyncRootConfigFolder(profileName), fileName);
         }
 
+        public static string SyncRootNewXmlExportFile(SyncProfile sp)
+        {
+            string fileName = TimeStamp.Now() + "-nwd.xml";
+            return Path.Combine(SyncRootXmlFolder(sp.Name), fileName);
+        }
+
+        public static string SyncRootMostRecentXmlFile(string profileName)
+        {
+            String xmlDir = SyncRootXmlFolder(profileName);
+
+            List<string> validPaths = new List<string>();
+
+            Regex regex = new Regex("^\\d{14}-nwd.xml$");
+
+            foreach(String path in Directory.GetFiles(xmlDir, "*.xml", SearchOption.TopDirectoryOnly))
+            {
+                String fileName = Path.GetFileName(path);
+
+                Match m = regex.Match(fileName);
+
+                if (m.Success)
+                {
+                    validPaths.Add(path);
+                }
+            }
+
+            string mostRecentPath = null;
+
+            if(validPaths.Count > 0)
+            {
+                validPaths.Sort();
+                mostRecentPath = validPaths.Last();
+            }
+
+            return mostRecentPath;            
+        }
+
         public static string GetSqliteDbPath(string dbNameWithoutExtension)
         {
             string dbName = dbNameWithoutExtension + ".sqlite";
@@ -42,6 +81,11 @@ namespace NineWorldsDeep.Core
         public static string SyncRootConfigFolder(string name)
         {
             return Path.Combine(SyncRoot(name), "NWD/config");
+        }
+
+        public static string SyncRootXmlFolder(string name)
+        {
+            return Path.Combine(SyncRoot(name), "NWD/xml");
         }
 
         public static string SyncFolderMedia(string profileName, string mediaFolderName)
@@ -224,7 +268,7 @@ namespace NineWorldsDeep.Core
                 return @"C:\NWD-SYNC\phone\NWD\config\FileHashIndex.txt";
             }
         }
-
+        
         public static bool TestMode
         {
             get

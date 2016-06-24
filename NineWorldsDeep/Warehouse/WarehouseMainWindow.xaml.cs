@@ -1,4 +1,5 @@
-﻿using NineWorldsDeep.UI;
+﻿using NineWorldsDeep.Sqlite.Model;
+using NineWorldsDeep.UI;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -195,7 +196,7 @@ namespace NineWorldsDeep.Warehouse
                     {
                         string hash = Hashes.SHA1(filePath);
                         string path = filePath;
-                        string tags = Tags.FromHash(sp, sm.SyncDirection, hash);
+                        string tags = Tags.ExportForHash(hash);
                         string displayName = DisplayNames.FromHash(sp, sm.SyncDirection, hash);
 
                         SyncItems.Add(new SyncItem(sm)
@@ -216,6 +217,8 @@ namespace NineWorldsDeep.Warehouse
 
             string profileName = sp.Name;
 
+            bool tagsFromXmlNotKeyValFile = chkTagsFromXmlNotKeyVal.IsChecked.Value;
+
             foreach (SyncMap sm in sp.SyncMaps)
             {
                 if (sm.SyncDirection == SyncDirection.Import)
@@ -227,7 +230,7 @@ namespace NineWorldsDeep.Warehouse
                     {
                         string hash = Hashes.SHA1(filePath);
                         string path = filePath;
-                        string tags = Tags.FromHash(sp, sm.SyncDirection, hash);
+                        string tags = Tags.ImportForHash(sp, hash, tagsFromXmlNotKeyValFile);
                         string displayName = DisplayNames.FromHash(sp, sm.SyncDirection, hash);
 
                         SyncItems.Add(new SyncItem(sm)
@@ -312,6 +315,9 @@ namespace NineWorldsDeep.Warehouse
         private void btnExecute_Click(object sender, RoutedEventArgs e)
         {
             List<string> failingPaths = new List<string>();
+            List<FileModelItem> fileModelItems = new List<FileModelItem>();
+            //TODO: this is a hack; NEED DEVICE NAME AFTER DB REFACTOR (Device table should mimic Android)
+            string deviceName = "Desktop";
 
             foreach (SyncItem si in SyncItems)
             {
@@ -330,6 +336,31 @@ namespace NineWorldsDeep.Warehouse
                             break;
                     }
                 }
+                else
+                {
+                    if(si.SyncDirection == SyncDirection.Export)
+                    {
+                        FileModelItem fmi = new FileModelItem(deviceName, si.HostPath);
+                        fmi.GetHashes().Add(new HashModelItem(si.HostHash, TimeStamp.Now()));
+
+                        foreach(string tag in Tags.StringToList(si.HostTags))
+                        {
+                            fmi.GetTags().Add(tag);
+                        }
+
+                        fileModelItems.Add(fmi);
+                    }
+
+                }
+            }
+
+            SyncDirection currentDirection = (SyncDirection)cmbDirection.SelectedItem;
+            SyncProfile sp = (SyncProfile)cmbSyncProfile.SelectedItem;
+
+            if (sp != null &&
+                currentDirection == SyncDirection.Export)
+            {
+                Tags.ExportTagsForProfileToXml(deviceName, sp, fileModelItems);
             }
 
             if (failingPaths.Count == 0)
@@ -366,7 +397,7 @@ namespace NineWorldsDeep.Warehouse
         {
             foreach (SyncItem si in SyncItems)
             {
-                si.RefreshDestination(CurrentProfile);
+                si.RefreshDestination(CurrentProfile, chkTagsFromXmlNotKeyVal.IsChecked.Value);
             }
 
             VerifyAllAndCleanup();
@@ -503,6 +534,11 @@ namespace NineWorldsDeep.Warehouse
         private void chkOverrideDefaultAction_checkToggled(object sender, RoutedEventArgs e)
         {
             ProcessActionDefault();
+        }
+
+        private void chkTagsFromXmlNotKeyVal_checkToggled(object sender, RoutedEventArgs e)
+        {
+            ProcessSyncDirection();
         }
     }
 }

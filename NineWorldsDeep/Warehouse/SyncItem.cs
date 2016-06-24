@@ -243,21 +243,21 @@ namespace NineWorldsDeep.Warehouse
             Executed = false;
         }
 
-        public void RefreshDestination(SyncProfile sp)
+        public void RefreshDestination(SyncProfile sp, bool useXmlInsteadOfKeyVal)
         {
             switch (SyncDirection)
             {
                 case SyncDirection.Export:
 
                     ExtHash = Hashes.SHA1(ExtPath);
-                    ExtTags = Tags.FromHash(sp, SyncDirection, ExtHash);
+                    ExtTags = Tags.ExportForHash(ExtHash);
 
                     break;
 
                 case SyncDirection.Import:
 
                     HostHash = Hashes.SHA1(HostPath);
-                    HostTags = Tags.FromHash(sp, SyncDirection, HostHash);
+                    HostTags = Tags.ImportForHash(sp, HostHash, useXmlInsteadOfKeyVal);
 
                     break;
             }
