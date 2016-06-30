@@ -34,7 +34,7 @@
             else if (uri.StartsWith("Studio",
                 System.StringComparison.CurrentCultureIgnoreCase))
             {
-                return new StudioFragment();
+                return new StudioNode();
             }
             else if (uri.StartsWith("Hierophant",
                 System.StringComparison.CurrentCultureIgnoreCase))
@@ -63,7 +63,7 @@
             }
             else
             {
-                return new RootFragment();
+                return new RootNode();
             }
         }
     }

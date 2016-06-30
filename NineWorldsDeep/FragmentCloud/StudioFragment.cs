@@ -3,9 +3,9 @@ using System;
 
 namespace NineWorldsDeep.FragmentCloud
 {
-    public class StudioFragment : TapestryNode
+    public class StudioNode : TapestryNode
     {
-        public StudioFragment()
+        public StudioNode()
             : base("Studio")
         {
             AddChild(new StudioMainNode());
@@ -13,6 +13,7 @@ namespace NineWorldsDeep.FragmentCloud
             AddChild(new StudioLyricsNode());
             AddChild(new StudioScalesNode());
             AddChild(new StudioKeyboardNode());
+            AddChild(new ArpaBetNode());
         }
 
         public override string GetShortName()

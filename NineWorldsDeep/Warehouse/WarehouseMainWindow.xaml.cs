@@ -102,6 +102,8 @@ namespace NineWorldsDeep.Warehouse
         private void CollectionsViewSource_Filter(object sender, FilterEventArgs e)
         {
             //not used currently
+            //some reference for datagrid grouping and sorting
+            //https://msdn.microsoft.com/en-us/library/ff407126(v=vs.100).aspx
         }
 
         private void MenuItemSyncMappingsWindow_Click(object sender, RoutedEventArgs e)

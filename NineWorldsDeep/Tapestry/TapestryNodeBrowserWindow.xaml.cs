@@ -26,7 +26,7 @@ namespace NineWorldsDeep.Tapestry
         {
             InitializeComponent();
             fragmentCloud.FragmentClicked += Fragment_Clicked;
-            ResolveContentControlForUri(new RootFragment());
+            ResolveContentControlForUri(new RootNode());
         }
 
         private void Fragment_Clicked(object sender,

@@ -19,6 +19,11 @@ namespace NineWorldsDeep.Core
             EnsureDirectories();
         }
 
+        public static string GetArphaBetFilePath()
+        {
+            return @"C:\NWD\config\studio\arpaBet\cmudict.0.7a.txt";
+        }
+
         //TODO: hard-coded values need to be transformed into config files and defaults
 
         //public static string AbletonProjectsFolder { get { return @"C:\NWD-AUX\abletonProjects"; } }

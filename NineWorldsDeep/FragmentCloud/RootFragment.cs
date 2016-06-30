@@ -6,14 +6,14 @@ using System.Threading.Tasks;
 
 namespace NineWorldsDeep.FragmentCloud
 {
-    class RootFragment : TapestryNode
+    class RootNode : TapestryNode
     {
-        public RootFragment() 
+        public RootNode() 
             : base("")
         {
             AddChild(new GardenFragment());
             AddChild(new SynergyFragment());
-            AddChild(new StudioFragment());
+            AddChild(new StudioNode());
             AddChild(new HierophantFragment());
             AddChild(new WareHouseFragment());
             AddChild(new AudioBrowserFragment());
