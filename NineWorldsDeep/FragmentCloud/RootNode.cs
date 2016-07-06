@@ -1,4 +1,5 @@
-﻿using System;
+﻿using NineWorldsDeep.Tapestry.Fragments;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -19,6 +20,7 @@ namespace NineWorldsDeep.FragmentCloud
             AddChild(new AudioBrowserFragment());
             AddChild(new ImageBrowserFragment());
             AddChild(new MtpFragment());
+            AddChild(new GrowthAreasNode());
         }
 
         public override string GetShortName()

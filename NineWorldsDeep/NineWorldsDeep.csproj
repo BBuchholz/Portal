@@ -27,7 +27,7 @@
     <UpdatePeriodically>false</UpdatePeriodically>
     <UpdateRequired>false</UpdateRequired>
     <MapFileExtensions>true</MapFileExtensions>
-    <ApplicationRevision>32</ApplicationRevision>
+    <ApplicationRevision>33</ApplicationRevision>
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <PublishWizardCompleted>true</PublishWizardCompleted>
@@ -164,7 +164,7 @@
     <Compile Include="FragmentCloud\MtpFragment.cs" />
     <Compile Include="FragmentCloud\NwdUriResolver.cs" />
     <Compile Include="FragmentCloud\GardenFragment.cs" />
-    <Compile Include="FragmentCloud\RootFragment.cs" />
+    <Compile Include="FragmentCloud\RootNode.cs" />
     <Compile Include="FragmentCloud\RotationType.cs" />
     <Compile Include="FragmentCloud\StudioFragment.cs" />
     <Compile Include="FragmentCloud\SynergyFragment.cs" />
@@ -238,6 +238,9 @@
     <Compile Include="Studio\FileElement.cs" />
     <Compile Include="Studio\FLStudioProject.cs" />
     <Compile Include="Studio\FLStudioProjects.cs" />
+    <Compile Include="Studio\GrowthAreas\GrowthAreasWindow.xaml.cs">
+      <DependentUpon>GrowthAreasWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Studio\InvalidNoteParseException.cs" />
     <Compile Include="Studio\InvalidScaleParseException.cs" />
     <Compile Include="Studio\LyricBit.cs" />
@@ -334,6 +337,7 @@
     <Compile Include="Tagger\VerticalTaggerGrid.xaml.cs">
       <DependentUpon>VerticalTaggerGrid.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Tapestry\Fragments\GrowthAreasNode.cs" />
     <Compile Include="Tapestry\Fragments\StudioKeyboardNode.cs" />
     <Compile Include="Tapestry\Fragments\ArpaBetNode.cs" />
     <Compile Include="Tapestry\Fragments\StudioLyricsNode.cs" />
@@ -444,6 +448,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Studio\ArpaBetWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Studio\GrowthAreas\GrowthAreasWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
