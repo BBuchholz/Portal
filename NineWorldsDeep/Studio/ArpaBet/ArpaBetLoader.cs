@@ -46,7 +46,13 @@ namespace NineWorldsDeep.Studio.ArpaBet
                 arr[0].Split(new char[] { '(' }, 2)[0];
 
             abp.Word = parenRemoved;
-            abp.ArpaBetValue = arr[1];
+
+            string arpaBetValueWithStress = arr[1];
+
+            string arpaBetValueWithoutStress = 
+                Regex.Replace(arpaBetValueWithStress, @"[\d]", string.Empty); ;
+
+            abp.StrippedArpaBetValue = arpaBetValueWithoutStress;
 
             return abp;
         }

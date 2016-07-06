@@ -59,7 +59,7 @@ namespace NineWorldsDeep.Studio
                     mArpaBetLetters[letter].Add(abp);
 
                     //PHONEMES
-                    string phoneme = GetLastPhoneme(abp.ArpaBetValue);
+                    string phoneme = GetLastPhoneme(abp.StrippedArpaBetValue);
 
                     if (!mArpaBetPhonemes.ContainsKey(phoneme))
                     {
@@ -166,7 +166,7 @@ namespace NineWorldsDeep.Studio
 
             var filtered =
                 GetPhoneme(partialWord)
-                .Where(x => x.ArpaBetValue.EndsWith(partialWord));
+                .Where(x => x.StrippedArpaBetValue.EndsWith(partialWord));
 
             mDgdWordArpaBetValues.ItemsSource = filtered;
         }
@@ -178,7 +178,7 @@ namespace NineWorldsDeep.Studio
             if(abp != null)
             {
                 mTxtWord.Text = abp.Word;
-                mTxtArpaBetValue.Text = abp.ArpaBetValue;
+                mTxtArpaBetValue.Text = abp.StrippedArpaBetValue;
                 ProcessWord();
             }
         }

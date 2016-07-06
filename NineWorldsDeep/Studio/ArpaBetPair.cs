@@ -4,7 +4,7 @@ namespace NineWorldsDeep.Studio
 {
     public class ArpaBetPair : INotifyPropertyChanged
     {
-        private string mWord, mArpaBetValue;
+        private string mWord, mStrippedArpaBetValue;
 
         public event PropertyChangedEventHandler PropertyChanged;
 
@@ -19,14 +19,14 @@ namespace NineWorldsDeep.Studio
             }
         }
 
-        public string ArpaBetValue
+        public string StrippedArpaBetValue
         {
-            get { return mArpaBetValue; }
+            get { return mStrippedArpaBetValue; }
 
             set
             {
-                mArpaBetValue = value;
-                OnPropertyChanged("ArpaBetValue");
+                mStrippedArpaBetValue = value;
+                OnPropertyChanged("StrippedArpaBetValue");
             }
         }
 
