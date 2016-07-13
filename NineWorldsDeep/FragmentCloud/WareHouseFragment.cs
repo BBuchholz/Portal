@@ -2,7 +2,7 @@
 
 namespace NineWorldsDeep.FragmentCloud
 {
-    internal class WareHouseFragment : TapestryNode
+    internal class WareHouseFragment : Tapestry.TapestryNode
     {
         public WareHouseFragment()
             : base("WareHouse")

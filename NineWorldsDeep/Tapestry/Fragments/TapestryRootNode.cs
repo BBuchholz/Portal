@@ -1,16 +1,16 @@
-﻿using NineWorldsDeep.Tapestry.Fragments;
+﻿using NineWorldsDeep.FragmentCloud;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace NineWorldsDeep.FragmentCloud
+namespace NineWorldsDeep.Tapestry.Fragments
 {
-    class RootNode : Tapestry.TapestryNode
+    class TapestryRootNode : Tapestry.TapestryNode
     {
-        public RootNode() 
-            : base("")
+        public TapestryRootNode() 
+            : base("TapestryRoot")
         {
             AddChild(new GardenFragment());
             AddChild(new SynergyFragment());
@@ -21,12 +21,11 @@ namespace NineWorldsDeep.FragmentCloud
             AddChild(new ImageBrowserFragment());
             AddChild(new MtpFragment());
             AddChild(new GrowthAreasNode());
-            AddChild(new TapestrySplitViewNode());
         }
 
         public override string GetShortName()
         {
-            return "Root";
+            return "Tapestry Root";
         }
 
         public override void PerformSelectionAction()

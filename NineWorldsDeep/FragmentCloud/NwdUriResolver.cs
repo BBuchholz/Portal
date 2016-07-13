@@ -19,7 +19,7 @@
             return instance;
         }
 
-        public TapestryNode Resolve(string uri)
+        public Tapestry.TapestryNode Resolve(string uri)
         {
             if (uri.StartsWith("NWD", 
                 System.StringComparison.CurrentCultureIgnoreCase))

@@ -32,9 +32,9 @@ namespace NineWorldsDeep.Tapestry
         private void Fragment_Clicked(object sender,
             FragmentClickedEventArgs e)
         {
-            txtUri.Text = e.Fragment.URI;
+            txtUri.Text = e.Node.URI;
             txtUri.Focus();
-            ResolveContentControlForUri(e.Fragment);
+            ResolveContentControlForUri(e.Node);
         }
 
         private void txtUri_KeyDown(object sender, KeyEventArgs e)

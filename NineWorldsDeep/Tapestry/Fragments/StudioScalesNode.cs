@@ -7,7 +7,7 @@ using NineWorldsDeep.FragmentCloud;
 
 namespace NineWorldsDeep.Tapestry.Fragments
 {
-    public class StudioScalesNode : FragmentCloud.TapestryNode
+    public class StudioScalesNode : TapestryNode
     {
         public StudioScalesNode()
             : base("Studio/Scales")

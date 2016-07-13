@@ -3,25 +3,24 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using NineWorldsDeep.FragmentCloud;
 
 namespace NineWorldsDeep.Tapestry.Fragments
 {
-    public class StudioKeyboardNode : TapestryNode
+    public class TapestrySplitViewNode : TapestryNode
     {
-        public StudioKeyboardNode() 
-            : base("Studio/Keyboard")
+        public TapestrySplitViewNode()
+            : base("Tapestry/SplitNodeView")
         {
         }
 
         public override string GetShortName()
         {
-            return "Studio Keyboard";
+            return "Tapestry Split";
         }
 
         public override void PerformSelectionAction()
         {
-            var window = new Studio.VisualKeyboardTestHarness();
+            var window = new TapestrySplitViewWindow();
             window.Show();
         }
     }

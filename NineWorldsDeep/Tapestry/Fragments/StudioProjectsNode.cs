@@ -7,7 +7,7 @@ using NineWorldsDeep.FragmentCloud;
 
 namespace NineWorldsDeep.Tapestry.Fragments
 {
-    class StudioProjectsNode : FragmentCloud.TapestryNode
+    class StudioProjectsNode : TapestryNode
     {
         public StudioProjectsNode() 
             : base("Studio/Projects")

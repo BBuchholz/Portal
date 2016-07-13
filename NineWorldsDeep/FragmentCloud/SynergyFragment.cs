@@ -2,7 +2,7 @@
 
 namespace NineWorldsDeep.FragmentCloud
 {
-    internal class SynergyFragment : TapestryNode
+    internal class SynergyFragment : Tapestry.TapestryNode
     {
         public SynergyFragment()
             : base("Synergy")

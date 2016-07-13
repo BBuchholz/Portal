@@ -2,11 +2,11 @@
 {
     public class FragmentClickedEventArgs
     {
-        public FragmentClickedEventArgs(TapestryNode f)
+        public FragmentClickedEventArgs(Tapestry.TapestryNode f)
         {
-            Fragment = f;
+            Node = f;
         }
 
-        public TapestryNode Fragment { get; private set; }
+        public Tapestry.TapestryNode Node { get; private set; }
     }
 }

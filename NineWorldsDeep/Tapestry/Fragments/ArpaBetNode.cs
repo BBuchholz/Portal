@@ -7,7 +7,7 @@ using NineWorldsDeep.FragmentCloud;
 
 namespace NineWorldsDeep.Tapestry.Fragments
 {
-    public class ArpaBetNode : FragmentCloud.TapestryNode
+    public class ArpaBetNode : TapestryNode
     {
         public ArpaBetNode()
             : base("ArpaBet")

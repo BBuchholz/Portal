@@ -30,8 +30,8 @@ namespace NineWorldsDeep.FragmentCloud
         private void Fragment_Clicked(object sender,
             FragmentClickedEventArgs e)
         {
-            txtUri.Text = e.Fragment.URI;
-            ResolveContentControlForUri(e.Fragment);
+            txtUri.Text = e.Node.URI;
+            ResolveContentControlForUri(e.Node);
         }
 
         private void txtUri_KeyDown(object sender, KeyEventArgs e)
@@ -47,7 +47,7 @@ namespace NineWorldsDeep.FragmentCloud
             ResolveContentControlForUri(ur.Resolve(txtUri.Text));
         }
 
-        private void ResolveContentControlForUri(TapestryNode frg)
+        private void ResolveContentControlForUri(Tapestry.TapestryNode frg)
         {
             if (frg.Children.Count() > 0)
             {

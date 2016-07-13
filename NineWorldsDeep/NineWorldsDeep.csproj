@@ -27,7 +27,7 @@
     <UpdatePeriodically>false</UpdatePeriodically>
     <UpdateRequired>false</UpdateRequired>
     <MapFileExtensions>true</MapFileExtensions>
-    <ApplicationRevision>35</ApplicationRevision>
+    <ApplicationRevision>36</ApplicationRevision>
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <PublishWizardCompleted>true</PublishWizardCompleted>
@@ -344,12 +344,27 @@
     <Compile Include="Tapestry\Fragments\StudioMainNode.cs" />
     <Compile Include="Tapestry\Fragments\StudioProjectsNode.cs" />
     <Compile Include="Tapestry\Fragments\StudioScalesNode.cs" />
+    <Compile Include="Tapestry\Fragments\TapestryRootNode.cs" />
+    <Compile Include="Tapestry\Fragments\TapestrySplitViewNode.cs" />
+    <Compile Include="Tapestry\TapestrySplitViewLoadCommand.cs" />
     <Compile Include="Tapestry\TapestryMainWindow.xaml.cs">
       <DependentUpon>TapestryMainWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Tapestry\TapestryNode.cs" />
     <Compile Include="Tapestry\TapestryNodeBrowserWindow.xaml.cs">
       <DependentUpon>TapestryNodeBrowserWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Tapestry\TapestryNodeSplitViewControl.xaml.cs">
+      <DependentUpon>TapestryNodeSplitViewControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Tapestry\TapestryNodeType.cs" />
+    <Compile Include="Tapestry\TapestryNodeViewControl.xaml.cs">
+      <DependentUpon>TapestryNodeViewControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Tapestry\TapestrySplitViewWindow.xaml.cs">
+      <DependentUpon>TapestrySplitViewWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Tapestry\TapestryHistoryHandler.cs" />
     <Compile Include="TimeStamp.cs" />
     <Compile Include="UI\Display.cs" />
     <Compile Include="UI\DisplayGridWindow.xaml.cs">
@@ -524,6 +539,18 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Tapestry\TapestryNodeBrowserWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Tapestry\TapestryNodeSplitViewControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Tapestry\TapestryNodeViewControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Tapestry\TapestrySplitViewWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

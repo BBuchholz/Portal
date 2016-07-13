@@ -10,26 +10,18 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace NineWorldsDeep.FragmentCloud
+namespace NineWorldsDeep.Tapestry
 {
     /// <summary>
-    /// Interaction logic for FragmentNodeDisplay.xaml
+    /// Interaction logic for TapestrySplitViewWindow.xaml
     /// </summary>
-    public partial class FragmentNodeDisplay : UserControl
+    public partial class TapestrySplitViewWindow : Window
     {
-        public FragmentNodeDisplay()
+        public TapestrySplitViewWindow()
         {
             InitializeComponent();
-        }
-
-        public void Display(Tapestry.TapestryNode frg)
-        {
-            txtMultiLine.Text = frg.ToMultiLineDetail();
-            
-            frg.PerformSelectionAction();
         }
     }
 }

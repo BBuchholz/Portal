@@ -2,7 +2,7 @@
 
 namespace NineWorldsDeep.FragmentCloud
 {
-    internal class AudioBrowserFragment : TapestryNode
+    internal class AudioBrowserFragment : Tapestry.TapestryNode
     {
         public AudioBrowserFragment()
             : base("Audio")

@@ -3,7 +3,7 @@ using System;
 
 namespace NineWorldsDeep.FragmentCloud
 {
-    public class StudioNode : TapestryNode
+    public class StudioNode : Tapestry.TapestryNode
     {
         public StudioNode()
             : base("Studio")

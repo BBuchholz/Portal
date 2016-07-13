@@ -7,7 +7,7 @@ using NineWorldsDeep.FragmentCloud;
 
 namespace NineWorldsDeep.Tapestry.Fragments
 {
-    public class GrowthAreasNode : FragmentCloud.TapestryNode
+    public class GrowthAreasNode : TapestryNode
     {
         public GrowthAreasNode()
             : base("GrowthAreas")

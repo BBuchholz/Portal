@@ -2,7 +2,7 @@
 
 namespace NineWorldsDeep.FragmentCloud
 {
-    internal class ImageBrowserFragment : TapestryNode
+    internal class ImageBrowserFragment : Tapestry.TapestryNode
     {
         public ImageBrowserFragment()
             : base("Images")

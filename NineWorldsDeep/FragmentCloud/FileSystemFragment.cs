@@ -5,11 +5,11 @@ using System.IO;
 
 namespace NineWorldsDeep.FragmentCloud
 {
-    public class FileSystemFragment : TapestryNode
+    public class FileSystemFragment : Tapestry.TapestryNode
     {
         private bool initialized = false;
 
-        public FileSystemFragment(string uri, bool lazyLoadChildren, params TapestryNode[] children)
+        public FileSystemFragment(string uri, bool lazyLoadChildren, params Tapestry.TapestryNode[] children)
             : base(uri, children)
         {
             Path = Converter.NwdUriToFileSystemPath(uri);
@@ -21,7 +21,7 @@ namespace NineWorldsDeep.FragmentCloud
 
         public string Path { get; private set; }
 
-        protected override IEnumerable<TapestryNode> GetChildren()
+        protected override IEnumerable<Tapestry.TapestryNode> GetChildren()
         {
             //if (base.GetChildren().Count() == 0)
             if (!initialized)
@@ -128,14 +128,14 @@ namespace NineWorldsDeep.FragmentCloud
                 //directories
                 foreach (string dirPath in Directory.EnumerateDirectories(Path))
                 {
-                    TapestryNode f = PathToFileSystemFragment(dirPath);
+                    Tapestry.TapestryNode f = PathToFileSystemFragment(dirPath);
                     AddChild(f);
                 }
 
                 //files
                 foreach (string filePath in Directory.EnumerateFiles(Path))
                 {
-                    TapestryNode f = PathToFileSystemFragment(filePath);
+                    Tapestry.TapestryNode f = PathToFileSystemFragment(filePath);
                     AddChild(f);
                 }
             }
@@ -143,7 +143,7 @@ namespace NineWorldsDeep.FragmentCloud
             initialized = true;
         }
 
-        private TapestryNode PathToFileSystemFragment(string path)
+        private Tapestry.TapestryNode PathToFileSystemFragment(string path)
         {
             string fileOrDirName = System.IO.Path.GetFileName(path);
             string frgUri = this.URI;
@@ -155,7 +155,7 @@ namespace NineWorldsDeep.FragmentCloud
 
             frgUri += fileOrDirName;
 
-            TapestryNode f = new FileSystemFragment(frgUri, true);
+            Tapestry.TapestryNode f = new FileSystemFragment(frgUri, true);
 
             return f;
         }

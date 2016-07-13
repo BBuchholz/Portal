@@ -1,10 +1,13 @@
-﻿using System;
+﻿using NineWorldsDeep.FragmentCloud;
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
-namespace NineWorldsDeep.FragmentCloud
+namespace NineWorldsDeep.Tapestry
 {
-    [Obsolete("use Tapestry.TapestryNode")]
+
     public abstract class TapestryNode
     {
         private Dictionary<string, TapestryNode> uriToChildFragments =
@@ -20,20 +23,20 @@ namespace NineWorldsDeep.FragmentCloud
             }
         }
 
-        //public TapestryNodeType NodeType
-        //{
-        //    get
-        //    {
-        //        if (Children.Count() > 0){
-
-               
-        //        }
-        //        else
-        //        {
-
-        //        }
-        //    }
-        //}
+        public TapestryNodeType NodeType
+        {
+            get
+            {
+                if (Children.Count() > 0)
+                {
+                    return TapestryNodeType.Collection;
+                }
+                else
+                {
+                    return TapestryNodeType.SingleNodeDefault;
+                }
+            }
+        }
 
         protected virtual IEnumerable<TapestryNode> GetChildren()
         {
@@ -96,6 +99,11 @@ namespace NineWorldsDeep.FragmentCloud
         public void SetChild(TapestryNode frg)
         {
             uriToChildFragments[frg.URI] = frg;
+        }
+
+        public override string ToString()
+        {
+            return GetShortName();
         }
     }
 }
