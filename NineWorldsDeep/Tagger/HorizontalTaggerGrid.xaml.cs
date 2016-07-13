@@ -395,7 +395,11 @@ namespace NineWorldsDeep.Tagger
             //delete
             FileElement fe = (FileElement)lvFileElements.SelectedItem;
 
-            if (fe != null)
+            string msg = "Are you sure you want to move this file to trash? " +
+                "Be aware that these tags will be permanently lost even if " +
+                "file is restored from trash: ";
+
+            if (fe != null && UI.Prompt.Confirm(msg + fe.TagString, true))
             {
                 StopAudioButton.RaiseEvent(
                     new RoutedEventArgs(ButtonBase.ClickEvent));
