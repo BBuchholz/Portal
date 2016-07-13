@@ -235,7 +235,7 @@ namespace NineWorldsDeep.Synergy
 
         #endregion
 
-        #region "Sync Menu Methods - READY FOR TESTING"
+        #region "Sync Menu Methods"
 
         private void MenuItemExportActiveLists_Click(object sender, RoutedEventArgs e)
         {
@@ -263,6 +263,8 @@ namespace NineWorldsDeep.Synergy
         {
             try
             {
+                Stopwatch sw = Stopwatch.StartNew();
+
                 _sh.ImportSynergyFiles();
 
                 foreach (var sl in _sh.Lists)
@@ -307,6 +309,12 @@ namespace NineWorldsDeep.Synergy
 
                     EnsureList(sl.Name).True(sl);
                 }
+
+                sw.Stop();
+
+                string time = sw.Elapsed.ToString("mm\\:ss\\.ff");
+
+                statusBar.StatusBarText = "Synergy Files Imported: " + time;
             }
             catch (Exception ex)
             {
@@ -318,14 +326,20 @@ namespace NineWorldsDeep.Synergy
         {
             try
             {
+                Stopwatch sw = Stopwatch.StartNew();
+
                 _sh.ImportSyncedArchiveFiles();
 
                 foreach (var sl in _sh.Lists)
                 {
                     EnsureList(sl.Name).True(sl);
                 }
-                
-                statusBar.StatusBarText = "Synergy Archive Files Imported.";
+
+                sw.Stop();
+
+                string time = sw.Elapsed.ToString("mm\\:ss\\.ff");
+
+                statusBar.StatusBarText = "Synergy Archive Files Imported: " + time;
             }
             catch (Exception ex)
             {
@@ -342,14 +356,16 @@ namespace NineWorldsDeep.Synergy
             else
             {
                 //TODO:  use Display.Grid(filesToConsume) but verify that we can receive a boolean (add OK/Cancel to Display.Grid()?), for now, just displaying and then prompting
-                Display.Grid("files to consume", _sh.FilesToConsume.ToListItems());
+                //Display.Grid("files to consume", _sh.FilesToConsume.ToListItems());
 
-                string msg = "The following files will be consumed, proceed?";
+                int countToConsume = _sh.FilesToConsume.Count;
 
-                foreach (string path in _sh.FilesToConsume)
-                {
-                    msg += Environment.NewLine + path;
-                }
+                string msg = countToConsume + " files will be consumed, proceed?";
+                
+                //foreach (string path in _sh.FilesToConsume)
+                //{
+                //    msg += Environment.NewLine + path;
+                //}
 
                 if (NineWorldsDeep.UI.Prompt.Confirm(msg, true))
                 {
