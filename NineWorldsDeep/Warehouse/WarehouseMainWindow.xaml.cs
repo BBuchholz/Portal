@@ -1,4 +1,5 @@
-﻿using NineWorldsDeep.Sqlite.Model;
+﻿using NineWorldsDeep.Core;
+using NineWorldsDeep.Sqlite.Model;
 using NineWorldsDeep.UI;
 using System;
 using System.Collections.Generic;
@@ -318,8 +319,8 @@ namespace NineWorldsDeep.Warehouse
         {
             List<string> failingPaths = new List<string>();
             List<FileModelItem> fileModelItems = new List<FileModelItem>();
-            //TODO: this is a hack; NEED DEVICE NAME AFTER DB REFACTOR (Device table should mimic Android)
-            string deviceName = "Desktop";
+
+            string deviceName = Configuration.GetLocalDeviceDescription();
 
             foreach (SyncItem si in SyncItems)
             {

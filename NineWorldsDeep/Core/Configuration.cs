@@ -77,6 +77,15 @@ namespace NineWorldsDeep.Core
             return mostRecentPath;            
         }
 
+        public static string GetTrashFileFromPath(string path)
+        {
+            string trashDir = ProcessTestMode("NWD-AUX/trash");
+            //ensure it exists
+            Directory.CreateDirectory(trashDir);
+            string fName = Path.GetFileName(path);
+            return Path.Combine(trashDir, fName);
+        }
+
         public static string GetSqliteDbPath(string dbNameWithoutExtension)
         {
             string dbName = dbNameWithoutExtension + ".sqlite";
@@ -342,6 +351,14 @@ namespace NineWorldsDeep.Core
             }
 
             return new NwdUri(trimmedPath);
+        }
+
+        public static string GetLocalDeviceDescription()
+        {
+            //TODO: this is a hack; NEED DEVICE NAME AFTER DB REFACTOR (Device table should mimic Android)
+            string deviceName = "Main Laptop";
+
+            return deviceName;
         }
 
         /// <summary>

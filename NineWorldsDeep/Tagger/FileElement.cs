@@ -1,4 +1,10 @@
-﻿namespace NineWorldsDeep.Tagger
+﻿using NineWorldsDeep.Core;
+using NineWorldsDeep.Db;
+using NineWorldsDeep.UI;
+using System;
+using System.IO;
+
+namespace NineWorldsDeep.Tagger
 {
     public class FileElement
     {
@@ -57,7 +63,7 @@
         }
 
         public override int GetHashCode()
-        {//TODO: LICENSE NOTES
+        {
             //from: http://stackoverflow.com/questions/1008633/gethashcode-problem-using-xor
 
             int hash = 23;
@@ -65,6 +71,28 @@
             hash = hash * 37 + Path.GetHashCode();
             return hash;
 
+        }
+
+        public void MoveToTrash(SqliteDbAdapter db)
+        {
+            if (File.Exists(Path))
+            {
+                try
+                {
+                    string destFile =
+                        Configuration.GetTrashFileFromPath(Path);
+                    File.Move(Path, destFile);  
+                }
+                catch (Exception ex)
+                {
+                    Display.Exception(ex);
+                }
+            }
+
+            //even if it doesn't exist, purge from db (it 
+            //exists as a file element for a reason, most 
+            //likely loaded from a stale entry)
+            db.DeleteFile(Path);
         }
     }
       

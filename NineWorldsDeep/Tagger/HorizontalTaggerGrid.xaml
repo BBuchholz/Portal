@@ -80,6 +80,14 @@
                                      Handler="HandleDoubleClick" />
                     </Style>
                 </ListView.Resources>
+                <ListView.ContextMenu>
+                    <ContextMenu Name="cmFileList" StaysOpen="true" Background="WhiteSmoke">
+                        <MenuItem Header="Open Externally"
+                                  Click="MenuItemOpenExternally_Click"/>
+                        <MenuItem Header="Send To Trash"
+                                  Click="MenuItemSendToTrash_Click"/>
+                    </ContextMenu>
+                </ListView.ContextMenu>
                 <ListView.ItemTemplate>
                     <DataTemplate>
                         <StackPanel Orientation="Vertical">

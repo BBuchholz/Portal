@@ -25,10 +25,12 @@ namespace NineWorldsDeep.Tagger
         public VerticalTaggerGrid()
         {
             InitializeComponent();
+            dbCore = new Db.SqliteDbAdapter();
             tagFile = taggerConfigFolderPath + "\\fileTags.xml";
         }
 
         private TagMatrix tagMatrix = new TagMatrix();
+        private Image imageControl;
         private List<FileElementActionSubscriber> selectionChangedListeners =
             new List<FileElementActionSubscriber>();
 
@@ -82,7 +84,13 @@ namespace NineWorldsDeep.Tagger
             return leastPath;
         }
 
+        public void SetImageControl(Image imageControl)
+        {
+            this.imageControl = imageControl;
+        }
+
         private NwdDb db = null;
+        private Db.SqliteDbAdapter dbCore = null;
 
         public void RegisterDb(NwdDb nwdDb)
         {
@@ -173,8 +181,17 @@ namespace NineWorldsDeep.Tagger
 
         private void lvTags_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            string tag = (string)lvTags.SelectedItem;
+            //string tag = (string)lvTags.SelectedItem;
 
+            //LoadFileElementList(tagMatrix.GetFilesForTag(tag));
+
+            LoadFromSelectedTag();
+        }
+
+        private void LoadFromSelectedTag()
+        {
+            string tag = (string)lvTags.SelectedItem;
+            
             LoadFileElementList(tagMatrix.GetFilesForTag(tag));
         }
 
@@ -276,6 +293,8 @@ namespace NineWorldsDeep.Tagger
 
                 feLst.Add(FileElement.FromPath(file, tagMatrix));
             }
+
+            feLst.Sort((fe1, fe2) => fe1.Name.CompareTo(fe2.Name));
 
             return feLst;
         }
@@ -399,6 +418,27 @@ namespace NineWorldsDeep.Tagger
         private void txtFilter_KeyUp(object sender, KeyEventArgs e)
         {
             PopulateTagListView();
+        }
+
+        private void MenuItemSendToTrash_Click(object sender, RoutedEventArgs e)
+        {
+            //delete
+            FileElement fe = (FileElement)lvFileElements.SelectedItem;
+
+            if (fe != null)
+            {
+                //imageControl.Source = null;
+
+                fe.MoveToTrash(dbCore);
+
+                //remove path from tag matrix
+                tagMatrix.RemovePath(fe.Path);
+
+                imageControl.Source = null;
+
+                //refresh list
+                LoadFromSelectedTag(); 
+            }
         }
     }
 }

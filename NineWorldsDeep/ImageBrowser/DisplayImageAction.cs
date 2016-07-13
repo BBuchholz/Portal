@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Windows.Input;
 using System.Windows.Media.Imaging;
 using System;
+using System.IO;
 
 namespace NineWorldsDeep.ImageBrowser
 {
@@ -22,12 +23,27 @@ namespace NineWorldsDeep.ImageBrowser
         {
             if (fe != null)
             {
+                //fileElement = fe;
+                //BitmapImage image = new BitmapImage();
+
+                //image.BeginInit();
+                //image.UriSource = new Uri(fe.Path);
+                //image.EndInit();
+
+                //imageControl.Source = image;
+
                 fileElement = fe;
-                BitmapImage bitmap = new BitmapImage();
-                bitmap.BeginInit();
-                bitmap.UriSource = new Uri(fe.Path);
-                bitmap.EndInit();
-                imageControl.Source = bitmap;
+                BitmapImage image = new BitmapImage();
+
+                using(FileStream stream = File.OpenRead(fe.Path))
+                {
+                    image.BeginInit();
+                    image.StreamSource = stream;
+                    image.CacheOption = BitmapCacheOption.OnLoad;
+                    image.EndInit();
+                }
+                
+                imageControl.Source = image;
             }
         }
 

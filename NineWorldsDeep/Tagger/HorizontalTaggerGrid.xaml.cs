@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Controls.Primitives;
 using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
@@ -24,11 +26,12 @@ namespace NineWorldsDeep.Tagger
         private List<FileElementActionSubscriber> selectionChangedListeners =
             new List<FileElementActionSubscriber>();
         private NwdDb db = null;
-
+        private Db.SqliteDbAdapter dbCore;
 
         public HorizontalTaggerGrid()
         {
             InitializeComponent();
+            dbCore = new Db.SqliteDbAdapter();
             tagFile = taggerConfigFolderPath + "\\fileTags.xml";
             AddSelectionChangedListener(new FileElementTimestampExtractionAction(tagMatrix, this));
             //moved to NwdVoiceMemoBrowser
@@ -137,8 +140,17 @@ namespace NineWorldsDeep.Tagger
 
         private void lvTags_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
+            //string tag = (string)lvTags.SelectedItem;
+
+            //LoadFileElementList(tagMatrix.GetFilesForTag(tag));
+
+            LoadFromSelectedTag();
+        }
+
+        private void LoadFromSelectedTag()
+        {
             string tag = (string)lvTags.SelectedItem;
-            
+
             LoadFileElementList(tagMatrix.GetFilesForTag(tag));
         }
 
@@ -362,6 +374,40 @@ namespace NineWorldsDeep.Tagger
         private void txtFilter_KeyUp(object sender, KeyEventArgs e)
         {
             PopulateTagListView();
+        }
+
+        private void MenuItemOpenExternally_Click(object sender, RoutedEventArgs e)
+        {
+
+            FileElement fe = (FileElement)lvFileElements.SelectedItem;
+
+            if (fe != null)
+            {
+                //open externally
+                Process proc = new Process();
+                proc.StartInfo.FileName = fe.Path;
+                proc.Start();
+            }
+        }
+
+        private void MenuItemSendToTrash_Click(object sender, RoutedEventArgs e)
+        {
+            //delete
+            FileElement fe = (FileElement)lvFileElements.SelectedItem;
+
+            if (fe != null)
+            {
+                StopAudioButton.RaiseEvent(
+                    new RoutedEventArgs(ButtonBase.ClickEvent));
+
+                fe.MoveToTrash(dbCore);
+
+                //remove path from tag matrix
+                tagMatrix.RemovePath(fe.Path);
+
+                //refresh list
+                LoadFromSelectedTag();
+            }
         }
     }
 }

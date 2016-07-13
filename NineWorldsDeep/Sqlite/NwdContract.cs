@@ -18,6 +18,7 @@ namespace NineWorldsDeep.Sqlite
         public static string TABLE_FILE_TAGS = "FileTags";
         public static string TABLE_AUDIO_TRANSCRIPT = "AudioTranscript";
         public static string TABLE_LOCAL_CONFIG = "LocalConfig";
+        public static string TABLE_JUNCTION_FILE_TAG = "junction_File_Tag";
         //columns
         public static string COLUMN_DISPLAY_NAME_ID = "DisplayNameId";
         public static string COLUMN_DISPLAY_NAME_VALUE = "DisplayNameValue";

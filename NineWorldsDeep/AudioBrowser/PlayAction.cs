@@ -3,6 +3,7 @@ using System.Media;
 using System.Windows;
 using System.Windows.Controls;
 using System;
+using System.IO;
 
 namespace NineWorldsDeep.AudioBrowser
 {
@@ -25,7 +26,7 @@ namespace NineWorldsDeep.AudioBrowser
 
         public void PerformAction(FileElement fe)
         {
-            if (fe != null)
+            if (fe != null && File.Exists(fe.Path))
             {
                 player = new SoundPlayer(fe.Path);
                 player.Play();

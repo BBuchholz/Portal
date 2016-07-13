@@ -32,6 +32,7 @@ namespace NineWorldsDeep.ImageBrowser
         {
             InitializeComponent();
             tgrGrid.SetFolderLoadStrategy(new LoadImagesStrategy());
+            tgrGrid.SetImageControl(ImageControl);
             tgrGrid.AddSelectionChangedListener(new DisplayImageAction(ImageControl));
             tgrGrid.AddSelectionChangedListener(
                 new FileElementTimestampExtractionAction(tgrGrid.GetTagMatrix(), tgrGrid, chkParseTimeStamps));
@@ -135,7 +136,6 @@ namespace NineWorldsDeep.ImageBrowser
             {
                 lastLoadedFromFileInsteadOfDb = false;
                 LoadFolder(lastLoadedFromFileInsteadOfDb, GetFolderWithLeastNonZeroUntaggedCount());
-
             }
             catch (Exception ex)
             {
@@ -206,6 +206,13 @@ namespace NineWorldsDeep.ImageBrowser
         }
 
         private void AllButton_Click(object sender, RoutedEventArgs e)
+        {
+            //LoadFolder(lastLoadedFromFileInsteadOfDb,
+            //           Configuration.ImagesFolder);
+            LoadAll();
+        }
+
+        private void LoadAll()
         {
             LoadFolder(lastLoadedFromFileInsteadOfDb,
                        Configuration.ImagesFolder);

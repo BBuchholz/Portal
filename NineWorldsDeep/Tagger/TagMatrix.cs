@@ -88,6 +88,11 @@ namespace NineWorldsDeep.Tagger
         {
             IEnumerable<string> fileElementPaths;
 
+            if (string.IsNullOrWhiteSpace(tag))
+            {
+                tag = "[[[ALL]]]";
+            }
+
             if (tag != null && tagFilesMap.Keys.Contains(tag))
             {
                 fileElementPaths = tagFilesMap[tag];
@@ -413,6 +418,12 @@ namespace NineWorldsDeep.Tagger
             //store mappings
             db.StorePathToTagMappings(mappings);
 
+        }
+
+        public void RemovePath(string path)
+        {
+            tagFilesMap.PurgeValue(path);
+            fileTagsMap.RemoveKey(path);
         }
     }
 }

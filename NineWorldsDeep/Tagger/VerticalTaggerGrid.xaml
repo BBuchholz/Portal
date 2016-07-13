@@ -33,7 +33,7 @@
 
         <ListView x:Name="lvFileElements"
                   Grid.Row="2"
-                  Margin="10" 
+                  Margin="10"
                   SelectionChanged="lvFileElements_SelectionChanged">
             <ListView.Resources>
                 <Style TargetType="{x:Type ListViewItem}">
@@ -41,6 +41,14 @@
                                      Handler="HandleDoubleClick" />
                 </Style>
             </ListView.Resources>
+            <ListView.ContextMenu>
+                <ContextMenu Name="cmFileList" 
+                             StaysOpen="true" 
+                             Background="WhiteSmoke">
+                    <MenuItem Header="Send To Trash"
+                                  Click="MenuItemSendToTrash_Click"/>
+                </ContextMenu>
+            </ListView.ContextMenu>
             <ListView.ItemTemplate>
                 <DataTemplate>
                     <StackPanel Orientation="Vertical">

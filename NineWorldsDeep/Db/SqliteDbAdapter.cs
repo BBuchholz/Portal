@@ -1,6 +1,7 @@
 ﻿using NineWorldsDeep.Core;
 using NineWorldsDeep.Mtp;
 using NineWorldsDeep.Parser;
+using NineWorldsDeep.Sqlite;
 using NineWorldsDeep.UI;
 using System;
 using System.Collections.Generic;
@@ -299,6 +300,7 @@ namespace NineWorldsDeep.Db
         /// <param name="filePathTopFolder"></param>
         public List<PathTagLink> GetPathTagLinks(string filePathTopFolder)
         {
+            //TODO: this should take device into account (overload method to default to this device if one is not supplied)
             List<PathTagLink> lst = new List<PathTagLink>();
 
             using (var conn = new SQLiteConnection(
@@ -344,6 +346,132 @@ namespace NineWorldsDeep.Db
             }
 
             return lst;
+        }
+
+        public string DeleteFile(String device, String path)
+        {
+            if (string.IsNullOrWhiteSpace(device))
+            {
+                device = Configuration.GetLocalDeviceDescription();
+            }
+
+            string outputMsg = "implementation in progress";
+            string time = "";
+
+            try
+            {
+                using (var conn =
+                    new SQLiteConnection(@"Data Source=" +
+                        Configuration.GetSqliteDbPath("nwd")))
+                {
+                    conn.Open();
+
+                    using (var cmd = new SQLiteCommand(conn))
+                    {
+                        using (var transaction = conn.BeginTransaction())
+                        {
+                            Stopwatch sw = Stopwatch.StartNew();
+
+                            ////////////////////////////////////////CODE HERE//////////////////////////////////////
+
+                            //get FileId for device path
+                            int fileId = GetFileIdForDevicePath(device, path, cmd);
+
+                            //remove all FileTags for FileId
+                            DeleteFileTagsForFileId(fileId, cmd);
+
+                            //remove FileEntry for FileId
+                            DeleteFileForFileId(fileId, cmd);
+
+                            transaction.Commit();
+
+                            sw.Stop();
+                            time = sw.Elapsed.ToString("mm\\:ss\\.ff");
+                        }
+                    }
+
+                    conn.Close();
+                }
+
+                outputMsg = "Finished: " + time;
+            }
+            catch (Exception ex)
+            {
+                outputMsg = "error: " + ex.Message;
+            }
+
+            return outputMsg;
+        }
+
+        public int GetFileIdForDevicePath(String device, 
+                                          String path, 
+                                          SQLiteCommand cmd)
+        {
+            int id = -1;
+
+            cmd.Parameters.Clear();
+            cmd.CommandText =
+                "SELECT " + NwdContract.COLUMN_FILE_ID + " " +
+                "FROM " + NwdContract.TABLE_FILE + " f " +
+                "JOIN " + NwdContract.TABLE_PATH + " p  " +
+                "ON f." + NwdContract.COLUMN_PATH_ID + 
+                    " = p." + NwdContract.COLUMN_PATH_ID + " " +
+                "JOIN " + NwdContract.TABLE_DEVICE + " d  " +
+                "ON d." + NwdContract.COLUMN_DEVICE_ID + 
+                    " = f." + NwdContract.COLUMN_DEVICE_ID + " " +
+                "WHERE d." + NwdContract.COLUMN_DEVICE_DESCRIPTION + " = ? " +
+                "AND p." + NwdContract.COLUMN_PATH_VALUE + " = ? ";
+
+            SQLiteParameter deviceParam = new SQLiteParameter();
+            deviceParam.Value = device;
+            cmd.Parameters.Add(deviceParam);
+
+            SQLiteParameter pathParam = new SQLiteParameter();
+            pathParam.Value = path;
+            cmd.Parameters.Add(pathParam);
+
+            using (var rdr = cmd.ExecuteReader())
+            {
+                if (rdr.Read())
+                {
+                    id = rdr.GetInt32(0);
+                }
+            }
+
+            return id;
+        }
+
+        public void DeleteFileTagsForFileId(int fileId, SQLiteCommand cmd)
+        {
+            cmd.Parameters.Clear();
+            cmd.CommandText =
+                "DELETE FROM " + NwdContract.TABLE_JUNCTION_FILE_TAG + 
+                " WHERE " + NwdContract.COLUMN_FILE_ID + " = ? ";
+            
+            SQLiteParameter fileIdParam = new SQLiteParameter();
+            fileIdParam.Value = fileId;
+            cmd.Parameters.Add(fileIdParam);
+            
+            cmd.ExecuteNonQuery();
+        }
+
+        public void DeleteFileForFileId(int fileId, SQLiteCommand cmd)
+        {
+            cmd.Parameters.Clear();
+            cmd.CommandText =
+                "DELETE FROM " + NwdContract.TABLE_FILE +
+                " WHERE " + NwdContract.COLUMN_FILE_ID + " = ? ";
+
+            SQLiteParameter fileIdParam = new SQLiteParameter();
+            fileIdParam.Value = fileId;
+            cmd.Parameters.Add(fileIdParam);
+
+            cmd.ExecuteNonQuery();
+        }
+
+        public string DeleteFile(String path)
+        {
+            return DeleteFile(null, path);
         }
 
         public void PopulatePathIds(Dictionary<string, int> pathsToIds)
@@ -1003,5 +1131,61 @@ namespace NineWorldsDeep.Db
                 device.FriendlyName = "";
             }
         }
+
+
+        /////////////////////////////////////connection/transaction template        
+        //
+        //private void ExecuteNonQueryTemplate(string xxx, SQLiteCommand cmd)
+        //{
+        //    cmd.Parameters.Clear();
+        //    cmd.CommandText =
+        //        "INSERT OR IGNORE INTO XXX (XXXValue) VALUES (?)";
+        //    SQLiteParameter param = new SQLiteParameter();
+        //    param.Value = xxx;
+        //    cmd.Parameters.Add(param);
+        //    cmd.ExecuteNonQuery();
+        //}
+        //
+        //public string TransactionTemplate()
+        //{
+        //    string outputMsg = "implementation in progress";
+        //    string time = "";
+
+        //    try
+        //    {
+        //        using (var conn =
+        //            new SQLiteConnection(@"Data Source=" +
+        //                Configuration.GetSqliteDbPath("nwd")))
+        //        {
+        //            conn.Open();
+
+        //            using (var cmd = new SQLiteCommand(conn))
+        //            {
+        //                using (var transaction = conn.BeginTransaction())
+        //                {
+        //                    Stopwatch sw = Stopwatch.StartNew();
+
+        //                    ////////////////////////////////////////CODE HERE//////////////////////////////////////
+
+        //                    transaction.Commit();
+
+        //                    sw.Stop();
+        //                    time = sw.Elapsed.ToString("mm\\:ss\\.ff");
+        //                }
+        //            }
+
+        //            conn.Close();
+        //        }
+
+        //        outputMsg = "Finished: " + time;
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        outputMsg = "error: " + ex.Message;
+        //    }
+
+        //    return outputMsg;
+        //}
+
     }
 }
