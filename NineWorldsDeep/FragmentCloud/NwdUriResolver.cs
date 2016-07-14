@@ -24,7 +24,7 @@
             if (uri.StartsWith("NWD", 
                 System.StringComparison.CurrentCultureIgnoreCase))
             {
-                return new FileSystemFragment(uri, true);
+                return new FileSystemNode(uri, true);
             }
             else if (uri.StartsWith("Synergy",
                 System.StringComparison.CurrentCultureIgnoreCase))

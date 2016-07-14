@@ -4,6 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:NineWorldsDeep.Tapestry"
+             xmlns:nodeUI="clr-namespace:NineWorldsDeep.Tapestry.NodeUI"
              xmlns:frgCloud="clr-namespace:NineWorldsDeep.FragmentCloud"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
@@ -18,6 +19,11 @@
                     Visibility="Collapsed">
             <frgCloud:FragmentNodeDisplay x:Name="nodeDisplayDefault"/>
         </ContentControl>
-        
+
+        <ContentControl x:Name="ccAudioNode"
+                    Visibility="Collapsed">
+            <nodeUI:AudioNodeDisplay x:Name="audioNodeDisplay"/>
+        </ContentControl>
+
     </Grid>
 </UserControl>

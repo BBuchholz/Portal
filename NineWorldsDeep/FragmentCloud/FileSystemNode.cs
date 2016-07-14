@@ -2,14 +2,15 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using NineWorldsDeep.Tapestry;
 
 namespace NineWorldsDeep.FragmentCloud
 {
-    public class FileSystemFragment : Tapestry.TapestryNode
+    public class FileSystemNode : Tapestry.TapestryNode
     {
         private bool initialized = false;
 
-        public FileSystemFragment(string uri, bool lazyLoadChildren, params Tapestry.TapestryNode[] children)
+        public FileSystemNode(string uri, bool lazyLoadChildren, params Tapestry.TapestryNode[] children)
             : base(uri, children)
         {
             Path = Converter.NwdUriToFileSystemPath(uri);
@@ -143,6 +144,21 @@ namespace NineWorldsDeep.FragmentCloud
             initialized = true;
         }
 
+        public override TapestryNodeType NodeType
+        {
+            get
+            {
+                if (Path.ToLower().EndsWith(".wav"))
+                {
+                    return TapestryNodeType.Audio;
+                }
+                else
+                {
+                    return base.NodeType;
+                }
+            }
+        }
+
         private Tapestry.TapestryNode PathToFileSystemFragment(string path)
         {
             string fileOrDirName = System.IO.Path.GetFileName(path);
@@ -155,7 +171,7 @@ namespace NineWorldsDeep.FragmentCloud
 
             frgUri += fileOrDirName;
 
-            Tapestry.TapestryNode f = new FileSystemFragment(frgUri, true);
+            Tapestry.TapestryNode f = new FileSystemNode(frgUri, true);
 
             return f;
         }
@@ -169,7 +185,7 @@ namespace NineWorldsDeep.FragmentCloud
 
             if (File.Exists(Path))
             {
-                Display.Message("open containing folder in explorer goes here");
+                //Display.Message("open containing folder in explorer goes here");
             }
         }
 
@@ -178,12 +194,12 @@ namespace NineWorldsDeep.FragmentCloud
             int shortNameLength = 15;
             string name = Converter.NwdUriNodeName(URI);
 
-            name = System.IO.Path.GetFileNameWithoutExtension(name);
+            name = System.IO.Path.GetFileName(name);
 
             if (name.Length > shortNameLength)
             {
-                name = name.Substring(0, shortNameLength - 6) + "..." +
-                    name.Substring(name.Length - 3, 3);
+                name = name.Substring(0, shortNameLength - 7) + "..." +
+                    name.Substring(name.Length - 4, 4);
             }
 
             return name;

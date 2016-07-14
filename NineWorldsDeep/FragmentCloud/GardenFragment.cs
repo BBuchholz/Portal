@@ -7,11 +7,11 @@ namespace NineWorldsDeep.FragmentCloud
         public GardenFragment()
             : base("")
         {
-            AddChild(new FileSystemFragment("NWD", true));
-            AddChild(new FileSystemFragment("NWD-AUX", true));
-            AddChild(new FileSystemFragment("NWD-MEDIA", true));
-            AddChild(new FileSystemFragment("NWD-SNDBX", true));
-            AddChild(new FileSystemFragment("NWD-SYNC", true));
+            AddChild(new FileSystemNode("NWD", true));
+            AddChild(new FileSystemNode("NWD-AUX", true));
+            AddChild(new FileSystemNode("NWD-MEDIA", true));
+            AddChild(new FileSystemNode("NWD-SNDBX", true));
+            AddChild(new FileSystemNode("NWD-SYNC", true));
         }
 
         public override string GetShortName()

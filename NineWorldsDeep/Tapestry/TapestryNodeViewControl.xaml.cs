@@ -44,6 +44,7 @@ namespace NineWorldsDeep.Tapestry
             contentControls = new List<ContentControl>();
             contentControls.Add(ccFragCloud);
             contentControls.Add(ccFragment);
+            contentControls.Add(ccAudioNode);
         }
 
         private void Fragment_Clicked(object sender, FragmentClickedEventArgs e)
@@ -75,22 +76,29 @@ namespace NineWorldsDeep.Tapestry
             currentNode = nd;
         }
 
-        private void ResolveContentControl(TapestryNode frg)
+        private void ResolveContentControl(TapestryNode node)
         {
-            if(frg != null)
+            if(node != null)
             {
-                switch (frg.NodeType)
+                switch (node.NodeType)
                 {
                     case TapestryNodeType.Collection:
 
                         SetVisible(ccFragCloud);
-                        fragmentCloud.Display(frg);
+                        fragmentCloud.Display(node);
+                        break;
+
+                    case TapestryNodeType.Audio:
+
+                        SetVisible(ccAudioNode);
+                        FileSystemNode nd = (FileSystemNode)node;
+                        audioNodeDisplay.Display(nd);
                         break;
 
                     default:
 
                         SetVisible(ccFragment);
-                        nodeDisplayDefault.Display(frg);
+                        nodeDisplayDefault.Display(node);
                         break;
 
                 }

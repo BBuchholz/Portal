@@ -147,7 +147,7 @@
     <Compile Include="FragmentCloud\ElementCloud.cs" />
     <Compile Include="FragmentCloud\ElementCloudItem.cs" />
     <Compile Include="FragmentCloud\ElementCloudItemSize.cs" />
-    <Compile Include="FragmentCloud\FileSystemFragment.cs" />
+    <Compile Include="FragmentCloud\FileSystemNode.cs" />
     <Compile Include="FragmentCloud\TapestryNode.cs" />
     <Compile Include="FragmentCloud\FragmentClickedEventArgs.cs" />
     <Compile Include="FragmentCloud\FragmentCloud.xaml.cs">
@@ -346,6 +346,9 @@
     <Compile Include="Tapestry\Fragments\StudioScalesNode.cs" />
     <Compile Include="Tapestry\Fragments\TapestryRootNode.cs" />
     <Compile Include="Tapestry\Fragments\TapestrySplitViewNode.cs" />
+    <Compile Include="Tapestry\NodeUI\AudioNodeDisplay.xaml.cs">
+      <DependentUpon>AudioNodeDisplay.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Tapestry\TapestrySplitViewLoadCommand.cs" />
     <Compile Include="Tapestry\TapestryMainWindow.xaml.cs">
       <DependentUpon>TapestryMainWindow.xaml</DependentUpon>
@@ -531,6 +534,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Tagger\VerticalTaggerGrid.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Tapestry\NodeUI\AudioNodeDisplay.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

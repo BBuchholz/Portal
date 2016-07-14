@@ -23,7 +23,7 @@ namespace NineWorldsDeep.Tapestry
             }
         }
 
-        public TapestryNodeType NodeType
+        public virtual TapestryNodeType NodeType
         {
             get
             {
