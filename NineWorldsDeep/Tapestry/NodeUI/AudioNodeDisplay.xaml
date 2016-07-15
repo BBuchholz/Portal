@@ -10,11 +10,11 @@
 
         <Style x:Key="RoundButtonTemplate" TargetType="Button">
             <Setter Property="Background" Value="White"/>
-            <Setter Property="Foreground" Value="Black" />
+            <Setter Property="Foreground" Value="Black"/>
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="Button">
-                        <Border CornerRadius="12" 
+                        <Border CornerRadius="12"
                                 Background="{TemplateBinding Background}"
                                 BorderThickness="1">
                             <ContentPresenter HorizontalAlignment="Center" 

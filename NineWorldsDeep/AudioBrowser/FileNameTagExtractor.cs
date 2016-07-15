@@ -13,7 +13,7 @@ namespace NineWorldsDeep.AudioBrowser
             Regex r = new Regex("([A-Za-z]+)");
             foreach (Match m in r.Matches(s))
             {
-                tags.Add(m.Value);
+                tags.Add(m.Value.ToLower());
             }
 
             return tags;
