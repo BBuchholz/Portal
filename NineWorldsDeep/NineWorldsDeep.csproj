@@ -27,7 +27,7 @@
     <UpdatePeriodically>false</UpdatePeriodically>
     <UpdateRequired>false</UpdateRequired>
     <MapFileExtensions>true</MapFileExtensions>
-    <ApplicationRevision>37</ApplicationRevision>
+    <ApplicationRevision>38</ApplicationRevision>
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <PublishWizardCompleted>true</PublishWizardCompleted>
@@ -349,6 +349,9 @@
     <Compile Include="Tapestry\NodeUI\AudioNodeDisplay.xaml.cs">
       <DependentUpon>AudioNodeDisplay.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Tapestry\NodeUI\NodeList.xaml.cs">
+      <DependentUpon>NodeList.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Tapestry\TapestrySplitViewLoadCommand.cs" />
     <Compile Include="Tapestry\TapestryMainWindow.xaml.cs">
       <DependentUpon>TapestryMainWindow.xaml</DependentUpon>
@@ -538,6 +541,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Tapestry\NodeUI\AudioNodeDisplay.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Tapestry\NodeUI\NodeList.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

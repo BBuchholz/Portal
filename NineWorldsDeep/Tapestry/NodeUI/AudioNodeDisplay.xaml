@@ -43,6 +43,7 @@
             <RowDefinition/>
             <RowDefinition/>
             <RowDefinition/>
+            <RowDefinition/>
         </Grid.RowDefinitions>
 
         <TextBox x:Name="txtMultiLine"
@@ -63,9 +64,15 @@
                     Style="{StaticResource RoundButtonTemplate}"
                     Click="StopButton_Click">Stop</Button>
 
-        <CheckBox Grid.Row="3"
+        <Button Grid.Row="3"
+                    Margin="10, 2" 
+                    Style="{StaticResource RoundButtonTemplate}"
+                    Click="OpenExternallyButton_Click">Open Externally</Button>
+
+        <CheckBox Grid.Row="4"
                   x:Name="chkLoop"
                   IsChecked="False"
+                  Checked="chkLoop_Checked"
                   VerticalAlignment="Center"
                   HorizontalAlignment="Center"
                   Foreground="WhiteSmoke">Loop</CheckBox>

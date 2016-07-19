@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using NineWorldsDeep.Tapestry;
+using NineWorldsDeep.Core;
 
 namespace NineWorldsDeep.FragmentCloud
 {
@@ -53,8 +54,8 @@ namespace NineWorldsDeep.FragmentCloud
             string detail = "";
 
             //short name
-            detail += "Short Name: " +
-                GetShortName() +
+            detail += "Long Name: " +
+                GetLongName() +
                 Environment.NewLine;
 
             //created at
@@ -147,7 +148,7 @@ namespace NineWorldsDeep.FragmentCloud
         public override TapestryNodeType NodeType
         {
             get
-            {
+            {                
                 if (Path.ToLower().EndsWith(".wav"))
                 {
                     return TapestryNodeType.Audio;
@@ -192,9 +193,8 @@ namespace NineWorldsDeep.FragmentCloud
         public override string GetShortName()
         {
             int shortNameLength = 15;
-            string name = Converter.NwdUriNodeName(URI);
 
-            name = System.IO.Path.GetFileName(name);
+            string name = GetLongName();
 
             if (name.Length > shortNameLength)
             {
@@ -202,6 +202,13 @@ namespace NineWorldsDeep.FragmentCloud
                     name.Substring(name.Length - 4, 4);
             }
 
+            return name;
+        }
+
+        public override string GetLongName()
+        {
+            string name = Converter.NwdUriNodeName(URI);
+            name = System.IO.Path.GetFileName(name);
             return name;
         }
     }

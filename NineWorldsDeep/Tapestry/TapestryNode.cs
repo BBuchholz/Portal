@@ -23,6 +23,30 @@ namespace NineWorldsDeep.Tapestry
             }
         }
 
+        public string ShortName
+        {
+            get
+            {
+                return GetShortName();
+            }
+        }
+
+        public int ChildCount
+        {
+            get
+            {
+                return Children.Count();
+            }
+        }
+
+        public string LongName
+        {
+            get
+            {
+                return GetLongName();
+            }
+        }
+
         public virtual TapestryNodeType NodeType
         {
             get
@@ -65,6 +89,12 @@ namespace NineWorldsDeep.Tapestry
         }
 
         public abstract string GetShortName();
+
+        public virtual string GetLongName()
+        {
+            //Default
+            return GetShortName();
+        }
 
         public void ClearChildren()
         {

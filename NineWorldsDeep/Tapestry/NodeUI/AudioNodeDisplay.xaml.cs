@@ -1,6 +1,7 @@
 ﻿using NineWorldsDeep.FragmentCloud;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Media;
@@ -40,7 +41,12 @@ namespace NineWorldsDeep.Tapestry.NodeUI
 
         private void PlayButton_Click(object sender, RoutedEventArgs e)
         {
-            if(fileNode != null && File.Exists(fileNode.Path))
+            PlayCurrent();
+        }
+
+        private void PlayCurrent()
+        {
+            if (fileNode != null && File.Exists(fileNode.Path))
             {
                 player = new SoundPlayer(fileNode.Path);
 
@@ -60,6 +66,23 @@ namespace NineWorldsDeep.Tapestry.NodeUI
             if(player != null)
             {
                 player.Stop();
+            }
+        }
+
+        private void chkLoop_Checked(object sender, RoutedEventArgs e)
+        {
+            //restart so looping or non-looping takes effect
+            PlayCurrent();
+        }
+
+        private void OpenExternallyButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (fileNode != null)
+            {
+                //open externally
+                Process proc = new Process();
+                proc.StartInfo.FileName = fileNode.Path;
+                proc.Start();
             }
         }
     }
