@@ -37,7 +37,7 @@ namespace NineWorldsDeep.Tapestry.NodeUI
         public void Display(FileSystemNode nd)
         {
             fileNode = nd;
-            txtMultiLine.Text = nd.ToMultiLineDetail();
+            FileDetailsControl.Display(fileNode);
         }
 
         private void PlayButton_Click(object sender, RoutedEventArgs e)
@@ -78,13 +78,7 @@ namespace NineWorldsDeep.Tapestry.NodeUI
 
         private void OpenExternallyButton_Click(object sender, RoutedEventArgs e)
         {
-            if (fileNode != null)
-            {
-                //open externally
-                Process proc = new Process();
-                proc.StartInfo.FileName = fileNode.Path;
-                proc.Start();
-            }
+            NwdUtils.OpenFileExternally(fileNode.Path);
         }
 
         private string CopyToVoiceMemoStaging()

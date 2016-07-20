@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -25,6 +27,17 @@ namespace NineWorldsDeep.Core
             if (!regex.IsMatch(name))
             {
                 throw new ArgumentException("invalid name: " + name);
+            }
+        }
+
+        public static void OpenFileExternally(string path)
+        {
+            if (File.Exists(path))
+            {
+                //open externally
+                Process proc = new Process();
+                proc.StartInfo.FileName = path;
+                proc.Start();
             }
         }
     }

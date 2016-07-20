@@ -47,15 +47,14 @@ namespace NineWorldsDeep.Tapestry.NodeUI
                 e.ClickCount == 2 &&
                 fileNode != null)
             {
-                Process proc = new Process();
-                proc.StartInfo.FileName = fileNode.Path;
-                proc.Start();
+                NwdUtils.OpenFileExternally(fileNode.Path);
             }
         }
 
         public void Display(FileSystemNode nd)
         {
             fileNode = nd;
+            FileDetailsControl.Display(nd);
 
             BitmapImage image = new BitmapImage();
 
