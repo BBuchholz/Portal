@@ -76,6 +76,7 @@ namespace NineWorldsDeep.Tapestry
             contentControls.Add(ccFragment);
             contentControls.Add(ccAudioNode);
             contentControls.Add(ccNodeList);
+            contentControls.Add(ccImageNode);
         }
 
         private void ResolveContentControl(TapestryNode node)
@@ -108,6 +109,13 @@ namespace NineWorldsDeep.Tapestry
                         SetVisible(ccAudioNode);
                         FileSystemNode nd = (FileSystemNode)node;
                         audioNodeDisplay.Display(nd);
+                        break;
+
+                    case TapestryNodeType.Image:
+
+                        SetVisible(ccImageNode);
+                        FileSystemNode ind = (FileSystemNode)node;
+                        imageNodeDisplay.Display(ind);
                         break;
 
                     default:

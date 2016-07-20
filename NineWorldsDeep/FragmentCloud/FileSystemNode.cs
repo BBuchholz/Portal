@@ -149,9 +149,13 @@ namespace NineWorldsDeep.FragmentCloud
         {
             get
             {                
-                if (Path.ToLower().EndsWith(".wav"))
+                if (Configuration.FileIsAudio(Path))
                 {
                     return TapestryNodeType.Audio;
+                }
+                else if (Configuration.FileIsImage(Path))
+                {
+                    return TapestryNodeType.Image;
                 }
                 else
                 {

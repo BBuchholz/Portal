@@ -130,6 +130,21 @@ namespace NineWorldsDeep.Core
             Directory.CreateDirectory(Configuration.MtpSynergySyncPath);
         }
 
+        public static bool FileIsAudio(string path)
+        {
+            return path.ToLower().EndsWith(".wav");
+        }
+
+        public static bool FileIsImage(string path)
+        {
+            return path.ToLower().EndsWith(".bmp") ||
+                        path.ToLower().EndsWith(".gif") ||
+                        path.ToLower().EndsWith(".ico") ||
+                        path.ToLower().EndsWith(".jpg") ||
+                        path.ToLower().EndsWith(".png") ||
+                        path.ToLower().EndsWith(".tiff");
+        }
+
         public static string GetPhoneSyncConfigFilePath(string fileNameWithoutExtension)
         {
             return PhoneSyncConfigFolder + "\\" + fileNameWithoutExtension + ".txt";

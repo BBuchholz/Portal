@@ -39,7 +39,9 @@
         </Grid.Background>
         
         <Grid.RowDefinitions>
-            <RowDefinition Height="4*"/>
+            <RowDefinition Height="3*"/>
+            <RowDefinition/>
+            <RowDefinition/>
             <RowDefinition/>
             <RowDefinition/>
             <RowDefinition/>
@@ -69,7 +71,17 @@
                     Style="{StaticResource RoundButtonTemplate}"
                     Click="OpenExternallyButton_Click">Open Externally</Button>
 
-        <CheckBox Grid.Row="4"
+        <Button Grid.Row="4"
+                    Margin="10, 2" 
+                    Style="{StaticResource RoundButtonTemplate}"
+                    Click="CopyToExportStagingButton_Click">Copy To Export Staging</Button>
+
+        <Button Grid.Row="4"
+                    Margin="10, 2" 
+                    Style="{StaticResource RoundButtonTemplate}"
+                    Click="SendToTrashButton_Click">Send To Trash</Button>
+
+        <CheckBox Grid.Row="6"
                   x:Name="chkLoop"
                   IsChecked="False"
                   Checked="chkLoop_Checked"

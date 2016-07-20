@@ -25,6 +25,11 @@
             <nodeUI:AudioNodeDisplay x:Name="audioNodeDisplay"/>
         </ContentControl>
 
+        <ContentControl x:Name="ccImageNode"
+                    Visibility="Collapsed">
+            <nodeUI:ImageNodeDisplay x:Name="imageNodeDisplay"/>
+        </ContentControl>
+        
         <ContentControl x:Name="ccNodeList"
                         Visibility="Collapsed">
             <nodeUI:NodeList x:Name="nodeList"/>

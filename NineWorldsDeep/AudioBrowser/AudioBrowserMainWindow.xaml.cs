@@ -144,7 +144,7 @@ namespace NineWorldsDeep.AudioBrowser
 
         private void MenuItemCopyMultipleToVoiceMemoStaging_Click(object sender, RoutedEventArgs e)
         {
-            int count = UI.Prompt.ForInteger("How many items would you like to copy?");
+            int count = UI.Prompt.ForInteger("How many items, from the top of the list, would you like to copy?");
 
             foreach (FileElement fe in tgrGrid.FileElements.Take(count))
             {
