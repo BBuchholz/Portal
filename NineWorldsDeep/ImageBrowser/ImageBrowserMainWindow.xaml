@@ -29,8 +29,10 @@
             		Click="MenuItemLoadFromSmallest_Click"/>
             </MenuItem>
             <MenuItem Header="Selected Item">
-                <MenuItem Header="Copy To Image Staging"
+                <MenuItem Header="Copy Selected Item To Image Staging"
                           Click="MenuItemCopyToImageStaging_Click"/>
+                <MenuItem Header="Copy Multiple Items To Image Staging"
+                          Click="MenuItemCopyMultipleToImageStaging_Click"/>
             </MenuItem>
         </Menu>
         <Grid>

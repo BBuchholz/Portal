@@ -140,6 +140,14 @@ namespace NineWorldsDeep.Tagger
             LoadFileElementList(tagMatrix.GetFilePaths());
         }
 
+        public IEnumerable<FileElement> FileElements
+        {
+            get
+            {
+                return lvFileElements.Items.Cast<FileElement>().ToList();
+            }
+        }
+
         private bool pendingChanges = false;
 
         public bool HasPendingChanges { get { return pendingChanges; } }

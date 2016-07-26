@@ -162,37 +162,76 @@ namespace NineWorldsDeep.ImageBrowser
             }
         }
 
+        private string CopyToImageStaging(FileElement fe)
+        {
+            string imageStagingFolderPath = Configuration.ImageStagingFolder;
+
+            //ensure directory exists
+            Directory.CreateDirectory(imageStagingFolderPath);
+
+            //create destination file path
+            string fName = System.IO.Path.GetFileName(fe.Path);
+            string destFilePath = System.IO.Path.Combine(imageStagingFolderPath, fName);
+
+            //copy if !exists, else message                
+            if (!File.Exists(destFilePath))
+            {
+                File.Copy(fe.Path, destFilePath);
+                return "copied to: " + destFilePath;
+            }
+            else
+            {
+                return "file exists: " + destFilePath;
+            }
+        }
+
         private void MenuItemCopyToImageStaging_Click(object sender, RoutedEventArgs e)
         {
             if (tgrGrid.SelectedFileElement != null)
             {
                 FileElement fe = (FileElement)tgrGrid.SelectedFileElement;
-                string imageStagingFolderPath = Configuration.ImageStagingFolder;
+                Display.Message(CopyToImageStaging(fe));
 
-                //ensure directory exists
-                Directory.CreateDirectory(imageStagingFolderPath);
+                //string imageStagingFolderPath = Configuration.ImageStagingFolder;
 
-                //create destination file path
-                string fName = System.IO.Path.GetFileName(fe.Path);
-                string destFilePath = System.IO.Path.Combine(imageStagingFolderPath, fName);
+                ////ensure directory exists
+                //Directory.CreateDirectory(imageStagingFolderPath);
 
-                //copy if !exists, else message                
-                if (!File.Exists(destFilePath))
-                {
-                    File.Copy(fe.Path, destFilePath);
-                    Display.Message("copied to: " + destFilePath);
-                }
-                else
-                {
-                    Display.Message("file exists: " + destFilePath);
-                }
+                ////create destination file path
+                //string fName = System.IO.Path.GetFileName(fe.Path);
+                //string destFilePath = System.IO.Path.Combine(imageStagingFolderPath, fName);
+
+                ////copy if !exists, else message                
+                //if (!File.Exists(destFilePath))
+                //{
+                //    File.Copy(fe.Path, destFilePath);
+                //    Display.Message("copied to: " + destFilePath);
+                //}
+                //else
+                //{
+                //    Display.Message("file exists: " + destFilePath);
+                //}
+
+
             }
             else
             {
                 Display.Message("nothing selected");
             }
         }
-        
+
+        private void MenuItemCopyMultipleToImageStaging_Click(object sender, RoutedEventArgs e)
+        {
+            int count = UI.Prompt.ForInteger("How many items, from the top of the list, would you like to copy?");
+
+            foreach (FileElement fe in tgrGrid.FileElements.Take(count))
+            {
+                CopyToImageStaging(fe);
+            }
+
+            Display.Message(count + " items copied.");
+        }
+
         private void BrowseButton_Click(object sender, RoutedEventArgs e)
         {
             FolderBrowserDialog dlg = new FolderBrowserDialog();
@@ -223,5 +262,6 @@ namespace NineWorldsDeep.ImageBrowser
             LoadFolder(lastLoadedFromFileInsteadOfDb,
                 GetFolderWithLeastNonZeroUntaggedCount());
         }
+
     }
 }
