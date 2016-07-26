@@ -19,7 +19,23 @@ namespace NineWorldsDeep.Sqlite
         public static string TABLE_AUDIO_TRANSCRIPT = "AudioTranscript";
         public static string TABLE_LOCAL_CONFIG = "LocalConfig";
         public static string TABLE_JUNCTION_FILE_TAG = "junction_File_Tag";
-        //columns
+        public static string TABLE_LIST = "List";
+        public static string TABLE_ITEM = "Item";
+        public static string TABLE_FRAGMENT = "Fragment";
+        //public static string TABLE_ = "";
+        //public static string TABLE_ = "";
+        //public static string TABLE_ = "";
+        //public static string TABLE_ = "";
+
+        ////columns
+        //public static string COLUMN_ = "";
+        //public static string COLUMN_ = "";
+        //public static string COLUMN_ = "";
+        //public static string COLUMN_ = "";
+        public static string COLUMN_UPDATED_AT = "UpdatedAt";
+        public static string COLUMN_FRAGMENT_VALUE = "FragmentValue";
+        public static string COLUMN_ARCHIVED_AT = "ArchivedAt";
+        public static string COLUMN_COMPLETED_AT = "CompletedAt";
         public static string COLUMN_DISPLAY_NAME_ID = "DisplayNameId";
         public static string COLUMN_DISPLAY_NAME_VALUE = "DisplayNameValue";
         public static string COLUMN_PATH_ID = "PathId";
@@ -40,5 +56,10 @@ namespace NineWorldsDeep.Sqlite
         public static string COLUMN_LOCAL_CONFIG_ID = "LocalConfigId";
         public static string COLUMN_LOCAL_CONFIG_KEY = "LocalConfigKey";
         public static string COLUMN_LOCAL_CONFIG_VALUE = "LocalConfigValue";
+        public static string COLUMN_LIST_ID = "ListId";
+        public static string COLUMN_LIST_NAME = "ListName";
+        public static string COLUMN_ITEM_ID = "ItemId";
+        public static string COLUMN_ITEM_VALUE = "ItemValue";
+        public static string COLUMN_LIST_ACTIVE = "ListActive";
     }
 }

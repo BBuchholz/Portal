@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Data.SQLite;
 using System.Linq;
 using System.Collections.ObjectModel;
+using NineWorldsDeep.Sqlite;
 
 namespace NineWorldsDeep.Synergy
 {
@@ -32,6 +33,18 @@ namespace NineWorldsDeep.Synergy
                         using (var transaction = conn.BeginTransaction())
                         {
                             cmd.CommandText =
+                                //"SELECT l.ListName, " +
+                                //       "i.ItemValue, " +
+                                //       "f.CompletedAt, " +
+                                //       "f.ArchivedAt " +
+                                //"FROM List l " +
+                                //"JOIN Fragment f ON l.ListId = f.ListId " +
+                                //"JOIN Item i ON f.ItemId = i.ItemId " +
+                                //"WHERE l.ListActive = @active " +
+                                //"AND (f.CompletedAt IS NULL OR " +
+                                //     "f.CompletedAt = '') " +
+                                //"AND (f.ArchivedAt IS NULL OR " +
+                                //     "f.ArchivedAt = '')";
                                 "SELECT l.ListName, " +
                                        "i.ItemValue, " +
                                        "f.CompletedAt, " +
@@ -187,7 +200,10 @@ namespace NineWorldsDeep.Synergy
         {
             cmd.Parameters.Clear();
             cmd.CommandText =
-                "UPDATE List SET ListActive = @active WHERE ListName = @listName";
+                //"UPDATE List SET ListActive = @active WHERE ListName = @listName";
+                "UPDATE " + NwdContract.TABLE_LIST +
+                " SET " + NwdContract.COLUMN_LIST_ACTIVE + " = @active " +
+                "WHERE " + NwdContract.COLUMN_LIST_NAME + " = @listName";
             cmd.Parameters.AddWithValue("@active", active);
             cmd.Parameters.AddWithValue("@listName", listName);
             cmd.ExecuteNonQuery();
@@ -209,14 +225,21 @@ namespace NineWorldsDeep.Synergy
 
             //attempt update for CompletedAt
             cmd.Parameters.Clear();
-            cmd.CommandText = 
-                "UPDATE OR IGNORE Fragment " +
-                "SET CompletedAt = @completedAt " +
-                "WHERE ListId = @listId " +
-                "AND ItemId = @itemId " +
-                "AND CompletedAt IS NOT @completedAt " +
-                "AND (CompletedAt IS NULL " +
-                     "OR CompletedAt = '') ";
+            cmd.CommandText =
+                                //"UPDATE OR IGNORE Fragment " +
+                                //"SET CompletedAt = @completedAt " +
+                                //"WHERE ListId = @listId " +
+                                //"AND ItemId = @itemId " +
+                                //"AND CompletedAt IS NOT @completedAt " +
+                                //"AND (CompletedAt IS NULL " +
+                                //     "OR CompletedAt = '') ";
+                "UPDATE OR IGNORE " + NwdContract.TABLE_FRAGMENT + " " +
+                "SET " + NwdContract.COLUMN_COMPLETED_AT + " = @completedAt " +
+                "WHERE " + NwdContract.COLUMN_LIST_ID + " = @listId " +
+                "AND " + NwdContract.COLUMN_ITEM_ID + " = @itemId " +
+                "AND " + NwdContract.COLUMN_COMPLETED_AT + " IS NOT @completedAt " +
+                "AND (" + NwdContract.COLUMN_COMPLETED_AT + " IS NULL " +
+                     "OR " + NwdContract.COLUMN_COMPLETED_AT + " = '') ";
 
             cmd.Parameters.AddWithValue("@completedAt", si.CompletedAt);
             cmd.Parameters.AddWithValue("@listId", listId);
@@ -226,13 +249,20 @@ namespace NineWorldsDeep.Synergy
             //attempt update for ArchivedAt
             cmd.Parameters.Clear();
             cmd.CommandText =
-                "UPDATE OR IGNORE Fragment " +
-                "SET ArchivedAt = @archivedAt " +
-                "WHERE ListId = @listId " +
-                "AND ItemId = @itemId " +
-                "AND ArchivedAt IS NOT @archivedAt " +
-                "AND (ArchivedAt IS NULL " +
-                     "OR ArchivedAt = '') ";
+                //"UPDATE OR IGNORE Fragment " +
+                //"SET ArchivedAt = @archivedAt " +
+                //"WHERE ListId = @listId " +
+                //"AND ItemId = @itemId " +
+                //"AND ArchivedAt IS NOT @archivedAt " +
+                //"AND (ArchivedAt IS NULL " +
+                //     "OR ArchivedAt = '') ";
+                "UPDATE OR IGNORE " + NwdContract.TABLE_FRAGMENT + " " +
+                "SET " + NwdContract.COLUMN_ARCHIVED_AT + " = @archivedAt " +
+                "WHERE " + NwdContract.COLUMN_LIST_ID + " = @listId " +
+                "AND " + NwdContract.COLUMN_ITEM_ID + " = @itemId " +
+                "AND " + NwdContract.COLUMN_ARCHIVED_AT + " IS NOT @archivedAt " +
+                "AND (" + NwdContract.COLUMN_ARCHIVED_AT + " IS NULL " +
+                     "OR " + NwdContract.COLUMN_ARCHIVED_AT + " = '') ";
 
             cmd.Parameters.AddWithValue("@archivedAt", si.ArchivedAt);
             cmd.Parameters.AddWithValue("@listId", listId);
@@ -242,11 +272,16 @@ namespace NineWorldsDeep.Synergy
             //attempt update for Fragment
             cmd.Parameters.Clear();
             cmd.CommandText =
-                "UPDATE OR IGNORE Fragment " +
-                "SET FragmentValue = @fragVal, " +
-                    "UpdatedAt = @updatedAt " +
-                "WHERE ListId = @listId " +
-                "AND ItemId = @itemId ";
+                //"UPDATE OR IGNORE Fragment " +
+                //"SET FragmentValue = @fragVal, " +
+                //    "UpdatedAt = @updatedAt " +
+                //"WHERE ListId = @listId " +
+                //"AND ItemId = @itemId ";
+                "UPDATE OR IGNORE " + NwdContract.TABLE_FRAGMENT + " " +
+                "SET " + NwdContract.COLUMN_FRAGMENT_VALUE + " = @fragVal, " +
+                    NwdContract.COLUMN_UPDATED_AT + " = @updatedAt " +
+                "WHERE " + NwdContract.COLUMN_LIST_ID + " = @listId " +
+                "AND " + NwdContract.COLUMN_ITEM_ID + " = @itemId ";
 
             cmd.Parameters.AddWithValue("@fragVal", si.Fragment);
             cmd.Parameters.AddWithValue("@updatedAt", updatedAt);
@@ -258,18 +293,31 @@ namespace NineWorldsDeep.Synergy
             //attempt insert for Fragment
             cmd.Parameters.Clear();
             cmd.CommandText =
-                "INSERT OR IGNORE INTO Fragment (ListId, " +
-                                                "ItemId, " +
-                                                "FragmentValue, " +
-                                                "CompletedAt, " +
-                                                "ArchivedAt, " +
-                                                "UpdatedAt) " +
-                "VALUES (@listId, " +
-                        "@itemId, " +
-                        "@fragVal, " +
-                        "@completedAt, " +
-                        "@archivedAt, " +
-                        "@updatedAt) ";
+            //"INSERT OR IGNORE INTO Fragment (ListId, " +
+            //                                "ItemId, " +
+            //                                "FragmentValue, " +
+            //                                "CompletedAt, " +
+            //                                "ArchivedAt, " +
+            //                                "UpdatedAt) " +
+            //"VALUES (@listId, " +
+            //        "@itemId, " +
+            //        "@fragVal, " +
+            //        "@completedAt, " +
+            //        "@archivedAt, " +
+            //        "@updatedAt) ";
+            "INSERT OR IGNORE INTO " + NwdContract.TABLE_FRAGMENT +
+                " (" + NwdContract.COLUMN_LIST_ID + ", " +
+                    "" + NwdContract.COLUMN_ITEM_ID + ", " +
+                    "" + NwdContract.COLUMN_FRAGMENT_VALUE + ", " +
+                    "" + NwdContract.COLUMN_COMPLETED_AT + ", " +
+                    "" + NwdContract.COLUMN_ARCHIVED_AT + ", " +
+                    "" + NwdContract.COLUMN_UPDATED_AT + ") " +
+            "VALUES (@listId, " +
+                    "@itemId, " +
+                    "@fragVal, " +
+                    "@completedAt, " +
+                    "@archivedAt, " +
+                    "@updatedAt) ";
 
             cmd.Parameters.AddWithValue("@listId", listId);
             cmd.Parameters.AddWithValue("@itemId", itemId);
@@ -282,9 +330,9 @@ namespace NineWorldsDeep.Synergy
 
         private int EnsureIdForItemValue(string item, SQLiteCommand cmd)
         {
-            return EnsureIdForValue("Item",
-                                    "ItemId",
-                                    "ItemValue",
+            return EnsureIdForValue(NwdContract.TABLE_ITEM,
+                                    NwdContract.COLUMN_ITEM_ID,
+                                    NwdContract.COLUMN_ITEM_VALUE,
                                     item,
                                     cmd);
             //int id = -1;
@@ -315,36 +363,17 @@ namespace NineWorldsDeep.Synergy
 
         private int EnsureIdForListName(string name, SQLiteCommand cmd)
         {
-            return EnsureIdForValue("List", 
-                                    "ListId", 
-                                    "ListName", 
-                                    name, 
+            //return EnsureIdForValue("List", 
+            //                        "ListId", 
+            //                        "ListName", 
+            //                        name, 
+            //                        cmd);
+            
+            return EnsureIdForValue(NwdContract.TABLE_LIST,
+                                    NwdContract.COLUMN_LIST_ID,
+                                    NwdContract.COLUMN_LIST_NAME,
+                                    name,
                                     cmd);
-
-            //int id = -1;
-
-            ////insert or ignore
-            //cmd.Parameters.Clear();
-            //cmd.CommandText =
-            //    "INSERT OR IGNORE INTO List (ListName) VALUES (@listName)";
-            //cmd.Parameters.AddWithValue("@listName", name);
-            //cmd.ExecuteNonQuery();
-
-            ////select value
-            //cmd.Parameters.Clear(); //since we will be reusing command
-            //cmd.CommandText = "SELECT ListId FROM List " +
-            //                  "WHERE ListName = @listName";
-            //cmd.Parameters.AddWithValue("@listName", name);
-
-            //using (var rdr = cmd.ExecuteReader())
-            //{
-            //    if (rdr.Read()) //if statement cause we only need the first
-            //    {
-            //        id = rdr.GetInt32(0);
-            //    }
-            //}
-
-            //return id;
         }
 
         private int EnsureIdForValue(string tableName, 

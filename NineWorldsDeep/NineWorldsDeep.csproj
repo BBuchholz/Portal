@@ -27,7 +27,7 @@
     <UpdatePeriodically>false</UpdatePeriodically>
     <UpdateRequired>false</UpdateRequired>
     <MapFileExtensions>true</MapFileExtensions>
-    <ApplicationRevision>38</ApplicationRevision>
+    <ApplicationRevision>39</ApplicationRevision>
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <PublishWizardCompleted>true</PublishWizardCompleted>
@@ -288,7 +288,6 @@
     <Compile Include="Synergy\Fragment.cs" />
     <Compile Include="Synergy\GauntletExtensions.cs" />
     <Compile Include="Synergy\GauntletMenuController.cs" />
-    <Compile Include="Synergy\GauntletModelSqliteDbAdapter.cs" />
     <Compile Include="Synergy\GauntletUtils.cs" />
     <Compile Include="Synergy\IGauntletDbAdapter.cs" />
     <Compile Include="Synergy\IListMatrix.cs" />
@@ -305,9 +304,6 @@
     <Compile Include="Synergy\SynergyList.cs" />
     <Compile Include="Synergy\SynergyListManagementWindow.xaml.cs">
       <DependentUpon>SynergyListManagementWindow.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Synergy\SynergyMainWindow.xaml.cs">
-      <DependentUpon>SynergyMainWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Synergy\SynergyRowObject.cs" />
     <Compile Include="Synergy\SynergySqliteDbAdapter.cs" />
@@ -527,10 +523,6 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Synergy\SynergyListManagementWindow.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Synergy\SynergyMainWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
