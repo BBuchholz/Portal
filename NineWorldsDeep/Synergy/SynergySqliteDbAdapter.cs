@@ -45,18 +45,18 @@ namespace NineWorldsDeep.Synergy
                                 //     "f.CompletedAt = '') " +
                                 //"AND (f.ArchivedAt IS NULL OR " +
                                 //     "f.ArchivedAt = '')";
-                                "SELECT l.ListName, " +
-                                       "i.ItemValue, " +
-                                       "f.CompletedAt, " +
-                                       "f.ArchivedAt " +
-                                "FROM List l " +
-                                "JOIN Fragment f ON l.ListId = f.ListId " +
-                                "JOIN Item i ON f.ItemId = i.ItemId " +
-                                "WHERE l.ListActive = @active " +
-                                "AND (f.CompletedAt IS NULL OR " +
-                                     "f.CompletedAt = '') " +
-                                "AND (f.ArchivedAt IS NULL OR " +
-                                     "f.ArchivedAt = '')";
+                                "SELECT l." + NwdContract.COLUMN_LIST_NAME + ", " +
+                                       "i." + NwdContract.COLUMN_ITEM_VALUE + ", " +
+                                       "f." + NwdContract.COLUMN_COMPLETED_AT + ", " +
+                                       "f." + NwdContract.COLUMN_ARCHIVED_AT + " " +
+                                "FROM " + NwdContract.TABLE_LIST + " l " +
+                                "JOIN " + NwdContract.TABLE_FRAGMENT + " f ON l.ListId = f.ListId " +
+                                "JOIN " + NwdContract.TABLE_ITEM + " i ON f.ItemId = i.ItemId " +
+                                "WHERE l." + NwdContract.COLUMN_LIST_ACTIVE + " = @active " +
+                                "AND (f." + NwdContract.COLUMN_COMPLETED_AT + " IS NULL OR " +
+                                     "f." + NwdContract.COLUMN_COMPLETED_AT + " = '') " +
+                                "AND (f." + NwdContract.COLUMN_ARCHIVED_AT + " IS NULL OR " +
+                                     "f." + NwdContract.COLUMN_ARCHIVED_AT + " = '')";
 
                             cmd.Parameters.AddWithValue("@active", active);
 
