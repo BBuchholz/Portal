@@ -90,100 +90,100 @@ namespace NineWorldsDeep.Warehouse
             return hashToTagString;
         }
 
-        [Obsolete("use ImportForHash and ExportForHash")]
-        public static string FromHash(SyncProfile sp,
-                                      SyncDirection direction,
-                                      string sha1Hash,
-                                      bool tagsFromXmlNotKeyVal)
-        {
-            string tags = "";
+        //[Obsolete("use ImportForHash and ExportForHash")]
+        //public static string FromHash(SyncProfile sp,
+        //                              SyncDirection direction,
+        //                              string sha1Hash,
+        //                              bool tagsFromXmlNotKeyVal)
+        //{
+        //    string tags = "";
 
-            switch (direction)
-            {
-                case SyncDirection.Import:
+        //    switch (direction)
+        //    {
+        //        case SyncDirection.Import:
 
-                    ////load by using profile to get sync root
-                    ////which gives us NWD/config
-                    //string fileHashIndexPath = Configuration.SyncRootConfigFile(sp.Name, "FileHashIndex");
-                    //string tagIndexPath = Configuration.SyncRootConfigFile(sp.Name, "TagIndex");
+        //            ////load by using profile to get sync root
+        //            ////which gives us NWD/config
+        //            //string fileHashIndexPath = Configuration.SyncRootConfigFile(sp.Name, "FileHashIndex");
+        //            //string tagIndexPath = Configuration.SyncRootConfigFile(sp.Name, "TagIndex");
 
-                    //if (File.Exists(fileHashIndexPath) && File.Exists(tagIndexPath))
-                    //{
-                    //    Parser.Parser p = new Parser.Parser();
-                    //    List<string> paths = new List<string>();
+        //            //if (File.Exists(fileHashIndexPath) && File.Exists(tagIndexPath))
+        //            //{
+        //            //    Parser.Parser p = new Parser.Parser();
+        //            //    List<string> paths = new List<string>();
 
-                    //    //get all paths matching hash (may be multiple files, if copied in multiple places)
-                    //    foreach (string lineItem in File.ReadLines(fileHashIndexPath))
-                    //    {
-                    //        string path = p.Extract("path", lineItem);
-                    //        string hash = p.Extract("sha1Hash", lineItem);
+        //            //    //get all paths matching hash (may be multiple files, if copied in multiple places)
+        //            //    foreach (string lineItem in File.ReadLines(fileHashIndexPath))
+        //            //    {
+        //            //        string path = p.Extract("path", lineItem);
+        //            //        string hash = p.Extract("sha1Hash", lineItem);
 
-                    //        if(!string.IsNullOrWhiteSpace(path) &&
-                    //            !string.IsNullOrWhiteSpace(hash))
-                    //        {
-                    //            if (hash.Equals(sha1Hash, StringComparison.CurrentCultureIgnoreCase))
-                    //            {
-                    //                paths.Add(path);
-                    //            }
-                    //        }
-                    //    }
+        //            //        if(!string.IsNullOrWhiteSpace(path) &&
+        //            //            !string.IsNullOrWhiteSpace(hash))
+        //            //        {
+        //            //            if (hash.Equals(sha1Hash, StringComparison.CurrentCultureIgnoreCase))
+        //            //            {
+        //            //                paths.Add(path);
+        //            //            }
+        //            //        }
+        //            //    }
 
-                    //    List<string> tagStrings = new List<string>();
+        //            //    List<string> tagStrings = new List<string>();
 
-                    //    //since we may have multiple files for a given hash, need to get all tags for those paths
-                    //    foreach (string lineItem in File.ReadLines(tagIndexPath))
-                    //    {
-                    //        string path = p.Extract("path", lineItem);
-                    //        string tagString = p.Extract("tags", lineItem);
+        //            //    //since we may have multiple files for a given hash, need to get all tags for those paths
+        //            //    foreach (string lineItem in File.ReadLines(tagIndexPath))
+        //            //    {
+        //            //        string path = p.Extract("path", lineItem);
+        //            //        string tagString = p.Extract("tags", lineItem);
 
-                    //        if (paths.Contains(path))
-                    //        {
-                    //            tagStrings.Add(tagString);
-                    //        }
-                    //    }
+        //            //        if (paths.Contains(path))
+        //            //        {
+        //            //            tagStrings.Add(tagString);
+        //            //        }
+        //            //    }
 
-                    //    //remove any duplicates
-                    //    HashSet<string> uniqueTags = new HashSet<string>();
+        //            //    //remove any duplicates
+        //            //    HashSet<string> uniqueTags = new HashSet<string>();
 
-                    //    foreach (string tagString in tagStrings)
-                    //    {
-                    //        var theseTags = StringToList(tagString);
+        //            //    foreach (string tagString in tagStrings)
+        //            //    {
+        //            //        var theseTags = StringToList(tagString);
 
-                    //        foreach (string tag in theseTags)
-                    //        {
-                    //            if (!uniqueTags.Contains(tag))
-                    //            {
-                    //                uniqueTags.Add(tag);
-                    //            }
-                    //        }
-                    //    }
+        //            //        foreach (string tag in theseTags)
+        //            //        {
+        //            //            if (!uniqueTags.Contains(tag))
+        //            //            {
+        //            //                uniqueTags.Add(tag);
+        //            //            }
+        //            //        }
+        //            //    }
 
-                    //    tags = string.Join(", ", uniqueTags);
-                    //}
+        //            //    tags = string.Join(", ", uniqueTags);
+        //            //}
 
-                    if (tagsFromXmlNotKeyVal)
-                    {
-                        tags = GetTagsFromXmlFile(sp, sha1Hash);
-                    }
-                    else
-                    {
-                        tags = GetTagsFromKeyValFile(sp, sha1Hash);
-                    }
+        //            if (tagsFromXmlNotKeyVal)
+        //            {
+        //                tags = GetTagsFromXmlFile(sp, sha1Hash);
+        //            }
+        //            else
+        //            {
+        //                tags = GetTagsFromKeyValFile(sp, sha1Hash);
+        //            }
 
-                    break;
+        //            break;
 
-                case SyncDirection.Export:
+        //        case SyncDirection.Export:
 
-                    //get any tags from database tied to the
-                    //supplied sha1Hash
-                    SqliteDbAdapter db = new SqliteDbAdapter();
-                    tags = db.GetTagsForSHA1Hash(sha1Hash);
+        //            //get any tags from database tied to the
+        //            //supplied sha1Hash
+        //            SqliteDbAdapter db = new SqliteDbAdapter();
+        //            tags = db.GetTagsForSHA1Hash(sha1Hash);
 
-                    break;
-            }
+        //            break;
+        //    }
 
-            return tags;
-        }
+        //    return tags;
+        //}
 
         public static string ExportForHash(string sha1Hash)
         {

@@ -1178,22 +1178,22 @@ namespace NineWorldsDeep.Warehouse
             cmd.ExecuteNonQuery();
         }
 
+        //private void InsertOrIgnoreProfile(SyncProfile sp, SQLiteCommand cmd)
+        //{
+        //    string profileName = sp.Name;
+        //    cmd.Parameters.Clear();
+        //    cmd.CommandText =
+        //        "INSERT OR IGNORE INTO SyncProfile (SyncProfileName) VALUES (@profileName)";
+        //    cmd.Parameters.AddWithValue("@profileName", profileName);
+        //    cmd.ExecuteNonQuery();
+        //}
+
         private void InsertOrIgnoreTags(List<string> tags, SQLiteCommand cmd)
         {
             foreach (var tag in tags)
             {
                 InsertOrIgnoreTag(tag, cmd);
             }
-        }
-
-        private void InsertOrIgnoreProfile(SyncProfile sp, SQLiteCommand cmd)
-        {
-            string profileName = sp.Name;
-            cmd.Parameters.Clear();
-            cmd.CommandText =
-                "INSERT OR IGNORE INTO SyncProfile (SyncProfileName) VALUES (@profileName)";
-            cmd.Parameters.AddWithValue("@profileName", profileName);
-            cmd.ExecuteNonQuery();
         }
 
         /////////////////////////////////////connection/transaction template        
