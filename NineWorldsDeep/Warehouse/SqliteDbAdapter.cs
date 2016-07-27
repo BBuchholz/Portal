@@ -98,7 +98,11 @@ namespace NineWorldsDeep.Warehouse
         private void PopulateSyncProfiles(List<SyncProfile> lst, SQLiteCommand cmd)
         {
             cmd.Parameters.Clear(); //since we will be reusing command
-            cmd.CommandText = "SELECT SyncProfileName FROM SyncProfile";
+            cmd.CommandText =
+                //"SELECT SyncProfileName FROM SyncProfile";
+                "SELECT " + 
+                    NwdContract.COLUMN_SYNC_PROFILE_NAME + 
+                " FROM " + NwdContract.TABLE_SYNC_PROFILE + " ";
 
             using (var rdr = cmd.ExecuteReader())
             {
@@ -123,15 +127,27 @@ namespace NineWorldsDeep.Warehouse
         private string GetTagsForHash(string sha1Hash, SQLiteCommand cmd)
         {
             cmd.Parameters.Clear();
-            cmd.CommandText = "SELECT t.TagValue " +
-                              "FROM Tag t " +
-                              "JOIN junction_File_Tag jft " +
-                              "ON t.TagId = jft.TagId " +
-                              "JOIN File f " +
-                              "ON f.FileId = jft.FileId " +
-                              "JOIN Hash h " +
-                              "ON h.HashId = f.HashId " +
-                              "WHERE h.HashValue = @hash ";
+
+            cmd.CommandText =
+                //"SELECT t.TagValue " +
+                //"FROM Tag t " +
+                //"JOIN junction_File_Tag jft " +
+                //"ON t.TagId = jft.TagId " +
+                //"JOIN File f " +
+                //"ON f.FileId = jft.FileId " +
+                //"JOIN Hash h " +
+                //"ON h.HashId = f.HashId " +
+                //"WHERE h.HashValue = @hash ";
+                "SELECT t." + NwdContract.COLUMN_TAG_VALUE + " " +
+                "FROM " + NwdContract.TABLE_TAG + " t " +
+                "JOIN " + NwdContract.TABLE_JUNCTION_FILE_TAG + " jft " +
+                "ON t." + NwdContract.COLUMN_TAG_ID + " = jft." + NwdContract.COLUMN_TAG_ID + " " +
+                "JOIN " + NwdContract.TABLE_FILE + " f " +
+                "ON f." + NwdContract.COLUMN_FILE_ID + " = jft." + NwdContract.COLUMN_FILE_ID + " " +
+                "JOIN " + NwdContract.TABLE_HASH + " h " +
+                "ON h." + NwdContract.COLUMN_HASH_ID + " = f." + NwdContract.COLUMN_HASH_ID + " " +
+                "WHERE h." + NwdContract.COLUMN_HASH_VALUE + " = @hash ";
+
             cmd.Parameters.AddWithValue("@hash", sha1Hash);
 
             List<string> tags = new List<string>();
@@ -231,19 +247,33 @@ namespace NineWorldsDeep.Warehouse
             sp.SyncMaps.Clear();
 
             cmd.Parameters.Clear(); //since we will be reusing command
-            cmd.CommandText = "SELECT sp.SyncProfileName, " +
-                                     "pSrc.PathValue AS SourcePath,  " +
-                                     "pDst.PathValue AS DestPath, " +
-                                     "sm.SyncDirectionId, " +
-                                     "sm.SyncActionIdDefault " +
-                              "FROM SyncMap AS sm " +
-                              "JOIN SyncProfile AS sp " +
-                              "ON sm.SyncProfileId = sp.SyncProfileId " +
-                              "JOIN Path AS pSrc " +
-                              "ON pSrc.PathId = sm.PathIdSource " +
-                              "JOIN Path AS pDst " +
-                              "ON pDst.PathId = sm.PathIdDestination " +
-                              "WHERE sp.SyncProfileName = @name ";
+            cmd.CommandText =
+                //"SELECT sp.SyncProfileName, " +
+                //        "pSrc.PathValue AS SourcePath,  " +
+                //        "pDst.PathValue AS DestPath, " +
+                //        "sm.SyncDirectionId, " +
+                //        "sm.SyncActionIdDefault " +
+                //"FROM SyncMap AS sm " +
+                //"JOIN SyncProfile AS sp " +
+                //"ON sm.SyncProfileId = sp.SyncProfileId " +
+                //"JOIN Path AS pSrc " +
+                //"ON pSrc.PathId = sm.PathIdSource " +
+                //"JOIN Path AS pDst " +
+                //"ON pDst.PathId = sm.PathIdDestination " +
+                //"WHERE sp.SyncProfileName = @name ";
+                "SELECT sp." + NwdContract.COLUMN_SYNC_PROFILE_NAME + ", " +
+                        "pSrc." + NwdContract.COLUMN_PATH_VALUE + " AS SourcePath,  " +
+                        "pDst." + NwdContract.COLUMN_PATH_VALUE + " AS DestPath, " +
+                        "sm." + NwdContract.COLUMN_SYNC_DIRECTION_ID + ", " +
+                        "sm." + NwdContract.COLUMN_SYNC_ACTION_ID_DEFAULT + " " +
+                "FROM " + NwdContract.TABLE_SYNC_MAP + " AS sm " +
+                "JOIN " + NwdContract.TABLE_SYNC_PROFILE + " AS sp " +
+                "ON sm." + NwdContract.COLUMN_SYNC_PROFILE_ID + " = sp." + NwdContract.COLUMN_SYNC_PROFILE_ID + " " +
+                "JOIN " + NwdContract.TABLE_PATH + " AS pSrc " +
+                "ON pSrc." + NwdContract.COLUMN_PATH_ID + " = sm." + NwdContract.COLUMN_PATH_ID_SOURCE + " " +
+                "JOIN " + NwdContract.TABLE_PATH + " AS pDst " +
+                "ON pDst." + NwdContract.COLUMN_PATH_ID + " = sm." + NwdContract.COLUMN_PATH_ID_DESTINATION + " " +
+                "WHERE sp." + NwdContract.COLUMN_SYNC_PROFILE_NAME + " = @name ";
 
             cmd.Parameters.AddWithValue("@name", sp.Name);
 
