@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using NineWorldsDeep.Sqlite.Model;
 using System.Xml.Linq;
+using System.IO;
 
 namespace NineWorldsDeep.Xml
 {
@@ -12,6 +13,9 @@ namespace NineWorldsDeep.Xml
     {
         public void Export(string deviceName, List<LocalConfigModelItem> cfg, List<FileModelItem> files, string targetFile)
         {
+            //ensure directory
+            Directory.CreateDirectory(Path.GetDirectoryName(targetFile));
+
             XDocument doc = 
                 new XDocument(new XElement("nwd", 
                     new XElement("local-config",

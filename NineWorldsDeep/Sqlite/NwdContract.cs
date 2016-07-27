@@ -19,19 +19,31 @@ namespace NineWorldsDeep.Sqlite
         public static string TABLE_AUDIO_TRANSCRIPT = "AudioTranscript";
         public static string TABLE_LOCAL_CONFIG = "LocalConfig";
         public static string TABLE_JUNCTION_FILE_TAG = "junction_File_Tag";
+        public static string TABLE_JUNCTION_DEVICE_SYNC_PROFILE = "junction_Device_SyncProfile";
         public static string TABLE_LIST = "List";
         public static string TABLE_ITEM = "Item";
         public static string TABLE_FRAGMENT = "Fragment";
-        //public static string TABLE_ = "";
-        //public static string TABLE_ = "";
+        public static string TABLE_SYNC_ACTION = "SyncAction";
+        public static string TABLE_SYNC_DIRECTION = "SyncDirection";
+        public static string TABLE_SYNC_PROFILE = "SyncProfile";
+        public static string TABLE_SYNC_MAP = "SyncMap";
         //public static string TABLE_ = "";
         //public static string TABLE_ = "";
 
         ////columns
         //public static string COLUMN_ = "";
         //public static string COLUMN_ = "";
-        //public static string COLUMN_ = "";
-        //public static string COLUMN_ = "";
+        public static string COLUMN_SYNC_ACTION_ID_DEFAULT = "SyncActionIdDefault";
+        public static string COLUMN_PATH_ID_SOURCE = "PathIdSource";
+        public static string COLUMN_PATH_ID_DESTINATION = "PathIdDestination";
+        public static string COLUMN_DEVICE_ID_EXT = "DeviceIdExt";
+        public static string COLUMN_DEVICE_ID_HOST = "DeviceIdHost";
+        public static string COLUMN_SYNC_ACTION_ID = "SyncActionId";
+        public static string COLUMN_SYNC_PROFILE_ID = "SyncProfileId";
+        public static string COLUMN_SYNC_PROFILE_NAME = "SyncProfileName";
+        public static string COLUMN_SYNC_DIRECTION_ID = "SyncDirectionId";
+        public static string COLUMN_SYNC_DIRECTION_VALUE = "SyncDirectionValue";
+        public static string COLUMN_SYNC_ACTION_VALUE = "SyncActionValue";
         public static string COLUMN_UPDATED_AT = "UpdatedAt";
         public static string COLUMN_FRAGMENT_VALUE = "FragmentValue";
         public static string COLUMN_ARCHIVED_AT = "ArchivedAt";

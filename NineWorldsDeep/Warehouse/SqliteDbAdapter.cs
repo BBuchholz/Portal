@@ -1,4 +1,5 @@
 ﻿using NineWorldsDeep.Core;
+using NineWorldsDeep.Sqlite;
 using System;
 using System.Collections.Generic;
 using System.Data.SQLite;
@@ -305,7 +306,13 @@ namespace NineWorldsDeep.Warehouse
             int id = -1;
 
             cmd.Parameters.Clear(); //since we will be reusing command
-            cmd.CommandText = "SELECT HashId FROM Hash WHERE HashValue = @hashVal";
+
+            cmd.CommandText =
+                //"SELECT HashId FROM Hash WHERE HashValue = @hashVal";
+                "SELECT " + NwdContract.COLUMN_HASH_ID + 
+                " FROM " + NwdContract.TABLE_HASH + 
+                " WHERE " + NwdContract.COLUMN_HASH_VALUE + " = @hashVal";
+
             cmd.Parameters.AddWithValue("@hashVal", hash);
 
             using (var rdr = cmd.ExecuteReader())
@@ -330,7 +337,14 @@ namespace NineWorldsDeep.Warehouse
             int id = -1;
 
             cmd.Parameters.Clear(); //since we will be reusing command
-            cmd.CommandText = "SELECT DeviceIdExt FROM junction_Device_SyncProfile WHERE SyncProfileId = @profileId";
+
+            cmd.CommandText =
+                //"SELECT DeviceIdExt FROM junction_Device_SyncProfile WHERE SyncProfileId = @profileId";
+                "SELECT " + NwdContract.COLUMN_DEVICE_ID_EXT + 
+                " FROM " + NwdContract.TABLE_JUNCTION_DEVICE_SYNC_PROFILE + 
+                " WHERE " + 
+                    NwdContract.COLUMN_SYNC_PROFILE_ID + " = @profileId";
+
             cmd.Parameters.AddWithValue("@profileId", profileId);
 
             using (var rdr = cmd.ExecuteReader())
@@ -355,7 +369,14 @@ namespace NineWorldsDeep.Warehouse
             int id = -1;
 
             cmd.Parameters.Clear(); //since we will be reusing command
-            cmd.CommandText = "SELECT DeviceIdHost FROM junction_Device_SyncProfile WHERE SyncProfileId = @profileId";
+
+            cmd.CommandText =
+                //"SELECT DeviceIdHost FROM junction_Device_SyncProfile WHERE SyncProfileId = @profileId";
+                "SELECT " + NwdContract.COLUMN_DEVICE_ID_HOST + 
+                " FROM " + NwdContract.TABLE_JUNCTION_DEVICE_SYNC_PROFILE + 
+                " WHERE " + 
+                    NwdContract.COLUMN_SYNC_PROFILE_ID + " = @profileId";
+
             cmd.Parameters.AddWithValue("@profileId", profileId);
 
             using (var rdr = cmd.ExecuteReader())
@@ -375,7 +396,10 @@ namespace NineWorldsDeep.Warehouse
                 new Dictionary<string, int>();
 
             cmd.Parameters.Clear();
-            cmd.CommandText = "SELECT TagId, TagValue FROM Tag";
+            cmd.CommandText = // "SELECT TagId, TagValue FROM Tag";
+                "SELECT " + NwdContract.COLUMN_TAG_ID + ", " + 
+                            NwdContract.COLUMN_TAG_VALUE + 
+                " FROM " + NwdContract.TABLE_TAG + "";
 
             using (var rdr = cmd.ExecuteReader())
             {
@@ -484,8 +508,17 @@ namespace NineWorldsDeep.Warehouse
         private void LinkFileIdToTagId(int fileId, int tagId, SQLiteCommand cmd)
         {
             cmd.Parameters.Clear();
+
             cmd.CommandText =
-                "INSERT OR IGNORE INTO junction_File_Tag (FileId, TagId) VALUES (@fileId, @tagId) ";
+                //"INSERT OR IGNORE INTO junction_File_Tag (FileId, TagId) VALUES (@fileId, @tagId) ";
+                "INSERT OR IGNORE INTO " + 
+                    NwdContract.TABLE_JUNCTION_FILE_TAG + 
+                    " (" + 
+                        NwdContract.COLUMN_FILE_ID + ", " + 
+                        NwdContract.COLUMN_TAG_ID + 
+                     ") " + 
+                "VALUES (@fileId, @tagId) ";
+
             cmd.Parameters.AddWithValue("@fileId", fileId);
             cmd.Parameters.AddWithValue("@tagId", tagId);
             cmd.ExecuteNonQuery();
@@ -495,7 +528,7 @@ namespace NineWorldsDeep.Warehouse
         {
             /////////see link answers below accepted answer
             //http://stackoverflow.com/questions/15277373/sqlite-upsert-update-or-insert
-            //TODO: LICENSE NOTES
+            
             // need to do an UPDATE or IGNORE followed by an INSERT or IGNORE, so the
             // update attempts first (to change default action id for example), and
             // if not found, gets ignored, so the insert would then fire.
@@ -507,11 +540,16 @@ namespace NineWorldsDeep.Warehouse
             cmd.Parameters.Clear();
 
             cmd.CommandText =
-                "UPDATE OR IGNORE File " +
-                "SET HashId = @hashId, " +
-                    "FileHashedAt = @hashedAt " +
-                "WHERE DeviceId = @deviceId " +
-                "AND PathId = @pathId ";
+                //"UPDATE OR IGNORE File " +
+                //"SET HashId = @hashId, " +
+                //    "FileHashedAt = @hashedAt " +
+                //"WHERE DeviceId = @deviceId " +
+                //"AND PathId = @pathId ";
+                "UPDATE OR IGNORE " + NwdContract.TABLE_FILE + " " +
+                "SET " + NwdContract.COLUMN_HASH_ID + " = @hashId, " +
+                    "" + NwdContract.COLUMN_FILE_HASHED_AT + " = @hashedAt " +
+                "WHERE " + NwdContract.COLUMN_DEVICE_ID + " = @deviceId " +
+                "AND " + NwdContract.COLUMN_PATH_ID + " = @pathId ";
 
             cmd.Parameters.AddWithValue("@hashId", hashId);
             cmd.Parameters.AddWithValue("@hashedAt", hashedAtTimeStamp);
@@ -522,10 +560,19 @@ namespace NineWorldsDeep.Warehouse
             //INSERT or IGNORE
             cmd.Parameters.Clear();
             cmd.CommandText =
-                "INSERT OR IGNORE INTO File (DeviceId, " +
-                                             "PathId, " +
-                                             "HashId, " +
-                                             "FileHashedAt) " +
+                //"INSERT OR IGNORE INTO File (DeviceId, " +
+                //                             "PathId, " +
+                //                             "HashId, " +
+                //                             "FileHashedAt) " +
+                //"VALUES (@deviceId, " +
+                //        "@pathId, " +
+                //        "@hashId, " +
+                //        "@hashedAt)";
+                "INSERT OR IGNORE INTO " + NwdContract.TABLE_FILE + 
+                " (" + NwdContract.COLUMN_DEVICE_ID + ", " +
+                  "" + NwdContract.COLUMN_PATH_ID + ", " +
+                  "" + NwdContract.COLUMN_HASH_ID + ", " +
+                  "" + NwdContract.COLUMN_FILE_HASHED_AT + ") " +
                 "VALUES (@deviceId, " +
                         "@pathId, " +
                         "@hashId, " +
@@ -696,8 +743,11 @@ namespace NineWorldsDeep.Warehouse
         {
             string directionVal = direction.ToString();
             cmd.Parameters.Clear();
+
             cmd.CommandText =
-                "INSERT OR IGNORE INTO SyncDirection (SyncDirectionValue) VALUES (@directionVal)";
+                //"INSERT OR IGNORE INTO SyncDirection (SyncDirectionValue) VALUES (@directionVal)";
+                "INSERT OR IGNORE INTO " + NwdContract.TABLE_SYNC_DIRECTION + " (" + NwdContract.COLUMN_SYNC_DIRECTION_VALUE + ") VALUES (@directionVal)";
+
             cmd.Parameters.AddWithValue("@directionVal", directionVal);
             cmd.ExecuteNonQuery();
         }
@@ -706,8 +756,13 @@ namespace NineWorldsDeep.Warehouse
         {
             string actionVal = action.ToString();
             cmd.Parameters.Clear();
+
             cmd.CommandText =
-                "INSERT OR IGNORE INTO SyncAction (SyncActionValue) VALUES (@actionVal)";
+                //"INSERT OR IGNORE INTO SyncAction (SyncActionValue) VALUES (@actionVal)";
+                "INSERT OR IGNORE INTO " + NwdContract.TABLE_SYNC_ACTION + 
+                " (" + NwdContract.COLUMN_SYNC_ACTION_VALUE + 
+                ") VALUES (@actionVal)";
+
             cmd.Parameters.AddWithValue("@actionVal", actionVal);
             cmd.ExecuteNonQuery();
         }
@@ -792,7 +847,11 @@ namespace NineWorldsDeep.Warehouse
         private void RefreshProfileIds(SQLiteCommand cmd)
         {
             cmd.Parameters.Clear(); //since we will be reusing command
-            cmd.CommandText = "SELECT SyncProfileId, SyncProfileName FROM SyncProfile";
+            cmd.CommandText =
+                //"SELECT SyncProfileId, SyncProfileName FROM SyncProfile";
+                "SELECT " + NwdContract.COLUMN_SYNC_PROFILE_ID + ", " + 
+                            NwdContract.COLUMN_SYNC_PROFILE_NAME + 
+                " FROM " + NwdContract.TABLE_SYNC_PROFILE + "";
 
             using (var rdr = cmd.ExecuteReader())
             {
@@ -811,8 +870,13 @@ namespace NineWorldsDeep.Warehouse
         public void RefreshDirectionIds(SQLiteCommand cmd)
         {
             cmd.Parameters.Clear(); //since we will be reusing command
-            cmd.CommandText = "SELECT SyncDirectionId, SyncDirectionValue FROM SyncDirection";
-            //cmd.Parameters.AddWithValue();
+
+            cmd.CommandText =
+                //"SELECT SyncDirectionId, SyncDirectionValue FROM SyncDirection";
+                "SELECT " + 
+                    NwdContract.COLUMN_SYNC_DIRECTION_ID + ", " + 
+                    NwdContract.COLUMN_SYNC_DIRECTION_VALUE + 
+                " FROM " + NwdContract.TABLE_SYNC_DIRECTION + "";
 
             using (var rdr = cmd.ExecuteReader())
             {
@@ -835,8 +899,12 @@ namespace NineWorldsDeep.Warehouse
         public void RefreshActionIds(SQLiteCommand cmd)
         {
             cmd.Parameters.Clear(); //since we will be reusing command
-            cmd.CommandText = "SELECT SyncActionId, SyncActionValue FROM SyncAction";
-            //cmd.Parameters.AddWithValue();
+            cmd.CommandText =
+                //"SELECT SyncActionId, SyncActionValue FROM SyncAction";
+                "SELECT " + 
+                    NwdContract.COLUMN_SYNC_ACTION_ID + ", " + 
+                    NwdContract.COLUMN_SYNC_ACTION_VALUE + 
+                " FROM " + NwdContract.TABLE_SYNC_ACTION + "";
 
             using (var rdr = cmd.ExecuteReader())
             {
@@ -930,7 +998,7 @@ namespace NineWorldsDeep.Warehouse
         {
             /////////see link answers below accepted answer
             //http://stackoverflow.com/questions/15277373/sqlite-upsert-update-or-insert
-            //TODO: LICENSE NOTES
+            
             // need to do an UPDATE or IGNORE followed by an INSERT or IGNORE, so the
             // update attempts first (to change default action id for example), and
             // if not found, gets ignored, so the insert would then fire.
@@ -942,12 +1010,18 @@ namespace NineWorldsDeep.Warehouse
             cmd.Parameters.Clear();
 
             cmd.CommandText =
-                "UPDATE OR IGNORE SyncMap " +
-                "SET SyncActionIdDefault = @actionId " +
-                "WHERE SyncProfileId = @profileId " +
-                "AND PathIdSource = @srcId " +
-                "AND PathIdDestination = @destId " +
-                "AND SyncDirectionId = @directionId";
+                //"UPDATE OR IGNORE SyncMap " +
+                //"SET SyncActionIdDefault = @actionId " +
+                //"WHERE SyncProfileId = @profileId " +
+                //"AND PathIdSource = @srcId " +
+                //"AND PathIdDestination = @destId " +
+                //"AND SyncDirectionId = @directionId";
+                "UPDATE OR IGNORE " + NwdContract.TABLE_SYNC_MAP + " " +
+                "SET " + NwdContract.COLUMN_SYNC_ACTION_ID_DEFAULT + " = @actionId " +
+                "WHERE " + NwdContract.COLUMN_SYNC_PROFILE_ID + " = @profileId " +
+                "AND " + NwdContract.COLUMN_PATH_ID_SOURCE + " = @srcId " +
+                "AND " + NwdContract.COLUMN_PATH_ID_DESTINATION + " = @destId " +
+                "AND " + NwdContract.COLUMN_SYNC_DIRECTION_ID + " = @directionId";
 
             cmd.Parameters.AddWithValue("@profileId", profileId);
             cmd.Parameters.AddWithValue("@srcId", srcId);
@@ -959,16 +1033,32 @@ namespace NineWorldsDeep.Warehouse
             //INSERT or IGNORE
             cmd.Parameters.Clear();
             cmd.CommandText =
-                "INSERT OR IGNORE INTO SyncMap (SyncProfileId, " +
-                                               "PathIdSource, " +
-                                               "PathIdDestination, " +
-                                               "SyncDirectionId, " +
-                                               "SyncActionIdDefault) " +
+                //"INSERT OR IGNORE INTO SyncMap (SyncProfileId, " +
+                //                               "PathIdSource, " +
+                //                               "PathIdDestination, " +
+                //                               "SyncDirectionId, " +
+                //                               "SyncActionIdDefault) " +
+                //"VALUES (@profileId, " +
+                //        "@srcId, " +
+                //        "@destId, " +
+                //        "@directionId, " +
+                //        "@actionId)";
+                "INSERT OR IGNORE INTO " + 
+
+                    NwdContract.TABLE_SYNC_MAP + 
+
+                        " (" + NwdContract.COLUMN_SYNC_PROFILE_ID + ", " +
+                          "" + NwdContract.COLUMN_PATH_ID_SOURCE + ", " +
+                          "" + NwdContract.COLUMN_PATH_ID_DESTINATION + ", " +
+                          "" + NwdContract.COLUMN_SYNC_DIRECTION_ID + ", " +
+                          "" + NwdContract.COLUMN_SYNC_ACTION_ID_DEFAULT + ") " +
+
                 "VALUES (@profileId, " +
                         "@srcId, " +
                         "@destId, " +
                         "@directionId, " +
                         "@actionId)";
+
 
             cmd.Parameters.AddWithValue("@profileId", profileId);
             cmd.Parameters.AddWithValue("@srcId", srcId);
@@ -989,12 +1079,18 @@ namespace NineWorldsDeep.Warehouse
 
 
             cmd.Parameters.Clear();
+
             cmd.CommandText =
-                "DELETE FROM SyncMap " +
-                "WHERE SyncProfileId = @profileId " +
-                "AND PathIdSource = @srcId " +
-                "AND PathIdDestination = @destId " +
-                "AND SyncDirectionId = @directionId";
+                //"DELETE FROM SyncMap " +
+                //"WHERE SyncProfileId = @profileId " +
+                //"AND PathIdSource = @srcId " +
+                //"AND PathIdDestination = @destId " +
+                //"AND SyncDirectionId = @directionId";
+                "DELETE FROM " + NwdContract.TABLE_SYNC_MAP + " " +
+                "WHERE " + NwdContract.COLUMN_SYNC_PROFILE_ID + " = @profileId " +
+                "AND " + NwdContract.COLUMN_PATH_ID_SOURCE + " = @srcId " +
+                "AND " + NwdContract.COLUMN_PATH_ID_DESTINATION + " = @destId " +
+                "AND " + NwdContract.COLUMN_SYNC_DIRECTION_ID + " = @directionId";
 
             cmd.Parameters.AddWithValue("@profileId", nameIds[sm.Profile.Name]);
             cmd.Parameters.AddWithValue("@srcId", pathIds[sm.Source]);
@@ -1056,13 +1152,24 @@ namespace NineWorldsDeep.Warehouse
 
             cmd.Parameters.Clear();
             cmd.CommandText =
-                "INSERT OR IGNORE INTO SyncProfile (SyncProfileName) VALUES (@profileName)";
+                //"INSERT OR IGNORE INTO SyncProfile (SyncProfileName) VALUES (@profileName)";
+                "INSERT OR IGNORE INTO " + NwdContract.TABLE_SYNC_PROFILE + 
+                " (" + 
+                    NwdContract.COLUMN_SYNC_PROFILE_NAME + 
+                 ") VALUES (@profileName)";
+
             cmd.Parameters.AddWithValue("@profileName", profileName);
             cmd.ExecuteNonQuery();
 
             //select value
             cmd.Parameters.Clear(); //since we will be reusing command
-            cmd.CommandText = "SELECT SyncProfileId FROM SyncProfile WHERE SyncProfileName = @name";
+
+            cmd.CommandText =
+                //"SELECT SyncProfileId FROM SyncProfile WHERE SyncProfileName = @name";
+                "SELECT " + NwdContract.COLUMN_SYNC_PROFILE_ID + 
+                " FROM " + NwdContract.TABLE_SYNC_PROFILE + 
+                " WHERE " + NwdContract.COLUMN_SYNC_PROFILE_NAME + " = @name";
+
             cmd.Parameters.AddWithValue("@name", profileName);
 
             using (var rdr = cmd.ExecuteReader())
@@ -1085,8 +1192,13 @@ namespace NineWorldsDeep.Warehouse
         private void RefreshPathIds(Dictionary<string, int> pathIds, SQLiteCommand cmd)
         {
             cmd.Parameters.Clear(); //since we will be reusing command
-            cmd.CommandText = "SELECT PathId, PathValue FROM Path";
-            //cmd.Parameters.AddWithValue();
+
+            cmd.CommandText =
+                //"SELECT PathId, PathValue FROM Path";
+                "SELECT " + 
+                    NwdContract.COLUMN_PATH_ID + ", " + 
+                    NwdContract.COLUMN_PATH_VALUE + 
+                " FROM " + NwdContract.TABLE_PATH + "";
 
             using (var rdr = cmd.ExecuteReader())
             {
@@ -1115,7 +1227,13 @@ namespace NineWorldsDeep.Warehouse
             int id = -1;
 
             cmd.Parameters.Clear(); //since we will be reusing command
-            cmd.CommandText = "SELECT PathId FROM Path WHERE PathValue = @pathVal";
+
+            cmd.CommandText =
+                //"SELECT PathId FROM Path WHERE PathValue = @pathVal";
+                "SELECT " + NwdContract.COLUMN_PATH_ID + 
+                " FROM " + NwdContract.TABLE_PATH + 
+                " WHERE " + NwdContract.COLUMN_PATH_VALUE + " = @pathVal";
+
             cmd.Parameters.AddWithValue("@pathVal", path);
 
             using (var rdr = cmd.ExecuteReader())
@@ -1134,9 +1252,16 @@ namespace NineWorldsDeep.Warehouse
             int id = -1;
 
             cmd.Parameters.Clear(); //since we will be reusing command
-            cmd.CommandText = "SELECT FileId FROM File " +
-                              "WHERE DeviceId = @deviceId " +
-                              "AND PathId = @pathId ";
+
+            cmd.CommandText =
+                //"SELECT FileId FROM File " +
+                //              "WHERE DeviceId = @deviceId " +
+                //              "AND PathId = @pathId ";
+                "SELECT " + NwdContract.COLUMN_FILE_ID + 
+                " FROM " + NwdContract.TABLE_FILE + 
+                " WHERE " + NwdContract.COLUMN_DEVICE_ID + " = @deviceId " + 
+                "AND " + NwdContract.COLUMN_PATH_ID + " = @pathId ";
+
             cmd.Parameters.AddWithValue("@deviceId", deviceId);
             cmd.Parameters.AddWithValue("@pathId", pathId);
 
@@ -1154,8 +1279,12 @@ namespace NineWorldsDeep.Warehouse
         private void InsertOrIgnorePath(string path, SQLiteCommand cmd)
         {
             cmd.Parameters.Clear();
+
             cmd.CommandText =
-                "INSERT OR IGNORE INTO Path (PathValue) VALUES (@path)";
+                //"INSERT OR IGNORE INTO Path (PathValue) VALUES (@path)";
+                "INSERT OR IGNORE INTO " + NwdContract.TABLE_PATH +
+                " (" + NwdContract.COLUMN_PATH_VALUE + ") VALUES (@path)";
+
             cmd.Parameters.AddWithValue("@path", path);
             cmd.ExecuteNonQuery();
         }
@@ -1163,8 +1292,12 @@ namespace NineWorldsDeep.Warehouse
         private void InsertOrIgnoreHash(string hash, SQLiteCommand cmd)
         {
             cmd.Parameters.Clear();
+
             cmd.CommandText =
-                "INSERT OR IGNORE INTO Hash (HashValue) VALUES (@hash)";
+                //"INSERT OR IGNORE INTO Hash (HashValue) VALUES (@hash)";
+                "INSERT OR IGNORE INTO " + NwdContract.TABLE_HASH +
+                    " (" + NwdContract.COLUMN_HASH_VALUE + ") VALUES (@hash)";
+
             cmd.Parameters.AddWithValue("@hash", hash);
             cmd.ExecuteNonQuery();
         }
@@ -1172,8 +1305,12 @@ namespace NineWorldsDeep.Warehouse
         private void InsertOrIgnoreTag(string tag, SQLiteCommand cmd)
         {
             cmd.Parameters.Clear();
+
             cmd.CommandText =
-                "INSERT OR IGNORE INTO Tag (TagValue) VALUES (@tag)";
+                //"INSERT OR IGNORE INTO Tag (TagValue) VALUES (@tag)";
+                "INSERT OR IGNORE INTO " + NwdContract.TABLE_TAG +
+                " (" + NwdContract.COLUMN_TAG_VALUE + ") VALUES (@tag)";
+
             cmd.Parameters.AddWithValue("@tag", tag);
             cmd.ExecuteNonQuery();
         }
