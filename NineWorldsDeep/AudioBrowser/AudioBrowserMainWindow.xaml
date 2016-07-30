@@ -53,6 +53,8 @@
                           Click="MenuItemCopySelectedItemToVoiceMemoStaging_Click"/>
                 <MenuItem Header="Copy Multiple Items To VoiceMemo Staging"
                           Click="MenuItemCopyMultipleToVoiceMemoStaging_Click"/>
+                <MenuItem Header="Copy Transcription Tag to Clipboard"
+                          Click="MenuItemCopyTranscriptionTagToClipboard_Click"/>
             </MenuItem>
         </Menu>
         <Grid>

@@ -142,6 +142,21 @@ namespace NineWorldsDeep.AudioBrowser
             }
         }
 
+        private void MenuItemCopyTranscriptionTagToClipboard_Click(object sender, RoutedEventArgs e)
+        {
+            if (tgrGrid.SelectedFileElement != null)
+            {
+                FileElement fe = (FileElement)tgrGrid.SelectedFileElement;
+                string tag = "(transcribed from: " + fe.Name + ")";
+                Clipboard.SetText(tag);
+                MessageBox.Show("[" + tag + "] copied to clipboard");
+            }
+            else
+            {
+                Display.Message("nothing selected");
+            }
+        }
+
         private void MenuItemCopyMultipleToVoiceMemoStaging_Click(object sender, RoutedEventArgs e)
         {
             int count = UI.Prompt.ForInteger("How many items, from the top of the list, would you like to copy?");
