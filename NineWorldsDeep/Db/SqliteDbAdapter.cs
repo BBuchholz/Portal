@@ -409,7 +409,7 @@ namespace NineWorldsDeep.Db
                         {
                             string pathVal = rdr.GetString(0);
                             string tagVal = rdr.GetString(1);
-
+                            
                             if (pathVal.ToLower().StartsWith(filePathTopFolder.ToLower()))
                             {
                                 //TODO: may be able to move this into a LIKE clause

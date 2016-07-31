@@ -135,7 +135,8 @@ namespace NineWorldsDeep.ImageBrowser
             try
             {
                 lastLoadedFromFileInsteadOfDb = false;
-                LoadFolder(lastLoadedFromFileInsteadOfDb, GetFolderWithLeastNonZeroUntaggedCount());
+                //LoadFolder(lastLoadedFromFileInsteadOfDb, GetFolderWithLeastNonZeroUntaggedCount());
+                LoadAll();
             }
             catch (Exception ex)
             {

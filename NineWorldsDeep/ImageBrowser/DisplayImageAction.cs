@@ -5,6 +5,7 @@ using System.Windows.Input;
 using System.Windows.Media.Imaging;
 using System;
 using System.IO;
+using NineWorldsDeep.UI;
 
 namespace NineWorldsDeep.ImageBrowser
 {
@@ -35,15 +36,23 @@ namespace NineWorldsDeep.ImageBrowser
                 fileElement = fe;
                 BitmapImage image = new BitmapImage();
 
-                using(FileStream stream = File.OpenRead(fe.Path))
+                if (File.Exists(fe.Path))
                 {
-                    image.BeginInit();
-                    image.StreamSource = stream;
-                    image.CacheOption = BitmapCacheOption.OnLoad;
-                    image.EndInit();
+                    using (FileStream stream = File.OpenRead(fe.Path))
+                    {
+                        image.BeginInit();
+                        image.StreamSource = stream;
+                        image.CacheOption = BitmapCacheOption.OnLoad;
+                        image.EndInit();
+                    }
+
+                    imageControl.Source = image;
                 }
-                
-                imageControl.Source = image;
+                else
+                {
+                    imageControl.Source = null;
+                    Display.Message("file not found");
+                }
             }
         }
 

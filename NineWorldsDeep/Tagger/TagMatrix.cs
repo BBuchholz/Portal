@@ -223,8 +223,11 @@ namespace NineWorldsDeep.Tagger
 
         private void Link(string filePath, string tag)
         {
-            tagFilesMap.Add(tag, filePath);
-            fileTagsMap.Add(filePath, tag);
+            if (File.Exists(filePath))
+            {
+                tagFilesMap.Add(tag, filePath);
+                fileTagsMap.Add(filePath, tag);
+            }
         }
 
         public IEnumerable<string> GetFilePaths()
