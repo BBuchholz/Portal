@@ -27,8 +27,19 @@ namespace NineWorldsDeep.FragmentCloud
 
         public void Display(Tapestry.TapestryNode frg)
         {
-            txtMultiLine.Text = frg.ToMultiLineDetail();
-            
+            if(frg is FileSystemNode)
+            {
+                FileDetailsControl.Visibility = Visibility.Visible;
+                MultiLineTextBox.Visibility = Visibility.Collapsed;
+                FileDetailsControl.Display((FileSystemNode)frg);
+            }
+            else
+            {
+                MultiLineTextBox.Visibility = Visibility.Visible;
+                FileDetailsControl.Visibility = Visibility.Collapsed;
+                MultiLineTextBox.Text = frg.ToMultiLineDetail();
+            }
+
             frg.PerformSelectionAction();
         }
     }
