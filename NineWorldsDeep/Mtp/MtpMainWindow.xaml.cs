@@ -1345,138 +1345,140 @@ namespace NineWorldsDeep.Mtp
 
         private void MenuItemFindHashedMediaFiles_Click(object sender, RoutedEventArgs e)
         {
-            try
-            {
-                //just supporting first attached device for now
-                NwdPortableDeviceCollection col =
-                    new NwdPortableDeviceCollection();
+            //try
+            //{
+            //    //just supporting first attached device for now
+            //    NwdPortableDeviceCollection col =
+            //        new NwdPortableDeviceCollection();
 
-                col.Refresh();
+            //    col.Refresh();
 
-                if (col.Count() > 0)
-                {
-                    NwdPortableDevice device = col.First();
+            //    if (col.Count() > 0)
+            //    {
+            //        NwdPortableDevice device = col.First();
 
-                    if (device != null)
-                    {
-                        if (unprocessedHashedMedia.IsEmptyOrNull())
-                        {
-                            IEnumerable<NwdUriProcessEntry> hashedMedia =
-                                GetDeviceHashedMedia(device);
+            //        if (device != null)
+            //        {
+            //            if (unprocessedHashedMedia.IsEmptyOrNull())
+            //            {
+            //                IEnumerable<NwdUriProcessEntry> hashedMedia =
+            //                    GetDeviceHashedMedia(device);
 
-                            unprocessedHashedMedia =
-                                new Stack<NwdUriProcessEntry>(hashedMedia);
+            //                unprocessedHashedMedia =
+            //                    new Stack<NwdUriProcessEntry>(hashedMedia);
 
-                            string msg = unprocessedHashedMedia.Count() +
-                                " hashed media entries found";
+            //                string msg = unprocessedHashedMedia.Count() +
+            //                    " hashed media entries found";
 
-                            Display.Grid(msg, unprocessedHashedMedia);
-                        }
-                        else
-                        {
-                            string msg = unprocessedHashedMedia.Count +
-                                " unprocessed hashed media entries found";
+            //                Display.Grid(msg, unprocessedHashedMedia);
+            //            }
+            //            else
+            //            {
+            //                string msg = unprocessedHashedMedia.Count +
+            //                    " unprocessed hashed media entries found";
 
-                            Display.Message(msg);
-                        }
+            //                Display.Message(msg);
+            //            }
 
-                        if (unprocessedHashedMedia != null)
-                        {
-                            //MessageBox.Show("processing goes here");
+            //            if (unprocessedHashedMedia != null)
+            //            {
+            //                //MessageBox.Show("processing goes here");
 
-                            List<NwdUriProcessEntry> processed =
-                                new List<NwdUriProcessEntry>();
+            //                List<NwdUriProcessEntry> processed =
+            //                    new List<NwdUriProcessEntry>();
 
-                            bool again = true;
-                            string msg = "Enter processing segment size";
+            //                bool again = true;
+            //                string msg = "Enter processing segment size";
 
-                            while (again && unprocessedHashedMedia.Count() > 0)
-                            {
-                                int repetitionSegmentSize =
-                                    NineWorldsDeep.UI.Prompt.ForInteger(msg);
+            //                while (again && unprocessedHashedMedia.Count() > 0)
+            //                {
+            //                    int repetitionSegmentSize =
+            //                        NineWorldsDeep.UI.Prompt.ForInteger(msg);
 
-                                IEnumerable<NwdUriProcessEntry> currentlyProcessing =
-                                    unprocessedHashedMedia.Pop(repetitionSegmentSize);
+            //                    IEnumerable<NwdUriProcessEntry> currentlyProcessing =
+            //                        unprocessedHashedMedia.Pop(repetitionSegmentSize);
 
-                                int processedFileCount = 0;
+            //                    int processedFileCount = 0;
 
-                                //TODO: make FindByUri/FindByUriCached faster, or create another method, this takes so long I am commenting it out for now and just supporting the storing of hash information
-                                //Stopwatch watch = Stopwatch.StartNew();
-                                //var res = FindByUriCached(currentlyProcessing.ToNwdUris());
-                                //watch.Stop();
+            //                    //TODO: make FindByUri/FindByUriCached faster, or create another method, this takes so long I am commenting it out for now and just supporting the storing of hash information
+            //                    //Stopwatch watch = Stopwatch.StartNew();
+            //                    //var res = FindByUriCached(currentlyProcessing.ToNwdUris());
+            //                    //watch.Stop();
 
-                                foreach (NwdUriProcessEntry pe in currentlyProcessing)
-                                {
-                                    //TODO: make FindByUri/FindByUriCached faster, or create another method, this takes so long I am commenting it out for now and just supporting the storing of hash information
-                                    //if (res[pe.URI].Count > 0)
-                                    //{
-                                    //    pe.DeviceObject = res[pe.URI].First();
-                                    //}
+            //                    foreach (NwdUriProcessEntry pe in currentlyProcessing)
+            //                    {
+            //                        //TODO: make FindByUri/FindByUriCached faster, or create another method, this takes so long I am commenting it out for now and just supporting the storing of hash information
+            //                        //if (res[pe.URI].Count > 0)
+            //                        //{
+            //                        //    pe.DeviceObject = res[pe.URI].First();
+            //                        //}
 
-                                    pe.PortableDevice = device;
-                                    pe.Processed = true;
-                                    processed.Add(pe);
+            //                        pe.PortableDevice = device;
+            //                        pe.Processed = true;
+            //                        processed.Add(pe);
 
-                                    processedFileCount++;
-                                }
+            //                        processedFileCount++;
+            //                    }
 
 
 
-                                again =
-                                NineWorldsDeep.UI.Prompt.Confirm("Processing time: " +
-                                //watch.Elapsed.ToString() + //TODO: make FindByUri/FindByUriCached faster, or create another method, this takes so long I am commenting it out for now and just supporting the storing of hash information
-                                " to process " + processedFileCount +
-                                " entries. Process more entries?");
-                            }
+            //                    again =
+            //                    NineWorldsDeep.UI.Prompt.Confirm("Processing time: " +
+            //                    //watch.Elapsed.ToString() + //TODO: make FindByUri/FindByUriCached faster, or create another method, this takes so long I am commenting it out for now and just supporting the storing of hash information
+            //                    " to process " + processedFileCount +
+            //                    " entries. Process more entries?");
+            //                }
 
-                            string displayMsg = processed.Count +
-                                    " processed / " +
-                                    unprocessedHashedMedia.Count +
-                                    " unprocessed";
+            //                string displayMsg = processed.Count +
+            //                        " processed / " +
+            //                        unprocessedHashedMedia.Count +
+            //                        " unprocessed";
 
-                            Display.Grid(displayMsg,
-                                         processed,
-                                         unprocessedHashedMedia);
+            //                Display.Grid(displayMsg,
+            //                             processed,
+            //                             unprocessedHashedMedia);
 
-                            if (NineWorldsDeep.UI.Prompt.Confirm("update hashes in database?"))
-                            {
-                                SqliteDbAdapter db = new SqliteDbAdapter();
+            //                if (NineWorldsDeep.UI.Prompt.Confirm("update hashes in database?"))
+            //                {
+            //                    SqliteDbAdapter db = new SqliteDbAdapter();
 
-                                db.StoreHashes(processed);
-                                db.StorePaths(processed);
-                                db.StoreDevice(device);
-                                db.PopulateIds(processed);
+            //                    db.StoreHashes(processed);
+            //                    db.StorePaths(processed);
+            //                    db.StoreDevice(device);
+            //                    db.PopulateIds(processed);
 
-                                Display.Grid("ids populated", processed);
+            //                    Display.Grid("ids populated", processed);
 
-                                db.StoreHashPathJunctions(processed);
+            //                    db.StoreHashPathJunctions(processed);
 
-                                Display.Message("all items propagated to db");
-                            }
+            //                    Display.Message("all items propagated to db");
+            //                }
 
-                            if (NineWorldsDeep.UI.Prompt.Confirm("backup all new files?"))
-                            {
-                                Display.Message("backup not supported until FindByUri/FindByUriCached is made faster, or replaced by something else. It takes 40 seconds to process 10 entries and there are over 1300, I think maybe indexing the object ids and just double checking them on access (cause I'm not sure if they could change so we want to be safe) might help, so the indexing could be a long running process that would only have to be run once on the large set, and then just for changes going forward. Just spit-ballin'.");
-                                //check hashes in database, any not associated with a local path
-                                //add to list of process entries to be downloaded
-                                //also, any file not hashed should be downloaded as well
-                                //better to err on the side of caution
-                                //we can index our external and internal hard drives later
-                                //to verify any duplicates, which can then be removed                               
-                            }
-                        }
-                    }
-                }
-                else
-                {
-                    Display.Message("no devices found");
-                }
+            //                if (NineWorldsDeep.UI.Prompt.Confirm("backup all new files?"))
+            //                {
+            //                    Display.Message("backup not supported until FindByUri/FindByUriCached is made faster, or replaced by something else. It takes 40 seconds to process 10 entries and there are over 1300, I think maybe indexing the object ids and just double checking them on access (cause I'm not sure if they could change so we want to be safe) might help, so the indexing could be a long running process that would only have to be run once on the large set, and then just for changes going forward. Just spit-ballin'.");
+            //                    //check hashes in database, any not associated with a local path
+            //                    //add to list of process entries to be downloaded
+            //                    //also, any file not hashed should be downloaded as well
+            //                    //better to err on the side of caution
+            //                    //we can index our external and internal hard drives later
+            //                    //to verify any duplicates, which can then be removed                               
+            //                }
+            //            }
+            //        }
+            //    }
+            //    else
+            //    {
+            //        Display.Message("no devices found");
+            //    }
 
-            }
-            catch (Exception ex)
-            {
-                Display.Exception(ex);
-            }
+            //}
+            //catch (Exception ex)
+            //{
+            //    Display.Exception(ex);
+            //}
+
+            Display.Message("disabled");
         }
 
         private IEnumerable<NwdUriProcessEntry>

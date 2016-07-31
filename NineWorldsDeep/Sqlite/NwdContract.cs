@@ -15,7 +15,7 @@ namespace NineWorldsDeep.Sqlite
         public static string TABLE_DEVICE = "Device";
         public static string TABLE_FILE = "File";
         public static string TABLE_TAG = "Tag";
-        public static string TABLE_FILE_TAGS = "FileTags";
+        public static string TABLE_FILE_TAG = "FileTag";
         public static string TABLE_AUDIO_TRANSCRIPT = "AudioTranscript";
         public static string TABLE_LOCAL_CONFIG = "LocalConfig";
         public static string TABLE_JUNCTION_FILE_TAG = "junction_File_Tag";
@@ -56,6 +56,9 @@ namespace NineWorldsDeep.Sqlite
         public static string COLUMN_HASH_VALUE = "HashValue";
         public static string COLUMN_DEVICE_ID = "DeviceId";
         public static string COLUMN_DEVICE_DESCRIPTION = "DeviceDescription";
+        public static string COLUMN_DEVICE_FRIENDLY_NAME = "DeviceFriendlyName";
+        public static string COLUMN_DEVICE_MODEL = "DeviceModel";
+        public static string COLUMN_DEVICE_TYPE = "DeviceType";
         public static string COLUMN_FILE_ID = "FileId";
         public static string COLUMN_FILE_HASHED_AT = "FileHashedAt";
         public static string COLUMN_TAG_ID = "TagId";

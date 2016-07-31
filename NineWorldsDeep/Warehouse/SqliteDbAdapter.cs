@@ -24,6 +24,9 @@ namespace NineWorldsDeep.Warehouse
         private Dictionary<int, string> idNames =
             new Dictionary<int, string>();
 
+        private Db.SqliteDbAdapter db =
+            new Db.SqliteDbAdapter();
+
         public SqliteDbAdapter()
         {
             InitializeIds();
@@ -124,6 +127,7 @@ namespace NineWorldsDeep.Warehouse
             }
         }
 
+        [Obsolete("use Db.SqliteDbAdapter")]
         private string GetTagsForHash(string sha1Hash, SQLiteCommand cmd)
         {
             cmd.Parameters.Clear();
@@ -181,7 +185,7 @@ namespace NineWorldsDeep.Warehouse
                     {
                         using (var transaction = conn.BeginTransaction())
                         {
-                            tags = GetTagsForHash(sha1Hash, cmd);
+                            tags = db.GetTagsForHash(sha1Hash, cmd);
                             transaction.Commit();
                         }
                     }
