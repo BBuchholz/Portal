@@ -49,7 +49,7 @@ namespace NineWorldsDeep.Warehouse
             //load if exists, will just be empty otherwise
             Dictionary<string, string> hashToTags = LoadFromHashToTagsIndex(sp);
 
-            hashToTags[sha1Hash] = ExportForHash(sha1Hash);
+            hashToTags[sha1Hash] = GetTagStringForHash(sha1Hash);
 
             List<string> lst = hashToTags.Select(x => "sha1Hash={" + x.Key + "} tags={" + x.Value + "}").ToList();
 
@@ -185,7 +185,7 @@ namespace NineWorldsDeep.Warehouse
         //    return tags;
         //}
 
-        public static string ExportForHash(string sha1Hash)
+        public static string GetTagStringForHash(string sha1Hash)
         {
             //get any tags from database tied to the
             //supplied sha1Hash

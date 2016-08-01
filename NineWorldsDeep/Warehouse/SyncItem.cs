@@ -250,7 +250,7 @@ namespace NineWorldsDeep.Warehouse
                 case SyncDirection.Export:
 
                     ExtHash = Hashes.SHA1(ExtPath);
-                    ExtTags = Tags.ExportForHash(ExtHash);
+                    ExtTags = Tags.GetTagStringForHash(ExtHash);
 
                     break;
 

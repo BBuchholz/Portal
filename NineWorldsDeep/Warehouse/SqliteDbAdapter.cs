@@ -539,6 +539,7 @@ namespace NineWorldsDeep.Warehouse
             }
         }
 
+        [Obsolete("use Db.SqliteDbAdapter")]
         private void LinkFileIdToTagId(int fileId, int tagId, SQLiteCommand cmd)
         {
             cmd.Parameters.Clear();
@@ -558,6 +559,7 @@ namespace NineWorldsDeep.Warehouse
             cmd.ExecuteNonQuery();
         }
 
+        [Obsolete("use Db.SqliteDbAdapter")]
         private int UpsertFile(int deviceId, int pathId, int hashId, string hashedAtTimeStamp, SQLiteCommand cmd)
         {
             /////////see link answers below accepted answer

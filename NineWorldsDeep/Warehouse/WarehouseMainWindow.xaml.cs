@@ -199,7 +199,7 @@ namespace NineWorldsDeep.Warehouse
                     {
                         string hash = Hashes.SHA1(filePath);
                         string path = filePath;
-                        string tags = Tags.ExportForHash(hash);
+                        string tags = Tags.GetTagStringForHash(hash);
                         string displayName = DisplayNames.FromHash(sp, sm.SyncDirection, hash);
 
                         SyncItems.Add(new SyncItem(sm)

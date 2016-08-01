@@ -521,6 +521,88 @@ namespace NineWorldsDeep.Db
             return id;
         }
 
+        public int UpsertFile(int deviceId, int pathId, int hashId, string hashedAtTimeStamp, SQLiteCommand cmd)
+        {
+            /////////see link answers below accepted answer
+            //http://stackoverflow.com/questions/15277373/sqlite-upsert-update-or-insert
+
+            // need to do an UPDATE or IGNORE followed by an INSERT or IGNORE, so the
+            // update attempts first (to change default action id for example), and
+            // if not found, gets ignored, so the insert would then fire.
+            // if the update did succeed the insert would get ignored
+            // so doing it this way, in this order, ensures 
+            // a proper "UPSERT"
+
+            //UPDATE or IGNORE
+            cmd.Parameters.Clear();
+
+            cmd.CommandText =
+                //"UPDATE OR IGNORE File " +
+                //"SET HashId = @hashId, " +
+                //    "FileHashedAt = @hashedAt " +
+                //"WHERE DeviceId = @deviceId " +
+                //"AND PathId = @pathId ";
+                "UPDATE OR IGNORE " + NwdContract.TABLE_FILE + " " +
+                "SET " + NwdContract.COLUMN_HASH_ID + " = @hashId, " +
+                    "" + NwdContract.COLUMN_FILE_HASHED_AT + " = @hashedAt " +
+                "WHERE " + NwdContract.COLUMN_DEVICE_ID + " = @deviceId " +
+                "AND " + NwdContract.COLUMN_PATH_ID + " = @pathId ";
+
+            cmd.Parameters.AddWithValue("@hashId", hashId);
+            cmd.Parameters.AddWithValue("@hashedAt", hashedAtTimeStamp);
+            cmd.Parameters.AddWithValue("@deviceId", deviceId);
+            cmd.Parameters.AddWithValue("@pathId", pathId);
+            cmd.ExecuteNonQuery();
+
+            //INSERT or IGNORE
+            cmd.Parameters.Clear();
+            cmd.CommandText =
+                //"INSERT OR IGNORE INTO File (DeviceId, " +
+                //                             "PathId, " +
+                //                             "HashId, " +
+                //                             "FileHashedAt) " +
+                //"VALUES (@deviceId, " +
+                //        "@pathId, " +
+                //        "@hashId, " +
+                //        "@hashedAt)";
+                "INSERT OR IGNORE INTO " + NwdContract.TABLE_FILE +
+                " (" + NwdContract.COLUMN_DEVICE_ID + ", " +
+                  "" + NwdContract.COLUMN_PATH_ID + ", " +
+                  "" + NwdContract.COLUMN_HASH_ID + ", " +
+                  "" + NwdContract.COLUMN_FILE_HASHED_AT + ") " +
+                "VALUES (@deviceId, " +
+                        "@pathId, " +
+                        "@hashId, " +
+                        "@hashedAt)";
+
+            cmd.Parameters.AddWithValue("@deviceId", deviceId);
+            cmd.Parameters.AddWithValue("@pathId", pathId);
+            cmd.Parameters.AddWithValue("@hashId", hashId);
+            cmd.Parameters.AddWithValue("@hashedAt", hashedAtTimeStamp);
+            cmd.ExecuteNonQuery();
+
+            return GetIdForFile(deviceId, pathId, cmd);
+        }
+
+        public void LinkFileIdToTagId(int fileId, int tagId, SQLiteCommand cmd)
+        {
+            cmd.Parameters.Clear();
+
+            cmd.CommandText =
+                //"INSERT OR IGNORE INTO junction_File_Tag (FileId, TagId) VALUES (@fileId, @tagId) ";
+                "INSERT OR IGNORE INTO " +
+                    NwdContract.TABLE_JUNCTION_FILE_TAG +
+                    " (" +
+                        NwdContract.COLUMN_FILE_ID + ", " +
+                        NwdContract.COLUMN_TAG_ID +
+                     ") " +
+                "VALUES (@fileId, @tagId) ";
+
+            cmd.Parameters.AddWithValue("@fileId", fileId);
+            cmd.Parameters.AddWithValue("@tagId", tagId);
+            cmd.ExecuteNonQuery();
+        }
+
         public void DeleteFileTagsForFileId(int fileId, SQLiteCommand cmd)
         {
             cmd.Parameters.Clear();
