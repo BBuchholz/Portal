@@ -10,20 +10,6 @@ namespace NineWorldsDeep.Warehouse
 {
     public class SqliteDbAdapter
     {
-        //private Dictionary<SyncDirection, int> directionIds =
-        //    new Dictionary<SyncDirection, int>();
-        //private Dictionary<SyncAction, int> actionIds =
-        //    new Dictionary<SyncAction, int>();
-        //private Dictionary<string, int> nameIds =
-        //    new Dictionary<string, int>();
-
-        //private Dictionary<int, SyncDirection> idDirections =
-        //    new Dictionary<int, SyncDirection>();
-        //private Dictionary<int, SyncAction> idActions =
-        //    new Dictionary<int, SyncAction>();
-        //private Dictionary<int, string> idNames =
-        //    new Dictionary<int, string>();
-
         private Db.SqliteDbAdapter db =
             new Db.SqliteDbAdapter();
 
@@ -31,39 +17,7 @@ namespace NineWorldsDeep.Warehouse
         {
             db.InitializeIds();
         }
-
-        //[Obsolete("use Db.SqliteDbAdapter")]
-        //private void InitializeIds()
-        //{
-        //    RefreshIds();
-
-        //    bool actionsMissing = false;
-        //    bool directionsMissing = false;
-
-        //    //check dictionaries, if any are not stored
-        //    //insert or ignore all (quicker and just a couple of values)
-        //    foreach (SyncAction action in Enum.GetValues(typeof(SyncAction)))
-        //    {
-        //        if (!actionIds.ContainsKey(action))
-        //        {
-        //            actionsMissing = true;
-        //        }
-        //    }
-
-        //    foreach (SyncDirection direction in Enum.GetValues(typeof(SyncDirection)))
-        //    {
-        //        if (!directionIds.ContainsKey(direction))
-        //        {
-        //            directionsMissing = true;
-        //        }
-        //    }
-
-        //    if (actionsMissing || directionsMissing)
-        //    {
-        //        InsertOrIgnoreAllDirectionsAndActions();
-        //    }
-        //}
-
+        
         public IEnumerable<SyncProfile> GetAllSyncProfiles()
         {
             List<SyncProfile> lst = new List<SyncProfile>();
@@ -204,66 +158,7 @@ namespace NineWorldsDeep.Warehouse
 
             return outputMsg;
         }
-
-        //[Obsolete("use Db.SqliteDbAdapter")]
-        //private void PopulateSyncMaps(SyncProfile sp, SQLiteCommand cmd)
-        //{
-        //    sp.SyncMaps.Clear();
-
-        //    cmd.Parameters.Clear(); //since we will be reusing command
-        //    cmd.CommandText =
-        //        //"SELECT sp.SyncProfileName, " +
-        //        //        "pSrc.PathValue AS SourcePath,  " +
-        //        //        "pDst.PathValue AS DestPath, " +
-        //        //        "sm.SyncDirectionId, " +
-        //        //        "sm.SyncActionIdDefault " +
-        //        //"FROM SyncMap AS sm " +
-        //        //"JOIN SyncProfile AS sp " +
-        //        //"ON sm.SyncProfileId = sp.SyncProfileId " +
-        //        //"JOIN Path AS pSrc " +
-        //        //"ON pSrc.PathId = sm.PathIdSource " +
-        //        //"JOIN Path AS pDst " +
-        //        //"ON pDst.PathId = sm.PathIdDestination " +
-        //        //"WHERE sp.SyncProfileName = @name ";
-        //        "SELECT sp." + NwdContract.COLUMN_SYNC_PROFILE_NAME + ", " +
-        //                "pSrc." + NwdContract.COLUMN_PATH_VALUE + " AS SourcePath,  " +
-        //                "pDst." + NwdContract.COLUMN_PATH_VALUE + " AS DestPath, " +
-        //                "sm." + NwdContract.COLUMN_SYNC_DIRECTION_ID + ", " +
-        //                "sm." + NwdContract.COLUMN_SYNC_ACTION_ID_DEFAULT + " " +
-        //        "FROM " + NwdContract.TABLE_SYNC_MAP + " AS sm " +
-        //        "JOIN " + NwdContract.TABLE_SYNC_PROFILE + " AS sp " +
-        //        "ON sm." + NwdContract.COLUMN_SYNC_PROFILE_ID + " = sp." + NwdContract.COLUMN_SYNC_PROFILE_ID + " " +
-        //        "JOIN " + NwdContract.TABLE_PATH + " AS pSrc " +
-        //        "ON pSrc." + NwdContract.COLUMN_PATH_ID + " = sm." + NwdContract.COLUMN_PATH_ID_SOURCE + " " +
-        //        "JOIN " + NwdContract.TABLE_PATH + " AS pDst " +
-        //        "ON pDst." + NwdContract.COLUMN_PATH_ID + " = sm." + NwdContract.COLUMN_PATH_ID_DESTINATION + " " +
-        //        "WHERE sp." + NwdContract.COLUMN_SYNC_PROFILE_NAME + " = @name ";
-
-        //    cmd.Parameters.AddWithValue("@name", sp.Name);
-
-        //    using (var rdr = cmd.ExecuteReader())
-        //    {
-        //        while (rdr.Read())
-        //        {
-        //            string source = rdr.GetString(1);
-        //            string destination = rdr.GetString(2);
-        //            int directionId = rdr.GetInt32(3);
-        //            int actionId = rdr.GetInt32(4);
-
-        //            SyncDirection direction = idDirections[directionId];
-        //            SyncAction action = idActions[actionId];
-
-        //            sp.SyncMaps.Add(new SyncMap(sp,
-        //                                        direction,
-        //                                        action)
-        //            {
-        //                Source = source,
-        //                Destination = destination
-        //            });
-        //        }
-        //    }
-        //}
-
+        
         private int EnsurePath(string path, SQLiteCommand cmd)
         {
             db.InsertOrIgnorePath(path, cmd);
@@ -467,49 +362,7 @@ namespace NineWorldsDeep.Warehouse
                 db.LinkFileIdToTagId(fileId, tagId, cmd);
             }
         }
-
-        //[Obsolete("use Db.SqliteDbAdapter")]
-        //private void InsertOrIgnoreAllDirectionsAndActions()
-        //{
-        //    try
-        //    {
-        //        using (var conn =
-        //            new SQLiteConnection(@"Data Source=" +
-        //                Configuration.GetSqliteDbPath("nwd")))
-        //        {
-        //            conn.Open();
-
-        //            using (var cmd = new SQLiteCommand(conn))
-        //            {
-        //                using (var transaction = conn.BeginTransaction())
-        //                {
-        //                    foreach (SyncAction action in Enum.GetValues(typeof(SyncAction)))
-        //                    {
-        //                        InsertOrIgnoreAction(action, cmd);
-        //                    }
-
-        //                    foreach (SyncDirection direction in Enum.GetValues(typeof(SyncDirection)))
-        //                    {
-        //                        if (!directionIds.ContainsKey(direction))
-        //                        {
-        //                            InsertOrIgnoreDirection(direction, cmd);
-        //                        }
-        //                    }
-        //                    transaction.Commit();
-        //                }
-        //            }
-
-        //            conn.Close();
-        //        }
-
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        //just throw for now
-        //        throw ex;
-        //    }
-        //}
-
+        
         public List<string> GetColumnNames(string tableName, SQLiteCommand cmd)
         {
             Regex regex = new Regex("^[a-zA-Z0-9_]*$");
@@ -620,37 +473,7 @@ namespace NineWorldsDeep.Warehouse
 
             return outputMsg;
         }
-
-        [Obsolete("use Db.SqliteDbAdapter")]
-        private void InsertOrIgnoreDirection(SyncDirection direction, SQLiteCommand cmd)
-        {
-            string directionVal = direction.ToString();
-            cmd.Parameters.Clear();
-
-            cmd.CommandText =
-                //"INSERT OR IGNORE INTO SyncDirection (SyncDirectionValue) VALUES (@directionVal)";
-                "INSERT OR IGNORE INTO " + NwdContract.TABLE_SYNC_DIRECTION + " (" + NwdContract.COLUMN_SYNC_DIRECTION_VALUE + ") VALUES (@directionVal)";
-
-            cmd.Parameters.AddWithValue("@directionVal", directionVal);
-            cmd.ExecuteNonQuery();
-        }
-
-        [Obsolete("use Db.SqliteDbAdapter")]
-        private void InsertOrIgnoreAction(SyncAction action, SQLiteCommand cmd)
-        {
-            string actionVal = action.ToString();
-            cmd.Parameters.Clear();
-
-            cmd.CommandText =
-                //"INSERT OR IGNORE INTO SyncAction (SyncActionValue) VALUES (@actionVal)";
-                "INSERT OR IGNORE INTO " + NwdContract.TABLE_SYNC_ACTION + 
-                " (" + NwdContract.COLUMN_SYNC_ACTION_VALUE + 
-                ") VALUES (@actionVal)";
-
-            cmd.Parameters.AddWithValue("@actionVal", actionVal);
-            cmd.ExecuteNonQuery();
-        }
-
+        
         public string Delete(SyncMap sm)
         {
             string outputMsg = "implementation in progress";
@@ -694,124 +517,7 @@ namespace NineWorldsDeep.Warehouse
 
             return outputMsg;
         }
-
-        //[Obsolete("use Db.SqliteDbAdapter")]
-        //public void RefreshIds()
-        //{
-        //    try
-        //    {
-        //        using (var conn =
-        //            new SQLiteConnection(@"Data Source=" +
-        //                Configuration.GetSqliteDbPath("nwd")))
-        //        {
-        //            conn.Open();
-
-        //            using (var cmd = new SQLiteCommand(conn))
-        //            {
-        //                using (var transaction = conn.BeginTransaction())
-        //                {
-        //                    RefreshProfileIds(cmd);
-        //                    RefreshDirectionIds(cmd);
-        //                    RefreshActionIds(cmd);
-
-        //                    transaction.Commit();
-        //                }
-        //            }
-
-        //            conn.Close();
-        //        }
-
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        //just throw for now
-        //        throw ex;
-        //    }
-        //}
-
-        //[Obsolete("use Db.SqliteDbAdapter")]
-        //private void RefreshProfileIds(SQLiteCommand cmd)
-        //{
-        //    cmd.Parameters.Clear(); //since we will be reusing command
-        //    cmd.CommandText =
-        //        //"SELECT SyncProfileId, SyncProfileName FROM SyncProfile";
-        //        "SELECT " + NwdContract.COLUMN_SYNC_PROFILE_ID + ", " + 
-        //                    NwdContract.COLUMN_SYNC_PROFILE_NAME + 
-        //        " FROM " + NwdContract.TABLE_SYNC_PROFILE + "";
-
-        //    using (var rdr = cmd.ExecuteReader())
-        //    {
-        //        while (rdr.Read())
-        //        {
-        //            int id = rdr.GetInt32(0);
-        //            string name = rdr.GetString(1);
-
-        //            nameIds[name] = id;
-        //            idNames[id] = name;
-
-        //        }
-        //    }
-        //}
-
-        //[Obsolete("use Db.SqliteDbAdapter")]
-        //public void RefreshDirectionIds(SQLiteCommand cmd)
-        //{
-        //    cmd.Parameters.Clear(); //since we will be reusing command
-
-        //    cmd.CommandText =
-        //        //"SELECT SyncDirectionId, SyncDirectionValue FROM SyncDirection";
-        //        "SELECT " + 
-        //            NwdContract.COLUMN_SYNC_DIRECTION_ID + ", " + 
-        //            NwdContract.COLUMN_SYNC_DIRECTION_VALUE + 
-        //        " FROM " + NwdContract.TABLE_SYNC_DIRECTION + "";
-
-        //    using (var rdr = cmd.ExecuteReader())
-        //    {
-        //        while (rdr.Read())
-        //        {
-        //            int id = rdr.GetInt32(0);
-        //            string directionValue = rdr.GetString(1);
-        //            SyncDirection direction =
-        //                (SyncDirection)Enum.Parse(typeof(SyncDirection),
-        //                                          directionValue);
-        //            if (Enum.IsDefined(typeof(SyncDirection), direction))
-        //            {
-        //                directionIds[direction] = id;
-        //                idDirections[id] = direction;
-        //            }
-        //        }
-        //    }
-        //}
-
-        //[Obsolete("use Db.SqliteDbAdapter")]
-        //public void RefreshActionIds(SQLiteCommand cmd)
-        //{
-        //    cmd.Parameters.Clear(); //since we will be reusing command
-        //    cmd.CommandText =
-        //        //"SELECT SyncActionId, SyncActionValue FROM SyncAction";
-        //        "SELECT " + 
-        //            NwdContract.COLUMN_SYNC_ACTION_ID + ", " + 
-        //            NwdContract.COLUMN_SYNC_ACTION_VALUE + 
-        //        " FROM " + NwdContract.TABLE_SYNC_ACTION + "";
-
-        //    using (var rdr = cmd.ExecuteReader())
-        //    {
-        //        while (rdr.Read())
-        //        {
-        //            int id = rdr.GetInt32(0);
-        //            string actionValue = rdr.GetString(1);
-        //            SyncAction action =
-        //                (SyncAction)Enum.Parse(typeof(SyncAction),
-        //                                       actionValue);
-        //            if (Enum.IsDefined(typeof(SyncAction), action))
-        //            {
-        //                actionIds[action] = id;
-        //                idActions[id] = action;
-        //            }
-        //        }
-        //    }
-        //}
-
+        
         public string Save(SyncProfile sp)
         {
             string outputMsg = "implementation in progress";
@@ -838,7 +544,7 @@ namespace NineWorldsDeep.Warehouse
 
                             foreach (string path in paths)
                             {
-                                InsertOrIgnorePath(path, cmd);
+                                db.InsertOrIgnorePath(path, cmd);
                             }
 
                             /////////use open transaction to get path ids for path values
@@ -850,7 +556,7 @@ namespace NineWorldsDeep.Warehouse
                                 pathIds[path] = -1;
                             }
 
-                            RefreshPathIds(pathIds, cmd);
+                            db.RefreshPathIds(pathIds, cmd);
 
                             foreach (SyncMap map in sp.SyncMaps)
                             {
@@ -1077,87 +783,7 @@ namespace NineWorldsDeep.Warehouse
 
             return id;
         }
-
-        /// <summary>
-        /// refreshes pathIds with the ids associated with each path in keys collection
-        /// any paths not in keys collection will be ignored
-        /// </summary>
-        /// <param name="pathIds"></param>
-        /// <param name="cmd"></param>
-        [Obsolete("use Db.SqliteDbAdapter")]
-        private void RefreshPathIds(Dictionary<string, int> pathIds, SQLiteCommand cmd)
-        {
-            cmd.Parameters.Clear(); //since we will be reusing command
-
-            cmd.CommandText =
-                //"SELECT PathId, PathValue FROM Path";
-                "SELECT " + 
-                    NwdContract.COLUMN_PATH_ID + ", " + 
-                    NwdContract.COLUMN_PATH_VALUE + 
-                " FROM " + NwdContract.TABLE_PATH + "";
-
-            using (var rdr = cmd.ExecuteReader())
-            {
-                while (rdr.Read())
-                {
-                    int id = rdr.GetInt32(0);
-                    string path = rdr.GetString(1);
-
-                    //only populate keys in dictionary
-                    if (pathIds.ContainsKey(path))
-                    {
-                        pathIds[path] = id;
-                    }
-                }
-            }
-        }
-
-        /// <summary>
-        /// returns -1 if not found, else found it
-        /// </summary>
-        /// <param name="path"></param>
-        /// <param name="cmd"></param>
-        /// <returns></returns>
-        [Obsolete("use Db.SqliteDbAdapter")]
-        private int GetIdForPath(string path, SQLiteCommand cmd)
-        {
-            int id = -1;
-
-            cmd.Parameters.Clear(); //since we will be reusing command
-
-            cmd.CommandText =
-                //"SELECT PathId FROM Path WHERE PathValue = @pathVal";
-                "SELECT " + NwdContract.COLUMN_PATH_ID + 
-                " FROM " + NwdContract.TABLE_PATH + 
-                " WHERE " + NwdContract.COLUMN_PATH_VALUE + " = @pathVal";
-
-            cmd.Parameters.AddWithValue("@pathVal", path);
-
-            using (var rdr = cmd.ExecuteReader())
-            {
-                if (rdr.Read())
-                {
-                    id = rdr.GetInt32(0);
-                }
-            }
-
-            return id;
-        }
-
-        [Obsolete("use Db.SqliteDbAdapter")]
-        private void InsertOrIgnorePath(string path, SQLiteCommand cmd)
-        {
-            cmd.Parameters.Clear();
-
-            cmd.CommandText =
-                //"INSERT OR IGNORE INTO Path (PathValue) VALUES (@path)";
-                "INSERT OR IGNORE INTO " + NwdContract.TABLE_PATH +
-                " (" + NwdContract.COLUMN_PATH_VALUE + ") VALUES (@path)";
-
-            cmd.Parameters.AddWithValue("@path", path);
-            cmd.ExecuteNonQuery();
-        }
-
+      
         private void InsertOrIgnoreTag(string tag, SQLiteCommand cmd)
         {
             cmd.Parameters.Clear();
@@ -1170,16 +796,6 @@ namespace NineWorldsDeep.Warehouse
             cmd.Parameters.AddWithValue("@tag", tag);
             cmd.ExecuteNonQuery();
         }
-
-        //private void InsertOrIgnoreProfile(SyncProfile sp, SQLiteCommand cmd)
-        //{
-        //    string profileName = sp.Name;
-        //    cmd.Parameters.Clear();
-        //    cmd.CommandText =
-        //        "INSERT OR IGNORE INTO SyncProfile (SyncProfileName) VALUES (@profileName)";
-        //    cmd.Parameters.AddWithValue("@profileName", profileName);
-        //    cmd.ExecuteNonQuery();
-        //}
 
         private void InsertOrIgnoreTags(List<string> tags, SQLiteCommand cmd)
         {
