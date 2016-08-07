@@ -14,7 +14,7 @@ using System.Threading.Tasks;
 namespace NineWorldsDeep.Db
 {
     public class SqliteDbAdapter
-    {
+    {        
         private Dictionary<NwdDeviceKey, int> deviceIds =
             new Dictionary<NwdDeviceKey, int>();
         private Dictionary<string, int> hashIds =
@@ -85,6 +85,50 @@ namespace NineWorldsDeep.Db
         //        }
         //    }
         //}
+
+        /// <summary>
+        /// returns -1 if not found, or id if found
+        /// </summary>
+        /// <param name="hash"></param>
+        /// <param name="cmd"></param>
+        /// <returns></returns>
+        public int GetIdForHash(string hash, SQLiteCommand cmd)
+        {
+            int id = -1;
+
+            cmd.Parameters.Clear(); //since we will be reusing command
+
+            cmd.CommandText =
+                //"SELECT HashId FROM Hash WHERE HashValue = @hashVal";
+                "SELECT " + NwdContract.COLUMN_HASH_ID +
+                " FROM " + NwdContract.TABLE_HASH +
+                " WHERE " + NwdContract.COLUMN_HASH_VALUE + " = @hashVal";
+
+            cmd.Parameters.AddWithValue("@hashVal", hash);
+
+            using (var rdr = cmd.ExecuteReader())
+            {
+                if (rdr.Read())
+                {
+                    id = rdr.GetInt32(0);
+                }
+            }
+
+            return id;
+        }
+
+        public void InsertOrIgnoreHash(string hash, SQLiteCommand cmd)
+        {
+            cmd.Parameters.Clear();
+
+            cmd.CommandText =
+                //"INSERT OR IGNORE INTO Hash (HashValue) VALUES (@hash)";
+                "INSERT OR IGNORE INTO " + NwdContract.TABLE_HASH +
+                    " (" + NwdContract.COLUMN_HASH_VALUE + ") VALUES (@hash)";
+
+            cmd.Parameters.AddWithValue("@hash", hash);
+            cmd.ExecuteNonQuery();
+        }
 
         public void StoreTags(List<string> lst)
         {
@@ -509,6 +553,35 @@ namespace NineWorldsDeep.Db
             SQLiteParameter pathParam = new SQLiteParameter();
             pathParam.Value = path;
             cmd.Parameters.Add(pathParam);
+
+            using (var rdr = cmd.ExecuteReader())
+            {
+                if (rdr.Read())
+                {
+                    id = rdr.GetInt32(0);
+                }
+            }
+
+            return id;
+        }
+
+        public int GetIdForFile(int deviceId, int pathId, SQLiteCommand cmd)
+        {
+            int id = -1;
+
+            cmd.Parameters.Clear(); //since we will be reusing command
+
+            cmd.CommandText =
+                //"SELECT FileId FROM File " +
+                //              "WHERE DeviceId = @deviceId " +
+                //              "AND PathId = @pathId ";
+                "SELECT " + NwdContract.COLUMN_FILE_ID +
+                " FROM " + NwdContract.TABLE_FILE +
+                " WHERE " + NwdContract.COLUMN_DEVICE_ID + " = @deviceId " +
+                "AND " + NwdContract.COLUMN_PATH_ID + " = @pathId ";
+
+            cmd.Parameters.AddWithValue("@deviceId", deviceId);
+            cmd.Parameters.AddWithValue("@pathId", pathId);
 
             using (var rdr = cmd.ExecuteReader())
             {

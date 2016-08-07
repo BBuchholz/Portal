@@ -126,49 +126,7 @@ namespace NineWorldsDeep.Warehouse
                 PopulateSyncMaps(sp, cmd);
             }
         }
-
-        [Obsolete("use Db.SqliteDbAdapter")]
-        private string GetTagsForHash(string sha1Hash, SQLiteCommand cmd)
-        {
-            cmd.Parameters.Clear();
-
-            cmd.CommandText =
-                //"SELECT t.TagValue " +
-                //"FROM Tag t " +
-                //"JOIN junction_File_Tag jft " +
-                //"ON t.TagId = jft.TagId " +
-                //"JOIN File f " +
-                //"ON f.FileId = jft.FileId " +
-                //"JOIN Hash h " +
-                //"ON h.HashId = f.HashId " +
-                //"WHERE h.HashValue = @hash ";
-                "SELECT t." + NwdContract.COLUMN_TAG_VALUE + " " +
-                "FROM " + NwdContract.TABLE_TAG + " t " +
-                "JOIN " + NwdContract.TABLE_JUNCTION_FILE_TAG + " jft " +
-                "ON t." + NwdContract.COLUMN_TAG_ID + " = jft." + NwdContract.COLUMN_TAG_ID + " " +
-                "JOIN " + NwdContract.TABLE_FILE + " f " +
-                "ON f." + NwdContract.COLUMN_FILE_ID + " = jft." + NwdContract.COLUMN_FILE_ID + " " +
-                "JOIN " + NwdContract.TABLE_HASH + " h " +
-                "ON h." + NwdContract.COLUMN_HASH_ID + " = f." + NwdContract.COLUMN_HASH_ID + " " +
-                "WHERE h." + NwdContract.COLUMN_HASH_VALUE + " = @hash ";
-
-            cmd.Parameters.AddWithValue("@hash", sha1Hash);
-
-            List<string> tags = new List<string>();
-
-            using (var rdr = cmd.ExecuteReader())
-            {
-                while (rdr.Read())
-                {
-                    string tag = rdr.GetString(0);
-
-                    tags.Add(tag);
-                }
-            }
-
-            return string.Join(", ", tags);
-        }
-
+        
         public string GetTagsForSHA1Hash(string sha1Hash)
         {
             string tags = "";
@@ -312,8 +270,8 @@ namespace NineWorldsDeep.Warehouse
 
         private int EnsureHash(string hash, SQLiteCommand cmd)
         {
-            InsertOrIgnoreHash(hash, cmd);
-            return GetIdForHash(hash, cmd);
+            db.InsertOrIgnoreHash(hash, cmd);
+            return db.GetIdForHash(hash, cmd);
         }
 
         /// <summary>
@@ -327,37 +285,6 @@ namespace NineWorldsDeep.Warehouse
         {
             InsertOrIgnoreTags(tags, cmd);
             return GetIdsForTags(tags, cmd);
-        }
-
-        /// <summary>
-        /// returns -1 if not found, or id if found
-        /// </summary>
-        /// <param name="hash"></param>
-        /// <param name="cmd"></param>
-        /// <returns></returns>
-        private int GetIdForHash(string hash, SQLiteCommand cmd)
-        {
-            int id = -1;
-
-            cmd.Parameters.Clear(); //since we will be reusing command
-
-            cmd.CommandText =
-                //"SELECT HashId FROM Hash WHERE HashValue = @hashVal";
-                "SELECT " + NwdContract.COLUMN_HASH_ID + 
-                " FROM " + NwdContract.TABLE_HASH + 
-                " WHERE " + NwdContract.COLUMN_HASH_VALUE + " = @hashVal";
-
-            cmd.Parameters.AddWithValue("@hashVal", hash);
-
-            using (var rdr = cmd.ExecuteReader())
-            {
-                if (rdr.Read())
-                {
-                    id = rdr.GetInt32(0);
-                }
-            }
-
-            return id;
         }
 
         /// <summary>
@@ -492,7 +419,7 @@ namespace NineWorldsDeep.Warehouse
                             {
                                 //upsert file (to update hashedAt timestamp if already exists)
                                 string timeStamp = NwdUtils.GetTimeStamp_yyyyMMddHHmmss();
-                                int fileId = UpsertFile(extDeviceId, extPathId, hashId, timeStamp, cmd);
+                                int fileId = db.UpsertFile(extDeviceId, extPathId, hashId, timeStamp, cmd);
 
                                 //foreach tag, link File to Tag (junction table entry)
                                 LinkFileIdToTagIds(fileId, tagIds, cmd);
@@ -505,7 +432,7 @@ namespace NineWorldsDeep.Warehouse
                             {
                                 //upsert file (to update hashedAt timestamp if already exists)
                                 string timeStamp = NwdUtils.GetTimeStamp_yyyyMMddHHmmss();
-                                int fileId = UpsertFile(hostDeviceId, hostPathId, hashId, timeStamp, cmd);
+                                int fileId = db.UpsertFile(hostDeviceId, hostPathId, hashId, timeStamp, cmd);
 
                                 //foreach tag, link File to Tag (junction table entry)
                                 LinkFileIdToTagIds(fileId, tagIds, cmd);
@@ -535,92 +462,8 @@ namespace NineWorldsDeep.Warehouse
         {
             foreach (var tagId in tagIds.Values)
             {
-                LinkFileIdToTagId(fileId, tagId, cmd);
+                db.LinkFileIdToTagId(fileId, tagId, cmd);
             }
-        }
-
-        [Obsolete("use Db.SqliteDbAdapter")]
-        private void LinkFileIdToTagId(int fileId, int tagId, SQLiteCommand cmd)
-        {
-            cmd.Parameters.Clear();
-
-            cmd.CommandText =
-                //"INSERT OR IGNORE INTO junction_File_Tag (FileId, TagId) VALUES (@fileId, @tagId) ";
-                "INSERT OR IGNORE INTO " + 
-                    NwdContract.TABLE_JUNCTION_FILE_TAG + 
-                    " (" + 
-                        NwdContract.COLUMN_FILE_ID + ", " + 
-                        NwdContract.COLUMN_TAG_ID + 
-                     ") " + 
-                "VALUES (@fileId, @tagId) ";
-
-            cmd.Parameters.AddWithValue("@fileId", fileId);
-            cmd.Parameters.AddWithValue("@tagId", tagId);
-            cmd.ExecuteNonQuery();
-        }
-
-        [Obsolete("use Db.SqliteDbAdapter")]
-        private int UpsertFile(int deviceId, int pathId, int hashId, string hashedAtTimeStamp, SQLiteCommand cmd)
-        {
-            /////////see link answers below accepted answer
-            //http://stackoverflow.com/questions/15277373/sqlite-upsert-update-or-insert
-            
-            // need to do an UPDATE or IGNORE followed by an INSERT or IGNORE, so the
-            // update attempts first (to change default action id for example), and
-            // if not found, gets ignored, so the insert would then fire.
-            // if the update did succeed the insert would get ignored
-            // so doing it this way, in this order, ensures 
-            // a proper "UPSERT"
-
-            //UPDATE or IGNORE
-            cmd.Parameters.Clear();
-
-            cmd.CommandText =
-                //"UPDATE OR IGNORE File " +
-                //"SET HashId = @hashId, " +
-                //    "FileHashedAt = @hashedAt " +
-                //"WHERE DeviceId = @deviceId " +
-                //"AND PathId = @pathId ";
-                "UPDATE OR IGNORE " + NwdContract.TABLE_FILE + " " +
-                "SET " + NwdContract.COLUMN_HASH_ID + " = @hashId, " +
-                    "" + NwdContract.COLUMN_FILE_HASHED_AT + " = @hashedAt " +
-                "WHERE " + NwdContract.COLUMN_DEVICE_ID + " = @deviceId " +
-                "AND " + NwdContract.COLUMN_PATH_ID + " = @pathId ";
-
-            cmd.Parameters.AddWithValue("@hashId", hashId);
-            cmd.Parameters.AddWithValue("@hashedAt", hashedAtTimeStamp);
-            cmd.Parameters.AddWithValue("@deviceId", deviceId);
-            cmd.Parameters.AddWithValue("@pathId", pathId);
-            cmd.ExecuteNonQuery();
-
-            //INSERT or IGNORE
-            cmd.Parameters.Clear();
-            cmd.CommandText =
-                //"INSERT OR IGNORE INTO File (DeviceId, " +
-                //                             "PathId, " +
-                //                             "HashId, " +
-                //                             "FileHashedAt) " +
-                //"VALUES (@deviceId, " +
-                //        "@pathId, " +
-                //        "@hashId, " +
-                //        "@hashedAt)";
-                "INSERT OR IGNORE INTO " + NwdContract.TABLE_FILE + 
-                " (" + NwdContract.COLUMN_DEVICE_ID + ", " +
-                  "" + NwdContract.COLUMN_PATH_ID + ", " +
-                  "" + NwdContract.COLUMN_HASH_ID + ", " +
-                  "" + NwdContract.COLUMN_FILE_HASHED_AT + ") " +
-                "VALUES (@deviceId, " +
-                        "@pathId, " +
-                        "@hashId, " +
-                        "@hashedAt)";
-
-            cmd.Parameters.AddWithValue("@deviceId", deviceId);
-            cmd.Parameters.AddWithValue("@pathId", pathId);
-            cmd.Parameters.AddWithValue("@hashId", hashId);
-            cmd.Parameters.AddWithValue("@hashedAt", hashedAtTimeStamp);
-            cmd.ExecuteNonQuery();
-
-            return GetIdForFile(deviceId, pathId, cmd);
         }
 
         private void InsertOrIgnoreAllDirectionsAndActions()
@@ -1282,36 +1125,7 @@ namespace NineWorldsDeep.Warehouse
 
             return id;
         }
-
-        private int GetIdForFile(int deviceId, int pathId, SQLiteCommand cmd)
-        {
-            int id = -1;
-
-            cmd.Parameters.Clear(); //since we will be reusing command
-
-            cmd.CommandText =
-                //"SELECT FileId FROM File " +
-                //              "WHERE DeviceId = @deviceId " +
-                //              "AND PathId = @pathId ";
-                "SELECT " + NwdContract.COLUMN_FILE_ID + 
-                " FROM " + NwdContract.TABLE_FILE + 
-                " WHERE " + NwdContract.COLUMN_DEVICE_ID + " = @deviceId " + 
-                "AND " + NwdContract.COLUMN_PATH_ID + " = @pathId ";
-
-            cmd.Parameters.AddWithValue("@deviceId", deviceId);
-            cmd.Parameters.AddWithValue("@pathId", pathId);
-
-            using (var rdr = cmd.ExecuteReader())
-            {
-                if (rdr.Read())
-                {
-                    id = rdr.GetInt32(0);
-                }
-            }
-
-            return id;
-        }
-
+        
         private void InsertOrIgnorePath(string path, SQLiteCommand cmd)
         {
             cmd.Parameters.Clear();
@@ -1322,19 +1136,6 @@ namespace NineWorldsDeep.Warehouse
                 " (" + NwdContract.COLUMN_PATH_VALUE + ") VALUES (@path)";
 
             cmd.Parameters.AddWithValue("@path", path);
-            cmd.ExecuteNonQuery();
-        }
-
-        private void InsertOrIgnoreHash(string hash, SQLiteCommand cmd)
-        {
-            cmd.Parameters.Clear();
-
-            cmd.CommandText =
-                //"INSERT OR IGNORE INTO Hash (HashValue) VALUES (@hash)";
-                "INSERT OR IGNORE INTO " + NwdContract.TABLE_HASH +
-                    " (" + NwdContract.COLUMN_HASH_VALUE + ") VALUES (@hash)";
-
-            cmd.Parameters.AddWithValue("@hash", hash);
             cmd.ExecuteNonQuery();
         }
 
