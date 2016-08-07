@@ -3,6 +3,7 @@ using NineWorldsDeep.Mtp;
 using NineWorldsDeep.Parser;
 using NineWorldsDeep.Sqlite;
 using NineWorldsDeep.UI;
+using NineWorldsDeep.Warehouse;
 using System;
 using System.Collections.Generic;
 using System.Data.SQLite;
@@ -21,6 +22,20 @@ namespace NineWorldsDeep.Db
             new Dictionary<string, int>();
         private Dictionary<string, int> pathIds =
             new Dictionary<string, int>();
+        
+        private Dictionary<SyncDirection, int> directionIds =
+            new Dictionary<SyncDirection, int>();
+        private Dictionary<SyncAction, int> actionIds =
+            new Dictionary<SyncAction, int>();
+        private Dictionary<string, int> nameIds =
+            new Dictionary<string, int>();
+
+        private Dictionary<int, SyncDirection> idDirections =
+            new Dictionary<int, SyncDirection>();
+        private Dictionary<int, SyncAction> idActions =
+            new Dictionary<int, SyncAction>();
+        private Dictionary<int, string> idNames =
+            new Dictionary<int, string>();
 
         //TODO: consolidate all db logic from all of NWD into one class with a private constructor (singleton)
         //TODO: in the db singleton, enable the foreign key pragma when opening sqlite db
@@ -707,6 +722,359 @@ namespace NineWorldsDeep.Db
         public string DeleteFile(String path)
         {
             return DeleteFile(null, path);
+        }
+
+        public int GetIdForPath(string path, SQLiteCommand cmd)
+        {
+            int id = -1;
+
+            cmd.Parameters.Clear(); //since we will be reusing command
+
+            cmd.CommandText =
+                //"SELECT PathId FROM Path WHERE PathValue = @pathVal";
+                "SELECT " + NwdContract.COLUMN_PATH_ID +
+                " FROM " + NwdContract.TABLE_PATH +
+                " WHERE " + NwdContract.COLUMN_PATH_VALUE + " = @pathVal";
+
+            cmd.Parameters.AddWithValue("@pathVal", path);
+
+            using (var rdr = cmd.ExecuteReader())
+            {
+                if (rdr.Read())
+                {
+                    id = rdr.GetInt32(0);
+                }
+            }
+
+            return id;
+        }
+
+        public void RefreshPathIds(Dictionary<string, int> pathIds, SQLiteCommand cmd)
+        {
+            cmd.Parameters.Clear(); //since we will be reusing command
+
+            cmd.CommandText =
+                //"SELECT PathId, PathValue FROM Path";
+                "SELECT " +
+                    NwdContract.COLUMN_PATH_ID + ", " +
+                    NwdContract.COLUMN_PATH_VALUE +
+                " FROM " + NwdContract.TABLE_PATH + "";
+
+            using (var rdr = cmd.ExecuteReader())
+            {
+                while (rdr.Read())
+                {
+                    int id = rdr.GetInt32(0);
+                    string path = rdr.GetString(1);
+
+                    //only populate keys in dictionary
+                    if (pathIds.ContainsKey(path))
+                    {
+                        pathIds[path] = id;
+                    }
+                }
+            }
+        }
+
+        public void PopulateSyncMaps(SyncProfile sp, SQLiteCommand cmd)
+        {
+            sp.SyncMaps.Clear();
+
+            cmd.Parameters.Clear(); //since we will be reusing command
+            cmd.CommandText =
+                //"SELECT sp.SyncProfileName, " +
+                //        "pSrc.PathValue AS SourcePath,  " +
+                //        "pDst.PathValue AS DestPath, " +
+                //        "sm.SyncDirectionId, " +
+                //        "sm.SyncActionIdDefault " +
+                //"FROM SyncMap AS sm " +
+                //"JOIN SyncProfile AS sp " +
+                //"ON sm.SyncProfileId = sp.SyncProfileId " +
+                //"JOIN Path AS pSrc " +
+                //"ON pSrc.PathId = sm.PathIdSource " +
+                //"JOIN Path AS pDst " +
+                //"ON pDst.PathId = sm.PathIdDestination " +
+                //"WHERE sp.SyncProfileName = @name ";
+                "SELECT sp." + NwdContract.COLUMN_SYNC_PROFILE_NAME + ", " +
+                        "pSrc." + NwdContract.COLUMN_PATH_VALUE + " AS SourcePath,  " +
+                        "pDst." + NwdContract.COLUMN_PATH_VALUE + " AS DestPath, " +
+                        "sm." + NwdContract.COLUMN_SYNC_DIRECTION_ID + ", " +
+                        "sm." + NwdContract.COLUMN_SYNC_ACTION_ID_DEFAULT + " " +
+                "FROM " + NwdContract.TABLE_SYNC_MAP + " AS sm " +
+                "JOIN " + NwdContract.TABLE_SYNC_PROFILE + " AS sp " +
+                "ON sm." + NwdContract.COLUMN_SYNC_PROFILE_ID + " = sp." + NwdContract.COLUMN_SYNC_PROFILE_ID + " " +
+                "JOIN " + NwdContract.TABLE_PATH + " AS pSrc " +
+                "ON pSrc." + NwdContract.COLUMN_PATH_ID + " = sm." + NwdContract.COLUMN_PATH_ID_SOURCE + " " +
+                "JOIN " + NwdContract.TABLE_PATH + " AS pDst " +
+                "ON pDst." + NwdContract.COLUMN_PATH_ID + " = sm." + NwdContract.COLUMN_PATH_ID_DESTINATION + " " +
+                "WHERE sp." + NwdContract.COLUMN_SYNC_PROFILE_NAME + " = @name ";
+
+            cmd.Parameters.AddWithValue("@name", sp.Name);
+
+            using (var rdr = cmd.ExecuteReader())
+            {
+                while (rdr.Read())
+                {
+                    string source = rdr.GetString(1);
+                    string destination = rdr.GetString(2);
+                    int directionId = rdr.GetInt32(3);
+                    int actionId = rdr.GetInt32(4);
+
+                    SyncDirection direction = idDirections[directionId];
+                    SyncAction action = idActions[actionId];
+
+                    sp.SyncMaps.Add(new SyncMap(sp,
+                                                direction,
+                                                action)
+                    {
+                        Source = source,
+                        Destination = destination
+                    });
+                }
+            }
+        }
+
+        public void RefreshProfileIds(SQLiteCommand cmd)
+        {
+            cmd.Parameters.Clear(); //since we will be reusing command
+            cmd.CommandText =
+                //"SELECT SyncProfileId, SyncProfileName FROM SyncProfile";
+                "SELECT " + NwdContract.COLUMN_SYNC_PROFILE_ID + ", " +
+                            NwdContract.COLUMN_SYNC_PROFILE_NAME +
+                " FROM " + NwdContract.TABLE_SYNC_PROFILE + "";
+
+            using (var rdr = cmd.ExecuteReader())
+            {
+                while (rdr.Read())
+                {
+                    int id = rdr.GetInt32(0);
+                    string name = rdr.GetString(1);
+
+                    nameIds[name] = id;
+                    idNames[id] = name;
+
+                }
+            }
+        }
+
+        public int GetNameId(string name)
+        {
+            return nameIds[name];
+        }
+
+        public int GetDirectionId(SyncDirection direction)
+        {
+            return directionIds[direction];
+        }
+
+        public int GetActionId(SyncAction action)
+        {
+            return actionIds[action];
+        }
+
+        public void RefreshIds()
+        {
+            try
+            {
+                using (var conn =
+                    new SQLiteConnection(@"Data Source=" +
+                        Configuration.GetSqliteDbPath("nwd")))
+                {
+                    conn.Open();
+
+                    using (var cmd = new SQLiteCommand(conn))
+                    {
+                        using (var transaction = conn.BeginTransaction())
+                        {
+                            RefreshProfileIds(cmd);
+                            RefreshDirectionIds(cmd);
+                            RefreshActionIds(cmd);
+
+                            transaction.Commit();
+                        }
+                    }
+
+                    conn.Close();
+                }
+
+            }
+            catch (Exception ex)
+            {
+                //just throw for now
+                throw ex;
+            }
+        }
+
+        public void RefreshActionIds(SQLiteCommand cmd)
+        {
+            cmd.Parameters.Clear(); //since we will be reusing command
+            cmd.CommandText =
+                //"SELECT SyncActionId, SyncActionValue FROM SyncAction";
+                "SELECT " +
+                    NwdContract.COLUMN_SYNC_ACTION_ID + ", " +
+                    NwdContract.COLUMN_SYNC_ACTION_VALUE +
+                " FROM " + NwdContract.TABLE_SYNC_ACTION + "";
+
+            using (var rdr = cmd.ExecuteReader())
+            {
+                while (rdr.Read())
+                {
+                    int id = rdr.GetInt32(0);
+                    string actionValue = rdr.GetString(1);
+                    SyncAction action =
+                        (SyncAction)Enum.Parse(typeof(SyncAction),
+                                               actionValue);
+                    if (Enum.IsDefined(typeof(SyncAction), action))
+                    {
+                        actionIds[action] = id;
+                        idActions[id] = action;
+                    }
+                }
+            }
+        }
+
+        public void InitializeIds()
+        {
+            RefreshIds();
+
+            bool actionsMissing = false;
+            bool directionsMissing = false;
+
+            //check dictionaries, if any are not stored
+            //insert or ignore all (quicker and just a couple of values)
+            foreach (SyncAction action in Enum.GetValues(typeof(SyncAction)))
+            {
+                if (!actionIds.ContainsKey(action))
+                {
+                    actionsMissing = true;
+                }
+            }
+
+            foreach (SyncDirection direction in Enum.GetValues(typeof(SyncDirection)))
+            {
+                if (!directionIds.ContainsKey(direction))
+                {
+                    directionsMissing = true;
+                }
+            }
+
+            if (actionsMissing || directionsMissing)
+            {
+                InsertOrIgnoreAllDirectionsAndActions();
+            }
+        }
+
+        public void InsertOrIgnoreAllDirectionsAndActions()
+        {
+            try
+            {
+                using (var conn =
+                    new SQLiteConnection(@"Data Source=" +
+                        Configuration.GetSqliteDbPath("nwd")))
+                {
+                    conn.Open();
+
+                    using (var cmd = new SQLiteCommand(conn))
+                    {
+                        using (var transaction = conn.BeginTransaction())
+                        {
+                            foreach (SyncAction action in Enum.GetValues(typeof(SyncAction)))
+                            {
+                                InsertOrIgnoreAction(action, cmd);
+                            }
+
+                            foreach (SyncDirection direction in Enum.GetValues(typeof(SyncDirection)))
+                            {
+                                if (!directionIds.ContainsKey(direction))
+                                {
+                                    InsertOrIgnoreDirection(direction, cmd);
+                                }
+                            }
+                            transaction.Commit();
+                        }
+                    }
+
+                    conn.Close();
+                }
+
+            }
+            catch (Exception ex)
+            {
+                //just throw for now
+                throw ex;
+            }
+        }
+
+
+
+        public void InsertOrIgnoreDirection(SyncDirection direction, SQLiteCommand cmd)
+        {
+            string directionVal = direction.ToString();
+            cmd.Parameters.Clear();
+
+            cmd.CommandText =
+                //"INSERT OR IGNORE INTO SyncDirection (SyncDirectionValue) VALUES (@directionVal)";
+                "INSERT OR IGNORE INTO " + NwdContract.TABLE_SYNC_DIRECTION + " (" + NwdContract.COLUMN_SYNC_DIRECTION_VALUE + ") VALUES (@directionVal)";
+
+            cmd.Parameters.AddWithValue("@directionVal", directionVal);
+            cmd.ExecuteNonQuery();
+        }
+
+        public void InsertOrIgnoreAction(SyncAction action, SQLiteCommand cmd)
+        {
+            string actionVal = action.ToString();
+            cmd.Parameters.Clear();
+
+            cmd.CommandText =
+                //"INSERT OR IGNORE INTO SyncAction (SyncActionValue) VALUES (@actionVal)";
+                "INSERT OR IGNORE INTO " + NwdContract.TABLE_SYNC_ACTION +
+                " (" + NwdContract.COLUMN_SYNC_ACTION_VALUE +
+                ") VALUES (@actionVal)";
+
+            cmd.Parameters.AddWithValue("@actionVal", actionVal);
+            cmd.ExecuteNonQuery();
+        }
+
+        public void RefreshDirectionIds(SQLiteCommand cmd)
+        {
+            cmd.Parameters.Clear(); //since we will be reusing command
+
+            cmd.CommandText =
+                //"SELECT SyncDirectionId, SyncDirectionValue FROM SyncDirection";
+                "SELECT " +
+                    NwdContract.COLUMN_SYNC_DIRECTION_ID + ", " +
+                    NwdContract.COLUMN_SYNC_DIRECTION_VALUE +
+                " FROM " + NwdContract.TABLE_SYNC_DIRECTION + "";
+
+            using (var rdr = cmd.ExecuteReader())
+            {
+                while (rdr.Read())
+                {
+                    int id = rdr.GetInt32(0);
+                    string directionValue = rdr.GetString(1);
+                    SyncDirection direction =
+                        (SyncDirection)Enum.Parse(typeof(SyncDirection),
+                                                  directionValue);
+                    if (Enum.IsDefined(typeof(SyncDirection), direction))
+                    {
+                        directionIds[direction] = id;
+                        idDirections[id] = direction;
+                    }
+                }
+            }
+        }
+
+        public void InsertOrIgnorePath(string path, SQLiteCommand cmd)
+        {
+            cmd.Parameters.Clear();
+
+            cmd.CommandText =
+                //"INSERT OR IGNORE INTO Path (PathValue) VALUES (@path)";
+                "INSERT OR IGNORE INTO " + NwdContract.TABLE_PATH +
+                " (" + NwdContract.COLUMN_PATH_VALUE + ") VALUES (@path)";
+
+            cmd.Parameters.AddWithValue("@path", path);
+            cmd.ExecuteNonQuery();
         }
 
         public void PopulatePathIds(Dictionary<string, int> pathsToIds)
