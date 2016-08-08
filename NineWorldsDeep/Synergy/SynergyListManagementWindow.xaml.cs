@@ -24,8 +24,8 @@ namespace NineWorldsDeep.Synergy
         private bool _isChanged = false;
         private ObservableCollection<SynergyList> _activeCol;
         private ObservableCollection<SynergyList> _inactiveCol;
-        private SynergySqliteDbAdapter _sqliteDb =
-            new SynergySqliteDbAdapter();
+        private Db.SqliteDbAdapter _sqliteDb =
+            new Db.SqliteDbAdapter();
 
         public SynergyListManagementWindow()
         {
@@ -104,7 +104,7 @@ namespace NineWorldsDeep.Synergy
             Display.Message("not included in migration");
         }
 
-        private void LoadDbLists(SynergySqliteDbAdapter db)
+        private void LoadDbLists(Db.SqliteDbAdapter db)
         {
             _activeCol = new ObservableCollection<SynergyList>(db.GetLists(true));
             _inactiveCol = new ObservableCollection<SynergyList>(db.GetLists(false));
@@ -150,7 +150,7 @@ namespace NineWorldsDeep.Synergy
         //    LoadDbLists(db);
         //}
 
-        private void UpdateDbActiveInactive(SynergySqliteDbAdapter db, IEnumerable<SynergyList> setToActive, IEnumerable<SynergyList> setToInactive)
+        private void UpdateDbActiveInactive(Db.SqliteDbAdapter db, IEnumerable<SynergyList> setToActive, IEnumerable<SynergyList> setToInactive)
         {
             db.UpdateActiveInactive(setToActive, setToInactive);
 
