@@ -10,6 +10,7 @@ using System.Data.SQLite;
 using System.Diagnostics;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace NineWorldsDeep.Db
@@ -43,64 +44,7 @@ namespace NineWorldsDeep.Db
         public SqliteDbAdapter()
         {
         }
-
-        ///// <summary>
-        ///// assumes conn opened and closed outside this method
-        ///// </summary>
-        ///// <param name="lst"></param>
-        ///// <param name="conn"></param>
-        //public void StoreHashes(List<string> lst, SQLiteConnection conn)
-        //{
-        //    //INSERT OR IGNORE            
-        //    using (var cmd = new SQLiteCommand(conn))
-        //    {
-        //        using (var transaction = conn.BeginTransaction())
-        //        {
-        //            foreach (var hash in lst)
-        //            {
-        //                if (!string.IsNullOrWhiteSpace(hash))
-        //                {
-        //                    cmd.CommandText =
-        //                        "INSERT OR IGNORE INTO Hash (HashValue) VALUES (@hashValue)";
-        //                    cmd.Parameters.AddWithValue("@hashValue", hash);
-        //                    cmd.ExecuteNonQuery();
-        //                }
-        //            }
-
-        //            transaction.Commit();
-        //        }
-        //    }
-        //}
-
-        /// <summary>
-        /// assumes conn opened and closed outside this method
-        /// </summary>
-        /// <param name="lst"></param>
-        /// <param name="conn"></param>
-        //public void StoreTags(List<string> lst, SQLiteConnection conn)
-        //{
-        //    //INSERT OR IGNORE            
-        //    using (var cmd = new SQLiteCommand(conn))
-        //    {
-        //        using (var transaction = conn.BeginTransaction())
-        //        {
-        //            foreach (var tag in lst)
-        //            {
-        //                if (!string.IsNullOrWhiteSpace(tag))
-        //                {
-        //                    throw new NotImplementedException("create tag table in db then implement");
-        //                    //cmd.CommandText =
-        //                    //    "INSERT OR IGNORE INTO Hash (HashValue) VALUES (@hashValue)";
-        //                    //cmd.Parameters.AddWithValue("@hashValue", hash);
-        //                    //cmd.ExecuteNonQuery();
-        //                }
-        //            }
-
-        //            transaction.Commit();
-        //        }
-        //    }
-        //}
-
+        
         /// <summary>
         /// returns -1 if not found, or id if found
         /// </summary>
@@ -189,72 +133,7 @@ namespace NineWorldsDeep.Db
             //ensure paths
             //link all
         }
-
-        //public void StoreHashes(List<NwdUriProcessEntry> lst)
-        //{
-        //    //INSERT OR IGNORE
-        //    using (var conn = new SQLiteConnection(
-        //        @"Data Source=" + Configuration.GetSqliteDbPath("nwd")))
-        //    {
-        //        conn.Open();
-
-        //        var stopwatch = new Stopwatch();
-        //        stopwatch.Start();
-
-        //        using (var cmd = new SQLiteCommand(conn))
-        //        {
-        //            using (var transaction = conn.BeginTransaction())
-        //            {
-        //                foreach (var pe in lst)
-        //                {
-        //                    if (!string.IsNullOrWhiteSpace(pe.Hash))
-        //                    {
-        //                        cmd.CommandText =
-        //                            "INSERT OR IGNORE INTO Hash (HashValue) VALUES (@hashValue)";
-        //                        cmd.Parameters.AddWithValue("@hashValue", pe.NwdUri.Hash);
-        //                        cmd.ExecuteNonQuery();
-        //                    }
-        //                }
-
-        //                transaction.Commit();
-        //            }
-        //        }
-
-        //        Display.Message(stopwatch.Elapsed.TotalSeconds +
-        //            " seconds with one transaction.");
-
-        //        conn.Close();
-        //    }
-        //}
-
-        ///// <summary>
-        ///// assumes conn opened and closed outside of this method
-        ///// </summary>
-        ///// <param name="lst"></param>
-        ///// <param name="conn"></param>
-        //public void StorePaths(List<string> lst, SQLiteConnection conn)
-        //{
-        //    //INSERT OR IGNORE            
-        //    using (var cmd = new SQLiteCommand(conn))
-        //    {
-        //        using (var transaction = conn.BeginTransaction())
-        //        {
-        //            foreach (var path in lst)
-        //            {
-        //                if (!string.IsNullOrWhiteSpace(path))
-        //                {
-        //                    cmd.CommandText =
-        //                        "INSERT OR IGNORE INTO Path (PathValue) VALUES (@pathValue)";
-        //                    cmd.Parameters.AddWithValue("@pathValue", path);
-        //                    cmd.ExecuteNonQuery();
-        //                }
-        //            }
-
-        //            transaction.Commit();
-        //        }
-        //    }
-        //}
-
+        
         public void StorePaths(List<string> lst)
         {
             //INSERT OR IGNORE
@@ -332,72 +211,7 @@ namespace NineWorldsDeep.Db
 
             return string.Join(", ", tags);
         }
-
-
-        //public void StorePaths(List<NwdUriProcessEntry> lst)
-        //{
-        //    //INSERT OR IGNORE
-        //    using (var conn = new SQLiteConnection(
-        //        @"Data Source=" + Configuration.GetSqliteDbPath("nwd")))
-        //    {
-        //        conn.Open();
-
-        //        var stopwatch = new Stopwatch();
-        //        stopwatch.Start();
-
-        //        using (var cmd = new SQLiteCommand(conn))
-        //        {
-        //            using (var transaction = conn.BeginTransaction())
-        //            {
-        //                foreach (var pe in lst)
-        //                {
-        //                    if (!string.IsNullOrWhiteSpace(pe.NwdUri.Hash))
-        //                    {
-        //                        cmd.CommandText =
-        //                            "INSERT OR IGNORE INTO Path (PathValue) VALUES (@pathValue)";
-        //                        cmd.Parameters.AddWithValue("@pathValue", pe.Path);
-        //                        cmd.ExecuteNonQuery();
-        //                    }
-        //                }
-
-        //                transaction.Commit();
-        //            }
-        //        }
-
-        //        Display.Message(stopwatch.Elapsed.TotalSeconds +
-        //            " seconds with one transaction.");
-
-        //        conn.Close();
-        //    }
-        //}
-
-        /// <summary>
-        /// uses conn for chaining multiple id refreshes with one 
-        /// connection. requires conn be opened before 
-        /// passing to method, and leaves conn open when
-        /// done (to be used by other refresh methods).
-        /// 
-        /// Be sure to close connection when finished (including
-        /// all refresh statements in a single using block
-        /// is the intended usage)
-        /// </summary>
-        /// <param name="conn"></param>
-        //public void RefreshHashIds(SQLiteConnection conn)
-        //{
-        //    string cmdStr = "SELECT HashValue, HashId FROM Hash";
-
-        //    using (var cmd = new SQLiteCommand(cmdStr, conn))
-        //    {
-        //        using (var rdr = cmd.ExecuteReader())
-        //        {
-        //            while (rdr.Read())
-        //            {
-        //                hashIds.Add(rdr.GetString(0), rdr.GetInt32(1));
-        //            }
-        //        }
-        //    }
-        //}
-
+        
         /// <summary>
         /// will retrieve load all paths and tags for those paths
         /// where the path begins with filePathTopFolder
@@ -1004,9 +818,7 @@ namespace NineWorldsDeep.Db
                 throw ex;
             }
         }
-
-
-
+        
         public void InsertOrIgnoreDirection(SyncDirection direction, SQLiteCommand cmd)
         {
             string directionVal = direction.ToString();
@@ -1261,6 +1073,400 @@ namespace NineWorldsDeep.Db
             return -1;
         }
 
+        public void PopulateSyncProfiles(List<SyncProfile> lst, SQLiteCommand cmd)
+        {
+            cmd.Parameters.Clear(); //since we will be reusing command
+            cmd.CommandText =
+                //"SELECT SyncProfileName FROM SyncProfile";
+                "SELECT " +
+                    NwdContract.COLUMN_SYNC_PROFILE_NAME +
+                " FROM " + NwdContract.TABLE_SYNC_PROFILE + " ";
+
+            using (var rdr = cmd.ExecuteReader())
+            {
+                while (rdr.Read())
+                {
+                    string name = rdr.GetString(0);
+
+                    SyncProfile sp = new SyncProfile(name);
+
+                    lst.Add(sp);
+                }
+            }
+
+            //cannot set command text while reader in use,
+            //so need to populate after reader completes
+            foreach (SyncProfile sp in lst)
+            {
+                PopulateSyncMaps(sp, cmd);
+            }
+        }
+
+        public void DeleteSyncMap(SyncMap sm, SQLiteCommand cmd)
+        {
+            Dictionary<string, int> pathIds =
+                new Dictionary<string, int>();
+
+            pathIds.Add(sm.Source, -1);
+            pathIds.Add(sm.Destination, -1);
+            RefreshPathIds(pathIds, cmd);
+
+            cmd.Parameters.Clear();
+
+            cmd.CommandText =
+                //"DELETE FROM SyncMap " +
+                //"WHERE SyncProfileId = @profileId " +
+                //"AND PathIdSource = @srcId " +
+                //"AND PathIdDestination = @destId " +
+                //"AND SyncDirectionId = @directionId";
+                "DELETE FROM " + NwdContract.TABLE_SYNC_MAP + " " +
+                "WHERE " + NwdContract.COLUMN_SYNC_PROFILE_ID + " = @profileId " +
+                "AND " + NwdContract.COLUMN_PATH_ID_SOURCE + " = @srcId " +
+                "AND " + NwdContract.COLUMN_PATH_ID_DESTINATION + " = @destId " +
+                "AND " + NwdContract.COLUMN_SYNC_DIRECTION_ID + " = @directionId";
+
+            //cmd.Parameters.AddWithValue("@profileId", nameIds[sm.Profile.Name]);
+            //cmd.Parameters.AddWithValue("@srcId", pathIds[sm.Source]);
+            //cmd.Parameters.AddWithValue("@destId", pathIds[sm.Destination]);
+            //cmd.Parameters.AddWithValue("@directionId", directionIds[sm.SyncDirection]);
+
+            cmd.Parameters.AddWithValue("@profileId", GetNameId(sm.Profile.Name));
+            cmd.Parameters.AddWithValue("@srcId", pathIds[sm.Source]);
+            cmd.Parameters.AddWithValue("@destId", pathIds[sm.Destination]);
+            cmd.Parameters.AddWithValue("@directionId", GetDirectionId(sm.SyncDirection));
+
+            cmd.ExecuteNonQuery();
+        }
+
+
+        public List<string> GetColumnNames(string tableName, SQLiteCommand cmd)
+        {
+            Regex regex = new Regex("^[a-zA-Z0-9_]*$");
+            if (!regex.IsMatch(tableName))
+            {
+                throw new ArgumentException("invalid tableName: " + tableName);
+            }
+
+            List<string> cols = new List<string>();
+
+            cmd.Parameters.Clear();
+            cmd.CommandText = "PRAGMA table_info('" + tableName + "')";
+            //cmd.Parameters.AddWithValue("@tableName", tableName);            
+
+            using (var rdr = cmd.ExecuteReader())
+            {
+                while (rdr.Read())
+                {
+                    //PRAGMA result indexes
+                    //0: cid - column id
+                    //1: name - column name
+                    //2: type - column type
+                    //3: notnull - 0 or 1
+                    //4: dflt_value - default value
+                    //5: pk - 0 or 1 
+
+                    string columnName = rdr.GetString(1);
+                    cols.Add(columnName);
+                }
+            }
+
+            return cols;
+        }
+
+        public List<string> GetTableNames(SQLiteCommand cmd)
+        {
+            List<string> tables = new List<string>();
+
+            cmd.Parameters.Clear(); //since we will be reusing command
+            cmd.CommandText = "SELECT name FROM sqlite_master WHERE type = 'table'";
+
+            using (var rdr = cmd.ExecuteReader())
+            {
+                while (rdr.Read())
+                {
+                    string tableName = rdr.GetString(0);
+                    if (!tableName.Equals("android_metadata",
+                                         StringComparison.CurrentCultureIgnoreCase) &&
+                       !tableName.Equals("sqlite_sequence",
+                                         StringComparison.CurrentCultureIgnoreCase))
+                    {
+                        tables.Add(tableName);
+                    }
+                }
+            }
+
+            return tables;
+        }
+        
+        public string GetErdRawSource()
+        {
+            string outputMsg = "";
+
+            try
+            {
+                using (var conn =
+                    new SQLiteConnection(@"Data Source=" +
+                        Configuration.GetSqliteDbPath("nwd")))
+                {
+                    conn.Open();
+
+                    using (var cmd = new SQLiteCommand(conn))
+                    {
+                        using (var transaction = conn.BeginTransaction())
+                        {
+                            ////////////////////////////////////////CODE HERE//////////////////////////////////////
+
+                            List<string> tables = GetTableNames(cmd);
+
+                            foreach (string table in tables)
+                            {
+                                outputMsg += table + Environment.NewLine;
+                                outputMsg += "-------" + Environment.NewLine;
+
+                                List<string> cols = GetColumnNames(table, cmd);
+
+                                foreach (string col in cols)
+                                {
+                                    outputMsg += col + Environment.NewLine;
+                                }
+
+                                outputMsg += Environment.NewLine;
+                            }
+
+                            transaction.Commit();
+
+                        }
+                    }
+
+                    conn.Close();
+                }
+
+            }
+            catch (Exception ex)
+            {
+                outputMsg = "error: " + ex.Message;
+            }
+
+            return outputMsg;
+        }
+        
+        public void UpsertSyncMap(int profileId, int srcId, int destId, int directionId, int actionId, SQLiteCommand cmd)
+        {
+            /////////see link answers below accepted answer
+            //http://stackoverflow.com/questions/15277373/sqlite-upsert-update-or-insert
+
+            // need to do an UPDATE or IGNORE followed by an INSERT or IGNORE, so the
+            // update attempts first (to change default action id for example), and
+            // if not found, gets ignored, so the insert would then fire.
+            // if the update did succeed the insert would get ignored
+            // so doing it this way, in this order, ensures 
+            // a proper "UPSERT"
+
+            //UPDATE or IGNORE
+            cmd.Parameters.Clear();
+
+            cmd.CommandText =
+                //"UPDATE OR IGNORE SyncMap " +
+                //"SET SyncActionIdDefault = @actionId " +
+                //"WHERE SyncProfileId = @profileId " +
+                //"AND PathIdSource = @srcId " +
+                //"AND PathIdDestination = @destId " +
+                //"AND SyncDirectionId = @directionId";
+                "UPDATE OR IGNORE " + NwdContract.TABLE_SYNC_MAP + " " +
+                "SET " + NwdContract.COLUMN_SYNC_ACTION_ID_DEFAULT + " = @actionId " +
+                "WHERE " + NwdContract.COLUMN_SYNC_PROFILE_ID + " = @profileId " +
+                "AND " + NwdContract.COLUMN_PATH_ID_SOURCE + " = @srcId " +
+                "AND " + NwdContract.COLUMN_PATH_ID_DESTINATION + " = @destId " +
+                "AND " + NwdContract.COLUMN_SYNC_DIRECTION_ID + " = @directionId";
+
+            cmd.Parameters.AddWithValue("@profileId", profileId);
+            cmd.Parameters.AddWithValue("@srcId", srcId);
+            cmd.Parameters.AddWithValue("@destId", destId);
+            cmd.Parameters.AddWithValue("@directionId", directionId);
+            cmd.Parameters.AddWithValue("@actionId", actionId);
+            cmd.ExecuteNonQuery();
+
+            //INSERT or IGNORE
+            cmd.Parameters.Clear();
+            cmd.CommandText =
+                //"INSERT OR IGNORE INTO SyncMap (SyncProfileId, " +
+                //                               "PathIdSource, " +
+                //                               "PathIdDestination, " +
+                //                               "SyncDirectionId, " +
+                //                               "SyncActionIdDefault) " +
+                //"VALUES (@profileId, " +
+                //        "@srcId, " +
+                //        "@destId, " +
+                //        "@directionId, " +
+                //        "@actionId)";
+                "INSERT OR IGNORE INTO " +
+
+                    NwdContract.TABLE_SYNC_MAP +
+
+                        " (" + NwdContract.COLUMN_SYNC_PROFILE_ID + ", " +
+                          "" + NwdContract.COLUMN_PATH_ID_SOURCE + ", " +
+                          "" + NwdContract.COLUMN_PATH_ID_DESTINATION + ", " +
+                          "" + NwdContract.COLUMN_SYNC_DIRECTION_ID + ", " +
+                          "" + NwdContract.COLUMN_SYNC_ACTION_ID_DEFAULT + ") " +
+
+                "VALUES (@profileId, " +
+                        "@srcId, " +
+                        "@destId, " +
+                        "@directionId, " +
+                        "@actionId)";
+
+
+            cmd.Parameters.AddWithValue("@profileId", profileId);
+            cmd.Parameters.AddWithValue("@srcId", srcId);
+            cmd.Parameters.AddWithValue("@destId", destId);
+            cmd.Parameters.AddWithValue("@directionId", directionId);
+            cmd.Parameters.AddWithValue("@actionId", actionId);
+            cmd.ExecuteNonQuery();
+        }
+
+        public int EnsureProfileId(string profileName, SQLiteCommand cmd)
+        {
+            int id = -1;
+
+            cmd.Parameters.Clear();
+            cmd.CommandText =
+                //"INSERT OR IGNORE INTO SyncProfile (SyncProfileName) VALUES (@profileName)";
+                "INSERT OR IGNORE INTO " + NwdContract.TABLE_SYNC_PROFILE +
+                " (" +
+                    NwdContract.COLUMN_SYNC_PROFILE_NAME +
+                 ") VALUES (@profileName)";
+
+            cmd.Parameters.AddWithValue("@profileName", profileName);
+            cmd.ExecuteNonQuery();
+
+            //select value
+            cmd.Parameters.Clear(); //since we will be reusing command
+
+            cmd.CommandText =
+                //"SELECT SyncProfileId FROM SyncProfile WHERE SyncProfileName = @name";
+                "SELECT " + NwdContract.COLUMN_SYNC_PROFILE_ID +
+                " FROM " + NwdContract.TABLE_SYNC_PROFILE +
+                " WHERE " + NwdContract.COLUMN_SYNC_PROFILE_NAME + " = @name";
+
+            cmd.Parameters.AddWithValue("@name", profileName);
+
+            using (var rdr = cmd.ExecuteReader())
+            {
+                if (rdr.Read()) //if statement cause we only need the first
+                {
+                    id = rdr.GetInt32(0);
+                }
+            }
+
+            return id;
+        }
+
+        /// <summary>
+        /// returns -1 if not found
+        /// </summary>
+        /// <param name="profileId"></param>
+        /// <param name="cmd"></param>
+        /// <returns></returns>
+        public int GetExtDeviceIdForProfileId(int profileId, SQLiteCommand cmd)
+        {
+            int id = -1;
+
+            cmd.Parameters.Clear(); //since we will be reusing command
+
+            cmd.CommandText =
+                //"SELECT DeviceIdExt FROM junction_Device_SyncProfile WHERE SyncProfileId = @profileId";
+                "SELECT " + NwdContract.COLUMN_DEVICE_ID_EXT +
+                " FROM " + NwdContract.TABLE_JUNCTION_DEVICE_SYNC_PROFILE +
+                " WHERE " +
+                    NwdContract.COLUMN_SYNC_PROFILE_ID + " = @profileId";
+
+            cmd.Parameters.AddWithValue("@profileId", profileId);
+
+            using (var rdr = cmd.ExecuteReader())
+            {
+                if (rdr.Read())
+                {
+                    id = rdr.GetInt32(0);
+                }
+            }
+
+            return id;
+        }
+
+        /// <summary>
+        /// returns -1 if not found
+        /// </summary>
+        /// <param name="profileId"></param>
+        /// <param name="cmd"></param>
+        /// <returns></returns>
+        public int GetHostDeviceIdForProfileId(int profileId, SQLiteCommand cmd)
+        {
+            int id = -1;
+
+            cmd.Parameters.Clear(); //since we will be reusing command
+
+            cmd.CommandText =
+                //"SELECT DeviceIdHost FROM junction_Device_SyncProfile WHERE SyncProfileId = @profileId";
+                "SELECT " + NwdContract.COLUMN_DEVICE_ID_HOST +
+                " FROM " + NwdContract.TABLE_JUNCTION_DEVICE_SYNC_PROFILE +
+                " WHERE " +
+                    NwdContract.COLUMN_SYNC_PROFILE_ID + " = @profileId";
+
+            cmd.Parameters.AddWithValue("@profileId", profileId);
+
+            using (var rdr = cmd.ExecuteReader())
+            {
+                if (rdr.Read())
+                {
+                    id = rdr.GetInt32(0);
+                }
+            }
+
+            return id;
+        }
+
+        public void InsertOrIgnoreTag(string tag, SQLiteCommand cmd)
+        {
+            cmd.Parameters.Clear();
+
+            cmd.CommandText =
+                //"INSERT OR IGNORE INTO Tag (TagValue) VALUES (@tag)";
+                "INSERT OR IGNORE INTO " + NwdContract.TABLE_TAG +
+                " (" + NwdContract.COLUMN_TAG_VALUE + ") VALUES (@tag)";
+
+            cmd.Parameters.AddWithValue("@tag", tag);
+            cmd.ExecuteNonQuery();
+        }
+        
+        public Dictionary<string, int> GetIdsForTags(List<string> tags, SQLiteCommand cmd)
+        {
+            Dictionary<string, int> tagIds =
+                new Dictionary<string, int>();
+
+            cmd.Parameters.Clear();
+            cmd.CommandText = // "SELECT TagId, TagValue FROM Tag";
+                "SELECT " + NwdContract.COLUMN_TAG_ID + ", " +
+                            NwdContract.COLUMN_TAG_VALUE +
+                " FROM " + NwdContract.TABLE_TAG + "";
+
+            using (var rdr = cmd.ExecuteReader())
+            {
+                while (rdr.Read())
+                {
+                    string tag = rdr.GetString(1);
+                    int tagId = rdr.GetInt32(0);
+
+                    //we only want to populate the supplied keys
+                    if (tags.Contains(tag))
+                    {
+                        tagIds[tag] = tagId;
+                    }
+                }
+            }
+
+            return tagIds;
+        }
+        
         public void PopulateTagIds(Dictionary<string, int> tagsToIds)
         {
             using (var conn = new SQLiteConnection(
@@ -1296,187 +1502,7 @@ namespace NineWorldsDeep.Db
                 }
             }
         }
-
-        /// <summary>
-        /// uses conn for chaining multiple id refreshes with one 
-        /// connection. requires conn be opened before 
-        /// passing to method, and leaves conn open when
-        /// done (to be used by other refresh methods).
-        /// 
-        /// Be sure to close connection when finished (including
-        /// all refresh statements in a single using block
-        /// is the intended usage)
-        /// </summary>
-        /// <param name="conn"></param>
-        //public void RefreshPathIds(SQLiteConnection conn)
-        //{
-        //    string cmdStr = "SELECT PathValue, PathId FROM Path";
-
-        //    using (var cmd = new SQLiteCommand(cmdStr, conn))
-        //    {
-        //        using (var rdr = cmd.ExecuteReader())
-        //        {
-        //            while (rdr.Read())
-        //            {
-        //                pathIds.Add(rdr.GetString(0), rdr.GetInt32(1));
-        //            }
-        //        }
-        //    }
-        //}
-
-        ///// <summary>
-        ///// uses conn for chaining multiple id refreshes with one 
-        ///// connection. requires conn be opened before 
-        ///// passing to method, and leaves conn open when
-        ///// done (to be used by other refresh methods).
-        ///// 
-        ///// Be sure to close connection when finished (including
-        ///// all refresh statements in a single using block
-        ///// is the intended usage)
-        ///// </summary>
-        ///// <param name="conn"></param>
-        //public void PopulateIds(List<NwdUriProcessEntry> lst, 
-        //                        SQLiteConnection conn)
-        //{
-        //    RefreshHashIds(conn);
-
-        //    RefreshPathIds(conn);
-
-        //    foreach (var pe in lst)
-        //    {
-        //        EnsureAndPopulateDeviceId(pe);
-
-        //        if (!string.IsNullOrWhiteSpace(pe.Path) &&
-        //            pathIds.ContainsKey(pe.Path))
-        //        {
-        //            pe.PathId = pathIds[pe.Path];
-        //        }
-
-        //        if (!string.IsNullOrWhiteSpace(pe.Hash) &&
-        //            hashIds.ContainsKey(pe.Hash))
-        //        {
-        //            pe.HashId = hashIds[pe.Hash];
-        //        }
-        //    }
-        //}
         
-        //[Obsolete("use PopulateIds(List<NwdUriProcessEntry, SQLiteConnection)")]
-        //public void PopulateIds(List<NwdUriProcessEntry> lst)
-        //{
-        //    Dictionary<string, int> hashes =
-        //        new Dictionary<string, int>();
-            
-        //    Dictionary<string, int> paths =
-        //        new Dictionary<string, int>();
-
-        //    //foreach entry, get id for hash and path from db
-        //    using (var conn = new SQLiteConnection(
-        //        @"Data Source=" + Configuration.GetSqliteDbPath("nwd")))
-        //    {
-        //        conn.Open();
-
-        //        var stopwatch = new Stopwatch();
-        //        stopwatch.Start();
-
-        //        string cmdStr = "SELECT HashValue, HashId FROM Hash";
-
-        //        using (var cmd = new SQLiteCommand(cmdStr, conn))
-        //        {
-        //            using (var rdr = cmd.ExecuteReader())
-        //            {
-        //                while (rdr.Read())
-        //                {
-        //                    hashes.Add(rdr.GetString(0), rdr.GetInt32(1));
-        //                }
-        //            }
-        //        }
-
-        //        Display.Message(stopwatch.Elapsed.TotalSeconds +
-        //            " seconds for hash ids.");
-
-        //        stopwatch = new Stopwatch();
-        //        stopwatch.Start();
-
-        //        cmdStr = "SELECT PathValue, PathId FROM Path";
-
-        //        using (var cmd = new SQLiteCommand(cmdStr, conn))
-        //        {
-        //            using (var rdr = cmd.ExecuteReader())
-        //            {
-        //                while (rdr.Read())
-        //                {
-        //                    paths.Add(rdr.GetString(0), rdr.GetInt32(1));
-        //                }
-        //            }
-        //        }
-
-        //        Display.Message(stopwatch.Elapsed.TotalSeconds +
-        //            " seconds for path ids.");
-                
-        //        conn.Close();
-        //    }
-
-        //    foreach (var pe in lst)
-        //    {
-        //        EnsureAndPopulateDeviceId(pe);
-                
-        //        if (!string.IsNullOrWhiteSpace(pe.Path) &&
-        //            paths.ContainsKey(pe.Path))
-        //        {
-        //            pe.PathId = paths[pe.Path];
-        //        }
-
-        //        if (!string.IsNullOrWhiteSpace(pe.Hash) &&
-        //            hashes.ContainsKey(pe.Hash))
-        //        {
-        //            pe.HashId = hashes[pe.Hash];
-        //        }
-        //    }
-        //}
-
-        /// <summary>
-        /// used for chaining multiple id refreshes with one 
-        /// connection. requires conn be opened before 
-        /// passing to method, and leaves conn open when
-        /// done (to be used by other refresh methods).
-        /// 
-        /// Be sure to close connection when finished (including
-        /// all refresh statements in a single using block
-        /// is the intended usage)
-        /// </summary>
-        /// <param name="conn"></param>
-        //private void RefreshDeviceIds(SQLiteConnection conn)
-        //{            
-        //    string cmdStr = "SELECT DeviceDescription, " +
-        //                            "DeviceFriendlyName, " +
-        //                            "DeviceModel, " +
-        //                            "DeviceType, " +
-        //                            "DeviceId " +
-        //                    "FROM Device";
-
-        //    using (var cmd = new SQLiteCommand(cmdStr, conn))
-        //    {
-        //        using (var rdr = cmd.ExecuteReader())
-        //        {
-        //            while (rdr.Read())
-        //            {
-        //                string desc = rdr.GetString(0);
-        //                string friendlyName = rdr.GetString(1);
-        //                string model = rdr.GetString(2);
-        //                string deviceType = rdr.GetString(3);
-
-        //                deviceIds.Add(new NwdDeviceKey()
-        //                {
-        //                    Description = desc,
-        //                    FriendlyName = friendlyName,
-        //                    Model = model,
-        //                    DeviceType = deviceType
-        //                }, rdr.GetInt32(4));
-        //            }
-        //        }
-        //    }                
-        //}
-
         private void RefreshDeviceIds()
         {
             using (var conn = new SQLiteConnection(
@@ -1541,110 +1567,7 @@ namespace NineWorldsDeep.Db
                 DeviceType = device.DeviceType
             };
         }
-
-        //private void EnsureAndPopulateDeviceId(NwdUriProcessEntry pe)
-        //{
-        //    var key = ToDeviceKey(pe.PortableDevice);
-
-        //    if (!deviceIds.ContainsKey(key))
-        //    {
-        //        StoreDevice(pe.PortableDevice);
-        //        RefreshDeviceIds();
-        //    }
-
-        //    pe.DeviceId = deviceIds[key];
-        //}
         
-        //public void StoreHashPathJunctions(List<NwdUriProcessEntry> lst)
-        //{
-        //    //if both hash and path ids are populated, INSERT OR IGNORE each
-        //    using (var conn = new SQLiteConnection(
-        //        @"Data Source=" + Configuration.GetSqliteDbPath("nwd")))
-        //    {
-        //        conn.Open();
-
-        //        var stopwatch = new Stopwatch();
-        //        stopwatch.Start();
-
-        //        using (var cmd = new SQLiteCommand(conn))
-        //        {
-        //            using (var transaction = conn.BeginTransaction())
-        //            {
-        //                foreach (var pe in lst)
-        //                {
-        //                    if (!string.IsNullOrWhiteSpace(pe.Hash) &&
-        //                        !string.IsNullOrWhiteSpace(pe.Path))
-        //                    {
-        //                        cmd.CommandText =
-        //                            "INSERT OR IGNORE INTO File (DeviceId, PathId, HashId) VALUES (@deviceId, @pathId, @hashId)";
-        //                        cmd.Parameters.AddWithValue("@deviceId", pe.DeviceId);
-        //                        cmd.Parameters.AddWithValue("@pathId", pe.PathId);
-        //                        cmd.Parameters.AddWithValue("@hashId", pe.HashId);
-        //                        cmd.ExecuteNonQuery();
-        //                    }
-        //                }
-
-        //                transaction.Commit();
-        //            }
-        //        }
-
-        //        Display.Message(stopwatch.Elapsed.TotalSeconds +
-        //            " seconds with one transaction.");
-
-        //        conn.Close();
-        //    }
-        //}
-
-        ///// <summary>
-        ///// executes an INSERT OR IGNORE statement for supplied device info,
-        ///// intended for use with device nodes not meeting the standard NwdPortableDevice
-        ///// format (laptops, desktops, remote servers, &c.)
-        ///// 
-        ///// Assumes conn opened and closed outside of method for bulk chaining
-        ///// 
-        ///// Any null or whitespace values will result in no database changes
-        ///// </summary>
-        ///// <param name="device"></param>
-        //public void StoreDevice(string description,
-        //                        string friendlyName,
-        //                        string model,
-        //                        string deviceType,
-        //                        SQLiteConnection conn)
-        //{
-        //    using (var cmd = new SQLiteCommand(conn))
-        //    {
-        //        using (var transaction = conn.BeginTransaction())
-        //        {
-        //            //TODO: change this to default each to "" if null or whitespace, change method summary when you do so (it currently mentions this limitation)
-        //            if (!string.IsNullOrWhiteSpace(description) &&
-        //                !string.IsNullOrWhiteSpace(friendlyName) &&
-        //                !string.IsNullOrWhiteSpace(model) &&
-        //                !string.IsNullOrWhiteSpace(deviceType))
-        //            {                        
-        //                cmd.CommandText =
-        //                    "INSERT OR IGNORE INTO Device " +
-        //                        "(DeviceDescription, " +
-        //                        "DeviceFriendlyName, " +
-        //                        "DeviceModel, " +
-        //                        "DeviceType) " +
-        //                    "VALUES (@deviceDescription, " +
-        //                            "@deviceFriendlyName, " +
-        //                            "@deviceModel, " +
-        //                            "@deviceType)";
-
-        //                cmd.Parameters.AddWithValue("@deviceDescription", description);
-        //                cmd.Parameters.AddWithValue("@deviceFriendlyName", friendlyName);
-        //                cmd.Parameters.AddWithValue("@deviceModel", model);
-        //                cmd.Parameters.AddWithValue("@deviceType", deviceType);
-        //                cmd.ExecuteNonQuery();
-        //            }
-
-        //            transaction.Commit();
-        //        }
-
-        //    }
-        //}
-
         /// <summary>
         /// executes an INSERT OR IGNORE statement for supplied device info,
         /// intended for use with device nodes not meeting the standard NwdPortableDevice
@@ -1709,59 +1632,7 @@ namespace NineWorldsDeep.Db
                 }
             }
         }
-
-        ///// <summary>
-        ///// executes an INSERT OR IGNORE statement for supplied device
-        ///// </summary>
-        ///// <param name="device"></param>
-        //public void StoreDevice(NwdPortableDevice device)
-        //{
-        //    using (var conn = new SQLiteConnection(
-        //        @"Data Source=" + Configuration.GetSqliteDbPath("nwd")))
-        //    {
-        //        conn.Open();
-
-        //        var stopwatch = new Stopwatch();
-        //        stopwatch.Start();
-
-        //        using (var cmd = new SQLiteCommand(conn))
-        //        {
-        //            using (var transaction = conn.BeginTransaction())
-        //            {
-        //                if (device != null)
-        //                {
-        //                    //convert null values to empty strings
-        //                    ConvertNullsToEmptyStrings(device);
-
-        //                    cmd.CommandText =
-        //                        "INSERT OR IGNORE INTO Device " +
-        //                            "(DeviceDescription, " +
-        //                            "DeviceFriendlyName, " +
-        //                            "DeviceModel, " +
-        //                            "DeviceType) " +
-        //                        "VALUES (@deviceDescription, " +
-        //                                "@deviceFriendlyName, " +
-        //                                "@deviceModel, " +
-        //                                "@deviceType)";
-
-        //                    cmd.Parameters.AddWithValue("@deviceDescription", device.Description);
-        //                    cmd.Parameters.AddWithValue("@deviceFriendlyName", device.FriendlyName);
-        //                    cmd.Parameters.AddWithValue("@deviceModel", device.Model);
-        //                    cmd.Parameters.AddWithValue("@deviceType", device.DeviceType);
-        //                    cmd.ExecuteNonQuery();
-        //                }
-                        
-        //                transaction.Commit();
-        //            }
-        //        }
-
-        //        Display.Message(stopwatch.Elapsed.TotalSeconds +
-        //            " seconds to insert one device.");
-
-        //        conn.Close();
-        //    }
-        //}
-
+        
         private void ConvertNullsToEmptyStrings(NwdPortableDevice device)
         {
             if(device.Description == null)
@@ -1784,9 +1655,8 @@ namespace NineWorldsDeep.Db
                 device.FriendlyName = "";
             }
         }
-
-
-        /////////////////////////////////////connection/transaction template        
+        
+        /////////////////////////////////////connection/transaction templates        
         //
         //private void ExecuteNonQueryTemplate(string xxx, SQLiteCommand cmd)
         //{
@@ -1800,6 +1670,49 @@ namespace NineWorldsDeep.Db
         //}
         //
         //public string TransactionTemplate()
+        //{
+        //    string outputMsg = "implementation in progress";
+        //    string time = "";
+
+        //    try
+        //    {
+        //        using (var conn =
+        //            new SQLiteConnection(@"Data Source=" +
+        //                Configuration.GetSqliteDbPath("nwd")))
+        //        {
+        //            conn.Open();
+
+        //            using (var cmd = new SQLiteCommand(conn))
+        //            {
+        //                using (var transaction = conn.BeginTransaction())
+        //                {
+        //                    Stopwatch sw = Stopwatch.StartNew();
+
+        //                    ////////////////////////////////////////CODE HERE//////////////////////////////////////
+
+        //                    transaction.Commit();
+
+        //                    sw.Stop();
+        //                    time = sw.Elapsed.ToString("mm\\:ss\\.ff");
+        //                }
+        //            }
+
+        //            conn.Close();
+        //        }
+
+        //        outputMsg = "Finished: " + time;
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        outputMsg = "error: " + ex.Message;
+        //    }
+
+        //    return outputMsg;
+        //}
+
+
+        /////////////////////////////////////connection/transaction template        
+        //public string Template()
         //{
         //    string outputMsg = "implementation in progress";
         //    string time = "";
