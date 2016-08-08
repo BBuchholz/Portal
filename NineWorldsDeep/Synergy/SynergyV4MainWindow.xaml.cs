@@ -126,7 +126,7 @@ namespace NineWorldsDeep.Synergy
             Stopwatch sw = Stopwatch.StartNew();
             try
             {
-                _db.Save(Lists);
+                _db.SaveSynergyLists(Lists);
                 sw.Stop();
             }
             catch(Exception ex)

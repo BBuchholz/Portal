@@ -18,7 +18,7 @@ namespace NineWorldsDeep.Synergy
             return db.GetLists(true);
         }
 
-        public void Save(IEnumerable<SynergyList> _lists)
+        public void SaveSynergyLists(IEnumerable<SynergyList> _lists)
         {
             try
             {
