@@ -25,8 +25,8 @@ namespace NineWorldsDeep.Synergy
     {
         private SynergyList _selectedList = null;
         private SyncHandler _sh = new SyncHandler();
-        private SynergySqliteDbAdapter _db =
-            new SynergySqliteDbAdapter();
+        private Db.SqliteDbAdapter _db =
+            new Db.SqliteDbAdapter();
 
         private ObservableCollection<SynergyList> _lists =
             new ObservableCollection<SynergyList>();

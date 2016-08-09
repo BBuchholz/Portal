@@ -24,6 +24,9 @@ namespace NineWorldsDeep.Warehouse
         private SyncMapCollection _syncMapCol;
         private SyncProfile _syncProfile;
 
+        private Db.SqliteDbAdapter db =
+            new Db.SqliteDbAdapter();
+
         public SyncMapWindow(SyncProfile syncProfile)
         {
             InitializeComponent();
@@ -36,9 +39,7 @@ namespace NineWorldsDeep.Warehouse
 
         private void LoadProfileFromDb()
         {
-            SqliteDbAdapter db = new SqliteDbAdapter();
-
-            Display.Message(db.Load(_syncProfile));
+            Display.Message(db.LoadSyncProfile(_syncProfile));
         }
 
         private void RefreshViewFromProfile()
@@ -187,9 +188,7 @@ namespace NineWorldsDeep.Warehouse
 
         private void MenuItemSaveToSqlite_Click(object sender, RoutedEventArgs e)
         {
-            SqliteDbAdapter db = new SqliteDbAdapter();
-
-            Display.Message(db.Save(_syncProfile));
+            Display.Message(db.SaveSyncProfile(_syncProfile));
         }
 
         private void dataGrid_AutoGeneratingColumn(object sender, DataGridAutoGeneratingColumnEventArgs e)
@@ -230,8 +229,7 @@ namespace NineWorldsDeep.Warehouse
 
             if (sm != null && UI.Prompt.Confirm("Are you sure you want to delete the selected SyncMap?", true))
             {
-                SqliteDbAdapter db = new SqliteDbAdapter();
-                Display.Message(db.Delete(sm));
+                Display.Message(db.DeleteSyncMap(sm));
 
                 //LoadProfileFromDb();
                 RefreshViewFromProfile(true);

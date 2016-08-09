@@ -24,6 +24,8 @@ namespace NineWorldsDeep.Warehouse
     public partial class WarehouseMainWindow : Window
     {
         private SyncItemCollection _syncItemCol;
+        private Db.SqliteDbAdapter db =
+            new Db.SqliteDbAdapter();
 
         public WarehouseMainWindow()
         {
@@ -80,9 +82,8 @@ namespace NineWorldsDeep.Warehouse
             SyncProfile phone = new SyncProfile("phone");
             SyncProfile tablet = new SyncProfile("tablet");
 
-            SqliteDbAdapter db = new SqliteDbAdapter();
-            db.Load(phone);
-            db.Load(tablet);
+            db.LoadSyncProfile(phone);
+            db.LoadSyncProfile(tablet);
 
             cmbSyncProfile.Items.Add(phone);
             cmbSyncProfile.Items.Add(tablet);
@@ -91,9 +92,7 @@ namespace NineWorldsDeep.Warehouse
         private void RefreshProfiles()
         {
             cmbSyncProfile.Items.Clear();
-
-            SqliteDbAdapter db = new SqliteDbAdapter();
-
+            
             foreach (SyncProfile sp in db.GetAllSyncProfiles())
             {
                 cmbSyncProfile.Items.Add(sp);
@@ -496,13 +495,11 @@ namespace NineWorldsDeep.Warehouse
 
         private void MenuItemAddProfile_Click(object sender, RoutedEventArgs e)
         {
-            SqliteDbAdapter db = new SqliteDbAdapter();
-
             string name = UI.Prompt.Input("Profile Name?");
 
             if (!string.IsNullOrWhiteSpace(name))
             {
-                db.EnsureProfile(name.Trim());
+                db.EnsureSyncProfile(name.Trim());
                 RefreshProfiles();
             }
             else
@@ -518,7 +515,6 @@ namespace NineWorldsDeep.Warehouse
 
         private void MenuItemRawDef_Click(object sender, RoutedEventArgs e)
         {
-            SqliteDbAdapter db = new SqliteDbAdapter();
             string output = db.GetErdRawSource();
 
             Display.Multiline("SQLite ERD Raw Source", output);

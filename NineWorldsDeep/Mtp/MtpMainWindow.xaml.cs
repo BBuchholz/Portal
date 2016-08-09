@@ -21,7 +21,6 @@ namespace NineWorldsDeep.Mtp
         private NwdPortableDevice _currentDevice;
         private Stack<NwdUriProcessEntry> unprocessedDeletions;
         private Stack<NwdUriProcessEntry> unprocessedSynergyFiles;
-        private Stack<NwdUriProcessEntry> unprocessedHashedMedia;
         private NwdPortableDeviceFile toBeRemoved;
         //TODO: LICENSE NOTES
         //marshalling fix: http://www.andrewt.com/blog/post/2013/06/15/Fun-with-MTP-in-C.aspx
@@ -518,8 +517,10 @@ namespace NineWorldsDeep.Mtp
                 "won't run as I've disabled it, but its in the source for " +
                 "reference sake.");
 
+            bool disabled = true;
+
             //disabled
-            if (false)
+            if (!disabled)
             {
                 var devices = new NwdPortableDeviceCollection();
                 devices.Refresh();

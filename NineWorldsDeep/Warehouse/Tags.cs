@@ -189,7 +189,7 @@ namespace NineWorldsDeep.Warehouse
         {
             //get any tags from database tied to the
             //supplied sha1Hash
-            SqliteDbAdapter db = new SqliteDbAdapter();
+            Db.SqliteDbAdapter db = new Db.SqliteDbAdapter();
             return db.GetTagsForSHA1Hash(sha1Hash);
         }
 
