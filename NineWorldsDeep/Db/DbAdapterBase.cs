@@ -88,6 +88,7 @@ namespace NineWorldsDeep.Db
         public abstract void DeleteSyncMap(SyncMap sm, SQLiteCommand cmd);
         public abstract List<string> GetColumnNames(string tableName, SQLiteCommand cmd);
         public abstract void UpsertSyncMap(int profileId, int srcId, int destId, int directionId, int actionId, SQLiteCommand cmd);
+        public abstract string GetDbName();
 
 
         public string GetErdRawSource()
@@ -98,7 +99,7 @@ namespace NineWorldsDeep.Db
             {
                 using (var conn =
                     new SQLiteConnection(@"Data Source=" +
-                        Configuration.GetSqliteDbPath("nwd")))
+                        Configuration.GetSqliteDbPath(GetDbName())))
                 {
                     conn.Open();
 
@@ -151,7 +152,7 @@ namespace NineWorldsDeep.Db
             {
                 using (var conn =
                     new SQLiteConnection(@"Data Source=" +
-                        Configuration.GetSqliteDbPath("nwd")))
+                        Configuration.GetSqliteDbPath(GetDbName())))
                 {
                     conn.Open();
 
@@ -229,7 +230,7 @@ namespace NineWorldsDeep.Db
             {
                 using (var conn =
                     new SQLiteConnection(@"Data Source=" +
-                        Configuration.GetSqliteDbPath("nwd")))
+                        Configuration.GetSqliteDbPath(GetDbName())))
                 {
                     conn.Open();
 
@@ -273,7 +274,7 @@ namespace NineWorldsDeep.Db
 
                 using (var conn =
                     new SQLiteConnection(@"Data Source=" +
-                        Configuration.GetSqliteDbPath("nwd")))
+                        Configuration.GetSqliteDbPath(GetDbName())))
                 {
                     conn.Open();
 
@@ -313,7 +314,7 @@ namespace NineWorldsDeep.Db
             {
                 using (var conn =
                     new SQLiteConnection(@"Data Source=" +
-                        Configuration.GetSqliteDbPath("nwd")))
+                        Configuration.GetSqliteDbPath(GetDbName())))
                 {
                     conn.Open();
 
@@ -350,7 +351,7 @@ namespace NineWorldsDeep.Db
 
                 using (var conn =
                     new SQLiteConnection(@"Data Source=" +
-                        Configuration.GetSqliteDbPath("nwd")))
+                        Configuration.GetSqliteDbPath(GetDbName())))
                 {
                     conn.Open();
 
@@ -390,7 +391,7 @@ namespace NineWorldsDeep.Db
             {
                 using (var conn =
                     new SQLiteConnection(@"Data Source=" +
-                        Configuration.GetSqliteDbPath("nwd")))
+                        Configuration.GetSqliteDbPath(GetDbName())))
                 {
                     conn.Open();
 
@@ -462,7 +463,7 @@ namespace NineWorldsDeep.Db
             {
                 using (var conn =
                     new SQLiteConnection(@"Data Source=" +
-                        Configuration.GetSqliteDbPath("nwd")))
+                        Configuration.GetSqliteDbPath(GetDbName())))
                 {
                     conn.Open();
 
@@ -598,7 +599,7 @@ namespace NineWorldsDeep.Db
             {
                 using (var conn =
                     new SQLiteConnection(@"Data Source=" +
-                        Configuration.GetSqliteDbPath("nwd")))
+                        Configuration.GetSqliteDbPath(GetDbName())))
                 {
                     conn.Open();
 
@@ -654,7 +655,7 @@ namespace NineWorldsDeep.Db
             {
                 using (var conn =
                     new SQLiteConnection(@"Data Source=" +
-                        Configuration.GetSqliteDbPath("nwd")))
+                        Configuration.GetSqliteDbPath(GetDbName())))
                 {
                     conn.Open();
 
@@ -748,7 +749,7 @@ namespace NineWorldsDeep.Db
             {
                 using (var conn =
                     new SQLiteConnection(@"Data Source=" +
-                        Configuration.GetSqliteDbPath("nwd")))
+                        Configuration.GetSqliteDbPath(GetDbName())))
                 {
                     conn.Open();
 
@@ -804,7 +805,7 @@ namespace NineWorldsDeep.Db
             {
                 using (var conn =
                     new SQLiteConnection(@"Data Source=" +
-                        Configuration.GetSqliteDbPath("nwd")))
+                        Configuration.GetSqliteDbPath(GetDbName())))
                 {
                     conn.Open();
 
