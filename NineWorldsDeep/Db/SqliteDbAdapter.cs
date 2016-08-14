@@ -17,31 +17,8 @@ using System.Threading.Tasks;
 namespace NineWorldsDeep.Db
 {
     public class SqliteDbAdapter : DbAdapterBase
-    {        
-        //private Dictionary<NwdDeviceKey, int> deviceIds =
-        //    new Dictionary<NwdDeviceKey, int>();
-        //private Dictionary<string, int> hashIds =
-        //    new Dictionary<string, int>();
-        //private Dictionary<string, int> pathIds =
-        //    new Dictionary<string, int>();
+    {       
         
-        //private Dictionary<SyncDirection, int> directionIds =
-        //    new Dictionary<SyncDirection, int>();
-        //private Dictionary<SyncAction, int> actionIds =
-        //    new Dictionary<SyncAction, int>();
-        //private Dictionary<string, int> nameIds =
-        //    new Dictionary<string, int>();
-
-        //private Dictionary<int, SyncDirection> idDirections =
-        //    new Dictionary<int, SyncDirection>();
-        //private Dictionary<int, SyncAction> idActions =
-        //    new Dictionary<int, SyncAction>();
-        //private Dictionary<int, string> idNames =
-        //    new Dictionary<int, string>();
-
-        //TODO: consolidate all db logic from all of NWD into one class with a private constructor (singleton)
-        //TODO: in the db singleton, enable the foreign key pragma when opening sqlite db
-
         public SqliteDbAdapter()
         {
         }
@@ -90,71 +67,6 @@ namespace NineWorldsDeep.Db
             cmd.ExecuteNonQuery();
         }
         
-        //public IEnumerable<SynergyList> GetActiveLists()
-        //{
-        //    return GetLists(true);
-        //}
-
-        //public void SaveSynergyLists(IEnumerable<SynergyList> _lists)
-        //{
-        //    try
-        //    {
-        //        using (var conn =
-        //            new SQLiteConnection(@"Data Source=" +
-        //                Configuration.GetSqliteDbPath("nwd")))
-        //        {
-        //            conn.Open();
-
-        //            using (var cmd = new SQLiteCommand(conn))
-        //            {
-        //                using (var transaction = conn.BeginTransaction())
-        //                {
-
-        //                    foreach (var lst in _lists)
-        //                    {
-        //                        int listId = EnsureIdForListName(lst.Name, cmd);
-
-        //                        foreach (var si in lst.Items)
-        //                        {
-        //                            int itemId = EnsureIdForItemValue(si.Item, cmd);
-
-        //                            UpsertFragment(listId, itemId, si, cmd);
-        //                        }
-        //                    }
-
-        //                    transaction.Commit();
-        //                }
-        //            }
-
-        //            conn.Close();
-        //        }
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        //lets just throw it for now, but put something here eventually
-        //        throw ex;
-        //    }
-        //}
-
-
-        //public int EnsureIdForItemValue(string item, SQLiteCommand cmd)
-        //{
-        //    return EnsureIdForValue(NwdContract.TABLE_ITEM,
-        //                            NwdContract.COLUMN_ITEM_ID,
-        //                            NwdContract.COLUMN_ITEM_VALUE,
-        //                            item,
-        //                            cmd);
-        //}
-
-        //public int EnsureIdForListName(string name, SQLiteCommand cmd)
-        //{
-        //    return EnsureIdForValue(NwdContract.TABLE_LIST,
-        //                            NwdContract.COLUMN_LIST_ID,
-        //                            NwdContract.COLUMN_LIST_NAME,
-        //                            name,
-        //                            cmd);
-        //}
-
         internal override int EnsureIdForValue(string tableName,
                                              string idColumnName,
                                              string valueColumnName,
@@ -319,44 +231,6 @@ namespace NineWorldsDeep.Db
                 .ToList<SynergyList>();
         }
         
-        //public void UpdateActiveInactive(IEnumerable<SynergyList> setToActive, IEnumerable<SynergyList> setToInactive)
-        //{
-        //    try
-        //    {
-        //        using (var conn =
-        //            new SQLiteConnection(@"Data Source=" +
-        //                Configuration.GetSqliteDbPath("nwd")))
-        //        {
-        //            conn.Open();
-
-        //            using (var cmd = new SQLiteCommand(conn))
-        //            {
-        //                using (var transaction = conn.BeginTransaction())
-        //                {
-        //                    foreach (SynergyList sl in setToActive)
-        //                    {
-        //                        SetActive(sl.Name, true, cmd);
-        //                    }
-
-        //                    foreach (SynergyList sl in setToInactive)
-        //                    {
-        //                        SetActive(sl.Name, false, cmd);
-        //                    }
-
-        //                    transaction.Commit();
-        //                }
-        //            }
-
-        //            conn.Close();
-        //        }
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        //lets just throw it for now, but put something here eventually
-        //        throw ex;
-        //    }
-        //}
-
         public override void SetActive(string listName, bool active, SQLiteCommand cmd)
         {
             cmd.Parameters.Clear();
@@ -888,11 +762,6 @@ namespace NineWorldsDeep.Db
             cmd.ExecuteNonQuery();
         }
 
-        //public override string DeleteFile(String path)
-        //{
-        //    return DeleteFile(null, path);
-        //}
-
         public override int GetIdForPath(string path, SQLiteCommand cmd)
         {
             int id = -1;
@@ -1026,54 +895,6 @@ namespace NineWorldsDeep.Db
             }
         }
 
-        //public int GetNameId(string name)
-        //{
-        //    return nameIds[name];
-        //}
-
-        //public int GetDirectionId(SyncDirection direction)
-        //{
-        //    return directionIds[direction];
-        //}
-
-        //public int GetActionId(SyncAction action)
-        //{
-        //    return actionIds[action];
-        //}
-
-        //public void RefreshIds()
-        //{
-        //    try
-        //    {
-        //        using (var conn =
-        //            new SQLiteConnection(@"Data Source=" +
-        //                Configuration.GetSqliteDbPath("nwd")))
-        //        {
-        //            conn.Open();
-
-        //            using (var cmd = new SQLiteCommand(conn))
-        //            {
-        //                using (var transaction = conn.BeginTransaction())
-        //                {
-        //                    RefreshProfileIds(cmd);
-        //                    RefreshDirectionIds(cmd);
-        //                    RefreshActionIds(cmd);
-
-        //                    transaction.Commit();
-        //                }
-        //            }
-
-        //            conn.Close();
-        //        }
-
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        //just throw for now
-        //        throw ex;
-        //    }
-        //}
-
         public override void RefreshActionIds(SQLiteCommand cmd)
         {
             cmd.Parameters.Clear(); //since we will be reusing command
@@ -1102,78 +923,6 @@ namespace NineWorldsDeep.Db
             }
         }
 
-        //public void InitializeIds()
-        //{
-        //    RefreshIds();
-
-        //    bool actionsMissing = false;
-        //    bool directionsMissing = false;
-
-        //    //check dictionaries, if any are not stored
-        //    //insert or ignore all (quicker and just a couple of values)
-        //    foreach (SyncAction action in Enum.GetValues(typeof(SyncAction)))
-        //    {
-        //        if (!actionIds.ContainsKey(action))
-        //        {
-        //            actionsMissing = true;
-        //        }
-        //    }
-
-        //    foreach (SyncDirection direction in Enum.GetValues(typeof(SyncDirection)))
-        //    {
-        //        if (!directionIds.ContainsKey(direction))
-        //        {
-        //            directionsMissing = true;
-        //        }
-        //    }
-
-        //    if (actionsMissing || directionsMissing)
-        //    {
-        //        InsertOrIgnoreAllDirectionsAndActions();
-        //    }
-        //}
-
-        //public void InsertOrIgnoreAllDirectionsAndActions()
-        //{
-        //    try
-        //    {
-        //        using (var conn =
-        //            new SQLiteConnection(@"Data Source=" +
-        //                Configuration.GetSqliteDbPath("nwd")))
-        //        {
-        //            conn.Open();
-
-        //            using (var cmd = new SQLiteCommand(conn))
-        //            {
-        //                using (var transaction = conn.BeginTransaction())
-        //                {
-        //                    foreach (SyncAction action in Enum.GetValues(typeof(SyncAction)))
-        //                    {
-        //                        InsertOrIgnoreAction(action, cmd);
-        //                    }
-
-        //                    foreach (SyncDirection direction in Enum.GetValues(typeof(SyncDirection)))
-        //                    {
-        //                        if (!directionIds.ContainsKey(direction))
-        //                        {
-        //                            InsertOrIgnoreDirection(direction, cmd);
-        //                        }
-        //                    }
-        //                    transaction.Commit();
-        //                }
-        //            }
-
-        //            conn.Close();
-        //        }
-
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        //just throw for now
-        //        throw ex;
-        //    }
-        //}
-        
         public override void InsertOrIgnoreDirection(SyncDirection direction, SQLiteCommand cmd)
         {
             string directionVal = direction.ToString();
@@ -1350,14 +1099,7 @@ namespace NineWorldsDeep.Db
             }
         }
 
-        //public void StorePathToTagMappings(List<PathToTagMapping> mappings)
-        //{
-        //    StoreDeviceFiles(mappings);
-        //    PopulateFileIds(mappings);
-        //    StoreFileTags(mappings);
-        //}
-
-        protected override void PopulateFileIds(List<PathToTagMapping> mappings)
+        internal override void PopulateFileIds(List<PathToTagMapping> mappings)
         {
             using (var conn = new SQLiteConnection(
                 @"Data Source=" + Configuration.GetSqliteDbPath("nwd")))
@@ -1398,35 +1140,6 @@ namespace NineWorldsDeep.Db
                 }
             }
         }
-
-        ///// <summary>
-        ///// returns device database id if found, -1 if not found
-        ///// </summary>
-        ///// <param name="description"></param>
-        ///// <param name="friendlyName"></param>
-        ///// <param name="model"></param>
-        ///// <param name="deviceType"></param>
-        ///// <returns></returns>
-        //public int GetDeviceId(string description,
-        //                       string friendlyName,
-        //                       string model,
-        //                       string deviceType)
-        //{
-        //    RefreshDeviceIds();
-
-        //    NwdDeviceKey deviceKey =
-        //        new NwdDeviceKey(description,
-        //                         friendlyName,
-        //                         model,
-        //                         deviceType);
-
-        //    if (deviceIds.ContainsKey(deviceKey))
-        //    {
-        //        return deviceIds[deviceKey];
-        //    }
-
-        //    return -1;
-        //}
 
         public override void PopulateSyncProfiles(List<SyncProfile> lst, SQLiteCommand cmd)
         {
@@ -1482,8 +1195,7 @@ namespace NineWorldsDeep.Db
 
             cmd.ExecuteNonQuery();
         }
-
-
+        
         public override List<string> GetColumnNames(string tableName, SQLiteCommand cmd)
         {
             Regex regex = new Regex("^[a-zA-Z0-9_]*$");
@@ -1517,58 +1229,6 @@ namespace NineWorldsDeep.Db
 
             return cols;
         }
-        
-        //public string GetErdRawSource()
-        //{
-        //    string outputMsg = "";
-
-        //    try
-        //    {
-        //        using (var conn =
-        //            new SQLiteConnection(@"Data Source=" +
-        //                Configuration.GetSqliteDbPath("nwd")))
-        //        {
-        //            conn.Open();
-
-        //            using (var cmd = new SQLiteCommand(conn))
-        //            {
-        //                using (var transaction = conn.BeginTransaction())
-        //                {
-        //                    ////////////////////////////////////////CODE HERE//////////////////////////////////////
-
-        //                    List<string> tables = GetTableNames(cmd);
-
-        //                    foreach (string table in tables)
-        //                    {
-        //                        outputMsg += table + Environment.NewLine;
-        //                        outputMsg += "-------" + Environment.NewLine;
-
-        //                        List<string> cols = GetColumnNames(table, cmd);
-
-        //                        foreach (string col in cols)
-        //                        {
-        //                            outputMsg += col + Environment.NewLine;
-        //                        }
-
-        //                        outputMsg += Environment.NewLine;
-        //                    }
-
-        //                    transaction.Commit();
-
-        //                }
-        //            }
-
-        //            conn.Close();
-        //        }
-
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        outputMsg = "error: " + ex.Message;
-        //    }
-
-        //    return outputMsg;
-        //}
         
         public override void UpsertSyncMap(int profileId, int srcId, int destId, int directionId, int actionId, SQLiteCommand cmd)
         {
@@ -1823,7 +1483,7 @@ namespace NineWorldsDeep.Db
             }
         }
         
-        protected override void RefreshDeviceIds()
+        internal override void RefreshDeviceIds()
         {
             using (var conn = new SQLiteConnection(
                 @"Data Source=" + Configuration.GetSqliteDbPath("nwd")))
@@ -1872,22 +1532,6 @@ namespace NineWorldsDeep.Db
             }
         }
 
-        //private NwdDeviceKey ToDeviceKey(NwdPortableDevice device)
-        //{
-        //    if(device == null)
-        //    {
-        //        throw new Exception("NwdPortableDevice null in method ToDeviceKey()");
-        //    }
-        
-        //    return new NwdDeviceKey()
-        //    {
-        //        Description = device.Description,
-        //        FriendlyName = device.FriendlyName,
-        //        Model = device.Model,
-        //        DeviceType = device.DeviceType
-        //    };
-        //}
-        
         /// <summary>
         /// executes an INSERT OR IGNORE statement for supplied device info,
         /// intended for use with device nodes not meeting the standard NwdPortableDevice
@@ -1952,6 +1596,33 @@ namespace NineWorldsDeep.Db
                 }
             }
         }
+      
+        public override List<string> GetTableNames(SQLiteCommand cmd)
+        {
+            List<string> tables = new List<string>();
+
+            cmd.Parameters.Clear(); //since we will be reusing command
+            cmd.CommandText = "SELECT name FROM sqlite_master WHERE type = 'table'";
+
+            using (var rdr = cmd.ExecuteReader())
+            {
+                while (rdr.Read())
+                {
+                    string tableName = rdr.GetString(0);
+                    if (!tableName.Equals("android_metadata",
+                                         StringComparison.CurrentCultureIgnoreCase) &&
+                       !tableName.Equals("sqlite_sequence",
+                                         StringComparison.CurrentCultureIgnoreCase))
+                    {
+                        tables.Add(tableName);
+                    }
+                }
+            }
+
+            return tables;
+        }
+
+        #region "Code commented out 2016-08-14"
         
         //private void ConvertNullsToEmptyStrings(NwdPortableDevice device)
         //{
@@ -1976,7 +1647,361 @@ namespace NineWorldsDeep.Db
         //    }
         //}
 
-        #region "Imported"
+        //private NwdDeviceKey ToDeviceKey(NwdPortableDevice device)
+        //{
+        //    if(device == null)
+        //    {
+        //        throw new Exception("NwdPortableDevice null in method ToDeviceKey()");
+        //    }
+        
+        //    return new NwdDeviceKey()
+        //    {
+        //        Description = device.Description,
+        //        FriendlyName = device.FriendlyName,
+        //        Model = device.Model,
+        //        DeviceType = device.DeviceType
+        //    };
+        //}
+        
+        //public void UpdateActiveInactive(IEnumerable<SynergyList> setToActive, IEnumerable<SynergyList> setToInactive)
+        //{
+        //    try
+        //    {
+        //        using (var conn =
+        //            new SQLiteConnection(@"Data Source=" +
+        //                Configuration.GetSqliteDbPath("nwd")))
+        //        {
+        //            conn.Open();
+
+        //            using (var cmd = new SQLiteCommand(conn))
+        //            {
+        //                using (var transaction = conn.BeginTransaction())
+        //                {
+        //                    foreach (SynergyList sl in setToActive)
+        //                    {
+        //                        SetActive(sl.Name, true, cmd);
+        //                    }
+
+        //                    foreach (SynergyList sl in setToInactive)
+        //                    {
+        //                        SetActive(sl.Name, false, cmd);
+        //                    }
+
+        //                    transaction.Commit();
+        //                }
+        //            }
+
+        //            conn.Close();
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        //lets just throw it for now, but put something here eventually
+        //        throw ex;
+        //    }
+        //}
+
+
+        //public IEnumerable<SynergyList> GetActiveLists()
+        //{
+        //    return GetLists(true);
+        //}
+
+        //public void SaveSynergyLists(IEnumerable<SynergyList> _lists)
+        //{
+        //    try
+        //    {
+        //        using (var conn =
+        //            new SQLiteConnection(@"Data Source=" +
+        //                Configuration.GetSqliteDbPath("nwd")))
+        //        {
+        //            conn.Open();
+
+        //            using (var cmd = new SQLiteCommand(conn))
+        //            {
+        //                using (var transaction = conn.BeginTransaction())
+        //                {
+
+        //                    foreach (var lst in _lists)
+        //                    {
+        //                        int listId = EnsureIdForListName(lst.Name, cmd);
+
+        //                        foreach (var si in lst.Items)
+        //                        {
+        //                            int itemId = EnsureIdForItemValue(si.Item, cmd);
+
+        //                            UpsertFragment(listId, itemId, si, cmd);
+        //                        }
+        //                    }
+
+        //                    transaction.Commit();
+        //                }
+        //            }
+
+        //            conn.Close();
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        //lets just throw it for now, but put something here eventually
+        //        throw ex;
+        //    }
+        //}
+
+
+        //public int EnsureIdForItemValue(string item, SQLiteCommand cmd)
+        //{
+        //    return EnsureIdForValue(NwdContract.TABLE_ITEM,
+        //                            NwdContract.COLUMN_ITEM_ID,
+        //                            NwdContract.COLUMN_ITEM_VALUE,
+        //                            item,
+        //                            cmd);
+        //}
+
+        //public int EnsureIdForListName(string name, SQLiteCommand cmd)
+        //{
+        //    return EnsureIdForValue(NwdContract.TABLE_LIST,
+        //                            NwdContract.COLUMN_LIST_ID,
+        //                            NwdContract.COLUMN_LIST_NAME,
+        //                            name,
+        //                            cmd);
+        //}
+
+
+        //private Dictionary<NwdDeviceKey, int> deviceIds =
+        //    new Dictionary<NwdDeviceKey, int>();
+        //private Dictionary<string, int> hashIds =
+        //    new Dictionary<string, int>();
+        //private Dictionary<string, int> pathIds =
+        //    new Dictionary<string, int>();
+        
+        //private Dictionary<SyncDirection, int> directionIds =
+        //    new Dictionary<SyncDirection, int>();
+        //private Dictionary<SyncAction, int> actionIds =
+        //    new Dictionary<SyncAction, int>();
+        //private Dictionary<string, int> nameIds =
+        //    new Dictionary<string, int>();
+
+        //private Dictionary<int, SyncDirection> idDirections =
+        //    new Dictionary<int, SyncDirection>();
+        //private Dictionary<int, SyncAction> idActions =
+        //    new Dictionary<int, SyncAction>();
+        //private Dictionary<int, string> idNames =
+        //    new Dictionary<int, string>();
+
+        //TODO: consolidate all db logic from all of NWD into one class with a private constructor (singleton)
+        //TODO: in the db singleton, enable the foreign key pragma when opening sqlite db
+
+
+        //public override string DeleteFile(String path)
+        //{
+        //    return DeleteFile(null, path);
+        //}
+
+
+        //public string GetErdRawSource()
+        //{
+        //    string outputMsg = "";
+
+        //    try
+        //    {
+        //        using (var conn =
+        //            new SQLiteConnection(@"Data Source=" +
+        //                Configuration.GetSqliteDbPath("nwd")))
+        //        {
+        //            conn.Open();
+
+        //            using (var cmd = new SQLiteCommand(conn))
+        //            {
+        //                using (var transaction = conn.BeginTransaction())
+        //                {
+        //                    ////////////////////////////////////////CODE HERE//////////////////////////////////////
+
+        //                    List<string> tables = GetTableNames(cmd);
+
+        //                    foreach (string table in tables)
+        //                    {
+        //                        outputMsg += table + Environment.NewLine;
+        //                        outputMsg += "-------" + Environment.NewLine;
+
+        //                        List<string> cols = GetColumnNames(table, cmd);
+
+        //                        foreach (string col in cols)
+        //                        {
+        //                            outputMsg += col + Environment.NewLine;
+        //                        }
+
+        //                        outputMsg += Environment.NewLine;
+        //                    }
+
+        //                    transaction.Commit();
+
+        //                }
+        //            }
+
+        //            conn.Close();
+        //        }
+
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        outputMsg = "error: " + ex.Message;
+        //    }
+
+        //    return outputMsg;
+        //}
+        
+
+        //public int GetNameId(string name)
+        //{
+        //    return nameIds[name];
+        //}
+
+        //public int GetDirectionId(SyncDirection direction)
+        //{
+        //    return directionIds[direction];
+        //}
+
+        //public int GetActionId(SyncAction action)
+        //{
+        //    return actionIds[action];
+        //}
+
+        //public void RefreshIds()
+        //{
+        //    try
+        //    {
+        //        using (var conn =
+        //            new SQLiteConnection(@"Data Source=" +
+        //                Configuration.GetSqliteDbPath("nwd")))
+        //        {
+        //            conn.Open();
+
+        //            using (var cmd = new SQLiteCommand(conn))
+        //            {
+        //                using (var transaction = conn.BeginTransaction())
+        //                {
+        //                    RefreshProfileIds(cmd);
+        //                    RefreshDirectionIds(cmd);
+        //                    RefreshActionIds(cmd);
+
+        //                    transaction.Commit();
+        //                }
+        //            }
+
+        //            conn.Close();
+        //        }
+
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        //just throw for now
+        //        throw ex;
+        //    }
+        //}
+
+
+        //public void InitializeIds()
+        //{
+        //    RefreshIds();
+
+        //    bool actionsMissing = false;
+        //    bool directionsMissing = false;
+
+        //    //check dictionaries, if any are not stored
+        //    //insert or ignore all (quicker and just a couple of values)
+        //    foreach (SyncAction action in Enum.GetValues(typeof(SyncAction)))
+        //    {
+        //        if (!actionIds.ContainsKey(action))
+        //        {
+        //            actionsMissing = true;
+        //        }
+        //    }
+
+        //    foreach (SyncDirection direction in Enum.GetValues(typeof(SyncDirection)))
+        //    {
+        //        if (!directionIds.ContainsKey(direction))
+        //        {
+        //            directionsMissing = true;
+        //        }
+        //    }
+
+        //    if (actionsMissing || directionsMissing)
+        //    {
+        //        InsertOrIgnoreAllDirectionsAndActions();
+        //    }
+        //}
+
+        //public void InsertOrIgnoreAllDirectionsAndActions()
+        //{
+        //    try
+        //    {
+        //        using (var conn =
+        //            new SQLiteConnection(@"Data Source=" +
+        //                Configuration.GetSqliteDbPath("nwd")))
+        //        {
+        //            conn.Open();
+
+        //            using (var cmd = new SQLiteCommand(conn))
+        //            {
+        //                using (var transaction = conn.BeginTransaction())
+        //                {
+        //                    foreach (SyncAction action in Enum.GetValues(typeof(SyncAction)))
+        //                    {
+        //                        InsertOrIgnoreAction(action, cmd);
+        //                    }
+
+        //                    foreach (SyncDirection direction in Enum.GetValues(typeof(SyncDirection)))
+        //                    {
+        //                        if (!directionIds.ContainsKey(direction))
+        //                        {
+        //                            InsertOrIgnoreDirection(direction, cmd);
+        //                        }
+        //                    }
+        //                    transaction.Commit();
+        //                }
+        //            }
+
+        //            conn.Close();
+        //        }
+
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        //just throw for now
+        //        throw ex;
+        //    }
+        //}
+        
+
+        ///// <summary>
+        ///// returns device database id if found, -1 if not found
+        ///// </summary>
+        ///// <param name="description"></param>
+        ///// <param name="friendlyName"></param>
+        ///// <param name="model"></param>
+        ///// <param name="deviceType"></param>
+        ///// <returns></returns>
+        //public int GetDeviceId(string description,
+        //                       string friendlyName,
+        //                       string model,
+        //                       string deviceType)
+        //{
+        //    RefreshDeviceIds();
+
+        //    NwdDeviceKey deviceKey =
+        //        new NwdDeviceKey(description,
+        //                         friendlyName,
+        //                         model,
+        //                         deviceType);
+
+        //    if (deviceIds.ContainsKey(deviceKey))
+        //    {
+        //        return deviceIds[deviceKey];
+        //    }
+
+        //    return -1;
+        //}
 
 
         //public IEnumerable<SyncProfile> GetAllSyncProfiles()
@@ -2202,31 +2227,6 @@ namespace NineWorldsDeep.Db
         //    }
         //}
 
-        public override List<string> GetTableNames(SQLiteCommand cmd)
-        {
-            List<string> tables = new List<string>();
-
-            cmd.Parameters.Clear(); //since we will be reusing command
-            cmd.CommandText = "SELECT name FROM sqlite_master WHERE type = 'table'";
-
-            using (var rdr = cmd.ExecuteReader())
-            {
-                while (rdr.Read())
-                {
-                    string tableName = rdr.GetString(0);
-                    if (!tableName.Equals("android_metadata",
-                                         StringComparison.CurrentCultureIgnoreCase) &&
-                       !tableName.Equals("sqlite_sequence",
-                                         StringComparison.CurrentCultureIgnoreCase))
-                    {
-                        tables.Add(tableName);
-                    }
-                }
-            }
-
-            return tables;
-        }
-
         //public string DeleteSyncMap(SyncMap sm)
         //{
         //    string outputMsg = "implementation in progress";
@@ -2398,8 +2398,16 @@ namespace NineWorldsDeep.Db
         //    }
         //}
 
-
+        //public void StorePathToTagMappings(List<PathToTagMapping> mappings)
+        //{
+        //    StoreDeviceFiles(mappings);
+        //    PopulateFileIds(mappings);
+        //    StoreFileTags(mappings);
+        //}
+        
         #endregion
+
+        #region "templates"
 
         /////////////////////////////////////connection/transaction templates        
         //
@@ -2497,6 +2505,8 @@ namespace NineWorldsDeep.Db
 
         //    return outputMsg;
         //}
+        
+        #endregion
 
     }
 }

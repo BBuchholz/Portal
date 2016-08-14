@@ -46,8 +46,8 @@ namespace NineWorldsDeep.Db
         public abstract void StoreTags(List<string> lst);
         public abstract void SetActive(string listName, bool active, SQLiteCommand cmd);
         public abstract void StorePaths(List<string> lst);
-        protected abstract void PopulateFileIds(List<PathToTagMapping> mappings);
-        protected abstract void RefreshDeviceIds();
+        internal abstract void PopulateFileIds(List<PathToTagMapping> mappings);
+        internal abstract void RefreshDeviceIds();
         public abstract void InsertOrIgnorePath(string path, SQLiteCommand cmd);
         public abstract void InsertOrIgnoreHash(string hash, SQLiteCommand cmd);
         public abstract int GetIdForPath(string path, SQLiteCommand cmd);

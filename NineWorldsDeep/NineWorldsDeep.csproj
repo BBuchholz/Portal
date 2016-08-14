@@ -143,6 +143,7 @@
     <Compile Include="Db\PathTagLink.cs" />
     <Compile Include="Db\PathToTagMapping.cs" />
     <Compile Include="Db\SqliteDbAdapter.cs" />
+    <Compile Include="Db\Sqlite\DbAdapterSwitch.cs" />
     <Compile Include="Db\Sqlite\DbAdapterV4c.cs" />
     <Compile Include="Db\Sqlite\DbAdapterV5.cs" />
     <Compile Include="DemoController.cs" />
