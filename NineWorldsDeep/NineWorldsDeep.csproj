@@ -138,10 +138,13 @@
     <Compile Include="Core\ProcessableFragment.cs" />
     <Compile Include="Core\ReviewableFragment.cs" />
     <Compile Include="Core\NwdUtils.cs" />
+    <Compile Include="Db\DbAdapterBase.cs" />
     <Compile Include="Db\NwdDeviceKey.cs" />
     <Compile Include="Db\PathTagLink.cs" />
     <Compile Include="Db\PathToTagMapping.cs" />
     <Compile Include="Db\SqliteDbAdapter.cs" />
+    <Compile Include="Db\Sqlite\DbAdapterV4c.cs" />
+    <Compile Include="Db\Sqlite\DbAdapterV5.cs" />
     <Compile Include="DemoController.cs" />
     <Compile Include="ExtensionsFragment.cs" />
     <Compile Include="Deprecated\Fragment.cs" />

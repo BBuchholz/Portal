@@ -2,7 +2,7 @@
 
 namespace NineWorldsDeep.Db
 {
-    internal class NwdDeviceKey
+    public class NwdDeviceKey
     {
         public string Description { get; internal set; }
         public string DeviceType { get; internal set; }

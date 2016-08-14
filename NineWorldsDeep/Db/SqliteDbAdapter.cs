@@ -16,28 +16,28 @@ using System.Threading.Tasks;
 
 namespace NineWorldsDeep.Db
 {
-    public class SqliteDbAdapter
+    public class SqliteDbAdapter : DbAdapterBase
     {        
-        private Dictionary<NwdDeviceKey, int> deviceIds =
-            new Dictionary<NwdDeviceKey, int>();
-        private Dictionary<string, int> hashIds =
-            new Dictionary<string, int>();
-        private Dictionary<string, int> pathIds =
-            new Dictionary<string, int>();
+        //private Dictionary<NwdDeviceKey, int> deviceIds =
+        //    new Dictionary<NwdDeviceKey, int>();
+        //private Dictionary<string, int> hashIds =
+        //    new Dictionary<string, int>();
+        //private Dictionary<string, int> pathIds =
+        //    new Dictionary<string, int>();
         
-        private Dictionary<SyncDirection, int> directionIds =
-            new Dictionary<SyncDirection, int>();
-        private Dictionary<SyncAction, int> actionIds =
-            new Dictionary<SyncAction, int>();
-        private Dictionary<string, int> nameIds =
-            new Dictionary<string, int>();
+        //private Dictionary<SyncDirection, int> directionIds =
+        //    new Dictionary<SyncDirection, int>();
+        //private Dictionary<SyncAction, int> actionIds =
+        //    new Dictionary<SyncAction, int>();
+        //private Dictionary<string, int> nameIds =
+        //    new Dictionary<string, int>();
 
-        private Dictionary<int, SyncDirection> idDirections =
-            new Dictionary<int, SyncDirection>();
-        private Dictionary<int, SyncAction> idActions =
-            new Dictionary<int, SyncAction>();
-        private Dictionary<int, string> idNames =
-            new Dictionary<int, string>();
+        //private Dictionary<int, SyncDirection> idDirections =
+        //    new Dictionary<int, SyncDirection>();
+        //private Dictionary<int, SyncAction> idActions =
+        //    new Dictionary<int, SyncAction>();
+        //private Dictionary<int, string> idNames =
+        //    new Dictionary<int, string>();
 
         //TODO: consolidate all db logic from all of NWD into one class with a private constructor (singleton)
         //TODO: in the db singleton, enable the foreign key pragma when opening sqlite db
@@ -52,7 +52,7 @@ namespace NineWorldsDeep.Db
         /// <param name="hash"></param>
         /// <param name="cmd"></param>
         /// <returns></returns>
-        public int GetIdForHash(string hash, SQLiteCommand cmd)
+        public override int GetIdForHash(string hash, SQLiteCommand cmd)
         {
             int id = -1;
 
@@ -77,7 +77,7 @@ namespace NineWorldsDeep.Db
             return id;
         }
 
-        public void InsertOrIgnoreHash(string hash, SQLiteCommand cmd)
+        public override void InsertOrIgnoreHash(string hash, SQLiteCommand cmd)
         {
             cmd.Parameters.Clear();
 
@@ -90,76 +90,76 @@ namespace NineWorldsDeep.Db
             cmd.ExecuteNonQuery();
         }
         
-        public IEnumerable<SynergyList> GetActiveLists()
-        {
-            return GetLists(true);
-        }
+        //public IEnumerable<SynergyList> GetActiveLists()
+        //{
+        //    return GetLists(true);
+        //}
 
-        public void SaveSynergyLists(IEnumerable<SynergyList> _lists)
-        {
-            try
-            {
-                using (var conn =
-                    new SQLiteConnection(@"Data Source=" +
-                        Configuration.GetSqliteDbPath("nwd")))
-                {
-                    conn.Open();
+        //public void SaveSynergyLists(IEnumerable<SynergyList> _lists)
+        //{
+        //    try
+        //    {
+        //        using (var conn =
+        //            new SQLiteConnection(@"Data Source=" +
+        //                Configuration.GetSqliteDbPath("nwd")))
+        //        {
+        //            conn.Open();
 
-                    using (var cmd = new SQLiteCommand(conn))
-                    {
-                        using (var transaction = conn.BeginTransaction())
-                        {
+        //            using (var cmd = new SQLiteCommand(conn))
+        //            {
+        //                using (var transaction = conn.BeginTransaction())
+        //                {
 
-                            foreach (var lst in _lists)
-                            {
-                                int listId = EnsureIdForListName(lst.Name, cmd);
+        //                    foreach (var lst in _lists)
+        //                    {
+        //                        int listId = EnsureIdForListName(lst.Name, cmd);
 
-                                foreach (var si in lst.Items)
-                                {
-                                    int itemId = EnsureIdForItemValue(si.Item, cmd);
+        //                        foreach (var si in lst.Items)
+        //                        {
+        //                            int itemId = EnsureIdForItemValue(si.Item, cmd);
 
-                                    UpsertFragment(listId, itemId, si, cmd);
-                                }
-                            }
+        //                            UpsertFragment(listId, itemId, si, cmd);
+        //                        }
+        //                    }
 
-                            transaction.Commit();
-                        }
-                    }
+        //                    transaction.Commit();
+        //                }
+        //            }
 
-                    conn.Close();
-                }
-            }
-            catch (Exception ex)
-            {
-                //lets just throw it for now, but put something here eventually
-                throw ex;
-            }
-        }
+        //            conn.Close();
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        //lets just throw it for now, but put something here eventually
+        //        throw ex;
+        //    }
+        //}
 
 
-        public int EnsureIdForItemValue(string item, SQLiteCommand cmd)
-        {
-            return EnsureIdForValue(NwdContract.TABLE_ITEM,
-                                    NwdContract.COLUMN_ITEM_ID,
-                                    NwdContract.COLUMN_ITEM_VALUE,
-                                    item,
-                                    cmd);
-        }
+        //public int EnsureIdForItemValue(string item, SQLiteCommand cmd)
+        //{
+        //    return EnsureIdForValue(NwdContract.TABLE_ITEM,
+        //                            NwdContract.COLUMN_ITEM_ID,
+        //                            NwdContract.COLUMN_ITEM_VALUE,
+        //                            item,
+        //                            cmd);
+        //}
 
-        public int EnsureIdForListName(string name, SQLiteCommand cmd)
-        {
-            return EnsureIdForValue(NwdContract.TABLE_LIST,
-                                    NwdContract.COLUMN_LIST_ID,
-                                    NwdContract.COLUMN_LIST_NAME,
-                                    name,
-                                    cmd);
-        }
+        //public int EnsureIdForListName(string name, SQLiteCommand cmd)
+        //{
+        //    return EnsureIdForValue(NwdContract.TABLE_LIST,
+        //                            NwdContract.COLUMN_LIST_ID,
+        //                            NwdContract.COLUMN_LIST_NAME,
+        //                            name,
+        //                            cmd);
+        //}
 
-        private int EnsureIdForValue(string tableName,
-                                     string idColumnName,
-                                     string valueColumnName,
-                                     string valueToEnsure,
-                                     SQLiteCommand cmd)
+        internal override int EnsureIdForValue(string tableName,
+                                             string idColumnName,
+                                             string valueColumnName,
+                                             string valueToEnsure,
+                                             SQLiteCommand cmd)
         {
             //prevent invalid names for columns and tables (according to NWD naming conventions)
             NwdUtils.ValidateColumnAndTableName(tableName);
@@ -192,7 +192,7 @@ namespace NineWorldsDeep.Db
             return id;
         }
 
-        public void StoreTags(List<string> lst)
+        public override void StoreTags(List<string> lst)
         {
             //INSERT OR IGNORE
             using (var conn = new SQLiteConnection(
@@ -229,7 +229,7 @@ namespace NineWorldsDeep.Db
             }
         }
         
-        public IEnumerable<SynergyList> GetLists(bool active)
+        public override IEnumerable<SynergyList> GetLists(bool active)
         {
             Dictionary<string, SynergyList> lists =
                 new Dictionary<string, SynergyList>();
@@ -319,45 +319,45 @@ namespace NineWorldsDeep.Db
                 .ToList<SynergyList>();
         }
         
-        public void UpdateActiveInactive(IEnumerable<SynergyList> setToActive, IEnumerable<SynergyList> setToInactive)
-        {
-            try
-            {
-                using (var conn =
-                    new SQLiteConnection(@"Data Source=" +
-                        Configuration.GetSqliteDbPath("nwd")))
-                {
-                    conn.Open();
+        //public void UpdateActiveInactive(IEnumerable<SynergyList> setToActive, IEnumerable<SynergyList> setToInactive)
+        //{
+        //    try
+        //    {
+        //        using (var conn =
+        //            new SQLiteConnection(@"Data Source=" +
+        //                Configuration.GetSqliteDbPath("nwd")))
+        //        {
+        //            conn.Open();
 
-                    using (var cmd = new SQLiteCommand(conn))
-                    {
-                        using (var transaction = conn.BeginTransaction())
-                        {
-                            foreach (SynergyList sl in setToActive)
-                            {
-                                SetActive(sl.Name, true, cmd);
-                            }
+        //            using (var cmd = new SQLiteCommand(conn))
+        //            {
+        //                using (var transaction = conn.BeginTransaction())
+        //                {
+        //                    foreach (SynergyList sl in setToActive)
+        //                    {
+        //                        SetActive(sl.Name, true, cmd);
+        //                    }
 
-                            foreach (SynergyList sl in setToInactive)
-                            {
-                                SetActive(sl.Name, false, cmd);
-                            }
+        //                    foreach (SynergyList sl in setToInactive)
+        //                    {
+        //                        SetActive(sl.Name, false, cmd);
+        //                    }
 
-                            transaction.Commit();
-                        }
-                    }
+        //                    transaction.Commit();
+        //                }
+        //            }
 
-                    conn.Close();
-                }
-            }
-            catch (Exception ex)
-            {
-                //lets just throw it for now, but put something here eventually
-                throw ex;
-            }
-        }
+        //            conn.Close();
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        //lets just throw it for now, but put something here eventually
+        //        throw ex;
+        //    }
+        //}
 
-        public void SetActive(string listName, bool active, SQLiteCommand cmd)
+        public override void SetActive(string listName, bool active, SQLiteCommand cmd)
         {
             cmd.Parameters.Clear();
             cmd.CommandText =
@@ -369,16 +369,8 @@ namespace NineWorldsDeep.Db
             cmd.Parameters.AddWithValue("@listName", listName);
             cmd.ExecuteNonQuery();
         }
-
-        public void SaveToDb()
-        {
-
-            //ensure tags
-            //ensure paths
-            //link all
-        }
         
-        public void StorePaths(List<string> lst)
+        public override void StorePaths(List<string> lst)
         {
             //INSERT OR IGNORE
             using (var conn = new SQLiteConnection(
@@ -415,7 +407,7 @@ namespace NineWorldsDeep.Db
             }
         }
         
-        public void UpsertFragment(int listId, int itemId, SynergyItem si, SQLiteCommand cmd)
+        public override void UpsertFragment(int listId, int itemId, SynergyItem si, SQLiteCommand cmd)
         {
             //need to do a separate update attemp for
             //each value to avoid overwriting existing
@@ -533,9 +525,8 @@ namespace NineWorldsDeep.Db
             cmd.Parameters.AddWithValue("@updatedAt", updatedAt);
             cmd.ExecuteNonQuery();
         }
-
-
-        public string GetTagsForHash(string sha1Hash, SQLiteCommand cmd)
+        
+        public override string GetTagsForHash(string sha1Hash, SQLiteCommand cmd)
         {
             cmd.Parameters.Clear();
 
@@ -589,7 +580,7 @@ namespace NineWorldsDeep.Db
         /// all paths for which tags have been stored
         /// </summary>
         /// <param name="filePathTopFolder"></param>
-        public List<PathTagLink> GetPathTagLinks(string filePathTopFolder)
+        public override List<PathTagLink> GetPathTagLinks(string filePathTopFolder)
         {
             //TODO: this should take device into account (overload method to default to this device if one is not supplied)
             List<PathTagLink> lst = new List<PathTagLink>();
@@ -665,7 +656,7 @@ namespace NineWorldsDeep.Db
             return lst;
         }
 
-        public string DeleteFile(String device, String path)
+        public override string DeleteFile(String device, String path)
         {
             if (string.IsNullOrWhiteSpace(device))
             {
@@ -720,7 +711,7 @@ namespace NineWorldsDeep.Db
             return outputMsg;
         }
 
-        public int GetFileIdForDevicePath(String device, 
+        public override int GetFileIdForDevicePath(String device, 
                                           String path, 
                                           SQLiteCommand cmd)
         {
@@ -758,7 +749,7 @@ namespace NineWorldsDeep.Db
             return id;
         }
 
-        public int GetIdForFile(int deviceId, int pathId, SQLiteCommand cmd)
+        public override int GetIdForFile(int deviceId, int pathId, SQLiteCommand cmd)
         {
             int id = -1;
 
@@ -787,7 +778,7 @@ namespace NineWorldsDeep.Db
             return id;
         }
 
-        public int UpsertFile(int deviceId, int pathId, int hashId, string hashedAtTimeStamp, SQLiteCommand cmd)
+        public override int UpsertFile(int deviceId, int pathId, int hashId, string hashedAtTimeStamp, SQLiteCommand cmd)
         {
             /////////see link answers below accepted answer
             //http://stackoverflow.com/questions/15277373/sqlite-upsert-update-or-insert
@@ -850,7 +841,7 @@ namespace NineWorldsDeep.Db
             return GetIdForFile(deviceId, pathId, cmd);
         }
 
-        public void LinkFileIdToTagId(int fileId, int tagId, SQLiteCommand cmd)
+        public override void LinkFileIdToTagId(int fileId, int tagId, SQLiteCommand cmd)
         {
             cmd.Parameters.Clear();
 
@@ -869,7 +860,7 @@ namespace NineWorldsDeep.Db
             cmd.ExecuteNonQuery();
         }
 
-        public void DeleteFileTagsForFileId(int fileId, SQLiteCommand cmd)
+        public override void DeleteFileTagsForFileId(int fileId, SQLiteCommand cmd)
         {
             cmd.Parameters.Clear();
             cmd.CommandText =
@@ -883,7 +874,7 @@ namespace NineWorldsDeep.Db
             cmd.ExecuteNonQuery();
         }
 
-        public void DeleteFileForFileId(int fileId, SQLiteCommand cmd)
+        public override void DeleteFileForFileId(int fileId, SQLiteCommand cmd)
         {
             cmd.Parameters.Clear();
             cmd.CommandText =
@@ -897,12 +888,12 @@ namespace NineWorldsDeep.Db
             cmd.ExecuteNonQuery();
         }
 
-        public string DeleteFile(String path)
-        {
-            return DeleteFile(null, path);
-        }
+        //public override string DeleteFile(String path)
+        //{
+        //    return DeleteFile(null, path);
+        //}
 
-        public int GetIdForPath(string path, SQLiteCommand cmd)
+        public override int GetIdForPath(string path, SQLiteCommand cmd)
         {
             int id = -1;
 
@@ -927,7 +918,7 @@ namespace NineWorldsDeep.Db
             return id;
         }
 
-        public void RefreshPathIds(Dictionary<string, int> pathIds, SQLiteCommand cmd)
+        public override void RefreshPathIds(Dictionary<string, int> pathIds, SQLiteCommand cmd)
         {
             cmd.Parameters.Clear(); //since we will be reusing command
 
@@ -954,7 +945,7 @@ namespace NineWorldsDeep.Db
             }
         }
 
-        public void PopulateSyncMaps(SyncProfile sp, SQLiteCommand cmd)
+        public override void PopulateSyncMaps(SyncProfile sp, SQLiteCommand cmd)
         {
             sp.SyncMaps.Clear();
 
@@ -1012,7 +1003,7 @@ namespace NineWorldsDeep.Db
             }
         }
 
-        public void RefreshProfileIds(SQLiteCommand cmd)
+        public override void RefreshProfileIds(SQLiteCommand cmd)
         {
             cmd.Parameters.Clear(); //since we will be reusing command
             cmd.CommandText =
@@ -1035,55 +1026,55 @@ namespace NineWorldsDeep.Db
             }
         }
 
-        public int GetNameId(string name)
-        {
-            return nameIds[name];
-        }
+        //public int GetNameId(string name)
+        //{
+        //    return nameIds[name];
+        //}
 
-        public int GetDirectionId(SyncDirection direction)
-        {
-            return directionIds[direction];
-        }
+        //public int GetDirectionId(SyncDirection direction)
+        //{
+        //    return directionIds[direction];
+        //}
 
-        public int GetActionId(SyncAction action)
-        {
-            return actionIds[action];
-        }
+        //public int GetActionId(SyncAction action)
+        //{
+        //    return actionIds[action];
+        //}
 
-        public void RefreshIds()
-        {
-            try
-            {
-                using (var conn =
-                    new SQLiteConnection(@"Data Source=" +
-                        Configuration.GetSqliteDbPath("nwd")))
-                {
-                    conn.Open();
+        //public void RefreshIds()
+        //{
+        //    try
+        //    {
+        //        using (var conn =
+        //            new SQLiteConnection(@"Data Source=" +
+        //                Configuration.GetSqliteDbPath("nwd")))
+        //        {
+        //            conn.Open();
 
-                    using (var cmd = new SQLiteCommand(conn))
-                    {
-                        using (var transaction = conn.BeginTransaction())
-                        {
-                            RefreshProfileIds(cmd);
-                            RefreshDirectionIds(cmd);
-                            RefreshActionIds(cmd);
+        //            using (var cmd = new SQLiteCommand(conn))
+        //            {
+        //                using (var transaction = conn.BeginTransaction())
+        //                {
+        //                    RefreshProfileIds(cmd);
+        //                    RefreshDirectionIds(cmd);
+        //                    RefreshActionIds(cmd);
 
-                            transaction.Commit();
-                        }
-                    }
+        //                    transaction.Commit();
+        //                }
+        //            }
 
-                    conn.Close();
-                }
+        //            conn.Close();
+        //        }
 
-            }
-            catch (Exception ex)
-            {
-                //just throw for now
-                throw ex;
-            }
-        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        //just throw for now
+        //        throw ex;
+        //    }
+        //}
 
-        public void RefreshActionIds(SQLiteCommand cmd)
+        public override void RefreshActionIds(SQLiteCommand cmd)
         {
             cmd.Parameters.Clear(); //since we will be reusing command
             cmd.CommandText =
@@ -1111,79 +1102,79 @@ namespace NineWorldsDeep.Db
             }
         }
 
-        public void InitializeIds()
-        {
-            RefreshIds();
+        //public void InitializeIds()
+        //{
+        //    RefreshIds();
 
-            bool actionsMissing = false;
-            bool directionsMissing = false;
+        //    bool actionsMissing = false;
+        //    bool directionsMissing = false;
 
-            //check dictionaries, if any are not stored
-            //insert or ignore all (quicker and just a couple of values)
-            foreach (SyncAction action in Enum.GetValues(typeof(SyncAction)))
-            {
-                if (!actionIds.ContainsKey(action))
-                {
-                    actionsMissing = true;
-                }
-            }
+        //    //check dictionaries, if any are not stored
+        //    //insert or ignore all (quicker and just a couple of values)
+        //    foreach (SyncAction action in Enum.GetValues(typeof(SyncAction)))
+        //    {
+        //        if (!actionIds.ContainsKey(action))
+        //        {
+        //            actionsMissing = true;
+        //        }
+        //    }
 
-            foreach (SyncDirection direction in Enum.GetValues(typeof(SyncDirection)))
-            {
-                if (!directionIds.ContainsKey(direction))
-                {
-                    directionsMissing = true;
-                }
-            }
+        //    foreach (SyncDirection direction in Enum.GetValues(typeof(SyncDirection)))
+        //    {
+        //        if (!directionIds.ContainsKey(direction))
+        //        {
+        //            directionsMissing = true;
+        //        }
+        //    }
 
-            if (actionsMissing || directionsMissing)
-            {
-                InsertOrIgnoreAllDirectionsAndActions();
-            }
-        }
+        //    if (actionsMissing || directionsMissing)
+        //    {
+        //        InsertOrIgnoreAllDirectionsAndActions();
+        //    }
+        //}
 
-        public void InsertOrIgnoreAllDirectionsAndActions()
-        {
-            try
-            {
-                using (var conn =
-                    new SQLiteConnection(@"Data Source=" +
-                        Configuration.GetSqliteDbPath("nwd")))
-                {
-                    conn.Open();
+        //public void InsertOrIgnoreAllDirectionsAndActions()
+        //{
+        //    try
+        //    {
+        //        using (var conn =
+        //            new SQLiteConnection(@"Data Source=" +
+        //                Configuration.GetSqliteDbPath("nwd")))
+        //        {
+        //            conn.Open();
 
-                    using (var cmd = new SQLiteCommand(conn))
-                    {
-                        using (var transaction = conn.BeginTransaction())
-                        {
-                            foreach (SyncAction action in Enum.GetValues(typeof(SyncAction)))
-                            {
-                                InsertOrIgnoreAction(action, cmd);
-                            }
+        //            using (var cmd = new SQLiteCommand(conn))
+        //            {
+        //                using (var transaction = conn.BeginTransaction())
+        //                {
+        //                    foreach (SyncAction action in Enum.GetValues(typeof(SyncAction)))
+        //                    {
+        //                        InsertOrIgnoreAction(action, cmd);
+        //                    }
 
-                            foreach (SyncDirection direction in Enum.GetValues(typeof(SyncDirection)))
-                            {
-                                if (!directionIds.ContainsKey(direction))
-                                {
-                                    InsertOrIgnoreDirection(direction, cmd);
-                                }
-                            }
-                            transaction.Commit();
-                        }
-                    }
+        //                    foreach (SyncDirection direction in Enum.GetValues(typeof(SyncDirection)))
+        //                    {
+        //                        if (!directionIds.ContainsKey(direction))
+        //                        {
+        //                            InsertOrIgnoreDirection(direction, cmd);
+        //                        }
+        //                    }
+        //                    transaction.Commit();
+        //                }
+        //            }
 
-                    conn.Close();
-                }
+        //            conn.Close();
+        //        }
 
-            }
-            catch (Exception ex)
-            {
-                //just throw for now
-                throw ex;
-            }
-        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        //just throw for now
+        //        throw ex;
+        //    }
+        //}
         
-        public void InsertOrIgnoreDirection(SyncDirection direction, SQLiteCommand cmd)
+        public override void InsertOrIgnoreDirection(SyncDirection direction, SQLiteCommand cmd)
         {
             string directionVal = direction.ToString();
             cmd.Parameters.Clear();
@@ -1196,7 +1187,7 @@ namespace NineWorldsDeep.Db
             cmd.ExecuteNonQuery();
         }
 
-        public void InsertOrIgnoreAction(SyncAction action, SQLiteCommand cmd)
+        public override void InsertOrIgnoreAction(SyncAction action, SQLiteCommand cmd)
         {
             string actionVal = action.ToString();
             cmd.Parameters.Clear();
@@ -1211,7 +1202,7 @@ namespace NineWorldsDeep.Db
             cmd.ExecuteNonQuery();
         }
 
-        public void RefreshDirectionIds(SQLiteCommand cmd)
+        public override void RefreshDirectionIds(SQLiteCommand cmd)
         {
             cmd.Parameters.Clear(); //since we will be reusing command
 
@@ -1240,7 +1231,7 @@ namespace NineWorldsDeep.Db
             }
         }
 
-        public void InsertOrIgnorePath(string path, SQLiteCommand cmd)
+        public override void InsertOrIgnorePath(string path, SQLiteCommand cmd)
         {
             cmd.Parameters.Clear();
 
@@ -1253,7 +1244,7 @@ namespace NineWorldsDeep.Db
             cmd.ExecuteNonQuery();
         }
 
-        public void PopulatePathIds(Dictionary<string, int> pathsToIds)
+        public override void PopulatePathIds(Dictionary<string, int> pathsToIds)
         {
             using (var conn = new SQLiteConnection(
                 @"Data Source=" + Configuration.GetSqliteDbPath("nwd")))
@@ -1287,7 +1278,7 @@ namespace NineWorldsDeep.Db
             }
         }
 
-        public void StoreFileTags(List<PathToTagMapping> mappings)
+        public override void StoreFileTags(List<PathToTagMapping> mappings)
         {
             //INSERT OR IGNORE
             using (var conn = new SQLiteConnection(
@@ -1323,7 +1314,7 @@ namespace NineWorldsDeep.Db
             }
         }
 
-        public void StoreDeviceFiles(List<PathToTagMapping> mappings)
+        public override void StoreDeviceFiles(List<PathToTagMapping> mappings)
         {
             //INSERT OR IGNORE
             using (var conn = new SQLiteConnection(
@@ -1359,14 +1350,14 @@ namespace NineWorldsDeep.Db
             }
         }
 
-        public void StorePathToTagMappings(List<PathToTagMapping> mappings)
-        {
-            StoreDeviceFiles(mappings);
-            PopulateFileIds(mappings);
-            StoreFileTags(mappings);
-        }
+        //public void StorePathToTagMappings(List<PathToTagMapping> mappings)
+        //{
+        //    StoreDeviceFiles(mappings);
+        //    PopulateFileIds(mappings);
+        //    StoreFileTags(mappings);
+        //}
 
-        private void PopulateFileIds(List<PathToTagMapping> mappings)
+        protected override void PopulateFileIds(List<PathToTagMapping> mappings)
         {
             using (var conn = new SQLiteConnection(
                 @"Data Source=" + Configuration.GetSqliteDbPath("nwd")))
@@ -1408,36 +1399,36 @@ namespace NineWorldsDeep.Db
             }
         }
 
-        /// <summary>
-        /// returns device database id if found, -1 if not found
-        /// </summary>
-        /// <param name="description"></param>
-        /// <param name="friendlyName"></param>
-        /// <param name="model"></param>
-        /// <param name="deviceType"></param>
-        /// <returns></returns>
-        public int GetDeviceId(string description,
-                               string friendlyName,
-                               string model,
-                               string deviceType)
-        {
-            RefreshDeviceIds();
+        ///// <summary>
+        ///// returns device database id if found, -1 if not found
+        ///// </summary>
+        ///// <param name="description"></param>
+        ///// <param name="friendlyName"></param>
+        ///// <param name="model"></param>
+        ///// <param name="deviceType"></param>
+        ///// <returns></returns>
+        //public int GetDeviceId(string description,
+        //                       string friendlyName,
+        //                       string model,
+        //                       string deviceType)
+        //{
+        //    RefreshDeviceIds();
 
-            NwdDeviceKey deviceKey =
-                new NwdDeviceKey(description,
-                                 friendlyName,
-                                 model,
-                                 deviceType);
+        //    NwdDeviceKey deviceKey =
+        //        new NwdDeviceKey(description,
+        //                         friendlyName,
+        //                         model,
+        //                         deviceType);
 
-            if (deviceIds.ContainsKey(deviceKey))
-            {
-                return deviceIds[deviceKey];
-            }
+        //    if (deviceIds.ContainsKey(deviceKey))
+        //    {
+        //        return deviceIds[deviceKey];
+        //    }
 
-            return -1;
-        }
+        //    return -1;
+        //}
 
-        public void PopulateSyncProfiles(List<SyncProfile> lst, SQLiteCommand cmd)
+        public override void PopulateSyncProfiles(List<SyncProfile> lst, SQLiteCommand cmd)
         {
             cmd.Parameters.Clear(); //since we will be reusing command
             cmd.CommandText =
@@ -1466,7 +1457,7 @@ namespace NineWorldsDeep.Db
             }
         }
 
-        public void DeleteSyncMap(SyncMap sm, SQLiteCommand cmd)
+        public override void DeleteSyncMap(SyncMap sm, SQLiteCommand cmd)
         {
             Dictionary<string, int> pathIds =
                 new Dictionary<string, int>();
@@ -1478,22 +1469,12 @@ namespace NineWorldsDeep.Db
             cmd.Parameters.Clear();
 
             cmd.CommandText =
-                //"DELETE FROM SyncMap " +
-                //"WHERE SyncProfileId = @profileId " +
-                //"AND PathIdSource = @srcId " +
-                //"AND PathIdDestination = @destId " +
-                //"AND SyncDirectionId = @directionId";
                 "DELETE FROM " + NwdContract.TABLE_SYNC_MAP + " " +
                 "WHERE " + NwdContract.COLUMN_SYNC_PROFILE_ID + " = @profileId " +
                 "AND " + NwdContract.COLUMN_PATH_ID_SOURCE + " = @srcId " +
                 "AND " + NwdContract.COLUMN_PATH_ID_DESTINATION + " = @destId " +
                 "AND " + NwdContract.COLUMN_SYNC_DIRECTION_ID + " = @directionId";
-
-            //cmd.Parameters.AddWithValue("@profileId", nameIds[sm.Profile.Name]);
-            //cmd.Parameters.AddWithValue("@srcId", pathIds[sm.Source]);
-            //cmd.Parameters.AddWithValue("@destId", pathIds[sm.Destination]);
-            //cmd.Parameters.AddWithValue("@directionId", directionIds[sm.SyncDirection]);
-
+            
             cmd.Parameters.AddWithValue("@profileId", GetNameId(sm.Profile.Name));
             cmd.Parameters.AddWithValue("@srcId", pathIds[sm.Source]);
             cmd.Parameters.AddWithValue("@destId", pathIds[sm.Destination]);
@@ -1503,7 +1484,7 @@ namespace NineWorldsDeep.Db
         }
 
 
-        public List<string> GetColumnNames(string tableName, SQLiteCommand cmd)
+        public override List<string> GetColumnNames(string tableName, SQLiteCommand cmd)
         {
             Regex regex = new Regex("^[a-zA-Z0-9_]*$");
             if (!regex.IsMatch(tableName))
@@ -1537,59 +1518,59 @@ namespace NineWorldsDeep.Db
             return cols;
         }
         
-        public string GetErdRawSource()
-        {
-            string outputMsg = "";
+        //public string GetErdRawSource()
+        //{
+        //    string outputMsg = "";
 
-            try
-            {
-                using (var conn =
-                    new SQLiteConnection(@"Data Source=" +
-                        Configuration.GetSqliteDbPath("nwd")))
-                {
-                    conn.Open();
+        //    try
+        //    {
+        //        using (var conn =
+        //            new SQLiteConnection(@"Data Source=" +
+        //                Configuration.GetSqliteDbPath("nwd")))
+        //        {
+        //            conn.Open();
 
-                    using (var cmd = new SQLiteCommand(conn))
-                    {
-                        using (var transaction = conn.BeginTransaction())
-                        {
-                            ////////////////////////////////////////CODE HERE//////////////////////////////////////
+        //            using (var cmd = new SQLiteCommand(conn))
+        //            {
+        //                using (var transaction = conn.BeginTransaction())
+        //                {
+        //                    ////////////////////////////////////////CODE HERE//////////////////////////////////////
 
-                            List<string> tables = GetTableNames(cmd);
+        //                    List<string> tables = GetTableNames(cmd);
 
-                            foreach (string table in tables)
-                            {
-                                outputMsg += table + Environment.NewLine;
-                                outputMsg += "-------" + Environment.NewLine;
+        //                    foreach (string table in tables)
+        //                    {
+        //                        outputMsg += table + Environment.NewLine;
+        //                        outputMsg += "-------" + Environment.NewLine;
 
-                                List<string> cols = GetColumnNames(table, cmd);
+        //                        List<string> cols = GetColumnNames(table, cmd);
 
-                                foreach (string col in cols)
-                                {
-                                    outputMsg += col + Environment.NewLine;
-                                }
+        //                        foreach (string col in cols)
+        //                        {
+        //                            outputMsg += col + Environment.NewLine;
+        //                        }
 
-                                outputMsg += Environment.NewLine;
-                            }
+        //                        outputMsg += Environment.NewLine;
+        //                    }
 
-                            transaction.Commit();
+        //                    transaction.Commit();
 
-                        }
-                    }
+        //                }
+        //            }
 
-                    conn.Close();
-                }
+        //            conn.Close();
+        //        }
 
-            }
-            catch (Exception ex)
-            {
-                outputMsg = "error: " + ex.Message;
-            }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        outputMsg = "error: " + ex.Message;
+        //    }
 
-            return outputMsg;
-        }
+        //    return outputMsg;
+        //}
         
-        public void UpsertSyncMap(int profileId, int srcId, int destId, int directionId, int actionId, SQLiteCommand cmd)
+        public override void UpsertSyncMap(int profileId, int srcId, int destId, int directionId, int actionId, SQLiteCommand cmd)
         {
             /////////see link answers below accepted answer
             //http://stackoverflow.com/questions/15277373/sqlite-upsert-update-or-insert
@@ -1663,7 +1644,7 @@ namespace NineWorldsDeep.Db
             cmd.ExecuteNonQuery();
         }
 
-        public int EnsureProfileId(string profileName, SQLiteCommand cmd)
+        public override int EnsureProfileId(string profileName, SQLiteCommand cmd)
         {
             int id = -1;
 
@@ -1706,7 +1687,7 @@ namespace NineWorldsDeep.Db
         /// <param name="profileId"></param>
         /// <param name="cmd"></param>
         /// <returns></returns>
-        public int GetExtDeviceIdForProfileId(int profileId, SQLiteCommand cmd)
+        public override int GetExtDeviceIdForProfileId(int profileId, SQLiteCommand cmd)
         {
             int id = -1;
 
@@ -1738,7 +1719,7 @@ namespace NineWorldsDeep.Db
         /// <param name="profileId"></param>
         /// <param name="cmd"></param>
         /// <returns></returns>
-        public int GetHostDeviceIdForProfileId(int profileId, SQLiteCommand cmd)
+        public override int GetHostDeviceIdForProfileId(int profileId, SQLiteCommand cmd)
         {
             int id = -1;
 
@@ -1764,7 +1745,7 @@ namespace NineWorldsDeep.Db
             return id;
         }
 
-        public void InsertOrIgnoreTag(string tag, SQLiteCommand cmd)
+        public override void InsertOrIgnoreTag(string tag, SQLiteCommand cmd)
         {
             cmd.Parameters.Clear();
 
@@ -1777,7 +1758,7 @@ namespace NineWorldsDeep.Db
             cmd.ExecuteNonQuery();
         }
         
-        public Dictionary<string, int> GetIdsForTags(List<string> tags, SQLiteCommand cmd)
+        public override Dictionary<string, int> GetIdsForTags(List<string> tags, SQLiteCommand cmd)
         {
             Dictionary<string, int> tagIds =
                 new Dictionary<string, int>();
@@ -1806,7 +1787,7 @@ namespace NineWorldsDeep.Db
             return tagIds;
         }
         
-        public void PopulateTagIds(Dictionary<string, int> tagsToIds)
+        public override void PopulateTagIds(Dictionary<string, int> tagsToIds)
         {
             using (var conn = new SQLiteConnection(
                 @"Data Source=" + Configuration.GetSqliteDbPath("nwd")))
@@ -1842,7 +1823,7 @@ namespace NineWorldsDeep.Db
             }
         }
         
-        private void RefreshDeviceIds()
+        protected override void RefreshDeviceIds()
         {
             using (var conn = new SQLiteConnection(
                 @"Data Source=" + Configuration.GetSqliteDbPath("nwd")))
@@ -1891,21 +1872,21 @@ namespace NineWorldsDeep.Db
             }
         }
 
-        private NwdDeviceKey ToDeviceKey(NwdPortableDevice device)
-        {
-            if(device == null)
-            {
-                throw new Exception("NwdPortableDevice null in method ToDeviceKey()");
-            }
+        //private NwdDeviceKey ToDeviceKey(NwdPortableDevice device)
+        //{
+        //    if(device == null)
+        //    {
+        //        throw new Exception("NwdPortableDevice null in method ToDeviceKey()");
+        //    }
         
-            return new NwdDeviceKey()
-            {
-                Description = device.Description,
-                FriendlyName = device.FriendlyName,
-                Model = device.Model,
-                DeviceType = device.DeviceType
-            };
-        }
+        //    return new NwdDeviceKey()
+        //    {
+        //        Description = device.Description,
+        //        FriendlyName = device.FriendlyName,
+        //        Model = device.Model,
+        //        DeviceType = device.DeviceType
+        //    };
+        //}
         
         /// <summary>
         /// executes an INSERT OR IGNORE statement for supplied device info,
@@ -1915,10 +1896,10 @@ namespace NineWorldsDeep.Db
         /// Any null or whitespace values will result in no database changes
         /// </summary>
         /// <param name="device"></param>
-        public void StoreDevice(string description,
-                                string friendlyName,
-                                string model,
-                                string deviceType)
+        public override void StoreDevice(string description,
+                                         string friendlyName,
+                                         string model,
+                                         string deviceType)
         {
             using (var conn = new SQLiteConnection(
                 @"Data Source=" + Configuration.GetSqliteDbPath("nwd")))
@@ -1972,256 +1953,256 @@ namespace NineWorldsDeep.Db
             }
         }
         
-        private void ConvertNullsToEmptyStrings(NwdPortableDevice device)
-        {
-            if(device.Description == null)
-            {
-                device.Description = "";
-            }
+        //private void ConvertNullsToEmptyStrings(NwdPortableDevice device)
+        //{
+        //    if(device.Description == null)
+        //    {
+        //        device.Description = "";
+        //    }
 
-            if (device.Model == null)
-            {
-                device.Model = "";
-            }
+        //    if (device.Model == null)
+        //    {
+        //        device.Model = "";
+        //    }
 
-            if (device.DeviceType == null)
-            {
-                device.DeviceType = "";
-            }
+        //    if (device.DeviceType == null)
+        //    {
+        //        device.DeviceType = "";
+        //    }
 
-            if (device.FriendlyName == null)
-            {
-                device.FriendlyName = "";
-            }
-        }
+        //    if (device.FriendlyName == null)
+        //    {
+        //        device.FriendlyName = "";
+        //    }
+        //}
 
         #region "Imported"
 
 
-        public IEnumerable<SyncProfile> GetAllSyncProfiles()
-        {
-            List<SyncProfile> lst = new List<SyncProfile>();
+        //public IEnumerable<SyncProfile> GetAllSyncProfiles()
+        //{
+        //    List<SyncProfile> lst = new List<SyncProfile>();
 
-            try
-            {
-                using (var conn =
-                    new SQLiteConnection(@"Data Source=" +
-                        Configuration.GetSqliteDbPath("nwd")))
-                {
-                    conn.Open();
+        //    try
+        //    {
+        //        using (var conn =
+        //            new SQLiteConnection(@"Data Source=" +
+        //                Configuration.GetSqliteDbPath("nwd")))
+        //        {
+        //            conn.Open();
 
-                    using (var cmd = new SQLiteCommand(conn))
-                    {
-                        using (var transaction = conn.BeginTransaction())
-                        {
-                            PopulateSyncProfiles(lst, cmd);
+        //            using (var cmd = new SQLiteCommand(conn))
+        //            {
+        //                using (var transaction = conn.BeginTransaction())
+        //                {
+        //                    PopulateSyncProfiles(lst, cmd);
 
-                            transaction.Commit();
-                        }
-                    }
+        //                    transaction.Commit();
+        //                }
+        //            }
 
-                    conn.Close();
-                }
+        //            conn.Close();
+        //        }
 
-            }
-            catch (Exception ex)
-            {
-                //just throw for now
-                throw ex;
-            }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        //just throw for now
+        //        throw ex;
+        //    }
 
-            return lst;
-        }
+        //    return lst;
+        //}
 
-        public string GetTagsForSHA1Hash(string sha1Hash)
-        {
-            string tags = "";
+        //public string GetTagsForSHA1Hash(string sha1Hash)
+        //{
+        //    string tags = "";
 
-            try
-            {
-                using (var conn =
-                    new SQLiteConnection(@"Data Source=" +
-                        Configuration.GetSqliteDbPath("nwd")))
-                {
-                    conn.Open();
+        //    try
+        //    {
+        //        using (var conn =
+        //            new SQLiteConnection(@"Data Source=" +
+        //                Configuration.GetSqliteDbPath("nwd")))
+        //        {
+        //            conn.Open();
 
-                    using (var cmd = new SQLiteCommand(conn))
-                    {
-                        using (var transaction = conn.BeginTransaction())
-                        {
-                            tags = GetTagsForHash(sha1Hash, cmd);
-                            transaction.Commit();
-                        }
-                    }
+        //            using (var cmd = new SQLiteCommand(conn))
+        //            {
+        //                using (var transaction = conn.BeginTransaction())
+        //                {
+        //                    tags = GetTagsForHash(sha1Hash, cmd);
+        //                    transaction.Commit();
+        //                }
+        //            }
 
-                    conn.Close();
-                }
+        //            conn.Close();
+        //        }
 
-            }
-            catch (Exception)
-            {
-                //do nothing
-            }
+        //    }
+        //    catch (Exception)
+        //    {
+        //        //do nothing
+        //    }
 
-            return tags;
-        }
+        //    return tags;
+        //}
 
-        public string LoadSyncProfile(SyncProfile sp)
-        {
-            string outputMsg = "implementation in progress";
-            string time = "";
+        //public string LoadSyncProfile(SyncProfile sp)
+        //{
+        //    string outputMsg = "implementation in progress";
+        //    string time = "";
 
-            try
-            {
-                //we need to make sure our id dictionaries are refreshed
-                RefreshIds();
+        //    try
+        //    {
+        //        //we need to make sure our id dictionaries are refreshed
+        //        RefreshIds();
 
-                using (var conn =
-                    new SQLiteConnection(@"Data Source=" +
-                        Configuration.GetSqliteDbPath("nwd")))
-                {
-                    conn.Open();
+        //        using (var conn =
+        //            new SQLiteConnection(@"Data Source=" +
+        //                Configuration.GetSqliteDbPath("nwd")))
+        //        {
+        //            conn.Open();
 
-                    using (var cmd = new SQLiteCommand(conn))
-                    {
-                        using (var transaction = conn.BeginTransaction())
-                        {
-                            Stopwatch sw = Stopwatch.StartNew();
+        //            using (var cmd = new SQLiteCommand(conn))
+        //            {
+        //                using (var transaction = conn.BeginTransaction())
+        //                {
+        //                    Stopwatch sw = Stopwatch.StartNew();
 
-                            PopulateSyncMaps(sp, cmd);
+        //                    PopulateSyncMaps(sp, cmd);
 
-                            transaction.Commit();
+        //                    transaction.Commit();
 
-                            sw.Stop();
-                            time = sw.Elapsed.ToString("mm\\:ss\\.ff");
-                        }
-                    }
+        //                    sw.Stop();
+        //                    time = sw.Elapsed.ToString("mm\\:ss\\.ff");
+        //                }
+        //            }
 
-                    conn.Close();
-                }
+        //            conn.Close();
+        //        }
 
-                outputMsg = "Load Sync Profile Finished: " + time;
-            }
-            catch (Exception ex)
-            {
-                outputMsg = "error: " + ex.Message;
-            }
+        //        outputMsg = "Load Sync Profile Finished: " + time;
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        outputMsg = "error: " + ex.Message;
+        //    }
 
-            return outputMsg;
-        }
+        //    return outputMsg;
+        //}
 
-        private int EnsurePath(string path, SQLiteCommand cmd)
-        {
-            InsertOrIgnorePath(path, cmd);
-            return GetIdForPath(path, cmd);
-        }
+        //private int EnsurePath(string path, SQLiteCommand cmd)
+        //{
+        //    InsertOrIgnorePath(path, cmd);
+        //    return GetIdForPath(path, cmd);
+        //}
 
-        private int EnsureHash(string hash, SQLiteCommand cmd)
-        {
-            InsertOrIgnoreHash(hash, cmd);
-            return GetIdForHash(hash, cmd);
-        }
+        //private int EnsureHash(string hash, SQLiteCommand cmd)
+        //{
+        //    InsertOrIgnoreHash(hash, cmd);
+        //    return GetIdForHash(hash, cmd);
+        //}
 
-        /// <summary>
-        /// adds all tags to database, ignoring each if it already exists
-        /// returns a dictionary mapping supplied tags to their ids
-        /// </summary>
-        /// <param name="tags"></param>
-        /// <param name="cmd"></param>
-        /// <returns></returns>
-        private Dictionary<string, int> EnsureTags(List<string> tags, SQLiteCommand cmd)
-        {
-            InsertOrIgnoreTags(tags, cmd);
-            return GetIdsForTags(tags, cmd);
-        }
+        ///// <summary>
+        ///// adds all tags to database, ignoring each if it already exists
+        ///// returns a dictionary mapping supplied tags to their ids
+        ///// </summary>
+        ///// <param name="tags"></param>
+        ///// <param name="cmd"></param>
+        ///// <returns></returns>
+        //private Dictionary<string, int> EnsureTags(List<string> tags, SQLiteCommand cmd)
+        //{
+        //    InsertOrIgnoreTags(tags, cmd);
+        //    return GetIdsForTags(tags, cmd);
+        //}
 
-        public string StoreImport(string profileName, string extPath, string hostPath, string hash, List<string> tags)
-        {
-            string outputMsg = "implementation in progress";
-            string time = "";
+        //public string StoreImport(string profileName, string extPath, string hostPath, string hash, List<string> tags)
+        //{
+        //    string outputMsg = "implementation in progress";
+        //    string time = "";
 
-            try
-            {
-                using (var conn =
-                    new SQLiteConnection(@"Data Source=" +
-                        Configuration.GetSqliteDbPath("nwd")))
-                {
-                    conn.Open();
+        //    try
+        //    {
+        //        using (var conn =
+        //            new SQLiteConnection(@"Data Source=" +
+        //                Configuration.GetSqliteDbPath("nwd")))
+        //        {
+        //            conn.Open();
 
-                    using (var cmd = new SQLiteCommand(conn))
-                    {
-                        using (var transaction = conn.BeginTransaction())
-                        {
-                            Stopwatch sw = Stopwatch.StartNew();
+        //            using (var cmd = new SQLiteCommand(conn))
+        //            {
+        //                using (var transaction = conn.BeginTransaction())
+        //                {
+        //                    Stopwatch sw = Stopwatch.StartNew();
 
-                            //ensure paths
-                            int extPathId = EnsurePath(extPath, cmd);
-                            int hostPathId = EnsurePath(hostPath, cmd);
+        //                    //ensure paths
+        //                    int extPathId = EnsurePath(extPath, cmd);
+        //                    int hostPathId = EnsurePath(hostPath, cmd);
 
-                            //ensure hash
-                            int hashId = EnsureHash(hash, cmd);
+        //                    //ensure hash
+        //                    int hashId = EnsureHash(hash, cmd);
 
-                            //ensure tags
-                            Dictionary<string, int> tagIds = EnsureTags(tags, cmd);
+        //                    //ensure tags
+        //                    Dictionary<string, int> tagIds = EnsureTags(tags, cmd);
 
-                            //ensure profile
-                            int profileId = EnsureProfileId(profileName, cmd);
+        //                    //ensure profile
+        //                    int profileId = EnsureProfileId(profileName, cmd);
 
-                            //get external deviceId for profile
-                            int extDeviceId = GetExtDeviceIdForProfileId(profileId, cmd);
+        //                    //get external deviceId for profile
+        //                    int extDeviceId = GetExtDeviceIdForProfileId(profileId, cmd);
 
-                            if (extDeviceId != -1)
-                            {
-                                //upsert file (to update hashedAt timestamp if already exists)
-                                string timeStamp = NwdUtils.GetTimeStamp_yyyyMMddHHmmss();
-                                int fileId = UpsertFile(extDeviceId, extPathId, hashId, timeStamp, cmd);
+        //                    if (extDeviceId != -1)
+        //                    {
+        //                        //upsert file (to update hashedAt timestamp if already exists)
+        //                        string timeStamp = NwdUtils.GetTimeStamp_yyyyMMddHHmmss();
+        //                        int fileId = UpsertFile(extDeviceId, extPathId, hashId, timeStamp, cmd);
 
-                                //foreach tag, link File to Tag (junction table entry)
-                                LinkFileIdToTagIds(fileId, tagIds, cmd);
-                            }
+        //                        //foreach tag, link File to Tag (junction table entry)
+        //                        LinkFileIdToTagIds(fileId, tagIds, cmd);
+        //                    }
 
-                            //get host deviceId for profile
-                            int hostDeviceId = GetHostDeviceIdForProfileId(profileId, cmd);
+        //                    //get host deviceId for profile
+        //                    int hostDeviceId = GetHostDeviceIdForProfileId(profileId, cmd);
 
-                            if (hostDeviceId != -1)
-                            {
-                                //upsert file (to update hashedAt timestamp if already exists)
-                                string timeStamp = NwdUtils.GetTimeStamp_yyyyMMddHHmmss();
-                                int fileId = UpsertFile(hostDeviceId, hostPathId, hashId, timeStamp, cmd);
+        //                    if (hostDeviceId != -1)
+        //                    {
+        //                        //upsert file (to update hashedAt timestamp if already exists)
+        //                        string timeStamp = NwdUtils.GetTimeStamp_yyyyMMddHHmmss();
+        //                        int fileId = UpsertFile(hostDeviceId, hostPathId, hashId, timeStamp, cmd);
 
-                                //foreach tag, link File to Tag (junction table entry)
-                                LinkFileIdToTagIds(fileId, tagIds, cmd);
-                            }
+        //                        //foreach tag, link File to Tag (junction table entry)
+        //                        LinkFileIdToTagIds(fileId, tagIds, cmd);
+        //                    }
 
-                            transaction.Commit();
+        //                    transaction.Commit();
 
-                            sw.Stop();
-                            time = sw.Elapsed.ToString("mm\\:ss\\.ff");
-                        }
-                    }
+        //                    sw.Stop();
+        //                    time = sw.Elapsed.ToString("mm\\:ss\\.ff");
+        //                }
+        //            }
 
-                    conn.Close();
-                }
+        //            conn.Close();
+        //        }
 
-                outputMsg = "Finished: " + time;
-            }
-            catch (Exception ex)
-            {
-                outputMsg = "error: " + ex.Message;
-            }
+        //        outputMsg = "Finished: " + time;
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        outputMsg = "error: " + ex.Message;
+        //    }
 
-            return outputMsg;
-        }
+        //    return outputMsg;
+        //}
 
-        private void LinkFileIdToTagIds(int fileId, Dictionary<string, int> tagIds, SQLiteCommand cmd)
-        {
-            foreach (var tagId in tagIds.Values)
-            {
-                LinkFileIdToTagId(fileId, tagId, cmd);
-            }
-        }
+        //private void LinkFileIdToTagIds(int fileId, Dictionary<string, int> tagIds, SQLiteCommand cmd)
+        //{
+        //    foreach (var tagId in tagIds.Values)
+        //    {
+        //        LinkFileIdToTagId(fileId, tagId, cmd);
+        //    }
+        //}
 
-        public List<string> GetTableNames(SQLiteCommand cmd)
+        public override List<string> GetTableNames(SQLiteCommand cmd)
         {
             List<string> tables = new List<string>();
 
@@ -2246,176 +2227,176 @@ namespace NineWorldsDeep.Db
             return tables;
         }
 
-        public string DeleteSyncMap(SyncMap sm)
-        {
-            string outputMsg = "implementation in progress";
-            string time = "";
+        //public string DeleteSyncMap(SyncMap sm)
+        //{
+        //    string outputMsg = "implementation in progress";
+        //    string time = "";
 
-            try
-            {
-                //we need to make sure our id dictionaries are refreshed
-                RefreshIds();
+        //    try
+        //    {
+        //        //we need to make sure our id dictionaries are refreshed
+        //        RefreshIds();
 
-                using (var conn =
-                    new SQLiteConnection(@"Data Source=" +
-                        Configuration.GetSqliteDbPath("nwd")))
-                {
-                    conn.Open();
+        //        using (var conn =
+        //            new SQLiteConnection(@"Data Source=" +
+        //                Configuration.GetSqliteDbPath("nwd")))
+        //        {
+        //            conn.Open();
 
-                    using (var cmd = new SQLiteCommand(conn))
-                    {
-                        using (var transaction = conn.BeginTransaction())
-                        {
-                            Stopwatch sw = Stopwatch.StartNew();
+        //            using (var cmd = new SQLiteCommand(conn))
+        //            {
+        //                using (var transaction = conn.BeginTransaction())
+        //                {
+        //                    Stopwatch sw = Stopwatch.StartNew();
 
-                            DeleteSyncMap(sm, cmd);
+        //                    DeleteSyncMap(sm, cmd);
 
-                            transaction.Commit();
+        //                    transaction.Commit();
 
-                            sw.Stop();
-                            time = sw.Elapsed.ToString("mm\\:ss\\.ff");
-                        }
-                    }
+        //                    sw.Stop();
+        //                    time = sw.Elapsed.ToString("mm\\:ss\\.ff");
+        //                }
+        //            }
 
-                    conn.Close();
-                }
+        //            conn.Close();
+        //        }
 
-                outputMsg = "Delete Sync Map Finished: " + time;
-            }
-            catch (Exception ex)
-            {
-                outputMsg = "error: " + ex.Message;
-            }
+        //        outputMsg = "Delete Sync Map Finished: " + time;
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        outputMsg = "error: " + ex.Message;
+        //    }
 
-            return outputMsg;
-        }
+        //    return outputMsg;
+        //}
 
-        public string SaveSyncProfile(SyncProfile sp)
-        {
-            string outputMsg = "implementation in progress";
-            string time = "";
+        //public string SaveSyncProfile(SyncProfile sp)
+        //{
+        //    string outputMsg = "implementation in progress";
+        //    string time = "";
 
-            try
-            {
-                using (var conn =
-                    new SQLiteConnection(@"Data Source=" +
-                        Configuration.GetSqliteDbPath("nwd")))
-                {
-                    conn.Open();
+        //    try
+        //    {
+        //        using (var conn =
+        //            new SQLiteConnection(@"Data Source=" +
+        //                Configuration.GetSqliteDbPath("nwd")))
+        //        {
+        //            conn.Open();
 
-                    using (var cmd = new SQLiteCommand(conn))
-                    {
-                        using (var transaction = conn.BeginTransaction())
-                        {
-                            Stopwatch sw = Stopwatch.StartNew();
+        //            using (var cmd = new SQLiteCommand(conn))
+        //            {
+        //                using (var transaction = conn.BeginTransaction())
+        //                {
+        //                    Stopwatch sw = Stopwatch.StartNew();
 
-                            /////////use open transaction to insert or ignore all paths, and profile name.
-                            int profileId = EnsureProfileId(sp.Name, cmd);
+        //                    /////////use open transaction to insert or ignore all paths, and profile name.
+        //                    int profileId = EnsureProfileId(sp.Name, cmd);
 
-                            List<string> paths = sp.SyncMaps.AllPaths();
+        //                    List<string> paths = sp.SyncMaps.AllPaths();
 
-                            foreach (string path in paths)
-                            {
-                                InsertOrIgnorePath(path, cmd);
-                            }
+        //                    foreach (string path in paths)
+        //                    {
+        //                        InsertOrIgnorePath(path, cmd);
+        //                    }
 
-                            /////////use open transaction to get path ids for path values
-                            Dictionary<string, int> pathIds = new Dictionary<string, int>();
+        //                    /////////use open transaction to get path ids for path values
+        //                    Dictionary<string, int> pathIds = new Dictionary<string, int>();
 
-                            //store all paths
-                            foreach (string path in paths)
-                            {
-                                pathIds[path] = -1;
-                            }
+        //                    //store all paths
+        //                    foreach (string path in paths)
+        //                    {
+        //                        pathIds[path] = -1;
+        //                    }
 
-                            RefreshPathIds(pathIds, cmd);
+        //                    RefreshPathIds(pathIds, cmd);
 
-                            foreach (SyncMap map in sp.SyncMaps)
-                            {
-                                int destId = pathIds[map.Destination];
-                                int srcId = pathIds[map.Source];
-                                //int directionId = directionIds[map.SyncDirection];
-                                //int actionId = actionIds[map.DefaultSyncAction];
-                                int directionId = GetDirectionId(map.SyncDirection);
-                                int actionId = GetActionId(map.DefaultSyncAction);
+        //                    foreach (SyncMap map in sp.SyncMaps)
+        //                    {
+        //                        int destId = pathIds[map.Destination];
+        //                        int srcId = pathIds[map.Source];
+        //                        //int directionId = directionIds[map.SyncDirection];
+        //                        //int actionId = actionIds[map.DefaultSyncAction];
+        //                        int directionId = GetDirectionId(map.SyncDirection);
+        //                        int actionId = GetActionId(map.DefaultSyncAction);
 
-                                UpsertSyncMap(profileId, srcId, destId, directionId, actionId, cmd);
-                            }
+        //                        UpsertSyncMap(profileId, srcId, destId, directionId, actionId, cmd);
+        //                    }
 
-                            transaction.Commit();
+        //                    transaction.Commit();
 
-                            sw.Stop();
-                            time = sw.Elapsed.ToString("mm\\:ss\\.ff");
-                        }
-                    }
+        //                    sw.Stop();
+        //                    time = sw.Elapsed.ToString("mm\\:ss\\.ff");
+        //                }
+        //            }
 
-                    conn.Close();
-                }
+        //            conn.Close();
+        //        }
 
-                outputMsg = "Save Sync Profile Finished: " + time;
-            }
-            catch (Exception ex)
-            {
-                outputMsg = "error: " + ex.Message;
-            }
+        //        outputMsg = "Save Sync Profile Finished: " + time;
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        outputMsg = "error: " + ex.Message;
+        //    }
 
-            return outputMsg;
-        }
+        //    return outputMsg;
+        //}
 
-        /// <summary>
-        /// will insert a profile name if it doesn't exist already,
-        /// will ignore on duplicate
-        /// </summary>
-        /// <param name="profileName"></param>
-        /// <returns>completion status string</returns>
-        public string EnsureSyncProfile(string profileName)
-        {
-            string outputMsg = "implementation in progress";
-            string time = "";
+        ///// <summary>
+        ///// will insert a profile name if it doesn't exist already,
+        ///// will ignore on duplicate
+        ///// </summary>
+        ///// <param name="profileName"></param>
+        ///// <returns>completion status string</returns>
+        //public string EnsureSyncProfile(string profileName)
+        //{
+        //    string outputMsg = "implementation in progress";
+        //    string time = "";
 
-            try
-            {
-                using (var conn =
-                    new SQLiteConnection(@"Data Source=" +
-                        Configuration.GetSqliteDbPath("nwd")))
-                {
-                    conn.Open();
+        //    try
+        //    {
+        //        using (var conn =
+        //            new SQLiteConnection(@"Data Source=" +
+        //                Configuration.GetSqliteDbPath("nwd")))
+        //        {
+        //            conn.Open();
 
-                    using (var cmd = new SQLiteCommand(conn))
-                    {
-                        using (var transaction = conn.BeginTransaction())
-                        {
-                            Stopwatch sw = Stopwatch.StartNew();
+        //            using (var cmd = new SQLiteCommand(conn))
+        //            {
+        //                using (var transaction = conn.BeginTransaction())
+        //                {
+        //                    Stopwatch sw = Stopwatch.StartNew();
 
-                            EnsureProfileId(profileName, cmd);
+        //                    EnsureProfileId(profileName, cmd);
 
-                            transaction.Commit();
+        //                    transaction.Commit();
 
-                            sw.Stop();
-                            time = sw.Elapsed.ToString("mm\\:ss\\.ff");
-                        }
-                    }
+        //                    sw.Stop();
+        //                    time = sw.Elapsed.ToString("mm\\:ss\\.ff");
+        //                }
+        //            }
 
-                    conn.Close();
-                }
+        //            conn.Close();
+        //        }
 
-                outputMsg = "Finished: " + time;
-            }
-            catch (Exception ex)
-            {
-                outputMsg = "error: " + ex.Message;
-            }
+        //        outputMsg = "Finished: " + time;
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        outputMsg = "error: " + ex.Message;
+        //    }
 
-            return outputMsg;
-        }
+        //    return outputMsg;
+        //}
 
-        private void InsertOrIgnoreTags(List<string> tags, SQLiteCommand cmd)
-        {
-            foreach (var tag in tags)
-            {
-                InsertOrIgnoreTag(tag, cmd);
-            }
-        }
+        //private void InsertOrIgnoreTags(List<string> tags, SQLiteCommand cmd)
+        //{
+        //    foreach (var tag in tags)
+        //    {
+        //        InsertOrIgnoreTag(tag, cmd);
+        //    }
+        //}
 
 
         #endregion
