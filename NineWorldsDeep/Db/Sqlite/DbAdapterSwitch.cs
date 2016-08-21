@@ -239,5 +239,10 @@ namespace NineWorldsDeep.Db.Sqlite
         {
             return db.EnsureIdForValue(tableName, idColumnName, valueColumnName, valueToEnsure, cmd);
         }
+
+        public override string GetDbName()
+        {
+            return db.GetDbName();
+        }
     }
 }

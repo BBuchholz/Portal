@@ -400,21 +400,25 @@ namespace NineWorldsDeep.Db.Sqlite
             cmd.CommandText =
                 //"SELECT t.TagValue " +
                 //"FROM Tag t " +
-                //"JOIN junction_File_Tag jft " +
-                //"ON t.TagId = jft.TagId " +
+                //"JOIN FileTag ft " +
+                //"ON t.TagId = ft.TagId " +
                 //"JOIN File f " +
-                //"ON f.FileId = jft.FileId " +
+                //"ON f.FileId = ft.FileId " +
+                //"JOIN FileHash fh " +
+                //"ON f.FileId = fh.FileId" +
                 //"JOIN Hash h " +
-                //"ON h.HashId = f.HashId " +
-                //"WHERE h.HashValue = @hash ";
+                //"ON h.HashId = fh.HashId " +
+                //"WHERE h.HashValue = @hash "
                 "SELECT t." + NwdContract.COLUMN_TAG_VALUE + " " +
                 "FROM " + NwdContract.TABLE_TAG + " t " +
-                "JOIN " + NwdContract.TABLE_JUNCTION_FILE_TAG + " jft " +
-                "ON t." + NwdContract.COLUMN_TAG_ID + " = jft." + NwdContract.COLUMN_TAG_ID + " " +
+                "JOIN " + NwdContract.TABLE_FILE_TAG + " ft " +
+                "ON t." + NwdContract.COLUMN_TAG_ID + " = ft." + NwdContract.COLUMN_TAG_ID + " " +
                 "JOIN " + NwdContract.TABLE_FILE + " f " +
-                "ON f." + NwdContract.COLUMN_FILE_ID + " = jft." + NwdContract.COLUMN_FILE_ID + " " +
+                "ON f." + NwdContract.COLUMN_FILE_ID + " = ft." + NwdContract.COLUMN_FILE_ID + " " +
+                "JOIN " + NwdContract.TABLE_FILE_HASH + " fh " +
+                "ON f." + NwdContract.COLUMN_FILE_ID + " = fh." + NwdContract.COLUMN_FILE_ID + "" +
                 "JOIN " + NwdContract.TABLE_HASH + " h " +
-                "ON h." + NwdContract.COLUMN_HASH_ID + " = f." + NwdContract.COLUMN_HASH_ID + " " +
+                "ON h." + NwdContract.COLUMN_HASH_ID + " = fh." + NwdContract.COLUMN_HASH_ID + " " +
                 "WHERE h." + NwdContract.COLUMN_HASH_VALUE + " = @hash ";
 
             cmd.Parameters.AddWithValue("@hash", sha1Hash);
