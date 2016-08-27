@@ -151,21 +151,35 @@ namespace NineWorldsDeep.Db.Sqlite
                     {
                         using (var transaction = conn.BeginTransaction())
                         {
-                            cmd.CommandText =
-                                "SELECT l." + NwdContract.COLUMN_LIST_NAME + ", " +
-                                       "i." + NwdContract.COLUMN_ITEM_VALUE + ", " +
-                                       "f." + NwdContract.COLUMN_COMPLETED_AT + ", " +
-                                       "f." + NwdContract.COLUMN_ARCHIVED_AT + " " +
-                                "FROM " + NwdContract.TABLE_LIST + " l " +
-                                "JOIN " + NwdContract.TABLE_FRAGMENT + " f ON l.ListId = f.ListId " +
-                                "JOIN " + NwdContract.TABLE_ITEM + " i ON f.ItemId = i.ItemId " +
-                                "WHERE l." + NwdContract.COLUMN_LIST_ACTIVE + " = @active " +
-                                "AND (f." + NwdContract.COLUMN_COMPLETED_AT + " IS NULL OR " +
-                                     "f." + NwdContract.COLUMN_COMPLETED_AT + " = '') " +
-                                "AND (f." + NwdContract.COLUMN_ARCHIVED_AT + " IS NULL OR " +
-                                     "f." + NwdContract.COLUMN_ARCHIVED_AT + " = '')";
+                            string cmdString =
+                                "SELECT sl." + NwdContract.COLUMN_SYNERGY_LIST_NAME + ", " +
+                                       "si." + NwdContract.COLUMN_SYNERGY_ITEM_VALUE + ", " +
+                                       "std." + NwdContract.COLUMN_SYNERGY_TO_DO_COMPLETED_AT + ", " +
+                                       "std." + NwdContract.COLUMN_SYNERGY_TO_DO_ARCHIVED_AT + " " +
+                                "FROM " + NwdContract.TABLE_SYNERGY_LIST + " sl " +
+                                "JOIN " + NwdContract.TABLE_SYNERGY_LIST_ITEM + " sli " +
+                                    "ON sl." + NwdContract.COLUMN_SYNERGY_LIST_ID + 
+                                    " = sli." + NwdContract.COLUMN_SYNERGY_LIST_ID + " " +
+                                "JOIN " + NwdContract.TABLE_SYNERGY_ITEM + " si " +
+                                    "ON sli." + NwdContract.COLUMN_SYNERGY_ITEM_ID + 
+                                    " = si." + NwdContract.COLUMN_SYNERGY_ITEM_ID + " " +
+                                "JOIN " + NwdContract.TABLE_SYNERGY_TO_DO + " std " +
+                                    "ON sli." + NwdContract.COLUMN_SYNERGY_LIST_ITEM_ID + " " +
+                                    " = std." + NwdContract.COLUMN_SYNERGY_LIST_ITEM_ID + " " +
+                                "WHERE (std." + NwdContract.COLUMN_SYNERGY_TO_DO_COMPLETED_AT + " IS NULL OR " +
+                                       "std." + NwdContract.COLUMN_SYNERGY_TO_DO_COMPLETED_AT + " = '') " +
+                                "AND (std." + NwdContract.COLUMN_SYNERGY_TO_DO_ARCHIVED_AT + " IS NULL OR " +
+                                     "std." + NwdContract.COLUMN_SYNERGY_TO_DO_ARCHIVED_AT + " = '') ";
 
-                            cmd.Parameters.AddWithValue("@active", active);
+                            if (active)
+                            {
+                                cmdString += "AND sl." + NwdContract.COLUMN_SYNERGY_LIST_ACTIVATED_AT +
+                                    " > sl." + NwdContract.COLUMN_SYNERGY_LIST_SHELVED_AT + " ";
+                            }
+
+                            cmd.CommandText = cmdString;
+
+                            //cmd.Parameters.AddWithValue("@active", active);
 
                             using (var rdr = cmd.ExecuteReader())
                             {
@@ -227,12 +241,24 @@ namespace NineWorldsDeep.Db.Sqlite
         public override void SetActive(string listName, bool active, SQLiteCommand cmd)
         {
             cmd.Parameters.Clear();
-            cmd.CommandText =
-                //"UPDATE List SET ListActive = @active WHERE ListName = @listName";
-                "UPDATE " + NwdContract.TABLE_LIST +
-                " SET " + NwdContract.COLUMN_LIST_ACTIVE + " = @active " +
-                "WHERE " + NwdContract.COLUMN_LIST_NAME + " = @listName";
-            cmd.Parameters.AddWithValue("@active", active);
+
+            string cmdString = "UPDATE " + NwdContract.TABLE_SYNERGY_LIST + " ";
+
+            if (active)
+            {
+                cmdString += "SET " + NwdContract.COLUMN_SYNERGY_LIST_ACTIVATED_AT +
+                    " = CURRENT_TIMESTAMP ";
+            }
+            else
+            {
+                cmdString += "SET " + NwdContract.COLUMN_SYNERGY_LIST_SHELVED_AT +
+                    " = CURRENT_TIMESTAMP ";
+            }
+
+            cmdString = "WHERE " + NwdContract.COLUMN_SYNERGY_LIST_NAME + " = @listName" ;
+
+            cmd.CommandText = cmdString;
+
             cmd.Parameters.AddWithValue("@listName", listName);
             cmd.ExecuteNonQuery();
         }
@@ -288,109 +314,110 @@ namespace NineWorldsDeep.Db.Sqlite
             string updatedAt =
                 NwdUtils.GetTimeStamp_yyyyMMddHHmmss();
 
+            int synergyListItemId = EnsureSynergyListItemId(listId, itemId, cmd);
+
             //attempt update for CompletedAt
             cmd.Parameters.Clear();
             cmd.CommandText =
-                //"UPDATE OR IGNORE Fragment " +
-                //"SET CompletedAt = @completedAt " +
-                //"WHERE ListId = @listId " +
-                //"AND ItemId = @itemId " +
-                //"AND CompletedAt IS NOT @completedAt " +
-                //"AND (CompletedAt IS NULL " +
-                //     "OR CompletedAt = '') ";
-                "UPDATE OR IGNORE " + NwdContract.TABLE_FRAGMENT + " " +
-                "SET " + NwdContract.COLUMN_COMPLETED_AT + " = @completedAt " +
-                "WHERE " + NwdContract.COLUMN_LIST_ID + " = @listId " +
-                "AND " + NwdContract.COLUMN_ITEM_ID + " = @itemId " +
-                "AND " + NwdContract.COLUMN_COMPLETED_AT + " IS NOT @completedAt " +
-                "AND (" + NwdContract.COLUMN_COMPLETED_AT + " IS NULL " +
-                     "OR " + NwdContract.COLUMN_COMPLETED_AT + " = '') ";
+                "UPDATE OR IGNORE " + NwdContract.TABLE_SYNERGY_TO_DO + " " +
+                "SET " + NwdContract.COLUMN_SYNERGY_TO_DO_COMPLETED_AT + " = @completedAt " +
+                "WHERE " + NwdContract.COLUMN_SYNERGY_LIST_ITEM_ID + " = @synergyListItemId " +
+                "AND " + NwdContract.COLUMN_SYNERGY_TO_DO_COMPLETED_AT + " IS NOT @completedAt " +
+                "AND (" + NwdContract.COLUMN_SYNERGY_TO_DO_COMPLETED_AT + " IS NULL " +
+                     "OR " + NwdContract.COLUMN_SYNERGY_TO_DO_COMPLETED_AT + " = '') ";
 
             cmd.Parameters.AddWithValue("@completedAt", si.CompletedAt);
-            cmd.Parameters.AddWithValue("@listId", listId);
-            cmd.Parameters.AddWithValue("@itemId", itemId);
+            cmd.Parameters.AddWithValue("@synergyListItemId", synergyListItemId);
             cmd.ExecuteNonQuery();
 
             //attempt update for ArchivedAt
             cmd.Parameters.Clear();
             cmd.CommandText =
-                //"UPDATE OR IGNORE Fragment " +
-                //"SET ArchivedAt = @archivedAt " +
-                //"WHERE ListId = @listId " +
-                //"AND ItemId = @itemId " +
-                //"AND ArchivedAt IS NOT @archivedAt " +
-                //"AND (ArchivedAt IS NULL " +
-                //     "OR ArchivedAt = '') ";
-                "UPDATE OR IGNORE " + NwdContract.TABLE_FRAGMENT + " " +
-                "SET " + NwdContract.COLUMN_ARCHIVED_AT + " = @archivedAt " +
-                "WHERE " + NwdContract.COLUMN_LIST_ID + " = @listId " +
-                "AND " + NwdContract.COLUMN_ITEM_ID + " = @itemId " +
-                "AND " + NwdContract.COLUMN_ARCHIVED_AT + " IS NOT @archivedAt " +
-                "AND (" + NwdContract.COLUMN_ARCHIVED_AT + " IS NULL " +
-                     "OR " + NwdContract.COLUMN_ARCHIVED_AT + " = '') ";
+                "UPDATE OR IGNORE " + NwdContract.TABLE_SYNERGY_TO_DO + " " +
+                "SET " + NwdContract.COLUMN_SYNERGY_TO_DO_ARCHIVED_AT + " = @archivedAt " +
+                "WHERE " + NwdContract.COLUMN_SYNERGY_LIST_ITEM_ID + " = @synergyListItemId " +
+                "AND " + NwdContract.COLUMN_SYNERGY_TO_DO_ARCHIVED_AT + " IS NOT @archivedAt " +
+                "AND (" + NwdContract.COLUMN_SYNERGY_TO_DO_ARCHIVED_AT + " IS NULL " +
+                     "OR " + NwdContract.COLUMN_SYNERGY_TO_DO_ARCHIVED_AT + " = '') ";
 
             cmd.Parameters.AddWithValue("@archivedAt", si.ArchivedAt);
-            cmd.Parameters.AddWithValue("@listId", listId);
-            cmd.Parameters.AddWithValue("@itemId", itemId);
+            cmd.Parameters.AddWithValue("@synergyListItemId", synergyListItemId);
             cmd.ExecuteNonQuery();
 
-            //attempt update for Fragment
-            cmd.Parameters.Clear();
-            cmd.CommandText =
-                //"UPDATE OR IGNORE Fragment " +
-                //"SET FragmentValue = @fragVal, " +
-                //    "UpdatedAt = @updatedAt " +
-                //"WHERE ListId = @listId " +
-                //"AND ItemId = @itemId ";
-                "UPDATE OR IGNORE " + NwdContract.TABLE_FRAGMENT + " " +
-                "SET " + NwdContract.COLUMN_FRAGMENT_VALUE + " = @fragVal, " +
-                    NwdContract.COLUMN_UPDATED_AT + " = @updatedAt " +
-                "WHERE " + NwdContract.COLUMN_LIST_ID + " = @listId " +
-                "AND " + NwdContract.COLUMN_ITEM_ID + " = @itemId ";
+            //SHOULDN'T NEED THIS WITH V5... leaving it here until tested
+            ////attempt update for Fragment
+            //cmd.Parameters.Clear();
+            //cmd.CommandText =adsf
+            //    "UPDATE OR IGNORE " + NwdContract.TABLE_FRAGMENT + " " +
+            //    "SET " + NwdContract.COLUMN_SYNERGY_LIST_ITEM_UPDATED_AT + " = @updatedAt " +
+            //    "WHERE " + NwdContract.COLUMN_LIST_ID + " = @listId " +
+            //    "AND " + NwdContract.COLUMN_ITEM_ID + " = @itemId ";
 
-            cmd.Parameters.AddWithValue("@fragVal", si.Fragment);
-            cmd.Parameters.AddWithValue("@updatedAt", updatedAt);
-            cmd.Parameters.AddWithValue("@listId", listId);
-            cmd.Parameters.AddWithValue("@itemId", itemId);
-            cmd.ExecuteNonQuery();
+            //cmd.Parameters.AddWithValue("@fragVal", si.Fragment);
+            //cmd.Parameters.AddWithValue("@updatedAt", updatedAt);
+            //cmd.Parameters.AddWithValue("@listId", listId);
+            //cmd.Parameters.AddWithValue("@itemId", itemId);
+            //cmd.ExecuteNonQuery();
+
 
             //if all the above fail and are ignored, this will work
             //attempt insert for Fragment
             cmd.Parameters.Clear();
             cmd.CommandText =
-            //"INSERT OR IGNORE INTO Fragment (ListId, " +
-            //                                "ItemId, " +
-            //                                "FragmentValue, " +
-            //                                "CompletedAt, " +
-            //                                "ArchivedAt, " +
-            //                                "UpdatedAt) " +
-            //"VALUES (@listId, " +
-            //        "@itemId, " +
-            //        "@fragVal, " +
-            //        "@completedAt, " +
-            //        "@archivedAt, " +
-            //        "@updatedAt) ";
-            "INSERT OR IGNORE INTO " + NwdContract.TABLE_FRAGMENT +
-                " (" + NwdContract.COLUMN_LIST_ID + ", " +
-                    "" + NwdContract.COLUMN_ITEM_ID + ", " +
-                    "" + NwdContract.COLUMN_FRAGMENT_VALUE + ", " +
-                    "" + NwdContract.COLUMN_COMPLETED_AT + ", " +
-                    "" + NwdContract.COLUMN_ARCHIVED_AT + ", " +
-                    "" + NwdContract.COLUMN_UPDATED_AT + ") " +
-            "VALUES (@listId, " +
-                    "@itemId, " +
-                    "@fragVal, " +
+            "INSERT OR IGNORE INTO " + NwdContract.TABLE_SYNERGY_TO_DO  +
+                " (" + NwdContract.COLUMN_SYNERGY_LIST_ITEM_ID + ", " +
+                    "" + NwdContract.COLUMN_SYNERGY_TO_DO_COMPLETED_AT + ", " +
+                    "" + NwdContract.COLUMN_SYNERGY_TO_DO_ARCHIVED_AT + ", " +
+                    "" + NwdContract.COLUMN_SYNERGY_TO_DO_UPDATED_AT + ") " +
+            "VALUES (@listItemId, " +
                     "@completedAt, " +
                     "@archivedAt, " +
                     "@updatedAt) ";
 
-            cmd.Parameters.AddWithValue("@listId", listId);
-            cmd.Parameters.AddWithValue("@itemId", itemId);
-            cmd.Parameters.AddWithValue("@fragVal", si.Fragment);
+            cmd.Parameters.AddWithValue("@listItemId", synergyListItemId);
             cmd.Parameters.AddWithValue("@completedAt", si.CompletedAt);
             cmd.Parameters.AddWithValue("@archivedAt", si.ArchivedAt);
             cmd.Parameters.AddWithValue("@updatedAt", updatedAt);
             cmd.ExecuteNonQuery();
+        }
+
+        private int EnsureSynergyListItemId(int listId, int itemId, SQLiteCommand cmd)
+        {
+            int id = -1;
+
+            cmd.Parameters.Clear();
+            cmd.CommandText =
+                "INSERT OR IGNORE INTO " + NwdContract.TABLE_SYNERGY_LIST_ITEM +
+                " (" +
+                    NwdContract.COLUMN_SYNERGY_LIST_ID + ", " +
+                    NwdContract.COLUMN_SYNERGY_ITEM_ID + 
+                 ") VALUES (@listId, @itemId)";
+
+            cmd.Parameters.AddWithValue("@listId", listId);
+            cmd.Parameters.AddWithValue("@itemId", itemId);
+            cmd.ExecuteNonQuery();
+
+            //select value
+            cmd.Parameters.Clear(); //since we will be reusing command
+
+            cmd.CommandText =
+                "SELECT " + NwdContract.COLUMN_SYNERGY_LIST_ITEM_ID +
+                " FROM " + NwdContract.TABLE_SYNERGY_LIST_ITEM +
+                " WHERE " + NwdContract.COLUMN_SYNERGY_LIST_ID + " = @listId " +
+                " AND " + NwdContract.COLUMN_SYNERGY_ITEM_ID + " = @itemId ";
+
+            cmd.Parameters.AddWithValue("@listId", listId);
+            cmd.Parameters.AddWithValue("@itemId", itemId);
+
+            using (var rdr = cmd.ExecuteReader())
+            {
+                if (rdr.Read()) //if statement cause we only need the first
+                {
+                    id = rdr.GetInt32(0);
+                }
+            }
+
+            return id;
         }
 
         public override string GetTagsForHash(string sha1Hash, SQLiteCommand cmd)
@@ -465,15 +492,6 @@ namespace NineWorldsDeep.Db.Sqlite
                 //but should test which is faster, for now just
                 //filtering in code
                 string cmdStr =
-                    //"SELECT PathValue, " +
-                    //        "TagValue " +
-                    //"FROM Path " +
-                    //"JOIN File " +
-                    //"ON Path.PathId = File.PathId " +
-                    //"JOIN junction_File_Tag " +
-                    //"ON File.FileId = junction_File_Tag.FileId " +
-                    //"JOIN Tag " +
-                    //"ON junction_File_Tag.TagId = Tag.TagId";
                     "SELECT " +
                         NwdContract.COLUMN_PATH_VALUE + ", " +
                         NwdContract.COLUMN_TAG_VALUE + " " +
@@ -485,16 +503,16 @@ namespace NineWorldsDeep.Db.Sqlite
                         " = " +
                         NwdContract.TABLE_FILE + "." +
                             NwdContract.COLUMN_PATH_ID + " " +
-                    "JOIN " + NwdContract.TABLE_JUNCTION_FILE_TAG + " " +
+                    "JOIN " + NwdContract.TABLE_FILE_TAG + " " +
                     "ON " +
                         NwdContract.TABLE_FILE + "." +
                             NwdContract.COLUMN_FILE_ID +
                         " = " +
-                        NwdContract.TABLE_JUNCTION_FILE_TAG + "." +
+                        NwdContract.TABLE_FILE_TAG + "." +
                             NwdContract.COLUMN_FILE_ID + " " +
                     "JOIN " + NwdContract.TABLE_TAG + " " +
                     "ON " +
-                        NwdContract.TABLE_JUNCTION_FILE_TAG + "." +
+                        NwdContract.TABLE_FILE_TAG + "." +
                             NwdContract.COLUMN_TAG_ID +
                         " = " +
                         NwdContract.TABLE_TAG + "." +
@@ -717,10 +735,9 @@ namespace NineWorldsDeep.Db.Sqlite
         {
             cmd.Parameters.Clear();
 
-            cmd.CommandText =
-                //"INSERT OR IGNORE INTO junction_File_Tag (FileId, TagId) VALUES (@fileId, @tagId) ";
+            cmd.CommandText =                
                 "INSERT OR IGNORE INTO " +
-                    NwdContract.TABLE_JUNCTION_FILE_TAG +
+                    NwdContract.TABLE_FILE_TAG +
                     " (" +
                         NwdContract.COLUMN_FILE_ID + ", " +
                         NwdContract.COLUMN_TAG_ID +
@@ -736,7 +753,7 @@ namespace NineWorldsDeep.Db.Sqlite
         {
             cmd.Parameters.Clear();
             cmd.CommandText =
-                "DELETE FROM " + NwdContract.TABLE_JUNCTION_FILE_TAG +
+                "DELETE FROM " + NwdContract.TABLE_FILE_TAG +
                 " WHERE " + NwdContract.COLUMN_FILE_ID + " = ? ";
 
             SQLiteParameter fileIdParam = new SQLiteParameter();
@@ -1040,9 +1057,8 @@ namespace NineWorldsDeep.Db.Sqlite
                         foreach (var mapping in mappings)
                         {
                             cmd.CommandText =
-                                //"INSERT OR IGNORE INTO junction_File_Tag (FileId, TagId) VALUES (@fileId, @tagId)";
                                 "INSERT OR IGNORE INTO " +
-                                    NwdContract.TABLE_JUNCTION_FILE_TAG +
+                                    NwdContract.TABLE_FILE_TAG +
                                     " (" +
                                         NwdContract.COLUMN_FILE_ID + ", " +
                                         NwdContract.COLUMN_TAG_ID +

@@ -28,12 +28,27 @@ namespace NineWorldsDeep.Sqlite
         public static string TABLE_SYNC_PROFILE = "SyncProfile";
         public static string TABLE_SYNC_MAP = "SyncMap";
         public static string TABLE_FILE_HASH = "FileHash";
+        public static string TABLE_SYNERGY_LIST = "SynergyList";
+        public static string TABLE_SYNERGY_LIST_ITEM = "SynergyListItem";
+        public static string TABLE_SYNERGY_ITEM = "SynergyItem";
+        public static string TABLE_SYNERGY_TO_DO = "SynergyToDo";
+
         //public static string TABLE_ = "";
         //public static string TABLE_ = "";
 
         ////columns
         //public static string COLUMN_ = "";
         //public static string COLUMN_ = "";
+        public static string COLUMN_SYNERGY_TO_DO_UPDATED_AT = "SynergyToDoUpdatedAt";
+        public static string COLUMN_SYNERGY_LIST_NAME = "SynergyListName";
+        public static string COLUMN_SYNERGY_ITEM_VALUE = "SynergyItemValue";
+        public static string COLUMN_SYNERGY_TO_DO_COMPLETED_AT = "SynergyToDoCompletedAt";
+        public static string COLUMN_SYNERGY_TO_DO_ARCHIVED_AT = "SynergyToDoArchivedAt";
+        public static string COLUMN_SYNERGY_LIST_ID = "SynergyListId";
+        public static string COLUMN_SYNERGY_ITEM_ID = "SynergyItemId";
+        public static string COLUMN_SYNERGY_LIST_ITEM_ID = "SynergyListItemId";
+        public static string COLUMN_SYNERGY_LIST_ACTIVATED_AT = "SynergyListActivatedAt";
+        public static string COLUMN_SYNERGY_LIST_SHELVED_AT = "SynergyListShelvedAt";
         public static string COLUMN_SYNC_ACTION_ID_DEFAULT = "SyncActionIdDefault";
         public static string COLUMN_PATH_ID_SOURCE = "PathIdSource";
         public static string COLUMN_PATH_ID_DESTINATION = "PathIdDestination";
