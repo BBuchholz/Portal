@@ -1622,8 +1622,13 @@ namespace NineWorldsDeep.Db
             return tables;
         }
 
+        public override string GetDbName()
+        {
+            throw new NotImplementedException();
+        }
+
         #region "Code commented out 2016-08-14"
-        
+
         //private void ConvertNullsToEmptyStrings(NwdPortableDevice device)
         //{
         //    if(device.Description == null)
@@ -1653,7 +1658,7 @@ namespace NineWorldsDeep.Db
         //    {
         //        throw new Exception("NwdPortableDevice null in method ToDeviceKey()");
         //    }
-        
+
         //    return new NwdDeviceKey()
         //    {
         //        Description = device.Description,
@@ -1662,7 +1667,7 @@ namespace NineWorldsDeep.Db
         //        DeviceType = device.DeviceType
         //    };
         //}
-        
+
         //public void UpdateActiveInactive(IEnumerable<SynergyList> setToActive, IEnumerable<SynergyList> setToInactive)
         //{
         //    try
@@ -1774,7 +1779,7 @@ namespace NineWorldsDeep.Db
         //    new Dictionary<string, int>();
         //private Dictionary<string, int> pathIds =
         //    new Dictionary<string, int>();
-        
+
         //private Dictionary<SyncDirection, int> directionIds =
         //    new Dictionary<SyncDirection, int>();
         //private Dictionary<SyncAction, int> actionIds =
@@ -1850,7 +1855,7 @@ namespace NineWorldsDeep.Db
 
         //    return outputMsg;
         //}
-        
+
 
         //public int GetNameId(string name)
         //{
@@ -1972,7 +1977,7 @@ namespace NineWorldsDeep.Db
         //        throw ex;
         //    }
         //}
-        
+
 
         ///// <summary>
         ///// returns device database id if found, -1 if not found
@@ -2404,7 +2409,7 @@ namespace NineWorldsDeep.Db
         //    PopulateFileIds(mappings);
         //    StoreFileTags(mappings);
         //}
-        
+
         #endregion
 
         #region "templates"
@@ -2505,7 +2510,7 @@ namespace NineWorldsDeep.Db
 
         //    return outputMsg;
         //}
-        
+
         #endregion
 
     }

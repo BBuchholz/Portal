@@ -42,6 +42,8 @@ namespace NineWorldsDeep.AudioBrowser
             tgrGrid.AddSelectionChangedListener(new FileElementTagExtractionAction(tgrGrid));
             tgrGrid.AddSelectionChangedListener(new ConditionalPlayAction(chkPlayOnSelectionChange));
             tgrGrid.SetStatusForegroundColor(Brushes.White);
+
+            LoadFromSqliteDb();
         }
 
         private void MenuItemSaveToXml_Click(object sender, RoutedEventArgs e)
@@ -69,6 +71,11 @@ namespace NineWorldsDeep.AudioBrowser
         }
 
         private void MenuItemLoadFromSqliteDb_Click(object sender, RoutedEventArgs e)
+        {
+            LoadFromSqliteDb();
+        }
+
+        private void LoadFromSqliteDb()
         {
             try
             {

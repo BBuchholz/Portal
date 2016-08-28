@@ -310,6 +310,7 @@ namespace NineWorldsDeep.Tagger
         private void LoadFileElementList(IEnumerable<string> pathList)
         {
             lvFileElements.ItemsSource = ToFileElementList(pathList);
+            tbFileCount.Text = "Count: " + pathList.Count();
             if(pathList.Count() > 0)
             {
                 lvFileElements.SelectedIndex = 0;

@@ -119,6 +119,7 @@
             <Grid Grid.Column="1">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="40"/>
+                    <RowDefinition Height="25"/>
                     <RowDefinition/>
                 </Grid.RowDefinitions>
                 <TextBox Grid.Row="0"
@@ -129,8 +130,14 @@
                          KeyUp="txtFilter_KeyUp">
                     
                 </TextBox>
+
+                <TextBlock x:Name="tbFileCount" 
+                   Grid.Row="1"
+                   HorizontalAlignment="Center"
+                   VerticalAlignment="Center"/>
+                
                 <ListView x:Name="lvTags"
-                      Grid.Row="1"
+                      Grid.Row="2"
                       Margin="10" 
                       SelectionChanged="lvTags_SelectionChanged">
                 </ListView>

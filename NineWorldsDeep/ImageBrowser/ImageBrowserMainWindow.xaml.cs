@@ -37,6 +37,8 @@ namespace NineWorldsDeep.ImageBrowser
             tgrGrid.AddSelectionChangedListener(
                 new FileElementTimestampExtractionAction(tgrGrid.GetTagMatrix(), tgrGrid, chkParseTimeStamps));
             //LoadFolder(lastLoadedFromFileInsteadOfDb, GetFolderWithLeastNonZeroUntaggedCount());
+
+            LoadFromSqliteDb();
         }
 
         private string GetFolderWithLeastNonZeroUntaggedCount()
@@ -75,14 +77,14 @@ namespace NineWorldsDeep.ImageBrowser
             tgrGrid.AddFolder(currentImageFolder);
         }
 
-        [Obsolete("use LoadFolder(bool, string)")]
-        private void LoadFolder(string folderPath)
-        {
-            currentImageFolder = folderPath;
-            tgrGrid.Clear();
-            tgrGrid.AddFolder(currentImageFolder);
-            tgrGrid.LoadFromFile(TagFilePath);
-        }
+        //[Obsolete("use LoadFolder(bool, string)")]
+        //private void LoadFolder(string folderPath)
+        //{
+        //    currentImageFolder = folderPath;
+        //    tgrGrid.Clear();
+        //    tgrGrid.AddFolder(currentImageFolder);
+        //    tgrGrid.LoadFromFile(TagFilePath);
+        //}
 
         private void Rotate0Button_Click(object sender, RoutedEventArgs e)
         {
@@ -131,6 +133,11 @@ namespace NineWorldsDeep.ImageBrowser
         }
 
         private void MenuItemLoadFromSqliteDb_Click(object sender, RoutedEventArgs e)
+        {
+            LoadFromSqliteDb();
+        }
+
+        private void LoadFromSqliteDb()
         {
             try
             {
