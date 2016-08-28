@@ -1519,10 +1519,11 @@ namespace NineWorldsDeep.Db
                             string deviceType = rdr.GetString(3);
 
                             deviceIds.Add(new NwdDeviceKey() {
-                                Description = desc,
-                                FriendlyName = friendlyName,
-                                Model = model,
-                                DeviceType = deviceType
+                                Description = desc
+                                //,
+                                //FriendlyName = friendlyName,
+                                //Model = model,
+                                //DeviceType = deviceType
                             }, rdr.GetInt32(4));                                                        
                         }
                     }

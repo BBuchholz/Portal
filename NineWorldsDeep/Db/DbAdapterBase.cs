@@ -434,10 +434,12 @@ namespace NineWorldsDeep.Db
             RefreshDeviceIds();
 
             NwdDeviceKey deviceKey =
-                new NwdDeviceKey(description,
-                                 friendlyName,
-                                 model,
-                                 deviceType);
+                new NwdDeviceKey(description
+                //,
+                //                 friendlyName,
+                //                 model,
+                //                 deviceType
+                                 );
 
             if (deviceIds.ContainsKey(deviceKey))
             {
@@ -715,21 +717,21 @@ namespace NineWorldsDeep.Db
             }
         }
 
-        protected NwdDeviceKey ToDeviceKey(NwdPortableDevice device)
-        {
-            if (device == null)
-            {
-                throw new Exception("NwdPortableDevice null in method ToDeviceKey()");
-            }
+        //protected NwdDeviceKey ToDeviceKey(NwdPortableDevice device)
+        //{
+        //    if (device == null)
+        //    {
+        //        throw new Exception("NwdPortableDevice null in method ToDeviceKey()");
+        //    }
 
-            return new NwdDeviceKey()
-            {
-                Description = device.Description,
-                FriendlyName = device.FriendlyName,
-                Model = device.Model,
-                DeviceType = device.DeviceType
-            };
-        }
+        //    return new NwdDeviceKey()
+        //    {
+        //        Description = device.Description,
+        //        FriendlyName = device.FriendlyName,
+        //        Model = device.Model,
+        //        DeviceType = device.DeviceType
+        //    };
+        //}
 
         protected int EnsurePath(string path, SQLiteCommand cmd)
         {

@@ -668,67 +668,47 @@ namespace NineWorldsDeep.Db.Sqlite
             return id;
         }
 
-        public override int UpsertFile(int deviceId, int pathId, int hashId, string hashedAtTimeStamp, SQLiteCommand cmd)
+        private int EnsureFile(int deviceId, int pathId, SQLiteCommand cmd)
         {
-            /////////see link answers below accepted answer
-            //http://stackoverflow.com/questions/15277373/sqlite-upsert-update-or-insert
-
-            // need to do an UPDATE or IGNORE followed by an INSERT or IGNORE, so the
-            // update attempts first (to change default action id for example), and
-            // if not found, gets ignored, so the insert would then fire.
-            // if the update did succeed the insert would get ignored
-            // so doing it this way, in this order, ensures 
-            // a proper "UPSERT"
-
-            //UPDATE or IGNORE
-            cmd.Parameters.Clear();
-
-            cmd.CommandText =
-                //"UPDATE OR IGNORE File " +
-                //"SET HashId = @hashId, " +
-                //    "FileHashedAt = @hashedAt " +
-                //"WHERE DeviceId = @deviceId " +
-                //"AND PathId = @pathId ";
-                "UPDATE OR IGNORE " + NwdContract.TABLE_FILE + " " +
-                "SET " + NwdContract.COLUMN_HASH_ID + " = @hashId, " +
-                    "" + NwdContract.COLUMN_FILE_HASHED_AT + " = @hashedAt " +
-                "WHERE " + NwdContract.COLUMN_DEVICE_ID + " = @deviceId " +
-                "AND " + NwdContract.COLUMN_PATH_ID + " = @pathId ";
-
-            cmd.Parameters.AddWithValue("@hashId", hashId);
-            cmd.Parameters.AddWithValue("@hashedAt", hashedAtTimeStamp);
-            cmd.Parameters.AddWithValue("@deviceId", deviceId);
-            cmd.Parameters.AddWithValue("@pathId", pathId);
-            cmd.ExecuteNonQuery();
-
             //INSERT or IGNORE
             cmd.Parameters.Clear();
             cmd.CommandText =
-                //"INSERT OR IGNORE INTO File (DeviceId, " +
-                //                             "PathId, " +
-                //                             "HashId, " +
-                //                             "FileHashedAt) " +
-                //"VALUES (@deviceId, " +
-                //        "@pathId, " +
-                //        "@hashId, " +
-                //        "@hashedAt)";
                 "INSERT OR IGNORE INTO " + NwdContract.TABLE_FILE +
                 " (" + NwdContract.COLUMN_DEVICE_ID + ", " +
-                  "" + NwdContract.COLUMN_PATH_ID + ", " +
-                  "" + NwdContract.COLUMN_HASH_ID + ", " +
-                  "" + NwdContract.COLUMN_FILE_HASHED_AT + ") " +
+                  "" + NwdContract.COLUMN_PATH_ID + ", " + ") " +
                 "VALUES (@deviceId, " +
-                        "@pathId, " +
-                        "@hashId, " +
-                        "@hashedAt)";
+                        "@pathId)";
 
             cmd.Parameters.AddWithValue("@deviceId", deviceId);
             cmd.Parameters.AddWithValue("@pathId", pathId);
-            cmd.Parameters.AddWithValue("@hashId", hashId);
-            cmd.Parameters.AddWithValue("@hashedAt", hashedAtTimeStamp);
             cmd.ExecuteNonQuery();
 
-            return GetIdForFile(deviceId, pathId, cmd);
+            return GetIdForFile(deviceId, pathId, cmd); 
+        }
+
+        public override int UpsertFile(int deviceId, int pathId, int hashId, string hashedAtTimeStamp, SQLiteCommand cmd)
+        {
+            int fileId = EnsureFile(deviceId, pathId, cmd);
+
+            LinkFileIdToHashId(fileId, hashId, cmd);
+
+            return fileId;
+        }
+
+        private void LinkFileIdToHashId(int fileId, int hashId, SQLiteCommand cmd)
+        {
+            //INSERT or IGNORE
+            cmd.Parameters.Clear();
+            cmd.CommandText =
+                "INSERT OR IGNORE INTO " + NwdContract.TABLE_FILE_HASH +
+                " (" + NwdContract.COLUMN_FILE_ID + ", " +
+                  "" + NwdContract.COLUMN_HASH_ID + ") " +
+                "VALUES (@fileId, " +
+                        "@hashId)";
+            
+            cmd.Parameters.AddWithValue("@fileId", fileId);
+            cmd.Parameters.AddWithValue("@hashId", hashId);
+            cmd.ExecuteNonQuery();
         }
 
         public override void LinkFileIdToTagId(int fileId, int tagId, SQLiteCommand cmd)
@@ -1515,9 +1495,6 @@ namespace NineWorldsDeep.Db.Sqlite
                 //        "DeviceId " +
                 //"FROM Device";
                 "SELECT " + NwdContract.COLUMN_DEVICE_DESCRIPTION + ", " +
-                    "" + NwdContract.COLUMN_DEVICE_FRIENDLY_NAME + ", " +
-                    "" + NwdContract.COLUMN_DEVICE_MODEL + ", " +
-                    "" + NwdContract.COLUMN_DEVICE_TYPE + ", " +
                     "" + NwdContract.COLUMN_DEVICE_ID + " " +
                 "FROM " + NwdContract.TABLE_DEVICE + "";
 
@@ -1528,17 +1505,15 @@ namespace NineWorldsDeep.Db.Sqlite
                         while (rdr.Read())
                         {
                             string desc = rdr.GetString(0);
-                            string friendlyName = rdr.GetString(1);
-                            string model = rdr.GetString(2);
-                            string deviceType = rdr.GetString(3);
 
                             deviceIds.Add(new NwdDeviceKey()
                             {
-                                Description = desc,
-                                FriendlyName = friendlyName,
-                                Model = model,
-                                DeviceType = deviceType
-                            }, rdr.GetInt32(4));
+                                Description = desc
+                                //,
+                                //FriendlyName = friendlyName,
+                                //Model = model,
+                                //DeviceType = deviceType
+                            }, rdr.GetInt32(1));
                         }
                     }
                 }
@@ -1570,39 +1545,17 @@ namespace NineWorldsDeep.Db.Sqlite
                     using (var transaction = conn.BeginTransaction())
                     {
                         //TODO: change this to default each to "" if null or whitespace, change method summary when you do so (it currently mentions this limitation)
-                        if (!string.IsNullOrWhiteSpace(description) &&
-                            !string.IsNullOrWhiteSpace(friendlyName) &&
-                            !string.IsNullOrWhiteSpace(model) &&
-                            !string.IsNullOrWhiteSpace(deviceType))
+                        if (!string.IsNullOrWhiteSpace(description))
                         {
                             cmd.CommandText =
-                                //"INSERT OR IGNORE INTO Device " +
-                                //    "(DeviceDescription, " +
-                                //    "DeviceFriendlyName, " +
-                                //    "DeviceModel, " +
-                                //    "DeviceType) " +
-                                //"VALUES (@deviceDescription, " +
-                                //        "@deviceFriendlyName, " +
-                                //        "@deviceModel, " +
-                                //        "@deviceType)";
-
                                 "INSERT OR IGNORE INTO " +
                                     NwdContract.TABLE_DEVICE + " " +
                                         "(" +
-                                            NwdContract.COLUMN_DEVICE_DESCRIPTION + ", " +
-                                            NwdContract.COLUMN_DEVICE_FRIENDLY_NAME + ", " +
-                                            NwdContract.COLUMN_DEVICE_MODEL + ", " +
-                                            NwdContract.COLUMN_DEVICE_TYPE +
+                                            NwdContract.COLUMN_DEVICE_DESCRIPTION +
                                         ") " +
-                                "VALUES (@deviceDescription, " +
-                                        "@deviceFriendlyName, " +
-                                        "@deviceModel, " +
-                                        "@deviceType)";
+                                "VALUES (@deviceDescription)";
 
                             cmd.Parameters.AddWithValue("@deviceDescription", description);
-                            cmd.Parameters.AddWithValue("@deviceFriendlyName", friendlyName);
-                            cmd.Parameters.AddWithValue("@deviceModel", model);
-                            cmd.Parameters.AddWithValue("@deviceType", deviceType);
                             cmd.ExecuteNonQuery();
                         }
 
