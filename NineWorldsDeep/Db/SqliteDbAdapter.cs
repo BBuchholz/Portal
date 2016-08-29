@@ -1625,7 +1625,7 @@ namespace NineWorldsDeep.Db
 
         public override string GetDbName()
         {
-            throw new NotImplementedException();
+            return "nwd";
         }
 
         #region "Code commented out 2016-08-14"
