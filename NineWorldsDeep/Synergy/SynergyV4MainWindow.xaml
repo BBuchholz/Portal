@@ -5,7 +5,9 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:NineWorldsDeep.Synergy"
         mc:Ignorable="d"
-        Title="SynergyV4MainWindow" Height="600" Width="800">
+        Title="SynergyV4MainWindow" 
+        Height="600" Width="800" 
+        WindowState="Maximized">
     <Window.Resources>
         <Style x:Key="alternatingStyle" TargetType="{x:Type ListViewItem}">
             <Style.Triggers>

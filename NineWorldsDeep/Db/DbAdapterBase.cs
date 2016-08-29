@@ -90,6 +90,10 @@ namespace NineWorldsDeep.Db
         public abstract void UpsertSyncMap(int profileId, int srcId, int destId, int directionId, int actionId, SQLiteCommand cmd);
         public abstract string GetDbName();
 
+        public DbAdapterBase()
+        {
+            InitializeIds();
+        }
 
         public string GetErdRawSource()
         {
