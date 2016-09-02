@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace NineWorldsDeep.Sqlite.Model
 {
+    [Obsolete("migrating to new package NineWorldsDeep.Model")]
     public class LocalConfigModelItem
     {
         private String mKey, mValue;

@@ -1,4 +1,6 @@
-﻿using System;
+﻿using NineWorldsDeep.Core;
+using NineWorldsDeep.Model;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -240,6 +242,34 @@ namespace NineWorldsDeep.Tagger
             return GetTags("");
         }
 
+        public IEnumerable<TagModelItem> GetTagModelItems(string filter)
+        {
+            List<TagModelItem> items = new List<TagModelItem>();
+
+            List<string> tags = tagFilesMap.Keys.ToList<string>();
+            tags = tags.Where(tag => tag.ToLower().Contains(filter.ToLower())).ToList();
+
+            tags.Sort();
+
+            foreach (string tag in tags)
+            {
+                TagModelItem tmi = new TagModelItem(tag);
+                foreach(string path in tagFilesMap[tag])
+                {
+                    tmi.Link(new Sqlite.Model.FileModelItem(
+                        Configuration.GetLocalDeviceDescription(), path));
+                }
+
+                items.Add(tmi);
+            }
+
+            items.Insert(0, new TagModelItem("[[[ALL]]]"));
+            items.Insert(1, new TagModelItem("[[[UNTAGGED]]]"));
+
+            return items;
+        }
+
+        [Obsolete("use GetTagModelItems()")]
         public IEnumerable<string> GetTags(string filter)
         {
             List<string> tags = tagFilesMap.Keys.ToList<string>();

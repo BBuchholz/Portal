@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace NineWorldsDeep.Sqlite
 {
+    [Obsolete("migrating to new package NineWorldsDeep.Db.Sqlite")]
     public class NwdContract
     {
         //tables

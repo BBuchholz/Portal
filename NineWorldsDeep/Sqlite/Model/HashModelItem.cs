@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 
 namespace NineWorldsDeep.Sqlite.Model
 {
+    //TODO: should be moved to NineWorldsDeep.Model (mark this one obsolete)
+    // mimic Gauntlet ModelItem and adjust internal implementation accordingly
+    [Obsolete("migrating to new package NineWorldsDeep.Model")]
     public class HashModelItem
     {
 
