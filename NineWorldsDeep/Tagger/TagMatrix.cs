@@ -237,10 +237,10 @@ namespace NineWorldsDeep.Tagger
             return fileTagsMap.Keys;
         }
 
-        public IEnumerable<string> GetTags()
-        {
-            return GetTags("");
-        }
+        //public IEnumerable<string> GetTags()
+        //{
+        //    return GetTags("");
+        //}
 
         public IEnumerable<TagModelItem> GetTagModelItems(string filter)
         {

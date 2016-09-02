@@ -1,4 +1,5 @@
 ﻿using NineWorldsDeep.Core;
+using NineWorldsDeep.Model;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -198,9 +199,18 @@ namespace NineWorldsDeep.Tagger
 
         private void LoadFromSelectedTag()
         {
-            string tag = (string)lvTags.SelectedItem;
-            
-            LoadFileElementList(tagMatrix.GetFilesForTag(tag));
+            //string tag = (string)lvTags.SelectedItem;
+
+            //LoadFileElementList(tagMatrix.GetFilesForTag(tag));
+
+            TagModelItem tmi = (TagModelItem)lvTags.SelectedItem;
+
+            if (tmi != null)
+            {
+                //LoadFileElementList(tagMatrix.GetFilesForTag(tmi.Tag));
+                LoadFileElementList(from fmi in tmi.Files
+                                    select fmi.GetPath());
+            }
         }
 
         private void UpdateButton_Click(object sender, RoutedEventArgs e)
@@ -319,7 +329,7 @@ namespace NineWorldsDeep.Tagger
 
         private void PopulateTagListView()
         {
-            lvTags.ItemsSource = tagMatrix.GetTags(txtFilter.Text);
+            lvTags.ItemsSource = tagMatrix.GetTagModelItems(txtFilter.Text);
         }
 
         public void LoadFromFileWithPrompt()
