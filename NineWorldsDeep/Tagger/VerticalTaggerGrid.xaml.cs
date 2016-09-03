@@ -190,10 +190,6 @@ namespace NineWorldsDeep.Tagger
 
         private void lvTags_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            //string tag = (string)lvTags.SelectedItem;
-
-            //LoadFileElementList(tagMatrix.GetFilesForTag(tag));
-
             LoadFromSelectedTag();
         }
 

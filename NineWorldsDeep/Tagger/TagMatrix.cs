@@ -263,6 +263,8 @@ namespace NineWorldsDeep.Tagger
                 items.Add(tmi);
             }
 
+            items = items.OrderByDescending(i => i.Files.Count()).ToList();
+
             items.Insert(0, new TagModelItem("[[[ALL]]]"));
             items.Insert(1, new TagModelItem("[[[UNTAGGED]]]"));
 
