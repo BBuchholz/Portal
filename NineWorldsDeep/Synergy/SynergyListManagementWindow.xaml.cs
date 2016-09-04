@@ -1,5 +1,6 @@
 ﻿using NineWorldsDeep.UI;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -55,13 +56,25 @@ namespace NineWorldsDeep.Synergy
         private void MoveSelected(ListView from,
                                   ObservableCollection<SynergyList> fromCol,
                                   ObservableCollection<SynergyList> toCol)
-        {
-            SynergyList selected = (SynergyList)from.SelectedItem;
-            if (selected != null)
+        {            
+            IList items = (IList)from.SelectedItems;
+            var selectedLists = items.Cast<SynergyList>();
+
+            List<SynergyList> toBeMoved = new List<SynergyList>();
+
+            foreach (SynergyList selected in selectedLists)
             {
-                fromCol.Remove(selected);
-                toCol.Add(selected);
-                IsChanged = true;
+                toBeMoved.Add(selected);       
+            }
+
+            foreach(SynergyList selected in toBeMoved)
+            {
+                if (selected != null)
+                {
+                    fromCol.Remove(selected);
+                    toCol.Add(selected);
+                    IsChanged = true;
+                }
             }
         }
 

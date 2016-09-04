@@ -59,12 +59,16 @@ namespace NineWorldsDeep.Synergy
                                   ObservableCollection<ToDoList> fromCol,
                                   ObservableCollection<ToDoList> toCol)
         {
-            ToDoList selected = (ToDoList)from.SelectedItem;
-            if (selected != null)
+            List<ToDoList> selectedLists = (List<ToDoList>)from.SelectedItems;
+            
+            foreach(ToDoList selected in selectedLists)
             {
-                fromCol.Remove(selected);
-                toCol.Add(selected);
-                IsChanged = true;
+                if (selected != null)
+                {
+                    fromCol.Remove(selected);
+                    toCol.Add(selected);
+                    IsChanged = true;
+                }
             }
         }
 
