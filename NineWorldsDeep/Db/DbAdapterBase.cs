@@ -38,7 +38,7 @@ namespace NineWorldsDeep.Db
         
         public abstract void UpsertFragment(int listId, int itemId, SynergyItem si, SQLiteCommand cmd);
         public abstract IEnumerable<SynergyList> GetLists(bool active);
-        internal abstract int EnsureIdForValue(string tableName,
+        public abstract int EnsureIdForValue(string tableName,
                                              string idColumnName,
                                              string valueColumnName,
                                              string valueToEnsure,
@@ -46,8 +46,8 @@ namespace NineWorldsDeep.Db
         public abstract void StoreTags(List<string> lst);
         public abstract void SetActive(string listName, bool active, SQLiteCommand cmd);
         public abstract void StorePaths(List<string> lst);
-        internal abstract void PopulateFileIds(List<PathToTagMapping> mappings);
-        internal abstract void RefreshDeviceIds();
+        public abstract void PopulateFileIds(List<PathToTagMapping> mappings);
+        public abstract void RefreshDeviceIds();
         public abstract void InsertOrIgnorePath(string path, SQLiteCommand cmd);
         public abstract void InsertOrIgnoreHash(string hash, SQLiteCommand cmd);
         public abstract int GetIdForPath(string path, SQLiteCommand cmd);
@@ -147,10 +147,17 @@ namespace NineWorldsDeep.Db
             return outputMsg;
         }
 
+        public Dictionary<string, int> GetPathIds()
+        {
+            return pathIds;
+        }
+
         public string SaveSyncProfile(SyncProfile sp)
         {
             string outputMsg = "implementation in progress";
             string time = "";
+
+            //RefreshIds();
 
             try
             {
@@ -606,35 +613,37 @@ namespace NineWorldsDeep.Db
         {
             try
             {
-                using (var conn =
-                    new SQLiteConnection(@"Data Source=" +
-                        Configuration.GetSqliteDbPath(GetDbName())))
+                if(GetDbName() != null)
                 {
-                    conn.Open();
-
-                    using (var cmd = new SQLiteCommand(conn))
+                    using (var conn =
+                        new SQLiteConnection(@"Data Source=" +
+                            Configuration.GetSqliteDbPath(GetDbName())))
                     {
-                        using (var transaction = conn.BeginTransaction())
+                        conn.Open();
+
+                        using (var cmd = new SQLiteCommand(conn))
                         {
-                            foreach (SyncAction action in Enum.GetValues(typeof(SyncAction)))
+                            using (var transaction = conn.BeginTransaction())
                             {
-                                InsertOrIgnoreAction(action, cmd);
-                            }
-
-                            foreach (SyncDirection direction in Enum.GetValues(typeof(SyncDirection)))
-                            {
-                                if (!directionIds.ContainsKey(direction))
+                                foreach (SyncAction action in Enum.GetValues(typeof(SyncAction)))
                                 {
-                                    InsertOrIgnoreDirection(direction, cmd);
+                                    InsertOrIgnoreAction(action, cmd);
                                 }
+
+                                foreach (SyncDirection direction in Enum.GetValues(typeof(SyncDirection)))
+                                {
+                                    if (!directionIds.ContainsKey(direction))
+                                    {
+                                        InsertOrIgnoreDirection(direction, cmd);
+                                    }
+                                }
+                                transaction.Commit();
                             }
-                            transaction.Commit();
                         }
+
+                        conn.Close();
                     }
-
-                    conn.Close();
                 }
-
             }
             catch (Exception ex)
             {
@@ -662,25 +671,28 @@ namespace NineWorldsDeep.Db
         {
             try
             {
-                using (var conn =
-                    new SQLiteConnection(@"Data Source=" +
-                        Configuration.GetSqliteDbPath(GetDbName())))
+                if(GetDbName() != null)
                 {
-                    conn.Open();
-
-                    using (var cmd = new SQLiteCommand(conn))
+                    using (var conn =
+                        new SQLiteConnection(@"Data Source=" +
+                            Configuration.GetSqliteDbPath(GetDbName())))
                     {
-                        using (var transaction = conn.BeginTransaction())
+                        conn.Open();
+
+                        using (var cmd = new SQLiteCommand(conn))
                         {
-                            RefreshProfileIds(cmd);
-                            RefreshDirectionIds(cmd);
-                            RefreshActionIds(cmd);
+                            using (var transaction = conn.BeginTransaction())
+                            {
+                                RefreshProfileIds(cmd);
+                                RefreshDirectionIds(cmd);
+                                RefreshActionIds(cmd);
 
-                            transaction.Commit();
+                                transaction.Commit();
+                            }
                         }
-                    }
 
-                    conn.Close();
+                        conn.Close();
+                    }
                 }
 
             }

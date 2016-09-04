@@ -67,7 +67,7 @@ namespace NineWorldsDeep.Db
             cmd.ExecuteNonQuery();
         }
         
-        internal override int EnsureIdForValue(string tableName,
+        public override int EnsureIdForValue(string tableName,
                                              string idColumnName,
                                              string valueColumnName,
                                              string valueToEnsure,
@@ -1099,7 +1099,7 @@ namespace NineWorldsDeep.Db
             }
         }
 
-        internal override void PopulateFileIds(List<PathToTagMapping> mappings)
+        public override void PopulateFileIds(List<PathToTagMapping> mappings)
         {
             using (var conn = new SQLiteConnection(
                 @"Data Source=" + Configuration.GetSqliteDbPath("nwd")))
@@ -1483,7 +1483,7 @@ namespace NineWorldsDeep.Db
             }
         }
         
-        internal override void RefreshDeviceIds()
+        public override void RefreshDeviceIds()
         {
             using (var conn = new SQLiteConnection(
                 @"Data Source=" + Configuration.GetSqliteDbPath("nwd")))

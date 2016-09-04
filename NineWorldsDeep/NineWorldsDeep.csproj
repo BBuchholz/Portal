@@ -146,6 +146,7 @@
     <Compile Include="Db\Sqlite\DbAdapterSwitch.cs" />
     <Compile Include="Db\Sqlite\DbAdapterV4c.cs" />
     <Compile Include="Db\Sqlite\DbAdapterV5.cs" />
+    <Compile Include="Db\Sqlite\IDbAdapter.cs" />
     <Compile Include="DemoController.cs" />
     <Compile Include="ExtensionsFragment.cs" />
     <Compile Include="Deprecated\Fragment.cs" />

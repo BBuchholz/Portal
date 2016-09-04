@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:NineWorldsDeep.Warehouse"
         mc:Ignorable="d"
-        Title="SyncMapWindow" Height="300" Width="300">
+        Title="SyncMapWindow" Height="300" Width="300" WindowState="Maximized">
     <Window.Resources>
         <local:SyncMapCollection x:Key="colSyncMaps"/>
         <CollectionViewSource x:Key="cvsSyncMaps"

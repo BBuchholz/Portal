@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:NineWorldsDeep.Warehouse"
         mc:Ignorable="d"
-        Title="WarehouseMainWindow" Height="500" Width="1200">
+        Title="WarehouseMainWindow" Height="500" Width="1200" WindowState="Maximized">
 
     <Window.Resources>
 
