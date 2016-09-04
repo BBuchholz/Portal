@@ -16,6 +16,11 @@ namespace NineWorldsDeep.Db.Sqlite
     internal class DbAdapterV5 : DbAdapterBase
     {
 
+        //public DbAdapterV5()
+        //{
+        //    InitializeIds(); //was in base class, caused errors
+        //}
+
         /// <summary>
         /// returns -1 if not found, or id if found
         /// </summary>
@@ -1348,9 +1353,8 @@ namespace NineWorldsDeep.Db.Sqlite
             cmd.Parameters.Clear(); //since we will be reusing command
 
             cmd.CommandText =
-                //"SELECT DeviceIdExt FROM junction_Device_SyncProfile WHERE SyncProfileId = @profileId";
                 "SELECT " + NwdContract.COLUMN_DEVICE_ID_EXT +
-                " FROM " + NwdContract.TABLE_JUNCTION_DEVICE_SYNC_PROFILE +
+                " FROM " + NwdContract.TABLE_SYNC_PROFILE_DEVICE +
                 " WHERE " +
                     NwdContract.COLUMN_SYNC_PROFILE_ID + " = @profileId";
 
@@ -1380,9 +1384,8 @@ namespace NineWorldsDeep.Db.Sqlite
             cmd.Parameters.Clear(); //since we will be reusing command
 
             cmd.CommandText =
-                //"SELECT DeviceIdHost FROM junction_Device_SyncProfile WHERE SyncProfileId = @profileId";
                 "SELECT " + NwdContract.COLUMN_DEVICE_ID_HOST +
-                " FROM " + NwdContract.TABLE_JUNCTION_DEVICE_SYNC_PROFILE +
+                " FROM " + NwdContract.TABLE_SYNC_PROFILE_DEVICE +
                 " WHERE " +
                     NwdContract.COLUMN_SYNC_PROFILE_ID + " = @profileId";
 

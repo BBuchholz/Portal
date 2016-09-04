@@ -27,12 +27,12 @@ namespace NineWorldsDeep.Tagger
         private List<FileElementActionSubscriber> selectionChangedListeners =
             new List<FileElementActionSubscriber>();
         private NwdDb db = null;
-        private Db.SqliteDbAdapter dbCore;
+        private Db.Sqlite.DbAdapterSwitch dbCore;
 
         public HorizontalTaggerGrid()
         {
             InitializeComponent();
-            dbCore = new Db.SqliteDbAdapter();
+            dbCore = new Db.Sqlite.DbAdapterSwitch();
             tagFile = taggerConfigFolderPath + "\\fileTags.xml";
             AddSelectionChangedListener(new FileElementTimestampExtractionAction(tagMatrix, this));
             //moved to NwdVoiceMemoBrowser

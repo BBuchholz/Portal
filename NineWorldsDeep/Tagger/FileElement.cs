@@ -73,7 +73,7 @@ namespace NineWorldsDeep.Tagger
 
         }
 
-        public void MoveToTrash(SqliteDbAdapter db)
+        public void MoveToTrash(Db.Sqlite.DbAdapterSwitch db)
         {
             if (File.Exists(Path))
             {

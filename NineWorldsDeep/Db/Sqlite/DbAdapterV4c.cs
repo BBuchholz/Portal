@@ -15,6 +15,11 @@ namespace NineWorldsDeep.Db.Sqlite
 {
     internal class DbAdapterV4c : DbAdapterBase
     {
+        //public DbAdapterV4c()
+        //{
+        //    InitializeIds();
+        //}
+
         /// <summary>
         /// returns -1 if not found, or id if found
         /// </summary>

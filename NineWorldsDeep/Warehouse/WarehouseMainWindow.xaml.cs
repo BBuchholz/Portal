@@ -24,8 +24,8 @@ namespace NineWorldsDeep.Warehouse
     public partial class WarehouseMainWindow : Window
     {
         private SyncItemCollection _syncItemCol;
-        private Db.SqliteDbAdapter db =
-            new Db.SqliteDbAdapter();
+        private Db.Sqlite.DbAdapterSwitch db =
+            new Db.Sqlite.DbAdapterSwitch();
 
         public WarehouseMainWindow()
         {

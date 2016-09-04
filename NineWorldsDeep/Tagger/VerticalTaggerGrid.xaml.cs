@@ -26,7 +26,7 @@ namespace NineWorldsDeep.Tagger
         public VerticalTaggerGrid()
         {
             InitializeComponent();
-            dbCore = new Db.SqliteDbAdapter();
+            dbCore = new Db.Sqlite.DbAdapterSwitch();
             tagFile = taggerConfigFolderPath + "\\fileTags.xml";
         }
 
@@ -91,7 +91,7 @@ namespace NineWorldsDeep.Tagger
         }
 
         private NwdDb db = null;
-        private Db.SqliteDbAdapter dbCore = null;
+        private Db.Sqlite.DbAdapterSwitch dbCore = null;
 
         public void RegisterDb(NwdDb nwdDb)
         {

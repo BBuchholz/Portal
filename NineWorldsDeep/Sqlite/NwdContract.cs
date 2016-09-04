@@ -28,6 +28,7 @@ namespace NineWorldsDeep.Sqlite
         public static string TABLE_SYNC_DIRECTION = "SyncDirection";
         public static string TABLE_SYNC_PROFILE = "SyncProfile";
         public static string TABLE_SYNC_MAP = "SyncMap";
+        public static string TABLE_SYNC_PROFILE_DEVICE = "SyncProfileDevice";
         public static string TABLE_FILE_HASH = "FileHash";
         public static string TABLE_SYNERGY_LIST = "SynergyList";
         public static string TABLE_SYNERGY_LIST_ITEM = "SynergyListItem";

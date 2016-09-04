@@ -272,7 +272,7 @@ namespace NineWorldsDeep.Warehouse
         {
             try
             {
-                Db.SqliteDbAdapter db = new Db.SqliteDbAdapter();
+                Db.Sqlite.DbAdapterSwitch db = new Db.Sqlite.DbAdapterSwitch();
 
                 if (SyncAction != SyncAction.Ignore)
                 {

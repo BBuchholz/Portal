@@ -366,8 +366,8 @@ namespace NineWorldsDeep.Tagger
         /// <param name="filePathTopFolder"></param>
         public void LoadFromDb(string filePathTopFolder)
         {
-            NineWorldsDeep.Db.SqliteDbAdapter db =
-                new NineWorldsDeep.Db.SqliteDbAdapter();
+            NineWorldsDeep.Db.Sqlite.DbAdapterSwitch db =
+                new NineWorldsDeep.Db.Sqlite.DbAdapterSwitch();
 
             //retrieve all path to tag mappings
             List<NineWorldsDeep.Db.PathTagLink> lst =
@@ -382,8 +382,8 @@ namespace NineWorldsDeep.Tagger
 
         public void SaveToDb()
         {
-            NineWorldsDeep.Db.SqliteDbAdapter db =
-                new NineWorldsDeep.Db.SqliteDbAdapter();
+            NineWorldsDeep.Db.Sqlite.DbAdapterSwitch db =
+                new NineWorldsDeep.Db.Sqlite.DbAdapterSwitch();
 
             //get unique list of paths (as dictionary, id = -1)
             Dictionary<string, int> pathsToIds =

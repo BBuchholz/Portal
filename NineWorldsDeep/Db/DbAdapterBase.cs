@@ -92,7 +92,7 @@ namespace NineWorldsDeep.Db
 
         public DbAdapterBase()
         {
-            InitializeIds();
+            InitializeIds(); //getting called twice
         }
 
         public string GetErdRawSource()
@@ -596,7 +596,10 @@ namespace NineWorldsDeep.Db
             if (actionsMissing || directionsMissing)
             {
                 InsertOrIgnoreAllDirectionsAndActions();
+                //RefreshIds();
             }
+
+            
         }
 
         public void InsertOrIgnoreAllDirectionsAndActions()

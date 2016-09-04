@@ -24,8 +24,8 @@ namespace NineWorldsDeep.Warehouse
         private SyncMapCollection _syncMapCol;
         private SyncProfile _syncProfile;
 
-        private Db.SqliteDbAdapter db =
-            new Db.SqliteDbAdapter();
+        private Db.Sqlite.DbAdapterSwitch db =
+            new Db.Sqlite.DbAdapterSwitch();
 
         public SyncMapWindow(SyncProfile syncProfile)
         {
