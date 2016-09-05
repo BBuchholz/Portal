@@ -28,6 +28,7 @@ namespace NineWorldsDeep.Tagger
             new List<FileElementActionSubscriber>();
         private NwdDb db = null;
         private Db.Sqlite.DbAdapterSwitch dbCore;
+        private string lastLoadedPath;
 
         public HorizontalTaggerGrid()
         {
@@ -314,6 +315,7 @@ namespace NineWorldsDeep.Tagger
             PopulateTagListView();
 
             tbStatus.Text = "Loaded.";
+            lastLoadedPath = filePathTopFolder;
             SetPendingChanges(false);
         }
 
@@ -413,7 +415,35 @@ namespace NineWorldsDeep.Tagger
                 tagMatrix.RemovePath(fe.Path);
 
                 //refresh list
-                LoadFromSelectedTag();
+                Reload();
+            }
+        }
+
+        private void Reload()
+        {
+            if (lastLoadedPath != null)
+            {
+                string filter = txtFilter.Text;
+                TagModelItem selectedTag = (TagModelItem)lvTags.SelectedItem;
+
+                LoadFromDb(lastLoadedPath);
+
+                txtFilter.Text = filter;
+
+                //find selected tag
+                TagModelItem selectedItem = null;
+                foreach (TagModelItem item in lvTags.Items)
+                {
+                    if (item.Tag.Equals(selectedTag.Tag, StringComparison.CurrentCultureIgnoreCase))
+                    {
+                        selectedItem = item;
+                    }
+                }
+
+                if (selectedItem != null)
+                {
+                    lvTags.SelectedItem = selectedItem;
+                }
             }
         }
     }

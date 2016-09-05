@@ -32,6 +32,7 @@ namespace NineWorldsDeep.Tagger
 
         private TagMatrix tagMatrix = new TagMatrix();
         private Image imageControl;
+        private string lastLoadedPath;
         private List<FileElementActionSubscriber> selectionChangedListeners =
             new List<FileElementActionSubscriber>();
 
@@ -382,6 +383,7 @@ namespace NineWorldsDeep.Tagger
             PopulateTagListView();
 
             tbStatus.Text = "Loaded.";
+            lastLoadedPath = filePathTopFolder;
             SetPendingChanges(false);
         }
 
@@ -456,7 +458,35 @@ namespace NineWorldsDeep.Tagger
                 imageControl.Source = null;
 
                 //refresh list
-                LoadFromSelectedTag(); 
+                Reload(); 
+            }
+        }
+
+        private void Reload()
+        {
+            if (lastLoadedPath != null)
+            {
+                string filter = txtFilter.Text;
+                TagModelItem selectedTag = (TagModelItem)lvTags.SelectedItem;
+
+                LoadFromDb(lastLoadedPath);
+
+                txtFilter.Text = filter;
+
+                //find selected tag
+                TagModelItem selectedItem = null;
+                foreach (TagModelItem item in lvTags.Items)
+                {
+                    if (item.Tag.Equals(selectedTag.Tag, StringComparison.CurrentCultureIgnoreCase))
+                    {
+                        selectedItem = item;
+                    }
+                }
+
+                if (selectedItem != null)
+                {
+                    lvTags.SelectedItem = selectedItem;
+                }
             }
         }
     }
