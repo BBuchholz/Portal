@@ -63,7 +63,8 @@ namespace NineWorldsDeep.ImageBrowser
             currentImageFolder = folderPath;
             tbFolder.Text = currentImageFolder;
             tgrGrid.Clear();
-            //tgrGrid.AddFolder(currentImageFolder);
+
+            tgrGrid.AddFolder(currentImageFolder);
 
             if (fileInsteadOfDb)
             {
@@ -74,7 +75,7 @@ namespace NineWorldsDeep.ImageBrowser
                 tgrGrid.LoadFromDb(currentImageFolder);
             }
 
-            tgrGrid.AddFolder(currentImageFolder);
+            //tgrGrid.AddFolder(currentImageFolder);
         }
 
         //[Obsolete("use LoadFolder(bool, string)")]

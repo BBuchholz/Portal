@@ -1,4 +1,5 @@
-﻿using System;
+﻿using NineWorldsDeep.Core;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -87,6 +88,12 @@ namespace NineWorldsDeep.Sqlite.Model
 
             SetDevice(device);
             SetPath(path);
+        }
+
+        public FileModelItem(String path)
+            : this(Configuration.GetLocalDeviceDescription(), path)
+        {
+            //do nothing chained constructor
         }
 
         public String GetDescription()

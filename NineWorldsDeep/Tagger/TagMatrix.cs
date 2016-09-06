@@ -20,6 +20,7 @@ namespace NineWorldsDeep.Tagger
 
         private IFolderLoadStrategy folderLoadStrategy;
         public static readonly string TAG_UNTAGGED = "[[[UNTAGGED]]]";
+        public static readonly string TAG_ALL = "[[[ALL]]]";
 
         public void Clear()
         {
@@ -92,14 +93,14 @@ namespace NineWorldsDeep.Tagger
 
             if (string.IsNullOrWhiteSpace(tag))
             {
-                tag = "[[[ALL]]]";
+                tag = TAG_ALL;
             }
 
             if (tag != null && tagFilesMap.Keys.Contains(tag))
             {
                 fileElementPaths = tagFilesMap[tag];
             }
-            else if (tag != null && tag.Equals("[[[ALL]]]"))
+            else if (tag != null && tag.Equals(TAG_ALL))
             {
                 fileElementPaths = fileTagsMap.Keys;
             }
@@ -265,26 +266,40 @@ namespace NineWorldsDeep.Tagger
 
             items = items.OrderByDescending(i => i.Files.Count()).ToList();
 
-            items.Insert(0, new TagModelItem("[[[ALL]]]"));
-            items.Insert(1, new TagModelItem("[[[UNTAGGED]]]"));
+            TagModelItem allTag = new TagModelItem(TAG_ALL);
+            //get files
+            foreach (string path in GetFilesForTag(allTag.Tag))
+            {
+                allTag.Link(new Sqlite.Model.FileModelItem(path));
+            }
+
+            TagModelItem untaggedTag = new TagModelItem(TAG_UNTAGGED);
+            //get files
+            foreach (string path in GetFilesForTag(untaggedTag.Tag))
+            {
+                untaggedTag.Link(new Sqlite.Model.FileModelItem(path));
+            }
+
+            items.Insert(0, allTag);
+            items.Insert(1, untaggedTag);
 
             return items;
         }
 
-        [Obsolete("use GetTagModelItems()")]
-        public IEnumerable<string> GetTags(string filter)
-        {
-            List<string> tags = tagFilesMap.Keys.ToList<string>();
+        //[Obsolete("use GetTagModelItems()")]
+        //public IEnumerable<string> GetTags(string filter)
+        //{
+        //    List<string> tags = tagFilesMap.Keys.ToList<string>();
 
-            tags = tags.Where(tag => tag.ToLower().Contains(filter.ToLower())).ToList();
+        //    tags = tags.Where(tag => tag.ToLower().Contains(filter.ToLower())).ToList();
 
-            tags.Sort();
+        //    tags.Sort();
 
-            tags.Insert(0, "[[[ALL]]]");
-            tags.Insert(1, "[[[UNTAGGED]]]");
+        //    tags.Insert(0, "[[[ALL]]]");
+        //    tags.Insert(1, "[[[UNTAGGED]]]");
 
-            return tags;
-        }
+        //    return tags;
+        //}
         
         //public string GetTagString(FileElement fe)
         //{
