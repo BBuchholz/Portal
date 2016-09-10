@@ -32,6 +32,7 @@ namespace NineWorldsDeep.Db.Sqlite
         void InsertOrIgnoreTag(string tag, SQLiteCommand cmd);
         void LinkFileIdToTagId(int fileId, int tagId, SQLiteCommand cmd);
         void PopulatePathIds(Dictionary<string, int> pathsToIds);
+        void UpdateTagStringForCurrentDevicePath(string path);
         void PopulateSyncMaps(SyncProfile sp, SQLiteCommand cmd);
         void PopulateSyncProfiles(List<SyncProfile> lst, SQLiteCommand cmd);
         void PopulateTagIds(Dictionary<string, int> tagsToIds);
@@ -66,5 +67,6 @@ namespace NineWorldsDeep.Db.Sqlite
         string EnsureSyncProfile(string profileName);
         void SaveSynergyLists(IEnumerable<SynergyList> lists);
         void UpdateActiveInactive(IEnumerable<SynergyList> setToActive, IEnumerable<SynergyList> setToInactive);
+        string GetTagsForDevicePath(string deviceDescription, string path);
     }
 }

@@ -13,7 +13,7 @@ using System.Threading.Tasks;
 
 namespace NineWorldsDeep.Db.Sqlite
 {
-    internal class DbAdapterV5 : DbAdapterBase
+    internal class DbAdapterV5 : DbAdapterBase, IDbAdapter
     {
 
         //public DbAdapterV5()
@@ -1596,6 +1596,16 @@ namespace NineWorldsDeep.Db.Sqlite
         public override string GetDbName()
         {
             return "nwd-V5-test";
+        }
+
+        public string GetTagsForDevicePath(string deviceDescription, string path)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void UpdateTagStringForCurrentDevicePath(string path)
+        {
+            throw new NotImplementedException();
         }
     }
 }

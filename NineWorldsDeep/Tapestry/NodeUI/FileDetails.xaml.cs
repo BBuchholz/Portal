@@ -1,5 +1,6 @@
 ﻿using NineWorldsDeep.Core;
 using NineWorldsDeep.FragmentCloud;
+using NineWorldsDeep.Warehouse;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -34,6 +35,8 @@ namespace NineWorldsDeep.Tapestry.NodeUI
         {
             UI.Display.Message("update goes here");
 
+            Tags.UpdateTagStringForCurrentDevicePath(fileNode.Path);
+
             UpdateButton.IsEnabled = false;
         }
 
@@ -50,7 +53,7 @@ namespace NineWorldsDeep.Tapestry.NodeUI
         {
             fileNode = nd;
             MultiLineTextBox.Text = nd.ToMultiLineDetail();
-            TagStringTextBox.Text = "{{{TAGS NOT IMPLEMENTED YET}}}";
+            TagStringTextBox.Text = Tags.GetTagStringForCurrentDevicePath(fileNode.Path);
         }
 
         private void OpenExternallyButton_Click(object sender, RoutedEventArgs e)

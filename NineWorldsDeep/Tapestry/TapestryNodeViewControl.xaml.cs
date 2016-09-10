@@ -71,6 +71,10 @@ namespace NineWorldsDeep.Tapestry
 
         private void IndexContentControls()
         {
+            //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+            // IF YOU ADD A CASE HERE, 
+            // ADD IT TO ResolveContentControl() ALSO!
+            //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
             contentControls = new List<ContentControl>();
             contentControls.Add(ccFragCloud);
             contentControls.Add(ccFragment);

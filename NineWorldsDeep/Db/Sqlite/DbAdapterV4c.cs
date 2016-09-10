@@ -1627,6 +1627,80 @@ namespace NineWorldsDeep.Db.Sqlite
             return "nwd";
         }
 
+        public string GetTagsForDevicePath(string deviceDescription, string path)
+        {
+            string tagString = "";
+            
+            try
+            {
+                using (var conn =
+                    new SQLiteConnection(@"Data Source=" +
+                        Configuration.GetSqliteDbPath(GetDbName())))
+                {
+                    conn.Open();
+
+                    using (var cmd = new SQLiteCommand(conn))
+                    {
+                        string cmdString =
+                            "SELECT " +
+                                    "" + NwdContract.COLUMN_TAG_VALUE + " " +
+                            "FROM " + NwdContract.TABLE_PATH + " p " +
+                            "JOIN " + NwdContract.TABLE_FILE + " f " +
+                            "ON p." + NwdContract.COLUMN_PATH_ID + " = f." + NwdContract.COLUMN_PATH_ID + " " +
+                            "JOIN " + NwdContract.TABLE_JUNCTION_FILE_TAG + " ft " +
+                            "ON f." + NwdContract.COLUMN_FILE_ID + " = ft." + NwdContract.COLUMN_FILE_ID + " " +
+                            "JOIN " + NwdContract.TABLE_TAG + " t " +
+                            "ON ft." + NwdContract.COLUMN_TAG_ID + " = t." + NwdContract.COLUMN_TAG_ID + " " +
+                            "JOIN " + NwdContract.TABLE_DEVICE + " d " +
+                            "ON d." + NwdContract.COLUMN_DEVICE_ID + " = f." + NwdContract.COLUMN_DEVICE_ID + " " +
+                            "WHERE d." + NwdContract.COLUMN_DEVICE_DESCRIPTION + " = ? " +
+                            "AND p." + NwdContract.COLUMN_PATH_VALUE + " = ? ; ";
+
+                        SQLiteParameter paramDevice = new SQLiteParameter();
+                        paramDevice.Value = deviceDescription;
+                        cmd.Parameters.Add(paramDevice);
+
+                        SQLiteParameter paramPath = new SQLiteParameter();
+                        paramPath.Value = path;
+                        cmd.Parameters.Add(paramPath);
+
+                        using (var rdr = cmd.ExecuteReader())
+                        {
+                            while (rdr.Read())
+                            {
+                                string tag = rdr.GetString(0);
+
+                                if (!string.IsNullOrWhiteSpace(tagString))
+                                {
+                                    tagString += ", ";
+                                }
+
+                                tagString += tag;
+                            }
+                        }
+                    }
+
+                    conn.Close();
+                }
+                
+            }
+            catch (Exception ex)
+            {
+                //do nothing, return empty tag string
+                tagString = 
+                    "Error Retrieving Tag String For Device[" + 
+                    deviceDescription + "] and Path[" + 
+                    path + "]: " + ex.Message;
+            }
+
+            return tagString;
+        }
+
+        public void UpdateTagStringForCurrentDevicePath(string path)
+        {
+            throw new NotImplementedException();
+        }
+
         #region "templates"
 
         /////////////////////////////////////connection/transaction templates        

@@ -8,10 +8,18 @@ using System.Linq;
 
 namespace NineWorldsDeep.Warehouse
 {
+    //TODO: should be moved to Core
     public class Tags
     {
         private static StringDictionary hashToTagString =
             new StringDictionary();
+
+        private static Db.Sqlite.DbAdapterSwitch db;
+
+        static Tags()
+        {
+            db = new Db.Sqlite.DbAdapterSwitch();
+        }
 
         /// <summary>
         /// used FromHash() to retrieve from database
@@ -34,6 +42,11 @@ namespace NineWorldsDeep.Warehouse
             //why this new way is being phased in)
             ExportTagsForProfileToPath(sp, sha1Hash, true);
             ExportTagsForProfileToPath(sp, sha1Hash, false);
+        }
+
+        public static void UpdateTagStringForCurrentDevicePath(string path)
+        {
+            db.UpdateTagStringForCurrentDevicePath(path);
         }
 
         public static void ExportTagsForProfileToXml(string deviceName, SyncProfile sp, List<FileModelItem> files)
@@ -189,8 +202,12 @@ namespace NineWorldsDeep.Warehouse
         {
             //get any tags from database tied to the
             //supplied sha1Hash
-            Db.Sqlite.DbAdapterSwitch db = new Db.Sqlite.DbAdapterSwitch();
             return db.GetTagsForSHA1Hash(sha1Hash);
+        }
+
+        public static string GetTagStringForCurrentDevicePath(string path)
+        {
+            return db.GetTagsForDevicePath(Configuration.GetLocalDeviceDescription(), path);
         }
 
         public static string ImportForHash(SyncProfile sp,

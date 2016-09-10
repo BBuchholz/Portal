@@ -65,6 +65,11 @@ namespace NineWorldsDeep.Db.Sqlite
             return db.GetExtDeviceIdForProfileId(profileId, cmd);
         }
 
+        public void UpdateTagStringForCurrentDevicePath(string path)
+        {
+            return db.UpdateTagStringForCurrentDevicePath(path);
+        }
+
         public int GetFileIdForDevicePath(string device, string path, SQLiteCommand cmd)
         {
             return db.GetFileIdForDevicePath(device, path, cmd);
@@ -278,6 +283,11 @@ namespace NineWorldsDeep.Db.Sqlite
         public int EnsureIdForValue(string tableName, string idColumnName, string valueColumnName, string valueToEnsure, SQLiteCommand cmd)
         {
             return db.EnsureIdForValue(tableName, idColumnName, valueColumnName, valueToEnsure, cmd);
+        }
+
+        public string GetTagsForDevicePath(string deviceDescription, string path)
+        {
+            return db.GetTagsForDevicePath(deviceDescription, path);
         }
 
         public string GetDbName()
