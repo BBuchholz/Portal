@@ -23,5 +23,10 @@ namespace NineWorldsDeep.Tapestry
         {
             InitializeComponent();
         }
+
+        private void MenuItemNavigateRoot_Click(object sender, RoutedEventArgs e)
+        {
+            ctrlNodeSplitView.NavigateRoot();
+        }
     }
 }

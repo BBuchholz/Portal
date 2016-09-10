@@ -7,7 +7,18 @@
         mc:Ignorable="d"
         Title="TapestrySplitViewWindow" Height="600" Width="800"
         WindowState="Maximized">
-    <Grid>
-        <local:TapestryNodeSplitViewControl/>
-    </Grid>
+    <DockPanel LastChildFill="True">
+        <Menu DockPanel.Dock="Top" 
+              IsMainMenu="True"
+              x:Name="mainMenu">
+
+            <MenuItem Header="Navigation">
+                <MenuItem Header="Root"
+                          Click="MenuItemNavigateRoot_Click"/>
+            </MenuItem>
+        </Menu>
+        <Grid>
+            <local:TapestryNodeSplitViewControl x:Name="ctrlNodeSplitView"/>
+        </Grid>
+    </DockPanel>
 </Window>

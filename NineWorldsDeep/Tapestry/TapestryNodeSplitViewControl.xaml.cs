@@ -25,18 +25,26 @@ namespace NineWorldsDeep.Tapestry
     {
         private Stack<TapestrySplitViewLoadCommand> history;
 
-        public TapestryNodeSplitViewControl()
+        public void NavigateRoot()
         {
-            InitializeComponent();
             history = new Stack<TapestrySplitViewLoadCommand>();
-
-            leftNodeView.RegisterHistoryHandler(this);
-            rightNodeView.RegisterHistoryHandler(this);
-
             //load to left, as if from right
             PerformLoad(rightNodeView, new TapestryRootNode());
         }
 
+        public TapestryNodeSplitViewControl()
+        {
+            InitializeComponent();
+
+            leftNodeView.RegisterHistoryHandler(this);
+            rightNodeView.RegisterHistoryHandler(this);
+
+            //history = new Stack<TapestrySplitViewLoadCommand>();
+            ////load to left, as if from right
+            //PerformLoad(rightNodeView, new TapestryRootNode());
+            NavigateRoot();
+        }
+        
         public void PerformLoad(TapestryNodeViewControl originator, TapestryNode nd)
         {
             TapestrySplitViewLoadCommand lc = new TapestrySplitViewLoadCommand();
