@@ -44,9 +44,9 @@ namespace NineWorldsDeep.Warehouse
             ExportTagsForProfileToPath(sp, sha1Hash, false);
         }
 
-        public static void UpdateTagStringForCurrentDevicePath(string path)
+        public static void UpdateTagStringForCurrentDevicePath(string path, string tagString)
         {
-            db.UpdateTagStringForCurrentDevicePath(path);
+            db.UpdateTagStringForCurrentDevicePath(path, tagString);
         }
 
         public static void ExportTagsForProfileToXml(string deviceName, SyncProfile sp, List<FileModelItem> files)

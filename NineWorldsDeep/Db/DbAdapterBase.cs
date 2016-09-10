@@ -52,7 +52,7 @@ namespace NineWorldsDeep.Db
         public abstract void InsertOrIgnoreHash(string hash, SQLiteCommand cmd);
         public abstract int GetIdForPath(string path, SQLiteCommand cmd);
         public abstract int GetIdForHash(string hash, SQLiteCommand cmd);
-        public abstract string GetTagsForHash(string sha1Hash, SQLiteCommand cmd);
+        public abstract string GetTagStringForHash(string sha1Hash, SQLiteCommand cmd);
         public abstract List<PathTagLink> GetPathTagLinks(string filePathTopFolder);
         public abstract string DeleteFile(String device, String path);
         public abstract int GetFileIdForDevicePath(String device,
@@ -89,10 +89,57 @@ namespace NineWorldsDeep.Db
         public abstract List<string> GetColumnNames(string tableName, SQLiteCommand cmd);
         public abstract void UpsertSyncMap(int profileId, int srcId, int destId, int directionId, int actionId, SQLiteCommand cmd);
         public abstract string GetDbName();
-
+        
         public DbAdapterBase()
         {
             InitializeIds(); //getting called twice
+        }
+        
+        public void UpdateTagStringForCurrentDevicePath(string path, string tagString)
+        {
+            MultiMap<String, String> pathToTags =
+                new MultiMap<string, string>();
+
+            pathToTags.PutCommaStringValues(path, tagString);
+
+            try
+            {
+                using (var conn =
+                    new SQLiteConnection(@"Data Source=" +
+                        Configuration.GetSqliteDbPath(GetDbName())))
+                {
+                    conn.Open();
+
+                    using (var cmd = new SQLiteCommand(conn))
+                    {
+                        using (var transaction = conn.BeginTransaction())
+                        {
+
+                            DeleteFileTagsForCurrentDevicePath(path, cmd);
+                            
+                            LinkTagsToCurrentDevicePaths(pathToTags, cmd);
+
+                            transaction.Commit();
+                        }
+                    }
+
+                    conn.Close();
+                }
+            }
+            catch (Exception)
+            {
+                //do nothing
+            }
+
+        }
+
+        public void DeleteFileTagsForCurrentDevicePath(string path, SQLiteCommand cmd)
+        {
+            string device = Configuration.GetLocalDeviceDescription();
+
+            int id = GetFileIdForDevicePath(device, path, cmd);
+
+            DeleteFileTagsForFileId(id, cmd);
         }
 
         public string GetErdRawSource()
@@ -317,7 +364,7 @@ namespace NineWorldsDeep.Db
             return outputMsg;
         }
 
-        public string GetTagsForSHA1Hash(string sha1Hash)
+        public string GetTagStringForSHA1Hash(string sha1Hash)
         {
             string tags = "";
 
@@ -333,7 +380,7 @@ namespace NineWorldsDeep.Db
                     {
                         using (var transaction = conn.BeginTransaction())
                         {
-                            tags = GetTagsForHash(sha1Hash, cmd);
+                            tags = GetTagStringForHash(sha1Hash, cmd);
                             transaction.Commit();
                         }
                     }
@@ -758,11 +805,61 @@ namespace NineWorldsDeep.Db
             return GetIdForPath(path, cmd);
         }
 
+        protected int EnsureDevice(string deviceDescription, SQLiteCommand cmd)
+        {
+            int id = GetIdForDeviceDescription(deviceDescription, cmd);
+
+            if(id < 1)
+            {
+                InsertOrIgnoreDevice(deviceDescription, cmd);
+            }
+
+            return GetIdForDeviceDescription(deviceDescription, cmd);
+        }
+
+        protected int EnsureDevicePath(string deviceDescription, string path, SQLiteCommand cmd)
+        {
+            int id = GetFileIdForDevicePath(deviceDescription, path, cmd);
+
+            if(id < 1)
+            {
+                InsertOrIgnoreDevicePath(deviceDescription, path, cmd);
+            }
+
+            return GetFileIdForDevicePath(deviceDescription, path, cmd);
+        }
+
+        public abstract void InsertOrIgnoreDevice(string deviceDescription, SQLiteCommand cmd);
+        public abstract void InsertOrIgnoreDevicePath(string deviceDescription, string path, SQLiteCommand cmd);
+        public abstract int GetIdForDeviceDescription(string deviceDescription, SQLiteCommand cmd);
+
         protected int EnsureHash(string hash, SQLiteCommand cmd)
         {
             InsertOrIgnoreHash(hash, cmd);
             return GetIdForHash(hash, cmd);
         }
+
+        public void LinkTagsToCurrentDevicePaths(MultiMap<string, string> pathToTags, SQLiteCommand cmd)
+        {
+            string devDescription = Configuration.GetLocalDeviceDescription();
+
+            EnsureDevice(devDescription, cmd);
+
+            foreach (string path in pathToTags.Keys)
+            {
+                EnsurePath(path, cmd);
+                EnsureDevicePath(devDescription, path, cmd);
+
+                foreach (string tag in pathToTags[path])
+                {
+                    InsertOrIgnoreTag(tag, cmd);
+                    LinkDevicePathToTag(devDescription, path, tag, cmd);
+                }
+            }
+
+        }
+
+        public abstract void LinkDevicePathToTag(string devDescription, string path, string tag, SQLiteCommand cmd);
 
         public void UpdateActiveInactive(IEnumerable<SynergyList> setToActive, IEnumerable<SynergyList> setToInactive)
         {

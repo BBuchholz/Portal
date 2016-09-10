@@ -425,7 +425,7 @@ namespace NineWorldsDeep.Db.Sqlite
             return id;
         }
 
-        public override string GetTagsForHash(string sha1Hash, SQLiteCommand cmd)
+        public override string GetTagStringForHash(string sha1Hash, SQLiteCommand cmd)
         {
             cmd.Parameters.Clear();
 
@@ -1604,6 +1604,26 @@ namespace NineWorldsDeep.Db.Sqlite
         }
 
         public void UpdateTagStringForCurrentDevicePath(string path)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void InsertOrIgnoreDevice(string deviceDescription, SQLiteCommand cmd)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void InsertOrIgnoreDevicePath(string deviceDescription, string path, SQLiteCommand cmd)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override int GetIdForDeviceDescription(string deviceDescription, SQLiteCommand cmd)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void LinkDevicePathToTag(string devDescription, string path, string tag, SQLiteCommand cmd)
         {
             throw new NotImplementedException();
         }

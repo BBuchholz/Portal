@@ -65,9 +65,9 @@ namespace NineWorldsDeep.Db.Sqlite
             return db.GetExtDeviceIdForProfileId(profileId, cmd);
         }
 
-        public void UpdateTagStringForCurrentDevicePath(string path)
+        public void UpdateTagStringForCurrentDevicePath(string path, string tagString)
         {
-            return db.UpdateTagStringForCurrentDevicePath(path);
+            db.UpdateTagStringForCurrentDevicePath(path, tagString);
         }
 
         public int GetFileIdForDevicePath(string device, string path, SQLiteCommand cmd)
@@ -130,9 +130,9 @@ namespace NineWorldsDeep.Db.Sqlite
             return db.GetTableNames(cmd);
         }
 
-        public string GetTagsForHash(string sha1Hash, SQLiteCommand cmd)
+        public string GetTagStringForHash(string sha1Hash, SQLiteCommand cmd)
         {
-            return db.GetTagsForHash(sha1Hash, cmd);
+            return db.GetTagStringForHash(sha1Hash, cmd);
         }
 
         public void InsertOrIgnoreAction(SyncAction action, SQLiteCommand cmd)
@@ -304,7 +304,7 @@ namespace NineWorldsDeep.Db.Sqlite
 
         internal string GetTagsForSHA1Hash(string sha1Hash)
         {
-            return db.GetTagsForSHA1Hash(sha1Hash);
+            return db.GetTagStringForSHA1Hash(sha1Hash);
         }
 
         internal void StorePathToTagMappings(List<PathToTagMapping> mappings)
@@ -347,9 +347,9 @@ namespace NineWorldsDeep.Db.Sqlite
             return db.DeleteSyncMap(sm);
         }
 
-        string IDbAdapter.GetTagsForSHA1Hash(string sha1Hash)
+        string IDbAdapter.GetTagStringForSHA1Hash(string sha1Hash)
         {
-            return db.GetTagsForSHA1Hash(sha1Hash);
+            return db.GetTagStringForSHA1Hash(sha1Hash);
         }
 
         void IDbAdapter.StorePathToTagMappings(List<PathToTagMapping> mappings)
@@ -376,5 +376,6 @@ namespace NineWorldsDeep.Db.Sqlite
         {
             return db.EnsureSyncProfile(profileName);
         }
+
     }
 }

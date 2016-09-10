@@ -120,5 +120,32 @@ namespace NineWorldsDeep.Core
                 }
             }
         }
+
+        public void PutCommaStringValues(K key, string commaSeperatedValues)
+        {
+            foreach(string untrimmed in commaSeperatedValues.Split(','))
+            {
+                string trimmed = untrimmed.Trim();
+
+                object obj = (Object)trimmed;
+
+                V cast;
+
+                if(obj is V)
+                {
+                    cast = (V)obj;
+                }
+                else
+                {                    
+                    cast = default(V);
+                }
+                
+                if(cast != null)
+                {
+                    Add(key, cast);
+                }
+            }
+        }
+        
     }
 }

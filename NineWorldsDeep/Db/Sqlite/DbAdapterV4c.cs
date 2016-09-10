@@ -117,16 +117,19 @@ namespace NineWorldsDeep.Db.Sqlite
                         {
                             if (!string.IsNullOrWhiteSpace(tag))
                             {
-                                cmd.CommandText =
-                                    //"INSERT OR IGNORE INTO Tag (TagValue) VALUES (@tagValue)";
-                                    "INSERT OR IGNORE INTO " +
-                                        NwdContract.TABLE_TAG +
-                                    " (" +
-                                        NwdContract.COLUMN_TAG_VALUE +
-                                    ") VALUES (@tagValue)";
+                                //cmd.CommandText =
+                                //    //"INSERT OR IGNORE INTO Tag (TagValue) VALUES (@tagValue)";
+                                //    "INSERT OR IGNORE INTO " +
+                                //        NwdContract.TABLE_TAG +
+                                //    " (" +
+                                //        NwdContract.COLUMN_TAG_VALUE +
+                                //    ") VALUES (@tagValue)";
 
-                                cmd.Parameters.AddWithValue("@tagValue", tag);
-                                cmd.ExecuteNonQuery();
+                                //cmd.Parameters.AddWithValue("@tagValue", tag);
+                                //cmd.ExecuteNonQuery();
+
+                                InsertOrIgnoreTag(tag, cmd);
+
                             }
                         }
 
@@ -397,7 +400,7 @@ namespace NineWorldsDeep.Db.Sqlite
             cmd.ExecuteNonQuery();
         }
 
-        public override string GetTagsForHash(string sha1Hash, SQLiteCommand cmd)
+        public override string GetTagStringForHash(string sha1Hash, SQLiteCommand cmd)
         {
             cmd.Parameters.Clear();
 
@@ -583,6 +586,13 @@ namespace NineWorldsDeep.Db.Sqlite
             return outputMsg;
         }
 
+        /// <summary>
+        /// returns -1 if either path or device description isn't found
+        /// </summary>
+        /// <param name="device"></param>
+        /// <param name="path"></param>
+        /// <param name="cmd"></param>
+        /// <returns></returns>
         public override int GetFileIdForDevicePath(String device,
                                           String path,
                                           SQLiteCommand cmd)
@@ -773,6 +783,38 @@ namespace NineWorldsDeep.Db.Sqlite
                 " WHERE " + NwdContract.COLUMN_PATH_VALUE + " = @pathVal";
 
             cmd.Parameters.AddWithValue("@pathVal", path);
+
+            using (var rdr = cmd.ExecuteReader())
+            {
+                if (rdr.Read())
+                {
+                    id = rdr.GetInt32(0);
+                }
+            }
+
+            return id;
+        }
+
+        /// <summary>
+        /// returns -1 if not found
+        /// </summary>
+        /// <param name="deviceDescription"></param>
+        /// <param name="cmd"></param>
+        /// <returns></returns>
+        public override int GetIdForDeviceDescription(string deviceDescription, SQLiteCommand cmd)
+        {
+            int id = -1;
+
+            cmd.Parameters.Clear(); //since we will be reusing command
+
+            cmd.CommandText =
+                "SELECT " + NwdContract.COLUMN_DEVICE_ID +
+                " FROM " + NwdContract.TABLE_DEVICE +
+                " WHERE " + NwdContract.COLUMN_DEVICE_DESCRIPTION + " = ? ";
+
+            SQLiteParameter paramDevice = new SQLiteParameter();
+            paramDevice.Value = deviceDescription;
+            cmd.Parameters.Add(paramDevice);
 
             using (var rdr = cmd.ExecuteReader())
             {
@@ -989,6 +1031,41 @@ namespace NineWorldsDeep.Db.Sqlite
 
             cmd.Parameters.AddWithValue("@path", path);
             cmd.ExecuteNonQuery();
+        }
+
+        public override void InsertOrIgnoreDevicePath(string deviceDescription, string path, SQLiteCommand cmd)
+        {
+            cmd.Parameters.Clear();
+
+            cmd.CommandText =
+                "INSERT OR IGNORE INTO " + NwdContract.TABLE_FILE +
+                        " (" + NwdContract.COLUMN_DEVICE_ID + ", " +
+                        NwdContract.COLUMN_PATH_ID + ") " +
+                "VALUES ( " +
+                    "(SELECT " + NwdContract.COLUMN_DEVICE_ID + " " +
+                             "FROM " + NwdContract.TABLE_DEVICE + " " +
+                             "WHERE " + NwdContract.COLUMN_DEVICE_DESCRIPTION + " = ?), " +
+                    "(SELECT " + NwdContract.COLUMN_PATH_ID + " " +
+                             "FROM " + NwdContract.TABLE_PATH + " " +
+                             "WHERE " + NwdContract.COLUMN_PATH_VALUE + " = ?)); ";
+
+            SQLiteParameter deviceParam = new SQLiteParameter();
+            deviceParam.Value = deviceDescription;
+            cmd.Parameters.Add(deviceParam);
+
+            SQLiteParameter pathParam = new SQLiteParameter();
+            pathParam.Value = path;
+            cmd.Parameters.Add(pathParam);
+
+            cmd.ExecuteNonQuery();
+        }
+
+        public override void InsertOrIgnoreDevice(string deviceDescription, SQLiteCommand cmd)
+        {            
+            //adapted existing method for this V4c, 
+            //will be implemented explicitly in V5+
+
+            StoreDevice(deviceDescription, "xxx", "xxx", "xxx");            
         }
 
         public override void PopulatePathIds(Dictionary<string, int> pathsToIds)
@@ -1531,7 +1608,7 @@ namespace NineWorldsDeep.Db.Sqlite
                 conn.Close();
             }
         }
-
+        
         /// <summary>
         /// executes an INSERT OR IGNORE statement for supplied device info,
         /// intended for use with device nodes not meeting the standard NwdPortableDevice
@@ -1596,7 +1673,7 @@ namespace NineWorldsDeep.Db.Sqlite
                 }
             }
         }
-
+        
         public override List<string> GetTableNames(SQLiteCommand cmd)
         {
             List<string> tables = new List<string>();
@@ -1641,7 +1718,7 @@ namespace NineWorldsDeep.Db.Sqlite
 
                     using (var cmd = new SQLiteCommand(conn))
                     {
-                        string cmdString =
+                        cmd.CommandText =
                             "SELECT " +
                                     "" + NwdContract.COLUMN_TAG_VALUE + " " +
                             "FROM " + NwdContract.TABLE_PATH + " p " +
@@ -1696,9 +1773,42 @@ namespace NineWorldsDeep.Db.Sqlite
             return tagString;
         }
 
-        public void UpdateTagStringForCurrentDevicePath(string path)
+        public override void LinkDevicePathToTag(string deviceDescription, string path, string tag, SQLiteCommand cmd)
         {
-            throw new NotImplementedException();
+            cmd.Parameters.Clear();
+
+            cmd.CommandText =
+                "INSERT OR IGNORE INTO " + NwdContract.TABLE_JUNCTION_FILE_TAG + " " +
+                        "(" + NwdContract.COLUMN_FILE_ID + ", " +
+                        NwdContract.COLUMN_TAG_ID + ") " +
+                "VALUES ( " +
+                    "(SELECT " + NwdContract.COLUMN_FILE_ID + " " +
+                             "FROM " + NwdContract.TABLE_FILE + " " +
+                             "WHERE " + NwdContract.COLUMN_DEVICE_ID + " = " +
+                                "(SELECT " + NwdContract.COLUMN_DEVICE_ID + " " +
+                                 "FROM " + NwdContract.TABLE_DEVICE + " " +
+                                 "WHERE " + NwdContract.COLUMN_DEVICE_DESCRIPTION + " = ?) " +
+                             "AND " + NwdContract.COLUMN_PATH_ID + " = " +
+                                "(SELECT " + NwdContract.COLUMN_PATH_ID + " " +
+                                 "FROM " + NwdContract.TABLE_PATH + " " +
+                                 "WHERE " + NwdContract.COLUMN_PATH_VALUE + " = ?)), " +
+                    "(SELECT " + NwdContract.COLUMN_TAG_ID + " " +
+                             "FROM " + NwdContract.TABLE_TAG + " " +
+                             "WHERE " + NwdContract.COLUMN_TAG_VALUE + " = ?)); ";
+
+            SQLiteParameter deviceParam = new SQLiteParameter();
+            deviceParam.Value = deviceDescription;
+            cmd.Parameters.Add(deviceParam);
+
+            SQLiteParameter pathParam = new SQLiteParameter();
+            pathParam.Value = path;
+            cmd.Parameters.Add(pathParam);
+
+            SQLiteParameter paramTag = new SQLiteParameter();
+            paramTag.Value = tag;
+            cmd.Parameters.Add(paramTag);
+
+            cmd.ExecuteNonQuery();
         }
 
         #region "templates"
@@ -1715,12 +1825,10 @@ namespace NineWorldsDeep.Db.Sqlite
         //    cmd.Parameters.Add(param);
         //    cmd.ExecuteNonQuery();
         //}
-        //
-        //public string TransactionTemplate()
-        //{
-        //    string outputMsg = "implementation in progress";
-        //    string time = "";
 
+
+        //public void TransactionTemplate()
+        //{
         //    try
         //    {
         //        using (var conn =
@@ -1733,33 +1841,25 @@ namespace NineWorldsDeep.Db.Sqlite
         //            {
         //                using (var transaction = conn.BeginTransaction())
         //                {
-        //                    Stopwatch sw = Stopwatch.StartNew();
-
         //                    ////////////////////////////////////////CODE HERE//////////////////////////////////////
 
         //                    transaction.Commit();
 
-        //                    sw.Stop();
-        //                    time = sw.Elapsed.ToString("mm\\:ss\\.ff");
         //                }
         //            }
 
         //            conn.Close();
         //        }
-
-        //        outputMsg = "Finished: " + time;
         //    }
         //    catch (Exception ex)
         //    {
-        //        outputMsg = "error: " + ex.Message;
+        //        //do nothing
         //    }
-
-        //    return outputMsg;
         //}
 
 
         /////////////////////////////////////connection/transaction template        
-        //public string Template()
+        //public string TransactionTemplateWithReturnString()
         //{
         //    string outputMsg = "implementation in progress";
         //    string time = "";

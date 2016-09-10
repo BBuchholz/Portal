@@ -1,4 +1,5 @@
-﻿using NineWorldsDeep.Synergy;
+﻿using NineWorldsDeep.Core;
+using NineWorldsDeep.Synergy;
 using NineWorldsDeep.Warehouse;
 using System.Collections.Generic;
 using System.Data.SQLite;
@@ -24,7 +25,7 @@ namespace NineWorldsDeep.Db.Sqlite
         List<PathTagLink> GetPathTagLinks(string filePathTopFolder);
         List<string> GetTableNames(SQLiteCommand cmd);
         string LoadSyncProfile(SyncProfile _syncProfile);
-        string GetTagsForHash(string sha1Hash, SQLiteCommand cmd);
+        string GetTagStringForHash(string sha1Hash, SQLiteCommand cmd);
         void InsertOrIgnoreAction(SyncAction action, SQLiteCommand cmd);
         void InsertOrIgnoreDirection(SyncDirection direction, SQLiteCommand cmd);
         void InsertOrIgnoreHash(string hash, SQLiteCommand cmd);
@@ -32,7 +33,7 @@ namespace NineWorldsDeep.Db.Sqlite
         void InsertOrIgnoreTag(string tag, SQLiteCommand cmd);
         void LinkFileIdToTagId(int fileId, int tagId, SQLiteCommand cmd);
         void PopulatePathIds(Dictionary<string, int> pathsToIds);
-        void UpdateTagStringForCurrentDevicePath(string path);
+        void UpdateTagStringForCurrentDevicePath(string path, string tagString);
         void PopulateSyncMaps(SyncProfile sp, SQLiteCommand cmd);
         void PopulateSyncProfiles(List<SyncProfile> lst, SQLiteCommand cmd);
         void PopulateTagIds(Dictionary<string, int> tagsToIds);
@@ -59,7 +60,7 @@ namespace NineWorldsDeep.Db.Sqlite
         string SaveSyncProfile(SyncProfile _syncProfile);
         string DeleteSyncMap(SyncMap sm);
         IEnumerable<SynergyList> GetActiveLists();
-        string GetTagsForSHA1Hash(string sha1Hash);
+        string GetTagStringForSHA1Hash(string sha1Hash);
         void StorePathToTagMappings(List<PathToTagMapping> mappings);
         string StoreImport(string profileName, string extPath, string hostPath, string hash, List<string> tags);
         string GetErdRawSource();

@@ -33,11 +33,15 @@ namespace NineWorldsDeep.Tapestry.NodeUI
 
         private void UpdateButton_Click(object sender, RoutedEventArgs e)
         {
-            UI.Display.Message("update goes here");
+            string path = fileNode.Path;
+            string tagString = TagStringTextBox.Text;
 
-            Tags.UpdateTagStringForCurrentDevicePath(fileNode.Path);
+            Tags.UpdateTagStringForCurrentDevicePath(path, tagString);
+
+            LoadTags();
 
             UpdateButton.IsEnabled = false;
+            tagStringChanged = false;
         }
 
         private void TagStringTextBox_KeyUp(object sender, KeyEventArgs e)
@@ -49,11 +53,16 @@ namespace NineWorldsDeep.Tapestry.NodeUI
             }
         }
 
+        private void LoadTags()
+        {
+            TagStringTextBox.Text = Tags.GetTagStringForCurrentDevicePath(fileNode.Path); 
+        }
+
         public void Display(FileSystemNode nd)
         {
             fileNode = nd;
             MultiLineTextBox.Text = nd.ToMultiLineDetail();
-            TagStringTextBox.Text = Tags.GetTagStringForCurrentDevicePath(fileNode.Path);
+            LoadTags();
         }
 
         private void OpenExternallyButton_Click(object sender, RoutedEventArgs e)
