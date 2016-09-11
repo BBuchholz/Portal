@@ -27,7 +27,7 @@
     <UpdatePeriodically>false</UpdatePeriodically>
     <UpdateRequired>false</UpdateRequired>
     <MapFileExtensions>true</MapFileExtensions>
-    <ApplicationRevision>48</ApplicationRevision>
+    <ApplicationRevision>49</ApplicationRevision>
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <PublishWizardCompleted>true</PublishWizardCompleted>
@@ -341,15 +341,15 @@
     <Compile Include="Tagger\VerticalTaggerGrid.xaml.cs">
       <DependentUpon>VerticalTaggerGrid.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Tapestry\Fragments\GrowthAreasNode.cs" />
-    <Compile Include="Tapestry\Fragments\StudioKeyboardNode.cs" />
-    <Compile Include="Tapestry\Fragments\ArpaBetNode.cs" />
-    <Compile Include="Tapestry\Fragments\StudioLyricsNode.cs" />
-    <Compile Include="Tapestry\Fragments\StudioMainNode.cs" />
-    <Compile Include="Tapestry\Fragments\StudioProjectsNode.cs" />
-    <Compile Include="Tapestry\Fragments\StudioScalesNode.cs" />
-    <Compile Include="Tapestry\Fragments\TapestryRootNode.cs" />
-    <Compile Include="Tapestry\Fragments\TapestrySplitViewNode.cs" />
+    <Compile Include="Tapestry\Nodes\GrowthAreasNode.cs" />
+    <Compile Include="Tapestry\Nodes\StudioKeyboardNode.cs" />
+    <Compile Include="Tapestry\Nodes\ArpaBetNode.cs" />
+    <Compile Include="Tapestry\Nodes\StudioLyricsNode.cs" />
+    <Compile Include="Tapestry\Nodes\StudioMainNode.cs" />
+    <Compile Include="Tapestry\Nodes\StudioProjectsNode.cs" />
+    <Compile Include="Tapestry\Nodes\StudioScalesNode.cs" />
+    <Compile Include="Tapestry\Nodes\TapestryRootNode.cs" />
+    <Compile Include="Tapestry\Nodes\TapestrySplitViewNode.cs" />
     <Compile Include="Tapestry\NodeUI\AudioNodeDisplay.xaml.cs">
       <DependentUpon>AudioNodeDisplay.xaml</DependentUpon>
     </Compile>
