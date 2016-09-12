@@ -107,6 +107,19 @@ namespace NineWorldsDeep.Core
             return Path.Combine(SyncRoot(profileName), "NWD-MEDIA", mediaFolderName);
         }
 
+        /// <summary>
+        /// node counts less than this number will be displayed as small 
+        /// collections. node counts equal to or greater than this number
+        /// will be displayed as large collections. (the distinctions
+        /// vary depending on the particular display control)
+        /// </summary>
+        /// <returns></returns>
+        public static int NodeCollectionThreshHold()
+        {
+            //previously "magic number"
+            return 15;
+        }
+
         //TODO: find all paths with a hard coded root and replace with ProcessTestMode(string)
 
         public static string AudacityProjectsFolder { get { return @"C:\NWD-AUX\audacityProjects"; } }

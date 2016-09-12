@@ -91,11 +91,7 @@ namespace NineWorldsDeep.FragmentCloud
 
         protected virtual void OnFragmentClicked(FragmentClickedEventArgs e)
         {
-            EventHandler<FragmentClickedEventArgs> handler = FragmentClicked;
-            if (handler != null)
-            {
-                handler(this, e);
-            }
+            FragmentClicked?.Invoke(this, e);
         }
 
         public event EventHandler<FragmentClickedEventArgs> FragmentClicked;

@@ -341,6 +341,7 @@
     <Compile Include="Tagger\VerticalTaggerGrid.xaml.cs">
       <DependentUpon>VerticalTaggerGrid.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Tapestry\Nodes\ClusterNode.cs" />
     <Compile Include="Tapestry\Nodes\GrowthAreasNode.cs" />
     <Compile Include="Tapestry\Nodes\StudioKeyboardNode.cs" />
     <Compile Include="Tapestry\Nodes\ArpaBetNode.cs" />
@@ -353,6 +354,18 @@
     <Compile Include="Tapestry\NodeUI\AudioNodeDisplay.xaml.cs">
       <DependentUpon>AudioNodeDisplay.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Tapestry\NodeUI\ClusterChooser.xaml.cs">
+      <DependentUpon>ClusterChooser.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Tapestry\NodeUI\ClusterDetails.xaml.cs">
+      <DependentUpon>ClusterDetails.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Tapestry\NodeUI\ClusterDisplay.xaml.cs">
+      <DependentUpon>ClusterDisplay.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Tapestry\NodeUI\ClusterNodeDisplay.xaml.cs">
+      <DependentUpon>ClusterNodeDisplay.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Tapestry\NodeUI\FileDetails.xaml.cs">
       <DependentUpon>FileDetails.xaml</DependentUpon>
     </Compile>
@@ -362,6 +375,7 @@
     <Compile Include="Tapestry\NodeUI\NodeList.xaml.cs">
       <DependentUpon>NodeList.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Tapestry\NodeUI\ClusterLoadedStateChangedEventArgs.cs" />
     <Compile Include="Tapestry\TapestrySplitViewLoadCommand.cs" />
     <Compile Include="Tapestry\TapestryMainWindow.xaml.cs">
       <DependentUpon>TapestryMainWindow.xaml</DependentUpon>
@@ -547,6 +561,22 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Tapestry\NodeUI\AudioNodeDisplay.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Tapestry\NodeUI\ClusterChooser.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Tapestry\NodeUI\ClusterDetails.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Tapestry\NodeUI\ClusterDisplay.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Tapestry\NodeUI\ClusterNodeDisplay.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

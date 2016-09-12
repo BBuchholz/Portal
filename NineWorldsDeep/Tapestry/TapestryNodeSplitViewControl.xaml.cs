@@ -1,5 +1,6 @@
 ﻿using NineWorldsDeep.FragmentCloud;
 using NineWorldsDeep.Tapestry.Fragments;
+using NineWorldsDeep.Tapestry.Nodes;
 using NineWorldsDeep.UI;
 using System;
 using System.Collections.Generic;
@@ -38,10 +39,7 @@ namespace NineWorldsDeep.Tapestry
 
             leftNodeView.RegisterHistoryHandler(this);
             rightNodeView.RegisterHistoryHandler(this);
-
-            //history = new Stack<TapestrySplitViewLoadCommand>();
-            ////load to left, as if from right
-            //PerformLoad(rightNodeView, new TapestryRootNode());
+            
             NavigateRoot();
         }
         

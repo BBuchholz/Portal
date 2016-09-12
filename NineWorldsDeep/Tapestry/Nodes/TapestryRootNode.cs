@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace NineWorldsDeep.Tapestry.Fragments
+namespace NineWorldsDeep.Tapestry.Nodes
 {
     class TapestryRootNode : Tapestry.TapestryNode
     {
@@ -21,6 +21,7 @@ namespace NineWorldsDeep.Tapestry.Fragments
             AddChild(new ImageBrowserFragment());
             AddChild(new MtpFragment());
             AddChild(new GrowthAreasNode());
+            AddChild(new ClusterNode());
         }
 
         public override string GetShortName()

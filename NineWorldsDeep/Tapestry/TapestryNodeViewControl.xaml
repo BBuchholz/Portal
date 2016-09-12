@@ -35,5 +35,10 @@
             <nodeUI:NodeList x:Name="nodeList"/>
         </ContentControl>
 
+        <ContentControl x:Name="ccClusterNode"
+                        Visibility="Collapsed">
+            <nodeUI:ClusterNodeDisplay x:Name="clusterNodeDisplay"/>
+        </ContentControl>
+
     </Grid>
 </UserControl>

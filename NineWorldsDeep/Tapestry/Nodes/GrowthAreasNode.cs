@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using NineWorldsDeep.FragmentCloud;
 
-namespace NineWorldsDeep.Tapestry.Fragments
+namespace NineWorldsDeep.Tapestry.Nodes
 {
     public class GrowthAreasNode : TapestryNode
     {

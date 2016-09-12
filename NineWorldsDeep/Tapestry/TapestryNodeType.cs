@@ -6,6 +6,7 @@
         List,
         Audio,
         Image,
+        Cluster,
         SingleNodeDefault
     }
 }

@@ -13,6 +13,8 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using NineWorldsDeep.FragmentCloud;
+using NineWorldsDeep.Tapestry.Nodes;
+using NineWorldsDeep.Core;
 
 namespace NineWorldsDeep.Tapestry
 {
@@ -81,6 +83,7 @@ namespace NineWorldsDeep.Tapestry
             contentControls.Add(ccAudioNode);
             contentControls.Add(ccNodeList);
             contentControls.Add(ccImageNode);
+            contentControls.Add(ccClusterNode);
         }
 
         private void ResolveContentControl(TapestryNode node)
@@ -95,7 +98,7 @@ namespace NineWorldsDeep.Tapestry
                 {
                     case TapestryNodeType.Collection:
 
-                        if(node.Children.Count() < 10)
+                        if(node.Children.Count() < Configuration.NodeCollectionThreshHold())
                         {
                             SetVisible(ccFragCloud);
                             fragmentCloud.Display(node);
@@ -120,6 +123,13 @@ namespace NineWorldsDeep.Tapestry
                         SetVisible(ccImageNode);
                         FileSystemNode ind = (FileSystemNode)node;
                         imageNodeDisplay.Display(ind);
+                        break;
+
+                    case TapestryNodeType.Cluster:
+
+                        SetVisible(ccClusterNode);
+                        ClusterNode clusterNode = (ClusterNode)node;
+                        clusterNodeDisplay.Display(clusterNode);
                         break;
 
                     default:

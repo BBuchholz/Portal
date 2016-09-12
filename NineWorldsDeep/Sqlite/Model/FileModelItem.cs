@@ -16,6 +16,7 @@ namespace NineWorldsDeep.Sqlite.Model
         private List<string> mTags = new List<string>();
         private List<HashModelItem> mHashes = new List<HashModelItem>();
 
+        //TODO: move this to data mapper
         public FileModelItem(Dictionary<String, String> record)
         {
 
