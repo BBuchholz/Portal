@@ -27,7 +27,7 @@
     <UpdatePeriodically>false</UpdatePeriodically>
     <UpdateRequired>false</UpdateRequired>
     <MapFileExtensions>true</MapFileExtensions>
-    <ApplicationRevision>49</ApplicationRevision>
+    <ApplicationRevision>50</ApplicationRevision>
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <PublishWizardCompleted>true</PublishWizardCompleted>
@@ -363,6 +363,7 @@
     <Compile Include="Tapestry\NodeUI\ClusterDisplay.xaml.cs">
       <DependentUpon>ClusterDisplay.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Tapestry\NodeUI\ClusterDisplayRequestedEventArgs.cs" />
     <Compile Include="Tapestry\NodeUI\ClusterNodeDisplay.xaml.cs">
       <DependentUpon>ClusterNodeDisplay.xaml</DependentUpon>
     </Compile>

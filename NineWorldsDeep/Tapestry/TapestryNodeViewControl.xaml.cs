@@ -15,6 +15,7 @@ using System.Windows.Shapes;
 using NineWorldsDeep.FragmentCloud;
 using NineWorldsDeep.Tapestry.Nodes;
 using NineWorldsDeep.Core;
+using NineWorldsDeep.Tapestry.NodeUI;
 
 namespace NineWorldsDeep.Tapestry
 {
@@ -33,6 +34,15 @@ namespace NineWorldsDeep.Tapestry
             IndexContentControls();
             fragmentCloud.FragmentClicked += Fragment_Clicked;
             nodeList.FragmentClicked += Fragment_Clicked;
+            clusterNodeDisplay.ClusterDisplayRequested += ClusterDisplay_Requested;
+        }
+
+        private void ClusterDisplay_Requested(object sender, ClusterDisplayRequestedEventArgs e)
+        {
+            if(historyHandler != null)
+            {
+                historyHandler.PerformLoad(this, e.ClusterNode);
+            }
         }
 
         public TapestryNode CurrentNode { get { return currentNode; } }

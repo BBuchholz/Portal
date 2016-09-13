@@ -37,9 +37,14 @@ namespace NineWorldsDeep.Tapestry.NodeUI
 
         private void CompareButton_Click(object sender, RoutedEventArgs e)
         {
-            string planning = "Should load another ClusterNodeDisplay in the facing pane. " +
-                " USE EVENT LIKE TapestryNodeViewControl!";
-            UI.Display.Message(planning);
+            //string planning = "Should load another ClusterNodeDisplay in the facing pane. " +
+            //    " USE EVENT LIKE TapestryNodeViewControl!";
+            //UI.Display.Message(planning);
+
+            ClusterDisplayRequestedEventArgs args =
+                    new ClusterDisplayRequestedEventArgs(new ClusterNode());
+
+            OnClusterDisplayRequested(args);
         }
 
         private void NodeTypesComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -64,7 +69,17 @@ namespace NineWorldsDeep.Tapestry.NodeUI
             ClusterLoadedStateChanged?.Invoke(this, e);
         }
 
+        protected virtual void OnClusterDisplayRequested(
+            ClusterDisplayRequestedEventArgs e)
+        {
+            ClusterDisplayRequested?.Invoke(this, e);
+        }
+
+        public event EventHandler<ClusterDisplayRequestedEventArgs>
+            ClusterDisplayRequested;
+
         public event EventHandler<ClusterLoadedStateChangedEventArgs>
             ClusterLoadedStateChanged;
+
     }
 }

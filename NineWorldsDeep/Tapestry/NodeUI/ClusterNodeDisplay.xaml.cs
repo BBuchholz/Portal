@@ -17,6 +17,12 @@ namespace NineWorldsDeep.Tapestry.NodeUI
             InitializeComponent();
             clusterChooser.ClusterLoadedStateChanged += ClusterLoaded_StateChanged;
             clusterDisplay.ClusterLoadedStateChanged += ClusterLoaded_StateChanged;
+            clusterDisplay.ClusterDisplayRequested += ClusterDisplay_Requested;
+        }
+
+        private void ClusterDisplay_Requested(object sender, ClusterDisplayRequestedEventArgs e)
+        {
+            OnClusterDisplayRequested(e);
         }
 
         private void ClusterLoaded_StateChanged(object sender, ClusterLoadedStateChangedEventArgs e)
@@ -45,5 +51,14 @@ namespace NineWorldsDeep.Tapestry.NodeUI
                 clusterDisplay.Display(nd);
             }
         }
+
+        protected virtual void OnClusterDisplayRequested(
+            ClusterDisplayRequestedEventArgs e)
+        {
+            ClusterDisplayRequested?.Invoke(this, e);
+        }
+
+        public event EventHandler<ClusterDisplayRequestedEventArgs>
+            ClusterDisplayRequested;
     }
 }
