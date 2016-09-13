@@ -30,25 +30,25 @@ namespace NineWorldsDeep.Warehouse
             Executed = false;
         }
 
-        public string ExtDisplayName
+        public bool Executed
         {
-            get { return _extDisplayName; }
+            get { return _executed; }
 
-            set
+            private set
             {
-                _extDisplayName = value;
-                OnPropertyChanged("ExtDisplayName");
+                _executed = value;
+                OnPropertyChanged("Executed");
             }
         }
 
-        public string HostDisplayName
+        public SyncAction SyncAction
         {
-            get { return _hostDisplayName; }
+            get { return _syncAction; }
 
             set
             {
-                _hostDisplayName = value;
-                OnPropertyChanged("HostDisplayName");
+                _syncAction = value;
+                OnPropertyChanged("SyncAction");
             }
         }
 
@@ -96,22 +96,6 @@ namespace NineWorldsDeep.Warehouse
             }
         }
 
-        public SyncAction SyncAction
-        {
-            get { return _syncAction; }
-
-            set
-            {
-                _syncAction = value;
-                OnPropertyChanged("SyncAction");
-            }
-        }
-
-        public SyncDirection SyncDirection
-        {
-            get { return _syncDirection; }
-        }
-
         public string ExtPath
         {
             get { return _extPath; }
@@ -134,16 +118,33 @@ namespace NineWorldsDeep.Warehouse
             }
         }
 
-        public bool Executed
+        public SyncDirection SyncDirection
         {
-            get { return _executed; }
+            get { return _syncDirection; }
+        }
 
-            private set
+        public string ExtDisplayName
+        {
+            get { return _extDisplayName; }
+
+            set
             {
-                _executed = value;
-                OnPropertyChanged("Executed");
+                _extDisplayName = value;
+                OnPropertyChanged("ExtDisplayName");
             }
         }
+
+        public string HostDisplayName
+        {
+            get { return _hostDisplayName; }
+
+            set
+            {
+                _hostDisplayName = value;
+                OnPropertyChanged("HostDisplayName");
+            }
+        }
+
 
         protected void OnPropertyChanged(string name)
         {
