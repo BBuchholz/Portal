@@ -9,10 +9,13 @@
 
     <StackPanel Orientation="Vertical">
 
-        <ComboBox x:Name="cmbClusterType"/>
+        <ComboBox x:Name="cmbClusterType"
+                  Margin="5"/>
+                
         <Button x:Name="btnSelect"
                 Click="btnSelect_Click"
-                Content="Select"/>
+                Content="Select"
+                Margin="5"/>
 
     </StackPanel>
     

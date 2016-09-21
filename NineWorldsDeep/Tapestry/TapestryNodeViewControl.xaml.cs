@@ -35,12 +35,24 @@ namespace NineWorldsDeep.Tapestry
             fragmentCloud.FragmentClicked += Fragment_Clicked;
             nodeList.FragmentClicked += Fragment_Clicked;
             clusterNodeDisplay.ClusterDisplayRequested += ClusterDisplay_Requested;
+            clusterNodeDisplay.NodeDisplayRequested += NodeDisplay_Requested;
+        }
+
+        private void NodeDisplay_Requested(object sender, NodeDisplayRequestedEventArgs e)
+        {
+            UI.Display.Message("this is where node load will occur, code is written but commented out, need to verify its triggered by the action we want first, hence this msg, in TapestryNodeViewControl");
+            ////the projected code
+            //if (historyHandler != null)
+            //{
+            //    historyHandler.PerformLoad(this, e.TapestryNode);
+            //}
         }
 
         private void ClusterDisplay_Requested(object sender, ClusterDisplayRequestedEventArgs e)
         {
             if(historyHandler != null)
-            {
+            {              
+
                 historyHandler.PerformLoad(this, e.ClusterNode);
             }
         }
@@ -108,7 +120,7 @@ namespace NineWorldsDeep.Tapestry
                 {
                     case TapestryNodeType.Collection:
 
-                        if(node.Children.Count() < Configuration.NodeCollectionThreshHold())
+                        if(node.Children().Count() < Configuration.NodeCollectionThreshHold())
                         {
                             SetVisible(ccFragCloud);
                             fragmentCloud.Display(node);
@@ -140,6 +152,12 @@ namespace NineWorldsDeep.Tapestry
                         SetVisible(ccClusterNode);
                         ClusterNode clusterNode = (ClusterNode)node;
                         clusterNodeDisplay.Display(clusterNode);
+                        break;
+
+                    case TapestryNodeType.NullCluster:
+
+                        SetVisible(ccClusterNode);
+                        clusterNodeDisplay.Display(null);
                         break;
 
                     default:

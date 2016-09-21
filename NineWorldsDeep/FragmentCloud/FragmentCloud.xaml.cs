@@ -35,7 +35,7 @@ namespace NineWorldsDeep.FragmentCloud
             List<ElementCloudItem> lst =
                 new List<ElementCloudItem>();
 
-            foreach (Tapestry.TapestryNode f in frg.Children)
+            foreach (Tapestry.TapestryNode f in frg.Children())
             {
                 lst.Add(ConvertToEci(f));
             }

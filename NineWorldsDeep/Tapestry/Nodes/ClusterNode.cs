@@ -6,20 +6,17 @@ using System.Threading.Tasks;
 
 namespace NineWorldsDeep.Tapestry.Nodes
 {
-    public class ClusterNode : TapestryNode
+    public abstract class ClusterNode : TapestryNode
     {
-        public ClusterNode() : 
-            base("Cluster")
+        public ClusterNode(string uri, params TapestryNode[] children) 
+            : base(uri, children)
         {
-            Loaded = false;
         }
 
-        public bool Loaded;
-
-        public override string GetShortName()
-        {
-            return "Cluster";
-        }
+        public override abstract string GetShortName();
+        //{
+        //    return "Cluster";
+        //}
 
         public override void PerformSelectionAction()
         {
@@ -34,9 +31,6 @@ namespace NineWorldsDeep.Tapestry.Nodes
             }
         }
 
-        public void Clear()
-        {
-            Loaded = false;
-        }
+        public override abstract IEnumerable<TapestryNode> Children(TapestryNodeType nodeType);
     }
 }

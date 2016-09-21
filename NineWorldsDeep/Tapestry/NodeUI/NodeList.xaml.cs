@@ -16,7 +16,7 @@ namespace NineWorldsDeep.Tapestry.NodeUI
 
         public void Display(TapestryNode nd)
         {
-            nodeListView.ItemsSource = nd.Children;
+            nodeListView.ItemsSource = nd.Children();
         }
 
         private void NodeListView_SelectionChanged(object sender, SelectionChangedEventArgs e)

@@ -15,12 +15,14 @@ namespace NineWorldsDeep.Tapestry
 
         public string URI { get; private set; }
 
-        public IEnumerable<TapestryNode> Children
+        public IEnumerable<TapestryNode> Children()
         {
-            get
-            {
                 return GetChildren();
-            }
+        }
+
+        public virtual IEnumerable<TapestryNode> Children(TapestryNodeType nodeType)
+        {
+            return GetChildren(nodeType);
         }
 
         public string ShortName
@@ -35,7 +37,7 @@ namespace NineWorldsDeep.Tapestry
         {
             get
             {
-                return Children.Count();
+                return Children().Count();
             }
         }
 
@@ -51,7 +53,7 @@ namespace NineWorldsDeep.Tapestry
         {
             get
             {
-                if (Children.Count() > 0)
+                if (Children().Count() > 0)
                 {
                     return TapestryNodeType.Collection;
                 }
@@ -67,6 +69,11 @@ namespace NineWorldsDeep.Tapestry
             return uriToChildFragments.Values;
         }
 
+        protected virtual IEnumerable<TapestryNode> GetChildren(TapestryNodeType nodeType)
+        {
+            return GetChildren().Where(nd => nd.NodeType == nodeType).ToList();
+        }
+
         public TapestryNode(string uri, params TapestryNode[] children)
         {
             this.URI = Converter.SanitizeUri(uri);
@@ -80,9 +87,10 @@ namespace NineWorldsDeep.Tapestry
 
         public virtual string ToMultiLineDetail()
         {
-            string detail = Converter.NwdUriNodeName(URI) +
+            //string detail = Converter.NwdUriNodeName(URI) +
+            string detail = URI +
                 System.Environment.NewLine;
-            detail += "Child Count: " + Children.Count() +
+            detail += "Child Count: " + Children().Count() +
                 System.Environment.NewLine;
 
             return detail;
@@ -105,7 +113,7 @@ namespace NineWorldsDeep.Tapestry
         /// Will attempt to add the fragment as a child of this fragment
         /// keyed to the uri of the given fragment. If a fragment
         /// is already keyed to the given uri, the fragment will
-        /// not be added and the method will return false (use SetChild())
+        /// not be added and the method will return false (use SetChild(TapestryNode))
         /// </summary>
         /// <param name="frg">the fragment to add as child to this fragment</param>
         /// <returns>true if Add was successful, false if not</returns>

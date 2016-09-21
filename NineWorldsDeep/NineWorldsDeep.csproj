@@ -27,7 +27,7 @@
     <UpdatePeriodically>false</UpdatePeriodically>
     <UpdateRequired>false</UpdateRequired>
     <MapFileExtensions>true</MapFileExtensions>
-    <ApplicationRevision>50</ApplicationRevision>
+    <ApplicationRevision>51</ApplicationRevision>
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <PublishWizardCompleted>true</PublishWizardCompleted>
@@ -200,6 +200,9 @@
     <Compile Include="ImageBrowser\LoadImagesStrategy.cs" />
     <Compile Include="IProgressBarCompatible.cs" />
     <Compile Include="MenuController.cs" />
+    <Compile Include="Mock\MockClusterDb.cs" />
+    <Compile Include="Mock\MockClusterFileSubsetXml.cs" />
+    <Compile Include="Mock\MockUtils.cs" />
     <Compile Include="Model\TagModelItem.cs" />
     <Compile Include="Mtp\Extensions.cs" />
     <Compile Include="Mtp\MtpMainWindow.xaml.cs">
@@ -343,6 +346,7 @@
     </Compile>
     <Compile Include="Tapestry\Nodes\ClusterNode.cs" />
     <Compile Include="Tapestry\Nodes\GrowthAreasNode.cs" />
+    <Compile Include="Tapestry\Nodes\NullClusterNode.cs" />
     <Compile Include="Tapestry\Nodes\StudioKeyboardNode.cs" />
     <Compile Include="Tapestry\Nodes\ArpaBetNode.cs" />
     <Compile Include="Tapestry\Nodes\StudioLyricsNode.cs" />
@@ -357,6 +361,12 @@
     <Compile Include="Tapestry\NodeUI\ClusterChooser.xaml.cs">
       <DependentUpon>ClusterChooser.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Tapestry\NodeUI\ClusterChooserMockDbOption.cs" />
+    <Compile Include="Tapestry\NodeUI\ClusterChooserMockXmlOption.cs" />
+    <Compile Include="Tapestry\NodeUI\ClusterChooserNewDbV4cOption.cs" />
+    <Compile Include="Tapestry\NodeUI\ClusterChooserNewDbV5Option.cs" />
+    <Compile Include="Tapestry\NodeUI\ClusterChooserNewXmlOption.cs" />
+    <Compile Include="Tapestry\NodeUI\ClusterChooserOption.cs" />
     <Compile Include="Tapestry\NodeUI\ClusterDetails.xaml.cs">
       <DependentUpon>ClusterDetails.xaml</DependentUpon>
     </Compile>
@@ -367,12 +377,14 @@
     <Compile Include="Tapestry\NodeUI\ClusterNodeDisplay.xaml.cs">
       <DependentUpon>ClusterNodeDisplay.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Tapestry\NodeUI\ClusterRegistry.cs" />
     <Compile Include="Tapestry\NodeUI\FileDetails.xaml.cs">
       <DependentUpon>FileDetails.xaml</DependentUpon>
     </Compile>
     <Compile Include="Tapestry\NodeUI\ImageNodeDisplay.xaml.cs">
       <DependentUpon>ImageNodeDisplay.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Tapestry\NodeUI\NodeDisplayRequestedEventArgs.cs" />
     <Compile Include="Tapestry\NodeUI\NodeList.xaml.cs">
       <DependentUpon>NodeList.xaml</DependentUpon>
     </Compile>

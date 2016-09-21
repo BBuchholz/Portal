@@ -49,7 +49,7 @@ namespace NineWorldsDeep.FragmentCloud
 
         private void ResolveContentControlForUri(Tapestry.TapestryNode frg)
         {
-            if (frg.Children.Count() > 0)
+            if (frg.Children().Count() > 0)
             {
                 ccBranch.Visibility = Visibility.Visible;
                 ccLeaf.Visibility = Visibility.Collapsed;

@@ -2,11 +2,19 @@
 {
     public enum TapestryNodeType
     {
+        //TODO: this has a bad smell, Collection, List, and SingleNodeDefault are NodeDisplayTypes, not NodeTypes
+        //maybe rename for clarity (I was lead here looking for types, but as display types these are already quite internal)?
         Collection,
         List,
         Audio,
         Image,
         Cluster,
-        SingleNodeDefault
+        SingleNodeDefault,
+        DevicePath,
+        Device,
+        SynergyList,
+        SynergyListItem,
+        LyricBit,
+        NullCluster
     }
 }

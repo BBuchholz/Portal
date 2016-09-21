@@ -45,7 +45,7 @@ namespace NineWorldsDeep.Tapestry
         
         public void PerformLoad(TapestryNodeViewControl originator, TapestryNode nd)
         {
-            TapestrySplitViewLoadCommand lc = new TapestrySplitViewLoadCommand();
+            TapestrySplitViewLoadCommand lc = new TapestrySplitViewLoadCommand();            
 
             if (originator == leftNodeView)
             {

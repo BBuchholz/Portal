@@ -1,4 +1,5 @@
 ﻿using NineWorldsDeep.Tapestry.Nodes;
+using NineWorldsDeep.Warehouse;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -22,18 +23,36 @@ namespace NineWorldsDeep.Tapestry.NodeUI
     public partial class ClusterChooser : UserControl
     {
         private ClusterNode clusterNode;
-        
+        private ClusterRegistry clusterRegistry =
+            ClusterRegistry.GetInstance();
         
         public ClusterChooser()
         {
             InitializeComponent();
+            LoadComboBoxDefaults();
+        }
+
+        private void LoadComboBoxDefaults()
+        {
+            cmbClusterType.ItemsSource = clusterRegistry.ChooserOptions;
         }
 
         private void btnSelect_Click(object sender, RoutedEventArgs e)
         {
-            clusterNode.Loaded = true;
-            OnClusterLoadedStateChanged(
-                new ClusterLoadedStateChangedEventArgs(clusterNode));
+            ClusterChooserOption selected =
+                (ClusterChooserOption)cmbClusterType.SelectedItem;
+
+            if(selected != null)
+            {
+                ClusterNode nd = selected.Retrieve();
+
+                if (nd != null)
+                {
+                    clusterNode = nd;
+                    OnClusterLoadedStateChanged(
+                        new ClusterLoadedStateChangedEventArgs(clusterNode));
+                }
+            }
         }
 
         public void Display(ClusterNode nd)

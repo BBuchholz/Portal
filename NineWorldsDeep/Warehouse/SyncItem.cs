@@ -144,15 +144,10 @@ namespace NineWorldsDeep.Warehouse
                 OnPropertyChanged("HostDisplayName");
             }
         }
-
-
+        
         protected void OnPropertyChanged(string name)
         {
-            PropertyChangedEventHandler handler = PropertyChanged;
-            if (handler != null)
-            {
-                handler(this, new PropertyChangedEventArgs(name));
-            }
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
         }
 
         private string PreparePath(string path)
