@@ -86,6 +86,8 @@
                                   Click="MenuItemOpenExternally_Click"/>
                         <MenuItem Header="Send To Trash"
                                   Click="MenuItemSendToTrash_Click"/>
+                        <MenuItem Header="Copy Consumption Tag"
+                              Click="MenuItemCopyConsumptionTag_Click"/>
                     </ContextMenu>
                 </ListView.ContextMenu>
                 <ListView.ItemTemplate>

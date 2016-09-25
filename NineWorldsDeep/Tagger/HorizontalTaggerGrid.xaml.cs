@@ -446,5 +446,18 @@ namespace NineWorldsDeep.Tagger
                 }
             }
         }
+
+        private void MenuItemCopyConsumptionTag_Click(object sender, RoutedEventArgs e)
+        {
+            FileElement fe = (FileElement)lvFileElements.SelectedItem;
+            
+            if (fe != null)
+            {
+                string fileName = System.IO.Path.GetFileName(fe.Path);
+                string tag = "[consumes " + fileName + "]";
+                Clipboard.SetText(tag);
+                MessageBox.Show(tag + " copied to clipboard");
+            }
+        }
     }
 }
