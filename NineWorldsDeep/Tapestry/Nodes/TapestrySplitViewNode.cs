@@ -18,6 +18,11 @@ namespace NineWorldsDeep.Tapestry.Fragments
             return "Tapestry Split";
         }
 
+        public override bool Parallels(TapestryNode nd)
+        {
+            throw new NotImplementedException();
+        }
+
         public override void PerformSelectionAction()
         {
             var window = new TapestrySplitViewWindow();

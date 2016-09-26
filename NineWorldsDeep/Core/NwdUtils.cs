@@ -16,6 +16,11 @@ namespace NineWorldsDeep.Core
             return DateTime.Now.ToString("yyyyMMddHHmmss");
         }
 
+        public static string GetTimeStamp_yyyyMMddHHmmss(DateTime dt)
+        {
+            return dt.ToString("yyyyMMddHHmmss");
+        }
+
         /// <summary>
         /// Throws an ArgumentException if name
         /// is not valid according to NWD naming conventions

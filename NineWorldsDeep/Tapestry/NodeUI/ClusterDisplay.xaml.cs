@@ -123,5 +123,10 @@ namespace NineWorldsDeep.Tapestry.NodeUI
         
         public event EventHandler<NodeDisplayRequestedEventArgs>
             NodeDisplayRequested;
+
+        private void LoadedClustersComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            UI.Display.Message("run comparison goes here");
+        }
     }
 }

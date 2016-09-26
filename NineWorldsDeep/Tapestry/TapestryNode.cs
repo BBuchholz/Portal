@@ -15,10 +15,24 @@ namespace NineWorldsDeep.Tapestry
 
         public string URI { get; private set; }
 
+        public TapestryNode(string uri, params TapestryNode[] children)
+        {
+            this.URI = Converter.SanitizeUri(uri);
+            if(children != null)
+            {
+                foreach (TapestryNode frg in children)
+                {
+                    AddChild(frg);
+                }
+            }
+        }
+
         public IEnumerable<TapestryNode> Children()
         {
                 return GetChildren();
         }
+
+        public abstract bool Parallels(TapestryNode nd);
 
         public virtual IEnumerable<TapestryNode> Children(TapestryNodeType nodeType)
         {
@@ -74,14 +88,6 @@ namespace NineWorldsDeep.Tapestry
             return GetChildren().Where(nd => nd.NodeType == nodeType).ToList();
         }
 
-        public TapestryNode(string uri, params TapestryNode[] children)
-        {
-            this.URI = Converter.SanitizeUri(uri);
-            foreach (TapestryNode frg in children)
-            {
-                AddChild(frg);
-            }
-        }
 
         public abstract void PerformSelectionAction();
 

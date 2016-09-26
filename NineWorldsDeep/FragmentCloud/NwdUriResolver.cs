@@ -1,4 +1,6 @@
-﻿namespace NineWorldsDeep.FragmentCloud
+﻿using NineWorldsDeep.Tapestry.Nodes;
+
+namespace NineWorldsDeep.FragmentCloud
 {
     public class NwdUriResolver
     {

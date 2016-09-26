@@ -131,6 +131,7 @@
     <Compile Include="AudioBrowser\FileNameTagExtractor.cs" />
     <Compile Include="AudioBrowser\PlayAction.cs" />
     <Compile Include="Core\Configuration.cs" />
+    <Compile Include="Core\Extensions.cs" />
     <Compile Include="Core\Fragment.cs" />
     <Compile Include="Core\FragmentMergeAction.cs" />
     <Compile Include="Core\FragmentMergeException.cs" />
@@ -138,6 +139,8 @@
     <Compile Include="Core\ProcessableFragment.cs" />
     <Compile Include="Core\ReviewableFragment.cs" />
     <Compile Include="Core\NwdUtils.cs" />
+    <Compile Include="Core\TimeStamp.cs" />
+    <Compile Include="Core\WordUtils.cs" />
     <Compile Include="Db\DbAdapterBase.cs" />
     <Compile Include="Db\NwdDeviceKey.cs" />
     <Compile Include="Db\PathTagLink.cs" />
@@ -345,7 +348,11 @@
       <DependentUpon>VerticalTaggerGrid.xaml</DependentUpon>
     </Compile>
     <Compile Include="Tapestry\Nodes\ClusterNode.cs" />
+    <Compile Include="Tapestry\Nodes\DevicePathNode.cs" />
+    <Compile Include="Tapestry\Nodes\FileSystemNode.cs" />
     <Compile Include="Tapestry\Nodes\GrowthAreasNode.cs" />
+    <Compile Include="Tapestry\Nodes\HashNode.cs" />
+    <Compile Include="Tapestry\Nodes\LocalConfigNode.cs" />
     <Compile Include="Tapestry\Nodes\NullClusterNode.cs" />
     <Compile Include="Tapestry\Nodes\StudioKeyboardNode.cs" />
     <Compile Include="Tapestry\Nodes\ArpaBetNode.cs" />
@@ -353,6 +360,9 @@
     <Compile Include="Tapestry\Nodes\StudioMainNode.cs" />
     <Compile Include="Tapestry\Nodes\StudioProjectsNode.cs" />
     <Compile Include="Tapestry\Nodes\StudioScalesNode.cs" />
+    <Compile Include="Tapestry\Nodes\SynergyItemNode.cs" />
+    <Compile Include="Tapestry\Nodes\SynergyListNode.cs" />
+    <Compile Include="Tapestry\Nodes\TagNode.cs" />
     <Compile Include="Tapestry\Nodes\TapestryRootNode.cs" />
     <Compile Include="Tapestry\Nodes\TapestrySplitViewNode.cs" />
     <Compile Include="Tapestry\NodeUI\AudioNodeDisplay.xaml.cs">

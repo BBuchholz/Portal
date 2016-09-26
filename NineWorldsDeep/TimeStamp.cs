@@ -6,11 +6,11 @@ using System.Threading.Tasks;
 
 namespace NineWorldsDeep
 {
-    public class TimeStamp
-    {
-        public static string Now()
-        {
-            return DateTime.Now.ToString("yyyyMMddHHmmss");
-        }
-    }
+    //public class TimeStamp
+    //{
+    //    public static string Now()
+    //    {
+    //        return DateTime.Now.ToString("yyyyMMddHHmmss");
+    //    }
+    //}
 }

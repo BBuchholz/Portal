@@ -19,6 +19,11 @@ namespace NineWorldsDeep.Tapestry.Fragments
             return "Studio Keyboard";
         }
 
+        public override bool Parallels(TapestryNode nd)
+        {
+            throw new NotImplementedException();
+        }
+
         public override void PerformSelectionAction()
         {
             var window = new Studio.VisualKeyboardTestHarness();

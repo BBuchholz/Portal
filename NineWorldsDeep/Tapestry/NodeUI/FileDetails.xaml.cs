@@ -1,5 +1,6 @@
 ﻿using NineWorldsDeep.Core;
 using NineWorldsDeep.FragmentCloud;
+using NineWorldsDeep.Tapestry.Nodes;
 using NineWorldsDeep.Warehouse;
 using System;
 using System.Collections.Generic;

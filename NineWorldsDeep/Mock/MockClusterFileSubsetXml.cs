@@ -18,8 +18,8 @@ namespace NineWorldsDeep.Mock
 
         public override IEnumerable<TapestryNode> Children(TapestryNodeType nodeType)
         {
-            List<FragmentCloud.FileSystemNode> lst =
-                new List<FragmentCloud.FileSystemNode>();
+            List<FileSystemNode> lst =
+                new List<FileSystemNode>();
 
             return (IEnumerable<TapestryNode>)lst;
         }
@@ -27,6 +27,11 @@ namespace NineWorldsDeep.Mock
         public override string GetShortName()
         {
             return "Mock File Subset XML Cluster";
+        }
+
+        public override bool Parallels(TapestryNode nd)
+        {
+            throw new NotImplementedException();
         }
     }
 }

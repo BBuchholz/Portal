@@ -1,5 +1,6 @@
 ﻿using NineWorldsDeep.Tapestry.Fragments;
 using System;
+using NineWorldsDeep.Tapestry;
 
 namespace NineWorldsDeep.FragmentCloud
 {
@@ -19,6 +20,11 @@ namespace NineWorldsDeep.FragmentCloud
         public override string GetShortName()
         {
             return "Studio";
+        }
+
+        public override bool Parallels(Tapestry.TapestryNode nd)
+        {
+            throw new NotImplementedException();
         }
 
         public override void PerformSelectionAction()

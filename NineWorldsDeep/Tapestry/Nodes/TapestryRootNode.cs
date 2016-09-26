@@ -29,6 +29,11 @@ namespace NineWorldsDeep.Tapestry.Nodes
             return "Tapestry Root";
         }
 
+        public override bool Parallels(TapestryNode nd)
+        {
+            throw new NotImplementedException();
+        }
+
         public override void PerformSelectionAction()
         {
             //do nothing

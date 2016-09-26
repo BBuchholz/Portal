@@ -196,7 +196,7 @@ namespace NineWorldsDeep.Warehouse
                     //get files
                     foreach (string filePath in Directory.GetFiles(exportRootPath, "*.*", SearchOption.TopDirectoryOnly))
                     {
-                        string hash = Hashes.SHA1(filePath);
+                        string hash = Hashes.Sha1ForFilePath(filePath);
                         string path = filePath;
                         string tags = Tags.GetTagStringForHash(hash);
                         string displayName = DisplayNames.FromHash(sp, sm.SyncDirection, hash);
@@ -230,7 +230,7 @@ namespace NineWorldsDeep.Warehouse
                     //get files
                     foreach (string filePath in Directory.GetFiles(importRootPath, "*.*", SearchOption.TopDirectoryOnly))
                     {
-                        string hash = Hashes.SHA1(filePath);
+                        string hash = Hashes.Sha1ForFilePath(filePath);
                         string path = filePath;
                         string tags = Tags.ImportForHash(sp, hash, tagsFromXmlNotKeyValFile);
                         string displayName = DisplayNames.FromHash(sp, sm.SyncDirection, hash);

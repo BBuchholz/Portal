@@ -27,6 +27,11 @@ namespace NineWorldsDeep.Tapestry.Nodes
             return new List<TapestryNode>();
         }
 
+        public override bool Parallels(TapestryNode nd)
+        {
+            throw new NotImplementedException();
+        }
+
         public override TapestryNodeType NodeType
         {
             get

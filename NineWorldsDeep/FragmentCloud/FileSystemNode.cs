@@ -7,213 +7,213 @@ using NineWorldsDeep.Core;
 
 namespace NineWorldsDeep.FragmentCloud
 {
-    public class FileSystemNode : Tapestry.TapestryNode
-    {
-        private bool initialized = false;
+    //public class FileSystemNode : Tapestry.TapestryNode
+    //{
+    //    private bool initialized = false;
 
-        public FileSystemNode(string uri, bool lazyLoadChildren, params Tapestry.TapestryNode[] children)
-            : base(uri, children)
-        {
-            Path = Converter.NwdUriToFileSystemPath(uri);
-            if (!lazyLoadChildren)
-            {
-                InitializeChildren();
-            }
-        }
+    //    public FileSystemNode(string uri, bool lazyLoadChildren, params Tapestry.TapestryNode[] children)
+    //        : base(uri, children)
+    //    {
+    //        Path = Converter.NwdUriToFileSystemPath(uri);
+    //        if (!lazyLoadChildren)
+    //        {
+    //            InitializeChildren();
+    //        }
+    //    }
 
-        public string Path { get; private set; }
+    //    public string Path { get; private set; }
 
-        protected override IEnumerable<Tapestry.TapestryNode> GetChildren()
-        {
-            //if (base.GetChildren().Count() == 0)
-            if (!initialized)
-            {
-                InitializeChildren();
-            }
+    //    protected override IEnumerable<Tapestry.TapestryNode> GetChildren()
+    //    {
+    //        //if (base.GetChildren().Count() == 0)
+    //        if (!initialized)
+    //        {
+    //            InitializeChildren();
+    //        }
 
-            return base.GetChildren();
-        }
+    //        return base.GetChildren();
+    //    }
 
-        public override string ToMultiLineDetail()
-        {
-            if (Directory.Exists(Path))
-            {
-                return base.ToMultiLineDetail();
-            }
+    //    public override string ToMultiLineDetail()
+    //    {
+    //        if (Directory.Exists(Path))
+    //        {
+    //            return base.ToMultiLineDetail();
+    //        }
 
-            if (File.Exists(Path))
-            {
-                return GetMultiLineFileDetails();
-            }
+    //        if (File.Exists(Path))
+    //        {
+    //            return GetMultiLineFileDetails();
+    //        }
 
-            return "[[[FILESYSTEM OBJECT NOT FOUND]]]";
-        }
+    //        return "[[[FILESYSTEM OBJECT NOT FOUND]]]";
+    //    }
 
-        private string GetMultiLineFileDetails()
-        {
-            string detail = "";
+    //    private string GetMultiLineFileDetails()
+    //    {
+    //        string detail = "";
 
-            //short name
-            detail += "Long Name: " +
-                GetLongName() +
-                Environment.NewLine;
+    //        //short name
+    //        detail += "Long Name: " +
+    //            GetLongName() +
+    //            Environment.NewLine;
 
-            //created at
-            detail += "Created: " +
-                File.GetCreationTime(Path).ToShortDateString() +
-                Environment.NewLine;
+    //        //created at
+    //        detail += "Created: " +
+    //            File.GetCreationTime(Path).ToShortDateString() +
+    //            Environment.NewLine;
 
-            //last modified
-            detail += "Modified: " +
-                File.GetLastWriteTime(Path).ToShortDateString() +
-                Environment.NewLine;
+    //        //last modified
+    //        detail += "Modified: " +
+    //            File.GetLastWriteTime(Path).ToShortDateString() +
+    //            Environment.NewLine;
 
-            //size
-            detail += "Size: " +
-                GetSizePrettyPrint(new FileInfo(Path).Length) +
-                Environment.NewLine;
+    //        //size
+    //        detail += "Size: " +
+    //            GetSizePrettyPrint(new FileInfo(Path).Length) +
+    //            Environment.NewLine;
 
-            //mime type
-            detail += "Mime Type: " +
-                GetMimeType(Path) +
-                Environment.NewLine;
+    //        //mime type
+    //        detail += "Mime Type: " +
+    //            GetMimeType(Path) +
+    //            Environment.NewLine;
 
-            //file extension
-            detail += "Extension: " +
-                System.IO.Path.GetExtension(Path) +
-                Environment.NewLine;
+    //        //file extension
+    //        detail += "Extension: " +
+    //            System.IO.Path.GetExtension(Path) +
+    //            Environment.NewLine;
 
-            return detail;
-        }
+    //        return detail;
+    //    }
 
-        private string GetSizePrettyPrint(long bytes)
-        {
-            double kb = bytes / 1024f;
-            double mb = kb / 1024f;
-            double gb = mb / 1024f;
+    //    private string GetSizePrettyPrint(long bytes)
+    //    {
+    //        double kb = bytes / 1024f;
+    //        double mb = kb / 1024f;
+    //        double gb = mb / 1024f;
 
-            if (gb > 1)
-            {
-                return String.Format("{0:0.00} GB", gb);
-            }
+    //        if (gb > 1)
+    //        {
+    //            return String.Format("{0:0.00} GB", gb);
+    //        }
 
-            if (mb > 1)
-            {
-                return String.Format("{0:0.00} MB", mb);
-            }
+    //        if (mb > 1)
+    //        {
+    //            return String.Format("{0:0.00} MB", mb);
+    //        }
 
-            if (kb > 1)
-            {
-                return String.Format("{0:0.00} KB", kb);
-            }
+    //        if (kb > 1)
+    //        {
+    //            return String.Format("{0:0.00} KB", kb);
+    //        }
 
-            return String.Format("{0:0.00} bytes", bytes);
-        }
+    //        return String.Format("{0:0.00} bytes", bytes);
+    //    }
 
-        private string GetMimeType(string fileName)
-        {
-            string mimeType = "application/unknown";
-            string ext = System.IO.Path.GetExtension(fileName).ToLower();
-            Microsoft.Win32.RegistryKey regKey = Microsoft.Win32.Registry.ClassesRoot.OpenSubKey(ext);
-            if (regKey != null && regKey.GetValue("Content Type") != null)
-                mimeType = regKey.GetValue("Content Type").ToString();
-            return mimeType;
-        }
+    //    private string GetMimeType(string fileName)
+    //    {
+    //        string mimeType = "application/unknown";
+    //        string ext = System.IO.Path.GetExtension(fileName).ToLower();
+    //        Microsoft.Win32.RegistryKey regKey = Microsoft.Win32.Registry.ClassesRoot.OpenSubKey(ext);
+    //        if (regKey != null && regKey.GetValue("Content Type") != null)
+    //            mimeType = regKey.GetValue("Content Type").ToString();
+    //        return mimeType;
+    //    }
 
-        private void InitializeChildren()
-        {
-            ClearChildren();
+    //    private void InitializeChildren()
+    //    {
+    //        ClearChildren();
 
-            //process children if folder
-            if (Directory.Exists(Path))
-            {
-                //directories
-                foreach (string dirPath in Directory.EnumerateDirectories(Path))
-                {
-                    Tapestry.TapestryNode f = PathToFileSystemFragment(dirPath);
-                    AddChild(f);
-                }
+    //        //process children if folder
+    //        if (Directory.Exists(Path))
+    //        {
+    //            //directories
+    //            foreach (string dirPath in Directory.EnumerateDirectories(Path))
+    //            {
+    //                Tapestry.TapestryNode f = PathToFileSystemNode(dirPath);
+    //                AddChild(f);
+    //            }
 
-                //files
-                foreach (string filePath in Directory.EnumerateFiles(Path))
-                {
-                    Tapestry.TapestryNode f = PathToFileSystemFragment(filePath);
-                    AddChild(f);
-                }
-            }
+    //            //files
+    //            foreach (string filePath in Directory.EnumerateFiles(Path))
+    //            {
+    //                Tapestry.TapestryNode f = PathToFileSystemNode(filePath);
+    //                AddChild(f);
+    //            }
+    //        }
 
-            initialized = true;
-        }
+    //        initialized = true;
+    //    }
 
-        public override TapestryNodeType NodeType
-        {
-            get
-            {                
-                if (Configuration.FileIsAudio(Path))
-                {
-                    return TapestryNodeType.Audio;
-                }
-                else if (Configuration.FileIsImage(Path))
-                {
-                    return TapestryNodeType.Image;
-                }
-                else
-                {
-                    return base.NodeType;
-                }
-            }
-        }
+    //    public override TapestryNodeType NodeType
+    //    {
+    //        get
+    //        {                
+    //            if (Configuration.FileIsAudio(Path))
+    //            {
+    //                return TapestryNodeType.Audio;
+    //            }
+    //            else if (Configuration.FileIsImage(Path))
+    //            {
+    //                return TapestryNodeType.Image;
+    //            }
+    //            else
+    //            {
+    //                return base.NodeType;
+    //            }
+    //        }
+    //    }
 
-        private Tapestry.TapestryNode PathToFileSystemFragment(string path)
-        {
-            string fileOrDirName = System.IO.Path.GetFileName(path);
-            string frgUri = this.URI;
+    //    private Tapestry.TapestryNode PathToFileSystemNode(string path)
+    //    {
+    //        string fileOrDirName = System.IO.Path.GetFileName(path);
+    //        string frgUri = this.URI;
 
-            if (!frgUri.EndsWith("/"))
-            {
-                frgUri += "/";
-            }
+    //        if (!frgUri.EndsWith("/"))
+    //        {
+    //            frgUri += "/";
+    //        }
 
-            frgUri += fileOrDirName;
+    //        frgUri += fileOrDirName;
 
-            Tapestry.TapestryNode f = new FileSystemNode(frgUri, true);
+    //        Tapestry.TapestryNode f = new FileSystemNode(frgUri, true);
 
-            return f;
-        }
+    //        return f;
+    //    }
 
-        public override void PerformSelectionAction()
-        {
-            if (Directory.Exists(Path))
-            {
-                //do nothing
-            }
+    //    public override void PerformSelectionAction()
+    //    {
+    //        if (Directory.Exists(Path))
+    //        {
+    //            //do nothing
+    //        }
 
-            if (File.Exists(Path))
-            {
-                //Display.Message("open containing folder in explorer goes here");
-            }
-        }
+    //        if (File.Exists(Path))
+    //        {
+    //            //Display.Message("open containing folder in explorer goes here");
+    //        }
+    //    }
 
-        public override string GetShortName()
-        {
-            int shortNameLength = 15;
+    //    public override string GetShortName()
+    //    {
+    //        int shortNameLength = 15;
 
-            string name = GetLongName();
+    //        string name = GetLongName();
 
-            if (name.Length > shortNameLength)
-            {
-                name = name.Substring(0, shortNameLength - 7) + "..." +
-                    name.Substring(name.Length - 4, 4);
-            }
+    //        if (name.Length > shortNameLength)
+    //        {
+    //            name = name.Substring(0, shortNameLength - 7) + "..." +
+    //                name.Substring(name.Length - 4, 4);
+    //        }
 
-            return name;
-        }
+    //        return name;
+    //    }
 
-        public override string GetLongName()
-        {
-            string name = Converter.NwdUriNodeName(URI);
-            name = System.IO.Path.GetFileName(name);
-            return name;
-        }
-    }
+    //    public override string GetLongName()
+    //    {
+    //        string name = Converter.NwdUriNodeName(URI);
+    //        name = System.IO.Path.GetFileName(name);
+    //        return name;
+    //    }
+    //}
 }

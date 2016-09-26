@@ -245,14 +245,14 @@ namespace NineWorldsDeep.Warehouse
             {
                 case SyncDirection.Export:
 
-                    ExtHash = Hashes.SHA1(ExtPath);
+                    ExtHash = Hashes.Sha1ForFilePath(ExtPath);
                     ExtTags = Tags.GetTagStringForHash(ExtHash);
 
                     break;
 
                 case SyncDirection.Import:
 
-                    HostHash = Hashes.SHA1(HostPath);
+                    HostHash = Hashes.Sha1ForFilePath(HostPath);
                     HostTags = Tags.ImportForHash(sp, HostHash, useXmlInsteadOfKeyVal);
 
                     break;
@@ -300,7 +300,7 @@ namespace NineWorldsDeep.Warehouse
                                 //unless the user explicitly decides
                                 //to do so.
 
-                                string destHash = Hashes.SHA1(ExtPath);
+                                string destHash = Hashes.Sha1ForFilePath(ExtPath);
                                 if (!destHash.Equals(HostHash,
                                     StringComparison.CurrentCultureIgnoreCase))
                                 {
@@ -339,7 +339,7 @@ namespace NineWorldsDeep.Warehouse
                                 //unless the user explicitly decides
                                 //to do so.
 
-                                string destHash = Hashes.SHA1(HostPath);
+                                string destHash = Hashes.Sha1ForFilePath(HostPath);
                                 if (!destHash.Equals(ExtHash,
                                     StringComparison.CurrentCultureIgnoreCase))
                                 {
