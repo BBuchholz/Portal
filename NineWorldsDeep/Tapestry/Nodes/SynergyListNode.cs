@@ -9,7 +9,7 @@ namespace NineWorldsDeep.Tapestry.Nodes
 {
     class SynergyListNode : TapestryNode
     {
-        private List<SynergyItemNode> listNodes =
+        private List<SynergyItemNode> mSynergyItemNodes =
             new List<SynergyItemNode>();
 
         private SynergyListNode(string uri, params TapestryNode[] children)
@@ -23,8 +23,15 @@ namespace NineWorldsDeep.Tapestry.Nodes
         {
             ListName = listName;
         }
-
+        
         public string ListName { get; internal set; }
+
+        public int Count { get { return mSynergyItemNodes.Count; } }
+
+        protected override IEnumerable<TapestryNode> GetChildren()
+        {
+            return mSynergyItemNodes;
+        }
 
         public override string GetShortName()
         {
@@ -53,7 +60,7 @@ namespace NineWorldsDeep.Tapestry.Nodes
 
         internal void Add(SynergyItemNode synergyItemNode)
         {
-            listNodes.AddIdempotent(synergyItemNode);
+            mSynergyItemNodes.AddIdempotent(synergyItemNode);
         }
     }
 }

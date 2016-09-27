@@ -19,12 +19,14 @@ namespace NineWorldsDeep.Mock
             new List<String>();
         private static List<String> mNouns =
                 new List<String>();
+
         private static List<String> mVerbs =
                 new List<String>();
 
+
         //NEED LISTS FOR EACH MODEL ITEM TO HOLD A FEW MOCKED COMMON ITEMS
         //eg. A couple FileModelItems to add into multiple nodes to test commonality
-        private static List<DevicePathNode> mFiles = new List<DevicePathNode>();
+        private static List<DevicePathNode> mDevicePaths = new List<DevicePathNode>();
 
 
         private static List<HashNode> mHashes = new List<HashNode>();
@@ -41,16 +43,26 @@ namespace NineWorldsDeep.Mock
             populateAdjectives();
             populateVerbs();
 
-            populateFiles();
-            populateLocalConfig();
-            populateSynergyLists();
+            PopulateFiles();
+            PopulateLocalConfig();
+            PopulateSynergyLists();
         }
 
-        private static void populateSynergyListItems(SynergyListNode lst)
+        public static IEnumerable<DevicePathNode> GetAllDevicePathNodes()
+        {
+            return mDevicePaths;
+        }
+
+        internal static IEnumerable<SynergyListNode> GetAllSynergyListNodes()
+        {
+            return mSynergyLists;
+        }
+
+        private static void PopulateSynergyListItems(SynergyListNode lst)
         {
 
             //add a random number of existing items
-            int numberOfExistingToAdd = getRandomIndex(6);
+            int numberOfExistingToAdd = GetRandomIndex(6);
 
             for (int i = 0; i < numberOfExistingToAdd; i++)
             {
@@ -58,14 +70,14 @@ namespace NineWorldsDeep.Mock
                 if (mSynergyListItems.Count > 0)
                 {
 
-                    int idx = getRandomIndex(mSynergyListItems.Count);
+                    int idx = GetRandomIndex(mSynergyListItems.Count);
 
                     lst.Add(mSynergyListItems[idx]);
                 }
             }
 
             //generate a random number of new items to add to shared list
-            int numberOfNewSharedToAdd = getRandomIndex(4);
+            int numberOfNewSharedToAdd = GetRandomIndex(4);
 
             for (int i = 0; i < numberOfNewSharedToAdd; i++)
             {
@@ -82,7 +94,7 @@ namespace NineWorldsDeep.Mock
             }
 
             //generate a random number of new items to keep seperate
-            int numberOfNewPrivateToAdd = getRandomIndex(4);
+            int numberOfNewPrivateToAdd = GetRandomIndex(4);
 
             for (int i = 0; i < numberOfNewPrivateToAdd; i++)
             {
@@ -98,11 +110,11 @@ namespace NineWorldsDeep.Mock
             }
         }
 
-        private static void populateTags(DevicePathNode fmi)
+        private static void PopulateTags(DevicePathNode fmi)
         {
 
             //add a random number of existing tags
-            int numberOfExistingToAdd = getRandomIndex(3);
+            int numberOfExistingToAdd = GetRandomIndex(3);
 
             for (int i = 0; i < numberOfExistingToAdd; i++)
             {
@@ -110,14 +122,14 @@ namespace NineWorldsDeep.Mock
                 if (mTags.Count > 0)
                 {
 
-                    int idx = getRandomIndex(mTags.Count);
+                    int idx = GetRandomIndex(mTags.Count);
 
                     fmi.Add(mTags[idx]);
                 }
             }
 
             //generate a random number of new tags to add to shared list
-            int numberOfNewSharedToAdd = getRandomIndex(4);
+            int numberOfNewSharedToAdd = GetRandomIndex(4);
 
             for (int i = 0; i < numberOfNewSharedToAdd; i++)
             {
@@ -144,7 +156,7 @@ namespace NineWorldsDeep.Mock
             }
 
             //generate a random number of new tags to keep seperate
-            int numberOfNewPrivateToAdd = getRandomIndex(3);
+            int numberOfNewPrivateToAdd = GetRandomIndex(3);
 
             for (int i = 0; i < numberOfNewPrivateToAdd; i++)
             {
@@ -170,10 +182,10 @@ namespace NineWorldsDeep.Mock
             }
         }
 
-        private static void populateHashes(DevicePathNode fmi)
+        private static void PopulateHashes(DevicePathNode fmi)
         {
 
-            int numberOfExistingToAdd = getRandomIndex(2);
+            int numberOfExistingToAdd = GetRandomIndex(2);
 
             for (int i = 0; i < numberOfExistingToAdd; i++)
             {
@@ -181,14 +193,14 @@ namespace NineWorldsDeep.Mock
                 if (mHashes.Count > 0)
                 {
 
-                    int idx = getRandomIndex(mHashes.Count);
+                    int idx = GetRandomIndex(mHashes.Count);
 
                     fmi.Add(mHashes[idx]);
                 }
             }
 
             //generate a random number of new hashes to add to shared list
-            int numberOfNewSharedToAdd = getRandomIndex(2);
+            int numberOfNewSharedToAdd = GetRandomIndex(2);
 
             for (int i = 0; i < numberOfNewSharedToAdd; i++)
             {
@@ -200,7 +212,7 @@ namespace NineWorldsDeep.Mock
             }
 
             //generate a random number of new hashes to keep seperate
-            int numberOfNewPrivateToAdd = getRandomIndex(2);
+            int numberOfNewPrivateToAdd = GetRandomIndex(2);
 
             for (int i = 0; i < numberOfNewPrivateToAdd; i++)
             {
@@ -268,10 +280,10 @@ namespace NineWorldsDeep.Mock
             return output;
         }
 
-        private static void populateSynergyLists()
+        private static void PopulateSynergyLists()
         {
 
-            int numberToAdd = getRandomIndex(13);
+            int numberToAdd = GetRandomIndex(5, 21);
 
             for (int i = 0; i < numberToAdd; i++)
             {
@@ -282,16 +294,16 @@ namespace NineWorldsDeep.Mock
                                         WordUtils.CapitalizeFully(getRandomNoun())
                         );
 
-                populateSynergyListItems(lst);
+                PopulateSynergyListItems(lst);
 
                 mSynergyLists.Add(lst);
             }
         }
 
-        private static void populateFiles()
+        private static void PopulateFiles()
         {
 
-            int numberToAdd = getRandomIndex(51);
+            int numberToAdd = GetRandomIndex(51);
 
             for (int i = 0; i < numberToAdd; i++)
             {
@@ -300,22 +312,37 @@ namespace NineWorldsDeep.Mock
                         WordUtils.CapitalizeFully(getRandomAdjective()) + " " +
                                 WordUtils.CapitalizeFully(getRandomNoun());
 
-                String path =
-                        "/NWD/" + getRandomNoun() + "/" + getRandomNoun() + ".test";
+                //String path =
+                //        "/NWD/" + getRandomNoun() + "/" + getRandomNoun() + ".test";
+
+                string path;
+
+                if(i % 3 == 0)
+                {
+                    path = MockAudioUri();
+                }
+                else if(i % 2 == 0)
+                {
+                    path = MockImageUri();
+                }
+                else
+                {
+                    path = MockTextUri();
+                }
 
                 DevicePathNode fmi = new DevicePathNode(deviceDesc, path);
 
-                populateTags(fmi);
-                populateHashes(fmi);
+                PopulateTags(fmi);
+                PopulateHashes(fmi);
 
-                mFiles.Add(fmi);
+                mDevicePaths.Add(fmi);
             }
         }
 
-        private static void populateLocalConfig()
+        private static void PopulateLocalConfig()
         {
 
-            int numberToAdd = getRandomIndex(9);
+            int numberToAdd = GetRandomIndex(9);
 
             for (int i = 0; i < numberToAdd; i++)
             {
@@ -644,28 +671,33 @@ namespace NineWorldsDeep.Mock
         public static String getRandomNoun()
         {
 
-            int idx = getRandomIndex(mNouns.Count);
+            int idx = GetRandomIndex(mNouns.Count);
             return mNouns[idx];
         }
 
         public static String getRandomAdjective()
         {
 
-            int idx = getRandomIndex(mAdjectives.Count);
+            int idx = GetRandomIndex(mAdjectives.Count);
             return mAdjectives[idx];
         }
 
         public static String getRandomVerb()
         {
 
-            int idx = getRandomIndex(mVerbs.Count);
+            int idx = GetRandomIndex(mVerbs.Count);
             return mVerbs[idx];
         }
 
-        private static int getRandomIndex(int upperBoundExclusive)
+        private static int GetRandomIndex(int upperBoundExclusive)
         {
 
             return rnd.Next(upperBoundExclusive);
+        }
+
+        private static int GetRandomIndex(int lowerBoundInclusive, int upperBoundExclusive)
+        {
+            return rnd.Next(lowerBoundInclusive, upperBoundExclusive);
         }
 
         private static string MockFileName(string extension)
@@ -675,13 +707,13 @@ namespace NineWorldsDeep.Mock
                 extension = "." + extension;
             }
 
-            return WordUtils.CapitalizeFully(getRandomAdjective()) + 
+            return WordUtils.CapitalizeFully(getRandomVerb()) + 
+                WordUtils.CapitalizeFully(getRandomAdjective()) + 
                 WordUtils.CapitalizeFully(getRandomNoun()) + 
-                WordUtils.CapitalizeFully(getRandomVerb()) + 
                 extension;
         }
 
-        internal static string MockUri()
+        internal static string MockTextUri()
         {
             return MockSandboxFolderURI() + MockFileName("txt");
         }
@@ -701,7 +733,7 @@ namespace NineWorldsDeep.Mock
             return WordUtils.CapitalizeFully(getRandomAdjective()) +
                 WordUtils.CapitalizeFully(getRandomNoun()) + "/" +
                 WordUtils.CapitalizeFully(getRandomAdjective()) +
-                WordUtils.CapitalizeFully(getRandomNoun());
+                WordUtils.CapitalizeFully(getRandomNoun()) + "/";
         }
 
         internal static string MockSandboxFolderURI()

@@ -4,9 +4,41 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:NineWorldsDeep.Tapestry.NodeUI"
+             xmlns:nodes="clr-namespace:NineWorldsDeep.Tapestry.Nodes"
              mc:Ignorable="d" 
              d:DesignHeight="600" d:DesignWidth="400">
     <UserControl.Resources>
+
+        <DataTemplate DataType="{x:Type nodes:DevicePathNode}">
+            <WrapPanel>
+                <TextBlock Text="URI: " FontWeight="Bold" />
+                <TextBlock Text="{Binding URI}"/>
+            </WrapPanel>
+        </DataTemplate>
+
+        <DataTemplate DataType="{x:Type nodes:SynergyListNode}">
+            <WrapPanel>
+                <TextBlock Text="List: " FontWeight="Bold" />
+                <TextBlock Text="{Binding ListName}"/>
+                <TextBlock Text=" (" />
+                <TextBlock Text="{Binding Count}"/>
+                <TextBlock Text=")" />
+            </WrapPanel>
+        </DataTemplate>
+
+        <DataTemplate DataType="{x:Type nodes:SynergyItemNode}">
+            <StackPanel Orientation="Vertical">
+                <WrapPanel>
+                    <TextBlock Text="List: " FontWeight="Bold" />
+                    <TextBlock Text="{Binding ListName}"/>
+                </WrapPanel>
+                <WrapPanel>
+                    <TextBlock Text="Item: " FontWeight="Bold" />
+                    <TextBlock Text="{Binding ItemText}"/>
+                </WrapPanel>
+            </StackPanel>
+            
+        </DataTemplate>
 
         <Style x:Key="RoundButtonTemplate" TargetType="Button">
             <Setter Property="Background" Value="White"/>
@@ -86,7 +118,25 @@
         <ListView x:Name="NodesListView"
                   Grid.Row="3"
                   Margin="5, 5, 5, 10"
-                  SelectionChanged="NodesListView_SelectionChanged"/>
+                  SelectionChanged="NodesListView_SelectionChanged">
+            <!--<ListView.ItemTemplate>
+                
+                <DataTemplate DataType="{x:Type nodes:DevicePathNode}">
+                    <WrapPanel>
+                        <TextBlock Text="URI: " FontWeight="Bold" />
+                        <TextBlock Text="{Binding URI}"/>
+                    </WrapPanel>
+                </DataTemplate>
+
+                <DataTemplate DataType="{x:Type nodes:SynergyListNode}">
+                    <WrapPanel>
+                        <TextBlock Text="URI: " FontWeight="Bold" />
+                        <TextBlock Text="{Binding URI}"/>
+                    </WrapPanel>
+                </DataTemplate>
+                
+            </ListView.ItemTemplate>-->
+        </ListView>
 
     </Grid>
 </UserControl>

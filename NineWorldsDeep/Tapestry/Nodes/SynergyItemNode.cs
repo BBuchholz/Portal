@@ -11,6 +11,7 @@ namespace NineWorldsDeep.Tapestry.Nodes
     {
         public string ItemText { get; private set; }
         public SynergyListNode ListNode { get; private set; }
+        public string ListName { get { return ListNode.ListName; } }
 
         private SynergyItemNode(string uri)
             : base(uri)
