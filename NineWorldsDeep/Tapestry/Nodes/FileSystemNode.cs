@@ -1,5 +1,6 @@
 ﻿using NineWorldsDeep.Core;
 using NineWorldsDeep.FragmentCloud;
+using NineWorldsDeep.Warehouse;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -85,7 +86,32 @@ namespace NineWorldsDeep.Tapestry.Nodes
                 System.IO.Path.GetExtension(Path) +
                 Environment.NewLine;
 
+            //hash and hash status
+            detail += "Hash: " +
+                GetHashAndStatus(Path) +
+                Environment.NewLine;
+
             return detail;
+        }
+
+        private string GetHashAndStatus(string path)
+        {
+            string hash = Hashes.Sha1ForFilePath(path);
+            
+            string msg = hash + " (Error)";
+
+            try
+            {
+                //go to media table in db
+                //if hash already exists, msg = hash + " (Confirmed)"
+                //else create/store and msg = hash + " (Stored)"
+            }
+            catch (Exception)
+            {
+                //leave as default
+            }
+
+            return msg;
         }
 
         private string GetSizePrettyPrint(long bytes)
