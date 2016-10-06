@@ -1,6 +1,7 @@
 ﻿using NineWorldsDeep.Core;
 using NineWorldsDeep.Tagger;
 using NineWorldsDeep.UI;
+using NineWorldsDeep.Warehouse;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -27,6 +28,8 @@ namespace NineWorldsDeep.ImageBrowser
         //private string currentImageFolder = "c:\\NWD-AUX\\images";
         private string currentImageFolder = Configuration.ImagesFolder;
         private bool lastLoadedFromFileInsteadOfDb = true; //default to filesystem for now
+        private Db.Sqlite.DbAdapterSwitch db =
+            new Db.Sqlite.DbAdapterSwitch();
 
         public ImageBrowserMainWindow()
         {
@@ -181,6 +184,10 @@ namespace NineWorldsDeep.ImageBrowser
             //create destination file path
             string fName = System.IO.Path.GetFileName(fe.Path);
             string destFilePath = System.IO.Path.Combine(imageStagingFolderPath, fName);
+            
+            //store hash for source file
+            string hash = Hashes.Sha1ForFilePath(fe.Path);
+            db.StoreHashForPath(hash, fe.Path);
 
             //copy if !exists, else message                
             if (!File.Exists(destFilePath))

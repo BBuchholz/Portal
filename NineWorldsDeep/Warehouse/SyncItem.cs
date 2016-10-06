@@ -307,7 +307,7 @@ namespace NineWorldsDeep.Warehouse
                                     return false;
                                 }
                             }
-
+                            
                             Tags.ExportTagsForProfile(_syncMap.Profile, HostHash);
                             DisplayNames.ExportNamesForProfile(_syncMap.Profile, HostHash);
 

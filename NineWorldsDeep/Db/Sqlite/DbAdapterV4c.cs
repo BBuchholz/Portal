@@ -1811,6 +1811,62 @@ namespace NineWorldsDeep.Db.Sqlite
             cmd.ExecuteNonQuery();
         }
 
+        public void StoreHashForPath(string hash, string path)
+        {
+            try
+            {
+                using (var conn =
+                    new SQLiteConnection(@"Data Source=" +
+                        Configuration.GetSqliteDbPath(GetDbName())))
+                {
+                    conn.Open();
+
+                    using (var cmd = new SQLiteCommand(conn))
+                    {
+                        using (var transaction = conn.BeginTransaction())
+                        {
+                            ////////////////////////////////////////CODE HERE//////////////////////////////////////
+                            int hashId = EnsureHash(hash, cmd);
+
+                            int fileId = EnsureDevicePath(Configuration.GetLocalDeviceDescription(), path, cmd);
+                            string timestamp = TimeStamp.Now();
+
+                            cmd.Parameters.Clear();
+                            cmd.CommandText =
+                                "UPDATE " + NwdContract.TABLE_FILE +
+                                    " SET " + NwdContract.COLUMN_HASH_ID + " = ?, " + 
+                                            NwdContract.COLUMN_FILE_HASHED_AT + " = ?" +
+                                    " WHERE " + NwdContract.COLUMN_FILE_ID + " = ? ";
+
+                            SQLiteParameter hashIdParam = new SQLiteParameter();
+                            hashIdParam.Value = hashId;
+
+                            SQLiteParameter hashedAtParam = new SQLiteParameter();
+                            hashedAtParam.Value = timestamp;
+
+                            SQLiteParameter fileIdParam = new SQLiteParameter();
+                            fileIdParam.Value = fileId;
+
+                            cmd.Parameters.Add(hashIdParam);
+                            cmd.Parameters.Add(hashedAtParam);
+                            cmd.Parameters.Add(fileIdParam);
+
+                            cmd.ExecuteNonQuery();
+
+                            transaction.Commit();
+
+                        }
+                    }
+
+                    conn.Close();
+                }
+            }
+            catch (Exception ex)
+            {
+                //do nothing
+            }
+        }
+
         #region "templates"
 
         /////////////////////////////////////connection/transaction templates        

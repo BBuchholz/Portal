@@ -1627,5 +1627,10 @@ namespace NineWorldsDeep.Db.Sqlite
         {
             throw new NotImplementedException();
         }
+
+        public void StoreHashForPath(string hostHash, string hostPath)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

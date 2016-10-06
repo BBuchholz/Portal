@@ -69,5 +69,6 @@ namespace NineWorldsDeep.Db.Sqlite
         void SaveSynergyLists(IEnumerable<SynergyList> lists);
         void UpdateActiveInactive(IEnumerable<SynergyList> setToActive, IEnumerable<SynergyList> setToInactive);
         string GetTagsForDevicePath(string deviceDescription, string path);
+        void StoreHashForPath(string hostHash, string hostPath);
     }
 }

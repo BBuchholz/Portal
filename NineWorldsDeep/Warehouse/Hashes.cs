@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Security.Cryptography;
 using System.Text;
@@ -73,6 +74,6 @@ namespace NineWorldsDeep.Warehouse
             writer.Flush();
             stream.Position = 0;
             return stream;
-        }
+        }        
     }
 }

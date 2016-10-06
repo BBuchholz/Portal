@@ -1,6 +1,7 @@
 ﻿using NineWorldsDeep.Core;
 using NineWorldsDeep.Tagger;
 using NineWorldsDeep.UI;
+using NineWorldsDeep.Warehouse;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -25,6 +26,8 @@ namespace NineWorldsDeep.AudioBrowser
     {
         private string voiceMemoFolderPath;
         private string tagFilePath;
+        private Db.Sqlite.DbAdapterSwitch db =
+            new Db.Sqlite.DbAdapterSwitch();
 
         public AudioBrowserMainWindow()
             : this(Configuration.VoiceMemosFolder,
@@ -123,6 +126,10 @@ namespace NineWorldsDeep.AudioBrowser
             //create destination file path
             string fName = System.IO.Path.GetFileName(fe.Path);
             string destFilePath = System.IO.Path.Combine(vmStagingFolderPath, fName);
+
+            //store hash for source file
+            string hash = Hashes.Sha1ForFilePath(fe.Path);
+            db.StoreHashForPath(hash, fe.Path);
 
             //copy if !exists, else message                
             if (!File.Exists(destFilePath))

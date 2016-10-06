@@ -302,6 +302,11 @@ namespace NineWorldsDeep.Db.Sqlite
             }
         }
 
+        public void StoreHashForPath(string hostHash, string hostPath)
+        {
+            db.StoreHashForPath(hostHash, hostPath);
+        }
+
         internal string GetTagsForSHA1Hash(string sha1Hash)
         {
             return db.GetTagStringForSHA1Hash(sha1Hash);
