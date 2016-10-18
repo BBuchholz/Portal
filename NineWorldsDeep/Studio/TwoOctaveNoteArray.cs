@@ -24,6 +24,14 @@ namespace NineWorldsDeep.Studio
             }
         }
 
+        public void SetAll(bool val)
+        {
+            for(int i = 0; i < notes.Length; i++)
+            {
+                notes[i] = val;
+            }
+        }
+
         public override string ToString()
         {
             return string.Join(",", ToStringList());

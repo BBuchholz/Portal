@@ -26,8 +26,11 @@ namespace NineWorldsDeep.Studio
         public VisualKeyboard()
         {
             InitializeComponent();
+            Clickable = true;
             RegisterKeyDots();
         }
+
+        public bool Clickable { get; set; }
 
         public TwoOctaveNoteArray Notes
         {
@@ -108,11 +111,14 @@ namespace NineWorldsDeep.Studio
 
         private void Key_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
-            foreach (VisualKey vk in orderedVisualKeys)
+            if (Clickable)
             {
-                if (sender == vk.KeyRectangle || sender == vk.KeyDot)
+                foreach (VisualKey vk in orderedVisualKeys)
                 {
-                    vk.ToggleHighlight();
+                    if (sender == vk.KeyRectangle || sender == vk.KeyDot)
+                    {
+                        vk.ToggleHighlight();
+                    }
                 }
             }
         }

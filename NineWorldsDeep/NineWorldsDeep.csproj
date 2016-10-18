@@ -279,6 +279,8 @@
       <DependentUpon>StudioMainWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Studio\TwoOctaveNoteArray.cs" />
+    <Compile Include="Studio\Utils\Chords.cs" />
+    <Compile Include="Studio\Utils\Notes.cs" />
     <Compile Include="Studio\VisualKey.cs" />
     <Compile Include="Studio\VisualKeyboard.xaml.cs">
       <DependentUpon>VisualKeyboard.xaml</DependentUpon>
@@ -347,6 +349,8 @@
     <Compile Include="Tagger\VerticalTaggerGrid.xaml.cs">
       <DependentUpon>VerticalTaggerGrid.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Tapestry\Nodes\ChordNode.cs" />
+    <Compile Include="Tapestry\Nodes\ChordProgressionsNode.cs" />
     <Compile Include="Tapestry\Nodes\ClusterNode.cs" />
     <Compile Include="Tapestry\Nodes\DevicePathNode.cs" />
     <Compile Include="Tapestry\Nodes\FileSystemNode.cs" />
@@ -367,6 +371,12 @@
     <Compile Include="Tapestry\Nodes\TapestrySplitViewNode.cs" />
     <Compile Include="Tapestry\NodeUI\AudioNodeDisplay.xaml.cs">
       <DependentUpon>AudioNodeDisplay.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Tapestry\NodeUI\ChordDisplay.xaml.cs">
+      <DependentUpon>ChordDisplay.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Tapestry\NodeUI\ChordProgressionsNodeDisplay.xaml.cs">
+      <DependentUpon>ChordProgressionsNodeDisplay.xaml</DependentUpon>
     </Compile>
     <Compile Include="Tapestry\NodeUI\ClusterChooser.xaml.cs">
       <DependentUpon>ClusterChooser.xaml</DependentUpon>
@@ -584,6 +594,14 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Tapestry\NodeUI\AudioNodeDisplay.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Tapestry\NodeUI\ChordDisplay.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Tapestry\NodeUI\ChordProgressionsNodeDisplay.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

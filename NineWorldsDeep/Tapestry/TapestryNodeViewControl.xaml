@@ -40,5 +40,15 @@
             <nodeUI:ClusterNodeDisplay x:Name="clusterNodeDisplay"/>
         </ContentControl>
 
+        <ContentControl x:Name="ccChordProgressionsNode"
+                        Visibility="Collapsed">
+            <nodeUI:ChordProgressionsNodeDisplay x:Name="chordProgressionsNodeDisplay"/>
+        </ContentControl>
+
+        <ContentControl x:Name="ccChordNode"
+                        Visibility="Collapsed">
+            <nodeUI:ChordDisplay x:Name="chordNodeDisplay"/>
+        </ContentControl>
+        
     </Grid>
 </UserControl>

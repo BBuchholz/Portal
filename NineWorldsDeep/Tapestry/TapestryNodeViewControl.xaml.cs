@@ -36,6 +36,15 @@ namespace NineWorldsDeep.Tapestry
             nodeList.FragmentClicked += Fragment_Clicked;
             clusterNodeDisplay.ClusterDisplayRequested += ClusterDisplay_Requested;
             clusterNodeDisplay.NodeDisplayRequested += NodeDisplay_Requested;
+            chordProgressionsNodeDisplay.ChordClicked += ChordDisplay_Requested;
+        }
+
+        private void ChordDisplay_Requested(object sender, ChordProgressionsNodeDisplay.ChordClickedEventArgs e)
+        {
+            if(historyHandler != null)
+            {
+                historyHandler.PerformLoad(this, e.ChordNode);
+            }
         }
 
         private void NodeDisplay_Requested(object sender, NodeDisplayRequestedEventArgs e)
@@ -106,6 +115,8 @@ namespace NineWorldsDeep.Tapestry
             contentControls.Add(ccNodeList);
             contentControls.Add(ccImageNode);
             contentControls.Add(ccClusterNode);
+            contentControls.Add(ccChordProgressionsNode);
+            contentControls.Add(ccChordNode);
         }
 
         private void ResolveContentControl(TapestryNode node)
@@ -145,6 +156,18 @@ namespace NineWorldsDeep.Tapestry
                         SetVisible(ccImageNode);
                         FileSystemNode ind = (FileSystemNode)node;
                         imageNodeDisplay.Display(ind);
+                        break;
+
+                    case TapestryNodeType.ChordProgressions:
+
+                        SetVisible(ccChordProgressionsNode);
+                        break;
+
+                    case TapestryNodeType.Chord:
+
+                        SetVisible(ccChordNode);
+                        ChordNode chordNode = (ChordNode)node;
+                        chordNodeDisplay.Display(chordNode);
                         break;
 
                     case TapestryNodeType.Cluster:

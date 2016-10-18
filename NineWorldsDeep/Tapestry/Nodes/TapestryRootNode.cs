@@ -21,7 +21,9 @@ namespace NineWorldsDeep.Tapestry.Nodes
             AddChild(new ImageBrowserFragment());
             AddChild(new MtpFragment());
             AddChild(new GrowthAreasNode());
-            AddChild(new NullClusterNode());
+            // shelved currently, may come 
+            // back, so leaving code, this is the only entry point
+            // AddChild(new NullClusterNode()); 
         }
 
         public override string GetShortName()

@@ -1,6 +1,7 @@
 ﻿using NineWorldsDeep.Tapestry.Fragments;
 using System;
 using NineWorldsDeep.Tapestry;
+using NineWorldsDeep.Tapestry.Nodes;
 
 namespace NineWorldsDeep.FragmentCloud
 {
@@ -15,6 +16,7 @@ namespace NineWorldsDeep.FragmentCloud
             AddChild(new StudioScalesNode());
             AddChild(new StudioKeyboardNode());
             AddChild(new ArpaBetNode());
+            AddChild(new ChordProgressionsNode());
         }
 
         public override string GetShortName()
