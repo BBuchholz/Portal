@@ -49,6 +49,16 @@
                         Visibility="Collapsed">
             <nodeUI:ChordDisplay x:Name="chordNodeDisplay"/>
         </ContentControl>
+
+        <ContentControl x:Name="ccSynergyV5MasterListNode"
+                        Visibility="Collapsed">
+            <nodeUI:SynergyV5MasterListDisplay x:Name="synergyV5MasterListDisplay"/>
+        </ContentControl>
+
+        <ContentControl x:Name="ccSynergyV5ListNode"
+                        Visibility="Collapsed">
+            <nodeUI:SynergyV5ListDisplay x:Name="synergyV5ListDisplay"/>
+        </ContentControl>
         
     </Grid>
 </UserControl>

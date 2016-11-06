@@ -33,7 +33,7 @@ namespace NineWorldsDeep.Tapestry.NodeUI
         {
             chordNode = nd;
 
-            visualKeyboard.Notes = chordNode.Notes;
+            visualKeyboard.Notes = chordNode.Chord.ChordNotes;
         }
     }
 }

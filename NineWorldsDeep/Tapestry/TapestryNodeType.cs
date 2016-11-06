@@ -17,6 +17,9 @@
         LyricBit,
         NullCluster,
         ChordProgressions,
-        Chord
+        Chord,
+        SynergyV5MasterList,
+        SynergyV5List,
+        SynergyV5ListItem
     }
 }

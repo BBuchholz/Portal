@@ -52,6 +52,43 @@ namespace NineWorldsDeep.Studio
             return lst;
         }
 
+        // override object.Equals
+        public override bool Equals(object obj)
+        {            
+
+            if (obj == null || GetType() != obj.GetType())
+            {
+                return false;
+            }
+
+            TwoOctaveNoteArray tona = (TwoOctaveNoteArray)obj;
+
+            bool isEqual = true;
+
+            for(int i = 0; i < 24; i++)
+            {
+                if(isEqual && tona[i] != this[i])
+                {
+                    isEqual = false;
+                }
+            }
+
+            return isEqual;
+        }
+
+        public override int GetHashCode()
+        {
+            unchecked
+            {
+                int hash = 17;
+                for (int index = 0; index < notes.Length; index++)
+                {
+                    hash = hash * 23 + notes[index].GetHashCode();
+                }
+                return hash;
+            }
+        }
+
         private string ConvertNoteValueToString(int i)
         {
             switch (i)

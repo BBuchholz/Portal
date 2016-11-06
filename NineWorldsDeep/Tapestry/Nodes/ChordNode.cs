@@ -1,4 +1,5 @@
 ﻿using NineWorldsDeep.Studio;
+using NineWorldsDeep.Studio.Utils;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,21 +13,23 @@ namespace NineWorldsDeep.Tapestry.Nodes
         public ChordNode(string chordName, TwoOctaveNoteArray notes) : 
             base("Chord/" + notes)
         {
-            ChordName = chordName;
-            Notes = notes;
+            //ChordName = chordName;
+            //Notes = notes;
+            Chord = new Chord(chordName, notes);
         }
 
-        public TwoOctaveNoteArray Notes { get; private set; }
-        public string ChordName { get; private set; }
+        //public TwoOctaveNoteArray Notes { get; private set; }
+        //public string ChordName { get; private set; }
+        public Chord Chord { get; private set; }
 
         public override string GetShortName()
         {
-            if (string.IsNullOrWhiteSpace(ChordName))
+            if (string.IsNullOrWhiteSpace(Chord.ChordName))
             {
-                return "Chord/" + Notes;
+                return "Chord/" + Chord.ChordNotes;
             }
 
-            return ChordName;
+            return Chord.ChordName;
         }
 
         public override bool Parallels(TapestryNode nd)

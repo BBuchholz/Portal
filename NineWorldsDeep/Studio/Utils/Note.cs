@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace NineWorldsDeep.Studio.Utils
 {
-    public class Notes
+    public class Note
     {
         public static int ParseAbsoluteValue(string noteName)
         {

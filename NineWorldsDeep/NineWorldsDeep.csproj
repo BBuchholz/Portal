@@ -27,7 +27,7 @@
     <UpdatePeriodically>false</UpdatePeriodically>
     <UpdateRequired>false</UpdateRequired>
     <MapFileExtensions>true</MapFileExtensions>
-    <ApplicationRevision>54</ApplicationRevision>
+    <ApplicationRevision>55</ApplicationRevision>
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <PublishWizardCompleted>true</PublishWizardCompleted>
@@ -280,7 +280,7 @@
     </Compile>
     <Compile Include="Studio\TwoOctaveNoteArray.cs" />
     <Compile Include="Studio\Utils\Chord.cs" />
-    <Compile Include="Studio\Utils\Notes.cs" />
+    <Compile Include="Studio\Utils\Note.cs" />
     <Compile Include="Studio\VisualKey.cs" />
     <Compile Include="Studio\VisualKeyboard.xaml.cs">
       <DependentUpon>VisualKeyboard.xaml</DependentUpon>
@@ -329,6 +329,8 @@
     </Compile>
     <Compile Include="Synergy\ToDoItem.cs" />
     <Compile Include="Synergy\ToDoList.cs" />
+    <Compile Include="Synergy\V5\SynergyV5List.cs" />
+    <Compile Include="Synergy\V5\SynergyV5ListItem.cs" />
     <Compile Include="Tagger\FileElement.cs" />
     <Compile Include="Tagger\FileElementActionSubscriber.cs" />
     <Compile Include="Tagger\FileElementTimestampExtractionAction.cs" />
@@ -366,6 +368,9 @@
     <Compile Include="Tapestry\Nodes\StudioScalesNode.cs" />
     <Compile Include="Tapestry\Nodes\SynergyItemNode.cs" />
     <Compile Include="Tapestry\Nodes\SynergyListNode.cs" />
+    <Compile Include="Tapestry\Nodes\SynergyV5ListItemNode.cs" />
+    <Compile Include="Tapestry\Nodes\SynergyV5ListNode.cs" />
+    <Compile Include="Tapestry\Nodes\SynergyV5MasterListNode.cs" />
     <Compile Include="Tapestry\Nodes\TagNode.cs" />
     <Compile Include="Tapestry\Nodes\TapestryRootNode.cs" />
     <Compile Include="Tapestry\Nodes\TapestrySplitViewNode.cs" />
@@ -409,6 +414,12 @@
       <DependentUpon>NodeList.xaml</DependentUpon>
     </Compile>
     <Compile Include="Tapestry\NodeUI\ClusterLoadedStateChangedEventArgs.cs" />
+    <Compile Include="Tapestry\NodeUI\SynergyV5ListDisplay.xaml.cs">
+      <DependentUpon>SynergyV5ListDisplay.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Tapestry\NodeUI\SynergyV5MasterListDisplay.xaml.cs">
+      <DependentUpon>SynergyV5MasterListDisplay.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Tapestry\TapestrySplitViewLoadCommand.cs" />
     <Compile Include="Tapestry\TapestryMainWindow.xaml.cs">
       <DependentUpon>TapestryMainWindow.xaml</DependentUpon>
@@ -630,6 +641,14 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Tapestry\NodeUI\NodeList.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Tapestry\NodeUI\SynergyV5ListDisplay.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Tapestry\NodeUI\SynergyV5MasterListDisplay.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

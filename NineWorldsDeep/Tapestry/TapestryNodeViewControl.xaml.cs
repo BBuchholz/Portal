@@ -37,6 +37,15 @@ namespace NineWorldsDeep.Tapestry
             clusterNodeDisplay.ClusterDisplayRequested += ClusterDisplay_Requested;
             clusterNodeDisplay.NodeDisplayRequested += NodeDisplay_Requested;
             chordProgressionsNodeDisplay.ChordClicked += ChordDisplay_Requested;
+            synergyV5MasterListDisplay.SynergyV5ListClicked += SynergyV5ListDisplay_Requested;
+        }
+
+        private void SynergyV5ListDisplay_Requested(object sender, SynergyV5MasterListDisplay.SynergyV5ListClickedEventArgs e)
+        {
+            if(historyHandler != null)
+            {
+                historyHandler.PerformLoad(this, e.ListNode);
+            }
         }
 
         private void ChordDisplay_Requested(object sender, ChordProgressionsNodeDisplay.ChordClickedEventArgs e)
@@ -117,6 +126,8 @@ namespace NineWorldsDeep.Tapestry
             contentControls.Add(ccClusterNode);
             contentControls.Add(ccChordProgressionsNode);
             contentControls.Add(ccChordNode);
+            contentControls.Add(ccSynergyV5MasterListNode);
+            contentControls.Add(ccSynergyV5ListNode);
         }
 
         private void ResolveContentControl(TapestryNode node)
@@ -161,6 +172,15 @@ namespace NineWorldsDeep.Tapestry
                     case TapestryNodeType.ChordProgressions:
 
                         SetVisible(ccChordProgressionsNode);
+                        break;
+
+                    case TapestryNodeType.SynergyV5MasterList:
+
+                        SetVisible(ccSynergyV5MasterListNode);
+                        break;
+
+                    case TapestryNodeType.SynergyV5List:
+                        UI.Display.Message("SynergyV5List node awaiting implementation");
                         break;
 
                     case TapestryNodeType.Chord:

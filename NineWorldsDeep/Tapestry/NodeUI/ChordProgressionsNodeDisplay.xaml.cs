@@ -34,10 +34,10 @@ namespace NineWorldsDeep.Tapestry.NodeUI
 
         private void RunMock()
         {
-            chords.Add(Chord.Parse("Am"));
-            chords.Add(Chord.Parse("Dm/a"));
-            chords.Add(Chord.Parse("E/g#"));
-            chords.Add(Chord.Parse("Dm/a"));
+            chords.Add(Chord.ParseToNode("Am"));
+            chords.Add(Chord.ParseToNode("Dm/a"));
+            chords.Add(Chord.ParseToNode("E/g#"));
+            chords.Add(Chord.ParseToNode("Dm/a"));
 
             lvChords.ItemsSource = chords;
         }
