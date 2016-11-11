@@ -348,6 +348,7 @@
     <Compile Include="Tagger\TagMatrix.cs" />
     <Compile Include="Tagger\TagString.cs" />
     <Compile Include="Tagger\TimeStampExtractor.cs" />
+    <Compile Include="Tagger\V2\TaggerGridController.cs" />
     <Compile Include="Tagger\VerticalTaggerGrid.xaml.cs">
       <DependentUpon>VerticalTaggerGrid.xaml</DependentUpon>
     </Compile>
