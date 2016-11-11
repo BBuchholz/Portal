@@ -172,7 +172,7 @@ namespace NineWorldsDeep.Db.Sqlite
 
         public void PopulatePathIds(Dictionary<string, int> pathsToIds)
         {
-            db.PopulatePathIds(db.GetPathIds());
+            db.PopulatePathIds(pathsToIds);
         }
 
         public void PopulateSyncMaps(SyncProfile sp, SQLiteCommand cmd)

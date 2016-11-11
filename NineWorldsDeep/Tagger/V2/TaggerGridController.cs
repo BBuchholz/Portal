@@ -1,9 +1,12 @@
-﻿using System;
+﻿using NineWorldsDeep.Model;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Media;
 
 namespace NineWorldsDeep.Tagger.V2
 {
@@ -18,6 +21,9 @@ namespace NineWorldsDeep.Tagger.V2
 
         private bool pendingChanges = false;
         private string lastLoadedPath;
+
+        private NwdDb db = null;
+        private Db.Sqlite.DbAdapterSwitch dbCore = null;
         private TagMatrix tagMatrix = new TagMatrix();
         private List<FileElementActionSubscriber> selectionChangedListeners =
             new List<FileElementActionSubscriber>();
@@ -36,6 +42,55 @@ namespace NineWorldsDeep.Tagger.V2
             lvFileElements = fileElements;
             tbFileCount = fileCount;
             tbStatus = status;
+            dbCore = new Db.Sqlite.DbAdapterSwitch();
+        }
+
+        public void LoadFromSelectedTag()
+        {
+            TagModelItem tmi = (TagModelItem)lvTags.SelectedItem;
+
+            if (tmi != null)
+            {
+                LoadFileElementList(from fmi in tmi.Files
+                                    select fmi.GetPath());
+            }
+        }
+        
+        public void RegisterDb(NwdDb nwdDb)
+        {
+            this.db = nwdDb;
+        }
+
+        public void LoadFileElementsFromDb()
+        {
+            if (db != null)
+            {
+                Add(db.GetFileElementsFromDb());
+            }
+        }
+
+        public void EnsureFileElementsInDb()
+        {
+            if (db != null)
+            {
+                List<FileElement> inputList = ToFileElementList(tagMatrix.GetFilePaths());
+                List<FileElement> dbList = db.GetFileElementsFromDb();
+                List<FileElement> toBeAdded = SyncTools.CalculateElementsToBeAdded(inputList, dbList);
+                db.AddFileElementsToDb(toBeAdded);
+                tbStatus.Text = toBeAdded.Count + " FileElement(s) added.";
+            }
+        }
+
+        public void Add(List<FileElement> lst)
+        {
+            tagMatrix.Add(lst);
+
+            LoadFileElementList(tagMatrix.GetFilePaths());
+        }
+
+        public void SetStatusForegroundColor(Brush b)
+        {
+            tbStatus.Foreground = b;
         }
 
         public IEnumerable<FileElement> FileElements
@@ -118,6 +173,97 @@ namespace NineWorldsDeep.Tagger.V2
             txtTags.Text = txtTags.Text + tag;
         }
 
+        public void SendSelectedFileElementToTrash()
+        {
+            //delete
+            FileElement fe = (FileElement)lvFileElements.SelectedItem;
+
+            string msg = "Are you sure you want to move this file to trash? " +
+                "Be aware that these tags will be permanently lost even if " +
+                "file is restored from trash: ";
+
+            if (fe != null && UI.Prompt.Confirm(msg + fe.TagString, true))
+            {
+                //imageControl.Source = null;
+
+                fe.MoveToTrash(dbCore);
+
+                //remove path from tag matrix
+                tagMatrix.RemovePath(fe.Path);
+                
+                //refresh list
+                Reload();
+            }
+        }
+
+        private void Reload()
+        {
+            if (lastLoadedPath != null)
+            {
+                string filter = txtFilter.Text;
+                TagModelItem selectedTag = (TagModelItem)lvTags.SelectedItem;
+
+                LoadFromDb(lastLoadedPath);
+
+                txtFilter.Text = filter;
+
+                //find selected tag
+                TagModelItem selectedItem = null;
+                foreach (TagModelItem item in lvTags.Items)
+                {
+                    if (item.Tag.Equals(selectedTag.Tag, StringComparison.CurrentCultureIgnoreCase))
+                    {
+                        selectedItem = item;
+                    }
+                }
+
+                if (selectedItem != null)
+                {
+                    lvTags.SelectedItem = selectedItem;
+                }
+            }
+        }
+
+        public void CopySelectedFileElementConsumptionTagToClipboard()
+        {
+            FileElement fe = (FileElement)lvFileElements.SelectedItem;
+
+            if (fe != null)
+            {
+                string fileName = System.IO.Path.GetFileName(fe.Path);
+                string tag = "[consumes " + fileName + "]";
+                Clipboard.SetText(tag);
+                MessageBox.Show(tag + " copied to clipboard");
+            }
+        }
+
+        public void ProcessFileElementSelectionChanged()
+        {
+            FileElement fe = (FileElement)lvFileElements.SelectedItem;
+
+            if (fe != null)
+            {
+                if (string.IsNullOrWhiteSpace(fe.TagString))
+                {
+                    fe.TagString = tagMatrix.GetTagString(fe.Path);
+                }
+
+                txtTags.Text = fe.TagString;
+
+                foreach (FileElementActionSubscriber feas in selectionChangedListeners)
+                {
+                    feas.PerformAction(fe);
+                }
+            }
+
+            tbStatus.Text = "";
+        }
+
+        //public void PopulateTagListView()
+        //{
+        //    lvTags.ItemsSource = tagMatrix.GetTagModelItems(txtFilter.Text);
+        //}
+
         public void Update()
         {
             tbStatus.Text = "Updating...";
@@ -148,7 +294,7 @@ namespace NineWorldsDeep.Tagger.V2
             }
         }
 
-        private void PopulateTagListView()
+        public void PopulateTagListView()
         {
             lvTags.ItemsSource = tagMatrix.GetTagModelItems(txtFilter.Text);
         }
