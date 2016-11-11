@@ -50,9 +50,14 @@
                           VerticalAlignment="Center">Show Path</CheckBox>
                 <CheckBox x:Name="chkShowLabels" 
                           IsChecked="True" 
-                          Margin="5,5,5,0" 
+                          Margin="5" 
                           Height="15" 
                           VerticalAlignment="Center">Show Labels</CheckBox>
+                <CheckBox x:Name="chkMultiTagsAsIntersectionInsteadOfUnion" 
+                          IsChecked="False" 
+                          Margin="5" 
+                          Height="15" 
+                          VerticalAlignment="Center">Tags As Intersection</CheckBox>
                 <Button x:Name="btnStopAudio" 
                         Content="Stop Audio"
                         Margin="5"

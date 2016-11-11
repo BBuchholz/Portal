@@ -1,6 +1,7 @@
 ﻿using NineWorldsDeep.Model;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -18,6 +19,7 @@ namespace NineWorldsDeep.Tagger.V2
         private TextBox txtFilter;
         private TextBlock tbFileCount;
         private TextBlock tbStatus;
+        private CheckBox chkMultiTagsAsIntersectionInsteadOfUnion;
 
         private bool pendingChanges = false;
         private string lastLoadedPath;
@@ -34,7 +36,8 @@ namespace NineWorldsDeep.Tagger.V2
             ListView tags, 
             ListView fileElements, 
             TextBlock fileCount, 
-            TextBlock status)
+            TextBlock status,
+            CheckBox multiTagsAsIntersectionInsteadOfUnion)
         {
             txtTags = tagString;
             txtFilter = tagFilter;
@@ -42,7 +45,34 @@ namespace NineWorldsDeep.Tagger.V2
             lvFileElements = fileElements;
             tbFileCount = fileCount;
             tbStatus = status;
+            chkMultiTagsAsIntersectionInsteadOfUnion =
+                multiTagsAsIntersectionInsteadOfUnion;
             dbCore = new Db.Sqlite.DbAdapterSwitch();
+
+            chkMultiTagsAsIntersectionInsteadOfUnion.Unchecked +=
+                ChkMultiTagsAsIntersectionInsteadOfUnion_Toggled;
+            chkMultiTagsAsIntersectionInsteadOfUnion.Checked +=
+                ChkMultiTagsAsIntersectionInsteadOfUnion_Toggled;
+        }
+
+        private void ChkMultiTagsAsIntersectionInsteadOfUnion_Toggled(object sender, RoutedEventArgs e)
+        {
+            string msg;
+            
+            if (!chkMultiTagsAsIntersectionInsteadOfUnion.IsChecked.Value)
+            {
+                msg = "When unchecked, this should populate the file element " +
+                    "list with all file elements matching at least " +
+                    "one tag filter in the comma separated tag filter list";
+            }
+            else
+            {
+                msg = "When checked, this should populate the file element list with " +
+                    "only those file elements matching all tag filters in the " +
+                    "comma separated tag filter list";
+            }
+
+            UI.Display.Message(msg);
         }
 
         public void LoadFromSelectedTag()
@@ -173,7 +203,7 @@ namespace NineWorldsDeep.Tagger.V2
             txtTags.Text = txtTags.Text + tag;
         }
 
-        public void SendSelectedFileElementToTrash()
+        public bool SendSelectedFileElementToTrash()
         {
             //delete
             FileElement fe = (FileElement)lvFileElements.SelectedItem;
@@ -193,6 +223,25 @@ namespace NineWorldsDeep.Tagger.V2
                 
                 //refresh list
                 Reload();
+
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        public void OpenSelectedFileElementExternally()
+        {
+            FileElement fe = (FileElement)lvFileElements.SelectedItem;
+
+            if (fe != null)
+            {
+                //open externally
+                Process proc = new Process();
+                proc.StartInfo.FileName = fe.Path;
+                proc.Start();
             }
         }
 

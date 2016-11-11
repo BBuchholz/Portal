@@ -33,12 +33,13 @@ namespace NineWorldsDeep.Tagger
             //dbCore = new Db.Sqlite.DbAdapterSwitch();
             tagFile = taggerConfigFolderPath + "\\fileTags.xml";
             mController = new TaggerGridController(
-                txtTagsx, 
-                txtFilterx, 
-                lvTagsx, 
-                lvFileElementsx, 
-                tbFileCountx, 
-                tbStatusx);
+                txtTags, 
+                txtFilter, 
+                lvTags, 
+                lvFileElements, 
+                tbFileCount, 
+                tbStatus,
+                chkMultiTagsAsIntersectionInsteadOfUnion);
         }
         
         //private TagMatrix tagMatrix = new TagMatrix();
@@ -498,9 +499,10 @@ namespace NineWorldsDeep.Tagger
             //    Reload(); 
             //}
 
-            mController.SendSelectedFileElementToTrash();
-
-            imageControl.Source = null;
+            if (mController.SendSelectedFileElementToTrash())
+            {
+                imageControl.Source = null;
+            }
         }
 
         //private void Reload()

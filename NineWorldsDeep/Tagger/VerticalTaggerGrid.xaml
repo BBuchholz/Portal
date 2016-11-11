@@ -18,7 +18,7 @@
         </Grid.RowDefinitions>
         
         <TextBox Grid.Row="0"                
-                 x:Name="txtFilterx"
+                 x:Name="txtFilter"
                  Margin="10 10 10 5"
                  HorizontalContentAlignment="Center"
                  VerticalContentAlignment="Center"
@@ -26,18 +26,34 @@
 
         </TextBox>
         
-        <ListView x:Name="lvTagsx"
+        <ListView x:Name="lvTags"
                   Grid.Row="1"
                   Margin="10" 
                   SelectionChanged="lvTags_SelectionChanged">
         </ListView>
 
-        <TextBlock x:Name="tbFileCountx" 
-                   Grid.Row="2"
-                   HorizontalAlignment="Center"
-                   VerticalAlignment="Center"/>
+        <Grid Grid.Row="2">
 
-        <ListView x:Name="lvFileElementsx"
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            
+            <TextBlock x:Name="tbFileCount" 
+                       Grid.Column="0"
+                       HorizontalAlignment="Center"
+                       VerticalAlignment="Center"/>
+            
+            <CheckBox x:Name="chkMultiTagsAsIntersectionInsteadOfUnion" 
+                      Grid.Column="1"
+                      IsChecked="False" 
+                      Margin="5" 
+                      Height="15" 
+                      VerticalAlignment="Center">Tags As Intersection</CheckBox>
+                        
+        </Grid>
+
+        <ListView x:Name="lvFileElements"
                   Grid.Row="3"
                   Margin="10"
                   SelectionChanged="lvFileElements_SelectionChanged">
@@ -77,7 +93,7 @@
             </ListView.ItemTemplate>
         </ListView>
 
-        <TextBox x:Name="txtTagsx"
+        <TextBox x:Name="txtTags"
                  Grid.Row="4"
                  Margin="10, 2, 10, 4"></TextBox>
         <Button Grid.Row="5"
@@ -88,7 +104,7 @@
             <Grid.ColumnDefinitions>
                 <ColumnDefinition/>
             </Grid.ColumnDefinitions>
-            <TextBlock x:Name="tbStatusx"
+            <TextBlock x:Name="tbStatus"
                        Grid.Column="0"
                        HorizontalAlignment="Center"
                        VerticalAlignment="Center"

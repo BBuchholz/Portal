@@ -1,4 +1,5 @@
 ﻿using NineWorldsDeep.Model;
+using NineWorldsDeep.Tagger.V2;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -23,19 +24,32 @@ namespace NineWorldsDeep.Tagger
     /// </summary>
     public partial class HorizontalTaggerGrid : UserControl, ITaggerGrid
     {
-        private TagMatrix tagMatrix = new TagMatrix();
-        private List<FileElementActionSubscriber> selectionChangedListeners =
-            new List<FileElementActionSubscriber>();
-        private NwdDb db = null;
-        private Db.Sqlite.DbAdapterSwitch dbCore;
-        private string lastLoadedPath;
+        //private TagMatrix tagMatrix = new TagMatrix();
+        //private List<FileElementActionSubscriber> selectionChangedListeners =
+        //    new List<FileElementActionSubscriber>();
+        //private NwdDb db = null;
+        //private Db.Sqlite.DbAdapterSwitch dbCore;
+        //private string lastLoadedPath;
+        private TaggerGridController mController;
 
         public HorizontalTaggerGrid()
         {
             InitializeComponent();
-            dbCore = new Db.Sqlite.DbAdapterSwitch();
+
+            mController = new TaggerGridController(
+                txtTags,
+                txtFilter,
+                lvTags,
+                lvFileElements,
+                tbFileCount,
+                tbStatus,
+                chkMultiTagsAsIntersectionInsteadOfUnion);
+
+            //dbCore = new Db.Sqlite.DbAdapterSwitch();
             tagFile = taggerConfigFolderPath + "\\fileTags.xml";
-            AddSelectionChangedListener(new FileElementTimestampExtractionAction(tagMatrix, this));
+            mController.AddSelectionChangedListener(
+                new FileElementTimestampExtractionAction(
+                    mController.GetTagMatrix(), this));
             //moved to NwdVoiceMemoBrowser
             //AddSelectionChangedListener(new FileElementTagExtractionAction(tagMatrix, this));
         }
@@ -47,50 +61,60 @@ namespace NineWorldsDeep.Tagger
 
         public void RegisterDb(NwdDb nwdDb)
         {
-            this.db = nwdDb;
+            //this.db = nwdDb;
+            mController.RegisterDb(nwdDb);
         }
 
         public void SetStatusForegroundColor(Brush b)
         {
-            tbPendingChanges.Foreground = b;
-            tbStatus.Foreground = b;
+            //tbPendingChanges.Foreground = b;
+            //tbStatus.Foreground = b;
+
+            mController.SetStatusForegroundColor(b);
         }
 
         private string taggerConfigFolderPath = "C:\\NWD\\config\\tagger";
 
         public List<string> GetTagsForCurrentSelection()
         {
-            return TagString.Parse(txtTags.Text);
+            //return TagString.Parse(txtTags.Text);
+            return mController.GetTagsForCurrentSelection();
         }
 
         public FileElementActionSubscriber DoubleClickListener { get; set; }
 
         public void AddSelectionChangedListener(FileElementActionSubscriber feas)
         {
-            selectionChangedListeners.Add(feas);
+            //selectionChangedListeners.Add(feas);
+            mController.AddSelectionChangedListener(feas);
         }
 
         private string tagFile;
 
         public void Clear()
         {
-            tagMatrix.Clear();
-            lvFileElements.ItemsSource = null;
-            lvTags.ItemsSource = null;
+            //tagMatrix.Clear();
+            //lvFileElements.ItemsSource = null;
+            //lvTags.ItemsSource = null;
+            mController.Clear();
         }
         
         public void AddFolder(string folderPath)
         {
-            tagMatrix.AddFolder(folderPath);
+            //tagMatrix.AddFolder(folderPath);
 
-            LoadFileElementList(tagMatrix.GetFilePaths());
+            //LoadFileElementList(tagMatrix.GetFilePaths());
+
+            mController.AddFolder(folderPath);
         }
 
         public void Add(List<FileElement> lst)
         {
-            tagMatrix.Add(lst);
+            //tagMatrix.Add(lst);
 
-            LoadFileElementList(tagMatrix.GetFilePaths());
+            //LoadFileElementList(tagMatrix.GetFilePaths());
+
+            mController.Add(lst);
         }
 
         private bool pendingChanges = false;
@@ -101,7 +125,8 @@ namespace NineWorldsDeep.Tagger
         {
             get
             {
-                return (FileElement)lvFileElements.SelectedItem;
+                //return (FileElement)lvFileElements.SelectedItem;
+                return mController.SelectedFileElement;
             }
         }
 
@@ -109,28 +134,33 @@ namespace NineWorldsDeep.Tagger
         {
             get
             {
-                return lvFileElements.Items.Cast<FileElement>().ToList();
+                //return lvFileElements.Items.Cast<FileElement>().ToList();
+                return mController.FileElements;
             }
         }
 
         public void LoadFileElementsFromDb()
         {
-            if(db != null)
-            {
-                Add(db.GetFileElementsFromDb());
-            }
+            //if(db != null)
+            //{
+            //    Add(db.GetFileElementsFromDb());
+            //}
+
+            mController.LoadFileElementsFromDb();
         }
 
         public void EnsureFileElementsInDb()
         {
-            if(db != null)
-            {
-                List<FileElement> inputList = ToFileElementList(tagMatrix.GetFilePaths());
-                List<FileElement> dbList = db.GetFileElementsFromDb();
-                List<FileElement> toBeAdded = SyncTools.CalculateElementsToBeAdded(inputList, dbList);
-                db.AddFileElementsToDb(toBeAdded);
-                tbStatus.Text = toBeAdded.Count + " FileElement(s) added.";
-            }
+            //if(db != null)
+            //{
+            //    List<FileElement> inputList = ToFileElementList(tagMatrix.GetFilePaths());
+            //    List<FileElement> dbList = db.GetFileElementsFromDb();
+            //    List<FileElement> toBeAdded = SyncTools.CalculateElementsToBeAdded(inputList, dbList);
+            //    db.AddFileElementsToDb(toBeAdded);
+            //    tbStatus.Text = toBeAdded.Count + " FileElement(s) added.";
+            //}
+
+            mController.EnsureFileElementsInDb();
         }
 
         protected void HandleDoubleClick(object sender, MouseButtonEventArgs e)
@@ -147,14 +177,16 @@ namespace NineWorldsDeep.Tagger
 
         private void LoadFromSelectedTag()
         {
-            TagModelItem tmi = (TagModelItem)lvTags.SelectedItem;
+            //TagModelItem tmi = (TagModelItem)lvTags.SelectedItem;
 
-            if(tmi != null)
-            {
-                //LoadFileElementList(tagMatrix.GetFilesForTag(tmi.Tag));
-                LoadFileElementList(from fmi in tmi.Files
-                                    select fmi.GetPath());
-            }
+            //if(tmi != null)
+            //{
+            //    //LoadFileElementList(tagMatrix.GetFilesForTag(tmi.Tag));
+            //    LoadFileElementList(from fmi in tmi.Files
+            //                        select fmi.GetPath());
+            //}
+
+            mController.LoadFromSelectedTag();
         }
 
         private void UpdateButton_Click(object sender, RoutedEventArgs e)
@@ -171,12 +203,14 @@ namespace NineWorldsDeep.Tagger
 
         public void AppendTagToCurrentTagString(string tag)
         {
-            if (!string.IsNullOrWhiteSpace(txtTags.Text))
-            {
-                tag = ", " + tag;
-            }
+            //if (!string.IsNullOrWhiteSpace(txtTags.Text))
+            //{
+            //    tag = ", " + tag;
+            //}
 
-            txtTags.Text = txtTags.Text + tag;
+            //txtTags.Text = txtTags.Text + tag;
+
+            mController.AppendTagToCurrentTagString(tag);
         }
 
         public void AppendTagsToCurrentTagStringAndUpdate(List<string> tags)
@@ -191,19 +225,21 @@ namespace NineWorldsDeep.Tagger
 
         public void Update()
         {
-            tbStatus.Text = "Updating...";
+            //tbStatus.Text = "Updating...";
 
-            FileElement fe = (FileElement)lvFileElements.SelectedItem;
+            //FileElement fe = (FileElement)lvFileElements.SelectedItem;
 
-            if (fe != null)
-            {
-                tagMatrix.UpdateTagString(fe, txtTags.Text);
+            //if (fe != null)
+            //{
+            //    tagMatrix.UpdateTagString(fe, txtTags.Text);
 
-                PopulateTagListView();
+            //    PopulateTagListView();
 
-                tbStatus.Text = "Updated.";                
-                SetPendingChanges(true);
-            }
+            //    tbStatus.Text = "Updated.";                
+            //    SetPendingChanges(true);
+            //}
+
+            mController.Update();
         }
 
         private void SetPendingChanges(bool b)
@@ -221,57 +257,59 @@ namespace NineWorldsDeep.Tagger
 
         private void lvFileElements_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            FileElement fe = (FileElement)lvFileElements.SelectedItem;
-            
-            if (fe != null)
-            {
-                if (string.IsNullOrWhiteSpace(fe.TagString))
-                {
-                    fe.TagString = tagMatrix.GetTagString(fe.Path);
-                }
+            //FileElement fe = (FileElement)lvFileElements.SelectedItem;
 
-                txtTags.Text = fe.TagString;
-                foreach (FileElementActionSubscriber feas in selectionChangedListeners)
-                {
-                    feas.PerformAction(fe);
-                }
-            }
+            //if (fe != null)
+            //{
+            //    if (string.IsNullOrWhiteSpace(fe.TagString))
+            //    {
+            //        fe.TagString = tagMatrix.GetTagString(fe.Path);
+            //    }
 
-            tbStatus.Text = "";
+            //    txtTags.Text = fe.TagString;
+            //    foreach (FileElementActionSubscriber feas in selectionChangedListeners)
+            //    {
+            //        feas.PerformAction(fe);
+            //    }
+            //}
+
+            //tbStatus.Text = "";
+
+            mController.ProcessFileElementSelectionChanged();
         }
         
-        private List<FileElement> ToFileElementList(IEnumerable<string> pathList)
-        {
-            List<FileElement> feLst = new List<FileElement>();
+        //private List<FileElement> ToFileElementList(IEnumerable<string> pathList)
+        //{
+        //    List<FileElement> feLst = new List<FileElement>();
             
-            foreach (string file in pathList)
-            {
-                //feLst.Add(new FileElement()
-                //{
-                //    Name = System.IO.Path.GetFileName(file),
-                //    Path = file
-                //});
+        //    foreach (string file in pathList)
+        //    {
+        //        //feLst.Add(new FileElement()
+        //        //{
+        //        //    Name = System.IO.Path.GetFileName(file),
+        //        //    Path = file
+        //        //});
 
-                feLst.Add(FileElement.FromPath(file, tagMatrix));
-            }
+        //        feLst.Add(FileElement.FromPath(file, tagMatrix));
+        //    }
 
-            return feLst;
-        }
+        //    return feLst;
+        //}
 
-        private void LoadFileElementList(IEnumerable<string> pathList)
-        {
-            lvFileElements.ItemsSource = ToFileElementList(pathList);
-            tbFileCount.Text = "Count: " + pathList.Count();
-            if (pathList.Count() > 0)
-            {
-                lvFileElements.SelectedIndex = 0;
-            }
-        }
+        //private void LoadFileElementList(IEnumerable<string> pathList)
+        //{
+        //    lvFileElements.ItemsSource = ToFileElementList(pathList);
+        //    tbFileCount.Text = "Count: " + pathList.Count();
+        //    if (pathList.Count() > 0)
+        //    {
+        //        lvFileElements.SelectedIndex = 0;
+        //    }
+        //}
 
-        private void PopulateTagListView()
-        {            
-            lvTags.ItemsSource = tagMatrix.GetTagModelItems(txtFilter.Text);
-        }
+        //private void PopulateTagListView()
+        //{            
+        //    lvTags.ItemsSource = tagMatrix.GetTagModelItems(txtFilter.Text);
+        //}
 
         public void LoadFromFileWithPrompt()
         {            
@@ -308,27 +346,31 @@ namespace NineWorldsDeep.Tagger
 
         public void LoadFromDb(string filePathTopFolder)
         {
-            tbStatus.Text = "Loading...";
+            //tbStatus.Text = "Loading...";
 
-            tagMatrix.LoadFromDb(filePathTopFolder);
+            //tagMatrix.LoadFromDb(filePathTopFolder);
 
-            PopulateTagListView();
+            //PopulateTagListView();
 
-            tbStatus.Text = "Loaded.";
-            lastLoadedPath = filePathTopFolder;
-            SetPendingChanges(false);
+            //tbStatus.Text = "Loaded.";
+            //lastLoadedPath = filePathTopFolder;
+            //SetPendingChanges(false);
+
+            mController.LoadFromDb(filePathTopFolder);
         }
 
         public void LoadFromFile(string loadFilePath)
         {
-            tbStatus.Text = "Loading...";
-            
-            tagMatrix.LoadFromXml(loadFilePath);
+            //tbStatus.Text = "Loading...";
 
-            PopulateTagListView();
-            
-            tbStatus.Text = "Loaded.";
-            SetPendingChanges(false);
+            //tagMatrix.LoadFromXml(loadFilePath);
+
+            //PopulateTagListView();
+
+            //tbStatus.Text = "Loaded.";
+            //SetPendingChanges(false);
+
+            mController.LoadFromFile(loadFilePath);
         }
 
         private void LoadButton_Click(object sender, RoutedEventArgs e)
@@ -338,22 +380,26 @@ namespace NineWorldsDeep.Tagger
 
         public void SaveToFile(string saveFilePath)
         {
-            tbStatus.Text = "Saving...";
+            //tbStatus.Text = "Saving...";
 
-            tagMatrix.SaveToXml(saveFilePath);
+            //tagMatrix.SaveToXml(saveFilePath);
 
-            tbStatus.Text = "Saved.";
-            SetPendingChanges(false);
+            //tbStatus.Text = "Saved.";
+            //SetPendingChanges(false);
+
+            mController.SaveToFile(saveFilePath);
         }
 
         public void SaveToDb()
         {
-            tbStatus.Text = "Saving...";
+            //tbStatus.Text = "Saving...";
 
-            tagMatrix.SaveToDb();
+            //tagMatrix.SaveToDb();
 
-            tbStatus.Text = "Saved.";
-            SetPendingChanges(false);
+            //tbStatus.Text = "Saved.";
+            //SetPendingChanges(false);
+
+            mController.SaveToDb();
         }
 
         private void SaveButton_Click(object sender, RoutedEventArgs e)
@@ -368,96 +414,109 @@ namespace NineWorldsDeep.Tagger
 
         public void SetFolderLoadStrategy(IFolderLoadStrategy fls)
         {
-            tagMatrix.SetFolderLoadStrategy(fls);
+            //tagMatrix.SetFolderLoadStrategy(fls);
+            mController.SetFolderLoadStrategy(fls);
         }
 
         public TagMatrix GetTagMatrix()
         {
-            return tagMatrix;
+            //return tagMatrix;
+            return mController.GetTagMatrix();
         }
 
         private void txtFilter_KeyUp(object sender, KeyEventArgs e)
         {
-            PopulateTagListView();
+            //PopulateTagListView();
+            mController.PopulateTagListView();
         }
 
         private void MenuItemOpenExternally_Click(object sender, RoutedEventArgs e)
         {
 
-            FileElement fe = (FileElement)lvFileElements.SelectedItem;
+            //FileElement fe = (FileElement)lvFileElements.SelectedItem;
 
-            if (fe != null)
-            {
-                //open externally
-                Process proc = new Process();
-                proc.StartInfo.FileName = fe.Path;
-                proc.Start();
-            }
+            //if (fe != null)
+            //{
+            //    //open externally
+            //    Process proc = new Process();
+            //    proc.StartInfo.FileName = fe.Path;
+            //    proc.Start();
+            //}
+
+            mController.OpenSelectedFileElementExternally();
         }
 
         private void MenuItemSendToTrash_Click(object sender, RoutedEventArgs e)
         {
-            //delete
-            FileElement fe = (FileElement)lvFileElements.SelectedItem;
+            ////delete
+            //FileElement fe = (FileElement)lvFileElements.SelectedItem;
 
-            string msg = "Are you sure you want to move this file to trash? " +
-                "Be aware that these tags will be permanently lost even if " +
-                "file is restored from trash: ";
+            //string msg = "Are you sure you want to move this file to trash? " +
+            //    "Be aware that these tags will be permanently lost even if " +
+            //    "file is restored from trash: ";
 
-            if (fe != null && UI.Prompt.Confirm(msg + fe.TagString, true))
+            //if (fe != null && UI.Prompt.Confirm(msg + fe.TagString, true))
+            //{
+            //    StopAudioButton.RaiseEvent(
+            //        new RoutedEventArgs(ButtonBase.ClickEvent));
+
+            //    fe.MoveToTrash(dbCore);
+
+            //    //remove path from tag matrix
+            //    tagMatrix.RemovePath(fe.Path);
+
+            //    //refresh list
+            //    Reload();
+            //}
+
+            if (mController.SendSelectedFileElementToTrash())
             {
                 StopAudioButton.RaiseEvent(
                     new RoutedEventArgs(ButtonBase.ClickEvent));
-
-                fe.MoveToTrash(dbCore);
-
-                //remove path from tag matrix
-                tagMatrix.RemovePath(fe.Path);
-
-                //refresh list
-                Reload();
             }
         }
 
-        private void Reload()
-        {
-            if (lastLoadedPath != null)
-            {
-                string filter = txtFilter.Text;
-                TagModelItem selectedTag = (TagModelItem)lvTags.SelectedItem;
+        //private void Reload()
+        //{
+        //    if (lastLoadedPath != null)
+        //    {
+        //        string filter = txtFilter.Text;
+        //        TagModelItem selectedTag = (TagModelItem)lvTags.SelectedItem;
 
-                LoadFromDb(lastLoadedPath);
+        //        LoadFromDb(lastLoadedPath);
 
-                txtFilter.Text = filter;
+        //        txtFilter.Text = filter;
 
-                //find selected tag
-                TagModelItem selectedItem = null;
-                foreach (TagModelItem item in lvTags.Items)
-                {
-                    if (item.Tag.Equals(selectedTag.Tag, StringComparison.CurrentCultureIgnoreCase))
-                    {
-                        selectedItem = item;
-                    }
-                }
+        //        //find selected tag
+        //        TagModelItem selectedItem = null;
+        //        foreach (TagModelItem item in lvTags.Items)
+        //        {
+        //            if (item.Tag.Equals(selectedTag.Tag, StringComparison.CurrentCultureIgnoreCase))
+        //            {
+        //                selectedItem = item;
+        //            }
+        //        }
 
-                if (selectedItem != null)
-                {
-                    lvTags.SelectedItem = selectedItem;
-                }
-            }
-        }
+        //        if (selectedItem != null)
+        //        {
+        //            lvTags.SelectedItem = selectedItem;
+        //        }
+        //    }
+        //}
 
         private void MenuItemCopyConsumptionTag_Click(object sender, RoutedEventArgs e)
         {
-            FileElement fe = (FileElement)lvFileElements.SelectedItem;
-            
-            if (fe != null)
-            {
-                string fileName = System.IO.Path.GetFileName(fe.Path);
-                string tag = "[consumes " + fileName + "]";
-                Clipboard.SetText(tag);
-                MessageBox.Show(tag + " copied to clipboard");
-            }
+            //FileElement fe = (FileElement)lvFileElements.SelectedItem;
+
+            //if (fe != null)
+            //{
+            //    string fileName = System.IO.Path.GetFileName(fe.Path);
+            //    string tag = "[consumes " + fileName + "]";
+            //    Clipboard.SetText(tag);
+            //    MessageBox.Show(tag + " copied to clipboard");
+            //}
+
+            mController.CopySelectedFileElementConsumptionTagToClipboard();
         }
     }
 }

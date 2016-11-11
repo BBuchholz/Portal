@@ -280,6 +280,8 @@ namespace NineWorldsDeep.Tagger
                 untaggedTag.Link(new Sqlite.Model.FileModelItem(path));
             }
 
+            items = items.OrderBy(i => i.Tag).ToList();
+
             items.Insert(0, allTag);
             items.Insert(1, untaggedTag);
 
