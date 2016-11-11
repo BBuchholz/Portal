@@ -1,5 +1,6 @@
 ﻿using NineWorldsDeep.Core;
 using NineWorldsDeep.Model;
+using NineWorldsDeep.Tagger.V2;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -23,18 +24,27 @@ namespace NineWorldsDeep.Tagger
     /// </summary>
     public partial class VerticalTaggerGrid : UserControl, ITaggerGrid
     {
+        private TaggerGridController controller;
+        private Image imageControl;
+
         public VerticalTaggerGrid()
         {
             InitializeComponent();
             dbCore = new Db.Sqlite.DbAdapterSwitch();
             tagFile = taggerConfigFolderPath + "\\fileTags.xml";
+            controller = new TaggerGridController(
+                txtTagsx, 
+                txtFilterx, 
+                lvTagsx, 
+                lvFileElementsx, 
+                tbFileCountx, 
+                tbStatusx);
         }
-
-        private TagMatrix tagMatrix = new TagMatrix();
-        private Image imageControl;
-        private string lastLoadedPath;
-        private List<FileElementActionSubscriber> selectionChangedListeners =
-            new List<FileElementActionSubscriber>();
+        
+        //private TagMatrix tagMatrix = new TagMatrix();
+        //private string lastLoadedPath;
+        //private List<FileElementActionSubscriber> selectionChangedListeners =
+        //    new List<FileElementActionSubscriber>();
 
         public string GetFolderWithLeastNonZeroUntaggedCount(string folderPath,
                                                              FilePathFilter fpf,
