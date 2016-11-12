@@ -97,7 +97,15 @@ namespace NineWorldsDeep.Tagger
                 {
                     string destFile =
                         Configuration.GetTrashFileFromPath(Path);
-                    File.Move(Path, destFile);  
+
+                    if (!File.Exists(destFile))
+                    { 
+                        File.Move(Path, destFile);
+                    }
+                    else
+                    {
+                        File.Delete(Path);
+                    }
                 }
                 catch (Exception ex)
                 {
