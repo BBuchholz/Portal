@@ -475,6 +475,19 @@ namespace NineWorldsDeep.Tagger
                     new RoutedEventArgs(ButtonBase.ClickEvent));
             }
         }
+        
+        public bool SendSelectedFileElementsToTrash()
+        {
+            if (mController.SendSelectedFileElementsToTrash())
+            {
+                StopAudioButton.RaiseEvent(
+                    new RoutedEventArgs(ButtonBase.ClickEvent));
+
+                return true;
+            }
+
+            return false;
+        }
 
         //private void Reload()
         //{
@@ -518,5 +531,6 @@ namespace NineWorldsDeep.Tagger
 
             mController.CopySelectedFileElementConsumptionTagToClipboard();
         }
+
     }
 }

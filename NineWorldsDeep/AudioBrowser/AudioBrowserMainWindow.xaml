@@ -55,6 +55,8 @@
                           Click="MenuItemCopyMultipleToVoiceMemoStaging_Click"/>
                 <MenuItem Header="Copy Transcription Tag to Clipboard"
                           Click="MenuItemCopyTranscriptionTagToClipboard_Click"/>
+                <MenuItem Header="Send Selected Items to Trash"
+                          Click="MenuItemSendSelectedItemsToTrash_Click"/>
             </MenuItem>
         </Menu>
         <Grid>

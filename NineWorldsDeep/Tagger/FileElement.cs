@@ -8,6 +8,14 @@ namespace NineWorldsDeep.Tagger
 {
     public class FileElement
     {
+        //intentionally private, use static methods
+        private FileElement(string path)
+        {
+            Path = path;
+            Name = System.IO.Path.GetFileName(path);
+            ModifiedAt = File.GetLastWriteTime(path); 
+        }
+
         /// <summary>
         /// will return a file element with tag string, 
         /// path, and name populated from supplied
@@ -18,12 +26,17 @@ namespace NineWorldsDeep.Tagger
         /// <returns></returns>
         public static FileElement FromPath(string path, TagMatrix matrix)
         {
-            return new FileElement
-            {
-                Path = path,
-                Name = System.IO.Path.GetFileName(path),
-                TagString = matrix.GetTagString(path)
-            };
+            //return new FileElement
+            //{
+            //    Path = path,
+            //    Name = System.IO.Path.GetFileName(path),
+            //    TagString = matrix.GetTagString(path)
+            //};
+
+            FileElement fe = new FileElement(path);
+            fe.TagString = matrix.GetTagString(path);
+
+            return fe;
         }
 
         /// <summary>
@@ -35,11 +48,13 @@ namespace NineWorldsDeep.Tagger
         /// <returns></returns>
         public static FileElement FromPath(string path)
         {
-            return new FileElement
-            {
-                Path = path,
-                Name = System.IO.Path.GetFileName(path)
-            };
+            //return new FileElement
+            //{
+            //    Path = path,
+            //    Name = System.IO.Path.GetFileName(path)
+            //};
+
+            return new FileElement(path);
         }
 
         public void PopulateTagString(TagMatrix tm)
@@ -50,6 +65,7 @@ namespace NineWorldsDeep.Tagger
         public string Path { get; set; }
         public string Name { get; set; }
         public string TagString { get; set; }
+        public DateTime ModifiedAt { get; private set; }
 
         public override bool Equals(object obj)
         {

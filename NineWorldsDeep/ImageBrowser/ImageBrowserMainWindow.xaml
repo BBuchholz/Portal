@@ -28,11 +28,13 @@
                 <MenuItem Header="Load From Smallest Folder"
             		Click="MenuItemLoadFromSmallest_Click"/>
             </MenuItem>
-            <MenuItem Header="Selected Item">
+            <MenuItem Header="Items">
                 <MenuItem Header="Copy Selected Item To Image Staging"
                           Click="MenuItemCopyToImageStaging_Click"/>
                 <MenuItem Header="Copy Multiple Items To Image Staging"
                           Click="MenuItemCopyMultipleToImageStaging_Click"/>
+                <MenuItem Header="Send Selected Items to Trash"
+                          Click="MenuItemSendSelectedItemsToTrash_Click"/>
             </MenuItem>
         </Menu>
         <Grid>

@@ -182,5 +182,21 @@ namespace NineWorldsDeep.AudioBrowser
 
             Display.Message(count + " items copied.");
         }
+
+        private void MenuItemSendSelectedItemsToTrash_Click(object sender, RoutedEventArgs e)
+        {
+            string msg = "";
+
+            if (tgrGrid.SendSelectedFileElementsToTrash())
+            {
+                msg = "files trashed.";                        
+            }
+            else
+            {
+                msg = "trashing cancelled.";
+            }
+
+            UI.Display.Message(msg);
+        }
     }
 }

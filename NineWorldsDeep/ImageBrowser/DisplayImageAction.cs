@@ -38,15 +38,25 @@ namespace NineWorldsDeep.ImageBrowser
 
                 if (File.Exists(fe.Path))
                 {
-                    using (FileStream stream = File.OpenRead(fe.Path))
+                    try
                     {
-                        image.BeginInit();
-                        image.StreamSource = stream;
-                        image.CacheOption = BitmapCacheOption.OnLoad;
-                        image.EndInit();
-                    }
+                        using (FileStream stream = File.OpenRead(fe.Path))
+                        {
+                            image.BeginInit();
+                            image.StreamSource = stream;
+                            image.CacheOption = BitmapCacheOption.OnLoad;
+                            image.EndInit();
+                        }
 
-                    imageControl.Source = image;
+                        imageControl.Source = image;
+
+                    }
+                    catch (Exception ex)
+                    {
+                        imageControl.Source = null;
+                        Display.Message("error opening file path [" + 
+                            fe.Path + "]:" + ex.Message);
+                    }
                 }
                 else
                 {

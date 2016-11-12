@@ -20,5 +20,6 @@ namespace NineWorldsDeep.Tagger
         void SaveToDb();
         void LoadFromDb(string filePathTopFolder);
         void Clear();
+        bool SendSelectedFileElementsToTrash();
     }
 }

@@ -505,6 +505,17 @@ namespace NineWorldsDeep.Tagger
             }
         }
 
+        public bool SendSelectedFileElementsToTrash()
+        {
+            if (mController.SendSelectedFileElementsToTrash())
+            {
+                imageControl.Source = null;
+                return true;
+            }
+
+            return false;
+        }
+
         //private void Reload()
         //{
         //    if (lastLoadedPath != null)

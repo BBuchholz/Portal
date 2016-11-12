@@ -173,7 +173,7 @@ namespace NineWorldsDeep.Tagger.V2
                 feLst.Add(FileElement.FromPath(file, tagMatrix));
             }
 
-            feLst.Sort((fe1, fe2) => fe1.Name.CompareTo(fe2.Name));
+            feLst = feLst.OrderByDescending(f => f.ModifiedAt).ToList();
 
             return feLst;
         }
@@ -214,8 +214,6 @@ namespace NineWorldsDeep.Tagger.V2
 
             if (fe != null && UI.Prompt.Confirm(msg + fe.TagString, true))
             {
-                //imageControl.Source = null;
-
                 fe.MoveToTrash(dbCore);
 
                 //remove path from tag matrix
@@ -223,6 +221,40 @@ namespace NineWorldsDeep.Tagger.V2
                 
                 //refresh list
                 Reload();
+
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        public bool SendSelectedFileElementsToTrash()
+        {
+            //delete
+            //List<FileElement> fe = (List<FileElement>)lvFileElements.SelectedItems;
+
+            List<FileElement> feLst = lvFileElements.SelectedItems.Cast<FileElement>()
+                                                    .Select(fe => fe)
+                                                    .ToList();
+
+            string msg = "Are you sure you want to move these " + feLst.Count + " files to trash? " +
+                "Be aware that these tags will be permanently lost even if " +
+                "files are restored from trash";
+
+            if (feLst != null && UI.Prompt.Confirm(msg, true))
+            {
+                foreach (FileElement fe in feLst)
+                {
+                    fe.MoveToTrash(dbCore);
+
+                    //remove path from tag matrix
+                    tagMatrix.RemovePath(fe.Path);
+
+                    //refresh list
+                    Reload();
+                }
 
                 return true;
             }
@@ -421,5 +453,6 @@ namespace NineWorldsDeep.Tagger.V2
         {
             tagMatrix.SetFolderLoadStrategy(fls);
         }
+
     }
 }

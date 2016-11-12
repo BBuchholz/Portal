@@ -279,5 +279,20 @@ namespace NineWorldsDeep.ImageBrowser
                 GetFolderWithLeastNonZeroUntaggedCount());
         }
 
+        private void MenuItemSendSelectedItemsToTrash_Click(object sender, RoutedEventArgs e)
+        {
+            string msg = "";
+
+            if (tgrGrid.SendSelectedFileElementsToTrash())
+            {
+                msg = "files trashed.";
+            }
+            else
+            {
+                msg = "trashing cancelled.";
+            }
+
+            UI.Display.Message(msg);
+        }
     }
 }
