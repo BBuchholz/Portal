@@ -1,0 +1,65 @@
+﻿<UserControl x:Class="NineWorldsDeep.Tapestry.NodeUI.MediaMasterDisplay"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:NineWorldsDeep.Tapestry.NodeUI"
+             mc:Ignorable="d" 
+             d:DesignHeight="600" d:DesignWidth="300">
+    <Grid>
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="40"/>
+            <RowDefinition Height="40"/>
+            <RowDefinition Height="40"/>
+            <RowDefinition Height="40"/>
+            <RowDefinition/>            
+        </Grid.RowDefinitions>
+
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="4*"/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+
+        <ComboBox x:Name="mMediaDevicesComboBox"
+                  Margin="5"
+                  Grid.Row="0"
+                  Grid.Column="0"
+                  SelectionChanged="mMediaDevicesComboBox_SelectionChanged"/>
+
+        <ComboBox x:Name="mMediaRootsComboBox"
+                  Margin="5"
+                  Grid.Row="1"
+                  Grid.Column="0"/>
+
+        <Button x:Name="mAddMediaRootButton"
+                Grid.Row="1"
+                Grid.Column="1"
+                Margin="5"
+                Content="+"
+                Click="mAddMediaRootButton_Click"
+                VerticalContentAlignment="Center"
+                HorizontalContentAlignment="Center"/>
+
+        <StackPanel Orientation="Horizontal"
+                    Grid.Row="2"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center">
+            
+            <RadioButton Margin="5" GroupName="SourceTarget" Content="FileSystem" IsChecked="True"/>
+            <RadioButton Margin="5" GroupName="SourceTarget" Content="DataBase"/>
+            <RadioButton Margin="5" GroupName="SourceTarget" Content="Diff"/>
+            
+        </StackPanel>
+
+        <ComboBox x:Name="mFileTypesComboBox"
+                  Margin="5"
+                  Grid.Row="3"
+                  Grid.Column="0"/>
+
+        <ListView x:Name="mMediaInstancesListView"
+                  Grid.Row="4"
+                  Grid.Column="0"
+                  Margin="5"/>
+    </Grid>
+</UserControl>

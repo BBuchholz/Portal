@@ -20,6 +20,7 @@
         Chord,
         SynergyV5MasterList,
         SynergyV5List,
-        SynergyV5ListItem
+        SynergyV5ListItem,
+        MediaMaster
     }
 }

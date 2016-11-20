@@ -128,6 +128,7 @@ namespace NineWorldsDeep.Tapestry
             contentControls.Add(ccChordNode);
             contentControls.Add(ccSynergyV5MasterListNode);
             contentControls.Add(ccSynergyV5ListNode);
+            contentControls.Add(ccMediaMasterNode);
         }
 
         private void ResolveContentControl(TapestryNode node)
@@ -177,6 +178,11 @@ namespace NineWorldsDeep.Tapestry
                     case TapestryNodeType.SynergyV5MasterList:
 
                         SetVisible(ccSynergyV5MasterListNode);
+                        break;
+
+                    case TapestryNodeType.MediaMaster:
+
+                        SetVisible(ccMediaMasterNode);
                         break;
 
                     case TapestryNodeType.SynergyV5List:

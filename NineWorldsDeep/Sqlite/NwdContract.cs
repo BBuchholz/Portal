@@ -6,7 +6,6 @@ using System.Threading.Tasks;
 
 namespace NineWorldsDeep.Sqlite
 {
-    [Obsolete("migrating to new package NineWorldsDeep.Db.Sqlite")]
     public class NwdContract
     {
         //tables
@@ -34,6 +33,9 @@ namespace NineWorldsDeep.Sqlite
         public static string TABLE_SYNERGY_LIST_ITEM = "SynergyListItem";
         public static string TABLE_SYNERGY_ITEM = "SynergyItem";
         public static string TABLE_SYNERGY_TO_DO = "SynergyToDo";
+        
+        public static string TABLE_MEDIA_DEVICE = "MediaDevice";
+        public static string TABLE_MEDIA_ROOT = "MediaRoot";
 
         //public static string TABLE_ = "";
         //public static string TABLE_ = "";
@@ -41,6 +43,12 @@ namespace NineWorldsDeep.Sqlite
         ////columns
         //public static string COLUMN_ = "";
         //public static string COLUMN_ = "";
+
+        public static string COLUMN_MEDIA_ROOT_ID = "MediaRootId";
+        public static string COLUMN_MEDIA_ROOT_PATH = "MediaRootPath";
+        public static string COLUMN_MEDIA_DEVICE_ID = "MediaDeviceId";
+        public static string COLUMN_MEDIA_DEVICE_DESCRIPTION = "MediaDeviceDescription";
+
         public static string COLUMN_SYNERGY_TO_DO_UPDATED_AT = "SynergyToDoUpdatedAt";
         public static string COLUMN_SYNERGY_LIST_NAME = "SynergyListName";
         public static string COLUMN_SYNERGY_ITEM_VALUE = "SynergyItemValue";

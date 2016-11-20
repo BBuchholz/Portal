@@ -22,6 +22,7 @@ namespace NineWorldsDeep.Tapestry.Nodes
             AddChild(new MtpFragment());
             AddChild(new GrowthAreasNode());
             AddChild(new SynergyV5MasterListNode());
+            AddChild(new MediaMasterNode());
             // shelved currently, may come 
             // back, so leaving code, this is the only entry point
             // AddChild(new NullClusterNode()); 

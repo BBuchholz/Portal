@@ -59,6 +59,11 @@
                         Visibility="Collapsed">
             <nodeUI:SynergyV5ListDisplay x:Name="synergyV5ListDisplay"/>
         </ContentControl>
+
+        <ContentControl x:Name="ccMediaMasterNode"
+                        Visibility="Collapsed">
+            <nodeUI:MediaMasterDisplay x:Name="mediaMasterDisplay"/>
+        </ContentControl>
         
     </Grid>
 </UserControl>

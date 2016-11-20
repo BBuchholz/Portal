@@ -150,6 +150,7 @@
     <Compile Include="Db\Sqlite\DbAdapterV4c.cs" />
     <Compile Include="Db\Sqlite\DbAdapterV5.cs" />
     <Compile Include="Db\Sqlite\IDbAdapter.cs" />
+    <Compile Include="Db\Sqlite\MediaSubsetDb.cs" />
     <Compile Include="DemoController.cs" />
     <Compile Include="ExtensionsFragment.cs" />
     <Compile Include="Deprecated\Fragment.cs" />
@@ -206,6 +207,8 @@
     <Compile Include="Mock\MockClusterDb.cs" />
     <Compile Include="Mock\MockClusterFileSubsetXml.cs" />
     <Compile Include="Mock\MockUtils.cs" />
+    <Compile Include="Model\MediaDeviceModelItem.cs" />
+    <Compile Include="Model\MediaRootModelItem.cs" />
     <Compile Include="Model\TagModelItem.cs" />
     <Compile Include="Mtp\Extensions.cs" />
     <Compile Include="Mtp\MtpMainWindow.xaml.cs">
@@ -360,6 +363,7 @@
     <Compile Include="Tapestry\Nodes\GrowthAreasNode.cs" />
     <Compile Include="Tapestry\Nodes\HashNode.cs" />
     <Compile Include="Tapestry\Nodes\LocalConfigNode.cs" />
+    <Compile Include="Tapestry\Nodes\MediaMasterNode.cs" />
     <Compile Include="Tapestry\Nodes\NullClusterNode.cs" />
     <Compile Include="Tapestry\Nodes\StudioKeyboardNode.cs" />
     <Compile Include="Tapestry\Nodes\ArpaBetNode.cs" />
@@ -409,6 +413,9 @@
     </Compile>
     <Compile Include="Tapestry\NodeUI\ImageNodeDisplay.xaml.cs">
       <DependentUpon>ImageNodeDisplay.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Tapestry\NodeUI\MediaMasterDisplay.xaml.cs">
+      <DependentUpon>MediaMasterDisplay.xaml</DependentUpon>
     </Compile>
     <Compile Include="Tapestry\NodeUI\NodeDisplayRequestedEventArgs.cs" />
     <Compile Include="Tapestry\NodeUI\NodeList.xaml.cs">
@@ -638,6 +645,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Tapestry\NodeUI\ImageNodeDisplay.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Tapestry\NodeUI\MediaMasterDisplay.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
