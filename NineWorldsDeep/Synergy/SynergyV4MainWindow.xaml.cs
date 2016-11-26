@@ -503,5 +503,14 @@ namespace NineWorldsDeep.Synergy
 
         #endregion
 
+        private void MenuItemExportSynergyV5ActiveLists_Click(object sender, RoutedEventArgs e)
+        {
+            UI.Display.Message("not implemented");
+        }
+
+        private void MenuItemImportSynergyV5_Click(object sender, RoutedEventArgs e)
+        {
+            UI.Display.Message("not implemented");
+        }
     }
 }
