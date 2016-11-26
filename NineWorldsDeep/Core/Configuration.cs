@@ -29,6 +29,11 @@ namespace NineWorldsDeep.Core
         //public static string AbletonProjectsFolder { get { return @"C:\NWD-AUX\abletonProjects"; } }
         public static string AbletonProjectsFolder { get { return ProcessTestMode(@"NWD-AUX\abletonProjects"); } }
 
+        public static string SyncFolder()
+        {
+            return ProcessTestMode(@"NWD-SYNC\");
+        }
+
         public static string SyncRoot(string name)
         {
             return ProcessTestMode(@"NWD-SYNC\" + name);

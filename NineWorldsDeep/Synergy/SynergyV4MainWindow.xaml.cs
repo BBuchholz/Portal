@@ -1,4 +1,6 @@
-﻿using NineWorldsDeep.UI;
+﻿using NineWorldsDeep.Core;
+using NineWorldsDeep.Synergy.V5;
+using NineWorldsDeep.UI;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -15,6 +17,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using System.Xml.Linq;
 
 namespace NineWorldsDeep.Synergy
 {
@@ -510,7 +513,20 @@ namespace NineWorldsDeep.Synergy
 
         private void MenuItemImportSynergyV5_Click(object sender, RoutedEventArgs e)
         {
-            UI.Display.Message("not implemented");
+            string path = UI.Prompt.ForXmlFileLoad(Configuration.SyncFolder());
+
+            if (!string.IsNullOrWhiteSpace(path))
+            {
+                XDocument doc = Xml.Xml.DocumentFromPath(path);
+
+                List<SynergyV5List> allLists =
+                    Xml.Xml.RetrieveSynergyV5Lists(doc);
+
+                UI.Display.Message("reached testing breakpoint");
+                
+                int insertBreakpointHereForTesting = 0;
+                
+            }
         }
     }
 }

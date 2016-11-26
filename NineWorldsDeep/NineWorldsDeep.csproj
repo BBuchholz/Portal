@@ -485,6 +485,7 @@
     <Compile Include="WorkbenchWindowController.cs" />
     <Compile Include="Xml\Adapters\FragmentXmlAdapter.cs" />
     <Compile Include="Xml\IXmlTransportable.cs" />
+    <Compile Include="Xml\Xml.cs" />
     <Compile Include="Xml\XmlExporter.cs" />
     <Compile Include="Xml\XmlHandler.cs" />
     <Compile Include="Xml\XmlImporter.cs" />
