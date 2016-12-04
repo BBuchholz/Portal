@@ -27,6 +27,8 @@ namespace NineWorldsDeep.Warehouse
         private Db.Sqlite.DbAdapterSwitch db =
             new Db.Sqlite.DbAdapterSwitch();
 
+        private bool syncDirectionProcessingInProgress = false;
+
         public WarehouseMainWindow()
         {
             InitializeComponent();
@@ -115,26 +117,63 @@ namespace NineWorldsDeep.Warehouse
             }
         }
 
-        private void ProcessSyncDirection()
+        private async void ProcessSyncDirection()
         {
-            SetExecutionStatus(ExecStatus.Ready);
-
-            if (CurrentProfile != null &&
-                cmbDirection.SelectedItem != null)
+            if(!syncDirectionProcessingInProgress)
             {
-                SyncDirection selected = (SyncDirection)cmbDirection.SelectedItem;
+                syncDirectionProcessingInProgress = true;
 
-                switch (selected)
+                SetExecutionStatus(ExecStatus.Ready);
+
+                if (CurrentProfile != null &&
+                    cmbDirection.SelectedItem != null)
                 {
-                    case SyncDirection.Import:
-                        PopulateImports(CurrentProfile);
-                        break;
+                    SyncDirection selected = (SyncDirection)cmbDirection.SelectedItem;
 
-                    case SyncDirection.Export:
-                        PopulateExports(CurrentProfile);
-                        break;
+                    SyncItems.Clear();
+
+                    switch (selected)
+                    {
+                        case SyncDirection.Import:
+
+                            SyncProfile sp = CurrentProfile.ShallowCopy();
+
+                            bool tagsFromXmlNotKeyValFile = chkTagsFromXmlNotKeyVal.IsChecked.Value;
+
+                            var importList = await Task.Run(() => 
+                                PopulateImports(this, sp, tagsFromXmlNotKeyValFile)
+                            );
+
+                            SyncItems.AddAll(importList);
+
+                            //old, synchronous version
+                            //PopulateImports(CurrentProfile);
+
+                            break;
+
+                        case SyncDirection.Export:
+
+                            SyncProfile sp2 = CurrentProfile.ShallowCopy();
+
+                            var exportList = await Task.Run(() => 
+                                PopulateExports(this, sp2)
+                            ); 
+
+                            SyncItems.AddAll(exportList);
+
+                            //old, synchronous version
+                            //PopulateExports(CurrentProfile);
+
+                            break;
+                    }
                 }
+                
+                syncDirectionProcessingInProgress = false;
             }
+
+            
+
+            
 
             ProcessActionDefault();
         }
@@ -181,6 +220,66 @@ namespace NineWorldsDeep.Warehouse
             return profileName;
         }
 
+        private void UpdateStatus(string text)
+        {
+            Dispatcher.Invoke(() =>
+            {
+                tbStatus.Text = text;
+            });
+        }
+
+        internal List<SyncItem> PopulateExports(
+            WarehouseMainWindow gui, SyncProfile sp)
+        {
+            List<SyncItem> lst = new List<SyncItem>();
+
+            string profileName = sp.Name;
+
+            int grandTotal = 0;
+
+            foreach (SyncMap sm in sp.SyncMaps)
+            {
+                if (sm.SyncDirection == SyncDirection.Export)
+                {
+                    string exportRootPath = sm.Source;
+
+                    var allFilePaths = Directory.GetFiles(exportRootPath, "*.*", SearchOption.TopDirectoryOnly);
+                    int count = 0;
+                    int total = allFilePaths.Count();
+                    grandTotal += total;
+
+                    //get files
+                    foreach (string filePath in allFilePaths)
+                    {
+                        count++;
+
+                        string msg = "processing " + count + " of " + total + ": " + filePath;
+
+                        gui.UpdateStatus(msg);
+                        
+                        string hash = Hashes.Sha1ForFilePath(filePath);
+                        string path = filePath;
+                        string tags = Tags.GetTagStringForHash(hash);
+                        string displayName = DisplayNames.FromHash(sp, sm.SyncDirection, hash);
+
+                        lst.Add(new SyncItem(sm)
+                        {
+                            HostHash = hash,
+                            HostPath = path,
+                            HostTags = tags,
+                            HostDisplayName = displayName
+                        });
+                    }
+
+                    gui.UpdateStatus("finished processing " + grandTotal + " files.");
+                }
+            }
+
+
+            return lst;
+        }
+
+
         private void PopulateExports(SyncProfile sp)
         {
             SyncItems.Clear();
@@ -193,8 +292,11 @@ namespace NineWorldsDeep.Warehouse
                 {
                     string exportRootPath = sm.Source;
 
+                    var allFilePaths = Directory.GetFiles(exportRootPath, "*.*", SearchOption.TopDirectoryOnly);
+
+
                     //get files
-                    foreach (string filePath in Directory.GetFiles(exportRootPath, "*.*", SearchOption.TopDirectoryOnly))
+                    foreach (string filePath in allFilePaths)
                     {
                         string hash = Hashes.Sha1ForFilePath(filePath);
                         string path = filePath;
@@ -212,6 +314,59 @@ namespace NineWorldsDeep.Warehouse
                 }
             }
         }
+        
+        internal List<SyncItem> PopulateImports(
+            WarehouseMainWindow gui, 
+            SyncProfile sp, 
+            bool tagsFromXmlNotKeyValFile)
+        {
+            List<SyncItem> lst = new List<SyncItem>();
+
+            string profileName = sp.Name;
+
+            int grandTotal = 0;
+
+            foreach (SyncMap sm in sp.SyncMaps)
+            {
+                if (sm.SyncDirection == SyncDirection.Import)
+                {
+                    string importRootPath = sm.Source;
+
+                    var allFilePaths = Directory.GetFiles(importRootPath, "*.*", SearchOption.TopDirectoryOnly);
+                    int count = 0;
+                    int total = allFilePaths.Count();
+                    grandTotal += total;
+
+                    //get files
+                    foreach (string filePath in allFilePaths)
+                    {
+                        count++;
+
+                        string msg = "processing " + count + " of " + total + ": " + filePath;
+
+                        gui.UpdateStatus(msg);
+
+                        string hash = Hashes.Sha1ForFilePath(filePath);
+                        string path = filePath;
+                        string tags = Tags.ImportForHash(sp, hash, tagsFromXmlNotKeyValFile);
+                        string displayName = DisplayNames.FromHash(sp, sm.SyncDirection, hash);
+
+                        lst.Add(new SyncItem(sm)
+                        {
+                            ExtHash = hash,
+                            ExtPath = path,
+                            ExtTags = tags,
+                            ExtDisplayName = displayName
+                        });
+                    }
+
+                    gui.UpdateStatus("finished processing " + grandTotal + " files.");
+                }
+            }
+
+            return lst;
+        }
+
 
         private void PopulateImports(SyncProfile sp)
         {

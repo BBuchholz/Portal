@@ -23,22 +23,24 @@ namespace NineWorldsDeep.Warehouse
                 {
                     //from: http://stackoverflow.com/questions/1993903/how-do-i-do-a-sha1-file-checksum-in-c
                     using (FileStream fs = new FileStream(filePath, FileMode.Open))
-                    using (BufferedStream bs = new BufferedStream(fs))
                     {
-                        using (SHA1Managed sha1 = new SHA1Managed())
+                        using (BufferedStream bs = new BufferedStream(fs))
                         {
-                            byte[] hash = sha1.ComputeHash(bs);
-                            StringBuilder formatted = new StringBuilder(2 * hash.Length);
-                            foreach (byte b in hash)
+                            using (SHA1Managed sha1 = new SHA1Managed())
                             {
-                                formatted.AppendFormat("{0:X2}", b);
+                                byte[] hash = sha1.ComputeHash(bs);
+                                StringBuilder formatted = new StringBuilder(2 * hash.Length);
+                                foreach (byte b in hash)
+                                {
+                                    formatted.AppendFormat("{0:X2}", b);
+                                }
+
+                                string hashOutputString = formatted.ToString();
+
+                                pathToHash[filePath] = hashOutputString;
+
+                                return hashOutputString;
                             }
-
-                            string hashOutputString = formatted.ToString();
-
-                            pathToHash[filePath] = hashOutputString;
-
-                            return hashOutputString;
                         }
                     }
                 }

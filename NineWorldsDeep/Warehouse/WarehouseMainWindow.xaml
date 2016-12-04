@@ -4,6 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:NineWorldsDeep.Warehouse"
+        xmlns:synergy="clr-namespace:NineWorldsDeep.Synergy"
         mc:Ignorable="d"
         Title="WarehouseMainWindow" Height="500" Width="1200" WindowState="Maximized">
 
@@ -38,6 +39,15 @@
             </MenuItem>
 
         </Menu>
+
+        <!--<synergy:StoryboardStatusBar x:Name="statusBar"
+                                     DockPanel.Dock="Bottom"/>-->
+
+        <StatusBar DockPanel.Dock="Bottom">
+            <StatusBarItem>
+                <TextBlock Name="tbStatus" />
+            </StatusBarItem>
+        </StatusBar>
 
         <!--main grid-->
         <Grid>

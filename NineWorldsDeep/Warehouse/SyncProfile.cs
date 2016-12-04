@@ -64,5 +64,10 @@ namespace NineWorldsDeep.Warehouse
         {
             return "SyncProfile: " + _name;
         }
+
+        internal SyncProfile ShallowCopy()
+        {
+            return (SyncProfile)this.MemberwiseClone();
+        }
     }
 }
