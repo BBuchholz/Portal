@@ -10,9 +10,15 @@ namespace NineWorldsDeep.Tapestry.Nodes
     public class SynergyV5ListNode : TapestryNode
     {
         public SynergyV5ListNode(string listName)
-            : base("SynergyV5List/" + listName)
+            : this(new SynergyV5List(listName))
         {
-            List = new SynergyV5List(listName);
+            //chained constructor, do nothing
+        }
+
+        public SynergyV5ListNode(SynergyV5List lst)
+            : base("SynergyV5List/" + lst.ListName)
+        {
+            List = lst;
         }
 
         public SynergyV5List List { get; private set; }

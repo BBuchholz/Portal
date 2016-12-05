@@ -469,6 +469,13 @@ namespace NineWorldsDeep.Warehouse
             RevertNonExecuted(ExecStatus.Ready);
         }
 
+        //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        // you may want to make this async, and that's a great idea, but create a brand new method
+        // and be prepared to change a lot of other SyncItem logic
+        // I just wasted hours trying to do this, and decided to rollback all changes wiht git cuz 
+        // it's way more of a headache than I have time for
+        // As it stands, be happy I made the import/export syncItem population asynchronous
+        //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
         private void btnExecute_Click(object sender, RoutedEventArgs e)
         {
             List<string> failingPaths = new List<string>();

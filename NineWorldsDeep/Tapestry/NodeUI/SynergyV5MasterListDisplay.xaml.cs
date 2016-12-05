@@ -33,8 +33,14 @@ namespace NineWorldsDeep.Tapestry.NodeUI
         {
             List<SynergyV5ListNode> lst =
                 new List<SynergyV5ListNode>();
-            //mock
-            lst.Add(new SynergyV5ListNode("DemoList"));
+
+            //needs to get all lists from database (SynergyV5SubsetDb.SelectAllActiveListsDeferredLoad())
+            //add property SynergyV5List.IsLoaded
+            //in ListDisplay, check if loaded, and if not, load before displaying
+            
+
+            //mock, two constructors
+            lst.Add(new SynergyV5ListNode(new SynergyV5List("DemoList")));
             lst.Add(new SynergyV5ListNode("DemoList2"));
 
             lvSynergyV5Lists.ItemsSource = lst;

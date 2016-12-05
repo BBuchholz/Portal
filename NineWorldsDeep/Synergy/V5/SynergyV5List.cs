@@ -43,6 +43,8 @@ namespace NineWorldsDeep.Synergy.V5
             //mock
             ListItems.Add(new SynergyV5ListItem("demo"));
 
+            //SEE GAUNTLET IMPLEMENTATION
+
             //should try to retrieve from database, and populate if found
 
             //be sure to populate ListId, if -1 on Save(), an insert will occur
@@ -59,5 +61,7 @@ namespace NineWorldsDeep.Synergy.V5
             // remember, other constructor could be null datetime,
             // so check for that as well, something overrides nothing
         }
+
+
     }
 }
