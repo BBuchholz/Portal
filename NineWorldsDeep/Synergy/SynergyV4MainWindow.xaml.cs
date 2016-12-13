@@ -513,7 +513,10 @@ namespace NineWorldsDeep.Synergy
 
         private void MenuItemImportSynergyV5_Click(object sender, RoutedEventArgs e)
         {
+            //NEEDS TO LOAD MULTIPLE PATHS FROM SYNC ROOT FOLDERS
             string path = UI.Prompt.ForXmlFileLoad(Configuration.SyncFolder());
+
+            throw new NotImplementedException();
 
             if (!string.IsNullOrWhiteSpace(path))
             {

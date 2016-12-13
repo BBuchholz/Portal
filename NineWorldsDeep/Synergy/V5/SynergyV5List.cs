@@ -8,60 +8,93 @@ namespace NineWorldsDeep.Synergy.V5
 {
     public class SynergyV5List
     {
-        public SynergyV5List(string listName, bool deferredLoad = false)
+        public string ListName { get; private set; }
+        public int ListId { get; set; }
+        public DateTime? ActivatedAt { get; private set; }
+        public DateTime? ShelvedAt { get; private set; }
+        public List<SynergyV5ListItem> ListItems { get; private set; }
+
+        public SynergyV5List(string listName)
         {
             ListName = listName;
+            ListId = -1;
             ListItems = new List<SynergyV5ListItem>();
-            ListId = -1; //Load() will populate id if found
+        }
 
-            if (!deferredLoad)
+        public void Save(Db.Sqlite.SynergyV5SubsetDb db)
+        {            
+            db.Save(this);
+        }
+
+        public void Add(int index, SynergyV5ListItem sli)
+        {
+            if (IsNotDuplicate(sli))
             {
-                Load();
+                ListItems.Insert(index, sli);
             }
         }
 
-        public SynergyV5List(string listName, 
-                             DateTime activatedAtTime, 
-                             DateTime shelvedAtTime) : this(listName, true)
+        private bool IsNotDuplicate(SynergyV5ListItem sli)
         {
-            ActivatedAt = activatedAtTime;
-            ShelvedAt = shelvedAtTime;
+            bool exists = false;
 
-            Load();
+            foreach(SynergyV5ListItem existingListItem in ListItems)
+            {
+                string existingValue = existingListItem.ItemValue;
+
+                if(existingValue.Equals(sli.ItemValue, StringComparison.CurrentCultureIgnoreCase))
+                {
+                    exists = true;
+                }
+            }
+
+            return exists;
         }
 
-        public string ListName { get; private set; }
-        public DateTime ActivatedAt { get; private set; }
-        public DateTime ShelvedAt { get; private set; }
-
-        public List<SynergyV5ListItem> ListItems { get; private set; }
-
-        public int ListId { get; private set; }
-
-        public void Load()
+        /// <summary>
+        /// will resolve conflicts, newest date will always take precedence
+        /// passing null values allowed as well to just set one or the other
+        /// null values always resolve to the non-null value(unless both null)
+        /// 
+        /// NOTE: THIS CONVERTS TO UTC, WHICH IS DEPENDENT ON DateTime.Kind
+        /// This property defaults to local, so if you are passing a UTC time, make
+        /// sure that the Kind is set to UTC or the conversion will
+        /// be off. 
+        /// 
+        /// </summary>
+        /// <param name="newActivatedAt"></param>
+        /// <param name="newShelvedAt"></param>
+        public void SetTimeStamps(DateTime? newActivatedAt, DateTime? newShelvedAt)
         {
-            //mock
-            ListItems.Add(new SynergyV5ListItem("demo"));
+            if(newActivatedAt != null)
+            {   
+                if(newActivatedAt.Value.Kind != DateTimeKind.Utc)
+                {
+                    newActivatedAt = newActivatedAt.Value.ToUniversalTime();
+                }         
 
-            //SEE GAUNTLET IMPLEMENTATION
+                if(ActivatedAt == null || 
+                   DateTime.Compare(ActivatedAt.Value, newActivatedAt.Value) < 0)
+                {
+                    //ActivatedAt is older or null
+                    ActivatedAt = newActivatedAt;
+                }
+            }
 
-            //should try to retrieve from database, and populate if found
+            if(newShelvedAt != null)
+            {
+                if(newShelvedAt.Value.Kind != DateTimeKind.Utc)
+                {
+                    newShelvedAt = newShelvedAt.Value.ToUniversalTime();
+                }
 
-            //be sure to populate ListId, if -1 on Save(), an insert will occur
-            //otherwise just an update
-
-            //if not found, do nothing
-
-            //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-            //account for this situation:
-            //instantiated with the datetime parameter constructor
-            // because loaded from xml (for example)
-            // load from database will get a conflicting value
-            // since either could be more recent, resolve to newest value
-            // remember, other constructor could be null datetime,
-            // so check for that as well, something overrides nothing
+                if(ShelvedAt == null || 
+                   DateTime.Compare(ShelvedAt.Value, newShelvedAt.Value) < 0)
+                {
+                    //ShelvedAt is older or null
+                    ShelvedAt = newShelvedAt;
+                }
+            }
         }
-
-
     }
 }

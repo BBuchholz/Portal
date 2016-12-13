@@ -7,23 +7,24 @@ namespace NineWorldsDeep.Synergy.V5
         public SynergyV5ListItem(string itemValue)
         {
             ItemValue = itemValue;
+            ItemId = -1;
+            ListItemId = -1;
         }
 
         public SynergyV5ListItem(string itemValue, 
-                                 DateTime itemActivatedAtTime, 
-                                 DateTime completedAtTime, 
-                                 DateTime archivedAtTime) : this(itemValue)
+                                 DateTime? itemActivatedAtTime, 
+                                 DateTime? completedAtTime, 
+                                 DateTime? archivedAtTime) : this(itemValue)
         {
-            this.ActivatedAt = itemActivatedAtTime;
-            this.CompletedAt = completedAtTime;
-            this.ArchivedAt = archivedAtTime;
+            SynergyV5ToDo newToDo = new SynergyV5ToDo();
+            newToDo.SetTimeStamps(itemActivatedAtTime, completedAtTime, archivedAtTime);
+            ToDo = newToDo;
         }
-
-        //should this become a SynergyItem object? to mirror db?
+        
         public string ItemValue { get; private set; }
+        public int ItemId { get; set; }
+        public int ListItemId { get; private set; }
+        public SynergyV5ToDo ToDo { get; set; }
 
-        public DateTime ActivatedAt { get; private set; }
-        public DateTime CompletedAt { get; private set; }
-        public DateTime ArchivedAt { get; private set; }
     }
 }

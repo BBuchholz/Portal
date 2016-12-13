@@ -298,9 +298,17 @@ namespace NineWorldsDeep.Db.Sqlite
                 {
                     using (var transaction = conn.BeginTransaction())
                     {
-                        // do stuff here
+                        try
+                        {
+                            // do stuff here
 
-                        transaction.Commit();
+                            transaction.Commit();
+                        }
+                        catch(Exception ex)
+                        {
+                            //handle exception here
+                            transaction.Rollback();
+                        }
                     }
                 }
 

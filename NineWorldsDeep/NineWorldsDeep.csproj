@@ -335,6 +335,7 @@
     <Compile Include="Synergy\ToDoList.cs" />
     <Compile Include="Synergy\V5\SynergyV5List.cs" />
     <Compile Include="Synergy\V5\SynergyV5ListItem.cs" />
+    <Compile Include="Synergy\V5\SynergyV5ToDo.cs" />
     <Compile Include="Tagger\FileElement.cs" />
     <Compile Include="Tagger\FileElementActionSubscriber.cs" />
     <Compile Include="Tagger\FileElementTimestampExtractionAction.cs" />
