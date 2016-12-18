@@ -23,7 +23,7 @@ namespace NineWorldsDeep.Synergy.V5
         
         public string ItemValue { get; private set; }
         public int ItemId { get; set; }
-        public int ListItemId { get; private set; }
+        public int ListItemId { get; set; }
         public SynergyV5ToDo ToDo { get; set; }
 
     }

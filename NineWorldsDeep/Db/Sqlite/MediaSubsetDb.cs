@@ -361,6 +361,24 @@ namespace NineWorldsDeep.Db.Sqlite
             cmd.ExecuteNonQuery();
         }
 
+        //query template, doesn't do anything, copy and modify for convenience
+        private void UpdateQueryTemplate(SQLiteCommand cmd)
+        {
+            cmd.Parameters.Clear();
+            cmd.CommandText =
+                "update query here";
+
+            SQLiteParameter param1 = new SQLiteParameter();
+            param1.Value = 1;
+            cmd.Parameters.Add(param1);
+
+            SQLiteParameter param2 = new SQLiteParameter();
+            param2.Value = 2;
+            cmd.Parameters.Add(param2);
+
+            cmd.ExecuteNonQuery();
+        }
+
         #endregion
     }
 }

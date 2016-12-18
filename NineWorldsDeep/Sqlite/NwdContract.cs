@@ -44,21 +44,50 @@ namespace NineWorldsDeep.Sqlite
         //public static string COLUMN_ = "";
         //public static string COLUMN_ = "";
 
+
+        #region "Synergy V5"
+
+        public static string COLUMN_SYNERGY_LIST_ID = "SynergyListId";
+        public static string COLUMN_SYNERGY_LIST_NAME = "SynergyListName";
+        public static string COLUMN_SYNERGY_LIST_ACTIVATED_AT = "SynergyListActivatedAt";
+        public static string COLUMN_SYNERGY_LIST_SHELVED_AT = "SynergyListShelvedAt";
+        public static string COLUMN_SYNERGY_LIST_CREATED_AT = "SynergyListCreatedAt";
+        public static string COLUMN_SYNERGY_LIST_UPDATED_AT = "SynergyListUpdatedAt";
+
+        public static string COLUMN_SYNERGY_LIST_ITEM_ID = "SynergyListItemId";
+        public static string COLUMN_SYNERGY_LIST_ITEM_CREATED_AT = "SynergyListItemCreatedAt";
+        public static string COLUMN_SYNERGY_LIST_ITEM_UPDATED_AT = "SynergyListItemUpdatedAt";
+        public static string COLUMN_SYNERGY_LIST_ITEM_POSITION = "SynergyListItemPosition";
+
+        public static string COLUMN_SYNERGY_ITEM_ID = "SynergyItemId";
+        public static string COLUMN_SYNERGY_ITEM_VALUE = "SynergyItemValue";
+        public static string COLUMN_SYNERGY_ITEM_CREATED_AT = "SynergyItemCreatedAt";
+        public static string COLUMN_SYNERGY_ITEM_UPDATED_AT = "SynergyItemUpdatedAt";
+
+        public static string COLUMN_SYNERGY_TO_DO_ID = "SynergyToDoId";
+        public static string COLUMN_SYNERGY_TO_DO_ACTIVATED_AT = "SynergyToDoActivatedAt";
+        public static string COLUMN_SYNERGY_TO_DO_COMPLETED_AT = "SynergyToDoCompletedAt";
+        public static string COLUMN_SYNERGY_TO_DO_ARCHIVED_AT = "SynergyToDoArchivedAt";
+        public static string COLUMN_SYNERGY_TO_DO_CREATED_AT = "SynergyToDoCreatedAt";
+        public static string COLUMN_SYNERGY_TO_DO_UPDATED_AT = "SynergyToDoUpdatedAt";
+
+        #endregion
+
         public static string COLUMN_MEDIA_ROOT_ID = "MediaRootId";
         public static string COLUMN_MEDIA_ROOT_PATH = "MediaRootPath";
         public static string COLUMN_MEDIA_DEVICE_ID = "MediaDeviceId";
         public static string COLUMN_MEDIA_DEVICE_DESCRIPTION = "MediaDeviceDescription";
 
-        public static string COLUMN_SYNERGY_TO_DO_UPDATED_AT = "SynergyToDoUpdatedAt";
-        public static string COLUMN_SYNERGY_LIST_NAME = "SynergyListName";
-        public static string COLUMN_SYNERGY_ITEM_VALUE = "SynergyItemValue";
-        public static string COLUMN_SYNERGY_TO_DO_COMPLETED_AT = "SynergyToDoCompletedAt";
-        public static string COLUMN_SYNERGY_TO_DO_ARCHIVED_AT = "SynergyToDoArchivedAt";
-        public static string COLUMN_SYNERGY_LIST_ID = "SynergyListId";
-        public static string COLUMN_SYNERGY_ITEM_ID = "SynergyItemId";
-        public static string COLUMN_SYNERGY_LIST_ITEM_ID = "SynergyListItemId";
-        public static string COLUMN_SYNERGY_LIST_ACTIVATED_AT = "SynergyListActivatedAt";
-        public static string COLUMN_SYNERGY_LIST_SHELVED_AT = "SynergyListShelvedAt";
+        //public static string COLUMN_SYNERGY_TO_DO_UPDATED_AT = "SynergyToDoUpdatedAt";
+        //public static string COLUMN_SYNERGY_LIST_NAME = "SynergyListName";
+        //public static string COLUMN_SYNERGY_ITEM_VALUE = "SynergyItemValue";
+        //public static string COLUMN_SYNERGY_TO_DO_COMPLETED_AT = "SynergyToDoCompletedAt";
+        //public static string COLUMN_SYNERGY_TO_DO_ARCHIVED_AT = "SynergyToDoArchivedAt";
+        //public static string COLUMN_SYNERGY_LIST_ID = "SynergyListId";
+        //public static string COLUMN_SYNERGY_ITEM_ID = "SynergyItemId";
+        //public static string COLUMN_SYNERGY_LIST_ITEM_ID = "SynergyListItemId";
+        //public static string COLUMN_SYNERGY_LIST_ACTIVATED_AT = "SynergyListActivatedAt";
+        //public static string COLUMN_SYNERGY_LIST_SHELVED_AT = "SynergyListShelvedAt";
         public static string COLUMN_SYNC_ACTION_ID_DEFAULT = "SyncActionIdDefault";
         public static string COLUMN_PATH_ID_SOURCE = "PathIdSource";
         public static string COLUMN_PATH_ID_DESTINATION = "PathIdDestination";
