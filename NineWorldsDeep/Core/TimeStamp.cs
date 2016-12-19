@@ -32,10 +32,20 @@ namespace NineWorldsDeep.Core
             }
         }
 
-        internal static DateTime YYYY_MM_DD_HH_MM_SS_UTC_ToDateTime(string utcDateString)
+        internal static DateTime? YYYY_MM_DD_HH_MM_SS_UTC_ToDateTime(string utcDateString)
         {
-            DateTime date = DateTime.Parse(utcDateString);
-            date = DateTime.SpecifyKind(date, DateTimeKind.Utc);
+            DateTime? date = null;
+
+            try
+            {
+                date = DateTime.Parse(utcDateString);
+                date = DateTime.SpecifyKind(date.Value, DateTimeKind.Utc);
+            }
+            catch(Exception)
+            {
+                //do nothing
+            }
+
             return date;
         }
     }

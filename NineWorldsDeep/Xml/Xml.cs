@@ -53,11 +53,22 @@ namespace NineWorldsDeep.Xml
         /// </summary>
         /// <param name="dateString">format: YYYY-MM-DD HH:MM:SS</param>
         /// <returns></returns>
-        public static DateTime ToTime(string dateString)
+        public static DateTime? ToTime(string dateString)
         {
-            return DateTime.ParseExact(dateString,
+            DateTime? output = null;
+
+            try
+            {
+                output = DateTime.ParseExact(dateString,
                                       "yyyy-MM-dd HH:mm:ss",
                                       CultureInfo.InvariantCulture);
+            }
+            catch (Exception)
+            {
+                //do nothing
+            }
+
+            return output;
         }
 
         public static List<SynergyV5List> RetrieveSynergyV5Lists(XDocument doc)
@@ -70,13 +81,13 @@ namespace NineWorldsDeep.Xml
                 string activatedAt = listEl.Attribute(ATTRIBUTE_ACTIVATED_AT).Value;
                 string shelvedAt = listEl.Attribute(ATTRIBUTE_SHELVED_AT).Value;
 
-                DateTime activatedAtTime = ToTime(activatedAt);
-                DateTime shelvedAtTime = ToTime(shelvedAt);
+                DateTime? activatedAtTime = ToTime(activatedAt);
+                DateTime? shelvedAtTime = ToTime(shelvedAt);
 
                 SynergyV5List lst = 
-                    new SynergyV5List(listName, 
-                                      activatedAtTime, 
-                                      shelvedAtTime);
+                    new SynergyV5List(listName);
+
+                lst.SetTimeStamps(activatedAtTime, shelvedAtTime);
 
                 foreach(XElement itemEl in listEl.Descendants(TAG_SYNERGY_ITEM))
                 {
@@ -93,9 +104,9 @@ namespace NineWorldsDeep.Xml
                         string completedAt = listEl.Attribute(ATTRIBUTE_COMPLETED_AT).Value;
                         string archivedAt = listEl.Attribute(ATTRIBUTE_ARCHIVED_AT).Value;
 
-                        DateTime itemActivatedAtTime = ToTime(itemActivatedAt);
-                        DateTime completedAtTime = ToTime(completedAt);
-                        DateTime archivedAtTime = ToTime(archivedAt);
+                        DateTime? itemActivatedAtTime = ToTime(itemActivatedAt);
+                        DateTime? completedAtTime = ToTime(completedAt);
+                        DateTime? archivedAtTime = ToTime(archivedAt);
 
                         SynergyV5ListItem item =
                             new SynergyV5ListItem(itemValue,

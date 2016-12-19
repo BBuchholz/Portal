@@ -65,8 +65,17 @@
 
             </MenuItem>
         </Menu>
-        <local:StoryboardStatusBar x:Name="statusBar" 
-                                   DockPanel.Dock="Bottom"/>
+
+        <Grid DockPanel.Dock="Bottom">
+
+            <Grid.RowDefinitions>
+                <RowDefinition/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+
+            <TextBlock x:Name="statusDetail" Grid.Row="0" Text="Detail here"/>
+            <local:StoryboardStatusBar x:Name="statusBar" Grid.Row="1" />
+        </Grid>
         <Grid>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition/>

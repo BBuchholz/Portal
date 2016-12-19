@@ -30,6 +30,8 @@ namespace NineWorldsDeep.Synergy
         private SyncHandler _sh = new SyncHandler();
         private Db.Sqlite.DbAdapterSwitch _db =
             new Db.Sqlite.DbAdapterSwitch();
+        Db.Sqlite.SynergyV5SubsetDb _dbV5 = 
+            new Db.Sqlite.SynergyV5SubsetDb();
 
         private ObservableCollection<SynergyList> _lists =
             new ObservableCollection<SynergyList>();
@@ -514,20 +516,25 @@ namespace NineWorldsDeep.Synergy
         private void MenuItemImportSynergyV5_Click(object sender, RoutedEventArgs e)
         {
             //NEEDS TO LOAD MULTIPLE PATHS FROM SYNC ROOT FOLDERS
-            string path = UI.Prompt.ForXmlFileLoad(Configuration.SyncFolder());
-
-            throw new NotImplementedException();
-
+            string path = //for testing
+                "C:/NWD-SYNC/phone/NWD/xml/outgoing/20161208003726-nwd-synergy-v5.xml"; 
+                //UI.Prompt.ForXmlFileLoad(Configuration.SyncFolder());
+           
+            
             if (!string.IsNullOrWhiteSpace(path))
             {
                 XDocument doc = Xml.Xml.DocumentFromPath(path);
 
                 List<SynergyV5List> allLists =
                     Xml.Xml.RetrieveSynergyV5Lists(doc);
-
-                UI.Display.Message("reached testing breakpoint");
                 
-                int insertBreakpointHereForTesting = 0;
+                foreach(SynergyV5List lst in allLists)
+                {
+                    //may need dispatcher async
+                    statusDetail.Text = "processing list: " + lst.ListName;
+
+                    _dbV5.Save(lst);
+                }
                 
             }
         }

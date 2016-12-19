@@ -28,6 +28,16 @@ namespace NineWorldsDeep.Db.Sqlite
         {
             // parallels gauntlet logic
             // (Android App: http://github.com/BBuchholz/Gauntlet)
+            
+            string listName = synLst.ListName;
+
+            //populate list id if not set, creating list if !exists
+            //this runs in its own transaction so the list will have written to db
+            //before the later transaction needs to access its id
+            if (synLst.ListId < 1)
+            {
+                EnsureSynergyV5ListName(listName);
+            }
 
             using (var conn = new SQLiteConnection(
                 @"Data Source=" + Configuration.GetSqliteDbPath(DbName)))
@@ -38,26 +48,19 @@ namespace NineWorldsDeep.Db.Sqlite
                 {
                     using (var transaction = conn.BeginTransaction())
                     {
-                        try
+                        //try
                         {
-                            string listName = synLst.ListName;
                             string activated =
                                 TimeStamp.To_UTC_YYYY_MM_DD_HH_MM_SS(synLst.ActivatedAt);
                             string shelved =
                                 TimeStamp.To_UTC_YYYY_MM_DD_HH_MM_SS(synLst.ShelvedAt);
-
-                            //populate list id if not set, creating list if !exists
-                            if (synLst.ListId < 1)
-                            {
-                                EnsureSynergyV5ListName(listName, cmd);
-                            }
-
+                            
                             //ensure current timestamps
                             UpdateTimeStampsForSynergyV5ListName(activated, shelved, listName, cmd);
 
-                            PopulateIdAndTimeStamps(synLst);
+                            PopulateIdAndTimeStamps(synLst, cmd);
 
-                            PopulateListItems(synLst);
+                            PopulateListItems(synLst, cmd);
 
                             // for each SynergyV5ListItem,
                             // do the same (populate item id, ensure, etc.)
@@ -70,13 +73,14 @@ namespace NineWorldsDeep.Db.Sqlite
 
                             transaction.Commit();
                         }
-                        catch (Exception ex)
-                        {
-                            //handle exception here
-                            transaction.Rollback();
+                        //catch (Exception ex)
+                        //{
+                        //    //handle exception here
+                        //    transaction.Rollback();
 
-                            UI.Display.Exception(ex);
-                        }
+                        //    throw ex;
+                        //    //UI.Display.Exception(ex);
+                        //}
                     }
                 }
 
@@ -85,93 +89,68 @@ namespace NineWorldsDeep.Db.Sqlite
 
         }
 
-        private void PopulateListItems(SynergyV5List synLst)
+        private void PopulateListItems(SynergyV5List synLst, SQLiteCommand cmd)
         {
             //mirrors synergyV5PopulateListItems() in Gauntlet
 
-            using (var conn = new SQLiteConnection(
-                @"Data Source=" + Configuration.GetSqliteDbPath(DbName)))
+            //select list items by position for list
+            cmd.Parameters.Clear();
+            cmd.CommandText =
+                SYNERGY_V5_SELECT_LIST_ITEMS_AND_TODOS_BY_POSITION_FOR_LIST_ID_X;
+                            
+            SQLiteParameter listIdParam = new SQLiteParameter();
+            listIdParam.Value = synLst.ListId;
+            cmd.Parameters.Add(listIdParam);
+                            
+            using (var rdr = cmd.ExecuteReader())
             {
-                conn.Open();
+                int itemId, position, listItemId, toDoId;
 
-                using (var cmd = new SQLiteCommand(conn))
+                String itemValue,
+                        toDoActivatedAtString,
+                        toDoCompletedAtString,
+                        toDoArchivedAtString;
+
+                while (rdr.Read())
                 {
-                    using (var transaction = conn.BeginTransaction())
+                    itemId = GetNullableInt32(rdr, 0);
+                    itemValue = GetNullableString(rdr, 1);
+                    position = GetNullableInt32(rdr, 2);
+                    listItemId = GetNullableInt32(rdr, 3);
+                    toDoId = GetNullableInt32(rdr, 4);
+                    toDoActivatedAtString = GetNullableString(rdr, 5);
+                    toDoCompletedAtString = GetNullableString(rdr, 6);
+                    toDoArchivedAtString = GetNullableString(rdr, 7);
+
+                    SynergyV5ListItem sli = new SynergyV5ListItem(itemValue);
+                    sli.ItemId = itemId;
+                    sli.ListItemId = listItemId;
+
+                    if(toDoId > 0)
                     {
-                        try
-                        {
-                            //select list items by position for list
-                            cmd.Parameters.Clear();
-                            cmd.CommandText =
-                                SYNERGY_V5_SELECT_LIST_ITEMS_AND_TODOS_BY_POSITION_FOR_LIST_ID_X;
-                            
-                            SQLiteParameter listIdParam = new SQLiteParameter();
-                            listIdParam.Value = synLst.ListId;
-                            cmd.Parameters.Add(listIdParam);
-                            
-                            using (var rdr = cmd.ExecuteReader())
-                            {
-                                int itemId, position, listItemId, toDoId;
+                        //has toDo item
 
-                                String itemValue,
-                                        toDoActivatedAtString,
-                                        toDoCompletedAtString,
-                                        toDoArchivedAtString;
-
-                                while (rdr.Read())
-                                {
-                                    itemId = GetNullableInt32(rdr, 0);
-                                    itemValue = rdr.GetString(1);
-                                    position = GetNullableInt32(rdr, 2);
-                                    listItemId = GetNullableInt32(rdr, 3);
-                                    toDoId = GetNullableInt32(rdr, 4);
-                                    toDoActivatedAtString = rdr.GetString(5);
-                                    toDoCompletedAtString = rdr.GetString(6);
-                                    toDoArchivedAtString = rdr.GetString(7);
-
-                                    SynergyV5ListItem sli = new SynergyV5ListItem(itemValue);
-                                    sli.ItemId = itemId;
-                                    sli.ListItemId = listItemId;
-
-                                    if(toDoId > 0)
-                                    {
-                                        //has toDo item
-
-                                        SynergyV5ToDo toDo = new SynergyV5ToDo();
-                                        toDo.ToDoId = toDoId;
+                        SynergyV5ToDo toDo = new SynergyV5ToDo();
+                        toDo.ToDoId = toDoId;
                                         
-                                        DateTime activated =
-                                            TimeStamp.YYYY_MM_DD_HH_MM_SS_UTC_ToDateTime(toDoActivatedAtString);
+                        DateTime? activated =
+                            TimeStamp.YYYY_MM_DD_HH_MM_SS_UTC_ToDateTime(toDoActivatedAtString);
 
-                                        DateTime completed =
-                                            TimeStamp.YYYY_MM_DD_HH_MM_SS_UTC_ToDateTime(toDoCompletedAtString);
+                        DateTime? completed =
+                            TimeStamp.YYYY_MM_DD_HH_MM_SS_UTC_ToDateTime(toDoCompletedAtString);
 
-                                        DateTime archived =
-                                            TimeStamp.YYYY_MM_DD_HH_MM_SS_UTC_ToDateTime(toDoArchivedAtString);
+                        DateTime? archived =
+                            TimeStamp.YYYY_MM_DD_HH_MM_SS_UTC_ToDateTime(toDoArchivedAtString);
 
-                                        toDo.SetTimeStamps(activated, completed, archived);
+                        toDo.SetTimeStamps(activated, completed, archived);
 
-                                        sli.ToDo = toDo;
-                                    }
-
-                                    synLst.Add(position, sli);
-                                }
-                            }
-
-                            transaction.Commit();
-                        }
-                        catch (Exception ex)
-                        {
-                            //handle exception here
-                            transaction.Rollback();
-
-                            UI.Display.Exception(ex);
-                        }
+                        sli.ToDo = toDo;
                     }
-                }
 
-                conn.Close();
+                    synLst.Add(position, sli);
+                }
             }
+                            
         }
 
         /// <summary>
@@ -184,7 +163,7 @@ namespace NineWorldsDeep.Db.Sqlite
         {
             if (!rdr.IsDBNull(idx))
             {
-                return rdr.GetInt32(0);
+                return rdr.GetInt32(idx);
             }
             else
             {
@@ -192,62 +171,59 @@ namespace NineWorldsDeep.Db.Sqlite
             }
         }
 
-        private void PopulateIdAndTimeStamps(SynergyV5List synLst)
+        /// <summary>
+        /// returns "" (empty string) if field is null
+        /// </summary>
+        /// <param name="rdr"></param>
+        /// <param name="idx"></param>
+        /// <returns></returns>
+        private string GetNullableString(SQLiteDataReader rdr, int idx)
+        {
+            if (!rdr.IsDBNull(idx))
+            {
+                return rdr.GetString(idx);
+            }
+            else
+            {
+                return "";
+            }
+        }
+
+        private void PopulateIdAndTimeStamps(SynergyV5List synLst, SQLiteCommand cmd)
         {
             string listName = synLst.ListName;
 
-            using (var conn = new SQLiteConnection(
-                @"Data Source=" + Configuration.GetSqliteDbPath(DbName)))
-            {
-                conn.Open();
+            cmd.Parameters.Clear();
 
-                using (var cmd = new SQLiteCommand(conn))
-                {
-                    using (var transaction = conn.BeginTransaction())
-                    {                        
-                        try
-                        {
+            cmd.CommandText =
+                SYNERGY_V5_SELECT_ID_ACTIVATED_AT_SHELVED_AT_FOR_LIST_NAME; 
 
-                            cmd.CommandText =
-                                SYNERGY_V5_SELECT_ID_ACTIVATED_AT_SHELVED_AT_FOR_LIST_NAME; 
-
-                            SQLiteParameter listNameParam = new SQLiteParameter();
-                            listNameParam.Value = listName;
-                            cmd.Parameters.Add(listNameParam);
+            SQLiteParameter listNameParam = new SQLiteParameter();
+            listNameParam.Value = listName;
+            cmd.Parameters.Add(listNameParam);
                             
-                            using (var rdr = cmd.ExecuteReader())
-                            {
-                                if (rdr.Read())
-                                {
-                                    int listId = rdr.GetInt32(0);
-                                    string activatedString =
-                                        rdr.GetString(1);
-                                    string shelvedString =
-                                        rdr.GetString(2);
+            using (var rdr = cmd.ExecuteReader())
+            {
+                if (rdr.Read())
+                {
+                    int listId = rdr.GetInt32(0);
+                    string activatedString =
+                        rdr.GetString(1);
+                    string shelvedString =
+                        rdr.GetString(2);
 
-                                    DateTime activated =
-                                        TimeStamp.YYYY_MM_DD_HH_MM_SS_UTC_ToDateTime(activatedString);
+                    DateTime? activated =
+                        TimeStamp.YYYY_MM_DD_HH_MM_SS_UTC_ToDateTime(activatedString);
 
-                                    DateTime shelved =
-                                        TimeStamp.YYYY_MM_DD_HH_MM_SS_UTC_ToDateTime(shelvedString);
+                    DateTime? shelved =
+                        TimeStamp.YYYY_MM_DD_HH_MM_SS_UTC_ToDateTime(shelvedString);
 
-                                    synLst.ListId = listId;
-                                    synLst.SetTimeStamps(activated, shelved);
-                                }
-                            }
-
-                            transaction.Commit();
-                        }
-                        catch (Exception ex)
-                        {
-                            UI.Display.Exception(ex);
-                            transaction.Rollback();
-                        }
-                    }
+                    synLst.ListId = listId;
+                    synLst.SetTimeStamps(activated, shelved);
                 }
-
-                conn.Close();
             }
+
+            
         }
 
         private void UpdateTimeStampsForSynergyV5ListName(string activated, string shelved, string listName, SQLiteCommand cmd)
@@ -270,16 +246,40 @@ namespace NineWorldsDeep.Db.Sqlite
             cmd.ExecuteNonQuery();
         }
 
-        private void EnsureSynergyV5ListName(string listName, SQLiteCommand cmd)
+        private void EnsureSynergyV5ListName(string listName)
         {
-            cmd.Parameters.Clear();
-            cmd.CommandText = SYNERGY_V5_ENSURE_LIST_NAME_X;
-                        
-            SQLiteParameter listNameParam = new SQLiteParameter();
-            listNameParam.Value = listName;
-            cmd.Parameters.Add(listNameParam);
-            
-            cmd.ExecuteNonQuery();
+            using (var conn = new SQLiteConnection(
+                @"Data Source=" + Configuration.GetSqliteDbPath(DbName)))
+            {
+                conn.Open();
+
+                using (var cmd = new SQLiteCommand(conn))
+                {
+                    using (var transaction = conn.BeginTransaction())
+                    {
+                        try
+                        {
+                            cmd.Parameters.Clear();
+                            cmd.CommandText = SYNERGY_V5_ENSURE_LIST_NAME_X;
+
+                            SQLiteParameter listNameParam = new SQLiteParameter();
+                            listNameParam.Value = listName;
+                            cmd.Parameters.Add(listNameParam);
+
+                            cmd.ExecuteNonQuery();
+                            transaction.Commit();
+                        }
+                        catch (Exception ex)
+                        {
+                            //handle exception here
+                            transaction.Rollback();
+                            UI.Display.Exception(ex);
+                        }
+                    }
+                }
+
+                conn.Close();
+            }
         }
 
         internal void Save(SynergyV5List synLst, SynergyV5ListItem sli, int position, SQLiteCommand cmd)
