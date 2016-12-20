@@ -247,11 +247,72 @@ namespace NineWorldsDeep.Core
             return PhoneSyncSynergyArchivedFolder + "\\" + listName + ".txt";
         }
 
-        public static string SyncFileSynergyPath(string profileName, string listName)
+        public static string SynergyV3SyncFilePath(string profileName, string listName)
         {
             return Path.Combine(ProcessTestMode("NWD-SYNC"), 
                                 profileName, 
                                 @"NWD\synergy\" + listName + ".txt");
+        }
+
+        public static List<string> GetActiveSyncProfileIncomingXmlFolders()
+        {
+            List<string> allFolderPaths = new List<string>();
+
+            foreach(string profileName in GetAllActiveSyncProfileNames())
+            {
+                string xmlDir = Path.Combine(ProcessTestMode("NWD-SYNC"),
+                                             profileName,
+                                             @"NWD\xml\incoming");
+
+                //ensure directory
+                Directory.CreateDirectory(xmlDir);
+
+                allFolderPaths.Add(xmlDir);
+            }
+
+            return allFolderPaths;
+        }
+
+        public static List<string> GetSynergyV5XmlImportPaths()
+        {
+            List<string> allPaths = new List<string>();
+
+            foreach(string profileName in GetAllActiveSyncProfileNames())
+            {
+                string xmlDir = Path.Combine(ProcessTestMode("NWD-SYNC"),
+                                             profileName,
+                                             @"NWD\xml\outgoing");
+
+                if (Directory.Exists(xmlDir))
+                {
+                    foreach (string filePath in
+                                Directory.GetFiles(xmlDir,
+                                                    "*.xml",
+                                                    SearchOption.TopDirectoryOnly))
+                    {
+                        string fileName = System.IO.Path.GetFileName(filePath);
+
+                        if (fileName.ToLower().Contains("nwd-synergy-v5"))
+                        {
+                            allPaths.Add(filePath);
+                        }
+                    }
+                }
+            }
+
+            return allPaths;
+        }
+
+        private static IEnumerable<string> GetAllActiveSyncProfileNames()
+        {
+            List<String> profileNames = new List<string>();
+
+            //todo: populate from db sync profiles eventually
+            profileNames.Add("phone");
+            profileNames.Add("logos");
+            profileNames.Add("galaxy-a");
+
+            return profileNames;
         }
 
         public static string GetPhoneSyncSynergyFilePath(string listName)

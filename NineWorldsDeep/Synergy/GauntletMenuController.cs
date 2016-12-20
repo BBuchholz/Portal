@@ -125,8 +125,8 @@ namespace NineWorldsDeep.Synergy
             foreach (ToDoList lst in db.GetLists(true))
             {
                 string phoneListPath = Configuration.GetPhoneSyncSynergyFilePath(lst.Name);
-                string tabletListPath = Configuration.SyncFileSynergyPath("galaxy-a", lst.Name);
-                string logosListPath = Configuration.SyncFileSynergyPath("logos", lst.Name);
+                string tabletListPath = Configuration.SynergyV3SyncFilePath("galaxy-a", lst.Name);
+                string logosListPath = Configuration.SynergyV3SyncFilePath("logos", lst.Name);
 
                 WriteListToPath(lst, phoneListPath, foundCount);
                 WriteListToPath(lst, tabletListPath, foundCount);

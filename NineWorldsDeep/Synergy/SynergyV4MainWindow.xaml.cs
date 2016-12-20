@@ -8,6 +8,7 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -33,12 +34,17 @@ namespace NineWorldsDeep.Synergy
         Db.Sqlite.SynergyV5SubsetDb _dbV5 = 
             new Db.Sqlite.SynergyV5SubsetDb();
 
+        //async related 
+        private readonly SynchronizationContext syncContext;
+        private DateTime previousTime = DateTime.Now;
+
         private ObservableCollection<SynergyList> _lists =
             new ObservableCollection<SynergyList>();
 
         public SynergyV4MainWindow()
         {
             InitializeComponent();
+            syncContext = SynchronizationContext.Current;
             _sh.DbSavePending = false;
             this.DataContext = this;
         }
@@ -510,33 +516,204 @@ namespace NineWorldsDeep.Synergy
 
         private void MenuItemExportSynergyV5ActiveLists_Click(object sender, RoutedEventArgs e)
         {
-            UI.Display.Message("not implemented");
+            var activeLists = _dbV5.GetAllActiveLists();
+
+            //XDocument doc =
+            //    new XDocument(Xml.Xml.Export(activeLists));
+            XElement synergySubsetEl = new XElement(Xml.Xml.TAG_SYNERGY_SUBSET);
+
+            foreach (SynergyV5List lst in activeLists)
+            {
+                synergySubsetEl.Add(Xml.Xml.Export(lst));
+            }
+            
+            XDocument doc =
+                new XDocument(
+                    new XElement("nwd", 
+                        synergySubsetEl));
+
+            //here, take doc and save to all sync locations            
+            string fileName = 
+                NwdUtils.GetTimeStamp_yyyyMMddHHmmss() + "-nwd-synergy-v5.xml";
+
+            var allFolders = 
+                Configuration.GetActiveSyncProfileIncomingXmlFolders();
+
+            foreach (string xmlIncomingFolderPath in allFolders)
+            {
+                string fullFilePath =
+                    System.IO.Path.Combine(xmlIncomingFolderPath, fileName);
+
+                doc.Save(fullFilePath);
+            }
         }
 
-        private void MenuItemImportSynergyV5_Click(object sender, RoutedEventArgs e)
+
+        private async void AsyncMenuItemExportSynergyV5ActiveLists_Click(object sender, RoutedEventArgs e)
+        {
+            //var activeLists = _dbV5.GetAllActiveLists();
+
+            await Task.Run(() => {
+
+                string detail;
+
+                List<SynergyV5List> activeLists = new List<SynergyV5List>();
+
+                var activeListNames = _dbV5.GetAllActiveListNames();
+
+                //mirrors Gauntlet 
+                foreach (string listName in activeListNames)
+                {
+                    SynergyV5List lst = new SynergyV5List(listName);
+
+                    detail = "loading list: " + lst.ListName;
+
+                    StatusDetailUpdate(detail);
+
+                    //save() populates each list as part of its process
+                    _dbV5.Save(lst);
+
+                    activeLists.Add(lst);
+                }
+            
+                //XDocument doc =
+                //    new XDocument(Xml.Xml.Export(activeLists));
+                XElement synergySubsetEl = new XElement(Xml.Xml.TAG_SYNERGY_SUBSET);
+                
+                detail = "exporting lists to XML";
+
+                StatusDetailUpdate(detail);
+
+                foreach (SynergyV5List lst in activeLists)
+                {
+
+                    synergySubsetEl.Add(Xml.Xml.Export(lst));
+                }         
+
+                XDocument doc =
+                    new XDocument(
+                        new XElement("nwd",
+                            synergySubsetEl));
+
+                //here, take doc and save to all sync locations            
+                string fileName =
+                    NwdUtils.GetTimeStamp_yyyyMMddHHmmss() + "-nwd-synergy-v5.xml";
+
+                var allFolders =
+                    Configuration.GetActiveSyncProfileIncomingXmlFolders();
+                
+                foreach (string xmlIncomingFolderPath in allFolders)
+                {
+                    string fullFilePath =
+                        System.IO.Path.Combine(xmlIncomingFolderPath, fileName);
+
+                    doc.Save(fullFilePath);
+                }
+
+
+            });
+            
+            statusDetail.Text = "finished.";
+        }
+
+
+        //private void MenuItemImportSynergyV5_Click(object sender, RoutedEventArgs e)
+        //{
+        //    //NEEDS TO LOAD MULTIPLE PATHS FROM SYNC ROOT FOLDERS
+        //    //string path = //for testing
+        //    //    "C:/NWD-SYNC/phone/NWD/xml/outgoing/20161208003726-nwd-synergy-v5.xml"; 
+        //    //    //UI.Prompt.ForXmlFileLoad(Configuration.SyncFolder());
+
+        //    var allPaths = Configuration.GetSynergyV5XmlImportPaths();
+        //    var count = 0;
+        //    var total = allPaths.Count();
+
+        //    foreach (string path in allPaths)
+        //    {
+        //        count++;
+
+        //        if (!string.IsNullOrWhiteSpace(path))
+        //        {
+        //            string fileName = System.IO.Path.GetFileName(path);
+
+        //            XDocument doc = Xml.Xml.DocumentFromPath(path);
+
+        //            List<SynergyV5List> allLists =
+        //                Xml.Xml.RetrieveSynergyV5Lists(doc);
+
+        //            foreach (SynergyV5List lst in allLists)
+        //            {
+        //                string detail = "path " + count + " of " + total;
+        //                detail += ": " + fileName + " -> ";
+        //                detail += "processing list: " + lst.ListName;
+
+        //                StatusDetailUpdate(detail);
+
+        //                _dbV5.Save(lst);
+        //            }
+        //        }
+        //    }
+        //}
+
+        private async void AsyncMenuItemImportSynergyV5_Click(object sender, RoutedEventArgs e)
         {
             //NEEDS TO LOAD MULTIPLE PATHS FROM SYNC ROOT FOLDERS
-            string path = //for testing
-                "C:/NWD-SYNC/phone/NWD/xml/outgoing/20161208003726-nwd-synergy-v5.xml"; 
-                //UI.Prompt.ForXmlFileLoad(Configuration.SyncFolder());
-           
-            
-            if (!string.IsNullOrWhiteSpace(path))
+            //string path = //for testing
+            //    "C:/NWD-SYNC/phone/NWD/xml/outgoing/20161208003726-nwd-synergy-v5.xml"; 
+            //    //UI.Prompt.ForXmlFileLoad(Configuration.SyncFolder());
+
+            var allPaths = Configuration.GetSynergyV5XmlImportPaths();
+            var count = 0;
+            var total = allPaths.Count();
+
+            await Task.Run(() =>
             {
-                XDocument doc = Xml.Xml.DocumentFromPath(path);
-
-                List<SynergyV5List> allLists =
-                    Xml.Xml.RetrieveSynergyV5Lists(doc);
-                
-                foreach(SynergyV5List lst in allLists)
+                foreach (string path in allPaths)
                 {
-                    //may need dispatcher async
-                    statusDetail.Text = "processing list: " + lst.ListName;
+                    count++;
 
-                    _dbV5.Save(lst);
+                    if (!string.IsNullOrWhiteSpace(path))
+                    {
+                        string fileName = System.IO.Path.GetFileName(path);
+
+                        XDocument doc = Xml.Xml.DocumentFromPath(path);
+
+                        List<SynergyV5List> allLists =
+                            Xml.Xml.RetrieveSynergyV5Lists(doc);
+
+                        foreach (SynergyV5List lst in allLists)
+                        {
+                            string detail = "path " + count + " of " + total;
+                            detail += ": " + fileName + " -> ";
+                            detail += "processing list: " + lst.ListName;
+
+                            StatusDetailUpdate(detail);
+
+                            _dbV5.Save(lst);
+                        }
+
+                    }
+
                 }
-                
-            }
+            });
+
+            statusDetail.Text = "finished.";
+        }
+
+        private void StatusDetailUpdate(string text)
+        {
+            //may need dispatcher async
+            
+            var currentTime = DateTime.Now;
+
+            if ((DateTime.Now - previousTime).Milliseconds <= 50) return;
+
+            syncContext.Post(new SendOrPostCallback(s =>
+            {
+                statusDetail.Text = (string)s;
+            }), text);
+
+            previousTime = currentTime;
         }
     }
 }

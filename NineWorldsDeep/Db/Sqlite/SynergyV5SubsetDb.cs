@@ -19,9 +19,72 @@ namespace NineWorldsDeep.Db.Sqlite
             DbName = "nwd";
         }
 
-        public List<SynergyV5List> SelectAllActiveListsDeferredLoad()
+        public List<SynergyV5List> GetAllActiveLists()
         {
-            throw new NotImplementedException();
+            List<SynergyV5List> activeLists = new List<SynergyV5List>();
+
+            var activeListNames = GetAllActiveListNames();
+            
+            //mirrors Gauntlet 
+            foreach(string listName in activeListNames)
+            {
+                SynergyV5List lst = new SynergyV5List(listName);
+
+                //save() populates each list as part of its process
+                Save(lst);
+
+                activeLists.Add(lst);
+            }
+
+            return activeLists;
+        }
+
+        public List<string> GetAllActiveListNames()
+        {
+            List<string> listNames = new List<string>();
+
+            using (var conn = new SQLiteConnection(
+                @"Data Source=" + Configuration.GetSqliteDbPath(DbName)))
+            {
+                conn.Open();
+
+                using (var cmd = new SQLiteCommand(conn))
+                {
+                    using (var transaction = conn.BeginTransaction())
+                    {
+                        try
+                        {
+                            cmd.Parameters.Clear();
+                            cmd.CommandText =
+                                SYNERGY_V5_SELECT_ACTIVE_LISTS;
+
+                            using (var rdr = cmd.ExecuteReader())
+                            {
+                                while (rdr.Read())
+                                {
+                                    string listName = GetNullableString(rdr, 0);
+
+                                    if (!string.IsNullOrWhiteSpace(listName))
+                                    {
+                                        listNames.Add(listName);
+                                    }
+                                }
+                            }
+
+                            transaction.Commit();
+                        }
+                        catch (Exception ex)
+                        {
+                            //handle exception here
+                            transaction.Rollback();
+                        }
+                    }
+                }
+
+                conn.Close();
+            }
+
+            return listNames;
         }
                 
         internal void Save(SynergyV5List synLst)
@@ -488,6 +551,14 @@ namespace NineWorldsDeep.Db.Sqlite
         }
 
         #region "queries"
+
+        public static string SYNERGY_V5_SELECT_ACTIVE_LISTS =
+
+            "SELECT " + NwdContract.COLUMN_SYNERGY_LIST_NAME + " "
+            + "FROM " + NwdContract.TABLE_SYNERGY_LIST + " "
+            + "WHERE " + NwdContract.COLUMN_SYNERGY_LIST_SHELVED_AT + " IS NULL "
+            + "   OR " + NwdContract.COLUMN_SYNERGY_LIST_ACTIVATED_AT + " > " +
+                         NwdContract.COLUMN_SYNERGY_LIST_SHELVED_AT + "; ";
 
         public static string
             SYNERGY_V5_LIST_UPDATE_ACTIVATE_AT_SHELVED_AT_FOR_LIST_NAME_X_Y_Z =

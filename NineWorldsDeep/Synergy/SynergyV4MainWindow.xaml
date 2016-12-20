@@ -51,7 +51,7 @@
                 <MenuItem Header="Export Active Lists"
                           Click="MenuItemExportActiveLists_Click"/>
                 <MenuItem Header="Export Synergy V5 Active Lists"
-                          Click="MenuItemExportSynergyV5ActiveLists_Click"/>
+                          Click="AsyncMenuItemExportSynergyV5ActiveLists_Click"/>
                 <MenuItem Header="Active List Management"
                           Click="MenuItemSynergyListManagement_Click"/>
                 <MenuItem Header="Import Synced Files"
@@ -59,7 +59,7 @@
                 <MenuItem Header="Import Synced Archive Files"
                           Click="MenuItemImportSyncedArchiveFiles_Click"/>
                 <MenuItem Header="Import Synergy V5"
-                          Click="MenuItemImportSynergyV5_Click"/>
+                          Click="AsyncMenuItemImportSynergyV5_Click"/>
                 <MenuItem Header="Consume All Imported Files"
                           Click="MenuItemConsumeAllImportedFiles_Click"/>
 

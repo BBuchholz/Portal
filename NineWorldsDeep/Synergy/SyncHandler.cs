@@ -33,9 +33,10 @@ namespace NineWorldsDeep.Synergy
 
             foreach (SynergyList lst in lists)
             {
+                //TODO: replacewith Configuration.GetSynergyV3SyncFilePaths(lst.Name) <-- should return list of paths, processed like below, for each sync root in Configuration (hard code for now)
                 string phoneListPath = Configuration.GetPhoneSyncSynergyFilePath(lst.Name);
-                string tabletListPath = Configuration.SyncFileSynergyPath("galaxy-a", lst.Name);
-                string logosListPath = Configuration.SyncFileSynergyPath("logos", lst.Name);
+                string tabletListPath = Configuration.SynergyV3SyncFilePath("galaxy-a", lst.Name);
+                string logosListPath = Configuration.SynergyV3SyncFilePath("logos", lst.Name);
 
                 WriteListToPath(lst, phoneListPath, ignoredCount);
                 WriteListToPath(lst, tabletListPath, ignoredCount);

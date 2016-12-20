@@ -30,6 +30,11 @@ namespace NineWorldsDeep.Synergy.V5
         {
             if (IsNotDuplicate(sli))
             {
+                if(index > ListItems.Count)
+                {
+                    index = ListItems.Count;
+                }
+
                 ListItems.Insert(index, sli);
             }
         }
@@ -48,7 +53,7 @@ namespace NineWorldsDeep.Synergy.V5
                 }
             }
 
-            return exists;
+            return !exists;
         }
 
         /// <summary>
