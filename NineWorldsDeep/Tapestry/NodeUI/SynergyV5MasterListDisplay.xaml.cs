@@ -22,9 +22,13 @@ namespace NineWorldsDeep.Tapestry.NodeUI
     /// </summary>
     public partial class SynergyV5MasterListDisplay : UserControl
     {
+        Db.Sqlite.SynergyV5SubsetDb db;
+
         public SynergyV5MasterListDisplay()
         {
             InitializeComponent();
+
+            db = new Db.Sqlite.SynergyV5SubsetDb();
 
             Load();
         }
@@ -33,15 +37,11 @@ namespace NineWorldsDeep.Tapestry.NodeUI
         {
             List<SynergyV5ListNode> lst =
                 new List<SynergyV5ListNode>();
-
-            //needs to get all lists from database (SynergyV5SubsetDb.SelectAllActiveListsDeferredLoad())
-            //add property SynergyV5List.IsLoaded
-            //in ListDisplay, check if loaded, and if not, load before displaying
-            
-
-            //mock, two constructors
-            lst.Add(new SynergyV5ListNode(new SynergyV5List("DemoList")));
-            lst.Add(new SynergyV5ListNode("DemoList2"));
+                        
+            foreach(string listName in db.GetAllActiveListNames())
+            {
+                lst.Add(new SynergyV5ListNode(listName));
+            }
 
             lvSynergyV5Lists.ItemsSource = lst;
         }

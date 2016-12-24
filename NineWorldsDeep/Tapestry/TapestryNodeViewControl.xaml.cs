@@ -186,7 +186,10 @@ namespace NineWorldsDeep.Tapestry
                         break;
 
                     case TapestryNodeType.SynergyV5List:
-                        UI.Display.Message("SynergyV5List node awaiting implementation");
+
+                        SetVisible(ccSynergyV5ListNode);
+                        SynergyV5ListNode listNode = (SynergyV5ListNode)node;
+                        synergyV5ListDisplay.Display(listNode);
                         break;
 
                     case TapestryNodeType.Chord:

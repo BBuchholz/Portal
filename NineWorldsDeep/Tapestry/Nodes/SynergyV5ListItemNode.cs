@@ -12,11 +12,17 @@ namespace NineWorldsDeep.Tapestry.Nodes
     public class SynergyV5ListItemNode : TapestryNode
     {
         public SynergyV5ListItemNode(string listName, string itemValue)
-            : base("SynergyV5ListItem/" + 
-                  Hashes.Sha1ForStringValue(listName + ": " + itemValue))
+            : this(new SynergyV5List(listName), new SynergyV5ListItem(itemValue))
         {
-            Item = new SynergyV5ListItem(itemValue);
-            List = new SynergyV5List(listName);
+            //do nothing, chained constructor
+        }
+
+        public SynergyV5ListItemNode(SynergyV5List lst, SynergyV5ListItem itm)
+            : base("SynergyV5ListItem/" +
+          Hashes.Sha1ForStringValue(lst.ListName + ": " + itm.ItemValue))
+        {
+            List = lst;
+            Item = itm;
         }
 
         public SynergyV5ListItem Item { get; private set; }

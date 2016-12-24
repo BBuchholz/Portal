@@ -1,4 +1,5 @@
-﻿using NineWorldsDeep.Tapestry.Nodes;
+﻿using NineWorldsDeep.Synergy.V5;
+using NineWorldsDeep.Tapestry.Nodes;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,18 +22,24 @@ namespace NineWorldsDeep.Tapestry.NodeUI
     /// </summary>
     public partial class SynergyV5ListDisplay : UserControl
     {
+        private Db.Sqlite.SynergyV5SubsetDb db;
+        private SynergyV5ListNode listNode;
+
         public SynergyV5ListDisplay()
         {
             InitializeComponent();
+            db = new Db.Sqlite.SynergyV5SubsetDb();
         }
 
         private void lvSynergyV5ListItems_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            SynergyV5ListItemNode nd = 
-                (SynergyV5ListItemNode)lvSynergyV5ListItems.SelectedItem;
+            SynergyV5ListItem item = 
+                (SynergyV5ListItem)lvSynergyV5ListItems.SelectedItem;
 
-            if(nd != null)
+            if(item != null)
             {
+                SynergyV5ListItemNode nd =
+                    new SynergyV5ListItemNode(listNode.List, item);
                 SynergyV5ListItemClickedEventArgs args =
                     new SynergyV5ListItemClickedEventArgs(nd);
 
@@ -56,6 +63,26 @@ namespace NineWorldsDeep.Tapestry.NodeUI
             }
 
             public SynergyV5ListItemNode ListItemNode { get; private set; }
+        }
+
+        internal void Display(SynergyV5ListNode listNode)
+        {
+            this.listNode = listNode;
+
+            Refresh();
+        }
+
+        public void Refresh()
+        {
+            SynergyV5List synLst = this.listNode.List;
+
+            if (synLst != null)
+            {
+                synLst.Save(db); //syncs with db, loads/merges
+
+                //display list here
+                lvSynergyV5ListItems.ItemsSource = synLst.ListItems;
+            }
         }
     }
 }

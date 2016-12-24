@@ -6,8 +6,22 @@
              xmlns:local="clr-namespace:NineWorldsDeep.Tapestry.NodeUI"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
+    <UserControl.Resources>
+        <Style x:Key="alternatingStyle" TargetType="{x:Type ListViewItem}">
+            <Style.Triggers>
+                <Trigger Property="ItemsControl.AlternationIndex" Value="0">
+                    <Setter Property="Background" Value="White"></Setter>
+                </Trigger>
+                <Trigger Property="ItemsControl.AlternationIndex" Value="1">
+                    <Setter Property="Background" Value="LightGray"></Setter>
+                </Trigger>
+                <Trigger Property="IsSelected" Value="True">
+                    <Setter Property="Background" Value="LightSkyBlue"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+    </UserControl.Resources>
     <Grid>
-
         <Grid.RowDefinitions>
             <RowDefinition/>
             <RowDefinition Height="40"/>
@@ -22,7 +36,20 @@
                   Grid.Row="0"
                   Grid.ColumnSpan="2"
                   Margin="5"
-                  SelectionChanged="lvSynergyV5ListItems_SelectionChanged"/>
+                  ItemContainerStyle="{StaticResource alternatingStyle}"
+                  AlternationCount="2"
+                  ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                  SelectionChanged="lvSynergyV5ListItems_SelectionChanged">
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <StackPanel Orientation="Vertical">
+                        <WrapPanel>
+                            <TextBlock Text="{Binding ItemValue}" TextWrapping="Wrap"/>
+                        </WrapPanel>
+                    </StackPanel>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
 
         <TextBox x:Name="txtListItemValueEntry"
                  Grid.Row="1"
@@ -34,6 +61,6 @@
                 Grid.Column="1"
                 Margin="5"
                 Content="Add"/>
-        
+         
     </Grid>
 </UserControl>
