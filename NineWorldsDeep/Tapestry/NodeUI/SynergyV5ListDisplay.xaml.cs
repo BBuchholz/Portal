@@ -1,6 +1,7 @@
 ﻿using NineWorldsDeep.Synergy.V5;
 using NineWorldsDeep.Tapestry.Nodes;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -81,8 +82,75 @@ namespace NineWorldsDeep.Tapestry.NodeUI
                 synLst.Save(db); //syncs with db, loads/merges
 
                 //display list here
+                lvSynergyV5ListItems.ItemsSource = null; //clear existing
                 lvSynergyV5ListItems.ItemsSource = synLst.ListItems;
             }
+        }
+        
+        private void MenuItemActivateSelected_Click(object sender, RoutedEventArgs e)
+        {
+            IList items = (IList)lvSynergyV5ListItems.SelectedItems;
+            var selectedItems = items.Cast<SynergyV5ListItem>();
+
+            string msg = "Are you sure you want to Activate these " +
+                selectedItems.Count() + " items? " +
+                "Permanent items CANNOT be reverted.";
+
+            if(UI.Prompt.Confirm(msg, true))
+            {
+                foreach(SynergyV5ListItem sli in selectedItems)
+                {
+                    sli.Activate();
+                }
+
+                this.listNode.List.Save(db);
+
+                Refresh();
+            }
+        }
+
+        private void MenuItemCompleteSelected_Click(object sender, RoutedEventArgs e)
+        {
+            IList items = (IList)lvSynergyV5ListItems.SelectedItems;
+            var selectedItems = items.Cast<SynergyV5ListItem>();
+
+            string msg = "Are you sure you want to Complete these " +
+                selectedItems.Count() + " items? " +
+                "Permanent items CANNOT be reverted.";
+
+            if (UI.Prompt.Confirm(msg, true))
+            {
+                foreach (SynergyV5ListItem sli in selectedItems)
+                {
+                    sli.Complete();
+                }
+
+                this.listNode.List.Save(db);
+
+                Refresh();
+            }
+        }
+
+        private void MenuItemArchiveSelected_Click(object sender, RoutedEventArgs e)
+        {
+            IList items = (IList)lvSynergyV5ListItems.SelectedItems;
+            var selectedItems = items.Cast<SynergyV5ListItem>();
+
+            string msg = "Are you sure you want to Archive these " +
+                selectedItems.Count() + " items? " +
+                "Permanent items CANNOT be reverted.";
+
+            if (UI.Prompt.Confirm(msg, true))
+            {
+                foreach (SynergyV5ListItem sli in selectedItems)
+                {
+                    sli.Archive();
+                }
+
+                this.listNode.List.Save(db);
+
+                Refresh();
+            }            
         }
     }
 }

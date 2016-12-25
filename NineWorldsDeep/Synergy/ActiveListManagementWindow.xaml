@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:NineWorldsDeep.Synergy"
         mc:Ignorable="d"
-        Title="ActiveListManagementWindow" Height="300" Width="300">
+        Title="ActiveListManagementWindow" Height="600" Width="600">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="40"/>

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using NineWorldsDeep.Core;
+using System;
 
 namespace NineWorldsDeep.Synergy.V5
 {
@@ -8,6 +9,9 @@ namespace NineWorldsDeep.Synergy.V5
         public DateTime? ActivatedAt { get; private set; }
         public DateTime? CompletedAt { get; private set; }
         public DateTime? ArchivedAt { get; private set; }
+        public string Status { get { return ProcessStatus(); } }
+
+
 
         /// <summary>
         /// 
@@ -71,6 +75,111 @@ namespace NineWorldsDeep.Synergy.V5
                     //ArchivedAt is older or null
                     ArchivedAt = newArchivedAt;
                 }
+            }
+        }
+
+        internal void Activate()
+        {
+            ActivatedAt = TimeStamp.NowUTC();
+        }
+
+        internal void Complete()
+        {
+            CompletedAt = TimeStamp.NowUTC();
+        }
+
+        internal void Archive()
+        {
+            ArchivedAt = TimeStamp.NowUTC();
+        }
+
+        private string ProcessStatus()
+        {
+            if (ActivatedAt == null && CompletedAt == null && ArchivedAt == null)
+            {
+                return "Status Indeterminate";
+            }
+
+            if (ActivatedAt == null && CompletedAt == null)
+            {
+                //only Archived is non-null
+                return "Archived";
+            }
+
+            if(CompletedAt == null && ArchivedAt == null)
+            {
+                //only Activated
+                return "Activated";
+            }
+
+            if(ActivatedAt == null && ArchivedAt == null)
+            {
+                //only Completed
+                return "Completed";
+            }
+
+            if(ActivatedAt == null)
+            {
+                //archived and completed 
+                return "Archived, Completed";
+            }
+
+            if(ArchivedAt == null)
+            {
+                //activated and completed
+                if (ActivatedNewerThanCompletedAssumingNonNullInput())
+                {
+                    return "Activated";
+                }
+                else
+                {
+                    return "Activated, Completed";
+                }                
+            }
+
+            if(CompletedAt == null)
+            {
+                //activated and archived
+                if(DateTime.Compare(ActivatedAt.Value, ArchivedAt.Value) < 0)
+                {
+                    //Activated is older
+                    return "Archived";
+                }
+                else
+                {
+                    return "Activated";
+                }
+            }
+            
+            //if we get here, all three are non-null
+            if (DateTime.Compare(ActivatedAt.Value, ArchivedAt.Value) < 0)
+            {
+                //Activated is older
+                return "Archived, Completed";
+            }
+            else
+            {
+                if (ActivatedNewerThanCompletedAssumingNonNullInput())
+                {
+                    return "Activated";
+                }
+                else
+                {
+                    return "Activated, Completed";
+                };
+            }
+        }
+
+        private bool ActivatedNewerThanCompletedAssumingNonNullInput()
+        {
+            if (DateTime.Compare(ActivatedAt.Value, CompletedAt.Value) < 0)
+            {
+                //ActivatedAt is older
+                return false;
+            }
+            else
+            {
+                return true;
             }
         }
     }

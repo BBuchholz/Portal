@@ -12,6 +12,11 @@ namespace NineWorldsDeep.Core
         {
             return DateTime.Now.ToString("yyyyMMddHHmmss");
         }
+
+        public static DateTime NowUTC()
+        {
+            return DateTime.UtcNow;
+        }
         
         /// <summary>
         /// converts datetime to UTC first, depending on DateTime.Kind

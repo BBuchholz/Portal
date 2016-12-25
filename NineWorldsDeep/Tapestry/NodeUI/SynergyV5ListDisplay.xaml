@@ -43,12 +43,26 @@
             <ListView.ItemTemplate>
                 <DataTemplate>
                     <StackPanel Orientation="Vertical">
-                        <WrapPanel>
-                            <TextBlock Text="{Binding ItemValue}" TextWrapping="Wrap"/>
-                        </WrapPanel>
+                        <TextBlock Text="{Binding ItemValue}" 
+                                       TextWrapping="Wrap"/>
+                        <TextBlock Text="{Binding ItemStatus}" 
+                                       TextWrapping="Wrap" 
+                                       FontWeight="Bold" />
                     </StackPanel>
                 </DataTemplate>
             </ListView.ItemTemplate>
+            <ListView.ContextMenu>
+                <ContextMenu Name="cmListItems"
+                             StaysOpen="True"
+                             Background="WhiteSmoke">
+                    <MenuItem Header="Activate Selected"
+                              Click="MenuItemActivateSelected_Click"/>
+                    <MenuItem Header="Complete Selected"
+                              Click="MenuItemCompleteSelected_Click"/>
+                    <MenuItem Header="Archive Selected"
+                              Click="MenuItemArchiveSelected_Click"/>
+                </ContextMenu>
+            </ListView.ContextMenu>
         </ListView>
 
         <TextBox x:Name="txtListItemValueEntry"
