@@ -147,10 +147,40 @@ namespace NineWorldsDeep.Tapestry.NodeUI
                     sli.Archive();
                 }
 
-                this.listNode.List.Save(db);
+                CurrentList.Save(db);
 
                 Refresh();
             }            
+        }
+
+        private void btnCreateListItem_Click(object sender, RoutedEventArgs e)
+        {
+            string itemValue = txtListItemValueEntry.Text;
+
+            if (!string.IsNullOrWhiteSpace(itemValue))
+            {
+                if(CurrentList != null)
+                {
+                    CurrentList.Add(0, new SynergyV5ListItem(itemValue));
+                    CurrentList.Save(db);
+                    Refresh();
+
+                    txtListItemValueEntry.Text = "";
+                }
+            }
+        }
+
+        private SynergyV5List CurrentList
+        {
+            get
+            {
+                if(this.listNode != null)
+                {
+                    return this.listNode.List;
+                }
+
+                return null;
+            }
         }
     }
 }

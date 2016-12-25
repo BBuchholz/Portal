@@ -43,6 +43,7 @@ namespace NineWorldsDeep.Tapestry.NodeUI
                 lst.Add(new SynergyV5ListNode(listName));
             }
 
+            lvSynergyV5Lists.ItemsSource = null; //reset value
             lvSynergyV5Lists.ItemsSource = lst;
         }
 
@@ -76,6 +77,22 @@ namespace NineWorldsDeep.Tapestry.NodeUI
 
             public SynergyV5ListNode ListNode { get; private set; }
 
+        }
+
+        private void btnCreateList_Click(object sender, RoutedEventArgs e)
+        {
+            string listName = 
+                Synergy.SynergyUtils.ProcessListName(txtListNameEntry.Text);
+
+            if (!string.IsNullOrWhiteSpace(listName))
+            {
+                SynergyV5List synLst = new SynergyV5List(listName);
+                synLst.Save(db);
+
+                Load();
+
+                txtListNameEntry.Text = "";
+            }
         }
     }
 

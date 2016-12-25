@@ -74,7 +74,8 @@
                 Grid.Row="1"
                 Grid.Column="1"
                 Margin="5"
-                Content="Add"/>
+                Content="Add"
+                Click="btnCreateListItem_Click"/>
          
     </Grid>
 </UserControl>
