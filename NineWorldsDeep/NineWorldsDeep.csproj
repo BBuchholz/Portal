@@ -284,7 +284,6 @@
     </Compile>
     <Compile Include="Studio\TwoOctaveNoteArray.cs" />
     <Compile Include="Studio\Utils\Chord.cs" />
-    <Compile Include="Studio\Utils\Note.cs" />
     <Compile Include="Studio\VisualKey.cs" />
     <Compile Include="Studio\VisualKeyboard.xaml.cs">
       <DependentUpon>VisualKeyboard.xaml</DependentUpon>

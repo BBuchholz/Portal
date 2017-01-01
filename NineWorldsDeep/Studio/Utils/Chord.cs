@@ -18,46 +18,78 @@ namespace NineWorldsDeep.Studio.Utils
         public string ChordName { get; private set; }
         public TwoOctaveNoteArray ChordNotes { get; private set; }
 
+        public Chord Inversion(string noteName)
+        {
+            if (!ChordNotes.Contains(noteName))
+            {
+                throw new ArgumentException(noteName + " not found in " + ChordName);
+            }
+
+            TwoOctaveNoteArray invertedNotes = ChordNotes.GetCopy();
+
+            int inversionCount = 0;
+
+            bool inversionNoteIsLowest = invertedNotes.IsLowest(noteName);
+
+            while (!inversionNoteIsLowest)
+            {
+                invertedNotes.Invert();
+                inversionCount++;
+                inversionNoteIsLowest = invertedNotes.IsLowest(noteName);
+            }
+
+            string invertedChordName = ChordName;
+
+            if (inversionCount > 0)
+            {
+                invertedChordName += "/" + invertedNotes.GetLowestNoteName().ToLower();
+            }
+
+            return new Chord(invertedChordName, invertedNotes);
+        }
+
         //currently a mock
         public static ChordNode ParseToNode(string chordName)
         {
             TwoOctaveNoteArray notes = new TwoOctaveNoteArray();
 
+            Chord chord = null;
+
             switch (chordName)
             {
                 // first inversion
                 case "Dm/a":
-                    
-                    // NB: next backfactoring we wanna make it look like this
-                    // notes = Minor("D").FirstInversion(), Minor("D") should return an instance(non-static) chord object (this class)
-                    // instanceChord.FirstInversion() should return a TwoOctaveNoteArray.
 
-                    notes = MinorTriadFirstInversion(Note.ParseAbsoluteValue("D"));
+                    //notes = MinorTriadFirstInversion(Note.ParseAbsoluteValue("D"));
+
+                    //chord = new Chord(chordName, notes);
+
+                    chord = MinorTriad("D").Inversion("a");
+
                     break;
                     
                 case "Am":
-
-                    //notes[9] = true;
-                    //notes[12] = true;
-                    //notes[16] = true;
-                    notes = MinorTriad(Note.ParseAbsoluteValue("A"));
+                    
+                    //notes = MinorTriad(Note.ParseAbsoluteValue("A"));
+                    chord = MinorTriad("A");
                     break;
 
                 // second inversion
                 case "E/g#":
 
-                    //notes[8] = true;
-                    //notes[11] = true;
-                    //notes[16] = true;
-                    notes = MajorTriadSecondInversion(Note.ParseAbsoluteValue("E"));
+                    //notes = MajorTriadSecondInversion(Note.ParseAbsoluteValue("E"));
+                    //chord = new Chord(chordName, notes);
+
+                    chord = MajorTriad("E").Inversion("g#");
+
                     break;
 
                 default:
 
                     throw new ArgumentException(chordName + " is not a supported chord name");
             }
-            
-            return new ChordNode(new Chord(chordName, notes));
+
+            return new ChordNode(chord);
         }
 
         //public TwoOctaveNoteArray FirstInversion()
@@ -121,19 +153,21 @@ namespace NineWorldsDeep.Studio.Utils
 
         private static int CoaxRootNote(int rootNote)
         {
-            //always shift as low as octaves will allow
-            while(rootNote > 11)
-            {
-                rootNote -= 12;
-            }
+            ////always shift as low as octaves will allow
+            //while(rootNote > 11)
+            //{
+            //    rootNote -= 12;
+            //}
 
-            //minmum is 0 for low C
-            while (rootNote < 0)
-            {
-                rootNote += 12;
-            }
+            ////minmum is 0 for low C
+            //while (rootNote < 0)
+            //{
+            //    rootNote += 12;
+            //}
 
-            return rootNote;
+            //return rootNote;
+
+            return Note.CoaxNote(rootNote);
         }
 
         private static TwoOctaveNoteArray MinorTriad(int rootNote)

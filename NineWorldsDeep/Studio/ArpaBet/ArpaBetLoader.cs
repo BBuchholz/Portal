@@ -50,7 +50,7 @@ namespace NineWorldsDeep.Studio.ArpaBet
             string arpaBetValueWithStress = arr[1];
 
             string arpaBetValueWithoutStress = 
-                Regex.Replace(arpaBetValueWithStress, @"[\d]", string.Empty); ;
+                Regex.Replace(arpaBetValueWithStress, @"[\d]", string.Empty);
 
             abp.StrippedArpaBetValue = arpaBetValueWithoutStress;
 
