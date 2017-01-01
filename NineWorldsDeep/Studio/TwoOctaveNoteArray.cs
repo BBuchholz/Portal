@@ -4,33 +4,51 @@ namespace NineWorldsDeep.Studio
 {
     public class TwoOctaveNoteArray
     {
-        private bool[] notes = new bool[24];
+        //private bool[] notes = new bool[24];
+        private List<int> noteIndexes = new List<int>();
 
-        public IEnumerable<bool> Notes
-        {
-            get { return notes; }
-        }
+        //public IEnumerable<bool> Notes
+        //{
+        //    get { return notes; }
+        //}
 
         public bool this[int i]
         {
             get
             {
-                return notes[i];
+                if (noteIndexes.Contains(i))
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
             }
 
             set
             {
-                notes[i] = value;
+                if (value)
+                {
+                    if (!noteIndexes.Contains(i))
+                    {
+                        noteIndexes.Add(i);
+                    }
+                }
+                else
+                {
+                    noteIndexes.Remove(i);
+                }
             }
         }
 
-        public void SetAll(bool val)
-        {
-            for(int i = 0; i < notes.Length; i++)
-            {
-                notes[i] = val;
-            }
-        }
+        //public void SetAll(bool val)
+        //{
+        //    for(int i = 0; i < notes.Length; i++)
+        //    {
+        //        notes[i] = val;
+        //    }
+        //}
 
         public override string ToString()
         {
@@ -41,18 +59,16 @@ namespace NineWorldsDeep.Studio
         {
             List<string> lst = new List<string>();
 
-            for (int i = 0; i < 24; i++)
+            noteIndexes.Sort();
+
+            foreach (int idx in noteIndexes)
             {
-                if (notes[i])
-                {
-                    lst.Add(ConvertNoteValueToString(i));
-                }
+                lst.Add(ConvertNoteValueToString(idx));                
             }
 
             return lst;
         }
-
-        // override object.Equals
+        
         public override bool Equals(object obj)
         {            
 
@@ -63,11 +79,16 @@ namespace NineWorldsDeep.Studio
 
             TwoOctaveNoteArray tona = (TwoOctaveNoteArray)obj;
 
+            if(tona.noteIndexes.Count != noteIndexes.Count)
+            {
+                return false;
+            }
+
             bool isEqual = true;
 
-            for(int i = 0; i < 24; i++)
+            foreach(int idx in tona.noteIndexes)
             {
-                if(isEqual && tona[i] != this[i])
+                if (!noteIndexes.Contains(idx))
                 {
                     isEqual = false;
                 }
@@ -78,12 +99,14 @@ namespace NineWorldsDeep.Studio
 
         public override int GetHashCode()
         {
+            noteIndexes.Sort();
+
             unchecked
             {
                 int hash = 17;
-                for (int index = 0; index < notes.Length; index++)
+                foreach(int idx in noteIndexes)
                 {
-                    hash = hash * 23 + notes[index].GetHashCode();
+                    hash = hash * 23 + idx.GetHashCode();
                 }
                 return hash;
             }

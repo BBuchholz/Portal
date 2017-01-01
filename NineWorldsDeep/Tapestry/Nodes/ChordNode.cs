@@ -10,16 +10,12 @@ namespace NineWorldsDeep.Tapestry.Nodes
 {
     public class ChordNode : TapestryNode
     {
-        public ChordNode(string chordName, TwoOctaveNoteArray notes) : 
-            base("Chord/" + notes)
+        public ChordNode(Chord chord) :
+            base("Chord/" + chord.ChordNotes)
         {
-            //ChordName = chordName;
-            //Notes = notes;
-            Chord = new Chord(chordName, notes);
+            Chord = chord;
         }
-
-        //public TwoOctaveNoteArray Notes { get; private set; }
-        //public string ChordName { get; private set; }
+        
         public Chord Chord { get; private set; }
 
         public override string GetShortName()

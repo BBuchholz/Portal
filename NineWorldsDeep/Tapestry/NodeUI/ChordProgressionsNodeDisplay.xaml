@@ -10,6 +10,7 @@
 
         <Grid.RowDefinitions>
             <RowDefinition Height="40"/>
+            <RowDefinition Height="40"/>
             <RowDefinition/>
         </Grid.RowDefinitions>
 
@@ -28,8 +29,13 @@
                   Grid.Column="0"
                   Margin="5"/>
 
+        <TextBox x:Name="txtNotes"
+                 Grid.Row="1"
+                 Grid.ColumnSpan ="2"
+                 Margin="5"/>
+
         <ListView x:Name="lvChords"
-                  Grid.Row="1"
+                  Grid.Row="2"
                   Grid.ColumnSpan="2"
                   Margin="5"
                   SelectionChanged="lvChords_SelectionChanged"/>

@@ -59,7 +59,7 @@ namespace NineWorldsDeep.Studio.Utils.Tests
             notes[4] = true;
             notes[7] = true;
 
-            Chord chord = Chord.Major("C");
+            Chord chord = Chord.MajorTriad("C");
 
             Assert.AreEqual(notes, chord.ChordNotes);
 
@@ -70,7 +70,7 @@ namespace NineWorldsDeep.Studio.Utils.Tests
             notes[8] = true;
             notes[11] = true;
 
-            chord = Chord.Major("E");
+            chord = Chord.MajorTriad("E");
 
             Assert.AreEqual(notes, chord.ChordNotes);
         }
@@ -85,7 +85,7 @@ namespace NineWorldsDeep.Studio.Utils.Tests
             notes[3] = true;
             notes[7] = true;
 
-            Chord chord = Chord.Minor("C");
+            Chord chord = Chord.MinorTriad("C");
 
             Assert.AreEqual(notes, chord.ChordNotes);
 
@@ -96,7 +96,7 @@ namespace NineWorldsDeep.Studio.Utils.Tests
             notes[7] = true;
             notes[11] = true;
 
-            chord = Chord.Minor("E");
+            chord = Chord.MinorTriad("E");
 
             Assert.AreEqual(notes, chord.ChordNotes);
         }
