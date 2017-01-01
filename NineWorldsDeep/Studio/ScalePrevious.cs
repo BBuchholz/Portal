@@ -1,11 +1,11 @@
 ﻿namespace NineWorldsDeep.Studio
 {
-    public class Scale
+    public class ScalePrevious
     {
-        private string scaleName;
-        private PatternSignature patternSignature;
+        protected string scaleName;
+        protected PatternSignature patternSignature;
 
-        public Scale(string name)
+        public ScalePrevious(string name)
         {
             this.scaleName = name;
             this.patternSignature =

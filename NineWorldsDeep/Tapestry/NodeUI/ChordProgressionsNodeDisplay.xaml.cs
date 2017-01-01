@@ -29,7 +29,31 @@ namespace NineWorldsDeep.Tapestry.NodeUI
         public ChordProgressionsNodeDisplay()
         {
             InitializeComponent();
+            cmbKey.ItemsSource = Note.AllNoteNames();
+            cmbProgression.ItemsSource = ChordProgression.AllProgressionSignatures();
             RunMock();
+        }
+
+        private void ProcessSelection()
+        {
+            string key = (string)cmbKey.SelectedItem;
+            string progressionSignature = (string)cmbProgression.SelectedItem;
+
+            if(key != null && progressionSignature != null)
+            {
+                chords.Clear();
+
+                List<Chord> chordList = 
+                    ChordProgression.ToChordList(key, progressionSignature);
+
+                foreach (Chord chord in chordList)
+                {
+                    chords.Add(new ChordNode(chord));
+                }
+
+                lvChords.ItemsSource = null;
+                lvChords.ItemsSource = chords;
+            }
         }
 
         private void RunMock()
@@ -70,6 +94,11 @@ namespace NineWorldsDeep.Tapestry.NodeUI
             }
 
             public ChordNode ChordNode { get; private set; }
+        }
+
+        private void cmb_ProcessSelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            ProcessSelection();
         }
     }
 }

@@ -32,8 +32,8 @@ namespace NineWorldsDeep.Studio
 
         private void LoadScales()
         {
-            cmbScale1.Items.Add(new Scale("Major"));
-            cmbScale1.Items.Add(new Scale("Minor"));
+            cmbScale1.Items.Add(new ScalePrevious("Major"));
+            cmbScale1.Items.Add(new ScalePrevious("Minor"));
         }
 
         private void LoadRootNotes()
@@ -64,7 +64,7 @@ namespace NineWorldsDeep.Studio
 
         private void LoadScale1()
         {
-            Scale s = (Scale)cmbScale1.SelectedItem;
+            ScalePrevious s = (ScalePrevious)cmbScale1.SelectedItem;
             Note r = (Note)cmbRoot1.SelectedItem;
 
             if (s != null && r != null)

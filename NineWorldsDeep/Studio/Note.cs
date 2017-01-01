@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.Text.RegularExpressions;
 
 namespace NineWorldsDeep.Studio
@@ -167,6 +169,20 @@ namespace NineWorldsDeep.Studio
             }
 
             return noteName;
+        }
+
+        public static List<string> AllNoteNames()
+        {
+            TwoOctaveNoteArray octaveArray =
+                new TwoOctaveNoteArray();
+
+            //populate first twelve
+            for(int i = 0; i < 12; i++)
+            {
+                octaveArray[i] = true;
+            }
+
+            return octaveArray.ToStringList();
         }
 
         public static bool AreEquivalent(string thisNoteName, string noteName)

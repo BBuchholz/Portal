@@ -92,6 +92,20 @@ namespace NineWorldsDeep.Studio.Utils
             return new ChordNode(chord);
         }
 
+        public static Chord DiminishedTriad(int rootNoteAbsVal)
+        {
+            return DiminishedTriad(Note.ConvertNoteValueToString(rootNoteAbsVal));
+        }
+
+        public static Chord DiminishedTriad(string noteName)
+        {
+            int rootNoteAbsVal = Note.ParseAbsoluteValue(noteName);
+
+            string chordName = noteName.ToUpper() + "dim";
+            
+            return new Chord(chordName, DiminishedTriadNoteArray(rootNoteAbsVal));
+        }
+
         //public TwoOctaveNoteArray FirstInversion()
         //{
         //    bool first = true;
@@ -99,6 +113,11 @@ namespace NineWorldsDeep.Studio.Utils
         //    TwoOctaveNoteArray notes = new TwoOctaveNoteArray();
         //    return notes;
         //}
+
+        public static Chord MajorTriad(int rootNoteAbsVal)
+        {
+            return MajorTriad(Note.ConvertNoteValueToString(rootNoteAbsVal));
+        }
 
         public static Chord MajorTriad(string noteName)
         {
@@ -112,7 +131,12 @@ namespace NineWorldsDeep.Studio.Utils
             //notes[rootNoteAbsVal + 4] = true;
             //notes[rootNoteAbsVal + 7] = true;
 
-            return new Chord(chordName, MajorTriad(rootNoteAbsVal));
+            return new Chord(chordName, MajorTriadNoteArray(rootNoteAbsVal));
+        }
+
+        public static Chord MinorTriad(int rootNoteAbsVal)
+        {
+            return MinorTriad(Note.ConvertNoteValueToString(rootNoteAbsVal));
         }
 
         public static Chord MinorTriad(string noteName)
@@ -123,13 +147,13 @@ namespace NineWorldsDeep.Studio.Utils
 
             string chordName = noteName.ToUpper() + "m";
 
-            TwoOctaveNoteArray notes = new TwoOctaveNoteArray();
+            //TwoOctaveNoteArray notes = new TwoOctaveNoteArray();
 
-            notes[rootNoteAbsVal] = true;
-            notes[rootNoteAbsVal + 3] = true;
-            notes[rootNoteAbsVal + 7] = true;
+            //notes[rootNoteAbsVal] = true;
+            //notes[rootNoteAbsVal + 3] = true;
+            //notes[rootNoteAbsVal + 7] = true;
 
-            return new Chord(chordName, notes);
+            return new Chord(chordName, MinorTriadNoteArray(rootNoteAbsVal));
         }
 
         private static TwoOctaveNoteArray MajorTriadSecondInversion(int rootNote)
@@ -170,7 +194,7 @@ namespace NineWorldsDeep.Studio.Utils
             return Note.CoaxNote(rootNote);
         }
 
-        private static TwoOctaveNoteArray MinorTriad(int rootNote)
+        private static TwoOctaveNoteArray MinorTriadNoteArray(int rootNote)
         {
             //pattern is 0, 3, 7
 
@@ -186,7 +210,23 @@ namespace NineWorldsDeep.Studio.Utils
             return notes;
         }
 
-        private static TwoOctaveNoteArray MajorTriad(int rootNoteAbsVal)
+        private static TwoOctaveNoteArray DiminishedTriadNoteArray(int rootNoteAbsVal)
+        {
+            //pattern is 0, 3, 6
+
+            //coax range
+            rootNoteAbsVal = CoaxRootNote(rootNoteAbsVal);
+
+            TwoOctaveNoteArray notes = new TwoOctaveNoteArray();
+
+            notes[rootNoteAbsVal] = true;
+            notes[rootNoteAbsVal + 3] = true;
+            notes[rootNoteAbsVal + 6] = true;
+
+            return notes;
+        }
+
+        private static TwoOctaveNoteArray MajorTriadNoteArray(int rootNoteAbsVal)
         {
             //pattern is 0, 4, 7
 

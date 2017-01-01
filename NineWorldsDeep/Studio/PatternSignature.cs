@@ -6,9 +6,9 @@ namespace NineWorldsDeep.Studio
     {
         private List<int> posVals = new List<int>();
 
-        public PatternSignature(string v)
+        public PatternSignature(string patternSignatureString)
         {
-            this.FromString(v);
+            this.FromString(patternSignatureString);
         }
 
         public List<int> getSignaturePositionalValues()
@@ -20,9 +20,11 @@ namespace NineWorldsDeep.Studio
         {
             string[] values = sig.Split(',');
 
-            foreach (string s in values)
+            foreach (string sigValue in values)
             {
-                int sigPosVal = int.Parse(s);
+                string trimmedSigValue = sigValue.Trim();
+
+                int sigPosVal = int.Parse(trimmedSigValue);
 
                 if (!posVals.Contains(sigPosVal))
                 {

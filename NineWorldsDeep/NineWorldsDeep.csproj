@@ -252,6 +252,7 @@
     <Compile Include="Studio\AudacityProject.cs" />
     <Compile Include="Studio\AudacityProjects.cs" />
     <Compile Include="Studio\AudioVignette.cs" />
+    <Compile Include="Studio\ChordProgression.cs" />
     <Compile Include="Studio\CubaseProject.cs" />
     <Compile Include="Studio\CubaseProjects.cs" />
     <Compile Include="Studio\FileElement.cs" />
@@ -270,6 +271,8 @@
     <Compile Include="Studio\LyricMatrixGridTestHarness.xaml.cs">
       <DependentUpon>LyricMatrixGridTestHarness.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Studio\Model\MajorScale.cs" />
+    <Compile Include="Studio\Model\MinorScale.cs" />
     <Compile Include="Studio\Note.cs" />
     <Compile Include="Studio\PatternSignature.cs" />
     <Compile Include="Studio\ProjectListEntry.cs" />
@@ -278,7 +281,8 @@
     </Compile>
     <Compile Include="Studio\ProjectType.cs" />
     <Compile Include="Studio\ProjectTypeInstance.cs" />
-    <Compile Include="Studio\Scale.cs" />
+    <Compile Include="Studio\Model\Scale.cs" />
+    <Compile Include="Studio\ScalePrevious.cs" />
     <Compile Include="Studio\StudioMainWindow.xaml.cs">
       <DependentUpon>StudioMainWindow.xaml</DependentUpon>
     </Compile>

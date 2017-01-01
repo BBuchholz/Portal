@@ -21,13 +21,15 @@
 
         <ComboBox x:Name="cmbProgression"
                   Grid.Row="0"
-                  Grid.Column="1" 
-                  Margin="5"/>
+                  Grid.Column="0" 
+                  Margin="5"
+                  SelectionChanged="cmb_ProcessSelectionChanged"/>
 
         <ComboBox x:Name="cmbKey"
                   Grid.Row="0"
-                  Grid.Column="0"
-                  Margin="5"/>
+                  Grid.Column="1"
+                  Margin="5"
+                  SelectionChanged="cmb_ProcessSelectionChanged"/>
 
         <TextBox x:Name="txtNotes"
                  Grid.Row="1"
