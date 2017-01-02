@@ -22,12 +22,12 @@ namespace NineWorldsDeep.Tapestry.NodeUI
     /// </summary>
     public partial class MediaMasterDisplay : UserControl
     {
-        private MediaSubsetDb db;
+        private MediaV5SubsetDb db;
 
         public MediaMasterDisplay()
         {
             InitializeComponent();
-            db = new MediaSubsetDb();
+            db = new MediaV5SubsetDb();
             LoadMediaDevices();
         }
 

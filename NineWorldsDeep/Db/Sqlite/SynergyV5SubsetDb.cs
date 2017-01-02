@@ -31,7 +31,7 @@ namespace NineWorldsDeep.Db.Sqlite
                 SynergyV5List lst = new SynergyV5List(listName);
 
                 //save() populates each list as part of its process
-                Save(lst);
+                Sync(lst);
 
                 activeLists.Add(lst);
             }
@@ -62,7 +62,7 @@ namespace NineWorldsDeep.Db.Sqlite
                             {
                                 while (rdr.Read())
                                 {
-                                    string listName = GetNullableString(rdr, 0);
+                                    string listName = DbV5Utils.GetNullableString(rdr, 0);
 
                                     if (!string.IsNullOrWhiteSpace(listName))
                                     {
@@ -87,7 +87,7 @@ namespace NineWorldsDeep.Db.Sqlite
             return listNames;
         }
                 
-        internal void Save(SynergyV5List synLst)
+        internal void Sync(SynergyV5List synLst)
         {
             // parallels gauntlet logic
             // (Android App: http://github.com/BBuchholz/Gauntlet)
@@ -176,14 +176,14 @@ namespace NineWorldsDeep.Db.Sqlite
 
                 while (rdr.Read())
                 {
-                    itemId = GetNullableInt32(rdr, 0);
-                    itemValue = GetNullableString(rdr, 1);
-                    position = GetNullableInt32(rdr, 2);
-                    listItemId = GetNullableInt32(rdr, 3);
-                    toDoId = GetNullableInt32(rdr, 4);
-                    toDoActivatedAtString = GetNullableString(rdr, 5);
-                    toDoCompletedAtString = GetNullableString(rdr, 6);
-                    toDoArchivedAtString = GetNullableString(rdr, 7);
+                    itemId = DbV5Utils.GetNullableInt32(rdr, 0);
+                    itemValue = DbV5Utils.GetNullableString(rdr, 1);
+                    position = DbV5Utils.GetNullableInt32(rdr, 2);
+                    listItemId = DbV5Utils.GetNullableInt32(rdr, 3);
+                    toDoId = DbV5Utils.GetNullableInt32(rdr, 4);
+                    toDoActivatedAtString = DbV5Utils.GetNullableString(rdr, 5);
+                    toDoCompletedAtString = DbV5Utils.GetNullableString(rdr, 6);
+                    toDoArchivedAtString = DbV5Utils.GetNullableString(rdr, 7);
 
                     SynergyV5ListItem sli = new SynergyV5ListItem(itemValue);
                     sli.ItemId = itemId;
@@ -216,41 +216,41 @@ namespace NineWorldsDeep.Db.Sqlite
                             
         }
 
-        /// <summary>
-        /// returns -1 if field is null
-        /// </summary>
-        /// <param name="rdr"></param>
-        /// <param name="idx"></param>
-        /// <returns></returns>
-        private int GetNullableInt32(SQLiteDataReader rdr, int idx)
-        {
-            if (!rdr.IsDBNull(idx))
-            {
-                return rdr.GetInt32(idx);
-            }
-            else
-            {
-                return -1;
-            }
-        }
+        ///// <summary>
+        ///// returns -1 if field is null
+        ///// </summary>
+        ///// <param name="rdr"></param>
+        ///// <param name="idx"></param>
+        ///// <returns></returns>
+        //private int GetNullableInt32(SQLiteDataReader rdr, int idx)
+        //{
+        //    if (!rdr.IsDBNull(idx))
+        //    {
+        //        return rdr.GetInt32(idx);
+        //    }
+        //    else
+        //    {
+        //        return -1;
+        //    }
+        //}
 
-        /// <summary>
-        /// returns "" (empty string) if field is null
-        /// </summary>
-        /// <param name="rdr"></param>
-        /// <param name="idx"></param>
-        /// <returns></returns>
-        private string GetNullableString(SQLiteDataReader rdr, int idx)
-        {
-            if (!rdr.IsDBNull(idx))
-            {
-                return rdr.GetString(idx);
-            }
-            else
-            {
-                return "";
-            }
-        }
+        ///// <summary>
+        ///// returns "" (empty string) if field is null
+        ///// </summary>
+        ///// <param name="rdr"></param>
+        ///// <param name="idx"></param>
+        ///// <returns></returns>
+        //private string GetNullableString(SQLiteDataReader rdr, int idx)
+        //{
+        //    if (!rdr.IsDBNull(idx))
+        //    {
+        //        return rdr.GetString(idx);
+        //    }
+        //    else
+        //    {
+        //        return "";
+        //    }
+        //}
 
         private void PopulateIdAndTimeStamps(SynergyV5List synLst, SQLiteCommand cmd)
         {
@@ -489,7 +489,7 @@ namespace NineWorldsDeep.Db.Sqlite
             {
                 if (rdr.Read())
                 {
-                    id = GetNullableInt32(rdr, 0);
+                    id = DbV5Utils.GetNullableInt32(rdr, 0);
                 }
             }
 
@@ -543,7 +543,7 @@ namespace NineWorldsDeep.Db.Sqlite
             {
                 if (rdr.Read())
                 {
-                    id = GetNullableInt32(rdr, 0);
+                    id = DbV5Utils.GetNullableInt32(rdr, 0);
                 }
             }
 

@@ -10,12 +10,12 @@ using System.Threading.Tasks;
 
 namespace NineWorldsDeep.Db.Sqlite
 {
-    public class MediaSubsetDb
+    public class MediaV5SubsetDb
     {
         protected string DbName { get; private set; }
         public int LocalDeviceId { get; private set; }
 
-        public MediaSubsetDb()
+        public MediaV5SubsetDb()
         {
             DbName = "nwd";
             LocalDeviceId = GetLocalMediaDeviceId();

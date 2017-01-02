@@ -27,7 +27,7 @@
     <UpdatePeriodically>false</UpdatePeriodically>
     <UpdateRequired>false</UpdateRequired>
     <MapFileExtensions>true</MapFileExtensions>
-    <ApplicationRevision>61</ApplicationRevision>
+    <ApplicationRevision>62</ApplicationRevision>
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <PublishWizardCompleted>true</PublishWizardCompleted>
@@ -149,8 +149,10 @@
     <Compile Include="Db\Sqlite\DbAdapterSwitch.cs" />
     <Compile Include="Db\Sqlite\DbAdapterV4c.cs" />
     <Compile Include="Db\Sqlite\DbAdapterV5.cs" />
+    <Compile Include="Db\Sqlite\DbV5Utils.cs" />
     <Compile Include="Db\Sqlite\IDbAdapter.cs" />
-    <Compile Include="Db\Sqlite\MediaSubsetDb.cs" />
+    <Compile Include="Db\Sqlite\MediaV5SubsetDb.cs" />
+    <Compile Include="Db\Sqlite\StudioV5SubsetDb.cs" />
     <Compile Include="Db\Sqlite\SynergyV5SubsetDb.cs" />
     <Compile Include="DemoController.cs" />
     <Compile Include="ExtensionsFragment.cs" />

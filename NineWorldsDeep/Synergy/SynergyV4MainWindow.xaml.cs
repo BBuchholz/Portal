@@ -571,7 +571,7 @@ namespace NineWorldsDeep.Synergy
                     StatusDetailUpdate(detail);
 
                     //save() populates each list as part of its process
-                    _dbV5.Save(lst);
+                    _dbV5.Sync(lst);
 
                     activeLists.Add(lst);
                 }
@@ -689,7 +689,7 @@ namespace NineWorldsDeep.Synergy
 
                             StatusDetailUpdate(detail);
 
-                            _dbV5.Save(lst);
+                            _dbV5.Sync(lst);
                         }
 
                     }

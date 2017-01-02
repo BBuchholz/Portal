@@ -23,7 +23,7 @@ namespace NineWorldsDeep.Synergy.V5
 
         public void Save(Db.Sqlite.SynergyV5SubsetDb db)
         {            
-            db.Save(this);
+            db.Sync(this);
         }
 
         public void Add(int index, SynergyV5ListItem sli)

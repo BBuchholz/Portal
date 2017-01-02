@@ -33,6 +33,9 @@ namespace NineWorldsDeep.Sqlite
         public static string TABLE_SYNERGY_LIST_ITEM = "SynergyListItem";
         public static string TABLE_SYNERGY_ITEM = "SynergyItem";
         public static string TABLE_SYNERGY_TO_DO = "SynergyToDo";
+
+        public static string TABLE_CHORD_PROGRESSION = "ChordProgression";
+        
         
         public static string TABLE_MEDIA_DEVICE = "MediaDevice";
         public static string TABLE_MEDIA_ROOT = "MediaRoot";
@@ -72,6 +75,10 @@ namespace NineWorldsDeep.Sqlite
         public static string COLUMN_SYNERGY_TO_DO_UPDATED_AT = "SynergyToDoUpdatedAt";
 
         #endregion
+
+        public static string COLUMN_CHORD_PROGRESSION_ID = "ChordProgressionId";
+        public static string COLUMN_CHORD_PROGRESSION_SIGNATURE = "ChordProgressionSignature";
+        public static string COLUMN_CHORD_PROGRESSION_NOTES = "ChordProgressionNotes";
 
         public static string COLUMN_MEDIA_ROOT_ID = "MediaRootId";
         public static string COLUMN_MEDIA_ROOT_PATH = "MediaRootPath";

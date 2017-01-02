@@ -23,49 +23,71 @@ namespace NineWorldsDeep.Tapestry.NodeUI
     /// </summary>
     public partial class ChordProgressionsNodeDisplay : UserControl
     {
+        private Db.Sqlite.StudioV5SubsetDb db = 
+            new Db.Sqlite.StudioV5SubsetDb();
+
         private List<ChordNode> chords =
             new List<ChordNode>();
+
+        private List<ChordProgression> progressions =
+            new List<ChordProgression>();
 
         public ChordProgressionsNodeDisplay()
         {
             InitializeComponent();
             cmbKey.ItemsSource = Note.AllNoteNames();
-            cmbProgression.ItemsSource = ChordProgression.AllProgressionSignatures();
-            RunMock();
+            RefreshProgressionList();
+        }
+
+        private ChordProgression SelectedProgression
+        {
+            get
+            {
+                return (ChordProgression)cmbProgression.SelectedItem;
+            }
+        }
+
+        private void RefreshProgressionList()
+        {
+            progressions = ChordProgression.AllProgressions();
+
+            cmbProgression.ItemsSource = null;
+            cmbProgression.ItemsSource = progressions;
         }
 
         private void ProcessSelection()
         {
             string key = (string)cmbKey.SelectedItem;
-            string progressionSignature = (string)cmbProgression.SelectedItem;
+            ChordProgression prog = SelectedProgression;
 
-            if(key != null && progressionSignature != null)
+            if(prog != null)
             {
-                chords.Clear();
+                txtNotes.Text = prog.Notes;
+                txtNotes.IsEnabled = true;
+                btnUpdate.IsEnabled = true;
 
-                List<Chord> chordList = 
-                    ChordProgression.ToChordList(key, progressionSignature);
-
-                foreach (Chord chord in chordList)
+                if (key != null)
                 {
-                    chords.Add(new ChordNode(chord));
+                    chords.Clear();
+
+                    List<Chord> chordList = prog.ToChordList(key);
+
+                    foreach (Chord chord in chordList)
+                    {
+                        chords.Add(new ChordNode(chord));
+                    }
+
+                    lvChords.ItemsSource = null;
+                    lvChords.ItemsSource = chords;
                 }
-
-                lvChords.ItemsSource = null;
-                lvChords.ItemsSource = chords;
             }
+            else
+            {
+                txtNotes.IsEnabled = false;
+                btnUpdate.IsEnabled = false;
+            }            
         }
-
-        private void RunMock()
-        {
-            chords.Add(Chord.ParseToNode("Am"));
-            chords.Add(Chord.ParseToNode("Dm/a"));
-            chords.Add(Chord.ParseToNode("E/g#"));
-            chords.Add(Chord.ParseToNode("Dm/a"));
-
-            lvChords.ItemsSource = chords;
-        }
-
+        
         private void lvChords_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             ChordNode nd = (ChordNode)lvChords.SelectedItem;
@@ -99,6 +121,57 @@ namespace NineWorldsDeep.Tapestry.NodeUI
         private void cmb_ProcessSelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             ProcessSelection();
+        }
+
+        private void btnUpdate_Click(object sender, RoutedEventArgs e)
+        {
+            ChordProgression prog = SelectedProgression;
+
+            if(prog != null)
+            {
+                prog.Notes = txtNotes.Text;
+
+                db.Save(prog);
+            }
+
+            btnUpdate.IsEnabled = false;            
+        }
+
+        private void txtNotes_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            if(SelectedProgression != null)
+            {
+                btnUpdate.IsEnabled = true;
+            }
+        }
+
+        private void btnNewProgression_Click(object sender, RoutedEventArgs e)
+        {
+            string msg = "Enter progression signature to create a new progression. " +
+                "Progression signatures are case-sensitive, duplicates will be ignored";
+
+            string progSignature = UI.Prompt.Input(msg);
+
+            if (!string.IsNullOrWhiteSpace(progSignature))
+            {
+                //check for new
+                if (!progressions.Any(p => p.Signature.Equals(progSignature)))
+                {
+                    //new entry
+                    msg = "Would you like to create progression: \"" + progSignature + "\", last chance to cancel";
+                    if (UI.Prompt.Confirm(msg, true))
+                    {
+                        ChordProgression prog = new ChordProgression(progSignature);
+                        db.Save(prog);
+
+                        RefreshProgressionList();
+                    }
+                }
+                else
+                {
+                    UI.Display.Message("Progression already exists");
+                }
+            }         
         }
     }
 }
