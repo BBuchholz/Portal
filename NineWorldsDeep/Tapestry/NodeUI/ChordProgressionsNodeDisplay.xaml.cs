@@ -100,7 +100,7 @@ namespace NineWorldsDeep.Tapestry.NodeUI
                 OnChordClicked(args);
             }
         }
-
+        
         protected virtual void OnChordClicked(ChordClickedEventArgs args)
         {
             ChordClicked?.Invoke(this, args);
@@ -161,10 +161,18 @@ namespace NineWorldsDeep.Tapestry.NodeUI
                     msg = "Would you like to create progression: \"" + progSignature + "\", last chance to cancel";
                     if (UI.Prompt.Confirm(msg, true))
                     {
-                        ChordProgression prog = new ChordProgression(progSignature);
-                        db.Save(prog);
+                        if (ChordProgression.IsValidSignature(progSignature))
+                        {
+                            ChordProgression prog = new ChordProgression(progSignature);
 
-                        RefreshProgressionList();
+                            db.Save(prog);
+
+                            RefreshProgressionList();
+                        }
+                        else
+                        {
+                            UI.Display.Message("invalid chord progression signature: " + progSignature);
+                        }
                     }
                 }
                 else
@@ -172,6 +180,12 @@ namespace NineWorldsDeep.Tapestry.NodeUI
                     UI.Display.Message("Progression already exists");
                 }
             }         
+        }
+
+        private void btnGlobal_Click(object sender, RoutedEventArgs e)
+        {
+            UI.Display.Message("In progress... [should highlight all notes whose absolute value corresponds to the absolute value of one of the chord notes]");
+            
         }
     }
 }

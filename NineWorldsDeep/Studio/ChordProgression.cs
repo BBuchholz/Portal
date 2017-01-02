@@ -142,6 +142,14 @@ namespace NineWorldsDeep.Studio
             return progressionSignature.Split('-').Select(sd => sd.Trim()).ToList();
         }
 
+        public static bool IsValidSignature(string progressionSignature)
+        {
+            List<string> scaleDegrees = ToScaleDegrees(progressionSignature);
+
+            //make sure we aren't mixing scale degrees in our signature
+            return IsMajorProgression(scaleDegrees) != IsMinorProgression(scaleDegrees);
+        }
+
         //SEE Scale.cs (need to implement for scale degrees)
 
         // MINOR SCALE CHORDS
