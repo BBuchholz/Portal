@@ -24,6 +24,7 @@ namespace NineWorldsDeep.FragmentCloud
         {
             var window = new Synergy.SynergyV4MainWindow();
             window.Show();
+            UI.Utils.MinimizeMainWindow();
         }
     }
 }

@@ -715,5 +715,10 @@ namespace NineWorldsDeep.Synergy
 
             previousTime = currentTime;
         }
+
+        private void Window_Closing(object sender, CancelEventArgs e)
+        {
+            UI.Utils.MaximizeMainWindow();
+        }
     }
 }

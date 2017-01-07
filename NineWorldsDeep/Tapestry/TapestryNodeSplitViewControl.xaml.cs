@@ -65,12 +65,12 @@ namespace NineWorldsDeep.Tapestry
         {
             history.Push(lc);
                      
-            if(leftNodeView.CurrentNode != lc.LeftNode)
+            if(true)//leftNodeView.CurrentNode != lc.LeftNode)
             {
                 leftNodeView.LoadNode(lc.LeftNode);
             }
 
-            if(rightNodeView.CurrentNode != lc.RightNode)
+            if(true)//rightNodeView.CurrentNode != lc.RightNode)
             {
                 rightNodeView.LoadNode(lc.RightNode);
             }

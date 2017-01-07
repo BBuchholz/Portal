@@ -9,14 +9,34 @@ namespace NineWorldsDeep.Studio.Utils
 {
     public class Chord
     {
+        private TwoOctaveNoteArray mChordNotes;
+
         public Chord(string chordName, TwoOctaveNoteArray notes)
         {
             ChordName = chordName;
-            ChordNotes = notes;
+            mChordNotes = notes;
         }
 
         public string ChordName { get; private set; }
-        public TwoOctaveNoteArray ChordNotes { get; private set; }
+        public TwoOctaveNoteArray ChordNotes
+        {
+            get
+            {
+                if (Core.Configuration.GlobalNotes)
+                {
+                    return TwoOctaveNoteArray.Global(mChordNotes);
+                }
+                else
+                {
+                    return mChordNotes;
+                }
+            }
+
+            private set
+            {
+                mChordNotes = value;
+            }
+        }
 
         public Chord Inversion(string noteName)
         {

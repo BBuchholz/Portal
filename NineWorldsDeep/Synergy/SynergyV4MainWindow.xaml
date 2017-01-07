@@ -6,7 +6,8 @@
         xmlns:local="clr-namespace:NineWorldsDeep.Synergy"
         mc:Ignorable="d"
         Title="SynergyV4MainWindow" 
-        Height="600" Width="800" 
+        Height="600" Width="800"
+        Closing="Window_Closing"
         WindowState="Maximized">
     <Window.Resources>
         <Style x:Key="alternatingStyle" TargetType="{x:Type ListViewItem}">

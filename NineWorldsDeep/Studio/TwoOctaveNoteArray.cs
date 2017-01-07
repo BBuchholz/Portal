@@ -43,6 +43,29 @@ namespace NineWorldsDeep.Studio
             return Note.AreEquivalent(GetLowestNoteName(), noteName);
         }
 
+        /// <summary>
+        /// generates a global note array (notes from both octaves lit up by Absolute Value)
+        /// </summary>
+        /// <param name="chordNotes"></param>
+        /// <returns></returns>
+        public static TwoOctaveNoteArray Global(TwoOctaveNoteArray chordNotes)
+        {
+            TwoOctaveNoteArray newArray = new TwoOctaveNoteArray();
+
+            foreach(int index in chordNotes.noteIndexes)
+            {
+                for(int i = 0; i < 24; i++)
+                {
+                    if(Note.AbsVal(index) == Note.AbsVal(i))
+                    {
+                        newArray[i] = true;
+                    }
+                }
+            }
+
+            return newArray;
+        }
+
         public void Invert()
         {
             int maxIndex = noteIndexes.Max();

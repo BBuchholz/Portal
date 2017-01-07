@@ -6,6 +6,7 @@
         xmlns:local="clr-namespace:NineWorldsDeep.Warehouse"
         xmlns:synergy="clr-namespace:NineWorldsDeep.Synergy"
         mc:Ignorable="d"
+        Closing="Window_Closing"
         Title="WarehouseMainWindow" Height="500" Width="1200" WindowState="Maximized">
 
     <Window.Resources>

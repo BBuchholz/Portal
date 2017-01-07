@@ -25,6 +25,7 @@ namespace NineWorldsDeep.FragmentCloud
         {
             var window = new Warehouse.WarehouseMainWindow();
             window.Show();
+            UI.Utils.MinimizeMainWindow();
         }
     }
 }

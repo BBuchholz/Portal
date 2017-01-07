@@ -174,7 +174,7 @@
     <Compile Include="FragmentCloud\FragmentNodeDisplay.xaml.cs">
       <DependentUpon>FragmentNodeDisplay.xaml</DependentUpon>
     </Compile>
-    <Compile Include="FragmentCloud\HierophantFragment.cs" />
+    <Compile Include="FragmentCloud\HierophantNode.cs" />
     <Compile Include="FragmentCloud\ImageBrowserFragment.cs" />
     <Compile Include="FragmentCloud\MtpFragment.cs" />
     <Compile Include="FragmentCloud\NwdUriResolver.cs" />
@@ -466,6 +466,7 @@
       <DependentUpon>FileElementBrowserWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="UI\Prompt.cs" />
+    <Compile Include="UI\Utils.cs" />
     <Compile Include="Warehouse\DisplayNames.cs" />
     <Compile Include="Warehouse\Extensions.cs" />
     <Compile Include="Warehouse\Hashes.cs" />

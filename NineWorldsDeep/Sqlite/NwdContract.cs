@@ -138,5 +138,25 @@ namespace NineWorldsDeep.Sqlite
         public static string COLUMN_ITEM_ID = "ItemId";
         public static string COLUMN_ITEM_VALUE = "ItemValue";
         public static string COLUMN_LIST_ACTIVE = "ListActive";
+
+
+        #region "Synergy V5"
+
+        public static string SYNERGY_V5_SELECT_ACTIVE_LISTS =
+
+            "SELECT " + COLUMN_SYNERGY_LIST_NAME + " "
+            + "FROM " + TABLE_SYNERGY_LIST + " "
+            + "WHERE " + COLUMN_SYNERGY_LIST_SHELVED_AT + " IS NULL "
+            + "   OR " + COLUMN_SYNERGY_LIST_ACTIVATED_AT + " >= " + COLUMN_SYNERGY_LIST_SHELVED_AT + " "
+            + "ORDER BY " + COLUMN_SYNERGY_LIST_NAME + "; ";
+
+        public static string SYNERGY_V5_SELECT_SHELVED_LISTS =
+
+            "SELECT " + COLUMN_SYNERGY_LIST_NAME + " "
+            + "FROM " + TABLE_SYNERGY_LIST + " "
+            + "WHERE " + COLUMN_SYNERGY_LIST_ACTIVATED_AT + " < " + COLUMN_SYNERGY_LIST_SHELVED_AT + " "
+            + "ORDER BY " + COLUMN_SYNERGY_LIST_NAME + "; ";
+
+        #endregion
     }
 }

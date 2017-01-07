@@ -25,12 +25,13 @@ namespace NineWorldsDeep.Tapestry.NodeUI
     {
         private Db.Sqlite.StudioV5SubsetDb db = 
             new Db.Sqlite.StudioV5SubsetDb();
-
+        
         private List<ChordNode> chords =
             new List<ChordNode>();
 
         private List<ChordProgression> progressions =
             new List<ChordProgression>();
+
 
         public ChordProgressionsNodeDisplay()
         {
@@ -90,15 +91,22 @@ namespace NineWorldsDeep.Tapestry.NodeUI
         
         private void lvChords_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
+            RequestDisplayForSelectedChordNode();
+        }
+
+        private void RequestDisplayForSelectedChordNode()
+        {
             ChordNode nd = (ChordNode)lvChords.SelectedItem;
 
-            if(nd != null)
+            if (nd == null)
             {
-                ChordClickedEventArgs args =
-                    new ChordClickedEventArgs(nd);
-
-                OnChordClicked(args);
+                nd = new ChordNode(new Chord("empty chord", new TwoOctaveNoteArray()));
             }
+
+            ChordClickedEventArgs args =
+                new ChordClickedEventArgs(nd);
+
+            OnChordClicked(args);            
         }
         
         protected virtual void OnChordClicked(ChordClickedEventArgs args)
@@ -184,8 +192,10 @@ namespace NineWorldsDeep.Tapestry.NodeUI
 
         private void btnGlobal_Click(object sender, RoutedEventArgs e)
         {
-            UI.Display.Message("In progress... [should highlight all notes whose absolute value corresponds to the absolute value of one of the chord notes]");
+            Core.Configuration.GlobalNotes = !Core.Configuration.GlobalNotes;
             
+            RequestDisplayForSelectedChordNode();
         }
+
     }
 }

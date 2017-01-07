@@ -11,13 +11,14 @@ namespace NineWorldsDeep.FragmentCloud
 {
     class RootNode : Tapestry.TapestryNode
     {
+        [Obsolete("Use Tapestry.Nodes.TapestryRootNode")]
         public RootNode() 
             : base("")
         {
             AddChild(new GardenFragment());
             AddChild(new SynergyFragment());
             AddChild(new StudioNode());
-            AddChild(new HierophantFragment());
+            AddChild(new HierophantNode());
             AddChild(new WareHouseFragment());
             AddChild(new AudioBrowserFragment());
             AddChild(new ImageBrowserFragment());

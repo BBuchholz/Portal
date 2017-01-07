@@ -701,5 +701,10 @@ namespace NineWorldsDeep.Warehouse
         {
             ProcessSyncDirection();
         }
+
+        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            UI.Utils.MaximizeMainWindow();
+        }
     }
 }

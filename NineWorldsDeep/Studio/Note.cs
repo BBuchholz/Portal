@@ -171,6 +171,21 @@ namespace NineWorldsDeep.Studio
             return noteName;
         }
 
+        public static int AbsVal(int noteValue)
+        {
+            while(noteValue > 11)
+            {
+                noteValue -= 12;
+            }
+
+            while(noteValue < 0)
+            {
+                noteValue += 12;
+            }
+
+            return noteValue;
+        }
+
         public static List<string> AllNoteNames()
         {
             TwoOctaveNoteArray octaveArray =

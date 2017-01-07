@@ -50,5 +50,10 @@ namespace NineWorldsDeep.Hierophant
         {
 
         }
+
+        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            UI.Utils.MaximizeMainWindow();
+        }
     }
 }

@@ -25,6 +25,7 @@ namespace NineWorldsDeep.FragmentCloud
             var window = 
                 new AudioBrowser.AudioBrowserMainWindow();
             window.Show();
+            UI.Utils.MinimizeMainWindow();
         }
     }
 }

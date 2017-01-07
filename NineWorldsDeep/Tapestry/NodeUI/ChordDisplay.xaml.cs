@@ -1,4 +1,5 @@
-﻿using NineWorldsDeep.Tapestry.Nodes;
+﻿using NineWorldsDeep.Studio;
+using NineWorldsDeep.Tapestry.Nodes;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -33,7 +34,7 @@ namespace NineWorldsDeep.Tapestry.NodeUI
         {
             chordNode = nd;
 
-            visualKeyboard.Notes = chordNode.Chord.ChordNotes;
+            visualKeyboard.Notes = chordNode.Chord.ChordNotes;            
         }
     }
 }

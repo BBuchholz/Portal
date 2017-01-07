@@ -25,6 +25,7 @@ namespace NineWorldsDeep.FragmentCloud
             var window = 
                 new ImageBrowser.ImageBrowserMainWindow();
             window.Show();
+            UI.Utils.MinimizeMainWindow();
         }
     }
 }

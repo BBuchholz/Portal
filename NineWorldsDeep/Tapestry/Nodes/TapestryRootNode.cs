@@ -15,12 +15,12 @@ namespace NineWorldsDeep.Tapestry.Nodes
             AddChild(new GardenFragment());
             AddChild(new SynergyFragment());
             AddChild(new StudioNode());
-            AddChild(new HierophantFragment());
+            AddChild(new HierophantNode());
             AddChild(new WareHouseFragment());
             AddChild(new AudioBrowserFragment());
             AddChild(new ImageBrowserFragment());
-            AddChild(new MtpFragment());
-            AddChild(new GrowthAreasNode());
+            //AddChild(new MtpFragment());
+            //AddChild(new GrowthAreasNode());
             AddChild(new SynergyV5MasterListNode());
             AddChild(new MediaMasterNode());
             // shelved currently, may come 

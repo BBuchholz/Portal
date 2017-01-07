@@ -56,7 +56,7 @@ namespace NineWorldsDeep.Db.Sqlite
                         {
                             cmd.Parameters.Clear();
                             cmd.CommandText =
-                                SYNERGY_V5_SELECT_ACTIVE_LISTS;
+                                NwdContract.SYNERGY_V5_SELECT_ACTIVE_LISTS;
 
                             using (var rdr = cmd.ExecuteReader())
                             {
@@ -552,13 +552,6 @@ namespace NineWorldsDeep.Db.Sqlite
 
         #region "queries"
 
-        public static string SYNERGY_V5_SELECT_ACTIVE_LISTS =
-
-            "SELECT " + NwdContract.COLUMN_SYNERGY_LIST_NAME + " "
-            + "FROM " + NwdContract.TABLE_SYNERGY_LIST + " "
-            + "WHERE " + NwdContract.COLUMN_SYNERGY_LIST_SHELVED_AT + " IS NULL "
-            + "   OR " + NwdContract.COLUMN_SYNERGY_LIST_ACTIVATED_AT + " > " +
-                         NwdContract.COLUMN_SYNERGY_LIST_SHELVED_AT + "; ";
 
         public static string
             SYNERGY_V5_LIST_UPDATE_ACTIVATE_AT_SHELVED_AT_FOR_LIST_NAME_X_Y_Z =

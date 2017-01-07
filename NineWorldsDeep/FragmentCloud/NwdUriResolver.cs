@@ -41,7 +41,7 @@ namespace NineWorldsDeep.FragmentCloud
             else if (uri.StartsWith("Hierophant",
                 System.StringComparison.CurrentCultureIgnoreCase))
             {
-                return new HierophantFragment();
+                return new HierophantNode();
             }
             else if (uri.StartsWith("WareHouse",
                 System.StringComparison.CurrentCultureIgnoreCase))

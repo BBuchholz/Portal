@@ -17,6 +17,8 @@ namespace NineWorldsDeep.Core
         static Configuration()
         {
             EnsureDirectories();
+
+            GlobalNotes = false;
         }
 
         public static string GetArphaBetFilePath()
@@ -567,6 +569,8 @@ namespace NineWorldsDeep.Core
                 return Path.Combine(NwdMediaFolder, "exportStaging/audio/voicememos");
             }
         }
+
+        public static bool GlobalNotes { get; internal set; }
 
         public static string NwdUriToLocalPath(string uri)
         {

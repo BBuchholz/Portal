@@ -3,9 +3,9 @@ using NineWorldsDeep.Tapestry;
 
 namespace NineWorldsDeep.FragmentCloud
 {
-    internal class HierophantFragment : Tapestry.TapestryNode
+    internal class HierophantNode : Tapestry.TapestryNode
     {
-        public HierophantFragment()
+        public HierophantNode()
             : base("Hierophant")
         {
         }
@@ -24,6 +24,7 @@ namespace NineWorldsDeep.FragmentCloud
         {
             var window = new Hierophant.HierophantMainWindow();
             window.Show();
+            UI.Utils.MinimizeMainWindow();
         }
     }
 }

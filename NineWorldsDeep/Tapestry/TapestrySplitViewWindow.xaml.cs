@@ -22,6 +22,7 @@ namespace NineWorldsDeep.Tapestry
         public TapestrySplitViewWindow()
         {
             InitializeComponent();
+            UI.Utils.MainWindow = this;
         }
 
         private void MenuItemNavigateRoot_Click(object sender, RoutedEventArgs e)

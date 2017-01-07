@@ -162,6 +162,8 @@ namespace NineWorldsDeep.ImageBrowser
 
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
+            bool proceedWithClosing = true;
+
             if (tgrGrid.HasPendingChanges)
             {
                 string msg = "There are pending changes " +
@@ -170,7 +172,13 @@ namespace NineWorldsDeep.ImageBrowser
                 if (!UI.Prompt.Confirm(msg, true))
                 {
                     e.Cancel = true;
+                    proceedWithClosing = false;
                 }
+            }
+
+            if (proceedWithClosing)
+            {
+                UI.Utils.MaximizeMainWindow();
             }
         }
 
@@ -293,6 +301,6 @@ namespace NineWorldsDeep.ImageBrowser
             }
 
             UI.Display.Message(msg);
-        }
+        }        
     }
 }
