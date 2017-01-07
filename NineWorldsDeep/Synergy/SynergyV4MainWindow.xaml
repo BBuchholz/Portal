@@ -49,15 +49,15 @@
                           Click="MenuItemArchiveAllSelectedLists_Click"/>
             </MenuItem>
             <MenuItem Header="Sync">
-                <MenuItem Header="Export Active Lists"
+                <MenuItem Header="Export V3 Active Lists"
                           Click="MenuItemExportActiveLists_Click"/>
                 <MenuItem Header="Export Synergy V5 Active Lists"
                           Click="AsyncMenuItemExportSynergyV5ActiveLists_Click"/>
-                <MenuItem Header="Active List Management"
+                <MenuItem Header="V3 Active List Management"
                           Click="MenuItemSynergyListManagement_Click"/>
-                <MenuItem Header="Import Synced Files"
+                <MenuItem Header="Import V3 Active Files"
                           Click="MenuItemImportSyncedFiles_Click"/>
-                <MenuItem Header="Import Synced Archive Files"
+                <MenuItem Header="Import V3 Archived Files"
                           Click="MenuItemImportSyncedArchiveFiles_Click"/>
                 <MenuItem Header="Import Synergy V5"
                           Click="AsyncMenuItemImportSynergyV5_Click"/>
