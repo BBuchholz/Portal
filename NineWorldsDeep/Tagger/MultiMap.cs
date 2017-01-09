@@ -1,7 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace NineWorldsDeep.Tagger
 {
+    [Obsolete("use Core.MultiMap")]
     public class MultiMap<K, V>
     {
         private Dictionary<K, List<V>> _dict;

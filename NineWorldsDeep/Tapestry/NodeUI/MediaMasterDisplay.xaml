@@ -13,7 +13,8 @@
             <RowDefinition Height="40"/>
             <RowDefinition Height="40"/>
             <RowDefinition Height="40"/>
-            <RowDefinition/>            
+            <RowDefinition/>
+            <RowDefinition Height="40"/>
         </Grid.RowDefinitions>
 
         <Grid.ColumnDefinitions>
@@ -30,7 +31,8 @@
         <ComboBox x:Name="mMediaRootsComboBox"
                   Margin="5"
                   Grid.Row="1"
-                  Grid.Column="0"/>
+                  Grid.Column="0"
+                  SelectionChanged="mMediaRootsComboBox_SelectionChanged"/>
 
         <Button x:Name="mAddMediaRootButton"
                 Grid.Row="1"
@@ -46,20 +48,58 @@
                     HorizontalAlignment="Center"
                     VerticalAlignment="Center">
             
-            <RadioButton Margin="5" GroupName="SourceTarget" Content="FileSystem" IsChecked="True"/>
-            <RadioButton Margin="5" GroupName="SourceTarget" Content="DataBase"/>
-            <RadioButton Margin="5" GroupName="SourceTarget" Content="Diff"/>
+            <RadioButton x:Name="mFileSystemRadioButton" 
+                         Margin="5" 
+                         GroupName="SourceTarget" 
+                         Content="FileSystem" 
+                         IsChecked="True" 
+                         Checked="mFileSourceRadioButton_Checked"/>
+            
+            <RadioButton x:Name="mDataBaseRadioButton" 
+                         Margin="5" 
+                         GroupName="SourceTarget" 
+                         Content="DataBase" 
+                         Checked="mFileSourceRadioButton_Checked"/>
+            
+            <RadioButton x:Name="mDiffRadioButton" 
+                         Margin="5" 
+                         GroupName="SourceTarget" 
+                         Content="Diff"
+                         Checked="mFileSourceRadioButton_Checked"/>
             
         </StackPanel>
+
+        <Button x:Name="mUpdateDbFromFileSystemButton"
+                Grid.Row="2"
+                Grid.Column="1"
+                Margin="5"
+                Content="FS to DB"
+                Click="mUpdateDbFromFileSystemButton_Click"
+                VerticalContentAlignment="Center"
+                HorizontalContentAlignment="Center"/>
 
         <ComboBox x:Name="mFileTypesComboBox"
                   Margin="5"
                   Grid.Row="3"
-                  Grid.Column="0"/>
+                  Grid.Column="0"
+                  SelectionChanged="mFileTypesComboBox_SelectionChanged"/>
 
-        <ListView x:Name="mMediaInstancesListView"
+        <ListView x:Name="mFilePathsListView"
                   Grid.Row="4"
                   Grid.Column="0"
                   Margin="5"/>
+
+        <StatusBar Grid.Row="5"
+                   Grid.ColumnSpan="2"
+                   Margin="5">
+            
+            <StatusBarItem>
+                
+                <TextBlock Name="mStatusTextBlock" />
+                
+            </StatusBarItem>
+            
+        </StatusBar>
+        
     </Grid>
 </UserControl>

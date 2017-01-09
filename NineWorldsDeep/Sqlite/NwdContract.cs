@@ -39,6 +39,9 @@ namespace NineWorldsDeep.Sqlite
         
         public static string TABLE_MEDIA_DEVICE = "MediaDevice";
         public static string TABLE_MEDIA_ROOT = "MediaRoot";
+        public static string TABLE_MEDIA_PATH = "MediaPath";
+        public static string TABLE_MEDIA = "Media";
+        public static string TABLE_MEDIA_DEVICE_PATH = "MediaDevicePath";
 
         //public static string TABLE_ = "";
         //public static string TABLE_ = "";
@@ -84,6 +87,11 @@ namespace NineWorldsDeep.Sqlite
         public static string COLUMN_MEDIA_ROOT_PATH = "MediaRootPath";
         public static string COLUMN_MEDIA_DEVICE_ID = "MediaDeviceId";
         public static string COLUMN_MEDIA_DEVICE_DESCRIPTION = "MediaDeviceDescription";
+        public static string COLUMN_MEDIA_PATH_VALUE = "MediaPathValue";
+        public static string COLUMN_MEDIA_FILE_NAME = "MediaFileName";
+        public static string COLUMN_MEDIA_ID = "MediaId";
+        public static string COLUMN_MEDIA_PATH_ID = "MediaPathId";
+        public static string COLUMN_MEDIA_HASH = "MediaHash";
 
         //public static string COLUMN_SYNERGY_TO_DO_UPDATED_AT = "SynergyToDoUpdatedAt";
         //public static string COLUMN_SYNERGY_LIST_NAME = "SynergyListName";

@@ -49,6 +49,64 @@ namespace NineWorldsDeep.Db.Sqlite
             return lst;
         }
 
+        public List<string> GetAllFilePathsForDeviceRoot(
+            int mediaDeviceId,
+            string rootPath)
+        {
+            List<string> lst =
+                new List<string>();
+
+            using (var conn = new SQLiteConnection(
+                @"Data Source=" + Configuration.GetSqliteDbPath(DbName)))
+            {
+                conn.Open();
+
+                using (var cmd = new SQLiteCommand(conn))
+                {
+                    using (var transaction = conn.BeginTransaction())
+                    {
+                        lst = SelectPathsForDeviceRoot(mediaDeviceId, rootPath, cmd);
+
+                        transaction.Commit();
+                    }
+                }
+
+                conn.Close();
+            }
+
+            return lst;
+        }
+
+        private List<string> SelectPathsForDeviceRoot(int mediaDeviceId, string rootPath, SQLiteCommand cmd)
+        {
+            List<string> lst =
+                new List<string>();
+
+            cmd.Parameters.Clear();
+            cmd.CommandText =
+                SELECT_PATH_FOR_DEVICE_ID_LIKE_ROOT_PATH_X_Y;
+
+            SQLiteParameter mediaDeviceIdParam = new SQLiteParameter();
+            mediaDeviceIdParam.Value = mediaDeviceId;
+            cmd.Parameters.Add(mediaDeviceIdParam);
+
+            SQLiteParameter rootPathParam = new SQLiteParameter();
+            rootPathParam.Value = rootPath;
+            cmd.Parameters.Add(rootPathParam);
+
+            using (var rdr = cmd.ExecuteReader())
+            {
+                while (rdr.Read())
+                {
+                    string path = DbV5Utils.GetNullableString(rdr, 0);
+
+                    lst.Add(path);
+                }
+            }
+
+            return lst;
+        }
+
         public List<MediaRootModelItem> GetMediaRootsForDeviceId(int id)
         {
             List<MediaRootModelItem> lst =
@@ -87,6 +145,27 @@ namespace NineWorldsDeep.Db.Sqlite
                     using (var transaction = conn.BeginTransaction())
                     {
                         InsertMediaRoot(deviceId, rootPath, cmd);
+
+                        transaction.Commit();
+                    }
+                }
+
+                conn.Close();
+            }
+        }
+        
+        public void InsertPathsForDeviceId(int mediaDeviceId, List<string> paths)
+        {
+            using (var conn = new SQLiteConnection(
+                @"Data Source=" + Configuration.GetSqliteDbPath(DbName)))
+            {
+                conn.Open();
+
+                using (var cmd = new SQLiteCommand(conn))
+                {
+                    using (var transaction = conn.BeginTransaction())
+                    {
+                        InsertPathsForDeviceId(mediaDeviceId, paths, cmd);
 
                         transaction.Commit();
                     }
@@ -227,6 +306,66 @@ namespace NineWorldsDeep.Db.Sqlite
             cmd.ExecuteNonQuery();
         }
 
+        private void InsertPathsForDeviceId(
+            int mediaDeviceId, List<string> paths, SQLiteCommand cmd)
+        {            
+            foreach(string path in paths)
+            {
+                string fileName = System.IO.Path.GetFileName(path);
+
+                InsertMediaPath(path, cmd);
+                InsertMediaFileName(fileName, cmd);
+
+                InsertMediaDevicePath(fileName, mediaDeviceId, path, cmd);
+            }
+        }
+
+        private void InsertMediaDevicePath(
+            string fileName, int mediaDeviceId, string path, SQLiteCommand cmd)
+        {
+            cmd.Parameters.Clear();
+            cmd.CommandText = 
+                INSERT_MEDIA_DEVICE_PATH_FILENAME_DEVICEID_PATH_X_Y_Z;
+
+            SQLiteParameter fileNameParam = new SQLiteParameter();
+            fileNameParam.Value = fileName;
+            cmd.Parameters.Add(fileNameParam);
+
+            SQLiteParameter mediaDeviceIdParam = new SQLiteParameter();
+            mediaDeviceIdParam.Value = mediaDeviceId;
+            cmd.Parameters.Add(mediaDeviceIdParam);
+
+            SQLiteParameter pathParam = new SQLiteParameter();
+            pathParam.Value = path;
+            cmd.Parameters.Add(pathParam);
+
+            cmd.ExecuteNonQuery();
+        }
+
+        private void InsertMediaFileName(string fileName, SQLiteCommand cmd)
+        {
+            cmd.Parameters.Clear();
+            cmd.CommandText = INSERT_MEDIA_FILE_NAME_X;
+
+            SQLiteParameter fileNameParam = new SQLiteParameter();
+            fileNameParam.Value = fileName;
+            cmd.Parameters.Add(fileNameParam);
+
+            cmd.ExecuteNonQuery();
+        }
+
+        private void InsertMediaPath(string path, SQLiteCommand cmd)
+        {
+            cmd.Parameters.Clear();
+            cmd.CommandText = INSERT_MEDIA_PATH_X;
+            
+            SQLiteParameter pathParam = new SQLiteParameter();
+            pathParam.Value = path;
+            cmd.Parameters.Add(pathParam);
+
+            cmd.ExecuteNonQuery();
+        }
+
         private int SelectMediaDeviceId(string deviceDescription, SQLiteCommand cmd)
         {
             int id = -1;
@@ -248,7 +387,7 @@ namespace NineWorldsDeep.Db.Sqlite
 
             return id;
         }
-        
+
         #endregion
 
         #region "queries"
@@ -281,6 +420,40 @@ namespace NineWorldsDeep.Db.Sqlite
                           + NwdContract.COLUMN_MEDIA_ROOT_PATH + " "
                 + "FROM " + NwdContract.TABLE_MEDIA_ROOT + " "
                 + "WHERE " + NwdContract.COLUMN_MEDIA_DEVICE_ID + " = ? ; ";
+
+        private static string SELECT_PATH_FOR_DEVICE_ID_LIKE_ROOT_PATH_X_Y =
+
+            "SELECT mp." + NwdContract.COLUMN_MEDIA_PATH_VALUE + "  " +
+            "FROM " + NwdContract.TABLE_MEDIA_PATH + " mp  " +
+            "JOIN " + NwdContract.TABLE_MEDIA_DEVICE_PATH + " mdp  " +
+            "ON mp." + NwdContract.COLUMN_MEDIA_PATH_ID + " = mdp." + NwdContract.COLUMN_MEDIA_PATH_ID + " " +
+            "WHERE mdp." + NwdContract.COLUMN_MEDIA_DEVICE_ID + " = ? " +
+            "AND mp." + NwdContract.COLUMN_MEDIA_PATH_VALUE + " LIKE ? || '%'; ";
+
+        private static string INSERT_MEDIA_PATH_X =
+            
+            "INSERT OR IGNORE INTO " + NwdContract.TABLE_MEDIA_PATH + " " + 
+            "	(" + NwdContract.COLUMN_MEDIA_PATH_VALUE + ") " + 
+            "VALUES " + 
+            "	(?); ";
+
+        private static string INSERT_MEDIA_FILE_NAME_X =
+
+            "INSERT OR IGNORE INTO " + NwdContract.TABLE_MEDIA + " " +
+            "	(" + NwdContract.COLUMN_MEDIA_FILE_NAME + ") " +
+            "VALUES " +
+            "	(?); ";
+
+        private static string INSERT_MEDIA_DEVICE_PATH_FILENAME_DEVICEID_PATH_X_Y_Z =
+
+            "INSERT OR IGNORE INTO " + NwdContract.TABLE_MEDIA_DEVICE_PATH + " " +
+            "	(" + NwdContract.COLUMN_MEDIA_ID + ", " + NwdContract.COLUMN_MEDIA_DEVICE_ID + ", " + NwdContract.COLUMN_MEDIA_PATH_ID + ") " +
+            "VALUES " +
+            "	( " +
+            "		(SELECT m." + NwdContract.COLUMN_MEDIA_ID + " FROM " + NwdContract.TABLE_MEDIA + " m LEFT JOIN " + NwdContract.TABLE_MEDIA_DEVICE_PATH + " mdp ON m." + NwdContract.COLUMN_MEDIA_ID + " = mdp." + NwdContract.COLUMN_MEDIA_ID + " WHERE " + NwdContract.COLUMN_MEDIA_FILE_NAME + " = ? AND m." + NwdContract.COLUMN_MEDIA_HASH + " IS NULL AND mdp." + NwdContract.COLUMN_MEDIA_DEVICE_ID + " IS NULL LIMIT 1), " +
+            "		?, " +
+            "		(SELECT " + NwdContract.COLUMN_MEDIA_PATH_ID + " FROM " + NwdContract.TABLE_MEDIA_PATH + " WHERE " + NwdContract.COLUMN_MEDIA_PATH_VALUE + " = ? LIMIT 1) " +
+            "	) ";
 
         #endregion
 

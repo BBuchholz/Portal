@@ -4,7 +4,6 @@ using System.Collections.Generic;
 
 namespace NineWorldsDeep.Core
 {
-    //TODO: deprecate MultiMap in NwdVoiceMemoBrowser
     public class MultiMap<K, V>
     {
         private Dictionary<K, List<V>> _dict;
