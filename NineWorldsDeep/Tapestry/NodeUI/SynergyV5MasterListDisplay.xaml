@@ -21,22 +21,63 @@
                   Margin="5"
                   Expanded="Expander_Expanded"
                   Collapsed="Expander_Collapsed">
+
+            <Grid>
+                
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+                
+                <Grid.RowDefinitions>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+
+                <Button x:Name="btnImportXml"
+                    Grid.Row="0"
+                    Grid.Column="0"
+                    Margin="5"
+                    Content="Import XML"
+                    Click="btnImportXml_Click"/>
+
+                <Button x:Name="btnExportXml"
+                    Grid.Row="1"
+                    Grid.Column="0"
+                    Margin="5"
+                    Content="Export XML"
+                    Click="btnExportXml_Click"/>
+
+            </Grid>
             
         </Expander>
 
         <Expander Header="Shelved"
                   Grid.Row="1"
-                  IsExpanded="False"
                   Margin="5"
+                  IsExpanded="False"
                   Expanded="Expander_Expanded"
                   Collapsed="Expander_Collapsed">
-            
+
+            <Grid>
+
+                <ListView x:Name="lvSynergyV5ShelvedLists"
+                      Margin="5"
+                      SelectionChanged="lvSynergyV5Lists_SelectionChanged"/>
+
+            </Grid>
+
         </Expander>
 
         <Expander Header="Active"
                   Grid.Row="2"
-                  IsExpanded="True"
                   Margin="5"
+                  IsExpanded="True"
                   Expanded="Expander_Expanded"
                   Collapsed="Expander_Collapsed">
             

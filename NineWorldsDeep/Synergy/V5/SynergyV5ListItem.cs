@@ -4,6 +4,8 @@ namespace NineWorldsDeep.Synergy.V5
 {
     public class SynergyV5ListItem
     {
+        public static string LIST_ITEM_STATUS_PERMANENT = "Permanent";
+
         public SynergyV5ListItem(string itemValue)
         {
             ItemValue = itemValue;
@@ -31,10 +33,59 @@ namespace NineWorldsDeep.Synergy.V5
             {
                 if (ToDo == null)
                 {
-                    return "Permanent";
+                    return LIST_ITEM_STATUS_PERMANENT;
                 }
 
                 return ToDo.Status;
+            }
+        }
+
+        public bool IsPermanent
+        {
+            get
+            {
+                return LIST_ITEM_STATUS_PERMANENT.Equals(ItemStatus);
+            }
+        }
+
+        public bool IsActivated
+        {
+            get
+            {
+                if(ToDo != null)
+                {
+                    return ToDo.IsActive();
+                }
+                
+                return false;
+            }
+        }
+
+
+        public bool IsCompleted
+        {
+            get
+            {
+                if (ToDo != null)
+                {
+                    return ToDo.IsCompleted();
+                }
+
+                return false;
+            }
+        }
+
+
+        public bool IsArchived
+        {
+            get
+            {
+                if (ToDo != null)
+                {
+                    return ToDo.IsArchived();
+                }
+
+                return false;
             }
         }
 

@@ -30,7 +30,7 @@ namespace NineWorldsDeep.Tapestry.NodeUI
 
             db = new Db.Sqlite.SynergyV5SubsetDb();
 
-            Load();
+            Load();            
         }
 
         private void Load()
@@ -135,6 +135,16 @@ namespace NineWorldsDeep.Tapestry.NodeUI
                 current = VisualTreeHelper.GetParent(current);
             };
             return null;
+        }
+
+        private void btnImportXml_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void btnExportXml_Click(object sender, RoutedEventArgs e)
+        {
+
         }
     }
 

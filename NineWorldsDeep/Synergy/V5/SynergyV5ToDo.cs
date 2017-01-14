@@ -5,14 +5,17 @@ namespace NineWorldsDeep.Synergy.V5
 {
     public class SynergyV5ToDo
     {
+        public static string TO_DO_STATUS_INDETERMINATE = "Status Indeterminate";
+        public static string TO_DO_STATUS_ARCHIVED = "Archived";
+        public static string TO_DO_STATUS_ACTIVATED = "Activated";
+        public static string TO_DO_STATUS_COMPLETED = "Completed";
+
         public int ToDoId { get; set; }
         public DateTime? ActivatedAt { get; private set; }
         public DateTime? CompletedAt { get; private set; }
         public DateTime? ArchivedAt { get; private set; }
         public string Status { get { return ProcessStatus(); } }
-
-
-
+        
         /// <summary>
         /// 
         /// will resolve conflicts, newest date will always take precedence
@@ -93,35 +96,50 @@ namespace NineWorldsDeep.Synergy.V5
             ArchivedAt = TimeStamp.NowUTC();
         }
 
+        public bool IsActive()
+        {
+            return Status.Contains(TO_DO_STATUS_ACTIVATED);
+        }
+
+        public bool IsCompleted()
+        {
+            return Status.Contains(TO_DO_STATUS_COMPLETED);
+        }
+
+        public bool IsArchived()
+        {
+            return Status.Contains(TO_DO_STATUS_ARCHIVED);
+        }
+
         private string ProcessStatus()
         {
             if (ActivatedAt == null && CompletedAt == null && ArchivedAt == null)
             {
-                return "Status Indeterminate";
+                return TO_DO_STATUS_INDETERMINATE;
             }
 
             if (ActivatedAt == null && CompletedAt == null)
             {
                 //only Archived is non-null
-                return "Archived";
+                return TO_DO_STATUS_ARCHIVED;
             }
 
             if(CompletedAt == null && ArchivedAt == null)
             {
                 //only Activated
-                return "Activated";
+                return TO_DO_STATUS_ACTIVATED;
             }
 
             if(ActivatedAt == null && ArchivedAt == null)
             {
                 //only Completed
-                return "Completed";
+                return TO_DO_STATUS_COMPLETED;
             }
 
             if(ActivatedAt == null)
             {
                 //archived and completed 
-                return "Archived, Completed";
+                return TO_DO_STATUS_ARCHIVED + ", " + TO_DO_STATUS_COMPLETED;
             }
 
             if(ArchivedAt == null)
@@ -129,11 +147,11 @@ namespace NineWorldsDeep.Synergy.V5
                 //activated and completed
                 if (ActivatedNewerThanCompletedAssumingNonNullInput())
                 {
-                    return "Activated";
+                    return TO_DO_STATUS_ACTIVATED;
                 }
                 else
                 {
-                    return "Activated, Completed";
+                    return TO_DO_STATUS_ACTIVATED + ", " + TO_DO_STATUS_COMPLETED;
                 }                
             }
 
@@ -143,11 +161,11 @@ namespace NineWorldsDeep.Synergy.V5
                 if(DateTime.Compare(ActivatedAt.Value, ArchivedAt.Value) < 0)
                 {
                     //Activated is older
-                    return "Archived";
+                    return TO_DO_STATUS_ARCHIVED;
                 }
                 else
                 {
-                    return "Activated";
+                    return TO_DO_STATUS_ACTIVATED;
                 }
             }
             
@@ -155,17 +173,17 @@ namespace NineWorldsDeep.Synergy.V5
             if (DateTime.Compare(ActivatedAt.Value, ArchivedAt.Value) < 0)
             {
                 //Activated is older
-                return "Archived, Completed";
+                return TO_DO_STATUS_ARCHIVED + ", " + TO_DO_STATUS_COMPLETED;
             }
             else
             {
                 if (ActivatedNewerThanCompletedAssumingNonNullInput())
                 {
-                    return "Activated";
+                    return TO_DO_STATUS_ACTIVATED;
                 }
                 else
                 {
-                    return "Activated, Completed";
+                    return TO_DO_STATUS_ACTIVATED + ", " + TO_DO_STATUS_COMPLETED;
                 };
             }
         }

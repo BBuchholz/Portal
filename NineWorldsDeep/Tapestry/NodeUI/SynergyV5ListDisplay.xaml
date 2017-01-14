@@ -23,7 +23,7 @@
     </UserControl.Resources>
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="60"/>
+            <RowDefinition Height="80"/>
             <RowDefinition/>
             <RowDefinition Height="40"/>
         </Grid.RowDefinitions>
@@ -37,9 +37,14 @@
               Grid.ColumnSpan="2">
 
             <Grid.ColumnDefinitions>
-                <ColumnDefinition/>
+                <ColumnDefinition Width="2*"/>
                 <ColumnDefinition/>
             </Grid.ColumnDefinitions>
+            
+            <Grid.RowDefinitions>
+                <RowDefinition Height="2*"/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
 
             <TextBlock x:Name="tbListName" 
                        Grid.Column="0"
@@ -50,8 +55,19 @@
                        FontSize="20"
                        Margin="20, 5, 5, 5"/>
 
+            <ComboBox x:Name="cmbItemStatusFilter"
+                      Grid.Row="1"
+                      Grid.Column="0"
+                      Width="150"
+                      HorizontalAlignment="Left"
+                      Margin="5, 0, 20, 0"
+                      SelectionChanged="cmbItemStatusFilter_SelectionChanged">
+                
+            </ComboBox>
+
             <TextBlock x:Name="tbListStatus" 
                        Grid.Column="1"
+                       Grid.RowSpan="2"
                        Text="List Status"
                        VerticalAlignment="Center"
                        HorizontalAlignment="Right"

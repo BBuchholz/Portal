@@ -23,6 +23,8 @@ namespace NineWorldsDeep.Tapestry.NodeUI
     /// </summary>
     public partial class SynergyV5ListDisplay : UserControl
     {
+        public static string STATUS_ALL = "All";
+
         private Db.Sqlite.SynergyV5SubsetDb db;
         private SynergyV5ListNode listNode;
 
@@ -30,6 +32,22 @@ namespace NineWorldsDeep.Tapestry.NodeUI
         {
             InitializeComponent();
             db = new Db.Sqlite.SynergyV5SubsetDb();
+
+            LoadStatusValues();
+        }
+
+        private void LoadStatusValues()
+        {
+            List<string> statuses = new List<string>();
+
+            statuses.Add(SynergyV5ListItem.LIST_ITEM_STATUS_PERMANENT);
+            statuses.Add(SynergyV5ToDo.TO_DO_STATUS_ACTIVATED);
+            statuses.Add(SynergyV5ToDo.TO_DO_STATUS_ARCHIVED);
+            statuses.Add(SynergyV5ToDo.TO_DO_STATUS_COMPLETED);
+            statuses.Add(STATUS_ALL);
+
+            cmbItemStatusFilter.ItemsSource = null;
+            cmbItemStatusFilter.ItemsSource = statuses;
         }
 
         private void lvSynergyV5ListItems_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -84,10 +102,46 @@ namespace NineWorldsDeep.Tapestry.NodeUI
                 tbListName.Text = synLst.ListName;
                 tbListStatus.Text = synLst.Status;
 
+                string statusValue = (string) cmbItemStatusFilter.SelectedItem;
+
+                List<SynergyV5ListItem> filteredItems;
+
+                if (string.IsNullOrWhiteSpace(statusValue))
+                {
+                    statusValue = STATUS_ALL;
+                }
+
+                if (statusValue.Equals(STATUS_ALL))
+                {
+                    filteredItems = synLst.ListItems;
+                }
+                else
+                {
+                    filteredItems = synLst.ListItems.Where(sli => sli.ItemStatus.Contains(statusValue)).ToList();
+                }
+
                 //display list here
                 lvSynergyV5ListItems.ItemsSource = null; //clear existing
-                lvSynergyV5ListItems.ItemsSource = synLst.ListItems;
+                lvSynergyV5ListItems.ItemsSource = filteredItems;
             }
+        }
+
+        private int GetSelectedPermanentItemsCount()
+        {
+            int permCount = 0;
+
+            IList items = (IList)lvSynergyV5ListItems.SelectedItems;
+            var selectedItems = items.Cast<SynergyV5ListItem>();
+
+            foreach (SynergyV5ListItem sli in selectedItems)
+            {
+                if (sli.IsPermanent)
+                {
+                    permCount++;
+                }
+            }
+
+            return permCount;
         }
         
         private void MenuItemActivateSelected_Click(object sender, RoutedEventArgs e)
@@ -95,13 +149,27 @@ namespace NineWorldsDeep.Tapestry.NodeUI
             IList items = (IList)lvSynergyV5ListItems.SelectedItems;
             var selectedItems = items.Cast<SynergyV5ListItem>();
 
-            string msg = "Are you sure you want to Activate these " +
-                selectedItems.Count() + " items? " +
-                "Permanent items CANNOT be reverted.";
+            bool proceed = true;
 
-            if(UI.Prompt.Confirm(msg, true))
+            int permCount = GetSelectedPermanentItemsCount();
+
+            if(permCount > 0)
             {
-                foreach(SynergyV5ListItem sli in selectedItems)
+                proceed = false;
+
+                string msg = "Are you sure you want to Activate these " +
+                    selectedItems.Count() + " items? " +
+                    permCount + " are permanent items and CANNOT be reverted.";
+
+                if (UI.Prompt.Confirm(msg, true))
+                {
+                    proceed = true;
+                }
+            }
+
+            if (proceed)
+            {
+                foreach (SynergyV5ListItem sli in selectedItems)
                 {
                     sli.Activate();
                 }
@@ -117,11 +185,25 @@ namespace NineWorldsDeep.Tapestry.NodeUI
             IList items = (IList)lvSynergyV5ListItems.SelectedItems;
             var selectedItems = items.Cast<SynergyV5ListItem>();
 
-            string msg = "Are you sure you want to Complete these " +
-                selectedItems.Count() + " items? " +
-                "Permanent items CANNOT be reverted.";
+            bool proceed = true;
 
-            if (UI.Prompt.Confirm(msg, true))
+            int permCount = GetSelectedPermanentItemsCount();
+
+            if (permCount > 0)
+            {
+                proceed = false;
+
+                string msg = "Are you sure you want to Complete these " +
+                    selectedItems.Count() + " items? " +
+                    permCount + " are permanent items and CANNOT be reverted.";
+
+                if (UI.Prompt.Confirm(msg, true))
+                {
+                    proceed = true;
+                }
+            }
+
+            if (proceed)
             {
                 foreach (SynergyV5ListItem sli in selectedItems)
                 {
@@ -131,7 +213,7 @@ namespace NineWorldsDeep.Tapestry.NodeUI
                 this.listNode.List.Save(db);
 
                 Refresh();
-            }
+            }            
         }
 
         private void MenuItemArchiveSelected_Click(object sender, RoutedEventArgs e)
@@ -139,21 +221,36 @@ namespace NineWorldsDeep.Tapestry.NodeUI
             IList items = (IList)lvSynergyV5ListItems.SelectedItems;
             var selectedItems = items.Cast<SynergyV5ListItem>();
 
-            string msg = "Are you sure you want to Archive these " +
-                selectedItems.Count() + " items? " +
-                "Permanent items CANNOT be reverted.";
+            bool proceed = true;
 
-            if (UI.Prompt.Confirm(msg, true))
+            int permCount = GetSelectedPermanentItemsCount();
+
+            if (permCount > 0)
+            {
+                proceed = false;
+
+                string msg = "Are you sure you want to Archive these " +
+                    selectedItems.Count() + " items? " +
+                    permCount + " are permanent items and CANNOT be reverted.";
+
+                if (UI.Prompt.Confirm(msg, true))
+                {
+                    proceed = true;
+                }
+            }
+
+            if (proceed)
             {
                 foreach (SynergyV5ListItem sli in selectedItems)
                 {
                     sli.Archive();
                 }
 
-                CurrentList.Save(db);
+                this.listNode.List.Save(db);
 
                 Refresh();
-            }            
+            }
+        
         }
 
         private void btnCreateListItem_Click(object sender, RoutedEventArgs e)
@@ -184,6 +281,11 @@ namespace NineWorldsDeep.Tapestry.NodeUI
 
                 return null;
             }
+        }
+
+        private void cmbItemStatusFilter_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            Refresh();
         }
     }
 }

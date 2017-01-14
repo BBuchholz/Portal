@@ -8,6 +8,9 @@ namespace NineWorldsDeep.Synergy.V5
 {
     public class SynergyV5List
     {
+        public static string LIST_STATUS_ACTIVE = "Active";
+        public static string LIST_STATUS_SHELVED = "Shelved";
+
         public string ListName { get; private set; }
         public int ListId { get; set; }
         public DateTime? ActivatedAt { get; private set; }
@@ -20,23 +23,23 @@ namespace NineWorldsDeep.Synergy.V5
             {
                 if(ShelvedAt == null)
                 {
-                    return "Active";
+                    return LIST_STATUS_ACTIVE;
                 }
 
                 //shelved is not null
                 if(ActivatedAt == null)
                 {
-                    return "Shelved";
+                    return LIST_STATUS_SHELVED;
                 }
 
                 //neither is null
                 if(ActivatedAt >= ShelvedAt)
                 {
-                    return "Active";
+                    return LIST_STATUS_ACTIVE;
                 }
                 else
                 {
-                    return "Shelved";
+                    return LIST_STATUS_SHELVED;
                 }
             }
         }
