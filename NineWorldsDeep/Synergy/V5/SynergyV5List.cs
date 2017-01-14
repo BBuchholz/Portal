@@ -14,6 +14,34 @@ namespace NineWorldsDeep.Synergy.V5
         public DateTime? ShelvedAt { get; private set; }
         public List<SynergyV5ListItem> ListItems { get; private set; }
 
+        public string Status
+        {
+            get
+            {
+                if(ShelvedAt == null)
+                {
+                    return "Active";
+                }
+
+                //shelved is not null
+                if(ActivatedAt == null)
+                {
+                    return "Shelved";
+                }
+
+                //neither is null
+                if(ActivatedAt >= ShelvedAt)
+                {
+                    return "Active";
+                }
+                else
+                {
+                    return "Shelved";
+                }
+            }
+        }
+
+
         public SynergyV5List(string listName)
         {
             ListName = listName;

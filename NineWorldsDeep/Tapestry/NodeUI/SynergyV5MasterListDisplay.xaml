@@ -5,36 +5,76 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:NineWorldsDeep.Tapestry.NodeUI"
              mc:Ignorable="d" 
-             d:DesignHeight="300" d:DesignWidth="300">
+             d:DesignHeight="700" d:DesignWidth="300">
+
     <Grid>
 
         <Grid.RowDefinitions>
-            <RowDefinition/>
             <RowDefinition Height="40"/>
+            <RowDefinition Height="40"/>
+            <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="4*"/>
-            <ColumnDefinition/>
-        </Grid.ColumnDefinitions>
-
-        <ListView x:Name="lvSynergyV5Lists"
+        <Expander Header="Utilites"
                   Grid.Row="0"
-                  Grid.ColumnSpan="2"
+                  IsExpanded="False"
                   Margin="5"
-                  SelectionChanged="lvSynergyV5Lists_SelectionChanged"/>
+                  Expanded="Expander_Expanded"
+                  Collapsed="Expander_Collapsed">
+            
+        </Expander>
 
-        <TextBox x:Name="txtListNameEntry"
-                 Grid.Row="1"
-                 Grid.Column="0"
-                 Margin="5"/>
+        <Expander Header="Shelved"
+                  Grid.Row="1"
+                  IsExpanded="False"
+                  Margin="5"
+                  Expanded="Expander_Expanded"
+                  Collapsed="Expander_Collapsed">
+            
+        </Expander>
 
-        <Button x:Name="btnCreateList"
-                Grid.Row="1"
-                Grid.Column="1"
-                Margin="5"
-                Content="Add"
-                Click="btnCreateList_Click"/>
+        <Expander Header="Active"
+                  Grid.Row="2"
+                  IsExpanded="True"
+                  Margin="5"
+                  Expanded="Expander_Expanded"
+                  Collapsed="Expander_Collapsed">
+            
+            <Grid>
 
+                <Grid.RowDefinitions>
+                    <RowDefinition/>
+                    <RowDefinition Height="40"/>
+                </Grid.RowDefinitions>
+
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="4*"/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+
+                <ListView x:Name="lvSynergyV5Lists"
+                      Grid.Row="0"
+                      Grid.ColumnSpan="2"
+                      Margin="5"
+                      SelectionChanged="lvSynergyV5Lists_SelectionChanged"/>
+
+                <TextBox x:Name="txtListNameEntry"
+                     Grid.Row="1"
+                     Grid.Column="0"
+                     Margin="5"/>
+
+                <Button x:Name="btnCreateList"
+                    Grid.Row="1"
+                    Grid.Column="1"
+                    Margin="5"
+                    Content="Add"
+                    Click="btnCreateList_Click"/>
+
+            </Grid>
+        
+        </Expander>
+        
+        
+        
     </Grid>
 </UserControl>

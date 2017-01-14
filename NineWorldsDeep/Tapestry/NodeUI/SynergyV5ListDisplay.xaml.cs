@@ -81,6 +81,9 @@ namespace NineWorldsDeep.Tapestry.NodeUI
             {
                 synLst.Save(db); //syncs with db, loads/merges
 
+                tbListName.Text = synLst.ListName;
+                tbListStatus.Text = synLst.Status;
+
                 //display list here
                 lvSynergyV5ListItems.ItemsSource = null; //clear existing
                 lvSynergyV5ListItems.ItemsSource = synLst.ListItems;
