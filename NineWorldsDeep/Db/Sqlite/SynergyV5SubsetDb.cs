@@ -39,6 +39,56 @@ namespace NineWorldsDeep.Db.Sqlite
             return activeLists;
         }
 
+
+        public List<string> GetAllShelvedListNames()
+        {
+            List<string> listNames = new List<string>();
+
+            using (var conn = new SQLiteConnection(
+                @"Data Source=" + Configuration.GetSqliteDbPath(DbName)))
+            {
+                conn.Open();
+
+                using (var cmd = new SQLiteCommand(conn))
+                {
+                    using (var transaction = conn.BeginTransaction())
+                    {
+                        try
+                        {
+                            cmd.Parameters.Clear();
+                            cmd.CommandText =
+                                NwdContract.SYNERGY_V5_SELECT_SHELVED_LISTS;
+
+                            using (var rdr = cmd.ExecuteReader())
+                            {
+                                while (rdr.Read())
+                                {
+                                    string listName = DbV5Utils.GetNullableString(rdr, 0);
+
+                                    if (!string.IsNullOrWhiteSpace(listName))
+                                    {
+                                        listNames.Add(listName);
+                                    }
+                                }
+                            }
+
+                            transaction.Commit();
+                        }
+                        catch (Exception ex)
+                        {
+                            //handle exception here
+                            transaction.Rollback();
+                        }
+                    }
+                }
+
+                conn.Close();
+            }
+
+            return listNames;
+        }
+
+
         public List<string> GetAllActiveListNames()
         {
             List<string> listNames = new List<string>();

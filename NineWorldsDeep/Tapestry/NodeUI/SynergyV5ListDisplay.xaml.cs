@@ -95,6 +95,10 @@ namespace NineWorldsDeep.Tapestry.NodeUI
         {
             SynergyV5List synLst = this.listNode.List;
 
+            tbListName.Text = "";
+            tbListStatus.Text = "";
+            lvSynergyV5ListItems.ItemsSource = null; //clear existing
+
             if (synLst != null)
             {
                 synLst.Save(db); //syncs with db, loads/merges
@@ -121,7 +125,6 @@ namespace NineWorldsDeep.Tapestry.NodeUI
                 }
 
                 //display list here
-                lvSynergyV5ListItems.ItemsSource = null; //clear existing
                 lvSynergyV5ListItems.ItemsSource = filteredItems;
             }
         }

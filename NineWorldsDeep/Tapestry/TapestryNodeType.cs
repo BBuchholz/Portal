@@ -21,6 +21,7 @@
         SynergyV5MasterList,
         SynergyV5List,
         SynergyV5ListItem,
-        MediaMaster
+        MediaMaster,
+        NullSynergyV5List
     }
 }

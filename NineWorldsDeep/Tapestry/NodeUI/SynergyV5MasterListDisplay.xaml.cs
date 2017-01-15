@@ -1,9 +1,13 @@
-﻿using NineWorldsDeep.Synergy.V5;
+﻿using NineWorldsDeep.Core;
+using NineWorldsDeep.Synergy.V5;
 using NineWorldsDeep.Tapestry.Nodes;
 using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -14,6 +18,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Xml.Linq;
 
 namespace NineWorldsDeep.Tapestry.NodeUI
 {
@@ -24,33 +29,51 @@ namespace NineWorldsDeep.Tapestry.NodeUI
     {
         Db.Sqlite.SynergyV5SubsetDb db;
 
+        //async related 
+        private readonly SynchronizationContext syncContext;
+        private DateTime previousTime = DateTime.Now;
+
         public SynergyV5MasterListDisplay()
         {
             InitializeComponent();
+            syncContext = SynchronizationContext.Current;
 
             db = new Db.Sqlite.SynergyV5SubsetDb();
+            
+            Load();
 
-            Load();            
+            statusDetail.Text = "Ready";
         }
 
         private void Load()
         {
-            List<SynergyV5ListNode> lst =
+            List<SynergyV5ListNode> activeLists =
                 new List<SynergyV5ListNode>();
                         
             foreach(string listName in db.GetAllActiveListNames())
             {
-                lst.Add(new SynergyV5ListNode(listName));
+                activeLists.Add(new SynergyV5ListNode(listName));
             }
 
-            lvSynergyV5Lists.ItemsSource = null; //reset value
-            lvSynergyV5Lists.ItemsSource = lst;
+            lvSynergyV5ActiveLists.ItemsSource = null; //reset value
+            lvSynergyV5ActiveLists.ItemsSource = activeLists;
+
+            List<SynergyV5ListNode> shelvedLists =
+                new List<SynergyV5ListNode>();
+
+            foreach (string listName in db.GetAllShelvedListNames())
+            {
+                shelvedLists.Add(new SynergyV5ListNode(listName));
+            }
+
+            lvSynergyV5ShelvedLists.ItemsSource = null; //reset value
+            lvSynergyV5ShelvedLists.ItemsSource = shelvedLists;
         }
 
         private void lvSynergyV5Lists_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             //mirrors ChordProgressionsNodeDisplay
-            SynergyV5ListNode nd = (SynergyV5ListNode)lvSynergyV5Lists.SelectedItem;
+            SynergyV5ListNode nd = (SynergyV5ListNode)lvSynergyV5ActiveLists.SelectedItem;
 
             if(nd != null)
             {
@@ -59,6 +82,38 @@ namespace NineWorldsDeep.Tapestry.NodeUI
 
                 OnSynergyV5ListClicked(args);
             }
+
+            ProcessNullListSelection();
+        }
+
+        private void ProcessNullListSelection()
+        {
+            if(lvSynergyV5ActiveLists.SelectedItem == null &&
+                lvSynergyV5ShelvedLists.SelectedItem == null)
+            {
+
+                SynergyV5ListClickedEventArgs args =
+                    new SynergyV5ListClickedEventArgs(new NullSynergyV5ListNode());
+
+                OnSynergyV5ListClicked(args);
+            }
+
+        }
+
+        private void lvSynergyV5ShelvedLists_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            //mirrors ChordProgressionsNodeDisplay
+            SynergyV5ListNode nd = (SynergyV5ListNode)lvSynergyV5ShelvedLists.SelectedItem;
+
+            if (nd != null)
+            {
+                SynergyV5ListClickedEventArgs args =
+                    new SynergyV5ListClickedEventArgs(nd);
+
+                OnSynergyV5ListClicked(args);
+            }
+
+            ProcessNullListSelection();
         }
 
         protected virtual void OnSynergyV5ListClicked(SynergyV5ListClickedEventArgs args)
@@ -137,14 +192,167 @@ namespace NineWorldsDeep.Tapestry.NodeUI
             return null;
         }
 
-        private void btnImportXml_Click(object sender, RoutedEventArgs e)
+        private async void btnImportXml_Click(object sender, RoutedEventArgs e)
         {
+            var allPaths = Configuration.GetSynergyV5XmlImportPaths();
+            var count = 0;
+            var total = allPaths.Count();
 
+            await Task.Run(() =>
+            {
+                foreach (string path in allPaths)
+                {
+                    count++;
+
+                    if (!string.IsNullOrWhiteSpace(path))
+                    {
+                        string fileName = System.IO.Path.GetFileName(path);
+
+                        XDocument doc = Xml.Xml.DocumentFromPath(path);
+
+                        List<SynergyV5List> allLists =
+                            Xml.Xml.RetrieveSynergyV5Lists(doc);
+
+                        foreach (SynergyV5List lst in allLists)
+                        {
+                            string detail = "path " + count + " of " + total;
+                            detail += ": " + fileName + " -> ";
+                            detail += "processing list: " + lst.ListName;
+
+                            StatusDetailUpdate(detail);
+
+                            db.Sync(lst);
+                        }
+
+                        File.Delete(path);
+                    }
+
+                }
+            });
+
+            statusDetail.Text = "finished.";
+        }
+        
+        private void StatusDetailUpdate(string text)
+        {
+            //may need dispatcher async
+
+            var currentTime = DateTime.Now;
+
+            if ((DateTime.Now - previousTime).Milliseconds <= 50) return;
+
+            syncContext.Post(new SendOrPostCallback(s =>
+            {
+                statusDetail.Text = (string)s;
+            }), text);
+
+            previousTime = currentTime;
         }
 
-        private void btnExportXml_Click(object sender, RoutedEventArgs e)
+        private async void btnExportXml_Click(object sender, RoutedEventArgs e)
         {
+            await Task.Run(() => {
 
+                string detail;
+
+                List<SynergyV5List> activeLists = new List<SynergyV5List>();
+
+                var allListNames = db.GetAllActiveListNames();
+                allListNames.AddRange(db.GetAllShelvedListNames());
+
+                //mirrors Gauntlet 
+                foreach (string listName in allListNames)
+                {
+                    SynergyV5List lst = new SynergyV5List(listName);
+
+                    detail = "loading list: " + lst.ListName;
+
+                    StatusDetailUpdate(detail);
+
+                    //save() populates each list as part of its process
+                    db.Sync(lst);
+
+                    activeLists.Add(lst);
+                }
+
+                //XDocument doc =
+                //    new XDocument(Xml.Xml.Export(activeLists));
+                XElement synergySubsetEl = new XElement(Xml.Xml.TAG_SYNERGY_SUBSET);
+
+                detail = "exporting lists to XML";
+
+                StatusDetailUpdate(detail);
+
+                foreach (SynergyV5List lst in activeLists)
+                {
+
+                    synergySubsetEl.Add(Xml.Xml.Export(lst));
+                }
+
+                XDocument doc =
+                    new XDocument(
+                        new XElement("nwd",
+                            synergySubsetEl));
+
+                //here, take doc and save to all sync locations            
+                string fileName =
+                    NwdUtils.GetTimeStamp_yyyyMMddHHmmss() + "-nwd-synergy-v5.xml";
+
+                var allFolders =
+                    Configuration.GetActiveSyncProfileIncomingXmlFolders();
+
+                foreach (string xmlIncomingFolderPath in allFolders)
+                {
+                    string fullFilePath =
+                        System.IO.Path.Combine(xmlIncomingFolderPath, fileName);
+
+                    doc.Save(fullFilePath);
+                }
+
+
+            });
+
+            statusDetail.Text = "finished.";
+        }
+
+        private void MenuItemShelveSelected_Click(object sender, RoutedEventArgs e)
+        {
+            IList items = (IList)lvSynergyV5ActiveLists.SelectedItems;
+            var selectedItems = items.Cast<SynergyV5ListNode>();
+
+            foreach (SynergyV5List sl in selectedItems.Select(x => x.List))
+            {
+                sl.Shelve();
+
+                sl.Save(db);
+            }
+
+            ExpandBothLists();
+            
+            Load();
+        }
+
+        private void MenuItemActivateSelected_Click(object sender, RoutedEventArgs e)
+        {
+            IList items = (IList)lvSynergyV5ShelvedLists.SelectedItems;
+            var selectedItems = items.Cast<SynergyV5ListNode>();
+
+            foreach (SynergyV5List sl in selectedItems.Select(x => x.List))
+            {
+                sl.Activate();
+
+                sl.Save(db);
+            }
+
+            ExpandBothLists();
+
+            Load();
+        }
+
+        private void ExpandBothLists()
+        {
+            expActive.IsExpanded = true;
+            expShelved.IsExpanded = true;
         }
     }
 

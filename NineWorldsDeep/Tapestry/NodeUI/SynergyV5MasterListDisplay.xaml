@@ -53,11 +53,21 @@
                     Content="Export XML"
                     Click="btnExportXml_Click"/>
 
+                <StackPanel Grid.Row="5"
+                            VerticalAlignment="Bottom"
+                            HorizontalAlignment="Center"
+                            Grid.ColumnSpan="3">
+                    
+                    <TextBlock x:Name="statusDetail" Text="status update goes here"/>
+                    
+                </StackPanel>
+
             </Grid>
             
         </Expander>
 
         <Expander Header="Shelved"
+                  x:Name="expShelved"
                   Grid.Row="1"
                   Margin="5"
                   IsExpanded="False"
@@ -68,13 +78,29 @@
 
                 <ListView x:Name="lvSynergyV5ShelvedLists"
                       Margin="5"
-                      SelectionChanged="lvSynergyV5Lists_SelectionChanged"/>
+                      SelectionChanged="lvSynergyV5ShelvedLists_SelectionChanged">
+
+                    <ListView.ContextMenu>
+
+                        <ContextMenu Name="cmShelvedLists"
+                                     StaysOpen="True"
+                                     Background="WhiteSmoke">
+
+                            <MenuItem Header="Activate Selected"
+                              Click="MenuItemActivateSelected_Click"/>
+
+                        </ContextMenu>
+
+                    </ListView.ContextMenu>
+
+                </ListView>
 
             </Grid>
 
         </Expander>
 
         <Expander Header="Active"
+                  x:Name="expActive"
                   Grid.Row="2"
                   Margin="5"
                   IsExpanded="True"
@@ -93,11 +119,26 @@
                     <ColumnDefinition/>
                 </Grid.ColumnDefinitions>
 
-                <ListView x:Name="lvSynergyV5Lists"
+                <ListView x:Name="lvSynergyV5ActiveLists"
                       Grid.Row="0"
                       Grid.ColumnSpan="2"
                       Margin="5"
-                      SelectionChanged="lvSynergyV5Lists_SelectionChanged"/>
+                      SelectionChanged="lvSynergyV5Lists_SelectionChanged">
+
+                    <ListView.ContextMenu>
+                        
+                        <ContextMenu Name="cmActiveLists"
+                                     StaysOpen="True"
+                                     Background="WhiteSmoke">
+                            
+                            <MenuItem Header="Shelve Selected"
+                              Click="MenuItemShelveSelected_Click"/>
+                            
+                        </ContextMenu>
+                        
+                    </ListView.ContextMenu>
+
+                </ListView>
 
                 <TextBox x:Name="txtListNameEntry"
                      Grid.Row="1"

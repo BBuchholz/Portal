@@ -657,11 +657,6 @@ namespace NineWorldsDeep.Synergy
 
         private async void AsyncMenuItemImportSynergyV5_Click(object sender, RoutedEventArgs e)
         {
-            //NEEDS TO LOAD MULTIPLE PATHS FROM SYNC ROOT FOLDERS
-            //string path = //for testing
-            //    "C:/NWD-SYNC/phone/NWD/xml/outgoing/20161208003726-nwd-synergy-v5.xml"; 
-            //    //UI.Prompt.ForXmlFileLoad(Configuration.SyncFolder());
-
             var allPaths = Configuration.GetSynergyV5XmlImportPaths();
             var count = 0;
             var total = allPaths.Count();

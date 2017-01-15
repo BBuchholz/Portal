@@ -186,10 +186,16 @@ namespace NineWorldsDeep.Tapestry
                         break;
 
                     case TapestryNodeType.SynergyV5List:
-
+                        
                         SetVisible(ccSynergyV5ListNode);
                         SynergyV5ListNode listNode = (SynergyV5ListNode)node;
                         synergyV5ListDisplay.Display(listNode);
+                        break;
+
+                    case TapestryNodeType.NullSynergyV5List:
+                        
+                        SetVisible(ccSynergyV5ListNode);
+                        synergyV5ListDisplay.Display((SynergyV5ListNode)node);
                         break;
 
                     case TapestryNodeType.Chord:

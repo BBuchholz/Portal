@@ -1,4 +1,5 @@
-﻿using System;
+﻿using NineWorldsDeep.Core;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -131,6 +132,16 @@ namespace NineWorldsDeep.Synergy.V5
                     ShelvedAt = newShelvedAt;
                 }
             }
+        }
+
+        public void Shelve()
+        {
+            SetTimeStamps(null, TimeStamp.NowUTC());
+        }
+
+        public void Activate()
+        {
+            SetTimeStamps(TimeStamp.NowUTC(), null);
         }
     }
 }

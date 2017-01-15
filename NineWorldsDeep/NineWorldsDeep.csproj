@@ -373,6 +373,7 @@
     <Compile Include="Tapestry\Nodes\LocalConfigNode.cs" />
     <Compile Include="Tapestry\Nodes\MediaMasterNode.cs" />
     <Compile Include="Tapestry\Nodes\NullClusterNode.cs" />
+    <Compile Include="Tapestry\Nodes\NullSynergyV5ListNode.cs" />
     <Compile Include="Tapestry\Nodes\StudioKeyboardNode.cs" />
     <Compile Include="Tapestry\Nodes\ArpaBetNode.cs" />
     <Compile Include="Tapestry\Nodes\StudioLyricsNode.cs" />

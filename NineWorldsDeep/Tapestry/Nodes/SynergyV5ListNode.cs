@@ -20,6 +20,12 @@ namespace NineWorldsDeep.Tapestry.Nodes
         {
             List = lst;
         }
+                
+        protected SynergyV5ListNode()
+            : base("SynergyV5List/NULL")
+        {
+            List = null;
+        }
 
         public SynergyV5List List { get; private set; }
 
