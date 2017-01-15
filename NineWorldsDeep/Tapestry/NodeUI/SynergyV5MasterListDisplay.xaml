@@ -55,7 +55,7 @@
 
                 <StackPanel Grid.Row="5"
                             VerticalAlignment="Bottom"
-                            HorizontalAlignment="Center"
+                            HorizontalAlignment="Left"
                             Grid.ColumnSpan="3">
                     
                     <TextBlock x:Name="statusDetail" Text="status update goes here"/>

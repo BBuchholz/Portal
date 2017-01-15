@@ -170,11 +170,7 @@ namespace NineWorldsDeep.Warehouse
                 
                 syncDirectionProcessingInProgress = false;
             }
-
-            
-
-            
-
+                        
             ProcessActionDefault();
         }
 
@@ -195,8 +191,16 @@ namespace NineWorldsDeep.Warehouse
                     if (sd == SyncDirection.Import &&
                         string.IsNullOrWhiteSpace(si.ExtTags) &&
                         chkOverrideDefaultAction.IsChecked != true)
-                    {
-                        si.SyncAction = SyncAction.Copy;
+                    {   
+                        //midi files always move, used for exports from tablet software
+                        if(si.ExtPath.EndsWith(".mid", StringComparison.CurrentCultureIgnoreCase)){
+
+                            si.SyncAction = SyncAction.Move;
+                        }
+                        else
+                        {
+                            si.SyncAction = SyncAction.Copy;
+                        }
                     }
                 }
             }
