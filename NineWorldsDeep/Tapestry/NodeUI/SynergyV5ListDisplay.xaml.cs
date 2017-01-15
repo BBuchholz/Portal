@@ -40,10 +40,11 @@ namespace NineWorldsDeep.Tapestry.NodeUI
         {
             List<string> statuses = new List<string>();
 
-            statuses.Add(SynergyV5ListItem.LIST_ITEM_STATUS_PERMANENT);
+            statuses.Add(SynergyV5ListItem.LIST_ITEM_STATUS_PERMANENT);            
             statuses.Add(SynergyV5ToDo.TO_DO_STATUS_ACTIVATED);
             statuses.Add(SynergyV5ToDo.TO_DO_STATUS_ARCHIVED);
             statuses.Add(SynergyV5ToDo.TO_DO_STATUS_COMPLETED);
+            statuses.Add(SynergyV5ToDo.TO_DO_STATUS_INDETERMINATE);
             statuses.Add(STATUS_ALL);
 
             cmbItemStatusFilter.ItemsSource = null;
@@ -101,7 +102,7 @@ namespace NineWorldsDeep.Tapestry.NodeUI
 
             if (synLst != null)
             {
-                synLst.Save(db); //syncs with db, loads/merges
+                synLst.Sync(db); //syncs with db, loads/merges
 
                 tbListName.Text = synLst.ListName;
                 tbListStatus.Text = synLst.Status;
@@ -177,7 +178,7 @@ namespace NineWorldsDeep.Tapestry.NodeUI
                     sli.Activate();
                 }
 
-                this.listNode.List.Save(db);
+                this.listNode.List.Sync(db);
 
                 Refresh();
             }
@@ -213,7 +214,7 @@ namespace NineWorldsDeep.Tapestry.NodeUI
                     sli.Complete();
                 }
 
-                this.listNode.List.Save(db);
+                this.listNode.List.Sync(db);
 
                 Refresh();
             }            
@@ -249,7 +250,7 @@ namespace NineWorldsDeep.Tapestry.NodeUI
                     sli.Archive();
                 }
 
-                this.listNode.List.Save(db);
+                this.listNode.List.Sync(db);
 
                 Refresh();
             }
@@ -265,7 +266,7 @@ namespace NineWorldsDeep.Tapestry.NodeUI
                 if(CurrentList != null)
                 {
                     CurrentList.Add(0, new SynergyV5ListItem(itemValue));
-                    CurrentList.Save(db);
+                    CurrentList.Sync(db);
                     Refresh();
 
                     txtListItemValueEntry.Text = "";

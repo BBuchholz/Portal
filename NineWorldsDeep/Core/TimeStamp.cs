@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using NineWorldsDeep.Synergy.V5;
+using System.Text.RegularExpressions;
 
 namespace NineWorldsDeep.Core
 {
@@ -52,6 +54,37 @@ namespace NineWorldsDeep.Core
             }
 
             return date;
+        }
+
+        public static bool IsTimeStampedList_YYYYMMDD(SynergyV5List synergyV5List)
+        {
+            return ContainsTimeStamp_YYYYMMDD(synergyV5List.ListName);
+        }
+
+        public static bool ContainsTimeStamp_YYYYMMDD(string listName)
+        {
+            return ExtractTimeStamp_YYYYMMDD(listName) != null;
+        }
+
+        public static string StripTimeStamp_YYYYMMDD(string listName)
+        {
+            string timeStamp = ExtractTimeStamp_YYYYMMDD(listName);
+
+            timeStamp += "-";
+
+            return listName.Replace(timeStamp, "");
+        }
+
+        private static string ExtractTimeStamp_YYYYMMDD(string listName)
+        {
+            Regex r = new Regex(@"\d{8}");
+            Match m = r.Match(listName);
+            if (m.Success)
+            {
+                return m.Value;
+            }
+
+            return null;
         }
     }
 }

@@ -53,8 +53,31 @@ namespace NineWorldsDeep.Synergy.V5
             ListItems = new List<SynergyV5ListItem>();
         }
 
-        public void Save(Db.Sqlite.SynergyV5SubsetDb db)
-        {            
+        public void Sync(Db.Sqlite.SynergyV5SubsetDb db)
+        {
+            //from gauntlet
+            if (TimeStamp.IsTimeStampedList_YYYYMMDD(this))
+            {
+
+                //load if not
+                db.Sync(this);
+
+                Shelve();
+
+                db.Sync(this);
+
+                ListId = -1;
+                ListName = TimeStamp.StripTimeStamp_YYYYMMDD(ListName);
+
+                foreach (SynergyV5ListItem sli in ListItems)
+                {
+
+                    sli.ClearIds();
+                }
+
+                Activate();
+            }
+
             db.Sync(this);
         }
 

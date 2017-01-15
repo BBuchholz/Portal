@@ -89,6 +89,12 @@ namespace NineWorldsDeep.Synergy.V5
             }
         }
 
+        internal void ClearIds()
+        {
+            this.ItemId = -1;
+            this.ListItemId = -1;
+        }
+
         internal void Activate()
         {
             if(ToDo == null)

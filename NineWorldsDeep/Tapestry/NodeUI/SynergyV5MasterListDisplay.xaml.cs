@@ -49,8 +49,20 @@ namespace NineWorldsDeep.Tapestry.NodeUI
         {
             List<SynergyV5ListNode> activeLists =
                 new List<SynergyV5ListNode>();
-                        
-            foreach(string listName in db.GetAllActiveListNames())
+
+            //clean listNames of timestamps
+            foreach (string listName in db.GetAllActiveListNames())
+            {
+                if (TimeStamp.ContainsTimeStamp_YYYYMMDD(listName))
+                {
+                    //create and sync (will handle shelving, renaming, etc.
+                    SynergyV5List synLst = new SynergyV5List(listName);
+
+                    synLst.Sync(db);
+                }
+            }
+
+            foreach (string listName in db.GetAllActiveListNames())
             {
                 activeLists.Add(new SynergyV5ListNode(listName));
             }
@@ -142,7 +154,7 @@ namespace NineWorldsDeep.Tapestry.NodeUI
             if (!string.IsNullOrWhiteSpace(listName))
             {
                 SynergyV5List synLst = new SynergyV5List(listName);
-                synLst.Save(db);
+                synLst.Sync(db);
 
                 Load();
 
@@ -324,7 +336,7 @@ namespace NineWorldsDeep.Tapestry.NodeUI
             {
                 sl.Shelve();
 
-                sl.Save(db);
+                sl.Sync(db);
             }
 
             ExpandBothLists();
@@ -341,7 +353,7 @@ namespace NineWorldsDeep.Tapestry.NodeUI
             {
                 sl.Activate();
 
-                sl.Save(db);
+                sl.Sync(db);
             }
 
             ExpandBothLists();
