@@ -27,7 +27,7 @@
     <UpdatePeriodically>false</UpdatePeriodically>
     <UpdateRequired>false</UpdateRequired>
     <MapFileExtensions>true</MapFileExtensions>
-    <ApplicationRevision>68</ApplicationRevision>
+    <ApplicationRevision>69</ApplicationRevision>
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <PublishWizardCompleted>true</PublishWizardCompleted>
@@ -190,6 +190,9 @@
     </Compile>
     <Compile Include="Hierophant\HierophantMainWindow.xaml.cs">
       <DependentUpon>HierophantMainWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Hierophant\HierophantTreeOfLife.xaml.cs">
+      <DependentUpon>HierophantTreeOfLife.xaml</DependentUpon>
     </Compile>
     <Compile Include="Hierophant\KabbalisticPath.cs" />
     <Compile Include="Hierophant\Sephirah.cs" />
@@ -370,6 +373,7 @@
     <Compile Include="Tapestry\Nodes\FileSystemNode.cs" />
     <Compile Include="Tapestry\Nodes\GrowthAreasNode.cs" />
     <Compile Include="Tapestry\Nodes\HashNode.cs" />
+    <Compile Include="Tapestry\Nodes\HierophantTreeOfLifeNode.cs" />
     <Compile Include="Tapestry\Nodes\LocalConfigNode.cs" />
     <Compile Include="Tapestry\Nodes\MediaMasterNode.cs" />
     <Compile Include="Tapestry\Nodes\NullClusterNode.cs" />
@@ -419,6 +423,9 @@
     <Compile Include="Tapestry\NodeUI\ClusterRegistry.cs" />
     <Compile Include="Tapestry\NodeUI\FileDetails.xaml.cs">
       <DependentUpon>FileDetails.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Tapestry\NodeUI\HierophantTreeOfLifeDisplay.xaml.cs">
+      <DependentUpon>HierophantTreeOfLifeDisplay.xaml</DependentUpon>
     </Compile>
     <Compile Include="Tapestry\NodeUI\ImageNodeDisplay.xaml.cs">
       <DependentUpon>ImageNodeDisplay.xaml</DependentUpon>
@@ -520,6 +527,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Hierophant\HierophantMainWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Hierophant\HierophantTreeOfLife.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -652,6 +663,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Tapestry\NodeUI\FileDetails.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Tapestry\NodeUI\HierophantTreeOfLifeDisplay.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

@@ -1,5 +1,4 @@
-﻿using NineWorldsDeep.UI;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -17,21 +16,22 @@ using System.Windows.Shapes;
 namespace NineWorldsDeep.Hierophant
 {
     /// <summary>
-    /// Interaction logic for VisualKabbalisticTree.xaml
+    /// Interaction logic for HierophantTreeOfLife.xaml
     /// </summary>
-    public partial class VisualKabbalisticTree : UserControl
+    public partial class HierophantTreeOfLife : UserControl
     {
         private Dictionary<Ellipse, Sephirah> sephiroth =
             new Dictionary<Ellipse, Sephirah>();
         private List<KabbalisticPath> paths =
             new List<KabbalisticPath>();
 
-        public VisualKabbalisticTree()
+        public HierophantTreeOfLife()
         {
             InitializeComponent();
             IndexSephiroth();
             DrawPaths();
         }
+
 
         private void IndexSephiroth()
         {
@@ -86,7 +86,7 @@ namespace NineWorldsDeep.Hierophant
         {
             Point fromCenter = GetCenter(from);
             Point toCenter = GetCenter(to);
-            
+
             Line line = CreateCenterLine(fromCenter, toCenter);
             Line lineAbove = CreateOffsetLine(line, 10.0);
             Line lineBelow = CreateOffsetLine(line, -10.0);
@@ -117,9 +117,9 @@ namespace NineWorldsDeep.Hierophant
             //TODO: LICENSE NOTES
             //from: http://stackoverflow.com/questions/2825412/draw-a-parallel-line
 
-            double x1 = originalLine.X1, 
-                x2 = originalLine.X2, 
-                y1 = originalLine.Y1, 
+            double x1 = originalLine.X1,
+                x2 = originalLine.X2,
+                y1 = originalLine.Y1,
                 y2 = originalLine.Y2;
 
             var L = Math.Sqrt((x1 - x2) * (x1 - x2) + (y1 - y2) * (y1 - y2));
@@ -204,7 +204,7 @@ namespace NineWorldsDeep.Hierophant
         private void Sephirah_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
             HandleSephirothClick(sender);
-            e.Handled = true; 
+            e.Handled = true;
         }
 
         public event EventHandler SephirahClicked;
@@ -212,12 +212,12 @@ namespace NineWorldsDeep.Hierophant
         private void HandleSephirothClick(object sender)
         {
             Ellipse clicked = (Ellipse)sender;
-            
-            if(clicked != null)
+
+            if (clicked != null)
             {
                 if (sephiroth.ContainsKey(clicked))
                 {
-                    if(SephirahClicked != null)
+                    if (SephirahClicked != null)
                     {
                         SephirahClicked(sephiroth[clicked], new EventArgs());
                     }
@@ -230,7 +230,7 @@ namespace NineWorldsDeep.Hierophant
         private bool HandlePathClick()
         {
             //TODO: replace with raising event (see HandleSephirothClick())
-            Display.Message("path testing not implemented yet");
+            UI.Display.Message("path testing not implemented yet");
 
             // We need to store lines for paths in pairs, and use
             // this formula to determine which side of both lines
@@ -258,10 +258,10 @@ namespace NineWorldsDeep.Hierophant
 
         private void Canvas_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
-            Display.Message(paths[clickCountForTesting].Description);
+            UI.Display.Message(paths[clickCountForTesting].Description);
             clickCountForTesting++;
 
-            if(clickCountForTesting > 21)
+            if (clickCountForTesting > 21)
             {
                 clickCountForTesting = 0;
             }

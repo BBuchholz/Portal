@@ -129,6 +129,7 @@ namespace NineWorldsDeep.Tapestry
             contentControls.Add(ccSynergyV5MasterListNode);
             contentControls.Add(ccSynergyV5ListNode);
             contentControls.Add(ccMediaMasterNode);
+            contentControls.Add(ccHierophantTreeOfLifeNode);
         }
 
         private void ResolveContentControl(TapestryNode node)
@@ -178,6 +179,11 @@ namespace NineWorldsDeep.Tapestry
                     case TapestryNodeType.SynergyV5MasterList:
 
                         SetVisible(ccSynergyV5MasterListNode);
+                        break;
+
+                    case TapestryNodeType.HierophantTreeOfLife:
+
+                        SetVisible(ccHierophantTreeOfLifeNode);
                         break;
 
                     case TapestryNodeType.MediaMaster:

@@ -6,13 +6,13 @@ namespace NineWorldsDeep.FragmentCloud
     internal class HierophantNode : Tapestry.TapestryNode
     {
         public HierophantNode()
-            : base("Hierophant")
+            : base("Hierophant/previous")
         {
         }
 
         public override string GetShortName()
         {
-            return "Hierophant";
+            return "Hierophant (previous)";
         }
 
         public override bool Parallels(Tapestry.TapestryNode nd)

@@ -64,6 +64,11 @@
                         Visibility="Collapsed">
             <nodeUI:MediaMasterDisplay x:Name="mediaMasterDisplay"/>
         </ContentControl>
+
+        <ContentControl x:Name="ccHierophantTreeOfLifeNode"
+                        Visibility="Collapsed">
+            <nodeUI:HierophantTreeOfLifeDisplay x:Name="hierophantTreeOfLifeDisplay"/>
+        </ContentControl>
         
     </Grid>
 </UserControl>
