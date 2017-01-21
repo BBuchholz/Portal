@@ -1,12 +1,15 @@
-﻿using NineWorldsDeep.Core;
+﻿using NineWorldsDeep.Mnemosyne.V5;
+using NineWorldsDeep.Core;
 using NineWorldsDeep.Db.Sqlite;
 using NineWorldsDeep.Model;
 using NineWorldsDeep.Tapestry.Nodes;
+using NineWorldsDeep.Warehouse;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -29,9 +32,15 @@ namespace NineWorldsDeep.Tapestry.NodeUI
         MultiMap<string, string> fileSystemExtensionToPaths;
         MultiMap<string, string> dataBaseExtensionToPaths;
 
+        //async related 
+        private readonly SynchronizationContext syncContext;
+        private DateTime previousTime = DateTime.Now;
+
         public MediaMasterDisplay()
         {
             InitializeComponent();
+            syncContext = SynchronizationContext.Current;
+
             db = new MediaV5SubsetDb();
             LoadMediaDevices();
         }
@@ -408,9 +417,79 @@ namespace NineWorldsDeep.Tapestry.NodeUI
             return null;
         }
 
-        private void btnImportV4TagsToV5_Click(object sender, RoutedEventArgs e)
+        private async void btnImportV4TagsToV5_Click(object sender, RoutedEventArgs e)
         {
-            //do this async with status updates, see Synergy V5 Utilities expander
+            //get V4c PathTagLinks
+            DbAdapterV4c v4cDb = new DbAdapterV4c();
+
+            await Task.Run(() =>
+            {
+                StatusDetailUpdate("retrieving PathTagLinks...");
+
+                var pathTagLinks = v4cDb.GetPathTagLinks("");
+                
+                int pathTagLinksCount = 0;
+                int pathTagLinksTotal = pathTagLinks.Count;
+
+                MultiMap<string, string> pathToTags = new MultiMap<string, string>();
+                HashSet<string> allTags = new HashSet<string>();
+
+                foreach(var link in pathTagLinks)
+                {
+                    pathTagLinksCount++;
+
+                    StatusDetailUpdate("Sorting links: processing link " +
+                        pathTagLinksCount + " of " + pathTagLinksTotal);
+
+                    pathToTags.Add(link.PathValue, link.TagValue);
+                    allTags.Add(link.TagValue);
+                }
+
+                StatusDetailUpdate("Ensuring media tags...");
+                db.EnsureMediaTags(allTags);
+
+                StatusDetailUpdate("Indexing media tags...");
+                Dictionary<string, Tag> tagsByTagValue = db.GetAllMediaTags();
+
+                Dictionary<string, string> pathToHash =
+                    new Dictionary<string, string>();
+
+                int localMediaDeviceId = Configuration.DB.MediaSubset.LocalDeviceId;
+
+                foreach(var path in pathToTags.Keys)
+                {
+                    StatusDetailUpdate("hashing and storing path: " + path);
+                    string hash = Hashes.Sha1ForFilePath(path);
+                    db.StoreHashForPath(localMediaDeviceId, path, hash);
+                }
+
+                StatusDetailUpdate("indexing media by hash...");
+                Dictionary<string, Media> hashToMedia =
+                    db.GetAllMedia();
+
+                asdf;
+            });
+
+            tbStatus.Text = "finished.";
+        }
+
+        private void StatusDetailUpdate(string text)
+        {
+            var currentTime = DateTime.Now;
+
+            if ((DateTime.Now - previousTime).Milliseconds <= 50) return;
+
+            syncContext.Post(new SendOrPostCallback(s =>
+            {
+                tbStatus.Text = (string)s;
+            }), text);
+
+            previousTime = currentTime;
+        }
+
+        private void btnPurgeTimeStampedLists_Click(object sender, RoutedEventArgs e)
+        {
+            UI.Display.Message("IN PROGRESS: should delete all timestamped lists and all list item junctions for those list ids...");
         }
     }
 }

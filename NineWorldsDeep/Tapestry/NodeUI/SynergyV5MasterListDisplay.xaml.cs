@@ -244,11 +244,9 @@ namespace NineWorldsDeep.Tapestry.NodeUI
 
             statusDetail.Text = "finished.";
         }
-        
+
         private void StatusDetailUpdate(string text)
         {
-            //may need dispatcher async
-
             var currentTime = DateTime.Now;
 
             if ((DateTime.Now - previousTime).Milliseconds <= 50) return;

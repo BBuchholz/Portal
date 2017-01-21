@@ -24,7 +24,7 @@ namespace NineWorldsDeep.Tagger.V2
         private bool pendingChanges = false;
         private string lastLoadedPath;
 
-        private NwdDb db = null;
+        //private NwdDb db = null;
         private Db.Sqlite.DbAdapterSwitch dbCore = null;
         private TagMatrix tagMatrix = new TagMatrix();
         private List<FileElementActionSubscriber> selectionChangedListeners =
@@ -86,30 +86,30 @@ namespace NineWorldsDeep.Tagger.V2
             }
         }
         
-        public void RegisterDb(NwdDb nwdDb)
-        {
-            this.db = nwdDb;
-        }
+        //public void RegisterDb(NwdDb nwdDb)
+        //{
+        //    this.db = nwdDb;
+        //}
 
-        public void LoadFileElementsFromDb()
-        {
-            if (db != null)
-            {
-                Add(db.GetFileElementsFromDb());
-            }
-        }
+        //public void LoadFileElementsFromDb()
+        //{
+        //    if (db != null)
+        //    {
+        //        Add(db.GetFileElementsFromDb());
+        //    }
+        //}
 
-        public void EnsureFileElementsInDb()
-        {
-            if (db != null)
-            {
-                List<FileElement> inputList = ToFileElementList(tagMatrix.GetFilePaths());
-                List<FileElement> dbList = db.GetFileElementsFromDb();
-                List<FileElement> toBeAdded = SyncTools.CalculateElementsToBeAdded(inputList, dbList);
-                db.AddFileElementsToDb(toBeAdded);
-                tbStatus.Text = toBeAdded.Count + " FileElement(s) added.";
-            }
-        }
+        //public void EnsureFileElementsInDb()
+        //{
+        //    if (db != null)
+        //    {
+        //        List<FileElement> inputList = ToFileElementList(tagMatrix.GetFilePaths());
+        //        List<FileElement> dbList = db.GetFileElementsFromDb();
+        //        List<FileElement> toBeAdded = SyncTools.CalculateElementsToBeAdded(inputList, dbList);
+        //        db.AddFileElementsToDb(toBeAdded);
+        //        tbStatus.Text = toBeAdded.Count + " FileElement(s) added.";
+        //    }
+        //}
 
         public void Add(List<FileElement> lst)
         {

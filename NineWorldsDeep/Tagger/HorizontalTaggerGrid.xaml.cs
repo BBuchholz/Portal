@@ -59,11 +59,11 @@ namespace NineWorldsDeep.Tagger
             get { return btnStopAudio; }
         }
 
-        public void RegisterDb(NwdDb nwdDb)
-        {
-            //this.db = nwdDb;
-            mController.RegisterDb(nwdDb);
-        }
+        //public void RegisterDb(NwdDb nwdDb)
+        //{
+        //    //this.db = nwdDb;
+        //    mController.RegisterDb(nwdDb);
+        //}
 
         public void SetStatusForegroundColor(Brush b)
         {
@@ -139,29 +139,29 @@ namespace NineWorldsDeep.Tagger
             }
         }
 
-        public void LoadFileElementsFromDb()
-        {
-            //if(db != null)
-            //{
-            //    Add(db.GetFileElementsFromDb());
-            //}
+        //public void LoadFileElementsFromDb()
+        //{
+        //    //if(db != null)
+        //    //{
+        //    //    Add(db.GetFileElementsFromDb());
+        //    //}
 
-            mController.LoadFileElementsFromDb();
-        }
+        //    mController.LoadFileElementsFromDb();
+        //}
 
-        public void EnsureFileElementsInDb()
-        {
-            //if(db != null)
-            //{
-            //    List<FileElement> inputList = ToFileElementList(tagMatrix.GetFilePaths());
-            //    List<FileElement> dbList = db.GetFileElementsFromDb();
-            //    List<FileElement> toBeAdded = SyncTools.CalculateElementsToBeAdded(inputList, dbList);
-            //    db.AddFileElementsToDb(toBeAdded);
-            //    tbStatus.Text = toBeAdded.Count + " FileElement(s) added.";
-            //}
+        //public void EnsureFileElementsInDb()
+        //{
+        //    //if(db != null)
+        //    //{
+        //    //    List<FileElement> inputList = ToFileElementList(tagMatrix.GetFilePaths());
+        //    //    List<FileElement> dbList = db.GetFileElementsFromDb();
+        //    //    List<FileElement> toBeAdded = SyncTools.CalculateElementsToBeAdded(inputList, dbList);
+        //    //    db.AddFileElementsToDb(toBeAdded);
+        //    //    tbStatus.Text = toBeAdded.Count + " FileElement(s) added.";
+        //    //}
 
-            mController.EnsureFileElementsInDb();
-        }
+        //    mController.EnsureFileElementsInDb();
+        //}
 
         protected void HandleDoubleClick(object sender, MouseButtonEventArgs e)
         {

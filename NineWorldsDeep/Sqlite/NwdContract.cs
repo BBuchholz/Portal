@@ -35,13 +35,13 @@ namespace NineWorldsDeep.Sqlite
         public static string TABLE_SYNERGY_TO_DO = "SynergyToDo";
 
         public static string TABLE_CHORD_PROGRESSION = "ChordProgression";
-        
-        
+                
         public static string TABLE_MEDIA_DEVICE = "MediaDevice";
         public static string TABLE_MEDIA_ROOT = "MediaRoot";
         public static string TABLE_MEDIA_PATH = "MediaPath";
         public static string TABLE_MEDIA = "Media";
         public static string TABLE_MEDIA_DEVICE_PATH = "MediaDevicePath";
+        public static string TABLE_MEDIA_TAG = "MediaTag";
 
         //public static string TABLE_ = "";
         //public static string TABLE_ = "";
@@ -49,8 +49,7 @@ namespace NineWorldsDeep.Sqlite
         ////columns
         //public static string COLUMN_ = "";
         //public static string COLUMN_ = "";
-
-
+        
         #region "Synergy V5"
 
         public static string COLUMN_SYNERGY_LIST_ID = "SynergyListId";
@@ -92,6 +91,9 @@ namespace NineWorldsDeep.Sqlite
         public static string COLUMN_MEDIA_ID = "MediaId";
         public static string COLUMN_MEDIA_PATH_ID = "MediaPathId";
         public static string COLUMN_MEDIA_HASH = "MediaHash";
+        public static string COLUMN_MEDIA_TAG_ID = "MediaTagId";
+        public static string COLUMN_MEDIA_TAG_VALUE = "MediaTagValue";
+        public static string COLUMN_MEDIA_DESCRIPTION = "MediaDescription";
 
         //public static string COLUMN_SYNERGY_TO_DO_UPDATED_AT = "SynergyToDoUpdatedAt";
         //public static string COLUMN_SYNERGY_LIST_NAME = "SynergyListName";
@@ -203,6 +205,35 @@ namespace NineWorldsDeep.Sqlite
             "SELECT " + COLUMN_MEDIA_PATH_ID + " " +
             "FROM " + TABLE_MEDIA_PATH + " " +
             "WHERE " + COLUMN_MEDIA_PATH_VALUE + " = ?;";
+
+        internal static readonly string SELECT_MEDIA_TAG_ID_VALUE =
+
+            "SELECT " + COLUMN_MEDIA_TAG_ID + ", " + COLUMN_MEDIA_TAG_VALUE + " " +
+            "FROM " + TABLE_MEDIA_TAG + ";";
+
+        internal static readonly string INSERT_MEDIA_TAG_X =
+
+            "INSERT OR IGNORE INTO " + TABLE_MEDIA_TAG + " " +
+            "	(" + COLUMN_MEDIA_TAG_VALUE + ") " +
+            "VALUES " +
+            "	(?); ";
+
+        internal static readonly string SELECT_MEDIA_TAG_ID_FOR_VALUE_X =
+
+            "SELECT " + COLUMN_MEDIA_TAG_ID + "  " +
+            "FROM " + TABLE_MEDIA_TAG + " " +
+            "WHERE " + COLUMN_MEDIA_TAG_VALUE + " = ?; ";
+
+        internal static readonly string 
+            SELECT_MEDIA_WHERE_HASH_NOT_NULL_OR_WHITESPACE =
+
+            "SELECT " + COLUMN_MEDIA_ID + ",  " +
+            "	   " + COLUMN_MEDIA_FILE_NAME + ",  " +
+            "	   " + COLUMN_MEDIA_DESCRIPTION + ",  " +
+            "	   " + COLUMN_MEDIA_HASH + " " +
+            "FROM " + TABLE_MEDIA + " " +
+            "WHERE " + COLUMN_MEDIA_HASH + " IS NOT NULL AND trim(" + COLUMN_MEDIA_HASH + ", ' ') != ''; "
+;
 
         #endregion
     }

@@ -14,7 +14,6 @@
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
-
         <Expander Header="Utilites"
                   Grid.Row="0"
                   IsExpanded="False"
@@ -45,6 +44,13 @@
                         Margin="5"
                         Content="Import V4 Tags To V5"
                         Click="btnImportV4TagsToV5_Click"/>
+
+                <Button x:Name="btnPurgeTimeStampedLists"
+                        Grid.Row="2"
+                        Grid.Column="0"
+                        Margin="5"
+                        Content="Purge TimeStamped V5 Lists"
+                        Click="btnPurgeTimeStampedLists_Click"/>
 
                 <StackPanel Grid.Row="5"
                             VerticalAlignment="Bottom"

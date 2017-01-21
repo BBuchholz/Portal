@@ -1,4 +1,5 @@
 ﻿using NineWorldsDeep.Core;
+using NineWorldsDeep.Mnemosyne.V5;
 using NineWorldsDeep.Model;
 using NineWorldsDeep.Sqlite;
 using System;
@@ -471,6 +472,199 @@ namespace NineWorldsDeep.Db.Sqlite
             cmd.Parameters.Add(rootPathParam);
 
             cmd.ExecuteNonQuery();
+        }
+
+        internal void EnsureMediaTags(HashSet<string> tagValues)
+        {
+            using (var conn = new SQLiteConnection(
+                @"Data Source=" + Configuration.GetSqliteDbPath(DbName)))
+            {
+                conn.Open();
+
+                using (var cmd = new SQLiteCommand(conn))
+                {
+                    using (var transaction = conn.BeginTransaction())
+                    {
+                        foreach(string tag in tagValues)
+                        {
+                            EnsureMediaTag(tag, cmd);
+                        }
+
+                        transaction.Commit();
+                    }
+                }
+
+                conn.Close();
+            }
+        }
+
+        private int EnsureMediaTag(string tag, SQLiteCommand cmd)
+        {
+            InsertOrIgnoreMediaTag(tag, cmd);
+            return GetMediaTagId(tag, cmd);
+        }
+
+        private int GetMediaTagId(string tag, SQLiteCommand cmd)
+        {
+            int id = -1;
+
+            cmd.Parameters.Clear();
+            cmd.CommandText =
+                NwdContract.SELECT_MEDIA_TAG_ID_FOR_VALUE_X;
+
+            SQLiteParameter tagParam = new SQLiteParameter();
+            tagParam.Value = tag;
+            cmd.Parameters.Add(tagParam);
+
+            using (var rdr = cmd.ExecuteReader())
+            {
+                if (rdr.Read())
+                {
+                    id = rdr.GetInt32(0);
+                }
+            }
+
+            return id;
+        }
+
+        private void InsertOrIgnoreMediaTag(string tag, SQLiteCommand cmd)
+        {
+            cmd.Parameters.Clear();
+
+            cmd.CommandText =
+                NwdContract.INSERT_MEDIA_TAG_X;
+
+            SQLiteParameter tagParam = new SQLiteParameter();
+            tagParam.Value = tag;
+            cmd.Parameters.Add(tagParam);
+
+            cmd.ExecuteNonQuery();
+        }
+
+        internal Dictionary<string, Tag> GetAllMediaTags()
+        {
+            Dictionary<string, Tag> allTags =
+                new Dictionary<string, Tag>();
+
+            using (var conn = new SQLiteConnection(
+                @"Data Source=" + Configuration.GetSqliteDbPath(DbName)))
+            {
+                conn.Open();
+
+                using (var cmd = new SQLiteCommand(conn))
+                {
+                    using (var transaction = conn.BeginTransaction())
+                    {
+                        allTags = SelectMediaTags(cmd);
+
+                        transaction.Commit();
+                    }
+                }
+
+                conn.Close();
+            }
+
+            return allTags;
+        }
+
+        /// <summary>
+        /// gets a dictionary of all media keyed to hash
+        /// </summary>
+        /// <returns></returns>
+        internal Dictionary<string, Media> GetAllMedia()
+        {
+            Dictionary<string, Media> allMedia =
+                new Dictionary<string, Media>();
+
+            using (var conn = new SQLiteConnection(
+                @"Data Source=" + Configuration.GetSqliteDbPath(DbName)))
+            {
+                conn.Open();
+
+                using (var cmd = new SQLiteCommand(conn))
+                {
+                    using (var transaction = conn.BeginTransaction())
+                    {
+                        allMedia = SelectMediaByHash(cmd);
+
+                        transaction.Commit();
+                    }
+                }
+
+                conn.Close();
+            }
+
+            return allMedia;
+        }
+
+        /// <summary>
+        /// gets a dictionary of all media keyed to hash. media with null or empty hash values in the db will be excluded
+        /// </summary>
+        /// <returns></returns>
+        private Dictionary<string, Media> SelectMediaByHash(SQLiteCommand cmd)
+        {
+            Dictionary<string, Media> allMedia =
+                new Dictionary<string, Media>();
+
+            cmd.Parameters.Clear();
+            cmd.CommandText = 
+                NwdContract.SELECT_MEDIA_WHERE_HASH_NOT_NULL_OR_WHITESPACE;
+
+            using (var rdr = cmd.ExecuteReader())
+            {
+                while (rdr.Read())
+                {
+                    // query column indexes
+                    // 0 : MediaId
+                    // 1 : MediaFileName
+                    // 2 : MediaDescription
+                    // 3 : MediaHash
+
+                    int mediaId = rdr.GetInt32(0);
+                    string mediaFileName = DbV5Utils.GetNullableString(rdr, 1);
+                    string mediaDescription = DbV5Utils.GetNullableString(rdr, 2);
+                    string mediaHash = DbV5Utils.GetNullableString(rdr, 3);
+                    
+                    if (!string.IsNullOrWhiteSpace(mediaHash))
+                    {
+                        allMedia.Add(mediaHash, new Media
+                        {
+                            MediaId = mediaId,
+                            MediaFileName = mediaFileName,
+                            MediaDescription = mediaDescription,
+                            MediaHash = mediaHash
+                        });
+                    }
+                }
+            }
+
+            return allMedia;
+        }
+
+        private Dictionary<string, Tag> SelectMediaTags(SQLiteCommand cmd)
+        {
+            Dictionary<string, Tag> allTags =
+                new Dictionary<string, Tag>();
+
+            cmd.Parameters.Clear();
+            cmd.CommandText = NwdContract.SELECT_MEDIA_TAG_ID_VALUE;
+
+            using (var rdr = cmd.ExecuteReader())
+            {
+                while (rdr.Read())
+                {
+                    int tagId = rdr.GetInt32(0);
+                    string tagValue = rdr.GetString(1);
+
+                    allTags.Add(tagValue, new Tag
+                    {
+                        TagId = tagId,
+                        TagValue = tagValue
+                    });
+                }
+            }
+
+            return allTags;
         }
 
         private void InsertPathsForDeviceId(
