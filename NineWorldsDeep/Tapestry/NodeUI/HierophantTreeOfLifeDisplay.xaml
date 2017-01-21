@@ -23,7 +23,6 @@
                   Expanded="Expander_Expanded"
                   Collapsed="Expander_Collapsed">
 
-
             <Grid>
 
                 <Grid.ColumnDefinitions>

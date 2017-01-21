@@ -6,35 +6,96 @@
              xmlns:local="clr-namespace:NineWorldsDeep.Tapestry.NodeUI"
              mc:Ignorable="d" 
              d:DesignHeight="600" d:DesignWidth="300">
+
     <Grid>
 
         <Grid.RowDefinitions>
             <RowDefinition Height="40"/>
-            <RowDefinition Height="40"/>
-            <RowDefinition Height="40"/>
-            <RowDefinition Height="40"/>
-            <RowDefinition/>
-            <RowDefinition Height="40"/>
+            <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="4*"/>
-            <ColumnDefinition/>
-        </Grid.ColumnDefinitions>
 
-        <ComboBox x:Name="mMediaDevicesComboBox"
+        <Expander Header="Utilites"
+                  Grid.Row="0"
+                  IsExpanded="False"
+                  Margin="5"
+                  Expanded="Expander_Expanded"
+                  Collapsed="Expander_Collapsed">
+
+            <Grid>
+
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+
+                <Grid.RowDefinitions>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+
+                <Button x:Name="btnImportV4TagsToV5"
+                        Grid.Row="1"
+                        Grid.Column="0"
+                        Margin="5"
+                        Content="Import V4 Tags To V5"
+                        Click="btnImportV4TagsToV5_Click"/>
+
+                <StackPanel Grid.Row="5"
+                            VerticalAlignment="Bottom"
+                            HorizontalAlignment="Left"
+                            Grid.ColumnSpan="3">
+
+                    <TextBlock x:Name="tbStatus" Text="status update goes here"/>
+
+                </StackPanel>
+
+            </Grid>
+
+        </Expander>
+
+        <Expander Header="Media"
+                  x:Name="expMedia"
+                  Grid.Row="1"
+                  Margin="5"
+                  IsExpanded="True"
+                  Expanded="Expander_Expanded"
+                  Collapsed="Expander_Collapsed">
+
+            <Grid>
+
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="40"/>
+                    <RowDefinition Height="40"/>
+                    <RowDefinition Height="40"/>
+                    <RowDefinition Height="40"/>
+                    <RowDefinition/>
+                    <RowDefinition Height="40"/>
+                </Grid.RowDefinitions>
+
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="4*"/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+
+                <ComboBox x:Name="mMediaDevicesComboBox"
                   Margin="5"
                   Grid.Row="0"
                   Grid.Column="0"
                   SelectionChanged="mMediaDevicesComboBox_SelectionChanged"/>
 
-        <ComboBox x:Name="mMediaRootsComboBox"
+                <ComboBox x:Name="mMediaRootsComboBox"
                   Margin="5"
                   Grid.Row="1"
                   Grid.Column="0"
                   SelectionChanged="mMediaRootsComboBox_SelectionChanged"/>
 
-        <Button x:Name="mAddMediaRootButton"
+                <Button x:Name="mAddMediaRootButton"
                 Grid.Row="1"
                 Grid.Column="1"
                 Margin="5"
@@ -43,33 +104,33 @@
                 VerticalContentAlignment="Center"
                 HorizontalContentAlignment="Center"/>
 
-        <StackPanel Orientation="Horizontal"
+                <StackPanel Orientation="Horizontal"
                     Grid.Row="2"
                     HorizontalAlignment="Center"
                     VerticalAlignment="Center">
-            
-            <RadioButton x:Name="mFileSystemRadioButton" 
+
+                    <RadioButton x:Name="mFileSystemRadioButton" 
                          Margin="5" 
                          GroupName="SourceTarget" 
                          Content="FileSystem" 
                          IsChecked="True" 
                          Checked="mFileSourceRadioButton_Checked"/>
-            
-            <RadioButton x:Name="mDataBaseRadioButton" 
+
+                    <RadioButton x:Name="mDataBaseRadioButton" 
                          Margin="5" 
                          GroupName="SourceTarget" 
                          Content="DataBase" 
                          Checked="mFileSourceRadioButton_Checked"/>
-            
-            <RadioButton x:Name="mDiffRadioButton" 
+
+                    <RadioButton x:Name="mDiffRadioButton" 
                          Margin="5" 
                          GroupName="SourceTarget" 
                          Content="Diff"
                          Checked="mFileSourceRadioButton_Checked"/>
-            
-        </StackPanel>
 
-        <Button x:Name="mUpdateDbFromFileSystemButton"
+                </StackPanel>
+
+                <Button x:Name="mUpdateDbFromFileSystemButton"
                 Grid.Row="2"
                 Grid.Column="1"
                 Margin="5"
@@ -78,29 +139,34 @@
                 VerticalContentAlignment="Center"
                 HorizontalContentAlignment="Center"/>
 
-        <ComboBox x:Name="mFileTypesComboBox"
+                <ComboBox x:Name="mFileTypesComboBox"
                   Margin="5"
                   Grid.Row="3"
                   Grid.Column="0"
                   SelectionChanged="mFileTypesComboBox_SelectionChanged"/>
 
-        <ListView x:Name="mFilePathsListView"
+                <ListView x:Name="mFilePathsListView"
                   Grid.Row="4"
                   Grid.Column="0"
                   Margin="5"
                   SelectionChanged="mFilePathsListView_SelectionChanged"/>
 
-        <StatusBar Grid.Row="5"
+                <StatusBar Grid.Row="5"
                    Grid.ColumnSpan="2"
                    Margin="5">
-            
-            <StatusBarItem>
-                
-                <TextBlock Name="mStatusTextBlock" />
-                
-            </StatusBarItem>
-            
-        </StatusBar>
-        
+
+                    <StatusBarItem>
+
+                        <TextBlock Name="mStatusTextBlock" />
+
+                    </StatusBarItem>
+
+                </StatusBar>
+
+            </Grid>
+
+        </Expander>
+
     </Grid>
+    
 </UserControl>
