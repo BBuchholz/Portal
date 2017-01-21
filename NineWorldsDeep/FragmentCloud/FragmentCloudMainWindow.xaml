@@ -5,10 +5,10 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:NineWorldsDeep.FragmentCloud"
         mc:Ignorable="d"
-        Title="FragmentCloudMainWindow" Height="700" Width="700"
-        KeyDown="Window_KeyDown">
+        Title="FragmentCloudMainWindow" Height="700" Width="700">
+    <!--KeyDown="Window_KeyDown">-->
     <Grid>
-        <Grid.RowDefinitions>
+        <!--<Grid.RowDefinitions>
             <RowDefinition Height="30"/>
             <RowDefinition/>
         </Grid.RowDefinitions>
@@ -26,6 +26,6 @@
         <ContentControl x:Name="ccLeaf"
                         Grid.Row="1">
             <local:FragmentNodeDisplay x:Name="nodeDisplay" />
-        </ContentControl>
+        </ContentControl>-->
     </Grid>
 </Window>

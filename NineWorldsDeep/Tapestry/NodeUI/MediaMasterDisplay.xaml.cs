@@ -1,6 +1,7 @@
 ﻿using NineWorldsDeep.Core;
 using NineWorldsDeep.Db.Sqlite;
 using NineWorldsDeep.Model;
+using NineWorldsDeep.Tapestry.Nodes;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -282,23 +283,6 @@ namespace NineWorldsDeep.Tapestry.NodeUI
             }
         }
 
-        private class ExtensionEntry
-        {
-            public string Extension { get; private set; }
-            public int Count { get; private set; }
-
-            public ExtensionEntry(string ext, int count)
-            {
-                Extension = ext;
-                Count = count;
-            }
-
-            public override string ToString()
-            {
-                return Extension + " (" + Count + ")";
-            }
-        }
-
         private void mUpdateDbFromFileSystemButton_Click(object sender, RoutedEventArgs e)
         {
             if(fileSystemExtensionToPaths != null && SelectedMediaDevice != null)
@@ -326,6 +310,60 @@ namespace NineWorldsDeep.Tapestry.NodeUI
         private void mFileSourceRadioButton_Checked(object sender, RoutedEventArgs e)
         {
             ProcessSelectedMediaRoot();    
+        }
+
+        private class ExtensionEntry
+        {
+            public string Extension { get; private set; }
+            public int Count { get; private set; }
+
+            public ExtensionEntry(string ext, int count)
+            {
+                Extension = ext;
+                Count = count;
+            }
+
+            public override string ToString()
+            {
+                return Extension + " (" + Count + ")";
+            }
+        }
+
+        private void mFilePathsListView_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            List<string> selectedPaths = mFilePathsListView.SelectedItems.Cast<string>().ToList();
+
+            if(selectedPaths.Count > 0)
+            {
+                //display first selected
+                string firstPath = selectedPaths[0];
+
+                if (File.Exists(firstPath) && SelectedMediaDevice != null)
+                {
+                    PathSelectedEventArgs args =
+                        new PathSelectedEventArgs(
+                            new FileSystemNode(firstPath, true, SelectedMediaDevice.MediaDeviceId));
+
+                    OnPathSelected(args);
+                }
+            }
+        }
+
+        protected virtual void OnPathSelected(PathSelectedEventArgs args)
+        {
+            PathSelected?.Invoke(this, args);
+        }
+
+        public event EventHandler<PathSelectedEventArgs> PathSelected;
+
+        public class PathSelectedEventArgs
+        {
+            public PathSelectedEventArgs(FileSystemNode f)
+            {
+                FileSystemNode = f;
+            }
+
+            public FileSystemNode FileSystemNode { get; private set; }
         }
     }
 }

@@ -6,11 +6,11 @@
         xmlns:local="clr-namespace:NineWorldsDeep.Tapestry"
         xmlns:frgCloud="clr-namespace:NineWorldsDeep.FragmentCloud"
         mc:Ignorable="d"
-        Title="TapestryNodeBrowser" Height="700" Width="700"
-        KeyDown="Window_KeyDown"
-        WindowState="Maximized">
+        Title="TapestryNodeBrowser" Height="700" Width="700">
+    <!--KeyDown="Window_KeyDown"
+        WindowState="Maximized">-->
     <Grid>
-        <Grid.RowDefinitions>
+        <!--<Grid.RowDefinitions>
             <RowDefinition Height="30"/>
             <RowDefinition/>
         </Grid.RowDefinitions>
@@ -28,6 +28,6 @@
         <ContentControl x:Name="ccLeaf"
                         Grid.Row="1">
             <frgCloud:FragmentNodeDisplay x:Name="nodeDisplay" />
-        </ContentControl>
+        </ContentControl>-->
     </Grid>
 </Window>

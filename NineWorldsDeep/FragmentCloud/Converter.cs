@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 
 namespace NineWorldsDeep.FragmentCloud
@@ -7,6 +8,11 @@ namespace NineWorldsDeep.FragmentCloud
     {
         public static string NwdUriToFileSystemPath(string uri)
         {
+            if (File.Exists(uri) || Directory.Exists(uri))
+            {
+                return uri;
+            }
+
             Stack<string> nodeStack = UriToNodeNameStack(uri);
 
             string path = "";

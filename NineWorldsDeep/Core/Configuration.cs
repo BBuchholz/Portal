@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using NineWorldsDeep.Parser;
 using System.Text.RegularExpressions;
 using NineWorldsDeep.Warehouse;
+using NineWorldsDeep.Db.Sqlite;
 
 namespace NineWorldsDeep.Core
 {
@@ -14,8 +15,12 @@ namespace NineWorldsDeep.Core
     {
         private static bool _testMode = false;
         
+        public static bool GlobalNotes { get; internal set; }
+        public static DatabaseMasterAccessPoint DB { get; internal set; }
+
         static Configuration()
         {
+            DB = new DatabaseMasterAccessPoint();
             EnsureDirectories();
 
             GlobalNotes = false;
@@ -570,7 +575,6 @@ namespace NineWorldsDeep.Core
             }
         }
 
-        public static bool GlobalNotes { get; internal set; }
 
         public static string NwdUriToLocalPath(string uri)
         {
@@ -588,6 +592,16 @@ namespace NineWorldsDeep.Core
             }
 
             return ProcessTestMode(trimmedPath);
+        }
+
+        public class DatabaseMasterAccessPoint
+        {
+            public DatabaseMasterAccessPoint()
+            {
+                MediaSubset = new MediaV5SubsetDb();
+            }
+
+            public MediaV5SubsetDb MediaSubset { get; internal set; }
         }
     }
 }

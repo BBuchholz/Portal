@@ -1,6 +1,7 @@
 ﻿using System;
 using NineWorldsDeep.Tapestry;
 using NineWorldsDeep.Tapestry.Nodes;
+using NineWorldsDeep.Core;
 
 namespace NineWorldsDeep.FragmentCloud
 {
@@ -9,11 +10,14 @@ namespace NineWorldsDeep.FragmentCloud
         public GardenFragment()
             : base("")
         {
-            AddChild(new FileSystemNode("NWD", true));
-            AddChild(new FileSystemNode("NWD-AUX", true));
-            AddChild(new FileSystemNode("NWD-MEDIA", true));
-            AddChild(new FileSystemNode("NWD-SNDBX", true));
-            AddChild(new FileSystemNode("NWD-SYNC", true));
+            int localMediaDeviceId =
+                Configuration.DB.MediaSubset.LocalDeviceId;
+
+            AddChild(new FileSystemNode("NWD", true, localMediaDeviceId));
+            AddChild(new FileSystemNode("NWD-AUX", true, localMediaDeviceId));
+            AddChild(new FileSystemNode("NWD-MEDIA", true, localMediaDeviceId));
+            AddChild(new FileSystemNode("NWD-SNDBX", true, localMediaDeviceId));
+            AddChild(new FileSystemNode("NWD-SYNC", true, localMediaDeviceId));
         }
 
         public override string GetShortName()

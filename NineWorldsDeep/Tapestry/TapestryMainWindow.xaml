@@ -9,7 +9,7 @@
     
     <DockPanel LastChildFill="True">        
         
-        <Menu DockPanel.Dock="Top">
+        <!--<Menu DockPanel.Dock="Top">
 
             <MenuItem Header="Options">
                 <MenuItem Header="Original Window"
@@ -24,8 +24,8 @@
                           Click="MenuItemMtpSandbox_Click"/>
                 <MenuItem Header="NwdWareHouse"
                           Click="MenuItemNwdWareHouse_Click"/>
-                <!--<MenuItem Header="NwdSynergy - RETIRING 20160521"
-                          Click="MenuItemNwdSynergy_Click"/>-->
+                --><!--<MenuItem Header="NwdSynergy - RETIRING 20160521"
+                          Click="MenuItemNwdSynergy_Click"/>--><!--
                 <MenuItem Header="SynergyV4"
                           Click="MenuItemSynergyV4_Click"/>
                 <MenuItem Header="NwdImageBrowser"
@@ -36,7 +36,7 @@
                           Click="MenuItemTapestryNodeBrowser_Click"/>
             </MenuItem>
 
-        </Menu>
+        </Menu>-->
         
         <Grid>      
             

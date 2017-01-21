@@ -21,7 +21,7 @@ namespace NineWorldsDeep.Db.Sqlite
             LocalDeviceId = GetLocalMediaDeviceId();
         }
 
-        #region "public methods"
+        #region "methods"
 
         public List<MediaDeviceModelItem> GetAllMediaDevices()
         {
@@ -133,6 +133,177 @@ namespace NineWorldsDeep.Db.Sqlite
             return lst;
         }
 
+        internal void StoreHashForPath(int mediaDeviceId, string path, string hash)
+        {
+            StoreHashForPath(-1, -1, mediaDeviceId, path, hash);
+        }
+
+        internal void StoreHashForPath(int mediaDevicePathId, 
+            int mediaId, int mediaDeviceId, string path, string hash)
+        {
+            TestIdIsSet(mediaDeviceId, "MediaDeviceId");
+            
+            using (var conn = new SQLiteConnection(
+                @"Data Source=" + Configuration.GetSqliteDbPath(DbName)))
+            {
+                conn.Open();
+
+                using (var cmd = new SQLiteCommand(conn))
+                {
+                    using (var transaction = conn.BeginTransaction())
+                    {
+                        try
+                        {
+                            if (mediaId < 1)
+                            {
+                                mediaId = GetMediaIdForHash(hash, cmd);
+
+                                if(mediaId < 1)
+                                {
+                                    mediaId = EnsureHashForMedia(hash, cmd);
+                                }
+                                else
+                                {
+                                    UpdateHashForMediaId(hash, mediaId, cmd);
+                                }
+                            }
+                            
+                            int mediaPathId = EnsureMediaPath(path, cmd);                                
+                            
+                            StoreMediaAtDevicePath(
+                                mediaId, mediaDeviceId, mediaPathId, cmd);
+
+                            transaction.Commit();
+                        }
+                        catch (Exception)
+                        {
+                            //handle exception here
+                            transaction.Rollback();
+                        }
+                    }
+                }
+
+                conn.Close();
+            }
+        }
+
+        private int EnsureMediaPath(string path, SQLiteCommand cmd)
+        {
+            InsertMediaPath(path, cmd);
+            return GetMediaPathId(path, cmd);
+        }
+
+        private int GetMediaPathId(string path, SQLiteCommand cmd)
+        {
+            int id = -1;
+
+            cmd.Parameters.Clear();
+            cmd.CommandText =
+                NwdContract.SELECT_MEDIA_PATH_ID_FOR_PATH_X;
+
+            SQLiteParameter pathParam = new SQLiteParameter();
+            pathParam.Value = path;
+            cmd.Parameters.Add(pathParam);
+
+            using (var rdr = cmd.ExecuteReader())
+            {
+                if (rdr.Read())
+                {
+                    id = rdr.GetInt32(0);
+                }
+            }
+
+            return id;
+        }
+
+        private void StoreMediaAtDevicePath(
+            int mediaId, int mediaDeviceId, int mediaPathId, SQLiteCommand cmd)
+        {
+            cmd.Parameters.Clear();
+            cmd.CommandText = NwdContract.INSERT_MEDIA_DEVICE_PATH_MID_DID_PID;
+
+            SQLiteParameter mediaIdParam = new SQLiteParameter();
+            mediaIdParam.Value = mediaId;
+            cmd.Parameters.Add(mediaIdParam);
+
+            SQLiteParameter mediaDeviceIdParam = new SQLiteParameter();
+            mediaDeviceIdParam.Value = mediaDeviceId;
+            cmd.Parameters.Add(mediaDeviceIdParam);
+
+            SQLiteParameter mediaPathIdParam = new SQLiteParameter();
+            mediaPathIdParam.Value = mediaPathId;
+            cmd.Parameters.Add(mediaPathIdParam);
+
+            cmd.ExecuteNonQuery();
+        }
+
+        private void UpdateHashForMediaId(string hash, int mediaId, SQLiteCommand cmd)
+        {
+            cmd.Parameters.Clear();
+            cmd.CommandText = NwdContract.UPDATE_HASH_FOR_MEDIA_ID_X_Y;
+
+            SQLiteParameter hashParam = new SQLiteParameter();
+            hashParam.Value = hash;
+            cmd.Parameters.Add(hashParam);
+
+            SQLiteParameter mediaIdParam = new SQLiteParameter();
+            mediaIdParam.Value = mediaId;
+            cmd.Parameters.Add(mediaIdParam);
+            
+            cmd.ExecuteNonQuery();
+        }
+
+        private int EnsureHashForMedia(string hash, SQLiteCommand cmd)
+        {
+            InsertOrIgnoreHashForMedia(hash, cmd);
+            return GetMediaIdForHash(hash, cmd);
+        }
+
+        private int GetMediaIdForHash(string hash, SQLiteCommand cmd)
+        {
+            int id = -1;
+
+            cmd.Parameters.Clear();
+            cmd.CommandText = 
+                NwdContract.SELECT_MEDIA_ID_FOR_HASH_X;
+
+            SQLiteParameter hashParam = new SQLiteParameter();
+            hashParam.Value = hash;
+            cmd.Parameters.Add(hashParam);
+
+            using (var rdr = cmd.ExecuteReader())
+            {
+                if (rdr.Read())
+                {
+                    id = rdr.GetInt32(0);
+                }
+            }
+
+            return id;
+        }
+
+        private void InsertOrIgnoreHashForMedia(string hash, SQLiteCommand cmd)
+        {
+            cmd.Parameters.Clear();
+
+            cmd.CommandText =
+                NwdContract.INSERT_MEDIA_HASH_X;
+
+            SQLiteParameter hashParam = new SQLiteParameter();
+            hashParam.Value = hash;
+            cmd.Parameters.Add(hashParam);
+
+            cmd.ExecuteNonQuery();
+        }
+
+        private void TestIdIsSet(int id, string idName)
+        {
+            if(id < 1)
+            {
+                throw new Exception("invalid " + idName + ": " + id);
+            }
+        }
+
         public void InsertMediaRoot(int deviceId, string rootPath)
         {
             using (var conn = new SQLiteConnection(
@@ -174,10 +345,6 @@ namespace NineWorldsDeep.Db.Sqlite
                 conn.Close();
             }
         }
-
-        #endregion
-
-        #region "private methods"
 
         private List<MediaDeviceModelItem> SelectMediaDevices(SQLiteCommand cmd)
         {
@@ -357,7 +524,7 @@ namespace NineWorldsDeep.Db.Sqlite
         private void InsertMediaPath(string path, SQLiteCommand cmd)
         {
             cmd.Parameters.Clear();
-            cmd.CommandText = INSERT_MEDIA_PATH_X;
+            cmd.CommandText = NwdContract.INSERT_MEDIA_PATH_X;
             
             SQLiteParameter pathParam = new SQLiteParameter();
             pathParam.Value = path;
@@ -429,14 +596,7 @@ namespace NineWorldsDeep.Db.Sqlite
             "ON mp." + NwdContract.COLUMN_MEDIA_PATH_ID + " = mdp." + NwdContract.COLUMN_MEDIA_PATH_ID + " " +
             "WHERE mdp." + NwdContract.COLUMN_MEDIA_DEVICE_ID + " = ? " +
             "AND mp." + NwdContract.COLUMN_MEDIA_PATH_VALUE + " LIKE ? || '%'; ";
-
-        private static string INSERT_MEDIA_PATH_X =
-            
-            "INSERT OR IGNORE INTO " + NwdContract.TABLE_MEDIA_PATH + " " + 
-            "	(" + NwdContract.COLUMN_MEDIA_PATH_VALUE + ") " + 
-            "VALUES " + 
-            "	(?); ";
-
+        
         private static string INSERT_MEDIA_FILE_NAME_X =
 
             "INSERT OR IGNORE INTO " + NwdContract.TABLE_MEDIA + " " +

@@ -38,6 +38,15 @@ namespace NineWorldsDeep.Tapestry
             clusterNodeDisplay.NodeDisplayRequested += NodeDisplay_Requested;
             chordProgressionsNodeDisplay.ChordClicked += ChordDisplay_Requested;
             synergyV5MasterListDisplay.SynergyV5ListClicked += SynergyV5ListDisplay_Requested;
+            mediaMasterDisplay.PathSelected += MediaMasterDisplay_PathSelected;
+        }
+
+        private void MediaMasterDisplay_PathSelected(object sender, MediaMasterDisplay.PathSelectedEventArgs e)
+        {
+            if(historyHandler != null)
+            {
+                historyHandler.PerformLoad(this, e.FileSystemNode);
+            }
         }
 
         private void SynergyV5ListDisplay_Requested(object sender, SynergyV5MasterListDisplay.SynergyV5ListClickedEventArgs e)

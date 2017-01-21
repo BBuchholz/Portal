@@ -14,10 +14,15 @@ namespace NineWorldsDeep.Tapestry.Nodes
     {
         private bool initialized = false;
 
-        public FileSystemNode(string uri, bool lazyLoadChildren, params Tapestry.TapestryNode[] children)
+        public FileSystemNode(string uri, bool lazyLoadChildren, int mediaDeviceId, params Tapestry.TapestryNode[] children)
             : base(uri, children)
         {
             Path = Converter.NwdUriToFileSystemPath(uri);
+            MediaDevicePathId = -1;
+            MediaId = -1;
+            MediaDeviceId = mediaDeviceId;
+            MediaPathId = -1;
+
             if (!lazyLoadChildren)
             {
                 InitializeChildren();
@@ -25,6 +30,11 @@ namespace NineWorldsDeep.Tapestry.Nodes
         }
 
         public string Path { get; private set; }
+        public string Hash { get; private set; }
+        public int MediaDevicePathId { get; set; }
+        public int MediaId { get; set; }
+        public int MediaDeviceId { get; set; }
+        public int MediaPathId { get; set; }
 
         protected override IEnumerable<Tapestry.TapestryNode> GetChildren()
         {
@@ -87,32 +97,51 @@ namespace NineWorldsDeep.Tapestry.Nodes
                 Environment.NewLine;
 
             //hash and hash status
-            detail += "Hash: " +
-                GetHashAndStatus(Path) +
+            //detail += "Hash: " +
+            //    Hashes.Sha1ForFilePath(Path) +
+            //    Environment.NewLine;
+            detail += "Hash: " + 
+                CalculateAndStoreHash() + 
                 Environment.NewLine;
 
             return detail;
         }
 
-        private string GetHashAndStatus(string path)
+        public string CalculateAndStoreHash()
         {
-            string hash = Hashes.Sha1ForFilePath(path);
-            
-            string msg = hash + " (Error)";
+            string newestHash = Hashes.Sha1ForFilePath(Path);
 
-            try
+            //only hit the database if we have to
+            if(!newestHash.Equals(Hash, StringComparison.CurrentCultureIgnoreCase))
             {
-                //go to media table in db
-                //if hash already exists, msg = hash + " (Confirmed)"
-                //else create/store and msg = hash + " (Stored)"
-            }
-            catch (Exception)
-            {
-                //leave as default
+                Hash = newestHash;
+
+                Configuration.DB.MediaSubset.StoreHashForPath(
+                    MediaDeviceId, Path, Hash);
             }
 
-            return msg;
+            return Hash;
         }
+
+        //private string GetHashAndStatus(string path)
+        //{
+        //    string hash = Hashes.Sha1ForFilePath(path);
+            
+        //    string msg = hash + " (Error)";
+
+        //    try
+        //    {
+        //        //go to media table in db
+        //        //if hash already exists, msg = hash + " (Confirmed)"
+        //        //else create/store and msg = hash + " (Stored)"
+        //    }
+        //    catch (Exception)
+        //    {
+        //        //leave as default
+        //    }
+
+        //    return msg;
+        //}
 
         private string GetSizePrettyPrint(long bytes)
         {
@@ -158,14 +187,14 @@ namespace NineWorldsDeep.Tapestry.Nodes
                 //directories
                 foreach (string dirPath in Directory.EnumerateDirectories(Path))
                 {
-                    Tapestry.TapestryNode f = PathToFileSystemNode(dirPath);
+                    Tapestry.TapestryNode f = LocalPathToFileSystemNode(dirPath);
                     AddChild(f);
                 }
 
                 //files
                 foreach (string filePath in Directory.EnumerateFiles(Path))
                 {
-                    Tapestry.TapestryNode f = PathToFileSystemNode(filePath);
+                    Tapestry.TapestryNode f = LocalPathToFileSystemNode(filePath);
                     AddChild(f);
                 }
             }
@@ -192,7 +221,7 @@ namespace NineWorldsDeep.Tapestry.Nodes
             }
         }
 
-        private Tapestry.TapestryNode PathToFileSystemNode(string path)
+        private Tapestry.TapestryNode LocalPathToFileSystemNode(string path)
         {
             string fileOrDirName = System.IO.Path.GetFileName(path);
             string frgUri = this.URI;
@@ -204,7 +233,12 @@ namespace NineWorldsDeep.Tapestry.Nodes
 
             frgUri += fileOrDirName;
 
-            Tapestry.TapestryNode f = new FileSystemNode(frgUri, true);
+            if(MediaDeviceId < 1)
+            {
+                throw new Exception("invalid MediaDeviceId: " + MediaDeviceId);
+            }
+
+            Tapestry.TapestryNode f = new FileSystemNode(frgUri, true, MediaDeviceId);
 
             return f;
         }

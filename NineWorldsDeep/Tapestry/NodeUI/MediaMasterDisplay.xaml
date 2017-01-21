@@ -87,7 +87,8 @@
         <ListView x:Name="mFilePathsListView"
                   Grid.Row="4"
                   Grid.Column="0"
-                  Margin="5"/>
+                  Margin="5"
+                  SelectionChanged="mFilePathsListView_SelectionChanged"/>
 
         <StatusBar Grid.Row="5"
                    Grid.ColumnSpan="2"

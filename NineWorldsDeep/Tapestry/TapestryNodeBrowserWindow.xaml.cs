@@ -18,61 +18,61 @@ namespace NineWorldsDeep.Tapestry
     /// <summary>
     /// Interaction logic for TapestryNodeBrowser.xaml
     /// </summary>
-    public partial class TapestryNodeBrowserWindow : Window
-    {
-        NwdUriResolver ur = NwdUriResolver.GetInstance();
+    //public partial class TapestryNodeBrowserWindow : Window
+    //{
+    //    NwdUriResolver ur = NwdUriResolver.GetInstance();
 
-        public TapestryNodeBrowserWindow()
-        {
-            InitializeComponent();
-            fragmentCloud.FragmentClicked += Fragment_Clicked;
-            ResolveContentControlForUri(new RootNode());
-        }
+    //    public TapestryNodeBrowserWindow()
+    //    {
+    //        InitializeComponent();
+    //        fragmentCloud.FragmentClicked += Fragment_Clicked;
+    //        ResolveContentControlForUri(new RootNode());
+    //    }
 
-        private void Fragment_Clicked(object sender,
-            FragmentClickedEventArgs e)
-        {
-            txtUri.Text = e.Node.URI;
-            txtUri.Focus();
-            ResolveContentControlForUri(e.Node);
-        }
+    //    private void Fragment_Clicked(object sender,
+    //        FragmentClickedEventArgs e)
+    //    {
+    //        txtUri.Text = e.Node.URI;
+    //        txtUri.Focus();
+    //        ResolveContentControlForUri(e.Node);
+    //    }
 
-        private void txtUri_KeyDown(object sender, KeyEventArgs e)
-        {
-            if (e.Key == Key.Return)
-            {
-                ResolveCurrentUri();
-            }
-        }
+    //    private void txtUri_KeyDown(object sender, KeyEventArgs e)
+    //    {
+    //        if (e.Key == Key.Return)
+    //        {
+    //            ResolveCurrentUri();
+    //        }
+    //    }
 
-        private void ResolveCurrentUri()
-        {
-            ResolveContentControlForUri(ur.Resolve(txtUri.Text));
-        }
+    //    private void ResolveCurrentUri()
+    //    {
+    //        ResolveContentControlForUri(ur.Resolve(txtUri.Text));
+    //    }
 
-        private void ResolveContentControlForUri(TapestryNode frg)
-        {
-            if (frg.Children().Count() > 0)
-            {
-                ccBranch.Visibility = Visibility.Visible;
-                ccLeaf.Visibility = Visibility.Collapsed;
-                fragmentCloud.Display(frg);
-            }
-            else
-            {
-                ccBranch.Visibility = Visibility.Collapsed;
-                ccLeaf.Visibility = Visibility.Visible;
-                nodeDisplay.Display(frg);
-            }
-        }
+    //    private void ResolveContentControlForUri(TapestryNode frg)
+    //    {
+    //        if (frg.Children().Count() > 0)
+    //        {
+    //            ccBranch.Visibility = Visibility.Visible;
+    //            ccLeaf.Visibility = Visibility.Collapsed;
+    //            fragmentCloud.Display(frg);
+    //        }
+    //        else
+    //        {
+    //            ccBranch.Visibility = Visibility.Collapsed;
+    //            ccLeaf.Visibility = Visibility.Visible;
+    //            nodeDisplay.Display(frg);
+    //        }
+    //    }
 
-        private void Window_KeyDown(object sender, KeyEventArgs e)
-        {
-            if (e.Key == Key.Escape)
-            {
-                txtUri.Text = Converter.TrimNwdUriNodeName(txtUri.Text);
-                ResolveCurrentUri();
-            }
-        }
-    }
+    //    private void Window_KeyDown(object sender, KeyEventArgs e)
+    //    {
+    //        if (e.Key == Key.Escape)
+    //        {
+    //            txtUri.Text = Converter.TrimNwdUriNodeName(txtUri.Text);
+    //            ResolveCurrentUri();
+    //        }
+    //    }
+    //}
 }

@@ -165,6 +165,45 @@ namespace NineWorldsDeep.Sqlite
             + "WHERE " + COLUMN_SYNERGY_LIST_ACTIVATED_AT + " < " + COLUMN_SYNERGY_LIST_SHELVED_AT + " "
             + "ORDER BY " + COLUMN_SYNERGY_LIST_NAME + "; ";
 
+        internal static readonly string INSERT_MEDIA_HASH_X =
+
+            "INSERT OR IGNORE INTO " + TABLE_MEDIA + " " +
+            "	(" + COLUMN_MEDIA_HASH + ") " +
+            "VALUES " +
+            "	(?); ";
+
+        internal static readonly string SELECT_MEDIA_ID_FOR_HASH_X =
+
+            "SELECT " + COLUMN_MEDIA_ID + " " +
+            "FROM " + TABLE_MEDIA + " " +
+            "WHERE " + COLUMN_MEDIA_HASH + " = ?;";
+
+        internal static readonly string UPDATE_HASH_FOR_MEDIA_ID_X_Y =
+
+            "UPDATE " + TABLE_MEDIA + " " +
+            "SET " + COLUMN_MEDIA_HASH + " = ? " +
+            "WHERE " + COLUMN_MEDIA_ID + " = ? ";
+
+        internal static readonly string INSERT_MEDIA_DEVICE_PATH_MID_DID_PID =
+
+            "INSERT OR IGNORE INTO " + TABLE_MEDIA_DEVICE_PATH + " " +
+            "	(" + COLUMN_MEDIA_ID + ", " + COLUMN_MEDIA_DEVICE_ID + ", " + COLUMN_MEDIA_PATH_ID + ") " +
+            "VALUES " +
+            "	(?, ?, ?); ";
+        
+        internal static string INSERT_MEDIA_PATH_X =
+
+            "INSERT OR IGNORE INTO " + NwdContract.TABLE_MEDIA_PATH + " " +
+            "	(" + NwdContract.COLUMN_MEDIA_PATH_VALUE + ") " +
+            "VALUES " +
+            "	(?); ";
+
+        internal static string SELECT_MEDIA_PATH_ID_FOR_PATH_X =
+
+            "SELECT " + COLUMN_MEDIA_PATH_ID + " " +
+            "FROM " + TABLE_MEDIA_PATH + " " +
+            "WHERE " + COLUMN_MEDIA_PATH_VALUE + " = ?;";
+
         #endregion
     }
 }
