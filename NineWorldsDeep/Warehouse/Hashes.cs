@@ -1,4 +1,5 @@
-﻿using System;
+﻿using NineWorldsDeep.Core;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Security.Cryptography;
@@ -47,6 +48,11 @@ namespace NineWorldsDeep.Warehouse
             }
 
             return "";
+        }
+
+        internal static int MediaIdForHash(string hash)
+        {
+            return Configuration.DB.MediaSubset.EnsureMediaHash(hash);
         }
 
         public static string Sha1ForStringValue(string strValue)

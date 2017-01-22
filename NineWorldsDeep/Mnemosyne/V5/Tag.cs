@@ -10,5 +10,6 @@ namespace NineWorldsDeep.Mnemosyne.V5
     {
         public int TagId { get; set; }
         public string TagValue { get; set; }
+
     }
 }

@@ -50,6 +50,118 @@ namespace NineWorldsDeep.Db.Sqlite
             return lst;
         }
 
+        public List<MediaTagging> GetTaggedMediaTaggingsForHash(string hash)
+        {
+            List<MediaTagging> lst =
+                new List<MediaTagging>();
+
+            using (var conn = new SQLiteConnection(
+                @"Data Source=" + Configuration.GetSqliteDbPath(DbName)))
+            {
+                conn.Open();
+
+                using (var cmd = new SQLiteCommand(conn))
+                {
+                    using (var transaction = conn.BeginTransaction())
+                    {
+                        lst = GetTaggedMediaTaggingsForHash(hash, cmd);
+
+                        transaction.Commit();
+                    }
+                }
+
+                conn.Close();
+            }
+
+            return lst;
+        }
+
+        internal void PopulateTagIds(List<Tag> tags)
+        {
+            using (var conn = new SQLiteConnection(
+                @"Data Source=" + Configuration.GetSqliteDbPath(DbName)))
+            {
+                conn.Open();
+
+                using (var cmd = new SQLiteCommand(conn))
+                {
+                    using (var transaction = conn.BeginTransaction())
+                    {
+                        foreach (Tag tag in tags)
+                        {
+                            tag.TagId = EnsureMediaTag(tag.TagValue, cmd);
+                        }
+
+                        transaction.Commit();
+                    }
+                }
+
+                conn.Close();
+            }
+        }
+        
+        private List<MediaTagging> GetTaggedMediaTaggingsForHash(
+            string hash, SQLiteCommand cmd)
+        {
+            List<MediaTagging> lst =
+                new List<MediaTagging>();
+
+            cmd.Parameters.Clear();
+            cmd.CommandText =
+                NwdContract.SELECT_TAGS_FOR_HASH_X;
+
+            cmd.Parameters.Add(new SQLiteParameter { Value = hash });
+
+            using (var rdr = cmd.ExecuteReader())
+            {
+                while (rdr.Read())
+                {
+                    // column indexes
+                    // 0: MediaTagId
+                    // 1: MediaTagValue
+                    // 2: MediaTaggingId
+                    // 3: MediaId
+                    // 4: MediaTaggingTaggedAt
+                    // 5: MediaTaggingUntaggedAt
+                    // 6: MediaHash
+
+                    int mediaTagId = rdr.GetInt32(0);
+                    string mediaTagValue = rdr.GetString(1);
+                    int mediaTaggingId = rdr.GetInt32(2);
+                    int mediaId = rdr.GetInt32(3);
+
+                    string mediaTaggingTaggedAtString = 
+                        DbV5Utils.GetNullableString(rdr, 4);
+
+                    string mediaTaggingUntaggedAtString = 
+                        DbV5Utils.GetNullableString(rdr, 5);
+
+                    string mediaHash = DbV5Utils.GetNullableString(rdr, 6);
+
+                    DateTime? taggedAt =
+                        TimeStamp.YYYY_MM_DD_HH_MM_SS_UTC_ToDateTime(mediaTaggingTaggedAtString);
+
+                    DateTime? untaggedAt =
+                        TimeStamp.YYYY_MM_DD_HH_MM_SS_UTC_ToDateTime(mediaTaggingUntaggedAtString);
+
+                    var mt = new MediaTagging()
+                    {
+                        MediaTagId = mediaTagId,
+                        MediaTagValue = mediaTagValue,
+                        MediaTaggingId = mediaTaggingId,
+                        MediaId = mediaId,
+                        MediaHash = mediaHash
+                    };
+
+                    mt.SetTimeStamps(taggedAt, untaggedAt);
+
+                    lst.Add(mt);
+                }
+            }
+
+            return lst;
+        }
+
         public List<string> GetAllFilePathsForDeviceRoot(
             int mediaDeviceId,
             string rootPath)
@@ -161,7 +273,7 @@ namespace NineWorldsDeep.Db.Sqlite
 
                                 if(mediaId < 1)
                                 {
-                                    mediaId = EnsureHashForMedia(hash, cmd);
+                                    mediaId = EnsureMediaHash(hash, cmd);
                                 }
                                 else
                                 {
@@ -254,10 +366,35 @@ namespace NineWorldsDeep.Db.Sqlite
             cmd.ExecuteNonQuery();
         }
 
-        private int EnsureHashForMedia(string hash, SQLiteCommand cmd)
+        private int EnsureMediaHash(string hash, SQLiteCommand cmd)
         {
             InsertOrIgnoreHashForMedia(hash, cmd);
             return GetMediaIdForHash(hash, cmd);
+        }
+
+        public int EnsureMediaHash(string hash)
+        {
+            int id = -1;
+
+            using (var conn = new SQLiteConnection(
+                @"Data Source=" + Configuration.GetSqliteDbPath(DbName)))
+            {
+                conn.Open();
+
+                using (var cmd = new SQLiteCommand(conn))
+                {
+                    using (var transaction = conn.BeginTransaction())
+                    {
+                        id = EnsureMediaHash(hash, cmd);
+
+                        transaction.Commit();
+                    }
+                }
+
+                conn.Close();
+            }
+
+            return id;
         }
 
         private int GetMediaIdForHash(string hash, SQLiteCommand cmd)
@@ -552,7 +689,7 @@ namespace NineWorldsDeep.Db.Sqlite
                 {
                     using (var transaction = conn.BeginTransaction())
                     {
-                        InsertMediaTaggings(taggings, cmd);
+                        EnsureMediaTaggings(taggings, cmd);
 
                         transaction.Commit();
                     }
@@ -562,12 +699,46 @@ namespace NineWorldsDeep.Db.Sqlite
             }
         }
 
-        private void InsertMediaTaggings(List<MediaTagging> taggings, SQLiteCommand cmd)
+        private void EnsureMediaTaggings(List<MediaTagging> taggings, SQLiteCommand cmd)
         {
             foreach(MediaTagging mt in taggings)
             {
+                if(mt.MediaId < 1 || mt.MediaTagId < 1)
+                {
+                    throw new Exception("Unable to ensure MediaTagging: " +
+                        "MediaId and/or MediaTagId not set.");
+                }
+
                 InsertMediaTagging(mt, cmd);
+                UpdateMediaTagging(mt, cmd);
             }
+        }
+
+        private void UpdateMediaTagging(MediaTagging mt, SQLiteCommand cmd)
+        {
+            cmd.Parameters.Clear();
+            cmd.CommandText =
+                NwdContract.UPDATE_MEDIA_TAGGING_TAGGED_UNTAGGED_WHERE_MEDIA_ID_AND_TAG_ID_W_X_Y_Z;
+
+            SQLiteParameter taggedParam = new SQLiteParameter();
+            taggedParam.Value = 
+                TimeStamp.To_UTC_YYYY_MM_DD_HH_MM_SS(mt.TaggedAt);
+            cmd.Parameters.Add(taggedParam);
+
+            SQLiteParameter untaggedParam = new SQLiteParameter();
+            untaggedParam.Value = 
+                TimeStamp.To_UTC_YYYY_MM_DD_HH_MM_SS(mt.UntaggedAt);
+            cmd.Parameters.Add(untaggedParam);
+
+            SQLiteParameter mediaIdParam = new SQLiteParameter();
+            mediaIdParam.Value = mt.MediaId;
+            cmd.Parameters.Add(mediaIdParam);
+
+            SQLiteParameter mediaTagIdParam = new SQLiteParameter();
+            mediaTagIdParam.Value = mt.MediaTagId;
+            cmd.Parameters.Add(mediaTagIdParam);
+
+            cmd.ExecuteNonQuery();
         }
 
         private void InsertMediaTagging(MediaTagging mt, SQLiteCommand cmd)

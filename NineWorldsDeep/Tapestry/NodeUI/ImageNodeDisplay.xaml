@@ -14,7 +14,7 @@
             <RowDefinition Height="30"/>
         </Grid.RowDefinitions>
 
-        <local:FileDetails x:Name="FileDetailsControl"/>
+        <local:FileDetailsV5 x:Name="FileDetailsControl"/>
 
         <Image x:Name="ImageControl"
                Grid.Row="1"

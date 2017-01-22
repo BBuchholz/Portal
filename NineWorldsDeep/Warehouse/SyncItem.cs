@@ -246,14 +246,14 @@ namespace NineWorldsDeep.Warehouse
                 case SyncDirection.Export:
 
                     ExtHash = Hashes.Sha1ForFilePath(ExtPath);
-                    ExtTags = Tags.GetTagStringForHash(ExtHash);
+                    ExtTags = TagsV4c.GetTagStringForHash(ExtHash);
 
                     break;
 
                 case SyncDirection.Import:
 
                     HostHash = Hashes.Sha1ForFilePath(HostPath);
-                    HostTags = Tags.ImportForHash(sp, HostHash, useXmlInsteadOfKeyVal);
+                    HostTags = TagsV4c.ImportForHash(sp, HostHash, useXmlInsteadOfKeyVal);
 
                     break;
             }
@@ -308,7 +308,7 @@ namespace NineWorldsDeep.Warehouse
                                 }
                             }
                             
-                            Tags.ExportTagsForProfile(_syncMap.Profile, HostHash);
+                            TagsV4c.ExportTagsForProfile(_syncMap.Profile, HostHash);
                             DisplayNames.ExportNamesForProfile(_syncMap.Profile, HostHash);
 
                             break;
@@ -347,7 +347,7 @@ namespace NineWorldsDeep.Warehouse
                                 }
                             }
 
-                            List<string> tags = Tags.StringToList(ExtTags);
+                            List<string> tags = TagsV4c.StringToList(ExtTags);
                             string profileName = _syncMap.Profile.Name;
                             db.StoreImport(profileName, ExtPath, HostPath, ExtHash, tags);
 

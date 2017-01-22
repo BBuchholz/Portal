@@ -9,14 +9,14 @@ using System.Linq;
 namespace NineWorldsDeep.Warehouse
 {
     //TODO: should be moved to Core
-    public class Tags
+    public class TagsV4c
     {
         private static StringDictionary hashToTagString =
             new StringDictionary();
 
         private static Db.Sqlite.DbAdapterSwitch db;
 
-        static Tags()
+        static TagsV4c()
         {
             db = new Db.Sqlite.DbAdapterSwitch();
         }

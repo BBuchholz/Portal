@@ -27,7 +27,7 @@
     <UpdatePeriodically>false</UpdatePeriodically>
     <UpdateRequired>false</UpdateRequired>
     <MapFileExtensions>true</MapFileExtensions>
-    <ApplicationRevision>73</ApplicationRevision>
+    <ApplicationRevision>74</ApplicationRevision>
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <PublishWizardCompleted>true</PublishWizardCompleted>
@@ -213,6 +213,7 @@
     <Compile Include="Mnemosyne\V5\Media.cs" />
     <Compile Include="Mnemosyne\V5\MediaTagging.cs" />
     <Compile Include="Mnemosyne\V5\Tag.cs" />
+    <Compile Include="Mnemosyne\V5\Tags.cs" />
     <Compile Include="Mock\MockClusterDb.cs" />
     <Compile Include="Mock\MockClusterFileSubsetXml.cs" />
     <Compile Include="Mock\MockUtils.cs" />
@@ -426,6 +427,9 @@
     <Compile Include="Tapestry\NodeUI\FileDetails.xaml.cs">
       <DependentUpon>FileDetails.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Tapestry\NodeUI\FileDetailsV5.xaml.cs">
+      <DependentUpon>FileDetailsV5.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Tapestry\NodeUI\HierophantTreeOfLifeDisplay.xaml.cs">
       <DependentUpon>HierophantTreeOfLifeDisplay.xaml</DependentUpon>
     </Compile>
@@ -492,7 +496,7 @@
       <DependentUpon>SyncMapWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Warehouse\SyncProfile.cs" />
-    <Compile Include="Warehouse\Tags.cs" />
+    <Compile Include="Warehouse\TagsV4c.cs" />
     <Compile Include="Warehouse\WarehouseMainWindow.xaml.cs">
       <DependentUpon>WarehouseMainWindow.xaml</DependentUpon>
     </Compile>
@@ -665,6 +669,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Tapestry\NodeUI\FileDetails.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Tapestry\NodeUI\FileDetailsV5.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

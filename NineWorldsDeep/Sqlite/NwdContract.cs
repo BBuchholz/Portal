@@ -95,6 +95,10 @@ namespace NineWorldsDeep.Sqlite
         public static string COLUMN_MEDIA_TAG_ID = "MediaTagId";
         public static string COLUMN_MEDIA_TAG_VALUE = "MediaTagValue";
         public static string COLUMN_MEDIA_DESCRIPTION = "MediaDescription";
+        public static string COLUMN_MEDIA_TAGGING_ID = "MediaTaggingId";
+        public static string COLUMN_MEDIA_TAGGING_TAGGED_AT = "MediaTaggingTaggedAt";
+        public static string COLUMN_MEDIA_TAGGING_UNTAGGED_AT = "MediaTaggingUntaggedAt";
+
 
         //public static string COLUMN_SYNERGY_TO_DO_UPDATED_AT = "SynergyToDoUpdatedAt";
         //public static string COLUMN_SYNERGY_LIST_NAME = "SynergyListName";
@@ -241,6 +245,31 @@ namespace NineWorldsDeep.Sqlite
             "	(" + COLUMN_MEDIA_ID + ", " + COLUMN_MEDIA_TAG_ID + ") " +
             "VALUES " +
             "	(?, ?); ";
+
+        internal static readonly string SELECT_TAGS_FOR_HASH_X =
+
+            "SELECT mt." + COLUMN_MEDIA_TAG_ID + ", " +
+            "	   mt." + COLUMN_MEDIA_TAG_VALUE + ", " +
+            "	   mtg." + COLUMN_MEDIA_TAGGING_ID + ", " +
+            "	   mtg." + COLUMN_MEDIA_ID + ", " +
+            "	   mtg." + COLUMN_MEDIA_TAGGING_TAGGED_AT + ", " +
+            "	   mtg." + COLUMN_MEDIA_TAGGING_UNTAGGED_AT + ", " +
+            "	   m." + COLUMN_MEDIA_HASH + " " +
+            "FROM " + TABLE_MEDIA_TAG + " mt " +
+            "JOIN " + TABLE_MEDIA_TAGGING + " mtg " +
+            "ON mt." + COLUMN_MEDIA_TAG_ID + " = mtg." + COLUMN_MEDIA_TAG_ID + " " +
+            "JOIN " + TABLE_MEDIA + " m " +
+            "ON m." + COLUMN_MEDIA_ID + " = mtg." + COLUMN_MEDIA_ID + " " +
+            "WHERE m." + COLUMN_MEDIA_HASH + " = ? " +
+            "AND (mtg." + COLUMN_MEDIA_TAGGING_UNTAGGED_AT + " IS NULL " +
+            "   OR mtg." + COLUMN_MEDIA_TAGGING_UNTAGGED_AT + " <= mtg." + COLUMN_MEDIA_TAGGING_TAGGED_AT + "); ";
+
+        internal static readonly string UPDATE_MEDIA_TAGGING_TAGGED_UNTAGGED_WHERE_MEDIA_ID_AND_TAG_ID_W_X_Y_Z =
+
+            "UPDATE " + TABLE_MEDIA_TAGGING + " " +
+            "SET " + COLUMN_MEDIA_TAGGING_TAGGED_AT + " = MAX(IFNULL(" + COLUMN_MEDIA_TAGGING_TAGGED_AT + ", ''), ?), " +
+            "	" + COLUMN_MEDIA_TAGGING_UNTAGGED_AT + " = MAX(IFNULL(" + COLUMN_MEDIA_TAGGING_UNTAGGED_AT + ", ''), ?) " +
+            "WHERE " + COLUMN_MEDIA_ID + " = ? AND " + COLUMN_MEDIA_TAG_ID + " = ?; ";
 
         #endregion
     }

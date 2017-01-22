@@ -263,7 +263,7 @@ namespace NineWorldsDeep.Warehouse
                         
                         string hash = Hashes.Sha1ForFilePath(filePath);
                         string path = filePath;
-                        string tags = Tags.GetTagStringForHash(hash);
+                        string tags = TagsV4c.GetTagStringForHash(hash);
                         string displayName = DisplayNames.FromHash(sp, sm.SyncDirection, hash);
 
                         lst.Add(new SyncItem(sm)
@@ -304,7 +304,7 @@ namespace NineWorldsDeep.Warehouse
                     {
                         string hash = Hashes.Sha1ForFilePath(filePath);
                         string path = filePath;
-                        string tags = Tags.GetTagStringForHash(hash);
+                        string tags = TagsV4c.GetTagStringForHash(hash);
                         string displayName = DisplayNames.FromHash(sp, sm.SyncDirection, hash);
 
                         SyncItems.Add(new SyncItem(sm)
@@ -352,7 +352,7 @@ namespace NineWorldsDeep.Warehouse
 
                         string hash = Hashes.Sha1ForFilePath(filePath);
                         string path = filePath;
-                        string tags = Tags.ImportForHash(sp, hash, tagsFromXmlNotKeyValFile);
+                        string tags = TagsV4c.ImportForHash(sp, hash, tagsFromXmlNotKeyValFile);
                         string displayName = DisplayNames.FromHash(sp, sm.SyncDirection, hash);
 
                         lst.Add(new SyncItem(sm)
@@ -391,7 +391,7 @@ namespace NineWorldsDeep.Warehouse
                     {
                         string hash = Hashes.Sha1ForFilePath(filePath);
                         string path = filePath;
-                        string tags = Tags.ImportForHash(sp, hash, tagsFromXmlNotKeyValFile);
+                        string tags = TagsV4c.ImportForHash(sp, hash, tagsFromXmlNotKeyValFile);
                         string displayName = DisplayNames.FromHash(sp, sm.SyncDirection, hash);
 
                         SyncItems.Add(new SyncItem(sm)
@@ -511,7 +511,7 @@ namespace NineWorldsDeep.Warehouse
                         FileModelItem fmi = new FileModelItem(deviceName, si.HostPath);
                         fmi.GetHashes().Add(new HashModelItem(si.HostHash, TimeStamp.Now()));
 
-                        foreach(string tag in Tags.StringToList(si.HostTags))
+                        foreach(string tag in TagsV4c.StringToList(si.HostTags))
                         {
                             fmi.GetTags().Add(tag);
                         }
@@ -528,7 +528,7 @@ namespace NineWorldsDeep.Warehouse
             if (sp != null &&
                 currentDirection == SyncDirection.Export)
             {
-                Tags.ExportTagsForProfileToXml(deviceName, sp, fileModelItems);
+                TagsV4c.ExportTagsForProfileToXml(deviceName, sp, fileModelItems);
             }
 
             if (failingPaths.Count == 0)

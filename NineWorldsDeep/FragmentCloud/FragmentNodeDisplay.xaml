@@ -8,7 +8,7 @@
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
     <StackPanel Orientation="Vertical">
-        <nodeUi:FileDetails x:Name="FileDetailsControl" Visibility="Visible"/>
+        <nodeUi:FileDetailsV5 x:Name="FileDetailsControl" Visibility="Visible"/>
         <TextBox x:Name="MultiLineTextBox"
                  TextWrapping="Wrap"
                  AcceptsReturn="True"

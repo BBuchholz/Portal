@@ -1,5 +1,5 @@
 ﻿using NineWorldsDeep.Core;
-using NineWorldsDeep.FragmentCloud;
+using NineWorldsDeep.Mnemosyne.V5;
 using NineWorldsDeep.Tapestry.Nodes;
 using NineWorldsDeep.Warehouse;
 using System;
@@ -20,43 +20,57 @@ using System.Windows.Shapes;
 namespace NineWorldsDeep.Tapestry.NodeUI
 {
     /// <summary>
-    /// Interaction logic for FileDetails.xaml
+    /// Interaction logic for FileDetailsV5.xaml
     /// </summary>
-    public partial class FileDetails : UserControl
+    public partial class FileDetailsV5 : UserControl
     {
-        private bool tagStringChanged = false;
+        //private bool tagStringChanged = false;
+        private string oldTagString;
         private FileSystemNode fileNode;
 
-        public FileDetails()
+        public FileDetailsV5()
         {
             InitializeComponent();
         }
 
+        public string TagString
+        {
+            get
+            {
+                return TagStringTextBox.Text;
+            }
+
+            set
+            {
+                oldTagString = TagStringTextBox.Text;
+                TagStringTextBox.Text = value;
+            }
+        }
+        
         private void UpdateButton_Click(object sender, RoutedEventArgs e)
         {
-            string path = fileNode.Path;
-            string tagString = TagStringTextBox.Text;
-
-            TagsV4c.UpdateTagStringForCurrentDevicePath(path, tagString);
+            string hash = Hashes.Sha1ForFilePath(fileNode.Path);
+            
+            Tags.UpdateTagStringForHash(hash, oldTagString, TagString);
 
             LoadTags();
 
             UpdateButton.IsEnabled = false;
-            tagStringChanged = false;
         }
 
         private void TagStringTextBox_KeyUp(object sender, KeyEventArgs e)
         {
-            if (!tagStringChanged)
+            if (oldTagString != TagString)
             {
-                tagStringChanged = true;
                 UpdateButton.IsEnabled = true;
             }
         }
 
         private void LoadTags()
         {
-            TagStringTextBox.Text = TagsV4c.GetTagStringForCurrentDevicePath(fileNode.Path); 
+            TagString = 
+                Tags.GetTagStringForHash(
+                    Hashes.Sha1ForFilePath(fileNode.Path));
         }
 
         public void Display(FileSystemNode nd)
@@ -68,7 +82,7 @@ namespace NineWorldsDeep.Tapestry.NodeUI
 
         private void OpenExternallyButton_Click(object sender, RoutedEventArgs e)
         {
-            if(fileNode != null)
+            if (fileNode != null)
             {
                 NwdUtils.OpenFileExternally(fileNode.Path);
             }
