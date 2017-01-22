@@ -107,9 +107,10 @@ namespace NineWorldsDeep.Hierophant
 
             paths.Add(path);
 
-            canvas.Children.Add(line);
-            canvas.Children.Add(lineAbove);
-            canvas.Children.Add(lineBelow);
+            //canvas.Children.Add(line);
+            //canvas.Children.Add(lineAbove);
+            //canvas.Children.Add(lineBelow);
+            path.DrawPath(canvas, 20);
         }
 
         private Line CreateOffsetLine(Line originalLine, double offsetPixels)
