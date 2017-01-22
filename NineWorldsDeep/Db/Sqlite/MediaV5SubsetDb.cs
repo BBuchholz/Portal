@@ -541,6 +541,52 @@ namespace NineWorldsDeep.Db.Sqlite
             cmd.ExecuteNonQuery();
         }
 
+        internal void EnsureMediaTaggings(List<MediaTagging> taggings)
+        {
+            using (var conn = new SQLiteConnection(
+                @"Data Source=" + Configuration.GetSqliteDbPath(DbName)))
+            {
+                conn.Open();
+
+                using (var cmd = new SQLiteCommand(conn))
+                {
+                    using (var transaction = conn.BeginTransaction())
+                    {
+                        InsertMediaTaggings(taggings, cmd);
+
+                        transaction.Commit();
+                    }
+                }
+
+                conn.Close();
+            }
+        }
+
+        private void InsertMediaTaggings(List<MediaTagging> taggings, SQLiteCommand cmd)
+        {
+            foreach(MediaTagging mt in taggings)
+            {
+                InsertMediaTagging(mt, cmd);
+            }
+        }
+
+        private void InsertMediaTagging(MediaTagging mt, SQLiteCommand cmd)
+        {
+            cmd.Parameters.Clear();
+            cmd.CommandText =
+                NwdContract.INSERT_OR_IGNORE_MEDIA_TAGGING_X_Y;
+
+            SQLiteParameter mediaIdParam = new SQLiteParameter();
+            mediaIdParam.Value = mt.MediaId;
+            cmd.Parameters.Add(mediaIdParam);
+
+            SQLiteParameter mediaTagIdParam = new SQLiteParameter();
+            mediaTagIdParam.Value = mt.MediaTagId;
+            cmd.Parameters.Add(mediaTagIdParam);
+            
+            cmd.ExecuteNonQuery();
+        }
+
         internal Dictionary<string, Tag> GetAllMediaTags()
         {
             Dictionary<string, Tag> allTags =
@@ -808,6 +854,8 @@ namespace NineWorldsDeep.Db.Sqlite
             "		?, " +
             "		(SELECT " + NwdContract.COLUMN_MEDIA_PATH_ID + " FROM " + NwdContract.TABLE_MEDIA_PATH + " WHERE " + NwdContract.COLUMN_MEDIA_PATH_VALUE + " = ? LIMIT 1) " +
             "	) ";
+
+
 
         #endregion
 

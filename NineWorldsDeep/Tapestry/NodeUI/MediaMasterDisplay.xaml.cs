@@ -456,10 +456,16 @@ namespace NineWorldsDeep.Tapestry.NodeUI
 
                 int localMediaDeviceId = Configuration.DB.MediaSubset.LocalDeviceId;
 
+                int pathCountTotal = pathToTags.Keys.Count();
+                int pathCountCurrent = 0;
+
                 foreach(var path in pathToTags.Keys)
                 {
-                    StatusDetailUpdate("hashing and storing path: " + path);
+                    pathCountCurrent++;
+
+                    StatusDetailUpdate("hashing and storing path " + pathCountCurrent + " of " + pathCountTotal + ": " + path);
                     string hash = Hashes.Sha1ForFilePath(path);
+                    pathToHash.Add(path, hash);
                     db.StoreHashForPath(localMediaDeviceId, path, hash);
                 }
 
@@ -467,7 +473,46 @@ namespace NineWorldsDeep.Tapestry.NodeUI
                 Dictionary<string, Media> hashToMedia =
                     db.GetAllMedia();
 
-                asdf;
+                List<MediaTagging> taggings = new List<MediaTagging>();
+
+                pathCountTotal = pathToTags.Keys.Count();
+                pathCountCurrent = 0;
+
+                foreach(string path in pathToTags.Keys)
+                {
+                    pathCountCurrent++;
+
+                    StatusDetailUpdate("processing tags for path " + pathCountCurrent + " of " + pathCountTotal + ": " + path);
+                    
+                    if (pathToHash.ContainsKey(path))
+                    {
+                        string pathHash = pathToHash[path];
+
+                        if (hashToMedia.ContainsKey(pathHash))
+                        {
+                            int mediaId = hashToMedia[pathHash].MediaId;
+
+                            foreach (string tag in pathToTags[path])
+                            {
+                                if (tagsByTagValue.ContainsKey(tag))
+                                {
+                                    int mediaTagId = tagsByTagValue[tag].TagId;
+
+                                    taggings.Add(new MediaTagging
+                                    {
+                                        MediaId = mediaId,
+                                        MediaTagId = mediaTagId
+                                    });
+                                }
+                            }
+                        }
+
+                    }
+                }
+
+                StatusDetailUpdate("ensuring media taggings in db...");
+
+                db.EnsureMediaTaggings(taggings);
             });
 
             tbStatus.Text = "finished.";

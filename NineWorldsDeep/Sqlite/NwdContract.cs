@@ -42,6 +42,7 @@ namespace NineWorldsDeep.Sqlite
         public static string TABLE_MEDIA = "Media";
         public static string TABLE_MEDIA_DEVICE_PATH = "MediaDevicePath";
         public static string TABLE_MEDIA_TAG = "MediaTag";
+        public static string TABLE_MEDIA_TAGGING = "MediaTagging";
 
         //public static string TABLE_ = "";
         //public static string TABLE_ = "";
@@ -49,7 +50,7 @@ namespace NineWorldsDeep.Sqlite
         ////columns
         //public static string COLUMN_ = "";
         //public static string COLUMN_ = "";
-        
+
         #region "Synergy V5"
 
         public static string COLUMN_SYNERGY_LIST_ID = "SynergyListId";
@@ -232,8 +233,14 @@ namespace NineWorldsDeep.Sqlite
             "	   " + COLUMN_MEDIA_DESCRIPTION + ",  " +
             "	   " + COLUMN_MEDIA_HASH + " " +
             "FROM " + TABLE_MEDIA + " " +
-            "WHERE " + COLUMN_MEDIA_HASH + " IS NOT NULL AND trim(" + COLUMN_MEDIA_HASH + ", ' ') != ''; "
-;
+            "WHERE " + COLUMN_MEDIA_HASH + " IS NOT NULL AND trim(" + COLUMN_MEDIA_HASH + ", ' ') != ''; ";
+
+        internal static readonly string INSERT_OR_IGNORE_MEDIA_TAGGING_X_Y =
+
+            "INSERT OR IGNORE INTO " + TABLE_MEDIA_TAGGING + " " +
+            "	(" + COLUMN_MEDIA_ID + ", " + COLUMN_MEDIA_TAG_ID + ") " +
+            "VALUES " +
+            "	(?, ?); ";
 
         #endregion
     }
