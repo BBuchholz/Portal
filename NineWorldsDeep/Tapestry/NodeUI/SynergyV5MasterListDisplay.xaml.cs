@@ -55,7 +55,7 @@ namespace NineWorldsDeep.Tapestry.NodeUI
             {
                 if (TimeStamp.ContainsTimeStamp_YYYYMMDD(listName))
                 {
-                    //create and sync (will handle shelving, renaming, etc.
+                    //create and sync (will handle shelving, renaming, etc.)
                     SynergyV5List synLst = new SynergyV5List(listName);
 
                     synLst.Sync(db);
@@ -363,6 +363,12 @@ namespace NineWorldsDeep.Tapestry.NodeUI
         {
             expActive.IsExpanded = true;
             expShelved.IsExpanded = true;
+        }
+
+        private void btnReloadLists_Click(object sender, RoutedEventArgs e)
+        {
+            Load();
+            statusDetail.Text = "lists reloaded.";
         }
     }
 

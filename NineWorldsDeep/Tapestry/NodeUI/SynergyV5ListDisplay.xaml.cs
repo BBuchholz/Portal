@@ -49,6 +49,8 @@ namespace NineWorldsDeep.Tapestry.NodeUI
 
             cmbItemStatusFilter.ItemsSource = null;
             cmbItemStatusFilter.ItemsSource = statuses;
+
+            cmbItemStatusFilter.SelectedItem = SynergyV5ToDo.TO_DO_STATUS_ACTIVATED;
         }
 
         private void lvSynergyV5ListItems_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -94,7 +96,12 @@ namespace NineWorldsDeep.Tapestry.NodeUI
 
         public void Refresh()
         {
-            SynergyV5List synLst = this.listNode.List;
+            SynergyV5List synLst = null;
+
+            if(this.listNode != null)
+            {
+                synLst = this.listNode.List;
+            }
 
             tbListName.Text = "";
             tbListStatus.Text = "";
