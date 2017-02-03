@@ -25,7 +25,7 @@ namespace NineWorldsDeep.Tapestry.NodeUI
     /// <summary>
     /// Interaction logic for SynergyV5MasterListDisplay.xaml
     /// </summary>
-    public partial class SynergyV5MasterListDisplay : UserControl
+    public partial class SynergyV5MasterListDisplay : UserControl, IAsyncStatusResponsive
     {
         Db.Sqlite.SynergyV5SubsetDb db;
 
@@ -245,7 +245,7 @@ namespace NineWorldsDeep.Tapestry.NodeUI
             statusDetail.Text = "finished.";
         }
 
-        private void StatusDetailUpdate(string text)
+        public void StatusDetailUpdate(string text)
         {
             var currentTime = DateTime.Now;
 

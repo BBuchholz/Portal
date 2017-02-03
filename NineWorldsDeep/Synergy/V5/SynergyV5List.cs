@@ -1,4 +1,6 @@
 ﻿using NineWorldsDeep.Core;
+using NineWorldsDeep.Db.Sqlite;
+using NineWorldsDeep.Tapestry.NodeUI;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -53,7 +55,44 @@ namespace NineWorldsDeep.Synergy.V5
             ListItems = new List<SynergyV5ListItem>();
         }
 
-        public void Sync(Db.Sqlite.SynergyV5SubsetDb db)
+        //async version of Sync()
+        public void SyncAsync(SynergyV5SubsetDb db, IAsyncStatusResponsive ui)
+        {
+            //await Task.Run(() =>
+            //{
+                //from gauntlet
+                if (TimeStamp.IsTimeStampedList_YYYYMMDD(this))
+                {
+                    ui.StatusDetailUpdate("processing timestamped list: " + ListName);
+
+                    //load if not
+                    db.SyncAsync(this, ui);
+
+                    Shelve();
+
+                    db.SyncAsync(this, ui);
+
+                    ListId = -1;
+                    ListName = TimeStamp.StripTimeStamp_YYYYMMDD(ListName);
+
+                    foreach (SynergyV5ListItem sli in ListItems)
+                    {
+
+                        sli.ClearIds();
+                    }
+
+                    Activate();
+                }
+
+                ui.StatusDetailUpdate("syncing list: " + ListName);
+
+                db.SyncAsync(this, ui);
+
+                ui.StatusDetailUpdate("finished syncing list: " + ListName);
+            //});            
+        }
+
+        public void Sync(SynergyV5SubsetDb db)
         {
             //from gauntlet
             if (TimeStamp.IsTimeStampedList_YYYYMMDD(this))

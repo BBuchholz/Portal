@@ -5,6 +5,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -21,16 +22,22 @@ namespace NineWorldsDeep.Tapestry.NodeUI
     /// <summary>
     /// Interaction logic for SynergyV5ListDisplay.xaml
     /// </summary>
-    public partial class SynergyV5ListDisplay : UserControl
+    public partial class SynergyV5ListDisplay : UserControl, IAsyncStatusResponsive
     {
         public static string STATUS_ALL = "All";
 
         private Db.Sqlite.SynergyV5SubsetDb db;
         private SynergyV5ListNode listNode;
 
+        //async related 
+        private readonly SynchronizationContext syncContext;
+        private DateTime previousTime = DateTime.Now;
+
         public SynergyV5ListDisplay()
         {
             InitializeComponent();
+            syncContext = SynchronizationContext.Current;
+
             db = new Db.Sqlite.SynergyV5SubsetDb();
 
             LoadStatusValues();
@@ -94,7 +101,7 @@ namespace NineWorldsDeep.Tapestry.NodeUI
             Refresh();
         }
 
-        public void Refresh()
+        public async void Refresh()
         {
             SynergyV5List synLst = null;
 
@@ -107,34 +114,45 @@ namespace NineWorldsDeep.Tapestry.NodeUI
             tbListStatus.Text = "";
             lvSynergyV5ListItems.ItemsSource = null; //clear existing
 
-            if (synLst != null)
+            string statusValue = (string)cmbItemStatusFilter.SelectedItem;
+
+            List<SynergyV5ListItem> filteredItems = null;
+            string listName = "";
+            string statusText = "";
+
+            await Task.Run(() =>
             {
-                synLst.Sync(db); //syncs with db, loads/merges
 
-                tbListName.Text = synLst.ListName;
-                tbListStatus.Text = synLst.Status;
-
-                string statusValue = (string) cmbItemStatusFilter.SelectedItem;
-
-                List<SynergyV5ListItem> filteredItems;
-
-                if (string.IsNullOrWhiteSpace(statusValue))
+                if (synLst != null)
                 {
-                    statusValue = STATUS_ALL;
-                }
+                    //synLst.Sync(db); //syncs with db, loads/merges
+                    synLst.SyncAsync(db, this); //syncs with db, loads/merges
 
-                if (statusValue.Equals(STATUS_ALL))
-                {
-                    filteredItems = synLst.ListItems;
-                }
-                else
-                {
-                    filteredItems = synLst.ListItems.Where(sli => sli.ItemStatus.Contains(statusValue)).ToList();
-                }
+                    listName = synLst.ListName;
+                    statusText = synLst.Status;
 
-                //display list here
-                lvSynergyV5ListItems.ItemsSource = filteredItems;
-            }
+                    if (string.IsNullOrWhiteSpace(statusValue))
+                    {
+                        statusValue = STATUS_ALL;
+                    }
+
+                    if (statusValue.Equals(STATUS_ALL))
+                    {
+                        filteredItems = synLst.ListItems;
+                    }
+                    else
+                    {
+                        filteredItems = synLst.ListItems.Where(sli => sli.ItemStatus.Contains(statusValue)).ToList();
+                    }
+
+                }
+            });
+
+            tbListName.Text = listName;
+            tbListStatus.Text = statusText;
+
+            //display list here
+            lvSynergyV5ListItems.ItemsSource = filteredItems;
         }
 
         private int GetSelectedPermanentItemsCount()
@@ -292,6 +310,21 @@ namespace NineWorldsDeep.Tapestry.NodeUI
 
                 return null;
             }
+        }
+        
+        public void StatusDetailUpdate(string text)
+        {
+            var currentTime = DateTime.Now;
+            
+            //disable delay for now            
+            //if ((DateTime.Now - previousTime).Milliseconds <= 50) return;
+
+            syncContext.Post(new SendOrPostCallback(s =>
+            {
+                tbStatus.Text = (string)s;
+            }), text);
+
+            previousTime = currentTime;
         }
 
         private void cmbItemStatusFilter_SelectionChanged(object sender, SelectionChangedEventArgs e)

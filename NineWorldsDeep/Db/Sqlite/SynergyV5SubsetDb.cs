@@ -7,6 +7,7 @@ using System.Data.SQLite;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using NineWorldsDeep.Tapestry.NodeUI;
 
 namespace NineWorldsDeep.Db.Sqlite
 {
@@ -198,6 +199,156 @@ namespace NineWorldsDeep.Db.Sqlite
                 }
 
                 conn.Close();
+            }
+
+        }
+        
+        public void SyncAsync(SynergyV5List synLst, IAsyncStatusResponsive ui)
+        {
+            //await Task.Run(() =>
+            //{
+                // parallels gauntlet logic
+                // (Android App: http://github.com/BBuchholz/Gauntlet)
+
+            string listName = synLst.ListName;
+
+            //populate list id if not set, creating list if !exists
+            //this runs in its own transaction so the list will have written to db
+            //before the later transaction needs to access its id
+            if (synLst.ListId < 1)
+            {
+                ui.StatusDetailUpdate("ensuring list name: " + synLst.ListName);
+                EnsureSynergyV5ListName(listName);
+            }
+
+            ui.StatusDetailUpdate("syncing list: " + synLst.ListName);
+
+            using (var conn = new SQLiteConnection(
+                    @"Data Source=" + Configuration.GetSqliteDbPath(DbName)))
+                {
+                    conn.Open();
+
+                    using (var cmd = new SQLiteCommand(conn))
+                    {
+                        using (var transaction = conn.BeginTransaction())
+                        {
+                            //try
+                            {
+                                string activated =
+                                    TimeStamp.To_UTC_YYYY_MM_DD_HH_MM_SS(synLst.ActivatedAt);
+                                string shelved =
+                                    TimeStamp.To_UTC_YYYY_MM_DD_HH_MM_SS(synLst.ShelvedAt);
+
+                                ui.StatusDetailUpdate("ensuring timestamps: " + synLst.ListName);
+
+                                //ensure current timestamps
+                                UpdateTimeStampsForSynergyV5ListName(activated, shelved, listName, cmd);
+
+                                ui.StatusDetailUpdate("populating timestamps: " + synLst.ListName);
+
+                                PopulateIdAndTimeStamps(synLst, cmd);
+
+                                ui.StatusDetailUpdate("populating list items: " + synLst.ListName);
+
+                                PopulateListItemsAsync(synLst, cmd, ui);
+
+                                // for each SynergyV5ListItem,
+                                // do the same (populate item id, ensure, etc.)
+                                for (int i = 0; i < synLst.ListItems.Count; i++)
+                                {
+                                    SynergyV5ListItem sli = synLst.ListItems[i];
+
+                                    ui.StatusDetailUpdate("syncing list item " + i + " of " + synLst.ListItems.Count + ": [" + synLst.ListName + "] " + sli.ItemValue);
+
+                                    Save(synLst, sli, i, cmd);
+                                }
+
+                                transaction.Commit();
+                            }
+                            //catch (Exception ex)
+                            //{
+                            //    //handle exception here
+                            //    transaction.Rollback();
+
+                            //    throw ex;
+                            //    //UI.Display.Exception(ex);
+                            //}
+                        }
+                    }
+
+                    conn.Close();
+                }
+            //});
+
+            ui.StatusDetailUpdate("finished syncing list: " + synLst.ListName);
+        }
+
+        private void PopulateListItemsAsync(SynergyV5List synLst, SQLiteCommand cmd, IAsyncStatusResponsive ui)
+        {
+            //mirrors synergyV5PopulateListItems() in Gauntlet
+
+            //select list items by position for list
+            cmd.Parameters.Clear();
+            cmd.CommandText =
+                SYNERGY_V5_SELECT_LIST_ITEMS_AND_TODOS_BY_POSITION_FOR_LIST_ID_X;
+
+            SQLiteParameter listIdParam = new SQLiteParameter();
+            listIdParam.Value = synLst.ListId;
+            cmd.Parameters.Add(listIdParam);
+
+            using (var rdr = cmd.ExecuteReader())
+            {
+                int itemId, position, listItemId, toDoId;
+
+                String itemValue,
+                        toDoActivatedAtString,
+                        toDoCompletedAtString,
+                        toDoArchivedAtString;
+
+                int count = 0;
+
+                while (rdr.Read())
+                {
+                    itemId = DbV5Utils.GetNullableInt32(rdr, 0);
+                    itemValue = DbV5Utils.GetNullableString(rdr, 1);
+                    position = DbV5Utils.GetNullableInt32(rdr, 2);
+                    listItemId = DbV5Utils.GetNullableInt32(rdr, 3);
+                    toDoId = DbV5Utils.GetNullableInt32(rdr, 4);
+                    toDoActivatedAtString = DbV5Utils.GetNullableString(rdr, 5);
+                    toDoCompletedAtString = DbV5Utils.GetNullableString(rdr, 6);
+                    toDoArchivedAtString = DbV5Utils.GetNullableString(rdr, 7);
+
+                    count++;
+
+                    ui.StatusDetailUpdate("processing item " + count + " : " + itemValue);
+
+                    SynergyV5ListItem sli = new SynergyV5ListItem(itemValue);
+                    sli.ItemId = itemId;
+                    sli.ListItemId = listItemId;
+
+                    if (toDoId > 0)
+                    {
+                        //has toDo item
+
+                        SynergyV5ToDo toDo = new SynergyV5ToDo();
+                        toDo.ToDoId = toDoId;
+
+                        DateTime? activated =
+                            TimeStamp.YYYY_MM_DD_HH_MM_SS_UTC_ToDateTime(toDoActivatedAtString);
+
+                        DateTime? completed =
+                            TimeStamp.YYYY_MM_DD_HH_MM_SS_UTC_ToDateTime(toDoCompletedAtString);
+
+                        DateTime? archived =
+                            TimeStamp.YYYY_MM_DD_HH_MM_SS_UTC_ToDateTime(toDoArchivedAtString);
+
+                        toDo.SetTimeStamps(activated, completed, archived);
+
+                        sli.ToDo = toDo;
+                    }
+
+                    synLst.Add(position, sli);
+                }
             }
 
         }
