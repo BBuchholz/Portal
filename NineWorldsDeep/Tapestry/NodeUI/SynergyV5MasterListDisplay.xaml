@@ -59,7 +59,14 @@
                     Margin="5"
                     Content="Reload Lists"
                     Click="btnReloadLists_Click"/>
-                
+
+                <Button x:Name="btnPurgeTimeStampedLists"
+                        Grid.Row="3"
+                        Grid.Column="0"
+                        Margin="5"
+                        Content="Purge TimeStamped V5 Lists"
+                        Click="btnPurgeTimeStampedLists_Click"/>
+
                 <StackPanel Grid.Row="5"
                             VerticalAlignment="Bottom"
                             HorizontalAlignment="Left"

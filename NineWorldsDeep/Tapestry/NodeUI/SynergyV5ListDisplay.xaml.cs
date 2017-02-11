@@ -331,5 +331,13 @@ namespace NineWorldsDeep.Tapestry.NodeUI
         {
             Refresh();
         }
+
+        private void MenuItemCopyItemValueToClipboard(object sender, RoutedEventArgs e)
+        {
+            IList items = (IList)lvSynergyV5ListItems.SelectedItems;
+            var selectedItems = items.Cast<SynergyV5ListItem>();
+
+            Clipboard.SetText(selectedItems.First().ItemValue);
+        }
     }
 }

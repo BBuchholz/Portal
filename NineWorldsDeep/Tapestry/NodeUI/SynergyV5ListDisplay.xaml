@@ -107,6 +107,8 @@
                               Click="MenuItemCompleteSelected_Click"/>
                     <MenuItem Header="Archive Selected"
                               Click="MenuItemArchiveSelected_Click"/>
+                    <MenuItem Header="Copy First ItemValue to Clipboard"
+                              Click="MenuItemCopyItemValueToClipboard"/>
                 </ContextMenu>
             </ListView.ContextMenu>
         </ListView>

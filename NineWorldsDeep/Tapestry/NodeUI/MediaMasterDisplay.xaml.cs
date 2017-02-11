@@ -532,9 +532,5 @@ namespace NineWorldsDeep.Tapestry.NodeUI
             previousTime = currentTime;
         }
 
-        private void btnPurgeTimeStampedLists_Click(object sender, RoutedEventArgs e)
-        {
-            UI.Display.Message("IN PROGRESS: should delete all timestamped lists and all list item junctions for those list ids...");
-        }
     }
 }
