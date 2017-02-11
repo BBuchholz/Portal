@@ -290,7 +290,14 @@ namespace NineWorldsDeep.Tapestry.NodeUI
             {
                 if(CurrentList != null)
                 {
-                    CurrentList.Add(0, new SynergyV5ListItem(itemValue));
+                    SynergyV5ListItem sli = new SynergyV5ListItem(itemValue);
+
+                    if(chkActivateNewEntries.IsChecked.HasValue && chkActivateNewEntries.IsChecked.Value)
+                    {
+                        sli.Activate();
+                    }
+
+                    CurrentList.Add(0, sli);
                     CurrentList.Sync(db);
                     Refresh();
 
