@@ -64,32 +64,6 @@ namespace NineWorldsDeep.Studio
             Db.Sqlite.StudioV5SubsetDb db = new Db.Sqlite.StudioV5SubsetDb();
 
             List<ChordProgression> lst = db.GetAllChordProgressions();
-
-            //all have been added to DB, replace hard-coded values with DB query
-
-            ////verify at http://www.piano-keyboard-guide.com/wp-content/uploads/2015/05/chord-progressions-in-major-keys.png
-
-            //lst.Add("I-IV-V");
-            //lst.Add("I-vi-ii-V");
-            //lst.Add("I-iii-IV-V");
-            //lst.Add("I-vi-IV-V");
-            //lst.Add("I-V-vi-IV");
-            //lst.Add("I-IV-I-V");
-            //lst.Add("ii-V-I");
-            //lst.Add("I-IV-vi-V");
-            //lst.Add("I-IV-ii-V");
-
-            ////verify at http://www.piano-keyboard-guide.com/wp-content/uploads/2015/05/chord-progressions-in-minor-keys.png
-
-            //lst.Add("i-VI-VII");
-            //lst.Add("i-VI-III-VII");
-            //lst.Add("VI-VII-i-i");
-            //lst.Add("i-iv-VII");
-            //lst.Add("ii-v-i");
-            //lst.Add("i-VII-VI-VII");
-            //lst.Add("i-iv-v");
-            //lst.Add("i-iv-v-i");
-            //lst.Add("i-iv-i");
                         
             return lst;
         }
@@ -139,7 +113,10 @@ namespace NineWorldsDeep.Studio
 
         public static List<string> ToScaleDegrees(string progressionSignature)
         {
-            return progressionSignature.Split('-').Select(sd => sd.Trim()).ToList();
+            return progressionSignature
+                .Split(new String[] { "-" }, StringSplitOptions.RemoveEmptyEntries)
+                .Select(sd => sd.Trim())
+                .ToList();
         }
 
         public static bool IsValidSignature(string progressionSignature)
