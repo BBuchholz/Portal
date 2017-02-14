@@ -40,7 +40,7 @@ namespace NineWorldsDeep.Hierophant
         {
             Sephirah seph = (Sephirah)sender;
 
-            Display.Message("Event Handler triggered for: " + seph.Name);
+            Display.Message("Event Handler triggered for: " + seph.NameId);
         }
     }
 }

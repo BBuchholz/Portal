@@ -1,12 +1,10 @@
 ﻿namespace NineWorldsDeep.Hierophant
 {
-    public class Sephirah
+    public class Sephirah : HierophantVertex
     {
-        public Sephirah(string name)
+        public Sephirah(string name)           
+            : base(name)
         {
-            this.Name = name;
-        }
-
-        public string Name { get; private set; }
+        }        
     }
 }

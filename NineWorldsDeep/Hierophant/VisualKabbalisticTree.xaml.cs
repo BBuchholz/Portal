@@ -102,8 +102,8 @@ namespace NineWorldsDeep.Hierophant
             Sephirah fromSeph = sephiroth[from];
             Sephirah toSeph = sephiroth[to];
 
-            path.Sephiroth[fromSeph.Name] = fromSeph;
-            path.Sephiroth[toSeph.Name] = toSeph;
+            path.Sephiroth[fromSeph.NameId] = fromSeph;
+            path.Sephiroth[toSeph.NameId] = toSeph;
 
             paths.Add(path);
 

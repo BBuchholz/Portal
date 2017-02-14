@@ -194,8 +194,10 @@
     <Compile Include="Hierophant\HierophantTreeOfLife.xaml.cs">
       <DependentUpon>HierophantTreeOfLife.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Hierophant\HierophantVertex.cs" />
     <Compile Include="Hierophant\KabbalisticPath.cs" />
     <Compile Include="Hierophant\Sephirah.cs" />
+    <Compile Include="Hierophant\TreePath.cs" />
     <Compile Include="Hierophant\VisualKabbalisticTree.xaml.cs">
       <DependentUpon>VisualKabbalisticTree.xaml</DependentUpon>
     </Compile>
@@ -430,8 +432,15 @@
     <Compile Include="Tapestry\NodeUI\FileDetailsV5.xaml.cs">
       <DependentUpon>FileDetailsV5.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Tapestry\NodeUI\HierophantCanvasElement.cs" />
+    <Compile Include="Tapestry\NodeUI\HierophantCircleElement.cs" />
+    <Compile Include="Tapestry\NodeUI\HierophantRectPath.cs" />
     <Compile Include="Tapestry\NodeUI\HierophantTreeOfLifeDisplay.xaml.cs">
       <DependentUpon>HierophantTreeOfLifeDisplay.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Tapestry\NodeUI\HierophantUiCoupling.cs" />
+    <Compile Include="Tapestry\NodeUI\HierophantVertexDisplay.xaml.cs">
+      <DependentUpon>HierophantVertexDisplay.xaml</DependentUpon>
     </Compile>
     <Compile Include="Tapestry\NodeUI\IAsyncStatusResponsive.cs" />
     <Compile Include="Tapestry\NodeUI\ImageNodeDisplay.xaml.cs">
@@ -678,6 +687,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Tapestry\NodeUI\HierophantTreeOfLifeDisplay.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Tapestry\NodeUI\HierophantVertexDisplay.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
