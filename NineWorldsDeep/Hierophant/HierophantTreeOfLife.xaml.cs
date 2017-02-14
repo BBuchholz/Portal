@@ -1,4 +1,5 @@
 ﻿using NineWorldsDeep.Core;
+using NineWorldsDeep.Tapestry.Nodes;
 using NineWorldsDeep.Tapestry.NodeUI;
 using System;
 using System.Collections.Generic;
@@ -91,9 +92,10 @@ namespace NineWorldsDeep.Hierophant
                 path.Sephiroth[toSeph.NameId] = toSeph;
 
                 canvas.Children.Add(rectPath.ShapeId);
-                //asdf; //add click handler to shape here
+                rectPath.ShapeId.MouseLeftButtonDown += RectPath_MouseLeftButtonDown;
             }
         }
+
 
         private Sephirah TryRetrieveSephirah(Shape shape)
         {
@@ -105,6 +107,18 @@ namespace NineWorldsDeep.Hierophant
                 {
                     retrieved = (Sephirah)shapesToCouplings[shape].Vertex;
                 }
+            }
+
+            return retrieved;
+        }
+
+        private HierophantUiCoupling TryRetrieveCoupling(Shape shape)
+        {
+            HierophantUiCoupling retrieved = null;
+
+            if (shapesToCouplings.ContainsKey(shape))
+            {
+                retrieved = shapesToCouplings[shape];                
             }
 
             return retrieved;
@@ -145,19 +159,67 @@ namespace NineWorldsDeep.Hierophant
 
         private void Sephirah_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
-            VertexClicked();
+            HandleVertexClicked(sender);
             e.Handled = true;
         }
 
-        private void VertexClicked()
+        private void RectPath_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
+            HandleVertexClicked(sender);
+            e.Handled = true;
+        }
 
+        private void HandleVertexClicked(object sender)
+        {
+            if(sender is Shape)
+            {
+                Shape shapeId = (Shape)sender;
+                HierophantUiCoupling coupling =
+                    TryRetrieveCoupling(shapeId);
+
+                if(coupling != null)
+                {
+                    HierophantVertexNode nd =
+                        new HierophantVertexNode(coupling);
+
+                    HierophantVertexClickedEventArgs args =
+                        new HierophantVertexClickedEventArgs(nd);
+
+                    OnVertexClicked(args);
+                }
+            }                
+        }
+
+        public event EventHandler<HierophantVertexClickedEventArgs> VertexClicked;
+
+        protected virtual void OnVertexClicked(HierophantVertexClickedEventArgs args)
+        {
+            VertexClicked?.Invoke(this, args);
         }
 
         private void Canvas_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
-            
+            ProcessNullVertexSelection();
+            e.Handled = true;
         }
+
+        private void ProcessNullVertexSelection()
+        {
+            HierophantVertexClickedEventArgs args =
+                new HierophantVertexClickedEventArgs(new NullHierophantVertexNode());
+
+            OnVertexClicked(args);
+        }
+    }
+
+    public class HierophantVertexClickedEventArgs
+    {
+        public HierophantVertexClickedEventArgs(HierophantVertexNode nd)
+        {
+            VertexNode = nd;
+        }
+
+        public HierophantVertexNode VertexNode { get; private set; }
 
     }
 }

@@ -379,9 +379,11 @@
     <Compile Include="Tapestry\Nodes\GrowthAreasNode.cs" />
     <Compile Include="Tapestry\Nodes\HashNode.cs" />
     <Compile Include="Tapestry\Nodes\HierophantTreeOfLifeNode.cs" />
+    <Compile Include="Tapestry\Nodes\HierophantVertexNode.cs" />
     <Compile Include="Tapestry\Nodes\LocalConfigNode.cs" />
     <Compile Include="Tapestry\Nodes\MediaMasterNode.cs" />
     <Compile Include="Tapestry\Nodes\NullClusterNode.cs" />
+    <Compile Include="Tapestry\Nodes\NullHierophantVertexNode.cs" />
     <Compile Include="Tapestry\Nodes\NullSynergyV5ListNode.cs" />
     <Compile Include="Tapestry\Nodes\StudioKeyboardNode.cs" />
     <Compile Include="Tapestry\Nodes\ArpaBetNode.cs" />

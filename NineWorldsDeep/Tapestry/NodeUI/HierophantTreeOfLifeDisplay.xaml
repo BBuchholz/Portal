@@ -68,7 +68,7 @@
                   Expanded="Expander_Expanded"
                   Collapsed="Expander_Collapsed">
 
-            <hiero:HierophantTreeOfLife/>
+            <hiero:HierophantTreeOfLife x:Name="hierophantTreeOfLifeInstance"/>
 
         </Expander>
 

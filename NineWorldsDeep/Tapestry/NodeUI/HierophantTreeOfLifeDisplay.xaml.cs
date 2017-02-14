@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using NineWorldsDeep.Hierophant;
 
 namespace NineWorldsDeep.Tapestry.NodeUI
 {
@@ -23,6 +24,19 @@ namespace NineWorldsDeep.Tapestry.NodeUI
         public HierophantTreeOfLifeDisplay()
         {
             InitializeComponent();
+            hierophantTreeOfLifeInstance.VertexClicked += TreeOfLife_VertexClicked;
+        }
+
+        public event EventHandler<HierophantVertexClickedEventArgs> VertexClicked;
+
+        private void TreeOfLife_VertexClicked(object sender, HierophantVertexClickedEventArgs args)
+        {
+            OnVertexClicked(args);
+        }
+
+        protected virtual void OnVertexClicked(HierophantVertexClickedEventArgs args)
+        {
+            VertexClicked?.Invoke(this, args);
         }
 
         private void Expander_Expanded(object sender, RoutedEventArgs e)

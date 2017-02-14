@@ -12,6 +12,8 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using NineWorldsDeep.Tapestry.Nodes;
+using NineWorldsDeep.Hierophant;
 
 namespace NineWorldsDeep.Tapestry.NodeUI
 {
@@ -23,6 +25,19 @@ namespace NineWorldsDeep.Tapestry.NodeUI
         public HierophantVertexDisplay()
         {
             InitializeComponent();
+        }
+
+        public void Display(HierophantVertexNode vNode)
+        {
+            string details = "";
+
+            if (vNode.Coupling != null)
+            {
+                HierophantVertex vertex = vNode.Coupling.Vertex;
+                details += vertex.Details();
+            }
+            
+            tbDetails.Text = details;
         }
     }
 }

@@ -23,5 +23,11 @@ namespace NineWorldsDeep.Hierophant
         {
             get { return _sephiroth; }
         }
+
+        public override string Details()
+        {
+            return "Path connecting " +
+                string.Join(", ", _sephiroth.Keys.ToList());
+        }
     }
 }

@@ -23,6 +23,8 @@
         SynergyV5ListItem,
         MediaMaster,
         NullSynergyV5List,
-        HierophantTreeOfLife
+        HierophantTreeOfLife,
+        HierophantVertex,
+        NullHierophantVertex
     }
 }

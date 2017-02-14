@@ -7,7 +7,9 @@
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
     <Grid>
-        <TextBlock VerticalAlignment="Center" HorizontalAlignment="Center">
+        <TextBlock x:Name="tbDetails" 
+                   VerticalAlignment="Center" 
+                   HorizontalAlignment="Center">
             Vertex Info Goes Here
         </TextBlock>
     </Grid>

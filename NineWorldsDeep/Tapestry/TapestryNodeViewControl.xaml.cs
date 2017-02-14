@@ -16,6 +16,7 @@ using NineWorldsDeep.FragmentCloud;
 using NineWorldsDeep.Tapestry.Nodes;
 using NineWorldsDeep.Core;
 using NineWorldsDeep.Tapestry.NodeUI;
+using NineWorldsDeep.Hierophant;
 
 namespace NineWorldsDeep.Tapestry
 {
@@ -39,6 +40,15 @@ namespace NineWorldsDeep.Tapestry
             chordProgressionsNodeDisplay.ChordClicked += ChordDisplay_Requested;
             synergyV5MasterListDisplay.SynergyV5ListClicked += SynergyV5ListDisplay_Requested;
             mediaMasterDisplay.PathSelected += MediaMasterDisplay_PathSelected;
+            hierophantTreeOfLifeDisplay.VertexClicked += HierophantTreeOfLifeDisplay_VertexClicked;
+        }
+
+        private void HierophantTreeOfLifeDisplay_VertexClicked(object sender, HierophantVertexClickedEventArgs e)
+        {
+            if(historyHandler != null)
+            {
+                historyHandler.PerformLoad(this, e.VertexNode);
+            }
         }
 
         private void MediaMasterDisplay_PathSelected(object sender, MediaMasterDisplay.PathSelectedEventArgs e)
@@ -139,6 +149,7 @@ namespace NineWorldsDeep.Tapestry
             contentControls.Add(ccSynergyV5ListNode);
             contentControls.Add(ccMediaMasterNode);
             contentControls.Add(ccHierophantTreeOfLifeNode);
+            contentControls.Add(ccHierophantVertexNode);
         }
 
         private void ResolveContentControl(TapestryNode node)
@@ -193,6 +204,19 @@ namespace NineWorldsDeep.Tapestry
                     case TapestryNodeType.HierophantTreeOfLife:
 
                         SetVisible(ccHierophantTreeOfLifeNode);
+                        break;
+
+                    case TapestryNodeType.HierophantVertex:
+
+                        SetVisible(ccHierophantVertexNode);
+                        HierophantVertexNode vNode = (HierophantVertexNode)node;
+                        hierophantVertexDisplay.Display(vNode);
+                        break;
+
+                    case TapestryNodeType.NullHierophantVertex:
+
+                        SetVisible(ccHierophantVertexNode);
+                        hierophantVertexDisplay.Display((HierophantVertexNode)node);
                         break;
 
                     case TapestryNodeType.MediaMaster:

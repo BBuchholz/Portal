@@ -69,6 +69,10 @@
                         Visibility="Collapsed">
             <nodeUI:HierophantTreeOfLifeDisplay x:Name="hierophantTreeOfLifeDisplay"/>
         </ContentControl>
+
+        <ContentControl x:Name="ccHierophantVertexNode">
+            <nodeUI:HierophantVertexDisplay x:Name="hierophantVertexDisplay"/>
+        </ContentControl>
         
     </Grid>
 </UserControl>

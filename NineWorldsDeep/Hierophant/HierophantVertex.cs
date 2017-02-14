@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace NineWorldsDeep.Hierophant
 {
-    public class HierophantVertex
+    public abstract class HierophantVertex
     {
         public HierophantVertex(string nameId)
         {
@@ -14,5 +14,7 @@ namespace NineWorldsDeep.Hierophant
         }
 
         public string NameId { get; set; }
+
+        public abstract string Details();
     }
 }
