@@ -17,7 +17,7 @@ namespace NineWorldsDeep.Xml
         //tags -
         private static string TAG_NWD = "nwd";
 
-        private static string TAG_MEDIA_SUBSET = "mediaSubset";
+        public static string TAG_MNEMOSYNE_SUBSET = "mnemosyneSubset";
         private static string TAG_MEDIA = "media";
 
         public static string TAG_SYNERGY_SUBSET = "synergySubset";

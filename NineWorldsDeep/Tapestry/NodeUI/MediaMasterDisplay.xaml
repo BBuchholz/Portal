@@ -39,13 +39,25 @@
                 </Grid.RowDefinitions>
 
                 <Button x:Name="btnImportV4TagsToV5"
-                        Grid.Row="1"
+                        Grid.Row="0"
                         Grid.Column="0"
                         Margin="5"
                         Content="Import V4 Tags To V5"
                         Click="btnImportV4TagsToV5_Click"/>
 
+                <Button x:Name="btnImportXml"
+                    Grid.Row="1"
+                    Grid.Column="0"
+                    Margin="5"
+                    Content="Import XML"
+                    Click="btnImportXml_Click"/>
 
+                <Button x:Name="btnExportXml"
+                    Grid.Row="2"
+                    Grid.Column="0"
+                    Margin="5"
+                    Content="Export XML"
+                    Click="btnExportXml_Click"/>
 
                 <StackPanel Grid.Row="5"
                             VerticalAlignment="Bottom"

@@ -20,6 +20,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Xml.Linq;
 
 namespace NineWorldsDeep.Tapestry.NodeUI
 {
@@ -532,5 +533,51 @@ namespace NineWorldsDeep.Tapestry.NodeUI
             previousTime = currentTime;
         }
 
+        private void btnImportXml_Click(object sender, RoutedEventArgs e)
+        {
+            tbStatus.Text = "import xml not yet implemented";
+        }
+
+        private async void btnExportXml_Click(object sender, RoutedEventArgs e)
+        {
+            await Task.Run(() => {
+
+                string detail = "starting export of mnemosyne subset";
+
+                StatusDetailUpdate(detail);
+
+                //for each media in db.getAllMedia()                
+                var hashedMedia = db.GetAllMedia();
+
+                XElement mnemosyneSubsetEl = new XElement(Xml.Xml.TAG_MNEMOSYNE_SUBSET);
+
+                foreach(string hash in hashedMedia.Keys)
+                {
+                    detail = hash + ": processing";
+
+                    //create media tag with attribute set for hash
+                    XElement mediaEl = Xml.Xml.CreateMediaElement(hash);
+
+                    detail = hash + ": processing tags";
+                    StatusDetailUpdate(detail);
+
+                    var taggings = db.GetTaggedMediaTaggingsForHash(hash);
+                    
+                    foreach(MediaTagging tag in taggings)
+                    {
+                        asdf;
+                        //create tag element and append to mediaEl
+                    }
+
+                    asdf;
+
+                    //  db.getDevicePaths(media.Hash) <- create this
+                    ///////--> return a MultiMap keyed on device name, with a list of path objects (path, verified, missing)
+                }
+
+            });
+            
+            tbStatus.Text = "finished.";
+        }
     }
 }
