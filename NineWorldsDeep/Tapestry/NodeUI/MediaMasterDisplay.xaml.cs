@@ -565,14 +565,32 @@ namespace NineWorldsDeep.Tapestry.NodeUI
                     
                     foreach(MediaTagging tag in taggings)
                     {
-                        asdf;
-                        //create tag element and append to mediaEl
+                        //create tag element and append to 
+                        XElement tagEl = Xml.Xml.CreateTagElement(tag);
+                        mediaEl.Add(tagEl);
                     }
-
-                    asdf;
 
                     //  db.getDevicePaths(media.Hash) <- create this
                     ///////--> return a MultiMap keyed on device name, with a list of path objects (path, verified, missing)
+                    
+                    detail = hash + ": processing device paths";
+                    StatusDetailUpdate(detail);
+
+                    MultiMap<string, DevicePath> devicePaths = db.GetDevicePaths(hash);
+
+                    foreach(string deviceName in devicePaths.Keys)
+                    {
+                        XElement deviceEl = Xml.Xml.CreateDeviceElement(deviceName);
+
+                        foreach(DevicePath path in devicePaths[deviceName])
+                        {
+                            XElement pathEl = Xml.Xml.CreatePathElement(path);
+                        }
+
+                        mediaEl.Add(deviceEl);
+                    }
+
+                    mnemosyneSubsetEl.Add(mediaEl);
                 }
 
             });

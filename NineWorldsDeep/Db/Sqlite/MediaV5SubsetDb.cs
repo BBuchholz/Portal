@@ -635,6 +635,36 @@ namespace NineWorldsDeep.Db.Sqlite
             }
         }
 
+        internal MultiMap<string, DevicePath> GetDevicePaths(string hash)
+        {
+            MultiMap<string, DevicePath> map = new MultiMap<string, DevicePath>();
+
+            using (var conn = new SQLiteConnection(
+                @"Data Source=" + Configuration.GetSqliteDbPath(DbName)))
+            {
+                conn.Open();
+
+                using (var cmd = new SQLiteCommand(conn))
+                {
+                    using (var transaction = conn.BeginTransaction())
+                    {
+                        map = GetDevicePaths(hash, cmd);
+
+                        transaction.Commit();
+                    }
+                }
+
+                conn.Close();
+            }
+
+            return map;
+        }
+
+        private MultiMap<string, DevicePath> GetDevicePaths(string hash, SQLiteCommand cmd)
+        {
+            //mimic GetTaggedMediaTaggingsForHash
+        }
+
         private int EnsureMediaTag(string tag, SQLiteCommand cmd)
         {
             InsertOrIgnoreMediaTag(tag, cmd);

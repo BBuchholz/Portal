@@ -212,6 +212,7 @@
     <Compile Include="ImageBrowser\LoadImagesStrategy.cs" />
     <Compile Include="IProgressBarCompatible.cs" />
     <Compile Include="MenuController.cs" />
+    <Compile Include="Mnemosyne\V5\DevicePath.cs" />
     <Compile Include="Mnemosyne\V5\Media.cs" />
     <Compile Include="Mnemosyne\V5\MediaTagging.cs" />
     <Compile Include="Mnemosyne\V5\Tag.cs" />

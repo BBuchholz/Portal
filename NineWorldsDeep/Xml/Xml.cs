@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Linq;
+using NineWorldsDeep.Mnemosyne.V5;
 
 namespace NineWorldsDeep.Xml
 {
@@ -19,6 +20,9 @@ namespace NineWorldsDeep.Xml
 
         public static string TAG_MNEMOSYNE_SUBSET = "mnemosyneSubset";
         private static string TAG_MEDIA = "media";
+        private static string TAG_TAG = "tag";
+        private static string TAG_MEDIA_DEVICE = "mediaDevice";
+        private static string TAG_PATH = "path";
 
         public static string TAG_SYNERGY_SUBSET = "synergySubset";
         private static string TAG_SYNERGY_LIST = "synergyList";
@@ -35,6 +39,14 @@ namespace NineWorldsDeep.Xml
         private static string ATTRIBUTE_POSITION = "position";
         private static string ATTRIBUTE_COMPLETED_AT = "completedAt";
         private static string ATTRIBUTE_ARCHIVED_AT = "archivedAt";
+
+        private static string ATTRIBUTE_TAG_VALUE = "tagValue";
+        private static string ATTRIBUTE_TAGGED_AT = "taggedAt";
+        private static string ATTRIBUTE_UNTAGGED_AT = "untaggedAt";
+        private static string ATTRIBUTE_DESCRIPTION = "description";
+        private static string ATTRIBUTE_VALUE = "value";
+        private static string ATTRIBUTE_VERIFIED_PRESENT = "verifiedPresent";
+        private static string ATTRIBUTE_VERIFIED_MISSING = "verifiedMissing";
 
         #endregion
 
@@ -271,5 +283,62 @@ namespace NineWorldsDeep.Xml
             return allLists;
         }
 
+        public static XElement CreateMediaElement(string hash)
+        {
+            XElement mediaEl = new XElement(TAG_MEDIA);
+
+            mediaEl.Add(new XAttribute(ATTRIBUTE_SHA1_HASH, hash));
+
+            return mediaEl;
+        }
+
+        public static XElement CreateTagElement(MediaTagging tag)
+        {
+            XElement tagEl = new XElement(TAG_TAG);
+
+            //tagValue
+            //taggedAt
+            //untaggedAt
+
+            string taggedAt =
+                TimeStamp.To_UTC_YYYY_MM_DD_HH_MM_SS(tag.TaggedAt);
+
+            string untaggedAt =
+                TimeStamp.To_UTC_YYYY_MM_DD_HH_MM_SS(tag.UntaggedAt);
+
+            tagEl.Add(new XAttribute(ATTRIBUTE_TAG_VALUE, tag.MediaTagValue));
+            tagEl.Add(new XAttribute(ATTRIBUTE_TAGGED_AT, taggedAt));
+            tagEl.Add(new XAttribute(ATTRIBUTE_UNTAGGED_AT, untaggedAt));
+
+            return tagEl;
+        }
+
+        public static XElement CreateDeviceElement(string deviceName)
+        {
+            XElement mediaDeviceEl = new XElement(TAG_MEDIA_DEVICE);
+
+            mediaDeviceEl.Add(new XAttribute(ATTRIBUTE_DESCRIPTION, deviceName));
+
+            return mediaDeviceEl;
+        }
+
+        public static XElement CreatePathElement(DevicePath path)
+        {
+            XElement pathEl = new XElement(TAG_PATH);
+
+            string verifiedPresent =
+                TimeStamp.To_UTC_YYYY_MM_DD_HH_MM_SS(path.VerifiedPresent);
+
+            string verifiedMissing =
+                TimeStamp.To_UTC_YYYY_MM_DD_HH_MM_SS(path.VerifiedMissing);
+
+            pathEl.Add(new XAttribute(ATTRIBUTE_VALUE, path.Path));
+            pathEl.Add(
+                new XAttribute(ATTRIBUTE_VERIFIED_PRESENT, path.VerifiedPresent));
+            pathEl.Add(
+                new XAttribute(ATTRIBUTE_VERIFIED_MISSING, path.VerifiedMissing));
+
+            return pathEl;
+        }
     }
 }
