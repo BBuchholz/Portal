@@ -37,10 +37,10 @@ namespace NineWorldsDeep.Sqlite
         public static string TABLE_CHORD_PROGRESSION = "ChordProgression";
                 
         public static string TABLE_MEDIA_DEVICE = "MediaDevice";
+        public static string TABLE_MEDIA_DEVICE_PATH = "MediaDevicePath";
         public static string TABLE_MEDIA_ROOT = "MediaRoot";
         public static string TABLE_MEDIA_PATH = "MediaPath";
         public static string TABLE_MEDIA = "Media";
-        public static string TABLE_MEDIA_DEVICE_PATH = "MediaDevicePath";
         public static string TABLE_MEDIA_TAG = "MediaTag";
         public static string TABLE_MEDIA_TAGGING = "MediaTagging";
 
@@ -89,6 +89,7 @@ namespace NineWorldsDeep.Sqlite
         public static string COLUMN_MEDIA_DEVICE_DESCRIPTION = "MediaDeviceDescription";
         public static string COLUMN_MEDIA_PATH_VALUE = "MediaPathValue";
         public static string COLUMN_MEDIA_FILE_NAME = "MediaFileName";
+        public static string COLUMN_MEDIA_DEVICE_PATH_ID = "MediaDevicePathId";
         public static string COLUMN_MEDIA_ID = "MediaId";
         public static string COLUMN_MEDIA_PATH_ID = "MediaPathId";
         public static string COLUMN_MEDIA_HASH = "MediaHash";
@@ -98,7 +99,8 @@ namespace NineWorldsDeep.Sqlite
         public static string COLUMN_MEDIA_TAGGING_ID = "MediaTaggingId";
         public static string COLUMN_MEDIA_TAGGING_TAGGED_AT = "MediaTaggingTaggedAt";
         public static string COLUMN_MEDIA_TAGGING_UNTAGGED_AT = "MediaTaggingUntaggedAt";
-
+        public static string COLUMN_MEDIA_DEVICE_PATH_VERIFIED_PRESENT = "MediaDevicePathVerifiedPresent";
+        public static string COLUMN_MEDIA_DEVICE_PATH_VERIFIED_MISSING = "MediaDevicePathVerifiedMissing";
 
         //public static string COLUMN_SYNERGY_TO_DO_UPDATED_AT = "SynergyToDoUpdatedAt";
         //public static string COLUMN_SYNERGY_LIST_NAME = "SynergyListName";
@@ -270,6 +272,25 @@ namespace NineWorldsDeep.Sqlite
             "SET " + COLUMN_MEDIA_TAGGING_TAGGED_AT + " = MAX(IFNULL(" + COLUMN_MEDIA_TAGGING_TAGGED_AT + ", ''), ?), " +
             "	" + COLUMN_MEDIA_TAGGING_UNTAGGED_AT + " = MAX(IFNULL(" + COLUMN_MEDIA_TAGGING_UNTAGGED_AT + ", ''), ?) " +
             "WHERE " + COLUMN_MEDIA_ID + " = ? AND " + COLUMN_MEDIA_TAG_ID + " = ?; ";
+
+        internal static readonly string SELECT_DEVICE_PATHS_FOR_HASH_X =
+
+            "SELECT mp." + COLUMN_MEDIA_PATH_VALUE + ", " +
+            "       md." + COLUMN_MEDIA_DEVICE_DESCRIPTION + ", " +
+            "       mdp." + COLUMN_MEDIA_DEVICE_PATH_ID + ", " +
+            "       mdp." + COLUMN_MEDIA_ID + ", " +
+            "       mdp." + COLUMN_MEDIA_DEVICE_ID + ", " +
+            "       mdp." + COLUMN_MEDIA_PATH_ID + ", " +
+            "       mdp." + COLUMN_MEDIA_DEVICE_PATH_VERIFIED_PRESENT + ", " +
+            "       mdp." + COLUMN_MEDIA_DEVICE_PATH_VERIFIED_MISSING + " " +
+            "FROM " + TABLE_MEDIA + " m " +
+            "JOIN " + TABLE_MEDIA_DEVICE_PATH + " mdp " +
+            "ON m." + COLUMN_MEDIA_ID + " = mdp." + COLUMN_MEDIA_ID + " " +
+            "JOIN " + TABLE_MEDIA_DEVICE + " md " +
+            "ON mdp." + COLUMN_MEDIA_DEVICE_ID + " = md." + COLUMN_MEDIA_DEVICE_ID + " " +
+            "JOIN " + TABLE_MEDIA_PATH + " mp " +
+            "ON mp." + COLUMN_MEDIA_PATH_ID + " = mdp." + COLUMN_MEDIA_PATH_ID + " " +
+            "WHERE m." + COLUMN_MEDIA_HASH + " = ?; ";
 
         #endregion
     }

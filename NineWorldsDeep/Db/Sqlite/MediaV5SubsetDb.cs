@@ -663,6 +663,66 @@ namespace NineWorldsDeep.Db.Sqlite
         private MultiMap<string, DevicePath> GetDevicePaths(string hash, SQLiteCommand cmd)
         {
             //mimic GetTaggedMediaTaggingsForHash
+            MultiMap<string, DevicePath> map = new MultiMap<string, DevicePath>();
+
+            cmd.Parameters.Clear();
+            cmd.CommandText =
+                NwdContract.SELECT_DEVICE_PATHS_FOR_HASH_X;
+
+            cmd.Parameters.Add(new SQLiteParameter { Value = hash });
+
+            using (var rdr = cmd.ExecuteReader())
+            {
+                while (rdr.Read())
+                {
+                    // column indexes
+                    //0: MediaPathValue
+                    //1: MediaDeviceDescription
+                    //2: MediaDevicePathId
+                    //3: MediaId
+                    //4: MediaDeviceId
+                    //5: MediaPathId
+                    //6: MediaDevicePathVerifiedPresent
+                    //7: MediaDevicePathVerifiedMissing
+
+                    string mediaPathValue = rdr.GetString(0);
+                    string mediaDeviceDescription = rdr.GetString(1);
+                    int mediaDevicePathId = rdr.GetInt32(2);
+                    int mediaId = rdr.GetInt32(3);
+                    int mediaDeviceId = rdr.GetInt32(4);
+                    int mediaPathId = rdr.GetInt32(5);
+
+                    string mediaDevicePathVerifiedPresent = 
+                        DbV5Utils.GetNullableString(rdr, 6);
+
+                    string mediaDevicePathVerifiedMissing = 
+                        DbV5Utils.GetNullableString(rdr, 7);
+
+                    DateTime? verifiedPresent =
+                        TimeStamp.YYYY_MM_DD_HH_MM_SS_UTC_ToDateTime(
+                            mediaDevicePathVerifiedPresent);
+                    
+                    DateTime? verifiedMissing =
+                        TimeStamp.YYYY_MM_DD_HH_MM_SS_UTC_ToDateTime(
+                            mediaDevicePathVerifiedMissing);
+
+                    var devicePath = new DevicePath()
+                    {
+                        Path = mediaPathValue,
+                        DeviceName = mediaDeviceDescription,
+                        DevicePathId = mediaDevicePathId,
+                        MediaId = mediaId,
+                        MediaDeviceId = mediaDeviceId,
+                        MediaPathId = mediaPathId
+                    };
+
+                    devicePath.SetTimeStamps(verifiedPresent, verifiedMissing);
+
+                    map.Add(mediaDeviceDescription, devicePath);
+                }
+            }
+
+            return map;
         }
 
         private int EnsureMediaTag(string tag, SQLiteCommand cmd)

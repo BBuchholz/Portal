@@ -333,11 +333,13 @@ namespace NineWorldsDeep.Xml
                 TimeStamp.To_UTC_YYYY_MM_DD_HH_MM_SS(path.VerifiedMissing);
 
             pathEl.Add(new XAttribute(ATTRIBUTE_VALUE, path.Path));
-            pathEl.Add(
-                new XAttribute(ATTRIBUTE_VERIFIED_PRESENT, path.VerifiedPresent));
-            pathEl.Add(
-                new XAttribute(ATTRIBUTE_VERIFIED_MISSING, path.VerifiedMissing));
 
+            pathEl.Add(
+                new XAttribute(ATTRIBUTE_VERIFIED_PRESENT, verifiedPresent));
+            
+            pathEl.Add(
+                new XAttribute(ATTRIBUTE_VERIFIED_MISSING, verifiedMissing));
+            
             return pathEl;
         }
     }

@@ -540,62 +540,101 @@ namespace NineWorldsDeep.Tapestry.NodeUI
 
         private async void btnExportXml_Click(object sender, RoutedEventArgs e)
         {
-            await Task.Run(() => {
-
-                string detail = "starting export of mnemosyne subset";
-
-                StatusDetailUpdate(detail);
-
-                //for each media in db.getAllMedia()                
-                var hashedMedia = db.GetAllMedia();
-
-                XElement mnemosyneSubsetEl = new XElement(Xml.Xml.TAG_MNEMOSYNE_SUBSET);
-
-                foreach(string hash in hashedMedia.Keys)
+            try
+            {
+                await Task.Run(() =>
                 {
-                    detail = hash + ": processing";
 
-                    //create media tag with attribute set for hash
-                    XElement mediaEl = Xml.Xml.CreateMediaElement(hash);
+                    string detail = "starting export of mnemosyne subset";
 
-                    detail = hash + ": processing tags";
                     StatusDetailUpdate(detail);
+               
+                    var hashedMedia = db.GetAllMedia();
 
-                    var taggings = db.GetTaggedMediaTaggingsForHash(hash);
-                    
-                    foreach(MediaTagging tag in taggings)
+                    XElement mnemosyneSubsetEl = new XElement(Xml.Xml.TAG_MNEMOSYNE_SUBSET);
+
+                    int total = hashedMedia.Keys.Count;
+                    int count = 0;
+
+                    foreach (string hash in hashedMedia.Keys)
                     {
-                        //create tag element and append to 
-                        XElement tagEl = Xml.Xml.CreateTagElement(tag);
-                        mediaEl.Add(tagEl);
-                    }
+                        count++;
 
-                    //  db.getDevicePaths(media.Hash) <- create this
-                    ///////--> return a MultiMap keyed on device name, with a list of path objects (path, verified, missing)
-                    
-                    detail = hash + ": processing device paths";
-                    StatusDetailUpdate(detail);
+                        //just for testing
+                        //if (count > 10)
+                        //{
+                        //    break;
+                        //}
 
-                    MultiMap<string, DevicePath> devicePaths = db.GetDevicePaths(hash);
+                        detail = count + " of " + total + ":" + hash + ": processing";
 
-                    foreach(string deviceName in devicePaths.Keys)
-                    {
-                        XElement deviceEl = Xml.Xml.CreateDeviceElement(deviceName);
+                        //create media tag with attribute set for hash
+                        XElement mediaEl = Xml.Xml.CreateMediaElement(hash);
 
-                        foreach(DevicePath path in devicePaths[deviceName])
+                        detail = count + " of " + total + ":" + hash + ": processing tags";
+                        StatusDetailUpdate(detail);
+
+                        var taggings = db.GetTaggedMediaTaggingsForHash(hash);
+
+                        foreach (MediaTagging tag in taggings)
                         {
-                            XElement pathEl = Xml.Xml.CreatePathElement(path);
+                            //create tag element and append to 
+                            XElement tagEl = Xml.Xml.CreateTagElement(tag);
+                            mediaEl.Add(tagEl);
                         }
 
-                        mediaEl.Add(deviceEl);
+                        //  db.getDevicePaths(media.Hash) <- create this
+                        ///////--> return a MultiMap keyed on device name, with a list of path objects (path, verified, missing)
+
+                        detail = count + " of " + total + ":" + hash + ": processing device paths";
+                        StatusDetailUpdate(detail);
+
+                        MultiMap<string, DevicePath> devicePaths = db.GetDevicePaths(hash);
+
+                        foreach (string deviceName in devicePaths.Keys)
+                        {
+                            XElement deviceEl = Xml.Xml.CreateDeviceElement(deviceName);
+
+                            foreach (DevicePath path in devicePaths[deviceName])
+                            {
+                                XElement pathEl = Xml.Xml.CreatePathElement(path);
+                                deviceEl.Add(pathEl);
+                            }
+
+                            mediaEl.Add(deviceEl);
+                        }
+
+                        mnemosyneSubsetEl.Add(mediaEl);
                     }
 
-                    mnemosyneSubsetEl.Add(mediaEl);
-                }
+                    XDocument doc =
+                        new XDocument(
+                            new XElement("nwd", mnemosyneSubsetEl));
 
-            });
-            
-            tbStatus.Text = "finished.";
+                    //here, take doc and save to all sync locations            
+                    string fileName =
+                        NwdUtils.GetTimeStamp_yyyyMMddHHmmss() + "-nwd-mnemosyne-v5.xml";
+
+                    var allFolders =
+                        Configuration.GetActiveSyncProfileIncomingXmlFolders();
+
+                    foreach (string xmlIncomingFolderPath in allFolders)
+                    {
+                        string fullFilePath =
+                            System.IO.Path.Combine(xmlIncomingFolderPath, fileName);
+
+                        doc.Save(fullFilePath);
+                    }
+
+                });
+
+                tbStatus.Text = "finished.";
+            }
+            catch (Exception ex)
+            {
+                tbStatus.Text = "Error: " + ex.Message;
+            }
+
         }
     }
 }
