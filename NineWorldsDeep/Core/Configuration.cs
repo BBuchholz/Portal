@@ -310,6 +310,36 @@ namespace NineWorldsDeep.Core
             return allPaths;
         }
 
+        public static List<string> GetMnemosyneXmlImportPaths()
+        {
+            List<string> allPaths = new List<string>();
+
+            foreach (string profileName in GetAllActiveSyncProfileNames())
+            {
+                string xmlDir = Path.Combine(ProcessTestMode("NWD-SYNC"),
+                                             profileName,
+                                             @"NWD\xml\outgoing");
+
+                if (Directory.Exists(xmlDir))
+                {
+                    foreach (string filePath in
+                                Directory.GetFiles(xmlDir,
+                                                    "*.xml",
+                                                    SearchOption.TopDirectoryOnly))
+                    {
+                        string fileName = System.IO.Path.GetFileName(filePath);
+
+                        if (fileName.ToLower().Contains("nwd-mnemosyne-v5"))
+                        {
+                            allPaths.Add(filePath);
+                        }
+                    }
+                }
+            }
+
+            return allPaths;
+        }
+
         private static IEnumerable<string> GetAllActiveSyncProfileNames()
         {
             List<String> profileNames = new List<string>();

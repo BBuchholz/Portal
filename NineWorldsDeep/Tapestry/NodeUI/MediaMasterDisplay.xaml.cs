@@ -533,9 +533,57 @@ namespace NineWorldsDeep.Tapestry.NodeUI
             previousTime = currentTime;
         }
 
-        private void btnImportXml_Click(object sender, RoutedEventArgs e)
+        private async void btnImportXml_Click(object sender, RoutedEventArgs e)
         {
-            tbStatus.Text = "import xml not yet implemented";
+            var allPaths = Configuration.GetMnemosyneXmlImportPaths();
+            var count = 0;
+            var total = allPaths.Count();
+
+            try
+            {
+                await Task.Run(() =>
+                {
+                    string detail = "starting import of mnemosyne xml files";
+                    StatusDetailUpdate(detail);
+
+                    foreach (string path in allPaths)
+                    {
+                        count++;
+
+                        if (!string.IsNullOrWhiteSpace(path))
+                        {
+                            string fileName = System.IO.Path.GetFileName(path);
+
+                            XDocument doc = Xml.Xml.DocumentFromPath(path);
+
+                            throw new NotImplementedException("implementation in progress");
+                            //List<SynergyV5List> allLists =
+                            //    Xml.Xml.RetrieveSynergyV5Lists(doc);
+
+                            //foreach (SynergyV5List lst in allLists)
+                            //{
+                            //    string detail = "path " + count + " of " + total;
+                            //    detail += ": " + fileName + " -> ";
+                            //    detail += "processing list: " + lst.ListName;
+
+                            //    StatusDetailUpdate(detail);
+
+                            //    db.Sync(lst);
+                            //}
+
+                            //File.Delete(path);
+                        }
+
+                    }
+
+                });
+
+                tbStatus.Text = "finished.";
+            }
+            catch (Exception ex)
+            {
+                tbStatus.Text = "Error: " + ex.Message;
+            }
         }
 
         private async void btnExportXml_Click(object sender, RoutedEventArgs e)
