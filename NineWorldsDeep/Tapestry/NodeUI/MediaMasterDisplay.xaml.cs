@@ -549,37 +549,23 @@ namespace NineWorldsDeep.Tapestry.NodeUI
                     foreach (string path in allPaths)
                     {
                         count++;
-
-                        //for testing
-                        if(count > 10)
-                        {
-                            break;
-                        }
-
+                        
                         if (!string.IsNullOrWhiteSpace(path))
                         {
                             string fileName = System.IO.Path.GetFileName(path);
 
-                            XDocument doc = Xml.Xml.DocumentFromPath(path);
-                            
-                            List<Media> allMedia = Xml.Xml.RetrieveMedia(doc);
+                            //XDocument doc = Xml.Xml.DocumentFromPath(path);
 
-                            string prefix = "path " + count + " of " + total;
-                            prefix += ": " + fileName + " -> ";
+                            //List<Media> allMedia = Xml.Xml.RetrieveMedia(doc);
+
+                            List<Media> allMedia = 
+                                Xml.Xml.RetrieveMediaWithReaderAsync(path, this);
+
+                            string prefix = "file " + count + " of " + total;
+                            prefix += " -> ";
 
                             db.SyncAsync(allMedia, this, prefix);
-
-                            //foreach (Media media in allMedia)
-                            //{
-                            //    detail = "path " + count + " of " + total;
-                            //    detail += ": " + fileName + " -> ";
-                            //    detail += "processing media: " + media.MediaHash;
-
-                            //    StatusDetailUpdate(detail);
-
-                            //    db.Sync(media);
-                            //}
-                            
+                                                        
                             //uncomment after testing is complete
                             //File.Delete(path);
                         }

@@ -781,7 +781,7 @@ namespace NineWorldsDeep.Db.Sqlite
                 UpsertTaggingTimeStamps(tagging, cmd);
             }
 
-            RefreshMediaTaggingsByMediaId(media, cmd);
+            RefreshMediaTaggingsByMediaHash(media, cmd);
 
             foreach (string deviceName in media.DevicePaths.Keys)
             {
@@ -807,6 +807,8 @@ namespace NineWorldsDeep.Db.Sqlite
                                 string asyncStatusDetailPrefix)
         {
             string detail;
+            int total = multipleMediaItems.Count();
+            int count = 0;
 
             using (var conn = new SQLiteConnection(
                 @"Data Source=" + Configuration.GetSqliteDbPath(DbName)))
@@ -819,8 +821,11 @@ namespace NineWorldsDeep.Db.Sqlite
                     {
                         foreach (Media media in multipleMediaItems)
                         {
+                            count++;
+
                             detail = asyncStatusDetailPrefix +
-                                "syncing media: " + media.MediaHash;
+                                "syncing media " + count + " of " + 
+                                total + ": " + media.MediaHash;
 
                             ui.StatusDetailUpdate(detail);
 
@@ -941,7 +946,8 @@ namespace NineWorldsDeep.Db.Sqlite
         /// <param name="cmd"></param>
         private void UpsertMediaDevicePathTimeStamps(DevicePath dp, SQLiteCommand cmd)
         {
-            asdf;
+            UpdateMediaDevicePath(dp, cmd);
+            InsertMediaDevicePath(dp, cmd);
         }
 
         /// <summary>
@@ -973,9 +979,8 @@ namespace NineWorldsDeep.Db.Sqlite
         /// <param name="cmd"></param>
         private void UpsertTaggingTimeStamps(MediaTagging tagging, SQLiteCommand cmd)
         {
-
-
-            asdf;
+            UpdateMediaTagging(tagging, cmd);
+            InsertMediaTagging(tagging, cmd);
         }
 
         /// <summary>
@@ -986,8 +991,7 @@ namespace NineWorldsDeep.Db.Sqlite
         /// <param name="cmd"></param>
         private void PopulateTagByValue(MediaTagging tagging, SQLiteCommand cmd)
         {
-
-            asdf;
+            tagging.MediaTagId = EnsureMediaTag(tagging.MediaTagValue, cmd);
         }
 
         internal MultiMap<string, DevicePath> GetDevicePaths(string hash)
@@ -1186,6 +1190,32 @@ namespace NineWorldsDeep.Db.Sqlite
             cmd.ExecuteNonQuery();
         }
 
+        /// <summary>
+        /// updates media device path timestamps using MediaId, 
+        /// MediaPathId, and MediaDeviceId
+        /// </summary>
+        /// <param name="dp"></param>
+        /// <param name="cmd"></param>
+        private void UpdateMediaDevicePath(DevicePath dp, SQLiteCommand cmd)
+        {
+            cmd.Parameters.Clear();
+            cmd.CommandText =
+                NwdContract.UPDATE_MEDIA_DEVICE_PATH_V_W_X_Y_Z;
+
+            string verifiedPresent =
+                TimeStamp.To_UTC_YYYY_MM_DD_HH_MM_SS(dp.VerifiedPresent);
+            string verifiedMissing =
+                TimeStamp.To_UTC_YYYY_MM_DD_HH_MM_SS(dp.VerifiedMissing);
+
+            cmd.Parameters.Add(new SQLiteParameter() { Value = verifiedPresent});
+            cmd.Parameters.Add(new SQLiteParameter() { Value = verifiedMissing});
+            cmd.Parameters.Add(new SQLiteParameter() { Value = dp.MediaId});
+            cmd.Parameters.Add(new SQLiteParameter() { Value = dp.MediaDeviceId});
+            cmd.Parameters.Add(new SQLiteParameter() { Value = dp.MediaPathId});
+
+            cmd.ExecuteNonQuery();
+        }
+
         private void InsertMediaTagging(MediaTagging mt, SQLiteCommand cmd)
         {
             cmd.Parameters.Clear();
@@ -1365,6 +1395,27 @@ namespace NineWorldsDeep.Db.Sqlite
             cmd.ExecuteNonQuery();
         }
 
+        private void InsertMediaDevicePath(DevicePath dp, SQLiteCommand cmd)
+        {
+            //fields: MediaId, MediaDeviceId, MediaPathId, verified present and missing
+            cmd.Parameters.Clear();
+            cmd.CommandText =
+                NwdContract.INSERT_MEDIA_DEVICE_PATH_V_W_X_Y_Z;
+
+            string verifiedPresent =
+                TimeStamp.To_UTC_YYYY_MM_DD_HH_MM_SS(dp.VerifiedPresent);
+            string verifiedMissing =
+                TimeStamp.To_UTC_YYYY_MM_DD_HH_MM_SS(dp.VerifiedMissing);
+
+            cmd.Parameters.Add(new SQLiteParameter() { Value = dp.MediaId });
+            cmd.Parameters.Add(new SQLiteParameter() { Value = dp.MediaDeviceId });
+            cmd.Parameters.Add(new SQLiteParameter() { Value = dp.MediaPathId });
+            cmd.Parameters.Add(new SQLiteParameter() { Value = verifiedPresent });
+            cmd.Parameters.Add(new SQLiteParameter() { Value = verifiedMissing });
+
+            cmd.ExecuteNonQuery();
+        }
+
         private void InsertMediaFileName(string fileName, SQLiteCommand cmd)
         {
             cmd.Parameters.Clear();
@@ -1470,8 +1521,6 @@ namespace NineWorldsDeep.Db.Sqlite
             "		?, " +
             "		(SELECT " + NwdContract.COLUMN_MEDIA_PATH_ID + " FROM " + NwdContract.TABLE_MEDIA_PATH + " WHERE " + NwdContract.COLUMN_MEDIA_PATH_VALUE + " = ? LIMIT 1) " +
             "	) ";
-
-
 
         #endregion
 

@@ -8,6 +8,8 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Linq;
 using NineWorldsDeep.Mnemosyne.V5;
+using System.Xml;
+using NineWorldsDeep.Tapestry.NodeUI;
 
 namespace NineWorldsDeep.Xml
 {
@@ -306,12 +308,145 @@ namespace NineWorldsDeep.Xml
                 return "";
             }
         }
+        
+        public static List<Media> RetrieveMediaWithReaderAsync(
+            string documentPath, IAsyncStatusResponsive ui)
+        {
+            List<Media> allMedia = new List<Media>();
+
+            //read once first to count elements
+
+            int totalElements = 0;
+            int count = 0;
+            
+            using (XmlReader reader = XmlReader.Create(documentPath))
+            {
+                while (reader.ReadToFollowing(TAG_MEDIA))
+                {
+                    totalElements++;
+                }
+            }
+
+            using (XmlReader reader = XmlReader.Create(documentPath))
+            {
+                //reader.ReadStartElement(TAG_NWD);
+                //reader.ReadStartElement(TAG_MNEMOSYNE_SUBSET);
+
+                while (reader.Read())
+                {
+                    //for testing
+                    //if(count > 200)
+                    //{
+                    //    break;
+                    //}
+
+                    if (reader.Name == TAG_MEDIA)
+                    {
+                        count++;
+                        
+                        XElement mediaEl = (XElement)XNode.ReadFrom(reader);
+
+                        string sha1Hash =
+                            GetAttributeValueIfExists(mediaEl, ATTRIBUTE_SHA1_HASH);
+
+                        string fileName =
+                            GetAttributeValueIfExists(mediaEl, ATTRIBUTE_FILE_NAME);
+
+                        string description =
+                            GetAttributeValueIfExists(mediaEl, ATTRIBUTE_DESCRIPTION);
+
+                        ui.StatusDetailUpdate(
+                            "processing " + count + " of " + 
+                            totalElements + " xml media elements with hash: " + 
+                            sha1Hash);
+
+                        Media media = new Media()
+                        {
+                            MediaHash = sha1Hash,
+                            MediaDescription = description,
+                            MediaFileName = fileName
+                        };
+
+                        //get tags
+                        foreach (XElement tagEl in mediaEl.Elements(TAG_TAG))
+                        {
+
+                            //tagValue
+                            //taggedAt
+                            //untaggedAt
+                            //mediaHash
+                            string tagValue =
+                                GetAttributeValueIfExists(tagEl, ATTRIBUTE_TAG_VALUE);
+
+                            string taggedAt =
+                                GetAttributeValueIfExists(tagEl, ATTRIBUTE_TAGGED_AT);
+
+                            string untaggedAt =
+                                GetAttributeValueIfExists(tagEl, ATTRIBUTE_UNTAGGED_AT);
+
+                            DateTime? taggedAtTime = ToTime(taggedAt);
+                            DateTime? untaggedAtTime = ToTime(untaggedAt);
+
+                            MediaTagging tagging = new MediaTagging()
+                            {
+                                MediaHash = media.MediaHash,
+                                MediaTagValue = tagValue
+                            };
+
+                            tagging.SetTimeStamps(taggedAtTime, untaggedAtTime);
+
+                            media.Add(tagging);
+                        }
+
+                        //get device paths
+                        foreach (XElement mediaDeviceEl in mediaEl.Elements(TAG_MEDIA_DEVICE))
+                        {
+                            string deviceName =
+                                GetAttributeValueIfExists(mediaDeviceEl, ATTRIBUTE_DESCRIPTION);
+
+                            foreach (XElement pathEl in mediaDeviceEl.Descendants(TAG_PATH))
+                            {
+                                string pathValue =
+                                    GetAttributeValueIfExists(pathEl, ATTRIBUTE_VALUE);
+
+                                string verifiedPresent =
+                                    GetAttributeValueIfExists(pathEl, ATTRIBUTE_VERIFIED_PRESENT);
+
+                                string verifiedMissing =
+                                    GetAttributeValueIfExists(pathEl, ATTRIBUTE_VERIFIED_MISSING);
+
+                                DateTime? verifiedPresentTime = ToTime(verifiedPresent);
+                                DateTime? verifiedMissingTime = ToTime(verifiedMissing);
+
+                                DevicePath dp = new DevicePath()
+                                {
+                                    DeviceName = deviceName,
+                                    Path = pathValue
+                                };
+
+                                dp.SetTimeStamps(verifiedPresentTime, verifiedMissingTime);
+
+                                media.Add(dp);
+                            }
+                        }
+
+                        allMedia.Add(media);
+                    }
+                }
+
+                //reader.ReadEndElement();
+                //reader.ReadEndElement();
+            }
+
+            return allMedia;
+        }
+
 
         public static List<Media> RetrieveMedia(XDocument doc)
         {
             List<Media> allMedia = new List<Media>();
 
-            foreach(XElement mediaEl in doc.Descendants(TAG_MEDIA))
+            foreach(XElement mediaEl in doc.Elements(TAG_MEDIA))
             {
                 string sha1Hash = 
                     GetAttributeValueIfExists(mediaEl, ATTRIBUTE_SHA1_HASH);
@@ -330,7 +465,7 @@ namespace NineWorldsDeep.Xml
                 };
 
                 //get tags
-                foreach(XElement tagEl in mediaEl.Descendants(TAG_TAG)){
+                foreach(XElement tagEl in mediaEl.Elements(TAG_TAG)){
 
                     //tagValue
                     //taggedAt
@@ -360,7 +495,7 @@ namespace NineWorldsDeep.Xml
                 }
 
                 //get device paths
-                foreach(XElement mediaDeviceEl in mediaEl.Descendants(TAG_MEDIA_DEVICE))
+                foreach(XElement mediaDeviceEl in mediaEl.Elements(TAG_MEDIA_DEVICE))
                 {
                     string deviceName =
                         GetAttributeValueIfExists(mediaDeviceEl, ATTRIBUTE_DESCRIPTION);

@@ -308,6 +308,26 @@ namespace NineWorldsDeep.Sqlite
             "ON mp." + COLUMN_MEDIA_PATH_ID + " = mdp." + COLUMN_MEDIA_PATH_ID + " " +
             "WHERE m." + COLUMN_MEDIA_HASH + " = ?; ";
 
+        internal static readonly string UPDATE_MEDIA_DEVICE_PATH_V_W_X_Y_Z =
+
+            "UPDATE " + TABLE_MEDIA_DEVICE_PATH + "  " +
+            "SET " + COLUMN_MEDIA_DEVICE_PATH_VERIFIED_PRESENT + " = MAX(IFNULL(" + COLUMN_MEDIA_DEVICE_PATH_VERIFIED_PRESENT + ", ''), ?), " +
+            "	" + COLUMN_MEDIA_DEVICE_PATH_VERIFIED_MISSING + " = MAX(IFNULL(" + COLUMN_MEDIA_DEVICE_PATH_VERIFIED_MISSING + ", ''), ?) " +
+            "WHERE " + COLUMN_MEDIA_ID + " = ? AND " + COLUMN_MEDIA_DEVICE_ID + " = ? AND " + COLUMN_MEDIA_PATH_ID + " = ?; ";
+
+        internal static readonly string INSERT_MEDIA_DEVICE_PATH_V_W_X_Y_Z =
+            
+            "INSERT OR IGNORE INTO " + TABLE_MEDIA_DEVICE_PATH + " " +
+            "	( " +
+            "		" + COLUMN_MEDIA_ID + ", " +
+            "		" + COLUMN_MEDIA_DEVICE_ID + ",  " +
+            "		" + COLUMN_MEDIA_PATH_ID + ",  " +
+            "		" + COLUMN_MEDIA_DEVICE_PATH_VERIFIED_PRESENT + ", " +
+            "		" + COLUMN_MEDIA_DEVICE_PATH_VERIFIED_MISSING + " " +
+            "	) " +
+            "VALUES " +
+            "	(?, ?, ?, ?, ?);" ;
+
         #endregion
     }
 }
