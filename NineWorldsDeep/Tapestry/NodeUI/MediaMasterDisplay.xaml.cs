@@ -27,7 +27,7 @@ namespace NineWorldsDeep.Tapestry.NodeUI
     /// <summary>
     /// Interaction logic for MediaMasterDisplay.xaml
     /// </summary>
-    public partial class MediaMasterDisplay : UserControl
+    public partial class MediaMasterDisplay : UserControl, IAsyncStatusResponsive
     {
         private MediaV5SubsetDb db;
         MultiMap<string, string> fileSystemExtensionToPaths;
@@ -519,7 +519,7 @@ namespace NineWorldsDeep.Tapestry.NodeUI
             tbStatus.Text = "finished.";
         }
 
-        private void StatusDetailUpdate(string text)
+        public void StatusDetailUpdate(string text)
         {
             var currentTime = DateTime.Now;
 
@@ -550,27 +550,37 @@ namespace NineWorldsDeep.Tapestry.NodeUI
                     {
                         count++;
 
+                        //for testing
+                        if(count > 10)
+                        {
+                            break;
+                        }
+
                         if (!string.IsNullOrWhiteSpace(path))
                         {
                             string fileName = System.IO.Path.GetFileName(path);
 
                             XDocument doc = Xml.Xml.DocumentFromPath(path);
+                            
+                            List<Media> allMedia = Xml.Xml.RetrieveMedia(doc);
 
-                            throw new NotImplementedException("implementation in progress");
-                            //List<SynergyV5List> allLists =
-                            //    Xml.Xml.RetrieveSynergyV5Lists(doc);
+                            string prefix = "path " + count + " of " + total;
+                            prefix += ": " + fileName + " -> ";
 
-                            //foreach (SynergyV5List lst in allLists)
+                            db.SyncAsync(allMedia, this, prefix);
+
+                            //foreach (Media media in allMedia)
                             //{
-                            //    string detail = "path " + count + " of " + total;
+                            //    detail = "path " + count + " of " + total;
                             //    detail += ": " + fileName + " -> ";
-                            //    detail += "processing list: " + lst.ListName;
+                            //    detail += "processing media: " + media.MediaHash;
 
                             //    StatusDetailUpdate(detail);
 
-                            //    db.Sync(lst);
+                            //    db.Sync(media);
                             //}
-
+                            
+                            //uncomment after testing is complete
                             //File.Delete(path);
                         }
 

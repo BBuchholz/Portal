@@ -48,6 +48,8 @@ namespace NineWorldsDeep.Xml
         private static string ATTRIBUTE_VERIFIED_PRESENT = "verifiedPresent";
         private static string ATTRIBUTE_VERIFIED_MISSING = "verifiedMissing";
 
+        private static string ATTRIBUTE_FILE_NAME = "fileName";
+
         #endregion
 
         public static XDocument DocumentFromPath(string xmlFilePath)
@@ -281,6 +283,118 @@ namespace NineWorldsDeep.Xml
             }
 
             return allLists;
+        }
+
+        /// <summary>
+        /// returns the value of an attribute if found, and an 
+        /// empty string if the attribute does not exist
+        /// </summary>
+        /// <param name="el"></param>
+        /// <param name="attributeName"></param>
+        /// <returns></returns>
+        private static string GetAttributeValueIfExists(
+            XElement el, string attributeName)
+        {
+            var attr = el.Attribute(attributeName);
+
+            if(attr != null)
+            {
+                return attr.Value;
+            }
+            else
+            {
+                return "";
+            }
+        }
+
+        public static List<Media> RetrieveMedia(XDocument doc)
+        {
+            List<Media> allMedia = new List<Media>();
+
+            foreach(XElement mediaEl in doc.Descendants(TAG_MEDIA))
+            {
+                string sha1Hash = 
+                    GetAttributeValueIfExists(mediaEl, ATTRIBUTE_SHA1_HASH);
+
+                string fileName =
+                    GetAttributeValueIfExists(mediaEl, ATTRIBUTE_FILE_NAME);
+
+                string description =
+                    GetAttributeValueIfExists(mediaEl, ATTRIBUTE_DESCRIPTION);
+
+                Media media = new Media()
+                {
+                    MediaHash = sha1Hash,
+                    MediaDescription = description,
+                    MediaFileName = fileName
+                };
+
+                //get tags
+                foreach(XElement tagEl in mediaEl.Descendants(TAG_TAG)){
+
+                    //tagValue
+                    //taggedAt
+                    //untaggedAt
+                    //mediaHash
+                    string tagValue = 
+                        GetAttributeValueIfExists(tagEl, ATTRIBUTE_TAG_VALUE);
+
+                    string taggedAt =
+                        GetAttributeValueIfExists(tagEl, ATTRIBUTE_TAGGED_AT);
+
+                    string untaggedAt =
+                        GetAttributeValueIfExists(tagEl, ATTRIBUTE_UNTAGGED_AT);
+
+                    DateTime? taggedAtTime = ToTime(taggedAt);
+                    DateTime? untaggedAtTime = ToTime(untaggedAt);
+
+                    MediaTagging tagging = new MediaTagging()
+                    {
+                        MediaHash = media.MediaHash,
+                        MediaTagValue = tagValue
+                    };
+
+                    tagging.SetTimeStamps(taggedAtTime, untaggedAtTime);
+
+                    media.Add(tagging);
+                }
+
+                //get device paths
+                foreach(XElement mediaDeviceEl in mediaEl.Descendants(TAG_MEDIA_DEVICE))
+                {
+                    string deviceName =
+                        GetAttributeValueIfExists(mediaDeviceEl, ATTRIBUTE_DESCRIPTION);
+
+                    foreach(XElement pathEl in mediaDeviceEl.Descendants(TAG_PATH))
+                    {
+                        string pathValue =
+                            GetAttributeValueIfExists(pathEl, ATTRIBUTE_VALUE);
+
+                        string verifiedPresent =
+                            GetAttributeValueIfExists(pathEl, ATTRIBUTE_VERIFIED_PRESENT);
+
+                        string verifiedMissing =
+                            GetAttributeValueIfExists(pathEl, ATTRIBUTE_VERIFIED_MISSING);
+
+                        DateTime? verifiedPresentTime = ToTime(verifiedPresent);
+                        DateTime? verifiedMissingTime = ToTime(verifiedMissing);
+
+                        DevicePath dp = new DevicePath()
+                        {
+                            DeviceName = deviceName,
+                            Path = pathValue
+                        };
+
+                        dp.SetTimeStamps(verifiedPresentTime, verifiedMissingTime);
+
+                        media.Add(dp);
+                    }
+                }
+
+                allMedia.Add(media);
+            }
+
+            return allMedia;
         }
 
         public static XElement CreateMediaElement(string hash)

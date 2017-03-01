@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-
+using NineWorldsDeep.Mnemosyne.V5;
+using System.Linq;
 
 namespace NineWorldsDeep.Core
 {
@@ -145,6 +146,14 @@ namespace NineWorldsDeep.Core
                 }
             }
         }
-        
+
+        internal List<V> AllValues()
+        {
+            var allVals = _dict.Values
+                               .SelectMany(x => x) 
+                               .ToList();
+
+            return allVals;
+        }
     }
 }

@@ -181,6 +181,15 @@ namespace NineWorldsDeep.Sqlite
             "VALUES " +
             "	(?); ";
 
+        internal static readonly string SELECT_MEDIA_FOR_HASH_X =
+
+            "SELECT " + COLUMN_MEDIA_ID + ",  " +
+            "	    " + COLUMN_MEDIA_FILE_NAME + ",  " +
+            "	    " + COLUMN_MEDIA_DESCRIPTION + ",  " +
+            "	    " + COLUMN_MEDIA_HASH + " " +
+            "FROM " + TABLE_MEDIA + " " +
+            "WHERE " + COLUMN_MEDIA_HASH + " = ? ";
+
         internal static readonly string SELECT_MEDIA_ID_FOR_HASH_X =
 
             "SELECT " + COLUMN_MEDIA_ID + " " +
@@ -192,6 +201,13 @@ namespace NineWorldsDeep.Sqlite
             "UPDATE " + TABLE_MEDIA + " " +
             "SET " + COLUMN_MEDIA_HASH + " = ? " +
             "WHERE " + COLUMN_MEDIA_ID + " = ? ";
+
+        internal static readonly string UPDATE_MEDIA_FILE_DESC_FOR_HASH_X_Y_Z =
+
+            "UPDATE " + TABLE_MEDIA + "  " +
+            "SET " + COLUMN_MEDIA_FILE_NAME + " = ?, " +
+            "	 " + COLUMN_MEDIA_DESCRIPTION + " = ? " +
+            "WHERE " + COLUMN_MEDIA_HASH + " = ?  ";
 
         internal static readonly string INSERT_MEDIA_DEVICE_PATH_MID_DID_PID =
 

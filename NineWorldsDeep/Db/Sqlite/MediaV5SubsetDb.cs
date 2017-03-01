@@ -2,6 +2,7 @@
 using NineWorldsDeep.Mnemosyne.V5;
 using NineWorldsDeep.Model;
 using NineWorldsDeep.Sqlite;
+using NineWorldsDeep.Tapestry.NodeUI;
 using System;
 using System.Collections.Generic;
 using System.Data.SQLite;
@@ -366,10 +367,48 @@ namespace NineWorldsDeep.Db.Sqlite
             cmd.ExecuteNonQuery();
         }
 
+        /// <summary>
+        /// only updates if either file name or description is set, in which case
+        /// it will update both (empty value in either will overwrite whatever is 
+        /// in the db, but only if one or the other is not an empty value)
+        /// </summary>
+        /// <param name="media"></param>
+        /// <param name="cmd"></param>
+        private void UpdateOrIgnoreMediaRecordByHash(Media media, SQLiteCommand cmd)
+        {
+            if (!string.IsNullOrWhiteSpace(media.MediaFileName) ||
+                !string.IsNullOrWhiteSpace(media.MediaDescription))
+            {
+                cmd.Parameters.Clear();
+                cmd.CommandText = NwdContract.UPDATE_MEDIA_FILE_DESC_FOR_HASH_X_Y_Z;
+
+                cmd.Parameters.Add(new SQLiteParameter { Value = media.MediaFileName });
+                cmd.Parameters.Add(new SQLiteParameter { Value = media.MediaDescription });
+                cmd.Parameters.Add(new SQLiteParameter { Value = media.MediaHash });
+
+                cmd.ExecuteNonQuery();
+            }
+        }
+
         private int EnsureMediaHash(string hash, SQLiteCommand cmd)
         {
             InsertOrIgnoreHashForMedia(hash, cmd);
             return GetMediaIdForHash(hash, cmd);
+        }
+
+        /// <summary>
+        /// only ensures media table fields (ignores taggings and device paths),
+        /// will return a media object with all fields populated from db after
+        /// updates from original media object
+        /// </summary>
+        /// <param name="media"></param>
+        /// <param name="cmd"></param>
+        /// <returns></returns>
+        private Media EnsureMediaRecord(Media media, SQLiteCommand cmd)
+        {            
+            EnsureMediaHash(media.MediaHash, cmd);
+            UpdateOrIgnoreMediaRecordByHash(media, cmd);
+            return GetMediaForHash(media.MediaHash, cmd);
         }
 
         public int EnsureMediaHash(string hash)
@@ -397,24 +436,101 @@ namespace NineWorldsDeep.Db.Sqlite
             return id;
         }
 
-        private int GetMediaIdForHash(string hash, SQLiteCommand cmd)
+        private void PopulateMediaByHash(Media media, SQLiteCommand cmd)
         {
-            int id = -1;
-
             cmd.Parameters.Clear();
-            cmd.CommandText = 
-                NwdContract.SELECT_MEDIA_ID_FOR_HASH_X;
+            cmd.CommandText =
+                NwdContract.SELECT_MEDIA_FOR_HASH_X;
 
-            SQLiteParameter hashParam = new SQLiteParameter();
-            hashParam.Value = hash;
-            cmd.Parameters.Add(hashParam);
+            //SQLiteParameter hashParam = new SQLiteParameter();
+            //hashParam.Value = media.MediaHash;
+            //cmd.Parameters.Add(hashParam);
+
+            cmd.Parameters.Add(new SQLiteParameter() { Value = media.MediaHash });
 
             using (var rdr = cmd.ExecuteReader())
             {
                 if (rdr.Read())
                 {
-                    id = rdr.GetInt32(0);
+                    //0:MediaId
+                    //1:MediaFileName
+                    //2:MediaDescription
+                    //3:MediaHash
+
+                    int id = rdr.GetInt32(0);
+                    string fileName = DbV5Utils.GetNullableString(rdr, 1);
+                    string description = DbV5Utils.GetNullableString(rdr, 2);
+
+                    media.MediaId = id;
+                    media.MediaFileName = fileName;
+                    media.MediaDescription = description;
                 }
+            }
+        }
+
+        private Media GetMediaForHash(string hash, SQLiteCommand cmd)
+        {
+            //cmd.Parameters.Clear();
+            //cmd.CommandText =
+            //    NwdContract.SELECT_MEDIA_FOR_HASH_X;
+
+            //SQLiteParameter hashParam = new SQLiteParameter();
+            //hashParam.Value = hash;
+            //cmd.Parameters.Add(hashParam);
+
+            //using (var rdr = cmd.ExecuteReader())
+            //{
+            //    if (rdr.Read())
+            //    {
+            //        //0:MediaId
+            //        //1:MediaFileName
+            //        //2:MediaDescription
+            //        //3:MediaHash
+
+            //        int id = rdr.GetInt32(0);
+            //        string fileName = DbV5Utils.GetNullableString(rdr, 1);
+            //        string description = DbV5Utils.GetNullableString(rdr, 2);
+
+            //        media = new Media()
+            //        {
+            //            MediaId = id,
+            //            MediaFileName = fileName,
+            //            MediaDescription = description,
+            //            MediaHash = hash
+            //        };
+            //    }
+            //}
+
+            Media m = new Media() { MediaHash = hash };
+            PopulateMediaByHash(m, cmd);
+            return m;
+        }
+
+        private int GetMediaIdForHash(string hash, SQLiteCommand cmd)
+        {
+            int id = -1;
+
+            //cmd.Parameters.Clear();
+            //cmd.CommandText = 
+            //    NwdContract.SELECT_MEDIA_ID_FOR_HASH_X;
+
+            //SQLiteParameter hashParam = new SQLiteParameter();
+            //hashParam.Value = hash;
+            //cmd.Parameters.Add(hashParam);
+
+            //using (var rdr = cmd.ExecuteReader())
+            //{
+            //    if (rdr.Read())
+            //    {
+            //        id = rdr.GetInt32(0);
+            //    }
+            //}
+
+            Media media = GetMediaForHash(hash, cmd);
+
+            if(media != null)
+            {
+                id = media.MediaId;
             }
 
             return id;
@@ -545,10 +661,25 @@ namespace NineWorldsDeep.Db.Sqlite
             return lst;
         }
 
+        private int EnsureMediaDevice(string deviceDescription, SQLiteCommand cmd)
+        {
+            int id = -1;
+
+            id = SelectMediaDeviceId(deviceDescription, cmd);
+
+            if (id < 0)
+            {
+                InsertMediaDevice(deviceDescription, cmd);
+                id = SelectMediaDeviceId(deviceDescription, cmd);
+            }
+
+            return id;
+        }
+
         private int GetLocalMediaDeviceId()
         {
             int id = -1;
-            string deviceDesription = Configuration.GetLocalDeviceDescription();
+            string deviceDescription = Configuration.GetLocalDeviceDescription();
 
             using (var conn = new SQLiteConnection(
                 @"Data Source=" + Configuration.GetSqliteDbPath(DbName)))
@@ -559,13 +690,15 @@ namespace NineWorldsDeep.Db.Sqlite
                 {
                     using (var transaction = conn.BeginTransaction())
                     {
-                        id = SelectMediaDeviceId(deviceDesription, cmd);
+                        //id = SelectMediaDeviceId(deviceDesription, cmd);
 
-                        if(id < 0)
-                        {
-                            InsertMediaDevice(deviceDesription, cmd);
-                            id = SelectMediaDeviceId(deviceDesription, cmd);
-                        }
+                        //if(id < 0)
+                        //{
+                        //    InsertMediaDevice(deviceDesription, cmd);
+                        //    id = SelectMediaDeviceId(deviceDesription, cmd);
+                        //}
+
+                        id = EnsureMediaDevice(deviceDescription, cmd);
 
                         transaction.Commit();
                     }
@@ -577,7 +710,7 @@ namespace NineWorldsDeep.Db.Sqlite
             if(id < 0)
             {
                 throw new Exception("Error retrieving id for Media Device: " +
-                    deviceDesription);
+                    deviceDescription);
             }
 
             return id;
@@ -633,6 +766,228 @@ namespace NineWorldsDeep.Db.Sqlite
 
                 conn.Close();
             }
+        }
+
+        internal void Sync(Media media, SQLiteCommand cmd)
+        {
+            PopulateMediaByHash(media, cmd);
+
+            foreach (MediaTagging tagging in media.MediaTaggings)
+            {
+                tagging.MediaHash = media.MediaHash;
+                tagging.MediaId = media.MediaId;
+
+                PopulateTagByValue(tagging, cmd);
+                UpsertTaggingTimeStamps(tagging, cmd);
+            }
+
+            RefreshMediaTaggingsByMediaId(media, cmd);
+
+            foreach (string deviceName in media.DevicePaths.Keys)
+            {
+                int deviceId = EnsureMediaDevice(deviceName, cmd);
+
+                foreach (DevicePath dp in media.DevicePaths[deviceName])
+                {
+                    int pathId = EnsureMediaPath(dp.Path, cmd);
+
+                    dp.MediaDeviceId = deviceId;
+                    dp.MediaPathId = pathId;
+                    dp.MediaId = media.MediaId;
+
+                    UpsertMediaDevicePathTimeStamps(dp, cmd);
+                }
+            }
+
+            RefreshDevicePathsByMediaHash(media, cmd);
+        }
+
+        internal void SyncAsync(IEnumerable<Media> multipleMediaItems, 
+                                IAsyncStatusResponsive ui,
+                                string asyncStatusDetailPrefix)
+        {
+            string detail;
+
+            using (var conn = new SQLiteConnection(
+                @"Data Source=" + Configuration.GetSqliteDbPath(DbName)))
+            {
+                conn.Open();
+
+                using (var cmd = new SQLiteCommand(conn))
+                {
+                    using (var transaction = conn.BeginTransaction())
+                    {
+                        foreach (Media media in multipleMediaItems)
+                        {
+                            detail = asyncStatusDetailPrefix +
+                                "syncing media: " + media.MediaHash;
+
+                            ui.StatusDetailUpdate(detail);
+
+                            Sync(media, cmd);
+                        }
+
+                        transaction.Commit();
+                    }
+                }
+
+                conn.Close();
+            }
+        }
+
+        internal void Sync(IEnumerable<Media> multipleMediaItems)
+        {
+
+            using (var conn = new SQLiteConnection(
+                @"Data Source=" + Configuration.GetSqliteDbPath(DbName)))
+            {
+                conn.Open();
+
+                using (var cmd = new SQLiteCommand(conn))
+                {
+                    using (var transaction = conn.BeginTransaction())
+                    {
+                        foreach(Media media in multipleMediaItems)
+                        {
+                            Sync(media, cmd);
+                        }
+
+                        transaction.Commit();
+                    }
+                }
+
+                conn.Close();
+            }
+        }
+
+        internal void Sync(Media media)
+        {
+            using (var conn = new SQLiteConnection(
+                @"Data Source=" + Configuration.GetSqliteDbPath(DbName)))
+            {
+                conn.Open();
+
+                using (var cmd = new SQLiteCommand(conn))
+                {
+                    using (var transaction = conn.BeginTransaction())
+                    {
+                        //PopulateMediaByHash(media, cmd);
+
+                        //foreach(MediaTagging tagging in media.MediaTaggings)
+                        //{
+                        //    tagging.MediaHash = media.MediaHash;
+                        //    tagging.MediaId = media.MediaId;
+
+                        //    PopulateTagByValue(tagging, cmd);
+                        //    UpsertTaggingTimeStamps(tagging, cmd);
+                        //}
+
+                        //RefreshMediaTaggingsByMediaId(media, cmd);
+
+                        //foreach(string deviceName in media.DevicePaths.Keys)
+                        //{
+                        //    int deviceId = EnsureMediaDevice(deviceName, cmd);
+
+                        //    foreach(DevicePath dp in media.DevicePaths[deviceName])
+                        //    {
+                        //        int pathId = EnsureMediaPath(dp.Path, cmd);
+
+                        //        dp.MediaDeviceId = deviceId;
+                        //        dp.MediaPathId = pathId;
+                        //        dp.MediaId = media.MediaId;
+
+                        //        UpsertMediaDevicePathTimeStamps(dp, cmd);
+                        //    }
+                        //}
+
+                        //RefreshDevicePathsByMediaId(media, cmd);
+
+                        Sync(media, cmd);
+
+                        transaction.Commit();
+                    }
+                }
+
+                conn.Close();
+            }
+        }
+
+        /// <summary>
+        /// will refresh all DevicePaths for the MediaHash of the 
+        /// Media object parameter. any existing DevicePaths will
+        /// be cleared and freshly populated from the db. 
+        /// Any DevicePaths that are not in the db already, will be lost
+        /// </summary>
+        /// <param name="media"></param>
+        /// <param name="cmd"></param>
+        private void RefreshDevicePathsByMediaHash(Media media, SQLiteCommand cmd)
+        {
+            media.DevicePaths.ClearAll();
+
+            var devPaths = GetDevicePaths(media.MediaHash, cmd);
+
+            foreach(DevicePath dp in devPaths.AllValues())
+            {
+                media.Add(dp);
+            }
+        }
+
+        /// <summary>
+        /// will update or insert the device path timestamps for VerifiedPresent 
+        /// and VerifiedMissing using the MediaId, MediaDeviceId, and MediaPathId
+        /// in the DevicePath parameter
+        /// </summary>
+        /// <param name="dp"></param>
+        /// <param name="cmd"></param>
+        private void UpsertMediaDevicePathTimeStamps(DevicePath dp, SQLiteCommand cmd)
+        {
+            asdf;
+        }
+
+        /// <summary>
+        /// will refresh all MediaTaggings for the MediaId of the 
+        /// Media object parameter. any existing MediaTaggings will
+        /// be cleared and freshly populated from the db. 
+        /// Any MediaTaggings that are not in the db already, will be lost
+        /// </summary>
+        /// <param name="media"></param>
+        /// <param name="cmd"></param>
+        private void RefreshMediaTaggingsByMediaHash(Media media, SQLiteCommand cmd)
+        {
+            media.MediaTaggings.Clear();
+
+            var taggings = GetTaggedMediaTaggingsForHash(media.MediaHash, cmd);
+
+            foreach(MediaTagging mt in taggings)
+            {
+                media.Add(mt);
+            }
+        }
+
+        /// <summary>
+        /// will update the TaggedAt and UntaggedAt timestamps for a 
+        /// MediaTagging, using the TagId and MediaId set in the tagging 
+        /// object parameter
+        /// </summary>
+        /// <param name="tagging"></param>
+        /// <param name="cmd"></param>
+        private void UpsertTaggingTimeStamps(MediaTagging tagging, SQLiteCommand cmd)
+        {
+
+
+            asdf;
+        }
+
+        /// <summary>
+        /// will populate the tagId value of the tagging object based on 
+        /// the tag value set in the tagging object
+        /// </summary>
+        /// <param name="tagging"></param>
+        /// <param name="cmd"></param>
+        private void PopulateTagByValue(MediaTagging tagging, SQLiteCommand cmd)
+        {
+
+            asdf;
         }
 
         internal MultiMap<string, DevicePath> GetDevicePaths(string hash)
