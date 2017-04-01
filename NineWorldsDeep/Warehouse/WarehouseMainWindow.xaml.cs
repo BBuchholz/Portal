@@ -344,24 +344,27 @@ namespace NineWorldsDeep.Warehouse
                     //get files
                     foreach (string filePath in allFilePaths)
                     {
-                        count++;
-
-                        string msg = "processing " + count + " of " + total + ": " + filePath;
-
-                        gui.UpdateStatus(msg);
-
-                        string hash = Hashes.Sha1ForFilePath(filePath);
-                        string path = filePath;
-                        string tags = TagsV4c.ImportForHash(sp, hash, tagsFromXmlNotKeyValFile);
-                        string displayName = DisplayNames.FromHash(sp, sm.SyncDirection, hash);
-
-                        lst.Add(new SyncItem(sm)
+                        if (!System.IO.Path.GetFileName(filePath).StartsWith("."))
                         {
-                            ExtHash = hash,
-                            ExtPath = path,
-                            ExtTags = tags,
-                            ExtDisplayName = displayName
-                        });
+                            count++;
+
+                            string msg = "processing " + count + " of " + total + ": " + filePath;
+
+                            gui.UpdateStatus(msg);
+
+                            string hash = Hashes.Sha1ForFilePath(filePath);
+                            string path = filePath;
+                            string tags = TagsV4c.ImportForHash(sp, hash, tagsFromXmlNotKeyValFile);
+                            string displayName = DisplayNames.FromHash(sp, sm.SyncDirection, hash);
+
+                            lst.Add(new SyncItem(sm)
+                            {
+                                ExtHash = hash,
+                                ExtPath = path,
+                                ExtTags = tags,
+                                ExtDisplayName = displayName
+                            });
+                        }
                     }
 
                     gui.UpdateStatus("finished processing " + grandTotal + " files.");
