@@ -537,7 +537,7 @@ namespace NineWorldsDeep.Tapestry.NodeUI
         {
             var allPaths = Configuration.GetMnemosyneXmlImportPaths();
             var count = 0;
-            var total = allPaths.Count();
+            var total = allPaths.Count();           
 
             try
             {
@@ -565,9 +565,9 @@ namespace NineWorldsDeep.Tapestry.NodeUI
                             prefix += " -> ";
 
                             db.SyncAsync(allMedia, this, prefix);
-                                                        
-                            //uncomment after testing is complete
-                            //File.Delete(path);
+                                                      
+                            
+                            File.Delete(path);
                         }
 
                     }
