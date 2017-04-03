@@ -194,7 +194,8 @@ namespace NineWorldsDeep.Sqlite
 
             "SELECT " + COLUMN_MEDIA_ID + " " +
             "FROM " + TABLE_MEDIA + " " +
-            "WHERE " + COLUMN_MEDIA_HASH + " = ?;";
+            "WHERE " + COLUMN_MEDIA_HASH + " = ? " +
+            "COLLATE NOCASE;";
 
         internal static readonly string UPDATE_HASH_FOR_MEDIA_ID_X_Y =
 
@@ -245,7 +246,8 @@ namespace NineWorldsDeep.Sqlite
 
             "SELECT " + COLUMN_MEDIA_TAG_ID + "  " +
             "FROM " + TABLE_MEDIA_TAG + " " +
-            "WHERE " + COLUMN_MEDIA_TAG_VALUE + " = ?; ";
+            "WHERE " + COLUMN_MEDIA_TAG_VALUE + " = ? " +
+            "COLLATE NOCASE; ";
 
         internal static readonly string 
             SELECT_MEDIA_WHERE_HASH_NOT_NULL_OR_WHITESPACE =

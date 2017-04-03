@@ -274,7 +274,7 @@ namespace NineWorldsDeep.Db.Sqlite
 
                                 if(mediaId < 1)
                                 {
-                                    mediaId = EnsureMediaHash(hash, cmd);
+                                    mediaId = EnsureMediaIdForHash(hash, cmd);
                                 }
                                 else
                                 {
@@ -390,10 +390,20 @@ namespace NineWorldsDeep.Db.Sqlite
             }
         }
 
-        private int EnsureMediaHash(string hash, SQLiteCommand cmd)
+        private int EnsureMediaIdForHash(string hash, SQLiteCommand cmd)
         {
-            InsertOrIgnoreHashForMedia(hash, cmd);
-            return GetMediaIdForHash(hash, cmd);
+            //need to get media first so COLLATE NOCASE can be used in 
+            //the select query (otherwise the select is case sensitive and
+            //duplicate hashes occur)
+            int mediaId = GetMediaIdForHash(hash, cmd);
+
+            if (mediaId < 1)
+            {
+                InsertOrIgnoreHashForMedia(hash, cmd);
+                mediaId = GetMediaIdForHash(hash, cmd);
+            }
+
+            return mediaId;
         }
 
         /// <summary>
@@ -406,7 +416,7 @@ namespace NineWorldsDeep.Db.Sqlite
         /// <returns></returns>
         private Media EnsureMediaRecord(Media media, SQLiteCommand cmd)
         {            
-            EnsureMediaHash(media.MediaHash, cmd);
+            EnsureMediaIdForHash(media.MediaHash, cmd);
             UpdateOrIgnoreMediaRecordByHash(media, cmd);
             return GetMediaForHash(media.MediaHash, cmd);
         }
@@ -424,7 +434,7 @@ namespace NineWorldsDeep.Db.Sqlite
                 {
                     using (var transaction = conn.BeginTransaction())
                     {
-                        id = EnsureMediaHash(hash, cmd);
+                        id = EnsureMediaIdForHash(hash, cmd);
 
                         transaction.Commit();
                     }
@@ -468,6 +478,13 @@ namespace NineWorldsDeep.Db.Sqlite
             }
         }
 
+        /// <summary>
+        /// requires that the hash already exists in the database,
+        /// will return empty media if it does not
+        /// </summary>
+        /// <param name="hash"></param>
+        /// <param name="cmd"></param>
+        /// <returns></returns>
         private Media GetMediaForHash(string hash, SQLiteCommand cmd)
         {
             //cmd.Parameters.Clear();
@@ -506,32 +523,39 @@ namespace NineWorldsDeep.Db.Sqlite
             return m;
         }
 
+        /// <summary>
+        /// uses COLLATE NOCASE to perform a case insensitive query
+        /// on MediaHash column
+        /// </summary>
+        /// <param name="hash"></param>
+        /// <param name="cmd"></param>
+        /// <returns></returns>
         private int GetMediaIdForHash(string hash, SQLiteCommand cmd)
         {
             int id = -1;
 
-            //cmd.Parameters.Clear();
-            //cmd.CommandText = 
-            //    NwdContract.SELECT_MEDIA_ID_FOR_HASH_X;
+            cmd.Parameters.Clear();
+            cmd.CommandText =
+                NwdContract.SELECT_MEDIA_ID_FOR_HASH_X;
 
-            //SQLiteParameter hashParam = new SQLiteParameter();
-            //hashParam.Value = hash;
-            //cmd.Parameters.Add(hashParam);
+            SQLiteParameter hashParam = new SQLiteParameter();
+            hashParam.Value = hash;
+            cmd.Parameters.Add(hashParam);
 
-            //using (var rdr = cmd.ExecuteReader())
-            //{
-            //    if (rdr.Read())
-            //    {
-            //        id = rdr.GetInt32(0);
-            //    }
-            //}
-
-            Media media = GetMediaForHash(hash, cmd);
-
-            if(media != null)
+            using (var rdr = cmd.ExecuteReader())
             {
-                id = media.MediaId;
+                if (rdr.Read())
+                {
+                    id = rdr.GetInt32(0);
+                }
             }
+
+            //Media media = GetMediaForHash(hash, cmd);
+
+            //if(media != null)
+            //{
+            //    id = media.MediaId;
+            //}
 
             return id;
         }
@@ -579,7 +603,8 @@ namespace NineWorldsDeep.Db.Sqlite
             }
         }
         
-        public void InsertPathsForDeviceId(int mediaDeviceId, List<string> paths)
+        public void InsertPathsForDeviceId(
+            int mediaDeviceId, List<string> paths, IAsyncStatusResponsive ui)
         {
             using (var conn = new SQLiteConnection(
                 @"Data Source=" + Configuration.GetSqliteDbPath(DbName)))
@@ -590,7 +615,7 @@ namespace NineWorldsDeep.Db.Sqlite
                 {
                     using (var transaction = conn.BeginTransaction())
                     {
-                        InsertPathsForDeviceId(mediaDeviceId, paths, cmd);
+                        InsertPathsForDeviceId(mediaDeviceId, paths, ui, cmd);
 
                         transaction.Commit();
                     }
@@ -770,13 +795,14 @@ namespace NineWorldsDeep.Db.Sqlite
 
         internal void Sync(Media media, SQLiteCommand cmd)
         {
+            media.MediaId = EnsureMediaIdForHash(media.MediaHash, cmd);
             PopulateMediaByHash(media, cmd);
 
             foreach (MediaTagging tagging in media.MediaTaggings)
             {
                 tagging.MediaHash = media.MediaHash;
                 tagging.MediaId = media.MediaId;
-
+                
                 PopulateTagByValue(tagging, cmd);
                 UpsertTaggingTimeStamps(tagging, cmd);
             }
@@ -1086,8 +1112,15 @@ namespace NineWorldsDeep.Db.Sqlite
 
         private int EnsureMediaTag(string tag, SQLiteCommand cmd)
         {
-            InsertOrIgnoreMediaTag(tag, cmd);
-            return GetMediaTagId(tag, cmd);
+            int mediaTagId = GetMediaTagId(tag, cmd);
+
+            if(mediaTagId < 1)
+            {
+                InsertOrIgnoreMediaTag(tag, cmd);
+                mediaTagId = GetMediaTagId(tag, cmd);
+            }
+
+            return mediaTagId;
         }
 
         private int GetMediaTagId(string tag, SQLiteCommand cmd)
@@ -1360,10 +1393,15 @@ namespace NineWorldsDeep.Db.Sqlite
         }
 
         private void InsertPathsForDeviceId(
-            int mediaDeviceId, List<string> paths, SQLiteCommand cmd)
+            int mediaDeviceId, 
+            List<string> paths, 
+            IAsyncStatusResponsive ui, 
+            SQLiteCommand cmd)
         {            
             foreach(string path in paths)
             {
+                ui.StatusDetailUpdate("inserting path: " + path);
+
                 string fileName = System.IO.Path.GetFileName(path);
 
                 InsertMediaPath(path, cmd);

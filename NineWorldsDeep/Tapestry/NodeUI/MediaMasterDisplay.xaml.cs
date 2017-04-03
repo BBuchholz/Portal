@@ -293,23 +293,26 @@ namespace NineWorldsDeep.Tapestry.NodeUI
             }
         }
 
-        private void mUpdateDbFromFileSystemButton_Click(object sender, RoutedEventArgs e)
+        private async void mUpdateDbFromFileSystemButton_Click(object sender, RoutedEventArgs e)
         {
             if(fileSystemExtensionToPaths != null && SelectedMediaDevice != null)
             {
                 List<string> paths = new List<string>();
                 int mediaDeviceId = SelectedMediaDevice.MediaDeviceId;
 
-                foreach(string ext in fileSystemExtensionToPaths.Keys)
+                foreach (string ext in fileSystemExtensionToPaths.Keys)
                 {
                     paths.AddRange(fileSystemExtensionToPaths[ext]);
                 }
 
-                UpdateStatus("inserting paths into database...");
-                
-                db.InsertPathsForDeviceId(mediaDeviceId, paths);
+                await Task.Run(() =>
+                {
+                    StatusDetailUpdate("inserting paths into database...");
 
-                UpdateStatus("finished inserting paths into database.");
+                    db.InsertPathsForDeviceId(mediaDeviceId, paths, this);
+
+                    StatusDetailUpdate("finished inserting paths into database.");
+                });
             }
             else
             {
@@ -566,7 +569,6 @@ namespace NineWorldsDeep.Tapestry.NodeUI
 
                             db.SyncAsync(allMedia, this, prefix);
                                                       
-                            
                             File.Delete(path);
                         }
 
