@@ -143,7 +143,11 @@ namespace NineWorldsDeep.Tapestry.NodeUI
 
                     List<ExtensionEntry> entries = new List<ExtensionEntry>();
 
-                    foreach (string ext in fileSystemExtensionToPaths.Keys)
+                    List<string> keys = fileSystemExtensionToPaths.Keys.ToList();
+
+                    keys.Sort();
+
+                    foreach (string ext in keys)
                     {
                         int count = fileSystemExtensionToPaths[ext].Count;
                         entries.Add(new ExtensionEntry(ext, count));
