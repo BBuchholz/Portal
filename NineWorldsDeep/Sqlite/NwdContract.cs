@@ -246,8 +246,8 @@ namespace NineWorldsDeep.Sqlite
 
             "SELECT " + COLUMN_MEDIA_TAG_ID + "  " +
             "FROM " + TABLE_MEDIA_TAG + " " +
-            "WHERE " + COLUMN_MEDIA_TAG_VALUE + " = ? " +
-            "COLLATE NOCASE; ";
+            "WHERE " + COLUMN_MEDIA_TAG_VALUE + " = ? "; // +
+            //"COLLATE NOCASE; ";
 
         internal static readonly string 
             SELECT_MEDIA_WHERE_HASH_NOT_NULL_OR_WHITESPACE =

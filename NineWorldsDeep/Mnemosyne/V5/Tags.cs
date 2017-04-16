@@ -25,14 +25,24 @@ namespace NineWorldsDeep.Mnemosyne.V5
             //get tags that changed (in one not the other, check both for new and removed)
             string[] seps = { "," };
 
+            //var oldTags = oldTagString
+            //    .ToLower()
+            //    .Split(seps, StringSplitOptions.RemoveEmptyEntries)
+            //    .Select(x => x.Trim())
+            //    .Where(x => !string.IsNullOrWhiteSpace(x));
+
+            //var newTags = newTagString
+            //    .ToLower()
+            //    .Split(seps, StringSplitOptions.RemoveEmptyEntries)
+            //    .Select(x => x.Trim())
+            //    .Where(x => !string.IsNullOrWhiteSpace(x));
+
             var oldTags = oldTagString
-                .ToLower()
                 .Split(seps, StringSplitOptions.RemoveEmptyEntries)
                 .Select(x => x.Trim())
                 .Where(x => !string.IsNullOrWhiteSpace(x));
 
             var newTags = newTagString
-                .ToLower()
                 .Split(seps, StringSplitOptions.RemoveEmptyEntries)
                 .Select(x => x.Trim())
                 .Where(x => !string.IsNullOrWhiteSpace(x));

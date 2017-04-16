@@ -1202,15 +1202,46 @@ namespace NineWorldsDeep.Db.Sqlite
             cmd.CommandText =
                 NwdContract.UPDATE_MEDIA_TAGGING_TAGGED_UNTAGGED_WHERE_MEDIA_ID_AND_TAG_ID_W_X_Y_Z;
 
+            //SQLiteParameter taggedParam = new SQLiteParameter();
+            //taggedParam.Value = 
+            //    TimeStamp.To_UTC_YYYY_MM_DD_HH_MM_SS(mt.TaggedAt);
+            //cmd.Parameters.Add(taggedParam);
+
+            //SQLiteParameter untaggedParam = new SQLiteParameter();
+            //untaggedParam.Value = 
+            //    TimeStamp.To_UTC_YYYY_MM_DD_HH_MM_SS(mt.UntaggedAt);
+            //cmd.Parameters.Add(untaggedParam);
+
             SQLiteParameter taggedParam = new SQLiteParameter();
-            taggedParam.Value = 
-                TimeStamp.To_UTC_YYYY_MM_DD_HH_MM_SS(mt.TaggedAt);
+
+            String taggedAt = TimeStamp.To_UTC_YYYY_MM_DD_HH_MM_SS(mt.TaggedAt);
+
+            if (string.IsNullOrWhiteSpace(taggedAt))
+            {
+                taggedParam.Value = DBNull.Value;
+            }
+            else
+            {
+                taggedParam.Value = taggedAt;
+            }                
             cmd.Parameters.Add(taggedParam);
 
+
             SQLiteParameter untaggedParam = new SQLiteParameter();
-            untaggedParam.Value = 
+
+            String untaggedAt = 
                 TimeStamp.To_UTC_YYYY_MM_DD_HH_MM_SS(mt.UntaggedAt);
+
+            if (string.IsNullOrWhiteSpace(untaggedAt))
+            {
+                untaggedParam.Value = DBNull.Value;
+            }
+            else
+            {
+                untaggedParam.Value = untaggedAt;
+            }
             cmd.Parameters.Add(untaggedParam);
+
 
             SQLiteParameter mediaIdParam = new SQLiteParameter();
             mediaIdParam.Value = mt.MediaId;
