@@ -31,5 +31,25 @@ namespace NineWorldsDeep.Mnemosyne.V5
         {
             DevicePaths.Add(dp.DeviceName, dp);
         }
+
+        public MediaTagging GetTag(string tag)
+        {
+            foreach(MediaTagging mt in MediaTaggings)
+            {
+                if(mt.MediaTagValue.Equals(tag))
+                {
+                    return mt;
+                }
+            }
+
+            MediaTagging newMt = new MediaTagging()
+            {
+                MediaTagValue = tag
+            };
+
+            Add(newMt);
+
+            return newMt;
+        }
     }
 }

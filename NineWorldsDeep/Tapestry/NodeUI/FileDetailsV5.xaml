@@ -29,19 +29,30 @@
                 <RowDefinition/>
             </Grid.RowDefinitions>
 
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+
             <TextBox x:Name="TagStringTextBox"                 
                      Grid.Row="0"
+                     Grid.ColumnSpan="2"
                      Margin="10, 2, 10, 4"
                      KeyUp="TagStringTextBox_KeyUp"/>
             <Button Grid.Row="1"
+                    Grid.ColumnSpan="2"
                     x:Name="UpdateButton"
                     Margin="10, 2"
                     IsEnabled="False"
                     Click="UpdateButton_Click">Update</Button>
             <Button Grid.Row="2"
+                    Grid.Column="0"
                     Margin="10, 2"
-                    Click="OpenExternallyButton_Click">Open Externally</Button>
-
+                    Click="OpenExternallyButton_Click">Open External</Button>
+            <Button Grid.Row="2"
+                    Grid.Column="1"
+                    Margin="10, 2"
+                    Click="ExportXmlButton_Click">Export XML</Button>
         </Grid>
 
     </Grid>

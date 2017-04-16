@@ -13,6 +13,25 @@ namespace NineWorldsDeep.Mnemosyne.V5
         public DateTime? UntaggedAt { get; private set; }
         public string MediaHash { get; set; }
 
+        public bool IsTagged()
+        {
+            if(UntaggedAt != null && TaggedAt != null)
+            {
+                return DateTime.Compare(UntaggedAt.Value, TaggedAt.Value) < 0;
+            }
+
+            if(UntaggedAt == null)
+            {
+                //TaggedAt is either null or greater
+                //in either case, its considered "tagged"
+                return true;
+            }
+
+            //if we reach here, UntaggedAt is not null, and
+            //TaggedAt is null
+            return false;
+        }
+
         /// <summary>
         /// 
         /// will resolve conflicts, newest date will always take precedence

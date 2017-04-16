@@ -1,4 +1,5 @@
 ﻿using NineWorldsDeep.Core;
+using NineWorldsDeep.Db.Sqlite;
 using NineWorldsDeep.Mnemosyne.V5;
 using NineWorldsDeep.Tapestry.Nodes;
 using NineWorldsDeep.Warehouse;
@@ -16,6 +17,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Xml.Linq;
 
 namespace NineWorldsDeep.Tapestry.NodeUI
 {
@@ -26,11 +28,14 @@ namespace NineWorldsDeep.Tapestry.NodeUI
     {
         //private bool tagStringChanged = false;
         private string oldTagString;
+        private MediaV5SubsetDb db;
         private FileSystemNode fileNode;
+        private MediaListItem currentMediaListItem;
 
         public FileDetailsV5()
         {
             InitializeComponent();
+            db = new MediaV5SubsetDb();
         }
 
         public string TagString
@@ -49,11 +54,14 @@ namespace NineWorldsDeep.Tapestry.NodeUI
         
         private void UpdateButton_Click(object sender, RoutedEventArgs e)
         {
-            string hash = Hashes.Sha1ForFilePath(fileNode.Path);
-            
-            Tags.UpdateTagStringForHash(hash, oldTagString, TagString);
+            //string hash = Hashes.Sha1ForFilePath(fileNode.Path);
 
-            LoadTags();
+            //Tags.UpdateTagStringForHash(hash, oldTagString, TagString);
+
+            //LoadTags();
+
+            currentMediaListItem.SetTagsFromTagString(TagString);
+            Sync();
 
             UpdateButton.IsEnabled = false;
         }
@@ -68,15 +76,30 @@ namespace NineWorldsDeep.Tapestry.NodeUI
 
         private void LoadTags()
         {
-            TagString = 
-                Tags.GetTagStringForHash(
-                    Hashes.Sha1ForFilePath(fileNode.Path));
+            //TagString = 
+            //    Tags.GetTagStringForHash(
+            //        Hashes.Sha1ForFilePath(fileNode.Path));
+
+            TagString = currentMediaListItem.GetTagString();
         }
 
         public void Display(FileSystemNode nd)
         {
             fileNode = nd;
             MultiLineTextBox.Text = nd.ToMultiLineDetail();
+            SetCurrentMediaListItem(new MediaListItem(fileNode.Path));
+        }
+
+        private void SetCurrentMediaListItem(MediaListItem mli)
+        {
+            currentMediaListItem = mli;
+            currentMediaListItem.HashMedia();
+            Sync();
+        }
+
+        private void Sync()
+        {
+            Configuration.DB.MediaSubset.Sync(currentMediaListItem.Media);
             LoadTags();
         }
 
@@ -88,5 +111,74 @@ namespace NineWorldsDeep.Tapestry.NodeUI
             }
         }
 
+        private async void ExportXmlButton_Click(object sender, RoutedEventArgs e)
+        {
+            string hash = currentMediaListItem.Media.MediaHash;
+
+            try
+            {
+                await Task.Run(() =>
+                {   
+                    XElement mnemosyneSubsetEl = new XElement(Xml.Xml.TAG_MNEMOSYNE_SUBSET);
+                    
+                    //create media tag with attribute set for hash
+                    XElement mediaEl = Xml.Xml.CreateMediaElement(hash);
+                    
+                    var taggings = db.GetTaggedMediaTaggingsForHash(hash);
+
+                    foreach (MediaTagging tag in taggings)
+                    {
+                        //create tag element and append to 
+                        XElement tagEl = Xml.Xml.CreateTagElement(tag);
+                        mediaEl.Add(tagEl);
+                    }
+
+                    //  db.getDevicePaths(media.Hash) <- create this
+                    ///////--> return a MultiMap keyed on device name, with a list of path objects (path, verified, missing)
+                    
+                    MultiMap<string, DevicePath> devicePaths = db.GetDevicePaths(hash);
+
+                    foreach (string deviceName in devicePaths.Keys)
+                    {
+                        XElement deviceEl = Xml.Xml.CreateDeviceElement(deviceName);
+
+                        foreach (DevicePath path in devicePaths[deviceName])
+                        {
+                            XElement pathEl = Xml.Xml.CreatePathElement(path);
+                            deviceEl.Add(pathEl);
+                        }
+
+                        mediaEl.Add(deviceEl);
+                    }
+
+                    mnemosyneSubsetEl.Add(mediaEl);
+                    
+
+                    XDocument doc =
+                        new XDocument(
+                            new XElement("nwd", mnemosyneSubsetEl));
+
+                    //here, take doc and save to all sync locations            
+                    string fileName =
+                        NwdUtils.GetTimeStamp_yyyyMMddHHmmss() + "-nwd-mnemosyne-v5.xml";
+
+                    var allFolders =
+                        Configuration.GetActiveSyncProfileIncomingXmlFolders();
+
+                    foreach (string xmlIncomingFolderPath in allFolders)
+                    {
+                        string fullFilePath =
+                            System.IO.Path.Combine(xmlIncomingFolderPath, fileName);
+
+                        doc.Save(fullFilePath);
+                    }
+
+                });
+            }
+            catch (Exception ex)
+            {
+                UI.Display.Exception(ex);
+            }
+        }
     }
 }

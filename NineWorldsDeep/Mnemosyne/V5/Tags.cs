@@ -116,10 +116,24 @@ namespace NineWorldsDeep.Mnemosyne.V5
         {
             return ToTagString(GetTaggingsForHash(hash));
         }
-
+        
         public static string ToTagString(List<MediaTagging> list)
         {
-            return string.Join(", ", list.Select(x => x.MediaTagValue));
+            return string.Join(", ", 
+                list.Where(y => y.IsTagged())
+                    .Select(x => x.MediaTagValue));
+        }
+
+        public static List<string> ToTagList(string tagString)
+        {
+            List<string> tags = new List<string>();
+
+            foreach(string tag in tagString.Split(','))
+            {
+                tags.Add(tag.Trim());
+            }
+
+            return tags;
         }
     }
 }
