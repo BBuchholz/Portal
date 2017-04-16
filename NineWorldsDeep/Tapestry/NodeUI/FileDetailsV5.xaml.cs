@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -31,10 +32,16 @@ namespace NineWorldsDeep.Tapestry.NodeUI
         private MediaV5SubsetDb db;
         private FileSystemNode fileNode;
         private MediaListItem currentMediaListItem;
+        
+        //async related 
+        private readonly SynchronizationContext syncContext;
+        private DateTime previousTime = DateTime.Now;
 
         public FileDetailsV5()
         {
             InitializeComponent();
+            syncContext = SynchronizationContext.Current;
+
             db = new MediaV5SubsetDb();
         }
 
@@ -63,6 +70,8 @@ namespace NineWorldsDeep.Tapestry.NodeUI
             currentMediaListItem.SetTagsFromTagString(TagString);
             Sync();
 
+            tbStatus.Text = "tags updated.";
+
             UpdateButton.IsEnabled = false;
         }
 
@@ -71,6 +80,7 @@ namespace NineWorldsDeep.Tapestry.NodeUI
             if (oldTagString != TagString)
             {
                 UpdateButton.IsEnabled = true;
+                tbStatus.Text = "tag string has unsaved changes";
             }
         }
 
@@ -124,7 +134,7 @@ namespace NineWorldsDeep.Tapestry.NodeUI
                     //create media tag with attribute set for hash
                     XElement mediaEl = Xml.Xml.CreateMediaElement(hash);
                     
-                    var taggings = db.GetTaggedMediaTaggingsForHash(hash);
+                    var taggings = db.GetMediaTaggingsForHash(hash);
 
                     foreach (MediaTagging tag in taggings)
                     {
@@ -173,12 +183,27 @@ namespace NineWorldsDeep.Tapestry.NodeUI
                         doc.Save(fullFilePath);
                     }
 
+                    StatusDetailUpdate("exported to xml.");
                 });
             }
             catch (Exception ex)
             {
                 UI.Display.Exception(ex);
             }
+        }
+
+        public void StatusDetailUpdate(string text)
+        {
+            var currentTime = DateTime.Now;
+
+            if ((DateTime.Now - previousTime).Milliseconds <= 50) return;
+
+            syncContext.Post(new SendOrPostCallback(s =>
+            {
+                tbStatus.Text = (string)s;
+            }), text);
+
+            previousTime = currentTime;
         }
     }
 }

@@ -51,7 +51,7 @@ namespace NineWorldsDeep.Db.Sqlite
             return lst;
         }
 
-        public List<MediaTagging> GetTaggedMediaTaggingsForHash(string hash)
+        public List<MediaTagging> GetMediaTaggingsForHash(string hash)
         {
             List<MediaTagging> lst =
                 new List<MediaTagging>();
@@ -65,7 +65,7 @@ namespace NineWorldsDeep.Db.Sqlite
                 {
                     using (var transaction = conn.BeginTransaction())
                     {
-                        lst = GetTaggedMediaTaggingsForHash(hash, cmd);
+                        lst = GetMediaTaggingsForHash(hash, cmd);
 
                         transaction.Commit();
                     }
@@ -101,7 +101,7 @@ namespace NineWorldsDeep.Db.Sqlite
             }
         }
         
-        private List<MediaTagging> GetTaggedMediaTaggingsForHash(
+        private List<MediaTagging> GetMediaTaggingsForHash(
             string hash, SQLiteCommand cmd)
         {
             List<MediaTagging> lst =
@@ -988,7 +988,7 @@ namespace NineWorldsDeep.Db.Sqlite
         {
             media.MediaTaggings.Clear();
 
-            var taggings = GetTaggedMediaTaggingsForHash(media.MediaHash, cmd);
+            var taggings = GetMediaTaggingsForHash(media.MediaHash, cmd);
 
             foreach(MediaTagging mt in taggings)
             {

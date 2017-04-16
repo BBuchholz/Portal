@@ -13,6 +13,11 @@
             <ColumnDefinition/>
         </Grid.ColumnDefinitions>
 
+        <Grid.RowDefinitions>
+            <RowDefinition/>
+            <RowDefinition Height="20"/>
+        </Grid.RowDefinitions>
+
         <TextBox x:Name="MultiLineTextBox"
                  TextWrapping="Wrap"
                  AcceptsReturn="True"
@@ -21,7 +26,8 @@
                  Margin="5"
                  HorizontalContentAlignment="Center"/>
 
-        <Grid Grid.Column="1">
+        <Grid Grid.Column="1"
+              Margin="0 3">
 
             <Grid.RowDefinitions>
                 <RowDefinition/>
@@ -54,6 +60,15 @@
                     Margin="10, 2"
                     Click="ExportXmlButton_Click">Export XML</Button>
         </Grid>
+
+        <StackPanel Grid.Row="5"
+                            VerticalAlignment="Bottom"
+                            HorizontalAlignment="Left"
+                            Grid.ColumnSpan="3">
+
+            <TextBlock x:Name="tbStatus" Text="status update goes here"/>
+
+        </StackPanel>
 
     </Grid>
 </UserControl>

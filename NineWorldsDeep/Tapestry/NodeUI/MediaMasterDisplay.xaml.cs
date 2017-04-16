@@ -624,7 +624,7 @@ namespace NineWorldsDeep.Tapestry.NodeUI
                         detail = count + " of " + total + ":" + hash + ": processing tags";
                         StatusDetailUpdate(detail);
 
-                        var taggings = db.GetTaggedMediaTaggingsForHash(hash);
+                        var taggings = db.GetMediaTaggingsForHash(hash);
 
                         foreach (MediaTagging tag in taggings)
                         {

@@ -280,9 +280,9 @@ namespace NineWorldsDeep.Sqlite
             "ON mt." + COLUMN_MEDIA_TAG_ID + " = mtg." + COLUMN_MEDIA_TAG_ID + " " +
             "JOIN " + TABLE_MEDIA + " m " +
             "ON m." + COLUMN_MEDIA_ID + " = mtg." + COLUMN_MEDIA_ID + " " +
-            "WHERE m." + COLUMN_MEDIA_HASH + " = ? " +
-            "AND (mtg." + COLUMN_MEDIA_TAGGING_UNTAGGED_AT + " IS NULL " +
-            "   OR mtg." + COLUMN_MEDIA_TAGGING_UNTAGGED_AT + " <= mtg." + COLUMN_MEDIA_TAGGING_TAGGED_AT + "); ";
+            "WHERE m." + COLUMN_MEDIA_HASH + " = ? ";// +
+            //"AND (mtg." + COLUMN_MEDIA_TAGGING_UNTAGGED_AT + " IS NULL " +
+            //"   OR mtg." + COLUMN_MEDIA_TAGGING_UNTAGGED_AT + " <= mtg." + COLUMN_MEDIA_TAGGING_TAGGED_AT + "); ";
 
         internal static readonly string UPDATE_MEDIA_TAGGING_TAGGED_UNTAGGED_WHERE_MEDIA_ID_AND_TAG_ID_W_X_Y_Z =
 

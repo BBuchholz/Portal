@@ -109,7 +109,7 @@ namespace NineWorldsDeep.Mnemosyne.V5
         public static List<MediaTagging> GetTaggingsForHash(string hash)
         {
             //exactly what it says
-            return Configuration.DB.MediaSubset.GetTaggedMediaTaggingsForHash(hash);
+            return Configuration.DB.MediaSubset.GetMediaTaggingsForHash(hash);
         }
 
         public static string GetTagStringForHash(string hash)
