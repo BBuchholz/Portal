@@ -106,16 +106,16 @@ namespace NineWorldsDeep.Mnemosyne.V5
             return taggings;
         }
 
-        public static List<MediaTagging> GetTaggingsForHash(string hash)
-        {
-            //exactly what it says
-            return Configuration.DB.MediaSubset.GetMediaTaggingsForHash(hash);
-        }
+        //public static List<MediaTagging> GetTaggingsForHash(string hash)
+        //{
+        //    //exactly what it says
+        //    return Configuration.DB.MediaSubset.GetMediaTaggingsForHash(hash);
+        //}
 
-        public static string GetTagStringForHash(string hash)
-        {
-            return ToTagString(GetTaggingsForHash(hash));
-        }
+        //public static string GetTagStringForHash(string hash)
+        //{
+        //    return ToTagString(GetTaggingsForHash(hash));
+        //}
         
         public static string ToTagString(List<MediaTagging> list)
         {
