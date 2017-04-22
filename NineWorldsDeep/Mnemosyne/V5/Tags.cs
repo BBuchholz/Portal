@@ -1,4 +1,5 @@
 ﻿using NineWorldsDeep.Core;
+using NineWorldsDeep.Tapestry.NodeUI;
 using NineWorldsDeep.Warehouse;
 using System;
 using System.Collections.Generic;
@@ -134,6 +135,50 @@ namespace NineWorldsDeep.Mnemosyne.V5
             }
 
             return tags;
+        }
+
+        public static TagStringHashIndex GetTagStringHashIndexFromXml(SyncProfile sp, IAsyncStatusResponsive ui)
+        {
+            TagStringHashIndex tshIndex = new TagStringHashIndex();
+
+            var allPaths = Configuration.GetMnemosyneXmlImportPaths(sp);
+            var count = 0;
+            var total = allPaths.Count();
+
+            //for each xmlFile in profile folder 
+            //  for each media Xml.RetrieveMedia(new XDocument(xmlFile))
+            //      tshIndex.GetMediaByHash(media.MediaHash).Merge(media)
+
+            string detail = "reading mnemosyne xml files";
+            ui.StatusDetailUpdate(detail);
+
+            foreach (string path in allPaths)
+            {
+                count++;
+
+                if (!string.IsNullOrWhiteSpace(path))
+                {
+                    string prefix = "file " + count + " of " + total;
+
+                    ui.StatusDetailUpdate(prefix);
+
+                    string fileName = System.IO.Path.GetFileName(path);
+
+                    //XDocument doc = Xml.Xml.DocumentFromPath(path);
+
+                    //List<Media> allMedia = Xml.Xml.RetrieveMedia(doc);
+
+                    List<Media> allMedia =
+                        Xml.Xml.RetrieveMediaWithReaderAsync(path, ui);
+                    
+                    foreach(Media m in allMedia)
+                    {
+                        tshIndex.Add(m);
+                    }
+                }
+            }
+
+            return tshIndex;
         }
     }
 }

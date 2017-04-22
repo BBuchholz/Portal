@@ -1,5 +1,7 @@
 ﻿using NineWorldsDeep.Core;
+using NineWorldsDeep.Mnemosyne.V5;
 using NineWorldsDeep.Sqlite.Model;
+using NineWorldsDeep.Tapestry.NodeUI;
 using NineWorldsDeep.UI;
 using System;
 using System.Collections.Generic;
@@ -21,7 +23,7 @@ namespace NineWorldsDeep.Warehouse
     /// <summary>
     /// Interaction logic for WarehouseMainWindow.xaml
     /// </summary>
-    public partial class WarehouseMainWindow : Window
+    public partial class WarehouseMainWindow : Window, IAsyncStatusResponsive
     {
         private SyncItemCollection _syncItemCol;
         private Db.Sqlite.DbAdapterSwitch db =
@@ -176,12 +178,17 @@ namespace NineWorldsDeep.Warehouse
 
         private void ProcessActionDefault()
         {
-            var sa = (SyncAction)cmbActionDefault.SelectedItem;
+            var sa = cmbActionDefault.SelectedItem;
             var objDirection = cmbDirection.SelectedItem;            
+
+            if(sa == null)
+            {
+                return;
+            }
 
             foreach (var si in SyncItems)
             {
-                si.SyncAction = sa;
+                si.SyncAction = (SyncAction)sa;
 
                 //by default, just copy all untagged imports
                 if (cmbDirection.SelectedItem != null)
@@ -224,7 +231,7 @@ namespace NineWorldsDeep.Warehouse
             return profileName;
         }
 
-        private void UpdateStatus(string text)
+        public void StatusDetailUpdate(string text)
         {
             Dispatcher.Invoke(() =>
             {
@@ -259,7 +266,7 @@ namespace NineWorldsDeep.Warehouse
 
                         string msg = "processing " + count + " of " + total + ": " + filePath;
 
-                        gui.UpdateStatus(msg);
+                        gui.StatusDetailUpdate(msg);
                         
                         string hash = Hashes.Sha1ForFilePath(filePath);
                         string path = filePath;
@@ -275,7 +282,7 @@ namespace NineWorldsDeep.Warehouse
                         });
                     }
 
-                    gui.UpdateStatus("finished processing " + grandTotal + " files.");
+                    gui.StatusDetailUpdate("finished processing " + grandTotal + " files.");
                 }
             }
 
@@ -320,7 +327,7 @@ namespace NineWorldsDeep.Warehouse
         }
         
         internal List<SyncItem> PopulateImports(
-            WarehouseMainWindow gui, 
+            IAsyncStatusResponsive gui, 
             SyncProfile sp, 
             bool tagsFromXmlNotKeyValFile)
         {
@@ -341,6 +348,14 @@ namespace NineWorldsDeep.Warehouse
                     int total = allFilePaths.Count();
                     grandTotal += total;
 
+                    TagStringHashIndex tagStringHashIndex = null;
+
+                    if (tagsFromXmlNotKeyValFile)
+                    {
+                        tagStringHashIndex = 
+                            Tags.GetTagStringHashIndexFromXml(sp, gui);
+                    }
+
                     //get files
                     foreach (string filePath in allFilePaths)
                     {
@@ -350,11 +365,21 @@ namespace NineWorldsDeep.Warehouse
 
                             string msg = "processing " + count + " of " + total + ": " + filePath;
 
-                            gui.UpdateStatus(msg);
+                            gui.StatusDetailUpdate(msg);
 
                             string hash = Hashes.Sha1ForFilePath(filePath);
                             string path = filePath;
-                            string tags = TagsV4c.ImportForHash(sp, hash, tagsFromXmlNotKeyValFile);
+                            string tags = "";
+
+                            if (tagsFromXmlNotKeyValFile)
+                            {
+                                tags = tagStringHashIndex.GetTagStringForHash(hash);
+                            }
+                            else
+                            {
+                                tags = TagsV4c.ImportForHash(sp, hash, tagsFromXmlNotKeyValFile);
+                            }
+
                             string displayName = DisplayNames.FromHash(sp, sm.SyncDirection, hash);
 
                             lst.Add(new SyncItem(sm)
@@ -367,7 +392,7 @@ namespace NineWorldsDeep.Warehouse
                         }
                     }
 
-                    gui.UpdateStatus("finished processing " + grandTotal + " files.");
+                    gui.StatusDetailUpdate("finished processing " + grandTotal + " files.");
                 }
             }
 
@@ -599,7 +624,7 @@ namespace NineWorldsDeep.Warehouse
             }
             else
             {
-                Display.Message("all hashes verified");
+                Display.Message("all hashes verified. if xml tags were displayed for the imported media, use Import XML Media Utility to store tags.");
                 //cleanup
                 foreach (SyncItem si in SyncItems)
                 {

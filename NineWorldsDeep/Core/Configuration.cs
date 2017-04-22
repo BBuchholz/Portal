@@ -310,34 +310,70 @@ namespace NineWorldsDeep.Core
             return allPaths;
         }
 
+        public static List<string> GetMnemosyneXmlImportPaths(SyncProfile sp)
+        {
+            List<string> pathList = new List<string>();
+
+            PopulateMnemosyneXmlImportPathsForProfileName(sp.Name, pathList);
+
+            return pathList;
+        }
+
         public static List<string> GetMnemosyneXmlImportPaths()
         {
             List<string> allPaths = new List<string>();
 
             foreach (string profileName in GetAllActiveSyncProfileNames())
             {
-                string xmlDir = Path.Combine(ProcessTestMode("NWD-SYNC"),
-                                             profileName,
-                                             @"NWD\xml\outgoing");
+                //string xmlDir = Path.Combine(ProcessTestMode("NWD-SYNC"),
+                //                             profileName,
+                //                             @"NWD\xml\outgoing");
 
-                if (Directory.Exists(xmlDir))
-                {
-                    foreach (string filePath in
-                                Directory.GetFiles(xmlDir,
-                                                    "*.xml",
-                                                    SearchOption.TopDirectoryOnly))
-                    {
-                        string fileName = System.IO.Path.GetFileName(filePath);
+                //if (Directory.Exists(xmlDir))
+                //{
+                //    foreach (string filePath in
+                //                Directory.GetFiles(xmlDir,
+                //                                    "*.xml",
+                //                                    SearchOption.TopDirectoryOnly))
+                //    {
+                //        string fileName = System.IO.Path.GetFileName(filePath);
 
-                        if (fileName.ToLower().Contains("nwd-mnemosyne-v5"))
-                        {
-                            allPaths.Add(filePath);
-                        }
-                    }
-                }
+                //        if (fileName.ToLower().Contains("nwd-mnemosyne-v5"))
+                //        {
+                //            allPaths.Add(filePath);
+                //        }
+                //    }
+                //}
+
+                PopulateMnemosyneXmlImportPathsForProfileName(profileName, allPaths);
             }
 
             return allPaths;
+        }
+
+        private static void PopulateMnemosyneXmlImportPathsForProfileName(
+            string profileName,
+            List<string> pathList)
+        {
+            string xmlDir = Path.Combine(ProcessTestMode("NWD-SYNC"),
+                             profileName,
+                             @"NWD\xml\outgoing");
+
+            if (Directory.Exists(xmlDir))
+            {
+                foreach (string filePath in
+                            Directory.GetFiles(xmlDir,
+                                                "*.xml",
+                                                SearchOption.TopDirectoryOnly))
+                {
+                    string fileName = System.IO.Path.GetFileName(filePath);
+
+                    if (fileName.ToLower().Contains("nwd-mnemosyne-v5"))
+                    {
+                        pathList.Add(filePath);
+                    }
+                }
+            }
         }
 
         private static IEnumerable<string> GetAllActiveSyncProfileNames()

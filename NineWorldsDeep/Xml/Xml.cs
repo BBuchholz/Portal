@@ -350,10 +350,10 @@ namespace NineWorldsDeep.Xml
                             GetAttributeValueIfExists(mediaEl, ATTRIBUTE_SHA1_HASH);
 
                         //for testing
-                        if(sha1Hash.Equals("83559ec05eecef4625acde9e76bc1f06f118fecd", StringComparison.CurrentCultureIgnoreCase))
-                        {
-                            bool testing = true;
-                        }
+                        //if(sha1Hash.Equals("83559ec05eecef4625acde9e76bc1f06f118fecd", StringComparison.CurrentCultureIgnoreCase))
+                        //{
+                        //    bool testing = true;
+                        //}
 
                         string fileName =
                             GetAttributeValueIfExists(mediaEl, ATTRIBUTE_FILE_NAME);

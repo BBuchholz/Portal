@@ -22,9 +22,80 @@ namespace NineWorldsDeep.Mnemosyne.V5
             DevicePaths = new MultiMap<string, DevicePath>();
         }
 
+        //public void Add(MediaTagging mt)
+        //{
+        //    MediaTaggings.Add(mt);
+        //}
+        
         public void Add(MediaTagging mt)
         {
-            MediaTaggings.Add(mt);
+            if (!string.IsNullOrWhiteSpace(mt.MediaTagValue))
+            {
+                GetTag(mt.MediaTagValue).Merge(mt);
+            }
+        }
+
+        /// <summary>
+        /// MediaFileName, MediaDescription, and MediaHash will default to non-empty, non-null value.
+        /// MediaId will default to value greater than zero.
+        /// 
+        /// if values are set for both objects on any of the above properties, 
+        /// and differ, an error will be thrown
+        /// 
+        /// MediaTaggings will be Merged with any existing taggings
+        /// 
+        /// DevicePaths will simply be added, without regard to duplication
+        /// </summary>
+        /// <param name="m"></param>
+        public void Merge(Media m)
+        {
+            MediaFileName = TryMergeString(MediaFileName, m.MediaFileName);
+            MediaDescription = TryMergeString(MediaDescription, m.MediaDescription);
+            MediaHash = TryMergeString(MediaHash, m.MediaHash);
+
+            MediaId = TryMergeInt(MediaId, m.MediaId);
+
+            foreach(MediaTagging mt in m.MediaTaggings)
+            {
+                GetTag(mt.MediaTagValue).Merge(mt);
+            }
+
+            foreach(DevicePath dp in m.DevicePaths.AllValues())
+            {
+                Add(dp);
+            }
+        }
+
+        private int TryMergeInt(int int1, int int2)
+        {
+            if (int1 > 0 && int2 > 0)
+            {
+                throw new Exception("unable to merge MediaTagging, conflicting values set on an exclusive property");
+            }
+
+            if (int1 > 0)
+            {
+                return int1;
+            }
+
+            return int2;
+        }
+
+        private string TryMergeString(string string1, string string2)
+        {
+            if (!string.IsNullOrWhiteSpace(string1) &&
+                !string.IsNullOrWhiteSpace(string2) &&
+                !string1.Equals(string2))
+            {
+                throw new Exception("unable to merge MediaTagging, conflicting values set on an exclusive property");
+            }
+
+            if (!string.IsNullOrWhiteSpace(string1))
+            {
+                return string1;
+            }
+
+            return string2;
         }
 
         public void Add(DevicePath dp)
@@ -47,7 +118,7 @@ namespace NineWorldsDeep.Mnemosyne.V5
                 MediaTagValue = tag
             };
 
-            Add(newMt);
+            MediaTaggings.Add(newMt);
 
             return newMt;
         }

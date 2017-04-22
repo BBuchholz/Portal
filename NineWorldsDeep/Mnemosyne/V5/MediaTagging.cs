@@ -31,6 +31,61 @@ namespace NineWorldsDeep.Mnemosyne.V5
             //TaggedAt is null
             return false;
         }
+        
+        /// <summary>
+        /// MediaTagValue and MediaHash will default to non-empty, non-null value.
+        /// MediaTagId, MediaTaggingId, and MediaId will default to value 
+        /// greater than zero.
+        /// 
+        /// if values are set for both objects on any of the above properties, 
+        /// and differ, an error will be thrown
+        /// 
+        /// TimeStamps will be processed with SetTimeStamps(x, y), which will
+        /// default to the most recent timestamp for each parameter.
+        /// </summary>
+        /// <param name="mt"></param>
+        public void Merge(MediaTagging mt)
+        {
+            MediaTagValue = TryMergeString(MediaTagValue, mt.MediaTagValue);
+            MediaHash = TryMergeString(MediaHash, mt.MediaHash);
+            MediaTagId = TryMergeInt(MediaTagId, mt.MediaTagId);
+            MediaTaggingId = TryMergeInt(MediaTaggingId, mt.MediaTaggingId);
+            MediaId = TryMergeInt(MediaId, mt.MediaId);
+
+            SetTimeStamps(mt.TaggedAt, mt.UntaggedAt);
+        }
+
+        private int TryMergeInt(int int1, int int2)
+        {
+            if(int1 > 0 && int2 > 0)
+            {
+                throw new Exception("unable to merge MediaTagging, conflicting values set on an exclusive property");
+            }
+
+            if(int1 > 0)
+            {
+                return int1;
+            }
+
+            return int2;
+        }
+
+        private string TryMergeString(string string1, string string2)
+        {
+            if(!string.IsNullOrWhiteSpace(string1) &&
+                !string.IsNullOrWhiteSpace(string2) &&
+                !string1.Equals(string2))
+            {
+                throw new Exception("unable to merge MediaTagging, conflicting values set on an exclusive property");
+            }
+
+            if (!string.IsNullOrWhiteSpace(string1))
+            {
+                return string1;
+            }
+
+            return string2;
+        }
 
         /// <summary>
         /// 

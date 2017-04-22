@@ -152,11 +152,11 @@
 
                 <Grid Grid.Column="1">
 
-                    <CheckBox Content="Load Tags From XML Instead Of KeyVal File"
+                    <CheckBox Content="Load Tags From V5 XML"
                               x:Name="chkTagsFromXmlNotKeyVal"
                               HorizontalAlignment="Center"
                               VerticalAlignment="Center"
-                              IsChecked="False"
+                              IsChecked="True"
                               Unchecked="chkTagsFromXmlNotKeyVal_checkToggled"
                               Checked="chkTagsFromXmlNotKeyVal_checkToggled"/>
 
