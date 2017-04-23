@@ -284,15 +284,41 @@ namespace NineWorldsDeep.Tapestry.NodeUI
 
         private void btnCreateListItem_Click(object sender, RoutedEventArgs e)
         {
+            ProcessEntryInput();
+
+            //string itemValue = txtListItemValueEntry.Text;
+
+            //if (!string.IsNullOrWhiteSpace(itemValue))
+            //{
+            //    if(CurrentList != null)
+            //    {
+            //        SynergyV5ListItem sli = new SynergyV5ListItem(itemValue);
+
+            //        if(chkActivateNewEntries.IsChecked.HasValue && chkActivateNewEntries.IsChecked.Value)
+            //        {
+            //            sli.Activate();
+            //        }
+
+            //        CurrentList.Add(0, sli);
+            //        CurrentList.Sync(db);
+            //        Refresh();
+
+            //        txtListItemValueEntry.Text = "";
+            //    }
+            //}
+        }
+
+        private void ProcessEntryInput()
+        {
             string itemValue = txtListItemValueEntry.Text;
 
             if (!string.IsNullOrWhiteSpace(itemValue))
             {
-                if(CurrentList != null)
+                if (CurrentList != null)
                 {
                     SynergyV5ListItem sli = new SynergyV5ListItem(itemValue);
 
-                    if(chkActivateNewEntries.IsChecked.HasValue && chkActivateNewEntries.IsChecked.Value)
+                    if (chkActivateNewEntries.IsChecked.HasValue && chkActivateNewEntries.IsChecked.Value)
                     {
                         sli.Activate();
                     }
@@ -345,6 +371,14 @@ namespace NineWorldsDeep.Tapestry.NodeUI
             var selectedItems = items.Cast<SynergyV5ListItem>();
 
             Clipboard.SetText(selectedItems.First().ItemValue);
+        }
+
+        private void txtListItemValueEntry_KeyUp(object sender, KeyEventArgs e)
+        {
+            if(e.Key == Key.Enter)
+            {
+                ProcessEntryInput();
+            }
         }
     }
 }

@@ -73,7 +73,7 @@
                       Grid.Row="1"
                       HorizontalAlignment="Center"
                       VerticalAlignment="Center"
-                      IsChecked="False"/>
+                      IsChecked="True"/>
             
             <TextBlock x:Name="tbListStatus" 
                        Grid.Column="2"
@@ -134,7 +134,8 @@
         <TextBox x:Name="txtListItemValueEntry"
                  Grid.Row="3"
                  Grid.Column="0"
-                 Margin="5"/>
+                 Margin="5"
+                 KeyUp="txtListItemValueEntry_KeyUp"/>
 
         <Button x:Name="btnCreateListItem"
                 Grid.Row="3"
