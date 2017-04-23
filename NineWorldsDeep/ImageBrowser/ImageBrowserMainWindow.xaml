@@ -6,7 +6,11 @@
         xmlns:local="clr-namespace:NineWorldsDeep.ImageBrowser"
         xmlns:tagger="clr-namespace:NineWorldsDeep.Tagger"
         mc:Ignorable="d"
-        Title="ImageBrowserMainWindow" Height="650" Width="850" Closing="Window_Closing">
+        Title="ImageBrowserMainWindow" 
+        Height="650" Width="850" 
+        Closing="Window_Closing"
+        WindowState="Maximized">
+    
     <DockPanel LastChildFill="True">
         <Menu DockPanel.Dock="Top">
             <MenuItem Header="File">

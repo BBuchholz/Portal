@@ -12,10 +12,10 @@ namespace NineWorldsDeep.Tapestry.Nodes
         public TapestryRootNode() 
             : base("TapestryRoot")
         {
-            AddChild(new GardenFragment());
-            AddChild(new SynergyFragment());
+            //AddChild(new GardenFragment());
+            //AddChild(new SynergyFragment());
             AddChild(new StudioNode());
-            AddChild(new HierophantNode());
+            //AddChild(new HierophantNode());
             AddChild(new WareHouseFragment());
             AddChild(new AudioBrowserFragment());
             AddChild(new ImageBrowserFragment());

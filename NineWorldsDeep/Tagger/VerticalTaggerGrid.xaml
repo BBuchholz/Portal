@@ -76,18 +76,18 @@
             <ListView.ItemTemplate>
                 <DataTemplate>
                     <StackPanel Orientation="Vertical">
-                        <WrapPanel>
+                        <!--<WrapPanel>
                             <TextBlock Text="Name: " />
                             <TextBlock Text="{Binding Name}" FontWeight="Bold" />
-                        </WrapPanel>
+                        </WrapPanel>-->
                         <WrapPanel>
                             <TextBlock Text="Path: " />
-                            <TextBlock Text="{Binding Path}" FontWeight="Bold" />
+                            <TextBlock Text="{Binding Path}" />
                         </WrapPanel>
-                        <WrapPanel>
+                        <!--<WrapPanel>
                             <TextBlock Text="TagString: " />
                             <TextBlock Text="{Binding TagString}" FontWeight="Bold" />
-                        </WrapPanel>
+                        </WrapPanel>-->
                     </StackPanel>
                 </DataTemplate>
             </ListView.ItemTemplate>

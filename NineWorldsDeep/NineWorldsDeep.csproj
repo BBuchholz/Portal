@@ -27,7 +27,7 @@
     <UpdatePeriodically>false</UpdatePeriodically>
     <UpdateRequired>false</UpdateRequired>
     <MapFileExtensions>true</MapFileExtensions>
-    <ApplicationRevision>89</ApplicationRevision>
+    <ApplicationRevision>90</ApplicationRevision>
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <PublishWizardCompleted>true</PublishWizardCompleted>
@@ -466,13 +466,7 @@
       <DependentUpon>SynergyV5MasterListDisplay.xaml</DependentUpon>
     </Compile>
     <Compile Include="Tapestry\TapestrySplitViewLoadCommand.cs" />
-    <Compile Include="Tapestry\TapestryMainWindow.xaml.cs">
-      <DependentUpon>TapestryMainWindow.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Tapestry\TapestryNode.cs" />
-    <Compile Include="Tapestry\TapestryNodeBrowserWindow.xaml.cs">
-      <DependentUpon>TapestryNodeBrowserWindow.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Tapestry\TapestryNodeSplitViewControl.xaml.cs">
       <DependentUpon>TapestryNodeSplitViewControl.xaml</DependentUpon>
     </Compile>
@@ -716,14 +710,6 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Tapestry\NodeUI\SynergyV5MasterListDisplay.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Tapestry\TapestryMainWindow.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Tapestry\TapestryNodeBrowserWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
