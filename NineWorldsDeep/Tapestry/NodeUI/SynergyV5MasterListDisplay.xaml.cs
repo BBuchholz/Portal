@@ -153,7 +153,25 @@ namespace NineWorldsDeep.Tapestry.NodeUI
 
         private void btnCreateList_Click(object sender, RoutedEventArgs e)
         {
-            string listName = 
+            //string listName = 
+            //    Synergy.SynergyUtils.ProcessListName(txtListNameEntry.Text);
+
+            //if (!string.IsNullOrWhiteSpace(listName))
+            //{
+            //    SynergyV5List synLst = new SynergyV5List(listName);
+            //    synLst.Sync(db);
+
+            //    Load();
+
+            //    txtListNameEntry.Text = "";
+            //}
+
+            CreateEnteredList();
+        }
+
+        private void CreateEnteredList()
+        {
+            string listName =
                 Synergy.SynergyUtils.ProcessListName(txtListNameEntry.Text);
 
             if (!string.IsNullOrWhiteSpace(listName))
@@ -375,6 +393,13 @@ namespace NineWorldsDeep.Tapestry.NodeUI
             Load();
             statusDetail.Text = "lists reloaded.";
         }
-    }
 
+        private void txtListNameEntry_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (Keyboard.IsKeyDown(Key.Enter))
+            {
+                CreateEnteredList();
+            }
+        }
+    }
 }

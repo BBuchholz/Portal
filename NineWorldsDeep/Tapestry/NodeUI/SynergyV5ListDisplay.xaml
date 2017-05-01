@@ -26,7 +26,7 @@
             <RowDefinition Height="80"/>
             <RowDefinition/>
             <RowDefinition Height="30"/>
-            <RowDefinition Height="40"/>
+            <RowDefinition Height="100"/>
         </Grid.RowDefinitions>
 
         <Grid.ColumnDefinitions>
@@ -135,12 +135,14 @@
                  Grid.Row="3"
                  Grid.Column="0"
                  Margin="5"
-                 KeyUp="txtListItemValueEntry_KeyUp"/>
+                 TextWrapping="Wrap"
+                 AcceptsReturn="True"
+                 KeyDown="txtListItemValueEntry_KeyDown"/>
 
         <Button x:Name="btnCreateListItem"
                 Grid.Row="3"
                 Grid.Column="1"
-                Margin="5"
+                Margin="15 30"
                 Content="Add"
                 Click="btnCreateListItem_Click"/>
          

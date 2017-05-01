@@ -43,6 +43,7 @@
                         Grid.Column="0"
                         Margin="5"
                         Content="Import V4 Tags To V5"
+                        IsEnabled="False"
                         Click="btnImportV4TagsToV5_Click"/>
 
                 <Button x:Name="btnImportXml"

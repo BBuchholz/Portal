@@ -155,9 +155,10 @@
                 </ListView>
 
                 <TextBox x:Name="txtListNameEntry"
-                     Grid.Row="1"
-                     Grid.Column="0"
-                     Margin="5"/>
+                         Grid.Row="1"
+                         Grid.Column="0"
+                         Margin="5"
+                         KeyDown="txtListNameEntry_KeyDown"/>
 
                 <Button x:Name="btnCreateList"
                     Grid.Row="1"

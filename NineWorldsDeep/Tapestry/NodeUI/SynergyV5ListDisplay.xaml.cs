@@ -373,11 +373,12 @@ namespace NineWorldsDeep.Tapestry.NodeUI
             Clipboard.SetText(selectedItems.First().ItemValue);
         }
 
-        private void txtListItemValueEntry_KeyUp(object sender, KeyEventArgs e)
+        private void txtListItemValueEntry_KeyDown(object sender, KeyEventArgs e)
         {
-            if(e.Key == Key.Enter)
+            if (Keyboard.Modifiers == ModifierKeys.Alt && Keyboard.IsKeyDown(Key.Enter))
             {
                 ProcessEntryInput();
+                e.Handled = true;
             }
         }
     }
