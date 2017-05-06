@@ -27,7 +27,7 @@
     <UpdatePeriodically>false</UpdatePeriodically>
     <UpdateRequired>false</UpdateRequired>
     <MapFileExtensions>true</MapFileExtensions>
-    <ApplicationRevision>91</ApplicationRevision>
+    <ApplicationRevision>92</ApplicationRevision>
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <PublishWizardCompleted>true</PublishWizardCompleted>
@@ -123,6 +123,8 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Archivist\ArchivistSource.cs" />
+    <Compile Include="Archivist\ArchivistSourceType.cs" />
     <Compile Include="AudioBrowser\AudioBrowserMainWindow.xaml.cs">
       <DependentUpon>AudioBrowserMainWindow.xaml</DependentUpon>
     </Compile>
@@ -146,6 +148,7 @@
     <Compile Include="Db\PathTagLink.cs" />
     <Compile Include="Db\PathToTagMapping.cs" />
     <Compile Include="Db\SqliteDbAdapter.cs" />
+    <Compile Include="Db\Sqlite\ArchivistSubsetDb.cs" />
     <Compile Include="Db\Sqlite\DbAdapterSwitch.cs" />
     <Compile Include="Db\Sqlite\DbAdapterV4c.cs" />
     <Compile Include="Db\Sqlite\DbAdapterV5.cs" />
@@ -374,6 +377,8 @@
     <Compile Include="Tagger\VerticalTaggerGrid.xaml.cs">
       <DependentUpon>VerticalTaggerGrid.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Tapestry\Nodes\ArchivistMasterNode.cs" />
+    <Compile Include="Tapestry\Nodes\ArchivistSourceNode.cs" />
     <Compile Include="Tapestry\Nodes\ChordNode.cs" />
     <Compile Include="Tapestry\Nodes\ChordProgressionsNode.cs" />
     <Compile Include="Tapestry\Nodes\ClusterNode.cs" />
@@ -402,6 +407,12 @@
     <Compile Include="Tapestry\Nodes\TagNode.cs" />
     <Compile Include="Tapestry\Nodes\TapestryRootNode.cs" />
     <Compile Include="Tapestry\Nodes\TapestrySplitViewNode.cs" />
+    <Compile Include="Tapestry\NodeUI\ArchivistMasterDisplay.xaml.cs">
+      <DependentUpon>ArchivistMasterDisplay.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Tapestry\NodeUI\ArchivistSourceDisplay.xaml.cs">
+      <DependentUpon>ArchivistSourceDisplay.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Tapestry\NodeUI\AudioNodeDisplay.xaml.cs">
       <DependentUpon>AudioNodeDisplay.xaml</DependentUpon>
     </Compile>
@@ -646,6 +657,14 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Tagger\VerticalTaggerGrid.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Tapestry\NodeUI\ArchivistMasterDisplay.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Tapestry\NodeUI\ArchivistSourceDisplay.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

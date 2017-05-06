@@ -73,6 +73,16 @@
         <ContentControl x:Name="ccHierophantVertexNode">
             <nodeUI:HierophantVertexDisplay x:Name="hierophantVertexDisplay"/>
         </ContentControl>
+
+        <ContentControl x:Name="ccArchivistMasterNode"
+                        Visibility="Collapsed">
+            <nodeUI:ArchivistMasterDisplay x:Name="archivistMasterDisplay"/>
+        </ContentControl>
+
+        <ContentControl x:Name="ccArchivistSourceNode"
+                        Visibility="Collapsed">
+            <nodeUI:ArchivistSourceDisplay x:Name="archivistSourceDisplay"/>
+        </ContentControl>
         
     </Grid>
 </UserControl>

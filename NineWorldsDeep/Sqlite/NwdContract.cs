@@ -157,6 +157,7 @@ namespace NineWorldsDeep.Sqlite
         public static string COLUMN_LIST_ACTIVE = "ListActive";
 
 
+
         #region "Synergy V5"
 
         public static string SYNERGY_V5_SELECT_ACTIVE_LISTS =
@@ -330,6 +331,37 @@ namespace NineWorldsDeep.Sqlite
             "	) " +
             "VALUES " +
             "	(?, ?, ?, ?, ?);" ;
+
+        #endregion
+
+        #region "Archivist Subset"
+
+        //SourceType
+        public static string TABLE_SOURCE_TYPE = "SourceType";
+        public static string COLUMN_SOURCE_TYPE_ID = "SourceTypeId";
+        public static string COLUMN_SOURCE_TYPE_VALUE = "SourceTypeValue";
+
+        //Source
+
+
+        internal static readonly string SELECT_TYPE_ID_TYPE_VALUE_FROM_SOURCE_TYPE =
+
+            "SELECT " + NwdContract.COLUMN_SOURCE_TYPE_ID + ", " +
+            "	    " + NwdContract.COLUMN_SOURCE_TYPE_VALUE + " " +
+            "FROM " + NwdContract.TABLE_SOURCE_TYPE + "; ";
+
+        internal static readonly string SELECT_SOURCE_TYPE_ID_FOR_VALUE_X =
+
+            "SELECT " + NwdContract.COLUMN_SOURCE_TYPE_ID + " " +
+            "FROM " + NwdContract.TABLE_SOURCE_TYPE + " " +
+            "WHERE " + NwdContract.COLUMN_SOURCE_TYPE_VALUE + " = ? ; ";
+
+        internal static readonly string INSERT_OR_IGNORE_SOURCE_TYPE_VALUE =
+
+            "INSERT OR IGNORE INTO " + NwdContract.TABLE_SOURCE_TYPE + " " +
+            "	(" + NwdContract.COLUMN_SOURCE_TYPE_VALUE + ") " +
+            "VALUES " +
+            "	(?); ";
 
         #endregion
     }

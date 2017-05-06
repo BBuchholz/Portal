@@ -25,6 +25,8 @@
         NullSynergyV5List,
         HierophantTreeOfLife,
         HierophantVertex,
-        NullHierophantVertex
+        NullHierophantVertex,
+        ArchivistMaster,
+        ArchivistSource
     }
 }

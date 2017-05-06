@@ -24,6 +24,7 @@ namespace NineWorldsDeep.Tapestry.Nodes
             AddChild(new SynergyV5MasterListNode());
             AddChild(new MediaMasterNode());
             AddChild(new HierophantTreeOfLifeNode());
+            AddChild(new ArchivistMasterNode());
             // shelved currently, may come 
             // back, so leaving code, this is the only entry point
             // AddChild(new NullClusterNode()); 

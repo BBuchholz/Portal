@@ -41,6 +41,12 @@ namespace NineWorldsDeep.Tapestry
             synergyV5MasterListDisplay.SynergyV5ListClicked += SynergyV5ListDisplay_Requested;
             mediaMasterDisplay.PathSelected += MediaMasterDisplay_PathSelected;
             hierophantTreeOfLifeDisplay.VertexClicked += HierophantTreeOfLifeDisplay_VertexClicked;
+            archivistMasterDisplay.SourceSelected += ArchivistMasterDisplay_SourceSelected;
+        }
+
+        private void ArchivistMasterDisplay_SourceSelected(object sender, ArchivistMasterDisplay.SourceSelectedEventArgs e)
+        {
+            UI.Display.Message("Source Display Awaiting Implementation");
         }
 
         private void HierophantTreeOfLifeDisplay_VertexClicked(object sender, HierophantVertexClickedEventArgs e)
@@ -150,6 +156,8 @@ namespace NineWorldsDeep.Tapestry
             contentControls.Add(ccMediaMasterNode);
             contentControls.Add(ccHierophantTreeOfLifeNode);
             contentControls.Add(ccHierophantVertexNode);
+            contentControls.Add(ccArchivistMasterNode);
+            contentControls.Add(ccArchivistSourceNode);
         }
 
         private void ResolveContentControl(TapestryNode node)
@@ -222,6 +230,18 @@ namespace NineWorldsDeep.Tapestry
                     case TapestryNodeType.MediaMaster:
 
                         SetVisible(ccMediaMasterNode);
+                        break;
+
+                    case TapestryNodeType.ArchivistMaster:
+
+                        SetVisible(ccArchivistMasterNode);
+                        break;
+
+                    case TapestryNodeType.ArchivistSource:
+
+                        SetVisible(ccArchivistSourceNode);
+                        ArchivistSourceNode srcNode = (ArchivistSourceNode)node;
+                        archivistSourceDisplay.Display(srcNode);
                         break;
 
                     case TapestryNodeType.SynergyV5List:
