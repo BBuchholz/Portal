@@ -73,6 +73,87 @@ namespace NineWorldsDeep.Db.Sqlite
             return lst;
         }
 
+        /// <summary>
+        /// will just retrieve the core properties of all sources
+        /// (SourceId, SourceTypeId, Title, Author, Director, Year,
+        /// Url, and RetrievalDate)
+        /// </summary>
+        /// <returns></returns>
+        internal List<ArchivistSource> GetAllSourceCores()
+        {
+            List<ArchivistSource> lst =
+                new List<ArchivistSource>();
+
+            using (var conn = new SQLiteConnection(
+                @"Data Source=" + Configuration.GetSqliteDbPath(DbName)))
+            {
+                conn.Open();
+
+                using (var cmd = new SQLiteCommand(conn))
+                {
+                    using (var transaction = conn.BeginTransaction())
+                    {
+                        lst = SelectSourceCores(cmd);
+
+                        transaction.Commit();
+                    }
+                }
+
+                conn.Close();
+            }
+
+            return lst;
+        }
+
+        private List<ArchivistSource> SelectSourceCores(SQLiteCommand cmd)
+        {
+            List<ArchivistSource> lst =
+                new List<ArchivistSource>();
+
+            cmd.Parameters.Clear();
+            cmd.CommandText =
+                NwdContract.SELECT_SOURCES;
+
+            using (var rdr = cmd.ExecuteReader())
+            {
+                while (rdr.Read())
+                {
+                    //query field order
+                    //0:SourceId
+                    //1:SourceTypeId
+                    //2:SourceTitle
+                    //3:SourceAuthor
+                    //4:SourceDirector
+                    //5:SourceYear
+                    //6:SourceUrl
+                    //7:SourceRetrievalDate
+                    
+                    int sourceId = rdr.GetInt32(0);
+                    int sourceTypeId = rdr.GetInt32(1);
+                    string sourceTitle = DbV5Utils.GetNullableString(rdr, 2);
+                    string sourceAuthor = DbV5Utils.GetNullableString(rdr, 3);
+                    string sourceDirector = DbV5Utils.GetNullableString(rdr, 4);
+                    string sourceYear = DbV5Utils.GetNullableString(rdr, 5);
+                    string sourceUrl = DbV5Utils.GetNullableString(rdr, 6);
+                    string sourceRetrievalDate = DbV5Utils.GetNullableString(rdr, 7);
+
+                    lst.Add(new ArchivistSource()
+                    {
+                        SourceId = sourceId,
+                        SourceTypeId = sourceTypeId,
+                        Title = sourceTitle,
+                        Author = sourceAuthor,
+                        Director = sourceDirector,
+                        Year = sourceYear,
+                        Url = sourceUrl,
+                        RetrievalDate = sourceRetrievalDate
+                    });
+                }
+            }
+
+            return lst;
+        }
+
         public void EnsureSourceType(string typeName)
         {
             using (var conn = new SQLiteConnection(
@@ -145,5 +226,55 @@ namespace NineWorldsDeep.Db.Sqlite
 
             return id;
         }
+
+        /// <summary>
+        /// As opposed to Sync(ArchivistSource), this will only sync
+        /// properties specific to the Source table (SourceTypeId, SourceId, 
+        /// Title, Author, Director, Year, Url, and RetrievalDate). The 
+        /// rest of the object's members will be left as is, neither pushed to
+        /// the db nor pulled from the db.
+        /// 
+        /// Lookup will be by SourceTypeId, Title, Year, and Url
+        /// </summary>
+        /// <param name="src"></param>
+        internal void SyncCore(ArchivistSource src)
+        {
+            using (var conn = new SQLiteConnection(
+                @"Data Source=" + Configuration.GetSqliteDbPath(DbName)))
+            {
+                conn.Open();
+
+                using (var cmd = new SQLiteCommand(conn))
+                {
+                    using (var transaction = conn.BeginTransaction())
+                    {
+                        SyncCore(src, cmd);
+
+                        transaction.Commit();
+                    }
+                }
+
+                conn.Close();
+            }
+        }
+        
+        /// <summary>
+        /// As opposed to Sync(), this will only sync
+        /// properties specific to the Source table (SourceTypeId, SourceId, 
+        /// Title, Author, Director, Year, Url, and RetrievalDate). The 
+        /// rest of the object's members will be left as is, neither pushed to
+        /// the db nor pulled from the db.
+        /// 
+        /// Lookup will be by SourceTypeId, Title, Year, and Url
+        /// </summary>
+        /// <param name="src"></param>
+        private void SyncCore(ArchivistSource src, SQLiteCommand cmd)
+        {
+            //mimic Sync(Media)
+            src.SourceId = EnsureSourceIdByTypeTitleYearAndUrl(src, cmd);
+            PopulateSourceByTypeTitleYearAndUrl(src, cmd);
+        }
+
+
     }
 }

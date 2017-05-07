@@ -1,4 +1,5 @@
-﻿using NineWorldsDeep.Db.Sqlite;
+﻿using NineWorldsDeep.Archivist;
+using NineWorldsDeep.Db.Sqlite;
 using NineWorldsDeep.Tapestry.Nodes;
 using System;
 using System.Collections.Generic;
@@ -40,7 +41,15 @@ namespace NineWorldsDeep.Tapestry.NodeUI
 
         private void LoadSourceTypes()
         {
-            cmbSourceTypes.ItemsSource = db.GetAllSourceTypes();
+            List<ArchivistSourceType> lst = db.GetAllSourceTypes();
+            cmbSourceTypes.ItemsSource = lst;
+            cmbAddSourceSourceType.ItemsSource = lst;
+        }
+
+        private void LoadSources()
+        {
+            List<ArchivistSource> lst = db.GetAllSourceCores();
+            lvSources.ItemsSource = lst;
         }
 
         private void btnImportTextFiles_Click(object sender, RoutedEventArgs e)
@@ -135,7 +144,89 @@ namespace NineWorldsDeep.Tapestry.NodeUI
 
         private void btnAddSource_Click(object sender, RoutedEventArgs e)
         {
+            /*
+             * Validate needed fields based on source type
+             * 
+             * Book needs title and author at least
+             * Movie needs title at least
+             * Website needs Url and Title at least
+             * all others, need title at least
+            */
 
+            //if source type == book
+            //hasTitle = Validate(txtTitle)
+            //hasAuthor = Validate(txtAuthor)
+            //if hasTitle and hasAuthor, add source
+
+            //&c.
+
+            var sType = (ArchivistSourceType)cmbAddSourceSourceType.SelectedItem;
+            string sourceTypeValue = sType.SourceTypeValue.ToLower();
+
+            bool valid = false;
+
+            switch (sourceTypeValue)
+            {
+                case "book":
+
+                    valid = Validate(txtAddSourceTitle) 
+                        && Validate(txtAddSourceAuthor);
+
+                    break;
+
+                case "movie":
+
+                    valid = Validate(txtAddSourceTitle)
+                        && Validate(txtAddSourceDirector);
+
+                    break;
+
+                case "website":
+
+                    valid = Validate(txtAddSourceTitle)
+                        && Validate(txtAddSourceUrl);
+
+                    break;
+
+                default:
+
+                    valid = Validate(txtAddSourceTitle);
+
+                    break;
+            }
+
+            if (valid)
+            {
+                ArchivistSource src = new ArchivistSource()
+                {
+                    Title = txtAddSourceTitle.Text,
+                    Author = txtAddSourceAuthor.Text,
+                    Director = txtAddSourceDirector.Text,
+                    Year = txtAddSourceYear.Text,
+                    Url = txtAddSourceUrl.Text,
+                    RetrievalDate = txtAddSourceRetrievalDate.Text
+                };
+
+                db.SyncCore(src);
+
+                LoadSources();
+            }
         }
+
+        private bool Validate(TextBox txt)
+        {
+            if(txt.Text.Length == 0)
+            {
+                txt.Background = Brushes.Red;
+                return false;
+            }
+            else
+            {
+                txt.Background = Brushes.White;
+                return true;
+            }
+        }
+
+
     }
 }

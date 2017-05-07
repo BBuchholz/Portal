@@ -8,6 +8,11 @@ namespace NineWorldsDeep.Sqlite
 {
     public class NwdContract
     {
+
+        #region "Tables and Columns - Previous Organizational Scheme"
+        //legacy organization of tables and columns, new way is to group in 
+        //subset specific regions (see below)
+
         //tables
         public static string TABLE_DISPLAY_NAME = "DisplayName";
         public static string TABLE_PATH = "Path";
@@ -50,34 +55,6 @@ namespace NineWorldsDeep.Sqlite
         ////columns
         //public static string COLUMN_ = "";
         //public static string COLUMN_ = "";
-
-        #region "Synergy V5"
-
-        public static string COLUMN_SYNERGY_LIST_ID = "SynergyListId";
-        public static string COLUMN_SYNERGY_LIST_NAME = "SynergyListName";
-        public static string COLUMN_SYNERGY_LIST_ACTIVATED_AT = "SynergyListActivatedAt";
-        public static string COLUMN_SYNERGY_LIST_SHELVED_AT = "SynergyListShelvedAt";
-        public static string COLUMN_SYNERGY_LIST_CREATED_AT = "SynergyListCreatedAt";
-        public static string COLUMN_SYNERGY_LIST_UPDATED_AT = "SynergyListUpdatedAt";
-
-        public static string COLUMN_SYNERGY_LIST_ITEM_ID = "SynergyListItemId";
-        public static string COLUMN_SYNERGY_LIST_ITEM_CREATED_AT = "SynergyListItemCreatedAt";
-        public static string COLUMN_SYNERGY_LIST_ITEM_UPDATED_AT = "SynergyListItemUpdatedAt";
-        public static string COLUMN_SYNERGY_LIST_ITEM_POSITION = "SynergyListItemPosition";
-
-        public static string COLUMN_SYNERGY_ITEM_ID = "SynergyItemId";
-        public static string COLUMN_SYNERGY_ITEM_VALUE = "SynergyItemValue";
-        public static string COLUMN_SYNERGY_ITEM_CREATED_AT = "SynergyItemCreatedAt";
-        public static string COLUMN_SYNERGY_ITEM_UPDATED_AT = "SynergyItemUpdatedAt";
-
-        public static string COLUMN_SYNERGY_TO_DO_ID = "SynergyToDoId";
-        public static string COLUMN_SYNERGY_TO_DO_ACTIVATED_AT = "SynergyToDoActivatedAt";
-        public static string COLUMN_SYNERGY_TO_DO_COMPLETED_AT = "SynergyToDoCompletedAt";
-        public static string COLUMN_SYNERGY_TO_DO_ARCHIVED_AT = "SynergyToDoArchivedAt";
-        public static string COLUMN_SYNERGY_TO_DO_CREATED_AT = "SynergyToDoCreatedAt";
-        public static string COLUMN_SYNERGY_TO_DO_UPDATED_AT = "SynergyToDoUpdatedAt";
-
-        #endregion
 
         public static string COLUMN_CHORD_PROGRESSION_ID = "ChordProgressionId";
         public static string COLUMN_CHORD_PROGRESSION_SIGNATURE = "ChordProgressionSignature";
@@ -156,9 +133,38 @@ namespace NineWorldsDeep.Sqlite
         public static string COLUMN_ITEM_VALUE = "ItemValue";
         public static string COLUMN_LIST_ACTIVE = "ListActive";
 
-
+        #endregion
 
         #region "Synergy V5"
+        
+        #region "Synergy V5 Naming Constants"
+
+        public static string COLUMN_SYNERGY_LIST_ID = "SynergyListId";
+        public static string COLUMN_SYNERGY_LIST_NAME = "SynergyListName";
+        public static string COLUMN_SYNERGY_LIST_ACTIVATED_AT = "SynergyListActivatedAt";
+        public static string COLUMN_SYNERGY_LIST_SHELVED_AT = "SynergyListShelvedAt";
+        public static string COLUMN_SYNERGY_LIST_CREATED_AT = "SynergyListCreatedAt";
+        public static string COLUMN_SYNERGY_LIST_UPDATED_AT = "SynergyListUpdatedAt";
+
+        public static string COLUMN_SYNERGY_LIST_ITEM_ID = "SynergyListItemId";
+        public static string COLUMN_SYNERGY_LIST_ITEM_CREATED_AT = "SynergyListItemCreatedAt";
+        public static string COLUMN_SYNERGY_LIST_ITEM_UPDATED_AT = "SynergyListItemUpdatedAt";
+        public static string COLUMN_SYNERGY_LIST_ITEM_POSITION = "SynergyListItemPosition";
+
+        public static string COLUMN_SYNERGY_ITEM_ID = "SynergyItemId";
+        public static string COLUMN_SYNERGY_ITEM_VALUE = "SynergyItemValue";
+        public static string COLUMN_SYNERGY_ITEM_CREATED_AT = "SynergyItemCreatedAt";
+        public static string COLUMN_SYNERGY_ITEM_UPDATED_AT = "SynergyItemUpdatedAt";
+
+        public static string COLUMN_SYNERGY_TO_DO_ID = "SynergyToDoId";
+        public static string COLUMN_SYNERGY_TO_DO_ACTIVATED_AT = "SynergyToDoActivatedAt";
+        public static string COLUMN_SYNERGY_TO_DO_COMPLETED_AT = "SynergyToDoCompletedAt";
+        public static string COLUMN_SYNERGY_TO_DO_ARCHIVED_AT = "SynergyToDoArchivedAt";
+        public static string COLUMN_SYNERGY_TO_DO_CREATED_AT = "SynergyToDoCreatedAt";
+        public static string COLUMN_SYNERGY_TO_DO_UPDATED_AT = "SynergyToDoUpdatedAt";
+
+        #endregion
+
 
         public static string SYNERGY_V5_SELECT_ACTIVE_LISTS =
 
@@ -336,13 +342,26 @@ namespace NineWorldsDeep.Sqlite
 
         #region "Archivist Subset"
 
+        #region "naming constants"
+
         //SourceType
         public static string TABLE_SOURCE_TYPE = "SourceType";
         public static string COLUMN_SOURCE_TYPE_ID = "SourceTypeId";
         public static string COLUMN_SOURCE_TYPE_VALUE = "SourceTypeValue";
 
         //Source
+        public static string TABLE_SOURCE = "Source";
+        public static string COLUMN_SOURCE_ID = "SourceId";
+        public static string COLUMN_SOURCE_TITLE = "SourceTitle";
+        public static string COLUMN_SOURCE_AUTHOR = "SourceAuthor";
+        public static string COLUMN_SOURCE_DIRECTOR = "SourceDirector";
+        public static string COLUMN_SOURCE_YEAR = "SourceYear";
+        public static string COLUMN_SOURCE_URL = "SourceUrl";
+        public static string COLUMN_SOURCE_RETRIEVAL_DATE = "SourceRetrievalDate";
 
+        #endregion
+
+        #region "queries"
 
         internal static readonly string SELECT_TYPE_ID_TYPE_VALUE_FROM_SOURCE_TYPE =
 
@@ -362,6 +381,20 @@ namespace NineWorldsDeep.Sqlite
             "	(" + NwdContract.COLUMN_SOURCE_TYPE_VALUE + ") " +
             "VALUES " +
             "	(?); ";
+
+        internal static readonly string SELECT_SOURCES =
+
+            "SELECT " + NwdContract.COLUMN_SOURCE_ID + ", " +
+            "	   " + NwdContract.COLUMN_SOURCE_TYPE_ID + ", " +
+            "	   " + NwdContract.COLUMN_SOURCE_TITLE + ", " +
+            "	   " + NwdContract.COLUMN_SOURCE_AUTHOR + ", " +
+            "	   " + NwdContract.COLUMN_SOURCE_DIRECTOR + ", " +
+            "	   " + NwdContract.COLUMN_SOURCE_YEAR + ", " +
+            "	   " + NwdContract.COLUMN_SOURCE_URL + ", " +
+            "	   " + NwdContract.COLUMN_SOURCE_RETRIEVAL_DATE + "  " +
+            "FROM " + NwdContract.TABLE_SOURCE + "; ";
+
+        #endregion
 
         #endregion
     }
