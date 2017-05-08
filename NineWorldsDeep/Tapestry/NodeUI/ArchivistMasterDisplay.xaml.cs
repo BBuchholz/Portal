@@ -46,9 +46,10 @@ namespace NineWorldsDeep.Tapestry.NodeUI
             cmbAddSourceSourceType.ItemsSource = lst;
         }
 
-        private void LoadSources()
+        private void LoadSources(int sourceTypeId)
         {
-            List<ArchivistSource> lst = db.GetAllSourceCores();
+            List<ArchivistSource> lst = 
+                db.GetSourceCoresForSourceTypeId(sourceTypeId);
             lvSources.ItemsSource = lst;
         }
 
@@ -59,7 +60,10 @@ namespace NineWorldsDeep.Tapestry.NodeUI
 
         private void cmbSourceTypes_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-
+            if(SelectedSourceType != null)
+            {
+                LoadSources(SelectedSourceType.SourceTypeId);
+            }
         }
 
         private void lvSources_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -142,6 +146,22 @@ namespace NineWorldsDeep.Tapestry.NodeUI
             }
         }
 
+        private ArchivistSourceType SelectedSourceType
+        {
+            get
+            {
+                return (ArchivistSourceType)cmbSourceTypes.SelectedItem; 
+            }
+        }
+
+        private ArchivistSourceType SelectedSourceTypeForSourceAdd
+        {
+            get
+            {
+                return (ArchivistSourceType)cmbAddSourceSourceType.SelectedItem;
+            }
+        }
+
         private void btnAddSource_Click(object sender, RoutedEventArgs e)
         {
             /*
@@ -153,14 +173,15 @@ namespace NineWorldsDeep.Tapestry.NodeUI
              * all others, need title at least
             */
 
-            //if source type == book
-            //hasTitle = Validate(txtTitle)
-            //hasAuthor = Validate(txtAuthor)
-            //if hasTitle and hasAuthor, add source
+            //var sType = (ArchivistSourceType)cmbAddSourceSourceType.SelectedItem;
+            var sType = SelectedSourceTypeForSourceAdd;
 
-            //&c.
+            if(sType == null)
+            {
+                UI.Display.Message("source type not specified, aborting.");
+                return;
+            }
 
-            var sType = (ArchivistSourceType)cmbAddSourceSourceType.SelectedItem;
             string sourceTypeValue = sType.SourceTypeValue.ToLower();
 
             bool valid = false;
@@ -199,6 +220,7 @@ namespace NineWorldsDeep.Tapestry.NodeUI
             {
                 ArchivistSource src = new ArchivistSource()
                 {
+                    SourceTypeId = sType.SourceTypeId,
                     Title = txtAddSourceTitle.Text,
                     Author = txtAddSourceAuthor.Text,
                     Director = txtAddSourceDirector.Text,
@@ -209,7 +231,7 @@ namespace NineWorldsDeep.Tapestry.NodeUI
 
                 db.SyncCore(src);
 
-                LoadSources();
+                LoadSources(sType.SourceTypeId);
             }
         }
 

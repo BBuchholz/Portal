@@ -195,7 +195,8 @@ namespace NineWorldsDeep.Sqlite
             "	    " + COLUMN_MEDIA_DESCRIPTION + ",  " +
             "	    " + COLUMN_MEDIA_HASH + " " +
             "FROM " + TABLE_MEDIA + " " +
-            "WHERE " + COLUMN_MEDIA_HASH + " = ? ";
+            "WHERE " + COLUMN_MEDIA_HASH + " = ? " +
+            "COLLATE NOCASE;"; //added 5/7/17 to mirror SELECT_MEDIA_ID_FOR_HASH_X --> if it causes issues just remove it again
 
         internal static readonly string SELECT_MEDIA_ID_FOR_HASH_X =
 
@@ -382,17 +383,56 @@ namespace NineWorldsDeep.Sqlite
             "VALUES " +
             "	(?); ";
 
-        internal static readonly string SELECT_SOURCES =
+        internal static readonly string SELECT_SOURCES_BY_TYPE_ID_X =
+
+            "SELECT " + COLUMN_SOURCE_ID + ", " +
+            "	   " + COLUMN_SOURCE_TYPE_ID + ", " +
+            "	   " + COLUMN_SOURCE_TITLE + ", " +
+            "	   " + COLUMN_SOURCE_AUTHOR + ", " +
+            "	   " + COLUMN_SOURCE_DIRECTOR + ", " +
+            "	   " + COLUMN_SOURCE_YEAR + ", " +
+            "	   " + COLUMN_SOURCE_URL + ", " +
+            "	   " + COLUMN_SOURCE_RETRIEVAL_DATE + "  " +
+            "FROM " + TABLE_SOURCE + " " +
+            "WHERE " + COLUMN_SOURCE_TYPE_ID + " = ?; ";
+
+        internal static readonly string SELECT_SOURCE_W_X_Y_Z =
 
             "SELECT " + NwdContract.COLUMN_SOURCE_ID + ", " +
-            "	   " + NwdContract.COLUMN_SOURCE_TYPE_ID + ", " +
-            "	   " + NwdContract.COLUMN_SOURCE_TITLE + ", " +
-            "	   " + NwdContract.COLUMN_SOURCE_AUTHOR + ", " +
-            "	   " + NwdContract.COLUMN_SOURCE_DIRECTOR + ", " +
-            "	   " + NwdContract.COLUMN_SOURCE_YEAR + ", " +
-            "	   " + NwdContract.COLUMN_SOURCE_URL + ", " +
-            "	   " + NwdContract.COLUMN_SOURCE_RETRIEVAL_DATE + "  " +
-            "FROM " + NwdContract.TABLE_SOURCE + "; ";
+            "	    " + NwdContract.COLUMN_SOURCE_TYPE_ID + ", " +
+            "	    " + NwdContract.COLUMN_SOURCE_TITLE + ", " +
+            "	    " + NwdContract.COLUMN_SOURCE_AUTHOR + ", " +
+            "	    " + NwdContract.COLUMN_SOURCE_DIRECTOR + ", " +
+            "	    " + NwdContract.COLUMN_SOURCE_YEAR + ", " +
+            "	    " + NwdContract.COLUMN_SOURCE_URL + ", " +
+            "	    " + NwdContract.COLUMN_SOURCE_RETRIEVAL_DATE + "  " +
+            "FROM " + TABLE_SOURCE + " " +
+            "WHERE " + COLUMN_SOURCE_TYPE_ID + " = ?  " +
+            "AND TRIM(IFNULL(" + COLUMN_SOURCE_TITLE + ", '')) = TRIM(IFNULL(?, ''))  " +
+            "AND TRIM(IFNULL(" + COLUMN_SOURCE_YEAR + ", '')) = TRIM(IFNULL(?, ''))  " +
+            "AND TRIM(IFNULL(" + COLUMN_SOURCE_URL + ", '')) = TRIM(IFNULL(?, '')); ";
+
+            //"SELECT " + COLUMN_SOURCE_ID + "  " +
+            //"FROM " + TABLE_SOURCE + " " +
+            //"WHERE " + COLUMN_SOURCE_TYPE_ID + " = ?  " +
+            //"AND TRIM(IFNULL(" + COLUMN_SOURCE_TITLE + ", '')) = TRIM(IFNULL(?, ''))  " +
+            //"AND TRIM(IFNULL(" + COLUMN_SOURCE_YEAR + ", '')) = TRIM(IFNULL(?, ''))  " +
+            //"AND TRIM(IFNULL(" + COLUMN_SOURCE_URL + ", '')) = TRIM(IFNULL(?, '')); ";
+
+        internal static readonly string INSERT_SOURCE_T_U_V_W_X_Y_Z =
+
+            "INSERT OR IGNORE INTO " + TABLE_SOURCE + " " +
+            "	(" + COLUMN_SOURCE_TYPE_ID + ", " +
+            "	 " + COLUMN_SOURCE_TITLE + ", " +
+            "	 " + COLUMN_SOURCE_AUTHOR + ", " +
+            "	 " + COLUMN_SOURCE_DIRECTOR + ", " +
+            "	 " + COLUMN_SOURCE_YEAR + ", " +
+            "	 " + COLUMN_SOURCE_URL + ", " +
+            "	 " + COLUMN_SOURCE_RETRIEVAL_DATE + ") " +
+            "VALUES " +
+            "	(?,?,?,?,?,?,?); ";
+
+
 
         #endregion
 

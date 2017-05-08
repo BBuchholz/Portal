@@ -414,12 +414,12 @@ namespace NineWorldsDeep.Db.Sqlite
         /// <param name="media"></param>
         /// <param name="cmd"></param>
         /// <returns></returns>
-        private Media EnsureMediaRecord(Media media, SQLiteCommand cmd)
-        {            
-            EnsureMediaIdForHash(media.MediaHash, cmd);
-            UpdateOrIgnoreMediaRecordByHash(media, cmd);
-            return GetMediaForHash(media.MediaHash, cmd);
-        }
+        //private Media EnsureMediaRecord(Media media, SQLiteCommand cmd)
+        //{            
+        //    EnsureMediaIdForHash(media.MediaHash, cmd);
+        //    UpdateOrIgnoreMediaRecordByHash(media, cmd);
+        //    return GetMediaForHash(media.MediaHash, cmd);
+        //}
 
         public int EnsureMediaHash(string hash)
         {
@@ -485,43 +485,43 @@ namespace NineWorldsDeep.Db.Sqlite
         /// <param name="hash"></param>
         /// <param name="cmd"></param>
         /// <returns></returns>
-        private Media GetMediaForHash(string hash, SQLiteCommand cmd)
-        {
-            //cmd.Parameters.Clear();
-            //cmd.CommandText =
-            //    NwdContract.SELECT_MEDIA_FOR_HASH_X;
+        //private Media GetMediaForHash(string hash, SQLiteCommand cmd)
+        //{
+        //    //cmd.Parameters.Clear();
+        //    //cmd.CommandText =
+        //    //    NwdContract.SELECT_MEDIA_FOR_HASH_X;
 
-            //SQLiteParameter hashParam = new SQLiteParameter();
-            //hashParam.Value = hash;
-            //cmd.Parameters.Add(hashParam);
+        //    //SQLiteParameter hashParam = new SQLiteParameter();
+        //    //hashParam.Value = hash;
+        //    //cmd.Parameters.Add(hashParam);
 
-            //using (var rdr = cmd.ExecuteReader())
-            //{
-            //    if (rdr.Read())
-            //    {
-            //        //0:MediaId
-            //        //1:MediaFileName
-            //        //2:MediaDescription
-            //        //3:MediaHash
+        //    //using (var rdr = cmd.ExecuteReader())
+        //    //{
+        //    //    if (rdr.Read())
+        //    //    {
+        //    //        //0:MediaId
+        //    //        //1:MediaFileName
+        //    //        //2:MediaDescription
+        //    //        //3:MediaHash
 
-            //        int id = rdr.GetInt32(0);
-            //        string fileName = DbV5Utils.GetNullableString(rdr, 1);
-            //        string description = DbV5Utils.GetNullableString(rdr, 2);
+        //    //        int id = rdr.GetInt32(0);
+        //    //        string fileName = DbV5Utils.GetNullableString(rdr, 1);
+        //    //        string description = DbV5Utils.GetNullableString(rdr, 2);
 
-            //        media = new Media()
-            //        {
-            //            MediaId = id,
-            //            MediaFileName = fileName,
-            //            MediaDescription = description,
-            //            MediaHash = hash
-            //        };
-            //    }
-            //}
+        //    //        media = new Media()
+        //    //        {
+        //    //            MediaId = id,
+        //    //            MediaFileName = fileName,
+        //    //            MediaDescription = description,
+        //    //            MediaHash = hash
+        //    //        };
+        //    //    }
+        //    //}
 
-            Media m = new Media() { MediaHash = hash };
-            PopulateMediaByHash(m, cmd);
-            return m;
-        }
+        //    Media m = new Media() { MediaHash = hash };
+        //    PopulateMediaByHash(m, cmd);
+        //    return m;
+        //}
 
         /// <summary>
         /// uses COLLATE NOCASE to perform a case insensitive query

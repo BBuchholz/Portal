@@ -6,12 +6,23 @@
              xmlns:local="clr-namespace:NineWorldsDeep.Tapestry.NodeUI"
              mc:Ignorable="d" 
              d:DesignHeight="600" d:DesignWidth="500">
+    
+    <UserControl.Resources>
+        <Style x:Key="conditionalDisplayStyle" TargetType="{x:Type TextBlock}">
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding Path=Reason_Explanation}" Value="TEST">
+                    <Setter Property="Width" Value="0"/>
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+    </UserControl.Resources>
+    
     <Grid>
 
         <Grid.RowDefinitions>
             <RowDefinition Height="40"/>
-            <RowDefinition Height="*"/>
             <RowDefinition Height="40"/>
+            <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
         <Expander Header="Utilites"
@@ -69,7 +80,7 @@
                   x:Name="expAddSources"
                   Grid.Row="1"
                   Margin="5"
-                  IsExpanded="True"
+                  IsExpanded="False"
                   Expanded="Expander_Expanded"
                   Collapsed="Expander_Collapsed">
 
@@ -197,7 +208,7 @@
                   x:Name="expSources"
                   Grid.Row="2"
                   Margin="5"
-                  IsExpanded="False"
+                  IsExpanded="True"
                   Expanded="Expander_Expanded"
                   Collapsed="Expander_Collapsed">
 
@@ -218,7 +229,88 @@
                 <ListView x:Name="lvSources"
                           Grid.Row="1"
                           Margin="5"
-                          SelectionChanged="lvSources_SelectionChanged"/>
+                          SelectionChanged="lvSources_SelectionChanged">
+                    <ListView.ItemTemplate>
+                        <DataTemplate>
+                            <StackPanel Orientation="Vertical">
+                                <WrapPanel Name="wpTitle">
+                                    <TextBlock Text="Title: " FontWeight="Bold"/>
+                                    <TextBlock Name="tbTitle" 
+	                                           Text="{Binding Title}" 
+	                                           TextWrapping="Wrap"/>
+                                </WrapPanel>
+                                <WrapPanel Name="wpAuthor">
+                                    <TextBlock Text ="Author: " FontWeight="Bold"/>
+                                    <TextBlock Name="tbAuthor" 
+                                               Text="{Binding Author}" 
+                                               TextWrapping="Wrap"/>
+                                </WrapPanel>
+                                <WrapPanel Name="wpDirector">
+                                    <TextBlock Text="Director: " FontWeight="Bold"/>
+                                    <TextBlock Name="tbDirector" 
+	                                           Text="{Binding Director}" 
+	                                           TextWrapping="Wrap"/>
+                                </WrapPanel>
+                                <WrapPanel Name="wpYear">
+                                    <TextBlock Text="Year: " FontWeight="Bold"/>
+                                    <TextBlock Name="tbYear" 
+	                                           Text="{Binding Year}" 
+	                                           TextWrapping="Wrap"/>
+                                </WrapPanel>
+                                <WrapPanel Name="wpUrl">
+                                    <TextBlock Text="Url: " FontWeight="Bold"/>
+                                    <TextBlock Name="tbUrl" 
+	                                           Text="{Binding Url}" 
+	                                           TextWrapping="Wrap"/>
+                                </WrapPanel>
+                                <WrapPanel Name="wpRetrievalDate">
+                                    <TextBlock Text="RetrievalDate: " FontWeight="Bold"/>
+                                    <TextBlock Name="tbRetrievalDate" 
+	                                           Text="{Binding RetrievalDate}" 
+	                                           TextWrapping="Wrap"/>
+                                </WrapPanel>
+                            </StackPanel>
+                            <DataTemplate.Triggers>
+                                <DataTrigger Binding="{Binding Title}" Value="">
+                                    <Setter TargetName="wpTitle" Property="Visibility" Value="Collapsed"/>
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding Author}" Value="">
+                                    <Setter TargetName="wpAuthor" Property="Visibility" Value="Collapsed"/>
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding Director}" Value="">
+                                    <Setter TargetName="wpDirector" Property="Visibility" Value="Collapsed"/>
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding Year}" Value="">
+                                    <Setter TargetName="wpYear" Property="Visibility" Value="Collapsed"/>
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding Url}" Value="">
+                                    <Setter TargetName="wpUrl" Property="Visibility" Value="Collapsed"/>
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding RetrievalDate}" Value="">
+                                    <Setter TargetName="wpRetrievalDate" Property="Visibility" Value="Collapsed"/>
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding Title}" Value="{x:Null}">
+                                    <Setter TargetName="wpTitle" Property="Visibility" Value="Collapsed"/>
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding Author}" Value="{x:Null}">
+                                    <Setter TargetName="wpAuthor" Property="Visibility" Value="Collapsed"/>
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding Director}" Value="{x:Null}">
+                                    <Setter TargetName="wpDirector" Property="Visibility" Value="Collapsed"/>
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding Year}" Value="{x:Null}">
+                                    <Setter TargetName="wpYear" Property="Visibility" Value="Collapsed"/>
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding Url}" Value="{x:Null}">
+                                    <Setter TargetName="wpUrl" Property="Visibility" Value="Collapsed"/>
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding RetrievalDate}" Value="{x:Null}">
+                                    <Setter TargetName="wpRetrievalDate" Property="Visibility" Value="Collapsed"/>
+                                </DataTrigger>
+                            </DataTemplate.Triggers>
+                        </DataTemplate>                        
+                    </ListView.ItemTemplate>
+                </ListView>
 
                 <StatusBar Grid.Row="2"
                            Margin="5">
