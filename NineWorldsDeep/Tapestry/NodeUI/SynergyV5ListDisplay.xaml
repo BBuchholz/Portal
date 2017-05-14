@@ -21,7 +21,9 @@
             </Style.Triggers>
         </Style>
     </UserControl.Resources>
+    
     <Grid>
+        
         <Grid.RowDefinitions>
             <RowDefinition Height="80"/>
             <RowDefinition/>

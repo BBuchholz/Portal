@@ -46,7 +46,10 @@ namespace NineWorldsDeep.Tapestry
 
         private void ArchivistMasterDisplay_SourceSelected(object sender, ArchivistMasterDisplay.SourceSelectedEventArgs e)
         {
-            UI.Display.Message("Source Display Awaiting Implementation");
+            if(historyHandler != null)
+            {
+                historyHandler.PerformLoad(this, e.SourceNode);
+            }
         }
 
         private void HierophantTreeOfLifeDisplay_VertexClicked(object sender, HierophantVertexClickedEventArgs e)

@@ -79,6 +79,10 @@
       <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.SqlServer.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="Faker.NET4, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Faker.Net.1.0.3\lib\net40\Faker.NET4.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="Interop.PortableDeviceApiLib, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <EmbedInteropTypes>False</EmbedInteropTypes>
@@ -124,6 +128,7 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Archivist\ArchivistSource.cs" />
+    <Compile Include="Archivist\ArchivistSourceExcerpt.cs" />
     <Compile Include="Archivist\ArchivistSourceType.cs" />
     <Compile Include="AudioBrowser\AudioBrowserMainWindow.xaml.cs">
       <DependentUpon>AudioBrowserMainWindow.xaml</DependentUpon>

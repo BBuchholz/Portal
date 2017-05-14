@@ -8,11 +8,24 @@
              d:DesignHeight="600" d:DesignWidth="500">
     
     <UserControl.Resources>
-        <Style x:Key="conditionalDisplayStyle" TargetType="{x:Type TextBlock}">
+        <!--<Style x:Key="conditionalDisplayStyle" TargetType="{x:Type TextBlock}">
             <Style.Triggers>
                 <DataTrigger Binding="{Binding Path=Reason_Explanation}" Value="TEST">
                     <Setter Property="Width" Value="0"/>
                 </DataTrigger>
+            </Style.Triggers>
+        </Style>-->
+        <Style x:Key="alternatingStyle" TargetType="{x:Type ListViewItem}">
+            <Style.Triggers>
+                <Trigger Property="ItemsControl.AlternationIndex" Value="0">
+                    <Setter Property="Background" Value="White"></Setter>
+                </Trigger>
+                <Trigger Property="ItemsControl.AlternationIndex" Value="1">
+                    <Setter Property="Background" Value="LightGray"></Setter>
+                </Trigger>
+                <Trigger Property="IsSelected" Value="True">
+                    <Setter Property="Background" Value="LightSkyBlue"/>
+                </Trigger>
             </Style.Triggers>
         </Style>
     </UserControl.Resources>
@@ -229,6 +242,8 @@
                 <ListView x:Name="lvSources"
                           Grid.Row="1"
                           Margin="5"
+                          ItemContainerStyle="{StaticResource alternatingStyle}"
+                          AlternationCount="2"
                           SelectionChanged="lvSources_SelectionChanged">
                     <ListView.ItemTemplate>
                         <DataTemplate>

@@ -68,10 +68,21 @@ namespace NineWorldsDeep.Tapestry.NodeUI
 
         private void lvSources_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
+            //mirrors SynergyV5MasterListDisplay
+            ArchivistSource src = (ArchivistSource)lvSources.SelectedItem;
 
+            if(src != null)
+            {
+                ArchivistSourceNode nd = new ArchivistSourceNode(src);
+
+                SourceSelectedEventArgs args =
+                    new SourceSelectedEventArgs(nd);
+
+                OnSourceSelected(args);
+            }
         }
 
-        protected virtual void OnPathSelected(SourceSelectedEventArgs args)
+        protected virtual void OnSourceSelected(SourceSelectedEventArgs args)
         {
             SourceSelected?.Invoke(this, args);
         }
@@ -231,8 +242,19 @@ namespace NineWorldsDeep.Tapestry.NodeUI
 
                 db.SyncCore(src);
 
+                ClearSourceEntryFields();
                 LoadSources(sType.SourceTypeId);
             }
+        }
+
+        private void ClearSourceEntryFields()
+        {
+            txtAddSourceTitle.Text = "";
+            txtAddSourceAuthor.Text = "";
+            txtAddSourceDirector.Text = "";
+            txtAddSourceYear.Text = "";
+            txtAddSourceUrl.Text = "";
+            txtAddSourceRetrievalDate.Text = "";
         }
 
         private bool Validate(TextBox txt)
