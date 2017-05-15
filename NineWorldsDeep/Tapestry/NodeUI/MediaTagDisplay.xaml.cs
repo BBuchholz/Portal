@@ -28,7 +28,7 @@ namespace NineWorldsDeep.Tapestry.NodeUI
 
         internal void Display(MediaTagNode tagNode)
         {
-            throw new NotImplementedException();
+            
         }
     }
 }

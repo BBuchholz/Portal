@@ -16,11 +16,13 @@ namespace NineWorldsDeep.Tapestry.Nodes
         {
             MediaTag = tag;
         }
-
-        protected MediaTagNode()
-            : base("MediaTag/NULL")
+        
+        public MediaTagNode(string tag)
+            : base("MediaTag/" + tag)
         {
-            MediaTag = null;
+            MediaTag = new MediaTag() {
+                MediaTagValue = tag
+            };
         }
 
         public override string GetShortName()

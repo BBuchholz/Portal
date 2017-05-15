@@ -42,6 +42,15 @@ namespace NineWorldsDeep.Tapestry
             mediaMasterDisplay.PathSelected += MediaMasterDisplay_PathSelected;
             hierophantTreeOfLifeDisplay.VertexClicked += HierophantTreeOfLifeDisplay_VertexClicked;
             archivistMasterDisplay.SourceSelected += ArchivistMasterDisplay_SourceSelected;
+            archivistSourceDisplay.HyperlinkClicked += ArchivistSourceDisplay_HyperlinkClicked;
+        }
+
+        private void ArchivistSourceDisplay_HyperlinkClicked(object sender, ArchivistSourceDisplay.HyperlinkClickedEventArgs e)
+        {
+            if(historyHandler != null)
+            {
+                historyHandler.PerformLoad(this, e.MediaTagNode);
+            }
         }
 
         private void ArchivistMasterDisplay_SourceSelected(object sender, ArchivistMasterDisplay.SourceSelectedEventArgs e)
@@ -97,8 +106,7 @@ namespace NineWorldsDeep.Tapestry
         private void ClusterDisplay_Requested(object sender, ClusterDisplayRequestedEventArgs e)
         {
             if(historyHandler != null)
-            {              
-
+            {   
                 historyHandler.PerformLoad(this, e.ClusterNode);
             }
         }
