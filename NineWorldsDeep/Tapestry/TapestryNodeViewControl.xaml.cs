@@ -161,6 +161,7 @@ namespace NineWorldsDeep.Tapestry
             contentControls.Add(ccHierophantVertexNode);
             contentControls.Add(ccArchivistMasterNode);
             contentControls.Add(ccArchivistSourceNode);
+            contentControls.Add(ccMediaTagNode);
         }
 
         private void ResolveContentControl(TapestryNode node)
@@ -245,6 +246,12 @@ namespace NineWorldsDeep.Tapestry
                         SetVisible(ccArchivistSourceNode);
                         ArchivistSourceNode srcNode = (ArchivistSourceNode)node;
                         archivistSourceDisplay.Display(srcNode);
+                        break;
+
+                    case TapestryNodeType.MediaTag:
+                        SetVisible(ccMediaTagNode);
+                        MediaTagNode tagNode = (MediaTagNode)node;
+                        mediaTagDisplay.Display(tagNode);
                         break;
 
                     case TapestryNodeType.SynergyV5List:

@@ -83,6 +83,11 @@
                         Visibility="Collapsed">
             <nodeUI:ArchivistSourceDisplay x:Name="archivistSourceDisplay"/>
         </ContentControl>
+
+        <ContentControl x:Name="ccMediaTagNode"
+                        Visibility="Collapsed">
+            <nodeUI:MediaTagDisplay x:Name="mediaTagDisplay"/>
+        </ContentControl>
         
     </Grid>
 </UserControl>

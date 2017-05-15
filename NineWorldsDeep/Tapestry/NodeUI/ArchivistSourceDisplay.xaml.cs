@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Controls.Primitives;
 using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
@@ -63,7 +64,100 @@ namespace NineWorldsDeep.Tapestry.NodeUI
             }
 
             lvSourceExcerpts.ItemsSource = testExcerpts;
+            
         }
+
+        private void Hyperlink_OnClick(object sender, EventArgs e)
+        {
+            var link = (Hyperlink)sender;
+
+            if (link != null)
+            {
+                var run = link.Inlines.FirstOrDefault() as Run;
+                string text = run == null ? string.Empty : run.Text;
+
+                UI.Display.Message("clicked " + text);
+            }
+        }
+
+        //private void ItemContainerGenerator_StatusChanged(object sender, EventArgs e)
+        //{
+        //    if (lvSourceExcerpts.ItemContainerGenerator.Status == GeneratorStatus.ContainersGenerated)
+        //    {
+        //        foreach (var item in lvSourceExcerpts.Items)
+        //        {
+        //            var container = lvSourceExcerpts.ItemContainerGenerator.ContainerFromItem(item);
+        //            ListViewItem i = (ListViewItem)container;
+
+        //            if (i != null)
+        //            {
+        //                //Seek out the ContentPresenter that actually presents our DataTemplate
+        //                ContentPresenter contentPresenter = FindVisualChild<ContentPresenter>(i);
+
+        //                //int count = VisualTreeHelper.GetChildrenCount(contentPresenter);
+
+        //                //for (int j = 0; j < count; j++)
+        //                //{
+        //                //    var innerChild = VisualTreeHelper.GetChild(contentPresenter, j);
+
+        //                //    if (innerChild is Hyperlink)
+        //                //    {
+        //                //        UI.Display.Message("found hyperlink");
+        //                //    }
+        //                //}
+
+        //                foreach(var x in FindVisualChildren<Hyperlink>(contentPresenter))
+        //                {
+        //                    if(x is Hyperlink)
+        //                    {
+        //                        UI.Display.Message("found link");
+        //                    }
+        //                }
+        //            }
+        //        }
+        //    }
+        //}
+
+        //public static IEnumerable<T> FindVisualChildren<T>(DependencyObject depObj) where T : DependencyObject
+        //{
+        //    if (depObj != null)
+        //    {
+        //        for (int i = 0; i < VisualTreeHelper.GetChildrenCount(depObj); i++)
+        //        {
+        //            DependencyObject child = VisualTreeHelper.GetChild(depObj, i);
+        //            if (child != null && child is T)
+        //            {
+        //                yield return (T)child;
+        //            }
+
+        //            foreach (T childOfChild in FindVisualChildren<T>(child))
+        //            {
+        //                yield return childOfChild;
+        //            }
+        //        }
+        //    }
+        //}
+
+        //private T FindVisualChild<T>(DependencyObject obj)
+        //where T : DependencyObject
+        //{
+        //    for (int i = 0; i < VisualTreeHelper.GetChildrenCount(obj); i++)
+        //    {
+        //        DependencyObject child = VisualTreeHelper.GetChild(obj, i);
+        //        if (child != null && child is T)
+        //            return (T)child;
+        //    }
+
+        //    for (int i = 0; i < VisualTreeHelper.GetChildrenCount(obj); i++)
+        //    {
+        //        DependencyObject child = VisualTreeHelper.GetChild(obj, i);
+        //        T childOfChild = FindVisualChild<T>(child);
+        //        if (childOfChild != null)
+        //            return childOfChild;
+        //    }
+
+        //    return null;
+        //}
 
         private void lvSourceExcerpts_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
@@ -84,6 +178,11 @@ namespace NineWorldsDeep.Tapestry.NodeUI
             ProcessEntryInput();
         }
 
+        public void Hyperlink_TagClicked(object sender, RoutedEventArgs e)
+        {
+            UI.Display.Message("clicked");
+        }
+
         private void ProcessEntryInput()
         {
             string itemValue = txtSourceExcerptInput.Text;
@@ -95,5 +194,19 @@ namespace NineWorldsDeep.Tapestry.NodeUI
                 UI.Display.Message("you entered: " + itemValue);
             }
         }
+
+        //private class SourceExcerptUiWrapper
+        //{
+        //    public ArchivistSourceExcerpt Excerpt { get; set; }
+
+        //    public string ExcerptValue
+        //    {
+        //        get
+        //        {
+        //            return Excerpt.ExcerptValue;
+        //        }
+        //    }
+            
+        //}
     }
 }

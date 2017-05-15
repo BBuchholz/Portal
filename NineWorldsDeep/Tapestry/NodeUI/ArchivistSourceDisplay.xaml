@@ -132,6 +132,9 @@
                 </Trigger>
             </Style.Triggers>
         </Style>
+        <Style TargetType="{x:Type Hyperlink}">
+            <EventSetter Event="Click" Handler="Hyperlink_OnClick"/>
+        </Style>
     </UserControl.Resources>
     
     <Grid>
@@ -161,7 +164,7 @@
                         <TextBlock Text="{Binding ExcerptValue}" 
                                    TextWrapping="Wrap"
                                    Margin="5"/>
-                        <TextBlock Text="{Binding TagString}" 
+                        <TextBlock local:ArchivistUiTagFormatter.FormattedText="{Binding TagString}" 
                                    TextWrapping="Wrap" 
                                    FontWeight="Bold"
                                    Margin="5"/>

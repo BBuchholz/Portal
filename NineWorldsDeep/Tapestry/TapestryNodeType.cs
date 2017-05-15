@@ -27,6 +27,7 @@
         HierophantVertex,
         NullHierophantVertex,
         ArchivistMaster,
-        ArchivistSource
+        ArchivistSource,
+        MediaTag
     }
 }
