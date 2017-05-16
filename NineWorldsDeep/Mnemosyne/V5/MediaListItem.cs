@@ -25,7 +25,7 @@ namespace NineWorldsDeep.Mnemosyne.V5
         {
             Media.Add(new DevicePath() {
                 DeviceName = Configuration.GetLocalDeviceDescription(),
-                Path = filePath                  
+                DevicePathValue = filePath                  
             });
         }
 

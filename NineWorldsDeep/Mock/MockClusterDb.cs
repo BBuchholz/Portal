@@ -22,12 +22,12 @@ namespace NineWorldsDeep.Mock
 
         private void PopulateSynergySubset()
         {
-            mSynergyListNodes.AddRange(MockUtils.GetAllSynergyListNodes());
+            mSynergyListNodes.AddRange(Utils.GetAllSynergyListNodes());
         }
 
         private void PopulateFileSubset()
         {
-            mDevicePathNodes.AddRange(MockUtils.GetAllDevicePathNodes());
+            mDevicePathNodes.AddRange(Utils.GetAllDevicePathNodes());
         }
 
         public override IEnumerable<TapestryNode> Children(TapestryNodeType nodeType)

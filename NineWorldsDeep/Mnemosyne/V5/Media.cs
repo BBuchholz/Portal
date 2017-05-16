@@ -22,6 +22,14 @@ namespace NineWorldsDeep.Mnemosyne.V5
             DevicePaths = new MultiMap<string, DevicePath>();
         }
 
+        public List<DevicePath> AllDevicePaths
+        {
+            get
+            {
+                return DevicePaths.AllValues();
+            }
+        }
+
         //public void Add(MediaTagging mt)
         //{
         //    MediaTaggings.Add(mt);

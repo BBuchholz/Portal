@@ -8,7 +8,7 @@ namespace NineWorldsDeep.Mnemosyne.V5
 {
     public class DevicePath
     {
-        public string Path { get; set; }
+        public string DevicePathValue { get; set; }
         public string DeviceName { get; set; }
         public int DevicePathId { get; set; }
         public int MediaId { get; set; }

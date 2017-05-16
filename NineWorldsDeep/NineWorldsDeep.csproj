@@ -27,7 +27,7 @@
     <UpdatePeriodically>false</UpdatePeriodically>
     <UpdateRequired>false</UpdateRequired>
     <MapFileExtensions>true</MapFileExtensions>
-    <ApplicationRevision>92</ApplicationRevision>
+    <ApplicationRevision>93</ApplicationRevision>
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <PublishWizardCompleted>true</PublishWizardCompleted>
@@ -230,7 +230,7 @@
     <Compile Include="Mnemosyne\V5\TagStringHashIndex.cs" />
     <Compile Include="Mock\MockClusterDb.cs" />
     <Compile Include="Mock\MockClusterFileSubsetXml.cs" />
-    <Compile Include="Mock\MockUtils.cs" />
+    <Compile Include="Mock\Utils.cs" />
     <Compile Include="Model\MediaDeviceModelItem.cs" />
     <Compile Include="Model\MediaRootModelItem.cs" />
     <Compile Include="Model\TagModelItem.cs" />

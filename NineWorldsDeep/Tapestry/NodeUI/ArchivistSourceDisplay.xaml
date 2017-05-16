@@ -7,9 +7,6 @@
              mc:Ignorable="d" 
              d:DesignHeight="800" d:DesignWidth="400">
     
-    <!-- MIMIC FUNCTIONALITY OF SynergyV5ListDisplay 
-        (data templates, styles, context menu, &c.)-->
-
     <UserControl.Resources>
         <DataTemplate x:Key="SourceTemplate">
             <StackPanel Orientation="Vertical" HorizontalAlignment="Center">

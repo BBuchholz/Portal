@@ -427,7 +427,7 @@ namespace NineWorldsDeep.Xml
                                 DevicePath dp = new DevicePath()
                                 {
                                     DeviceName = deviceName,
-                                    Path = pathValue
+                                    DevicePathValue = pathValue
                                 };
 
                                 dp.SetTimeStamps(verifiedPresentTime, verifiedMissingTime);
@@ -523,7 +523,7 @@ namespace NineWorldsDeep.Xml
                         DevicePath dp = new DevicePath()
                         {
                             DeviceName = deviceName,
-                            Path = pathValue
+                            DevicePathValue = pathValue
                         };
 
                         dp.SetTimeStamps(verifiedPresentTime, verifiedMissingTime);
@@ -587,7 +587,7 @@ namespace NineWorldsDeep.Xml
             string verifiedMissing =
                 TimeStamp.To_UTC_YYYY_MM_DD_HH_MM_SS(path.VerifiedMissing);
 
-            pathEl.Add(new XAttribute(ATTRIBUTE_VALUE, path.Path));
+            pathEl.Add(new XAttribute(ATTRIBUTE_VALUE, path.DevicePathValue));
 
             pathEl.Add(
                 new XAttribute(ATTRIBUTE_VERIFIED_PRESENT, verifiedPresent));

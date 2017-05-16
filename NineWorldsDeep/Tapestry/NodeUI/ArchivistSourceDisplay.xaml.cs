@@ -42,29 +42,9 @@ namespace NineWorldsDeep.Tapestry.NodeUI
             ccSourceDetails.Content = sourceNode.Source;
 
             //mimic SynergyV5ListDisplay user control for async load of listview
-
-            //testing
-            List<ArchivistSourceExcerpt> testExcerpts =
-                new List<ArchivistSourceExcerpt>();
-
-            Random r = new Random();
-            int rndInt = r.Next(3, 15);
-            int rndTags = r.Next(1, 8);
-            int rndParas = r.Next(1, 4);
-
-            for (int i = 1; i < rndInt; i++)
-            {
-                testExcerpts.Add(new ArchivistSourceExcerpt()
-                {
-                    ExcerptValue = string.Join(System.Environment.NewLine +
-                                               System.Environment.NewLine, 
-                                               Faker.Lorem.Paragraphs(rndParas)),
-                    TagString = string.Join(", ",Faker.Lorem.Words(rndTags))
-                });  
-            }
-
-            lvSourceExcerpts.ItemsSource = testExcerpts;
             
+            lvSourceExcerpts.ItemsSource = 
+                Mock.Utils.MockArchivistSourceExcerpts();            
         }
 
         private void lvSourceExcerpts_SelectionChanged(object sender, SelectionChangedEventArgs e)

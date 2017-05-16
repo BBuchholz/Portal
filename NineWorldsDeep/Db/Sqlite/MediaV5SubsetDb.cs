@@ -815,7 +815,7 @@ namespace NineWorldsDeep.Db.Sqlite
 
                 foreach (DevicePath dp in media.DevicePaths[deviceName])
                 {
-                    int pathId = EnsureMediaPath(dp.Path, cmd);
+                    int pathId = EnsureMediaPath(dp.DevicePathValue, cmd);
 
                     dp.MediaDeviceId = deviceId;
                     dp.MediaPathId = pathId;
@@ -1093,7 +1093,7 @@ namespace NineWorldsDeep.Db.Sqlite
 
                     var devicePath = new DevicePath()
                     {
-                        Path = mediaPathValue,
+                        DevicePathValue = mediaPathValue,
                         DeviceName = mediaDeviceDescription,
                         DevicePathId = mediaDevicePathId,
                         MediaId = mediaId,

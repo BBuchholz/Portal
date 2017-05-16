@@ -140,7 +140,7 @@
 
                 <Grid Grid.Column="0">
 
-                    <CheckBox Content="Override Default Action"
+                    <CheckBox Content="Override Default Action For Untagged Media"
                               x:Name="chkOverrideDefaultAction"
                               HorizontalAlignment="Center"
                               VerticalAlignment="Center"
