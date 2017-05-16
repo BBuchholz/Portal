@@ -107,9 +107,12 @@
                   Expanded="Expander_Expanded"
                   Collapsed="Expander_Collapsed">
 
+            <Grid>
+                
             <ListView x:Name="lvSourceExcerpts"
                       Margin="5"
                       ItemContainerStyle="{StaticResource alternatingStyle}"
+                      ScrollViewer.HorizontalScrollBarVisibility="Disabled"
                       AlternationCount="2">
                 <ListView.ItemTemplate>
                     <DataTemplate>
@@ -126,6 +129,7 @@
                 </ListView.ItemTemplate>
             </ListView>
 
+            </Grid>
         </Expander>
 
     </Grid>
