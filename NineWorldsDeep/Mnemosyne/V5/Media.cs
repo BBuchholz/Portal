@@ -30,6 +30,11 @@ namespace NineWorldsDeep.Mnemosyne.V5
             }
         }
 
+        public List<string> DeviceNames()
+        {
+            return DevicePaths.Keys.ToList();
+        }
+
         //public void Add(MediaTagging mt)
         //{
         //    MediaTaggings.Add(mt);
@@ -41,6 +46,14 @@ namespace NineWorldsDeep.Mnemosyne.V5
             {
                 GetTag(mt.MediaTagValue).Merge(mt);
             }
+        }
+
+        internal bool IsDeviceNameFilterMatch(string deviceNameFilter)
+        {
+            return DevicePaths.Keys
+                .Where(k => k.ToLower().Contains(deviceNameFilter.ToLower()))
+                .ToList()
+                .Count > 0;
         }
 
         /// <summary>

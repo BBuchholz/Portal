@@ -33,19 +33,25 @@ namespace NineWorldsDeep.Tapestry.NodeUI
         internal void Display(MediaTagNode tagNode)
         {
             this.mediaTagNode = tagNode;
-            Refresh();
-        }
 
-        public void Refresh()
-        {
-            ccMediaTagDetails.Content = mediaTagNode.MediaTag;
-
+            //LOAD HERE, ONCE
+            //filter can be applied without having to hit the db again
             //mimic SynergyV5ListDisplay user control for async load of listviews
-            
             Mock.Utils.PopulateTestMedia(mediaTagNode.MediaTag);
             Mock.Utils.PopulateTestExcerpts(mediaTagNode.MediaTag);
 
-            lvMediaItems.ItemsSource = mediaTagNode.MediaTag.Media;
+            Refresh(txtDeviceNameFilter.Text);
+        }
+
+        public void Refresh(string deviceNameFilter)
+        {
+            ccMediaTagDetails.Content = mediaTagNode.MediaTag;
+
+            //lvMediaItems.ItemsSource = mediaTagNode.MediaTag.Media;
+            lvMediaItems.ItemsSource =
+                mediaTagNode.MediaTag.Media
+                    .Where(m => m.IsDeviceNameFilterMatch(deviceNameFilter));
+
             lvSourceExcerpts.ItemsSource = mediaTagNode.MediaTag.SourceExcerpts;
         }
         
@@ -89,6 +95,15 @@ namespace NineWorldsDeep.Tapestry.NodeUI
                 current = VisualTreeHelper.GetParent(current);
             };
             return null;
+        }
+        
+        private void txtDeviceNameFilter_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (Keyboard.IsKeyDown(Key.Enter))
+            {
+                Refresh(txtDeviceNameFilter.Text);
+                e.Handled = true;
+            }
         }
     }
 }

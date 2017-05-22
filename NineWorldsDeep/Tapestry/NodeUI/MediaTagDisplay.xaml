@@ -72,7 +72,7 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="60"/>
             <RowDefinition Height="*"/>
-            <RowDefinition Height="40"/>
+            <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
         <ContentControl Grid.Row="0"
@@ -89,8 +89,21 @@
                   Collapsed="Expander_Collapsed">
 
             <Grid>
-                
+
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="40"/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+
+                <TextBox Grid.Row="0"
+                         x:Name="txtDeviceNameFilter"
+                         Margin="5"
+                         HorizontalContentAlignment="Center"
+                         VerticalContentAlignment="Center"
+                         KeyDown="txtDeviceNameFilter_KeyDown"/>
+
                 <ListView x:Name="lvMediaItems" 
+                          Grid.Row="1"
                           Margin="5"
                           ItemsSource="{Binding}"
                           ItemTemplate="{StaticResource MediaListItemTemplate}"
@@ -102,7 +115,7 @@
         
         <Expander Header="Excerpts"
                   Grid.Row="2"
-                  IsExpanded="False"
+                  IsExpanded="True"
                   Margin="5"
                   Expanded="Expander_Expanded"
                   Collapsed="Expander_Collapsed">
