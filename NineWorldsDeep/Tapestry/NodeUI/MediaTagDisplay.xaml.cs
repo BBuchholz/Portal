@@ -14,6 +14,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using NineWorldsDeep.Mnemosyne.V5;
 using NineWorldsDeep.Tapestry.Nodes;
+using NineWorldsDeep.Archivist;
 
 namespace NineWorldsDeep.Tapestry.NodeUI
 {
@@ -71,7 +72,7 @@ namespace NineWorldsDeep.Tapestry.NodeUI
         /// <param name="expander"></param>
         private void ProcessExpanderState(Expander expander)
         {
-            Grid parent = FindAncestor<Grid>(expander);
+            Grid parent = Core.UiUtils.FindAncestor<Grid>(expander);
             int rowIndex = Grid.GetRow(expander);
 
             if (parent.RowDefinitions.Count > rowIndex && rowIndex >= 0)
@@ -79,23 +80,23 @@ namespace NineWorldsDeep.Tapestry.NodeUI
                     (expander.IsExpanded ? new GridLength(1, GridUnitType.Star) : GridLength.Auto);
         }
 
-        public static T FindAncestor<T>(DependencyObject current)
-            where T : DependencyObject
-        {
-            // Need this call to avoid returning current object if it is the 
-            // same type as parent we are looking for
-            current = VisualTreeHelper.GetParent(current);
+        //public static T FindAncestor<T>(DependencyObject current)
+        //    where T : DependencyObject
+        //{
+        //    // Need this call to avoid returning current object if it is the 
+        //    // same type as parent we are looking for
+        //    current = VisualTreeHelper.GetParent(current);
 
-            while (current != null)
-            {
-                if (current is T)
-                {
-                    return (T)current;
-                }
-                current = VisualTreeHelper.GetParent(current);
-            };
-            return null;
-        }
+        //    while (current != null)
+        //    {
+        //        if (current is T)
+        //        {
+        //            return (T)current;
+        //        }
+        //        current = VisualTreeHelper.GetParent(current);
+        //    };
+        //    return null;
+        //}
         
         private void txtDeviceNameFilter_KeyDown(object sender, KeyEventArgs e)
         {
@@ -105,5 +106,61 @@ namespace NineWorldsDeep.Tapestry.NodeUI
                 e.Handled = true;
             }
         }
+
+
+        private void ButtonEditTags_Click(object sender, RoutedEventArgs e)
+        {
+            TextBlock tbTagString =
+                Core.UiUtils.GetTemplateSibling<TextBlock, Button>(
+                    (Button)sender, "tbTagString");
+
+            TextBox txtTagString =
+                Core.UiUtils.GetTemplateSibling<TextBox, Button>(
+                    (Button)sender, "txtTagString");
+
+
+            ArchivistSourceExcerpt ase =
+                (ArchivistSourceExcerpt)tbTagString.DataContext;
+
+            //UI.Display.Message(ase.TagString);
+            txtTagString.Text = ase.TagString;
+
+            StackPanel spTextBlock =
+                Core.UiUtils.GetTemplateSibling<StackPanel, Button>(
+                    (Button)sender, "spTagStringTextBlock");
+
+            StackPanel spTextBox =
+                Core.UiUtils.GetTemplateSibling<StackPanel, Button>(
+                    (Button)sender, "spTagStringTextBox");
+
+            spTextBox.Visibility = Visibility.Visible;
+            spTextBlock.Visibility = Visibility.Collapsed;
+        }
+
+        private void ButtonSaveTags_Click(object sender, RoutedEventArgs e)
+        {
+            TextBox txtTagString =
+                Core.UiUtils.GetTemplateSibling<TextBox, Button>(
+                    (Button)sender, "txtTagString");
+
+            ArchivistSourceExcerpt ase =
+                (ArchivistSourceExcerpt)txtTagString.DataContext;
+
+            ase.TagString = txtTagString.Text;
+
+            //UI.Display.Message(txtTagString.Text);     
+
+            StackPanel spTextBlock =
+                Core.UiUtils.GetTemplateSibling<StackPanel, Button>(
+                    (Button)sender, "spTagStringTextBlock");
+
+            StackPanel spTextBox =
+                Core.UiUtils.GetTemplateSibling<StackPanel, Button>(
+                    (Button)sender, "spTagStringTextBox");
+
+            spTextBox.Visibility = Visibility.Collapsed;
+            spTextBlock.Visibility = Visibility.Visible;
+        }
+
     }
 }

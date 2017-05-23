@@ -122,5 +122,61 @@ namespace NineWorldsDeep.Tapestry.NodeUI
 
             public MediaTagNode MediaTagNode { get; private set; }
         }
+
+        private void ButtonEditTags_Click(object sender, RoutedEventArgs e)
+        {
+            TextBlock tbTagString = 
+                Core.UiUtils.GetTemplateSibling<TextBlock, Button>(
+                    (Button)sender, "tbTagString");
+
+            TextBox txtTagString =
+                Core.UiUtils.GetTemplateSibling<TextBox, Button>(
+                    (Button)sender, "txtTagString");
+
+
+            ArchivistSourceExcerpt ase = 
+                (ArchivistSourceExcerpt)tbTagString.DataContext;
+
+            //UI.Display.Message(ase.TagString);
+            txtTagString.Text = ase.TagString;
+
+            StackPanel spTextBlock =
+                Core.UiUtils.GetTemplateSibling<StackPanel, Button>(
+                    (Button)sender, "spTagStringTextBlock");
+
+            StackPanel spTextBox =
+                Core.UiUtils.GetTemplateSibling<StackPanel, Button>(
+                    (Button)sender, "spTagStringTextBox");
+
+            spTextBox.Visibility = Visibility.Visible;
+            spTextBlock.Visibility = Visibility.Collapsed;
+        }
+        
+        private void ButtonSaveTags_Click(object sender, RoutedEventArgs e)
+        {
+            TextBox txtTagString =
+                Core.UiUtils.GetTemplateSibling<TextBox, Button>(
+                    (Button)sender, "txtTagString");
+
+            ArchivistSourceExcerpt ase =
+                (ArchivistSourceExcerpt)txtTagString.DataContext;
+
+            ase.TagString = txtTagString.Text;
+
+            //UI.Display.Message(txtTagString.Text);     
+
+            StackPanel spTextBlock =
+                Core.UiUtils.GetTemplateSibling<StackPanel, Button>(
+                    (Button)sender, "spTagStringTextBlock");
+
+            StackPanel spTextBox =
+                Core.UiUtils.GetTemplateSibling<StackPanel, Button>(
+                    (Button)sender, "spTagStringTextBox");
+
+            spTextBox.Visibility = Visibility.Collapsed;
+            spTextBlock.Visibility = Visibility.Visible;
+        }
+
+
     }
 }

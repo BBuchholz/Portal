@@ -158,13 +158,38 @@
             <ListView.ItemTemplate>
                 <DataTemplate>
                     <StackPanel Orientation="Vertical">
+                        
                         <TextBlock Text="{Binding ExcerptValue}" 
                                    TextWrapping="Wrap"
                                    Margin="5"/>
-                        <TextBlock local:ArchivistUiTagFormatter.FormattedText="{Binding TagString}" 
-                                   TextWrapping="Wrap" 
-                                   FontWeight="Bold"
-                                   Margin="5"/>
+                        
+                        <StackPanel Orientation="Horizontal"
+                                    x:Name="spTagStringTextBlock">
+                        
+                            <TextBlock local:ArchivistUiTagFormatter.FormattedText="{Binding TagString}" 
+                                       x:Name="tbTagString"
+                                       TextWrapping="Wrap" 
+                                       FontWeight="Bold"
+                                       Margin="5"/>
+                            
+                            <Button Content="Edit"
+                                    Click="ButtonEditTags_Click"/>
+                            
+                        </StackPanel>
+
+                        <StackPanel Orientation="Horizontal"
+                                    x:Name="spTagStringTextBox"
+                                    Visibility="Collapsed">
+
+                            <TextBox  x:Name="txtTagString"
+                                      TextWrapping="Wrap" 
+                                      FontWeight="Bold"
+                                      Margin="5"/>
+
+                            <Button Content="Save"
+                                    Click="ButtonSaveTags_Click"/>
+
+                        </StackPanel>
                     </StackPanel>
                 </DataTemplate>
             </ListView.ItemTemplate>

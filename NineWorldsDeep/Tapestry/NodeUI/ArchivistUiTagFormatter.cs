@@ -69,9 +69,9 @@ namespace NineWorldsDeep.Tapestry.NodeUI
             }
         }
 
-        public static void Hyperlink_TagClicked(object sender, RoutedEventArgs e)
-        {
-            UI.Display.Message("clicked");
-        }
+        //public static void Hyperlink_TagClicked(object sender, RoutedEventArgs e)
+        //{
+        //    UI.Display.Message("clicked");
+        //}
     }
 }
