@@ -117,6 +117,10 @@ namespace NineWorldsDeep.Warehouse
             {
                 new SyncMapWindow(selected).Show();
             }
+            else
+            {
+                UI.Display.Message("select a sync profile");
+            }
         }
 
         private async void ProcessSyncDirection()
