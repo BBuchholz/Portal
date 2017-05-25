@@ -384,6 +384,7 @@ namespace NineWorldsDeep.Core
             profileNames.Add("phone");
             profileNames.Add("logos");
             profileNames.Add("galaxy-a");
+            profileNames.Add("droid-z");
 
             return profileNames;
         }
