@@ -360,6 +360,15 @@ namespace NineWorldsDeep.Sqlite
         public static string COLUMN_SOURCE_URL = "SourceUrl";
         public static string COLUMN_SOURCE_RETRIEVAL_DATE = "SourceRetrievalDate";
 
+        //SourceExcerpt
+        public static string TABLE_SOURCE_EXCERPT = "SourceExcerpt";
+        public static string COLUMN_SOURCE_EXCERPT_ID = "SourceExcerptId";
+        public static string COLUMN_SOURCE_EXCERPT_VALUE = "SourceExcerptValue";
+
+        //SourceExcerptTagging
+        public static string TABLE_SOURCE_EXCERPT_TAGGING = "SourceExcerptTagging";
+        public static string COLUMN_SOURCE_EXCERPT_TAGGING_ID = "SourceExcerptTaggingId";
+
         #endregion
 
         #region "queries"
@@ -431,6 +440,35 @@ namespace NineWorldsDeep.Sqlite
             "	 " + COLUMN_SOURCE_RETRIEVAL_DATE + ") " +
             "VALUES " +
             "	(?,?,?,?,?,?,?); ";
+
+        internal static readonly string SELECT_SOURCE_EXCERPT_ID_X_Y =
+
+            "SELECT " + COLUMN_SOURCE_EXCERPT_ID + " " +
+            "FROM " + TABLE_SOURCE_EXCERPT + " " +
+            "WHERE " + COLUMN_SOURCE_ID + " = ? " +
+            "AND " + COLUMN_SOURCE_EXCERPT_VALUE + " = ? ; ";
+
+        internal static readonly string INSERT_OR_IGNORE_SOURCE_EXCERPT_X_Y =
+
+            "INSERT OR IGNORE INTO " + TABLE_SOURCE_EXCERPT + " " +
+            "	(" + COLUMN_SOURCE_ID + ", " + COLUMN_SOURCE_EXCERPT_VALUE + ") " +
+            "VALUES " +
+            "	(?, ?);";
+
+        internal static readonly string SELECT_EXCERPTS_WITH_TAGS_FOR_SOURCE_ID_X = 
+            
+            "SELECT sext." + COLUMN_SOURCE_EXCERPT_TAGGING_ID + ", " +
+            "		se." + COLUMN_SOURCE_EXCERPT_ID + ", " +
+            "		se." + COLUMN_SOURCE_ID + ", " +
+            "		se." + COLUMN_SOURCE_EXCERPT_VALUE + ", " +
+            "		mt." + COLUMN_MEDIA_TAG_ID + ", " +
+            "		mt." + COLUMN_MEDIA_TAG_VALUE + " " +
+            "FROM " + TABLE_SOURCE_EXCERPT + " se " +
+            "JOIN " + TABLE_SOURCE_EXCERPT_TAGGING + " sext " +
+            "ON se." + COLUMN_SOURCE_EXCERPT_ID + " = sext." + COLUMN_SOURCE_EXCERPT_ID + " " +
+            "JOIN " + TABLE_MEDIA_TAG + " mt " +
+            "ON sext." + COLUMN_MEDIA_TAG_ID + " = mt." + COLUMN_MEDIA_TAG_ID + " " +
+            "WHERE se." + COLUMN_SOURCE_ID + " = ? ; " ;
 
 
 

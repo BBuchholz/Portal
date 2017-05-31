@@ -5,6 +5,7 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
+using NineWorldsDeep.Mnemosyne.V5;
 
 namespace NineWorldsDeep.Archivist
 {
@@ -18,6 +19,13 @@ namespace NineWorldsDeep.Archivist
         public string ExcerptPages { get; set; }
         public string ExcerptBeginTime { get; set; }
         public string ExcerptEndTime { get; set; }
+        
+        protected Dictionary<string, SourceExcerptTagging> Taggings { get; private set; }        
+
+        public ArchivistSourceExcerpt()
+        {
+            Taggings = new Dictionary<string, SourceExcerptTagging>();
+        }
 
         public string TagString
         {
@@ -43,6 +51,47 @@ namespace NineWorldsDeep.Archivist
         private void NotifyPropertyChanged([CallerMemberName] String propertyName = "")
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+
+        public void Add(SourceExcerptTagging tagging)
+        {
+            if (string.IsNullOrWhiteSpace(tagging.Tag.MediaTagValue))
+            {
+                throw new Exception("cannot add tagging with empty tag value");
+            }
+
+            if (Taggings.ContainsKey(tagging.Tag.MediaTagValue))
+            {
+                Merge(tagging);
+            }
+            else
+            {
+                Taggings.Add(tagging.Tag.MediaTagValue, tagging);
+
+                string newTagString;
+
+                if(TagString.Trim() != "")
+                {
+                    newTagString = TagString + ", " + tagging.Tag.MediaTagValue;    
+                }
+                else
+                {
+                    newTagString = tagging.Tag.MediaTagValue;
+                }
+
+                TagString = newTagString;
+            }
+        }
+
+        private void Merge(SourceExcerptTagging tagging)
+        {
+            //does nothing right now, stubbing out
+
+            //should mimic MediaTagging.Merge(...)
+            //create an abstract base class, Tagging, to hold
+            //the TryMergeInt and TryMergeString for mutual
+            //usage (change them to protected)
+            //derive each from the base class
         }
     }
 }

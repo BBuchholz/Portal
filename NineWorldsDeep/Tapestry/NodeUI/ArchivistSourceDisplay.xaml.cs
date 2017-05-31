@@ -29,11 +29,14 @@ namespace NineWorldsDeep.Tapestry.NodeUI
         public ArchivistSourceDisplay()
         {
             InitializeComponent();
+            db = new Db.Sqlite.ArchivistSubsetDb();
         }
 
         public void Display(ArchivistSourceNode src)
         {
             this.sourceNode = src;
+            db.LoadSourceExcerptsWithTags(src.Source);
+
             Refresh();            
         }
 
@@ -42,9 +45,9 @@ namespace NineWorldsDeep.Tapestry.NodeUI
             ccSourceDetails.Content = sourceNode.Source;
 
             //mimic SynergyV5ListDisplay user control for async load of listview
-            
-            lvSourceExcerpts.ItemsSource = 
-                Mock.Utils.MockArchivistSourceExcerpts();            
+
+            lvSourceExcerpts.ItemsSource = null;
+            lvSourceExcerpts.ItemsSource = sourceNode.Source.Excerpts;            
         }
 
         private void lvSourceExcerpts_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -78,8 +81,20 @@ namespace NineWorldsDeep.Tapestry.NodeUI
             if (!string.IsNullOrWhiteSpace(itemValue))
             {
                 //process entry here
+                var excerpt = new ArchivistSourceExcerpt()
+                {
+                    ExcerptValue = itemValue,
+                    SourceId = sourceNode.Source.SourceId
+                };
 
-                UI.Display.Message("you entered: " + itemValue);
+                excerpt.SourceExcerptId =  db.EnsureCore(excerpt);
+
+                sourceNode.Source.Add(excerpt);
+
+                Refresh();
+
+                //for testing
+                //UI.Display.Message("you entered: " + itemValue);
             }
         }
 

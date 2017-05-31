@@ -1,5 +1,6 @@
 ﻿using NineWorldsDeep.Archivist;
 using NineWorldsDeep.Core;
+using NineWorldsDeep.Mnemosyne.V5;
 using NineWorldsDeep.Sqlite;
 using System;
 using System.Collections;
@@ -46,6 +47,72 @@ namespace NineWorldsDeep.Db.Sqlite
             return lst;
         }
 
+        public void LoadSourceExcerptsWithTags(ArchivistSource source)
+        {
+            using (var conn = new SQLiteConnection(
+                @"Data Source=" + Configuration.GetSqliteDbPath(DbName)))
+            {
+                conn.Open();
+
+                using (var cmd = new SQLiteCommand(conn))
+                {
+                    using (var transaction = conn.BeginTransaction())
+                    {
+
+                        LoadSourceExcerptsWithTags(source, cmd);
+                        transaction.Commit();
+                    }
+                }
+
+                conn.Close();
+            }
+        }
+
+        private void LoadSourceExcerptsWithTags(ArchivistSource source, SQLiteCommand cmd)
+        {
+            cmd.Parameters.Clear();
+            cmd.CommandText =
+                NwdContract.SELECT_EXCERPTS_WITH_TAGS_FOR_SOURCE_ID_X;
+            
+            cmd.Parameters.Add(new SQLiteParameter() { Value = source.SourceId });
+
+            using (var rdr = cmd.ExecuteReader())
+            {
+                while (rdr.Read())
+                {
+                    int taggingId = rdr.GetInt32(0);
+                    int excerptId = rdr.GetInt32(1);
+                    int sourceId = rdr.GetInt32(2);
+                    string exVal = rdr.GetString(3);
+                    int mediaTagId = rdr.GetInt32(4);
+                    string tagValue = rdr.GetString(5);
+
+                    var ase = new ArchivistSourceExcerpt()
+                    {
+                        SourceExcerptId = excerptId,
+                        SourceId = sourceId,
+                        ExcerptValue = exVal
+                    };
+
+                    var mt = new MediaTag() {
+                        MediaTagId = mediaTagId,
+                        MediaTagValue = tagValue
+                    };
+
+                    var tagging = new SourceExcerptTagging()
+                    {
+                        SourceExcerptTaggingId = taggingId,
+                        Excerpt = ase,
+                        Tag = mt
+                    };
+
+                    mt.Add(ase);
+                    ase.Add(tagging);
+                    source.Add(ase);
+                }
+            }
+        }
+        
         private List<ArchivistSourceType> SelectSourceTypes(SQLiteCommand cmd)
         {
             List<ArchivistSourceType> lst =
@@ -54,6 +121,7 @@ namespace NineWorldsDeep.Db.Sqlite
             cmd.Parameters.Clear();
             cmd.CommandText =
                 NwdContract.SELECT_TYPE_ID_TYPE_VALUE_FROM_SOURCE_TYPE;
+
 
             using (var rdr = cmd.ExecuteReader())
             {
@@ -103,6 +171,83 @@ namespace NineWorldsDeep.Db.Sqlite
             }
 
             return lst;
+        }
+
+        public int EnsureCore(ArchivistSourceExcerpt excerpt)
+        {
+            int excerptId = -1;
+
+            using (var conn = new SQLiteConnection(
+                @"Data Source=" + Configuration.GetSqliteDbPath(DbName)))
+            {
+                conn.Open();
+
+                using (var cmd = new SQLiteCommand(conn))
+                {
+                    using (var transaction = conn.BeginTransaction())
+                    {
+                        excerptId = EnsureCore(excerpt, cmd);
+                        transaction.Commit();
+                    }
+                }
+
+                conn.Close();
+            }
+
+            return excerptId;
+        }
+
+        public int EnsureCore(ArchivistSourceExcerpt excerpt, SQLiteCommand cmd)
+        {
+            int srcId = excerpt.SourceId;
+            string exVal = excerpt.ExcerptValue;
+
+            int excerptId = 
+                GetExcerptId(srcId, exVal, cmd);
+
+            if(excerptId < 1)
+            {
+                InsertOrIgnoreExcerpt(srcId, exVal, cmd);
+                excerptId = GetExcerptId(srcId, exVal, cmd);
+            }
+
+            return excerptId;
+        }
+
+        private void InsertOrIgnoreExcerpt(int sourceId, 
+            string excerptValue, SQLiteCommand cmd)
+        {
+            cmd.Parameters.Clear();
+
+            cmd.CommandText = NwdContract.INSERT_OR_IGNORE_SOURCE_EXCERPT_X_Y;
+
+            cmd.Parameters.Add(new SQLiteParameter() { Value = sourceId });
+            cmd.Parameters.Add(new SQLiteParameter() { Value = excerptValue });
+
+            cmd.ExecuteNonQuery();
+        }
+
+        private int GetExcerptId(int sourceId, 
+            string excerptValue, SQLiteCommand cmd)
+        {
+            int id = -1;
+
+            cmd.Parameters.Clear();
+            cmd.CommandText =
+                NwdContract.SELECT_SOURCE_EXCERPT_ID_X_Y;
+
+            cmd.Parameters.Add(new SQLiteParameter() { Value = sourceId });
+            cmd.Parameters.Add(new SQLiteParameter() { Value = excerptValue });
+
+            using (var rdr = cmd.ExecuteReader())
+            {
+                if (rdr.Read())
+                {
+                    id = rdr.GetInt32(0);
+                }
+            }
+
+            return id;
         }
 
         private List<ArchivistSource> SelectSourceCoresForSourceTypeId(
