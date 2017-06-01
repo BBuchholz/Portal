@@ -108,7 +108,7 @@ namespace NineWorldsDeep.Db.Sqlite
                         {
                             SourceExcerptTaggingId = taggingId,
                             Excerpt = ase,
-                            Tag = mt
+                            MediaTag = mt
                         };
 
                         mt.Add(ase);
@@ -178,6 +178,128 @@ namespace NineWorldsDeep.Db.Sqlite
             }
 
             return lst;
+        }
+
+        public void SaveExcerptTaggings(ArchivistSourceExcerpt ase)
+        {
+            using (var conn = new SQLiteConnection(
+                @"Data Source=" + Configuration.GetSqliteDbPath(DbName)))
+            {
+                conn.Open();
+
+                using (var cmd = new SQLiteCommand(conn))
+                {
+                    using (var transaction = conn.BeginTransaction())
+                    {
+                        SaveExcerptTaggings(ase, cmd);
+                        transaction.Commit();
+                    }
+                }
+
+                conn.Close();
+            }
+        }
+
+        private void SaveExcerptTaggings(ArchivistSourceExcerpt ase, SQLiteCommand cmd)
+        {
+            foreach(SourceExcerptTagging set in ase.ExcerptTaggings)
+            {
+                SaveExcerptTagging(set, cmd);
+            }
+        }
+
+        private void SaveExcerptTagging(SourceExcerptTagging set, SQLiteCommand cmd)
+        {
+            int sourceExcerptTaggingId = GetExcerptTaggingId(set, cmd);
+
+            if(sourceExcerptTaggingId < 1)
+            {
+                //no need to update, just insert it fresh
+                InsertOrIgnoreExcerptTagging(set, cmd); //mimic MediaV5SubsetDb.InsertMediaTagging(...)
+            }
+            else
+            {
+                cmd.Parameters.Clear();
+                cmd.CommandText =
+                    NwdContract.UPDATE_SOURCE_EXCERPT_TAGGING_TIMESTAMPS_X_Y_Z; //query is done in NwdSql, needs conversion to NwdContract format
+
+                //// TAGGED PARAM ///////////////////////////////////////////////////
+                SQLiteParameter taggedParam = new SQLiteParameter();
+
+                String taggedAt = TimeStamp.To_UTC_YYYY_MM_DD_HH_MM_SS(set.TaggedAt);
+
+                if (string.IsNullOrWhiteSpace(taggedAt))
+                {
+                    taggedParam.Value = DBNull.Value;
+                }
+                else
+                {
+                    taggedParam.Value = taggedAt;
+                }
+                cmd.Parameters.Add(taggedParam);
+
+                //// UNTAGGED PARAM ////////////////////////////////////////////////
+                SQLiteParameter untaggedParam = new SQLiteParameter();
+
+                String untaggedAt =
+                    TimeStamp.To_UTC_YYYY_MM_DD_HH_MM_SS(set.UntaggedAt);
+
+                if (string.IsNullOrWhiteSpace(untaggedAt))
+                {
+                    untaggedParam.Value = DBNull.Value;
+                }
+                else
+                {
+                    untaggedParam.Value = untaggedAt;
+                }
+                cmd.Parameters.Add(untaggedParam);
+
+                //// ID PARAM /////////////////////////////////////////////////////
+                cmd.Parameters.Add(new SQLiteParameter()
+                {
+                    Value = sourceExcerptTaggingId
+                });
+
+                cmd.ExecuteNonQuery();
+            }
+                        
+        }
+
+        private int GetExcerptTaggingId(SourceExcerptTagging set, SQLiteCommand cmd)
+        {
+            int sourceExcerptId = set.Excerpt.SourceExcerptId;
+            int mediaTagId = set.MediaTag.MediaTagId;
+
+            if(sourceExcerptId < 1)
+            {
+                throw new Exception("undefined source excerpt id");
+            }
+
+            if (mediaTagId < 1)
+            {
+                throw new Exception("undefined media tag id");
+            }
+
+            int id = -1;
+
+            cmd.Parameters.Clear();
+            cmd.CommandText = SELECT_SOURCE_EXCERPT_TAGGING_ID_X_Y;  //query is done in NwdSql, needs conversion to NwdContract format
+
+            cmd.Parameters.Add(
+                new SQLiteParameter() { Value = sourceExcerptId });
+
+            cmd.Parameters.Add(
+                new SQLiteParameter() { Value = mediaTagId });
+
+            using (var rdr = cmd.ExecuteReader())
+            {
+                if (rdr.Read())
+                {
+                    id = rdr.GetInt32(0);
+                }
+            }
+
+            return id;
         }
 
         public int EnsureCore(ArchivistSourceExcerpt excerpt)

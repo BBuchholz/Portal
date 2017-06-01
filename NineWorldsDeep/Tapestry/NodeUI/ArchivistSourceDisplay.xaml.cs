@@ -152,7 +152,6 @@ namespace NineWorldsDeep.Tapestry.NodeUI
             ArchivistSourceExcerpt ase = 
                 (ArchivistSourceExcerpt)tbTagString.DataContext;
 
-            //UI.Display.Message(ase.TagString);
             txtTagString.Text = ase.TagString;
 
             StackPanel spTextBlock =
@@ -175,10 +174,9 @@ namespace NineWorldsDeep.Tapestry.NodeUI
 
             ArchivistSourceExcerpt ase =
                 (ArchivistSourceExcerpt)txtTagString.DataContext;
-
-            ase.TagString = txtTagString.Text;
-
-            //UI.Display.Message(txtTagString.Text);     
+                        
+            ase.SetTagsFromTagString(txtTagString.Text);
+            db.SaveExcerptTaggings(ase);
 
             StackPanel spTextBlock =
                 Core.UiUtils.GetTemplateSibling<StackPanel, Button>(

@@ -23,12 +23,15 @@ namespace NineWorldsDeep.Tapestry.NodeUI
     /// </summary>
     public partial class MediaTagDisplay : UserControl
     {
-        private Db.Sqlite.MediaV5SubsetDb db;
+        private Db.Sqlite.MediaV5SubsetDb dbMediaV5;
+        private Db.Sqlite.ArchivistSubsetDb dbArchivist;
         private MediaTagNode mediaTagNode;
 
         public MediaTagDisplay()
         {
             InitializeComponent();
+            dbMediaV5 = new Db.Sqlite.MediaV5SubsetDb();
+            dbArchivist = new Db.Sqlite.ArchivistSubsetDb();
         }
 
         internal void Display(MediaTagNode tagNode)
@@ -38,8 +41,9 @@ namespace NineWorldsDeep.Tapestry.NodeUI
             //LOAD HERE, ONCE
             //filter can be applied without having to hit the db again
             //mimic SynergyV5ListDisplay user control for async load of listviews
-            Mock.Utils.PopulateTestMedia(mediaTagNode.MediaTag);
-            Mock.Utils.PopulateTestExcerpts(mediaTagNode.MediaTag);
+
+            //Mock.Utils.PopulateTestMedia(mediaTagNode.MediaTag);
+            //Mock.Utils.PopulateTestExcerpts(mediaTagNode.MediaTag);
 
             Refresh(txtDeviceNameFilter.Text);
         }
@@ -122,7 +126,6 @@ namespace NineWorldsDeep.Tapestry.NodeUI
             ArchivistSourceExcerpt ase =
                 (ArchivistSourceExcerpt)tbTagString.DataContext;
 
-            //UI.Display.Message(ase.TagString);
             txtTagString.Text = ase.TagString;
 
             StackPanel spTextBlock =
@@ -146,10 +149,9 @@ namespace NineWorldsDeep.Tapestry.NodeUI
             ArchivistSourceExcerpt ase =
                 (ArchivistSourceExcerpt)txtTagString.DataContext;
 
-            ase.TagString = txtTagString.Text;
-
-            //UI.Display.Message(txtTagString.Text);     
-
+            ase.SetTagsFromTagString(txtTagString.Text);
+            dbArchivist.SaveExcerptTaggings(ase);
+            
             StackPanel spTextBlock =
                 Core.UiUtils.GetTemplateSibling<StackPanel, Button>(
                     (Button)sender, "spTagStringTextBlock");

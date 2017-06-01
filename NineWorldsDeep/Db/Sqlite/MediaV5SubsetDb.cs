@@ -9,6 +9,7 @@ using System.Data.SQLite;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using NineWorldsDeep.Archivist;
 
 namespace NineWorldsDeep.Db.Sqlite
 {
@@ -190,7 +191,7 @@ namespace NineWorldsDeep.Db.Sqlite
 
             return lst;
         }
-
+        
         private List<string> SelectPathsForDeviceRoot(int mediaDeviceId, string rootPath, SQLiteCommand cmd)
         {
             List<string> lst =
@@ -1201,17 +1202,7 @@ namespace NineWorldsDeep.Db.Sqlite
             cmd.Parameters.Clear();
             cmd.CommandText =
                 NwdContract.UPDATE_MEDIA_TAGGING_TAGGED_UNTAGGED_WHERE_MEDIA_ID_AND_TAG_ID_W_X_Y_Z;
-
-            //SQLiteParameter taggedParam = new SQLiteParameter();
-            //taggedParam.Value = 
-            //    TimeStamp.To_UTC_YYYY_MM_DD_HH_MM_SS(mt.TaggedAt);
-            //cmd.Parameters.Add(taggedParam);
-
-            //SQLiteParameter untaggedParam = new SQLiteParameter();
-            //untaggedParam.Value = 
-            //    TimeStamp.To_UTC_YYYY_MM_DD_HH_MM_SS(mt.UntaggedAt);
-            //cmd.Parameters.Add(untaggedParam);
-
+            
             SQLiteParameter taggedParam = new SQLiteParameter();
 
             String taggedAt = TimeStamp.To_UTC_YYYY_MM_DD_HH_MM_SS(mt.TaggedAt);

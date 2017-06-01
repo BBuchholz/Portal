@@ -419,37 +419,37 @@ namespace NineWorldsDeep.Mock
             }
         }
 
-        public static void PopulateTestExcerpts(MediaTag mediaTag)
-        {
-            foreach(ArchivistSourceExcerpt ase in MockArchivistSourceExcerpts())
-            {
-                mediaTag.Add(ase);
-            }
-        }
+        //public static void PopulateTestExcerpts(MediaTag mediaTag)
+        //{
+        //    foreach(ArchivistSourceExcerpt ase in MockArchivistSourceExcerpts())
+        //    {
+        //        mediaTag.Add(ase);
+        //    }
+        //}
 
-        public static List<ArchivistSourceExcerpt> MockArchivistSourceExcerpts()
-        {
-            List<ArchivistSourceExcerpt> testExcerpts =
-                new List<ArchivistSourceExcerpt>();
+        //public static List<ArchivistSourceExcerpt> MockArchivistSourceExcerpts()
+        //{
+        //    List<ArchivistSourceExcerpt> testExcerpts =
+        //        new List<ArchivistSourceExcerpt>();
 
-            Random r = new Random();
-            int rndInt = r.Next(3, 15);
-            int rndTags = r.Next(1, 8);
-            int rndParas = r.Next(1, 4);
+        //    Random r = new Random();
+        //    int rndInt = r.Next(3, 15);
+        //    int rndTags = r.Next(1, 8);
+        //    int rndParas = r.Next(1, 4);
 
-            for (int i = 1; i < rndInt; i++)
-            {
-                testExcerpts.Add(new ArchivistSourceExcerpt()
-                {
-                    ExcerptValue = string.Join(System.Environment.NewLine +
-                                               System.Environment.NewLine,
-                                               Faker.Lorem.Paragraphs(rndParas)),
-                    TagString = string.Join(", ", Faker.Lorem.Words(rndTags))
-                });
-            }
+        //    for (int i = 1; i < rndInt; i++)
+        //    {
+        //        testExcerpts.Add(new ArchivistSourceExcerpt()
+        //        {
+        //            ExcerptValue = string.Join(System.Environment.NewLine +
+        //                                       System.Environment.NewLine,
+        //                                       Faker.Lorem.Paragraphs(rndParas)),
+        //            TagString = string.Join(", ", Faker.Lorem.Words(rndTags))
+        //        });
+        //    }
 
-            return testExcerpts;
-        }
+        //    return testExcerpts;
+        //}
 
         private static void populateVerbs()
         {

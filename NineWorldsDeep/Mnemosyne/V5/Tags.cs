@@ -106,17 +106,6 @@ namespace NineWorldsDeep.Mnemosyne.V5
 
             return taggings;
         }
-
-        //public static List<MediaTagging> GetTaggingsForHash(string hash)
-        //{
-        //    //exactly what it says
-        //    return Configuration.DB.MediaSubset.GetMediaTaggingsForHash(hash);
-        //}
-
-        //public static string GetTagStringForHash(string hash)
-        //{
-        //    return ToTagString(GetTaggingsForHash(hash));
-        //}
         
         public static string ToTagString(List<MediaTagging> list)
         {
@@ -179,6 +168,42 @@ namespace NineWorldsDeep.Mnemosyne.V5
             }
 
             return tshIndex;
+        }
+
+        public static List<string> GetRemovedTagValues(string oldTagString, string newTagString)
+        {
+            List<string> oldTags = Tags.ToTagList(oldTagString);
+            List<string> newTags = Tags.ToTagList(newTagString);
+
+            List<string> removedTags = new List<string>();
+
+            foreach (string tag in oldTags)
+            {
+                if (!newTags.Contains(tag))
+                {
+                    removedTags.Add(tag);
+                }
+            }
+
+            return removedTags;
+        }
+
+        public static List<string> GetAddedTagValues(string oldTagString, string newTagString)
+        {
+            List<string> oldTags = Tags.ToTagList(oldTagString);
+            List<string> newTags = Tags.ToTagList(newTagString);
+
+            List<string> addedTags = new List<string>();
+
+            foreach (string tag in newTags)
+            {
+                if (!oldTags.Contains(tag))
+                {
+                    addedTags.Add(tag);
+                }
+            }
+
+            return addedTags;
         }
     }
 }

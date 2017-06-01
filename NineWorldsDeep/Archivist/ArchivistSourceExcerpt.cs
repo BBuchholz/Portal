@@ -19,6 +19,10 @@ namespace NineWorldsDeep.Archivist
         public string ExcerptPages { get; set; }
         public string ExcerptBeginTime { get; set; }
         public string ExcerptEndTime { get; set; }
+        public List<SourceExcerptTagging> ExcerptTaggings
+        {
+            get { return Taggings.Values.ToList(); }
+        }
         
         protected Dictionary<string, SourceExcerptTagging> Taggings { get; private set; }        
 
@@ -33,7 +37,7 @@ namespace NineWorldsDeep.Archivist
             {
                 return _tagString;
             }
-            set
+            private set
             {
                 if (_tagString != value)
                 {
@@ -55,28 +59,28 @@ namespace NineWorldsDeep.Archivist
 
         public void Add(SourceExcerptTagging tagging)
         {
-            if (string.IsNullOrWhiteSpace(tagging.Tag.MediaTagValue))
+            if (string.IsNullOrWhiteSpace(tagging.MediaTag.MediaTagValue))
             {
                 throw new Exception("cannot add tagging with empty tag value");
             }
 
-            if (Taggings.ContainsKey(tagging.Tag.MediaTagValue))
+            if (Taggings.ContainsKey(tagging.MediaTag.MediaTagValue))
             {
                 Merge(tagging);
             }
             else
             {
-                Taggings.Add(tagging.Tag.MediaTagValue, tagging);
+                Taggings.Add(tagging.MediaTag.MediaTagValue, tagging);
 
                 string newTagString;
 
                 if(TagString.Trim() != "")
                 {
-                    newTagString = TagString + ", " + tagging.Tag.MediaTagValue;    
+                    newTagString = TagString + ", " + tagging.MediaTag.MediaTagValue;    
                 }
                 else
                 {
-                    newTagString = tagging.Tag.MediaTagValue;
+                    newTagString = tagging.MediaTag.MediaTagValue;
                 }
 
                 TagString = newTagString;
@@ -92,6 +96,55 @@ namespace NineWorldsDeep.Archivist
             //the TryMergeInt and TryMergeString for mutual
             //usage (change them to protected)
             //derive each from the base class
+        }
+
+        /// <summary>
+        /// will return tagging if it already exists 
+        /// if the tagging is not found, it will create 
+        /// a new one with Excerpt property set to this
+        /// excerpt and the Tag property set to a MediaTag
+        /// with the mediaTagId not set. No other properties
+        /// are set for any internal objects
+        /// 
+        /// Anywhere the Tag property is intended to persist to
+        /// the database, be sure to populate the mediaTagId
+        /// in some manner
+        /// </summary>
+        /// <param name="tagValue"></param>
+        /// <returns></returns>
+        public SourceExcerptTagging GetTagging(string tagValue)
+        {
+            SourceExcerptTagging set;
+
+            if (Taggings.ContainsKey(tagValue))
+            {
+                set = Taggings[tagValue];
+            }
+            else
+            {
+                set = new SourceExcerptTagging()
+                {
+                    Excerpt = this,
+                    MediaTag = new MediaTag() { MediaTagValue = tagValue }
+                };
+            }
+
+            return set;
+        }
+
+        public void SetTagsFromTagString(string newTagString)
+        {
+            foreach(string newTag in 
+                Tags.GetAddedTagValues(TagString, newTagString))
+            {
+                GetTagging(newTag).Tag();
+            }
+
+            foreach(string oldTag in 
+                Tags.GetRemovedTagValues(TagString, newTagString))
+            {
+                GetTagging(oldTag).Untag();
+            }
         }
     }
 }
