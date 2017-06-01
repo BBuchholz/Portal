@@ -14,11 +14,14 @@ namespace NineWorldsDeep.Db.Sqlite
 {
     public class ArchivistSubsetDb
     {
+        private MediaV5SubsetDb mediaDb;
+
         protected string DbName { get; private set; }
 
         public ArchivistSubsetDb()
         {
             DbName = "nwd";
+            mediaDb = new MediaV5SubsetDb();
         }
 
         public List<ArchivistSourceType> GetAllSourceTypes()
@@ -210,59 +213,100 @@ namespace NineWorldsDeep.Db.Sqlite
 
         private void SaveExcerptTagging(SourceExcerptTagging set, SQLiteCommand cmd)
         {
-            int sourceExcerptTaggingId = GetExcerptTaggingId(set, cmd);
+            if (set.MediaTag.MediaTagId < 1)
+            {                
+                set.MediaTag.MediaTagId = mediaDb.EnsureMediaTag(set.MediaTag.MediaTagValue, cmd);
+            }
 
-            if(sourceExcerptTaggingId < 1)
+            set.SourceExcerptTaggingId = GetExcerptTaggingId(set, cmd);
+            
+            if (set.SourceExcerptTaggingId < 1)
             {
                 //no need to update, just insert it fresh
                 InsertOrIgnoreExcerptTagging(set, cmd); //mimic MediaV5SubsetDb.InsertMediaTagging(...)
             }
             else
             {
-                cmd.Parameters.Clear();
-                cmd.CommandText =
-                    NwdContract.UPDATE_SOURCE_EXCERPT_TAGGING_TIMESTAMPS_X_Y_Z; //query is done in NwdSql, needs conversion to NwdContract format
-
-                //// TAGGED PARAM ///////////////////////////////////////////////////
-                SQLiteParameter taggedParam = new SQLiteParameter();
-
-                String taggedAt = TimeStamp.To_UTC_YYYY_MM_DD_HH_MM_SS(set.TaggedAt);
-
-                if (string.IsNullOrWhiteSpace(taggedAt))
-                {
-                    taggedParam.Value = DBNull.Value;
-                }
-                else
-                {
-                    taggedParam.Value = taggedAt;
-                }
-                cmd.Parameters.Add(taggedParam);
-
-                //// UNTAGGED PARAM ////////////////////////////////////////////////
-                SQLiteParameter untaggedParam = new SQLiteParameter();
-
-                String untaggedAt =
-                    TimeStamp.To_UTC_YYYY_MM_DD_HH_MM_SS(set.UntaggedAt);
-
-                if (string.IsNullOrWhiteSpace(untaggedAt))
-                {
-                    untaggedParam.Value = DBNull.Value;
-                }
-                else
-                {
-                    untaggedParam.Value = untaggedAt;
-                }
-                cmd.Parameters.Add(untaggedParam);
-
-                //// ID PARAM /////////////////////////////////////////////////////
-                cmd.Parameters.Add(new SQLiteParameter()
-                {
-                    Value = sourceExcerptTaggingId
-                });
-
-                cmd.ExecuteNonQuery();
+                UpdateExcerptTaggingTimestampsById(set, cmd);
             }
                         
+        }
+
+        private void UpdateExcerptTaggingTimestampsById(SourceExcerptTagging set, SQLiteCommand cmd)
+        {
+            cmd.Parameters.Clear();
+            cmd.CommandText =
+                NwdContract.UPDATE_SOURCE_EXCERPT_TAGGING_TIMESTAMPS_X_Y_Z; //query is done in NwdSql, needs conversion to NwdContract format
+
+            //// TAGGED PARAM ///////////////////////////////////////////////////
+            SQLiteParameter taggedParam = new SQLiteParameter();
+
+            String taggedAt = TimeStamp.To_UTC_YYYY_MM_DD_HH_MM_SS(set.TaggedAt);
+
+            if (string.IsNullOrWhiteSpace(taggedAt))
+            {
+                taggedParam.Value = DBNull.Value;
+            }
+            else
+            {
+                taggedParam.Value = taggedAt;
+            }
+            cmd.Parameters.Add(taggedParam);
+
+            //// UNTAGGED PARAM ////////////////////////////////////////////////
+            SQLiteParameter untaggedParam = new SQLiteParameter();
+
+            String untaggedAt =
+                TimeStamp.To_UTC_YYYY_MM_DD_HH_MM_SS(set.UntaggedAt);
+
+            if (string.IsNullOrWhiteSpace(untaggedAt))
+            {
+                untaggedParam.Value = DBNull.Value;
+            }
+            else
+            {
+                untaggedParam.Value = untaggedAt;
+            }
+            cmd.Parameters.Add(untaggedParam);
+
+            //// ID PARAM /////////////////////////////////////////////////////
+            cmd.Parameters.Add(new SQLiteParameter()
+            {
+                Value = set.SourceExcerptTaggingId
+            });
+
+            cmd.ExecuteNonQuery();
+        }
+
+        private void InsertOrIgnoreExcerptTagging(SourceExcerptTagging set, SQLiteCommand cmd)
+        {
+            int sourceExcerptId = set.Excerpt.SourceExcerptId;
+            int mediaTagId = set.MediaTag.MediaTagId;
+
+            if(sourceExcerptId < 1)
+            {
+                throw new Exception("sourceExcerptId not set");
+            }
+
+            if (mediaTagId < 1)
+            {
+                throw new Exception("mediaTagId not set");
+            }
+
+            cmd.Parameters.Clear();
+            cmd.CommandText =
+                NwdContract.INSERT_OR_IGNORE_EXCERPT_TAGGING_X_Y;
+            
+            cmd.Parameters.Add(
+                new SQLiteParameter() { Value = sourceExcerptId });
+            
+            cmd.Parameters.Add(
+                new SQLiteParameter() { Value = mediaTagId });
+
+            cmd.ExecuteNonQuery();
+
+            //update timestamps (no need to replicate code)
+            UpdateExcerptTaggingTimestampsById(set, cmd);
         }
 
         private int GetExcerptTaggingId(SourceExcerptTagging set, SQLiteCommand cmd)
@@ -283,7 +327,8 @@ namespace NineWorldsDeep.Db.Sqlite
             int id = -1;
 
             cmd.Parameters.Clear();
-            cmd.CommandText = SELECT_SOURCE_EXCERPT_TAGGING_ID_X_Y;  //query is done in NwdSql, needs conversion to NwdContract format
+            cmd.CommandText = 
+                NwdContract.SELECT_SOURCE_EXCERPT_TAGGING_ID_X_Y;  //query is done in NwdSql, needs conversion to NwdContract format
 
             cmd.Parameters.Add(
                 new SQLiteParameter() { Value = sourceExcerptId });

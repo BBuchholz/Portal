@@ -1111,7 +1111,7 @@ namespace NineWorldsDeep.Db.Sqlite
             return map;
         }
 
-        private int EnsureMediaTag(string tag, SQLiteCommand cmd)
+        public int EnsureMediaTag(string tag, SQLiteCommand cmd)
         {
             int mediaTagId = GetMediaTagId(tag, cmd);
 
@@ -1192,8 +1192,8 @@ namespace NineWorldsDeep.Db.Sqlite
                         "MediaId and/or MediaTagId not set.");
                 }
 
-                InsertMediaTagging(mt, cmd);
-                UpdateMediaTagging(mt, cmd);
+                InsertMediaTagging(mt, cmd); //just inserts ids, not timestamps
+                UpdateMediaTagging(mt, cmd); //updates timestamps
             }
         }
 
@@ -1286,6 +1286,11 @@ namespace NineWorldsDeep.Db.Sqlite
             cmd.Parameters.Add(mediaTagIdParam);
             
             cmd.ExecuteNonQuery();
+
+            //added 2017-06-01 (just noticed, working on something else)
+            //remove is something breaks :P
+            //use update to set timestamps
+            UpdateMediaTagging(mt, cmd);
         }
 
         internal Dictionary<string, Tag> GetAllMediaTags()

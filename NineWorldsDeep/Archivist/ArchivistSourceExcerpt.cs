@@ -127,6 +127,8 @@ namespace NineWorldsDeep.Archivist
                     Excerpt = this,
                     MediaTag = new MediaTag() { MediaTagValue = tagValue }
                 };
+
+                Taggings[tagValue] = set;
             }
 
             return set;

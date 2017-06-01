@@ -366,8 +366,15 @@ namespace NineWorldsDeep.Sqlite
         public static string COLUMN_SOURCE_EXCERPT_VALUE = "SourceExcerptValue";
 
         //SourceExcerptTagging
-        public static string TABLE_SOURCE_EXCERPT_TAGGING = "SourceExcerptTagging";
-        public static string COLUMN_SOURCE_EXCERPT_TAGGING_ID = "SourceExcerptTaggingId";
+        public static string TABLE_SOURCE_EXCERPT_TAGGING = 
+            "SourceExcerptTagging";
+        public static string COLUMN_SOURCE_EXCERPT_TAGGING_ID = 
+            "SourceExcerptTaggingId";
+        public static string COLUMN_SOURCE_EXCERPT_TAGGING_TAGGED_AT = 
+            "SourceExcerptTaggingTaggedAt";
+
+        public static string COLUMN_SOURCE_EXCERPT_TAGGING_UNTAGGED_AT = 
+            "SourceExcerptTaggingUntaggedAt";
 
         #endregion
 
@@ -469,6 +476,27 @@ namespace NineWorldsDeep.Sqlite
             "LEFT JOIN " + TABLE_MEDIA_TAG + " mt " +
             "ON sext." + COLUMN_MEDIA_TAG_ID + " = mt." + COLUMN_MEDIA_TAG_ID + " " +
             "WHERE se." + COLUMN_SOURCE_ID + " = ? ; " ;
+
+        internal static readonly string SELECT_SOURCE_EXCERPT_TAGGING_ID_X_Y =
+
+            "SELECT " + COLUMN_SOURCE_EXCERPT_TAGGING_ID + " " +
+            "FROM " + TABLE_SOURCE_EXCERPT_TAGGING + " " +
+            "WHERE " + COLUMN_SOURCE_EXCERPT_ID + " = ?  " +
+            "AND " + COLUMN_MEDIA_TAG_ID + " = ? ; ";
+
+        internal static readonly string UPDATE_SOURCE_EXCERPT_TAGGING_TIMESTAMPS_X_Y_Z =
+
+            "UPDATE " + TABLE_SOURCE_EXCERPT_TAGGING + "  " +
+            "SET " + COLUMN_SOURCE_EXCERPT_TAGGING_TAGGED_AT + "  =  MAX(IFNULL(" + COLUMN_SOURCE_EXCERPT_TAGGING_TAGGED_AT + ", ''), ?), " +
+            "	 " + COLUMN_SOURCE_EXCERPT_TAGGING_UNTAGGED_AT + " = MAX(IFNULL(" + COLUMN_SOURCE_EXCERPT_TAGGING_UNTAGGED_AT + ", ''), ?) " +
+            "WHERE " + COLUMN_SOURCE_EXCERPT_TAGGING_ID + " = ? ; ";
+
+        internal static readonly string INSERT_OR_IGNORE_EXCERPT_TAGGING_X_Y =
+
+            "INSERT OR IGNORE INTO " + TABLE_SOURCE_EXCERPT_TAGGING + " " +
+            "	(" + COLUMN_SOURCE_EXCERPT_ID + ", " + COLUMN_MEDIA_TAG_ID + ") " +
+            "VALUES " +
+            "	(?, ?); ";
 
 
 
