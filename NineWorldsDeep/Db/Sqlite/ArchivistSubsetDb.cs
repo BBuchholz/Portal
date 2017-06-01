@@ -80,12 +80,12 @@ namespace NineWorldsDeep.Db.Sqlite
             {
                 while (rdr.Read())
                 {
-                    int taggingId = rdr.GetInt32(0);
+                    int taggingId = DbV5Utils.GetNullableInt32(rdr, 0);
                     int excerptId = rdr.GetInt32(1);
                     int sourceId = rdr.GetInt32(2);
                     string exVal = rdr.GetString(3);
-                    int mediaTagId = rdr.GetInt32(4);
-                    string tagValue = rdr.GetString(5);
+                    int mediaTagId = DbV5Utils.GetNullableInt32(rdr, 4);
+                    string tagValue = DbV5Utils.GetNullableString(rdr, 5);
 
                     var ase = new ArchivistSourceExcerpt()
                     {
@@ -94,20 +94,27 @@ namespace NineWorldsDeep.Db.Sqlite
                         ExcerptValue = exVal
                     };
 
-                    var mt = new MediaTag() {
-                        MediaTagId = mediaTagId,
-                        MediaTagValue = tagValue
-                    };
-
-                    var tagging = new SourceExcerptTagging()
+                    if (taggingId > 0 &&
+                        mediaTagId > 0 &&
+                        !string.IsNullOrWhiteSpace(tagValue))
                     {
-                        SourceExcerptTaggingId = taggingId,
-                        Excerpt = ase,
-                        Tag = mt
-                    };
+                        var mt = new MediaTag()
+                        {
+                            MediaTagId = mediaTagId,
+                            MediaTagValue = tagValue
+                        };
 
-                    mt.Add(ase);
-                    ase.Add(tagging);
+                        var tagging = new SourceExcerptTagging()
+                        {
+                            SourceExcerptTaggingId = taggingId,
+                            Excerpt = ase,
+                            Tag = mt
+                        };
+
+                        mt.Add(ase);
+                        ase.Add(tagging);
+                    }
+
                     source.Add(ase);
                 }
             }
