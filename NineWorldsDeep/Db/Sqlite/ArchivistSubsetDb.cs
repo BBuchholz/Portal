@@ -75,12 +75,15 @@ namespace NineWorldsDeep.Db.Sqlite
         {
             cmd.Parameters.Clear();
             cmd.CommandText =
-                NwdContract.SELECT_EXCERPTS_WITH_TAGS_FOR_SOURCE_ID_X;
+                NwdContract.SELECT_EXCERPTS_WITH_TAGGED_TAGS_FOR_SOURCE_ID_X;
             
             cmd.Parameters.Add(new SQLiteParameter() { Value = source.SourceId });
 
             using (var rdr = cmd.ExecuteReader())
             {
+                Dictionary<int, ArchivistSourceExcerpt> idToExcerpt =
+                    new Dictionary<int, ArchivistSourceExcerpt>();
+
                 while (rdr.Read())
                 {
                     int taggingId = DbV5Utils.GetNullableInt32(rdr, 0);
@@ -90,12 +93,19 @@ namespace NineWorldsDeep.Db.Sqlite
                     int mediaTagId = DbV5Utils.GetNullableInt32(rdr, 4);
                     string tagValue = DbV5Utils.GetNullableString(rdr, 5);
 
-                    var ase = new ArchivistSourceExcerpt()
+                    if (!idToExcerpt.ContainsKey(excerptId))
                     {
-                        SourceExcerptId = excerptId,
-                        SourceId = sourceId,
-                        ExcerptValue = exVal
-                    };
+                        idToExcerpt[excerptId] = new ArchivistSourceExcerpt()
+                        {
+                            SourceExcerptId = excerptId,
+                            SourceId = sourceId,
+                            ExcerptValue = exVal
+                        };
+                        
+                        source.Add(idToExcerpt[excerptId]);
+                    }
+
+                    var ase = idToExcerpt[excerptId];
 
                     if (taggingId > 0 &&
                         mediaTagId > 0 &&
@@ -117,8 +127,6 @@ namespace NineWorldsDeep.Db.Sqlite
                         mt.Add(ase);
                         ase.Add(tagging);
                     }
-
-                    source.Add(ase);
                 }
             }
         }

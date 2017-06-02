@@ -35,17 +35,19 @@ namespace NineWorldsDeep.Tapestry.NodeUI
         public void Display(ArchivistSourceNode src)
         {
             this.sourceNode = src;
-            db.LoadSourceExcerptsWithTags(src.Source);
-
-            Refresh();            
+            RefreshFromDb();
         }
 
-        public void Refresh()
+        public void RefreshFromDb()
+        {
+            db.LoadSourceExcerptsWithTags(this.sourceNode.Source);
+            RefreshFromObject();
+        }
+
+        public void RefreshFromObject()
         {
             ccSourceDetails.Content = sourceNode.Source;
-
-            //mimic SynergyV5ListDisplay user control for async load of listview
-
+            
             lvSourceExcerpts.ItemsSource = null;
             lvSourceExcerpts.ItemsSource = sourceNode.Source.Excerpts;            
         }
@@ -91,7 +93,7 @@ namespace NineWorldsDeep.Tapestry.NodeUI
 
                 sourceNode.Source.Add(excerpt);
 
-                Refresh();
+                RefreshFromObject();
 
                 //for testing
                 //UI.Display.Message("you entered: " + itemValue);
@@ -177,6 +179,7 @@ namespace NineWorldsDeep.Tapestry.NodeUI
                         
             ase.SetTagsFromTagString(txtTagString.Text);
             db.SaveExcerptTaggings(ase);
+            RefreshFromDb();
 
             StackPanel spTextBlock =
                 Core.UiUtils.GetTemplateSibling<StackPanel, Button>(

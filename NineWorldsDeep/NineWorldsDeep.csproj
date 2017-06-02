@@ -147,6 +147,7 @@
     <Compile Include="Core\ProcessableFragment.cs" />
     <Compile Include="Core\ReviewableFragment.cs" />
     <Compile Include="Core\NwdUtils.cs" />
+    <Compile Include="Core\TaggingBase.cs" />
     <Compile Include="Core\TimeStamp.cs" />
     <Compile Include="Core\UiUtils.cs" />
     <Compile Include="Core\WordUtils.cs" />

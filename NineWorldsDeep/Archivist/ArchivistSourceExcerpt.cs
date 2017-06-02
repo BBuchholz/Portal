@@ -64,39 +64,48 @@ namespace NineWorldsDeep.Archivist
                 throw new Exception("cannot add tagging with empty tag value");
             }
 
-            if (Taggings.ContainsKey(tagging.MediaTag.MediaTagValue))
+            var tagValue = tagging.MediaTag.MediaTagValue;
+
+            if (Taggings.ContainsKey(tagValue))
             {
-                Merge(tagging);
+                Taggings[tagValue].Merge(tagging);
             }
             else
             {
                 Taggings.Add(tagging.MediaTag.MediaTagValue, tagging);
 
-                string newTagString;
+                //string newTagString;
 
-                if(TagString.Trim() != "")
-                {
-                    newTagString = TagString + ", " + tagging.MediaTag.MediaTagValue;    
-                }
-                else
-                {
-                    newTagString = tagging.MediaTag.MediaTagValue;
-                }
+                //if(TagString.Trim() != "")
+                //{
+                //    newTagString = TagString + ", " + tagging.MediaTag.MediaTagValue;    
+                //}
+                //else
+                //{
+                //    newTagString = tagging.MediaTag.MediaTagValue;
+                //}
 
-                TagString = newTagString;
+                //TagString = newTagString;
             }
+
+            TagString = GenerateTagString();
         }
 
-        private void Merge(SourceExcerptTagging tagging)
+        private string GenerateTagString()
         {
-            //does nothing right now, stubbing out
+            List<string> tags = new List<string>();
 
-            //should mimic MediaTagging.Merge(...)
-            //create an abstract base class, Tagging, to hold
-            //the TryMergeInt and TryMergeString for mutual
-            //usage (change them to protected)
-            //derive each from the base class
+            foreach(var tagging in Taggings.Values)
+            {
+                if (tagging.IsTagged())
+                {
+                    tags.Add(tagging.MediaTag.MediaTagValue);
+                }
+            }
+
+            return string.Join(",", tags);
         }
+
 
         /// <summary>
         /// will return tagging if it already exists 

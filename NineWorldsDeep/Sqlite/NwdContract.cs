@@ -498,6 +498,22 @@ namespace NineWorldsDeep.Sqlite
             "VALUES " +
             "	(?, ?); ";
 
+        internal static readonly string SELECT_EXCERPTS_WITH_TAGGED_TAGS_FOR_SOURCE_ID_X =
+
+            "SELECT  sext." + COLUMN_SOURCE_EXCERPT_TAGGING_ID + ", " +
+            "		se." + COLUMN_SOURCE_EXCERPT_ID + ", " +
+            "		se." + COLUMN_SOURCE_ID + ", " +
+            "		se." + COLUMN_SOURCE_EXCERPT_VALUE + ", " +
+            "		mt." + COLUMN_MEDIA_TAG_ID + ", " +
+            "		mt." + COLUMN_MEDIA_TAG_VALUE + " " +
+            "FROM " + TABLE_SOURCE_EXCERPT + " se " +
+            "LEFT JOIN " + TABLE_SOURCE_EXCERPT_TAGGING + " sext " +
+            "ON se." + COLUMN_SOURCE_EXCERPT_ID + " = sext." + COLUMN_SOURCE_EXCERPT_ID + " " +
+            "LEFT JOIN " + TABLE_MEDIA_TAG + " mt " +
+            "ON sext." + COLUMN_MEDIA_TAG_ID + " = mt." + COLUMN_MEDIA_TAG_ID + " " +
+            "WHERE se." + COLUMN_SOURCE_ID + " = ? " + 
+            "AND IFNULL(sext." + COLUMN_SOURCE_EXCERPT_TAGGING_TAGGED_AT + ", '') >= IFNULL(sext." + COLUMN_SOURCE_EXCERPT_TAGGING_UNTAGGED_AT + ", ''); ";
+
 
 
         #endregion
