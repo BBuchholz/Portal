@@ -142,6 +142,9 @@ namespace NineWorldsDeep.Tapestry.NodeUI
 
         private void ButtonEditTags_Click(object sender, RoutedEventArgs e)
         {
+            //TODO: refactor to common UI utility method?
+            //mimics MediaTagDisplay.ButtonEditTags_Click(...)
+
             TextBlock tbTagString = 
                 Core.UiUtils.GetTemplateSibling<TextBlock, Button>(
                     (Button)sender, "tbTagString");
@@ -149,8 +152,7 @@ namespace NineWorldsDeep.Tapestry.NodeUI
             TextBox txtTagString =
                 Core.UiUtils.GetTemplateSibling<TextBox, Button>(
                     (Button)sender, "txtTagString");
-
-
+            
             ArchivistSourceExcerpt ase = 
                 (ArchivistSourceExcerpt)tbTagString.DataContext;
 
@@ -170,6 +172,9 @@ namespace NineWorldsDeep.Tapestry.NodeUI
         
         private void ButtonSaveTags_Click(object sender, RoutedEventArgs e)
         {
+            //TODO: refactor to common UI utility method?
+            //mimics MediaTagDisplay.ButtonSaveTags_Click(...)
+
             TextBox txtTagString =
                 Core.UiUtils.GetTemplateSibling<TextBox, Button>(
                     (Button)sender, "txtTagString");
@@ -180,6 +185,8 @@ namespace NineWorldsDeep.Tapestry.NodeUI
             ase.SetTagsFromTagString(txtTagString.Text);
             db.SaveExcerptTaggings(ase);
             RefreshFromDb();
+            
+            //DEBUGGING: assign text here to simulate tagString update?
 
             StackPanel spTextBlock =
                 Core.UiUtils.GetTemplateSibling<StackPanel, Button>(

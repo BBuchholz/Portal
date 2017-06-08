@@ -114,6 +114,9 @@ namespace NineWorldsDeep.Tapestry.NodeUI
 
         private void ButtonEditTags_Click(object sender, RoutedEventArgs e)
         {
+            //TODO: refactor to common UI utility method?
+            //mimics ArchivistSourceDisplay.ButtonEditTags_Click(...)
+
             TextBlock tbTagString =
                 Core.UiUtils.GetTemplateSibling<TextBlock, Button>(
                     (Button)sender, "tbTagString");
@@ -121,8 +124,7 @@ namespace NineWorldsDeep.Tapestry.NodeUI
             TextBox txtTagString =
                 Core.UiUtils.GetTemplateSibling<TextBox, Button>(
                     (Button)sender, "txtTagString");
-
-
+            
             ArchivistSourceExcerpt ase =
                 (ArchivistSourceExcerpt)tbTagString.DataContext;
 
@@ -142,6 +144,9 @@ namespace NineWorldsDeep.Tapestry.NodeUI
 
         private void ButtonSaveTags_Click(object sender, RoutedEventArgs e)
         {
+            //TODO: refactor to common UI utility method?
+            //mimics ArchivistSourceDisplay.ButtonSaveTags_Click(...)
+
             TextBox txtTagString =
                 Core.UiUtils.GetTemplateSibling<TextBox, Button>(
                     (Button)sender, "txtTagString");
@@ -151,7 +156,9 @@ namespace NineWorldsDeep.Tapestry.NodeUI
 
             ase.SetTagsFromTagString(txtTagString.Text);
             dbArchivist.SaveExcerptTaggings(ase);
-            
+            //may need testing (mirroring ArchivistSourceDisplay for now)
+            Refresh(txtDeviceNameFilter.Text);
+
             StackPanel spTextBlock =
                 Core.UiUtils.GetTemplateSibling<StackPanel, Button>(
                     (Button)sender, "spTagStringTextBlock");

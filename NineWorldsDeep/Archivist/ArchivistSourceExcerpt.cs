@@ -121,7 +121,7 @@ namespace NineWorldsDeep.Archivist
         /// </summary>
         /// <param name="tagValue"></param>
         /// <returns></returns>
-        public SourceExcerptTagging GetTagging(string tagValue)
+        private SourceExcerptTagging GetTagging(string tagValue)
         {
             SourceExcerptTagging set;
 
@@ -156,6 +156,8 @@ namespace NineWorldsDeep.Archivist
             {
                 GetTagging(oldTag).Untag();
             }
+
+            TagString = GenerateTagString();
         }
     }
 }
