@@ -20,16 +20,51 @@ namespace NineWorldsDeep.Mnemosyne.V5
             SourceExcerpts = new List<ArchivistSourceExcerpt>();
         }
 
-        public void Add(Media m)
+        public void Add(Media newMedia)
         {
-            //ToDo: should check if exists/contains here (need to define uniqueness contraints for Media)
-            Media.Add(m);
+            bool found = false;
+
+            foreach(Media existingMedia in Media)
+            {
+                if (!string.IsNullOrWhiteSpace(newMedia.MediaHash) &&
+                    !string.IsNullOrWhiteSpace(existingMedia.MediaHash) &&
+                    newMedia.MediaHash.Equals(
+                        existingMedia.MediaHash,
+                        StringComparison.CurrentCultureIgnoreCase)){
+
+                    found = true;
+                }
+            }
+
+            if (!found)
+            {
+                Media.Add(newMedia);
+            }
         }
 
-        public void Add(ArchivistSourceExcerpt ase)
+        public void Add(ArchivistSourceExcerpt newAse)
         {
-            //ToDo: should check if exists/contains here (need to define uniqueness contraints for ArchivistSourceExcerpt)
-            SourceExcerpts.Add(ase);
+            bool found = false;
+
+            foreach (ArchivistSourceExcerpt existingAse in SourceExcerpts)
+            {
+                if (!string.IsNullOrWhiteSpace(newAse.ExcerptValue) &&
+                    !string.IsNullOrWhiteSpace(existingAse.ExcerptValue)){
+
+                    if (newAse.ExcerptValue.Equals(
+                            existingAse.ExcerptValue, 
+                            StringComparison.CurrentCultureIgnoreCase) &&
+                        newAse.SourceId == existingAse.SourceId)
+                    {
+                        found = true;
+                    }
+                }
+            }
+
+            if (!found)
+            {
+                SourceExcerpts.Add(newAse);
+            }
         }
     }
 }

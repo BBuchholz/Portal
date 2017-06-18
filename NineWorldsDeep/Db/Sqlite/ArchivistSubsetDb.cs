@@ -130,7 +130,92 @@ namespace NineWorldsDeep.Db.Sqlite
                 }
             }
         }
-        
+
+        public void LoadSourceExcerptsWithTags(MediaTag tag)
+        {
+            using (var conn = new SQLiteConnection(
+                @"Data Source=" + Configuration.GetSqliteDbPath(DbName)))
+            {
+                conn.Open();
+
+                using (var cmd = new SQLiteCommand(conn))
+                {
+                    using (var transaction = conn.BeginTransaction())
+                    {
+
+                        LoadSourceExcerptsWithTags(tag, cmd);
+                        transaction.Commit();
+                    }
+                }
+
+                conn.Close();
+            }
+        }
+
+        private void LoadSourceExcerptsWithTags(MediaTag tag, SQLiteCommand cmd)
+        {
+            cmd.Parameters.Clear();
+            cmd.CommandText =
+                NwdContract.SELECT_EXCERPTS_WITH_SOURCE_FOR_TAG_ID_X;
+
+            cmd.Parameters.Add(new SQLiteParameter() { Value = tag.MediaTagId });
+
+            using (var rdr = cmd.ExecuteReader())
+            {
+                Dictionary<int, ArchivistSourceExcerpt> idToExcerpt =
+                    new Dictionary<int, ArchivistSourceExcerpt>();
+
+                while (rdr.Read())
+                {                    
+                    int taggingId = DbV5Utils.GetNullableInt32(rdr, 0);
+                    int excerptId = rdr.GetInt32(1);
+                    string exVal = rdr.GetString(2);
+                    int mediaTagId = DbV5Utils.GetNullableInt32(rdr, 3);
+                    string tagValue = DbV5Utils.GetNullableString(rdr, 4);
+                    int sourceId = rdr.GetInt32(5);
+                    string sourceAuthor = DbV5Utils.GetNullableString(rdr, 6);
+                    string sourceTitle = DbV5Utils.GetNullableString(rdr, 7);
+                    string sourceUrl = DbV5Utils.GetNullableString(rdr, 8);
+                    string sourceTypeValue = rdr.GetString(9);
+
+                    if (!idToExcerpt.ContainsKey(excerptId))
+                    {
+                        idToExcerpt[excerptId] = new ArchivistSourceExcerpt()
+                        {
+                            SourceExcerptId = excerptId,
+                            SourceId = sourceId,
+                            ExcerptValue = exVal
+                        };
+
+                        tag.Add(idToExcerpt[excerptId]);
+                    }
+                    
+                    var ase = idToExcerpt[excerptId];
+
+                    if (taggingId > 0 &&
+                        mediaTagId > 0 &&
+                        !string.IsNullOrWhiteSpace(tagValue))
+                    {
+                        var mt = new MediaTag()
+                        {
+                            MediaTagId = mediaTagId,
+                            MediaTagValue = tagValue
+                        };
+
+                        var tagging = new SourceExcerptTagging()
+                        {
+                            SourceExcerptTaggingId = taggingId,
+                            Excerpt = ase,
+                            MediaTag = mt
+                        };
+
+                        mt.Add(ase);
+                        ase.Add(tagging);
+                    }
+                }
+            }
+        }
+
         private List<ArchivistSourceType> SelectSourceTypes(SQLiteCommand cmd)
         {
             List<ArchivistSourceType> lst =

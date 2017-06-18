@@ -19,6 +19,7 @@ namespace NineWorldsDeep.Archivist
         public string ExcerptPages { get; set; }
         public string ExcerptBeginTime { get; set; }
         public string ExcerptEndTime { get; set; }
+        public ArchivistSource Source { get; set; }
         public List<SourceExcerptTagging> ExcerptTaggings
         {
             get { return Taggings.Values.ToList(); }

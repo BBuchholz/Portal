@@ -21,7 +21,7 @@ namespace NineWorldsDeep.Tapestry.NodeUI
     /// <summary>
     /// Interaction logic for ArchivistSourceDisplay.xaml
     /// </summary>
-    public partial class ArchivistSourceDisplay : UserControl
+    public partial class ArchivistSourceDisplay : UserControl, ISourceExcerptDisplay
     {
         private Db.Sqlite.ArchivistSubsetDb db;
         private ArchivistSourceNode sourceNode;
@@ -30,6 +30,7 @@ namespace NineWorldsDeep.Tapestry.NodeUI
         {
             InitializeComponent();
             db = new Db.Sqlite.ArchivistSubsetDb();
+            Core.DataUpdateManager.Register(this);
         }
 
         public void Display(ArchivistSourceNode src)
@@ -40,8 +41,11 @@ namespace NineWorldsDeep.Tapestry.NodeUI
 
         public void RefreshFromDb()
         {
-            db.LoadSourceExcerptsWithTags(this.sourceNode.Source);
-            RefreshFromObject();
+            if (this.sourceNode != null && this.sourceNode.Source != null)
+            {
+                db.LoadSourceExcerptsWithTags(this.sourceNode.Source);
+                RefreshFromObject();
+            }
         }
 
         public void RefreshFromObject()
@@ -184,10 +188,9 @@ namespace NineWorldsDeep.Tapestry.NodeUI
                         
             ase.SetTagsFromTagString(txtTagString.Text);
             db.SaveExcerptTaggings(ase);
-            RefreshFromDb();
+            //RefreshFromDb();
+            Core.DataUpdateManager.UpdateSourceExcerptDisplays();
             
-            //DEBUGGING: assign text here to simulate tagString update?
-
             StackPanel spTextBlock =
                 Core.UiUtils.GetTemplateSibling<StackPanel, Button>(
                     (Button)sender, "spTagStringTextBlock");

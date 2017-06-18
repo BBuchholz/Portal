@@ -27,7 +27,7 @@
     <UpdatePeriodically>false</UpdatePeriodically>
     <UpdateRequired>false</UpdateRequired>
     <MapFileExtensions>true</MapFileExtensions>
-    <ApplicationRevision>97</ApplicationRevision>
+    <ApplicationRevision>98</ApplicationRevision>
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <PublishWizardCompleted>true</PublishWizardCompleted>
@@ -139,6 +139,7 @@
     <Compile Include="AudioBrowser\FileNameTagExtractor.cs" />
     <Compile Include="AudioBrowser\PlayAction.cs" />
     <Compile Include="Core\Configuration.cs" />
+    <Compile Include="Core\DataUpdateManager.cs" />
     <Compile Include="Core\Extensions.cs" />
     <Compile Include="Core\Fragment.cs" />
     <Compile Include="Core\FragmentMergeAction.cs" />
@@ -473,6 +474,7 @@
     <Compile Include="Tapestry\NodeUI\ImageNodeDisplay.xaml.cs">
       <DependentUpon>ImageNodeDisplay.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Tapestry\NodeUI\ISourceExcerptDisplay.cs" />
     <Compile Include="Tapestry\NodeUI\MediaMasterDisplay.xaml.cs">
       <DependentUpon>MediaMasterDisplay.xaml</DependentUpon>
     </Compile>

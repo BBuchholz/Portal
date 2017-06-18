@@ -21,7 +21,7 @@ namespace NineWorldsDeep.Tapestry.NodeUI
     /// <summary>
     /// Interaction logic for MediaTagDisplay.xaml
     /// </summary>
-    public partial class MediaTagDisplay : UserControl
+    public partial class MediaTagDisplay : UserControl, ISourceExcerptDisplay
     {
         private Db.Sqlite.MediaV5SubsetDb dbMediaV5;
         private Db.Sqlite.ArchivistSubsetDb dbArchivist;
@@ -32,30 +32,45 @@ namespace NineWorldsDeep.Tapestry.NodeUI
             InitializeComponent();
             dbMediaV5 = new Db.Sqlite.MediaV5SubsetDb();
             dbArchivist = new Db.Sqlite.ArchivistSubsetDb();
+            Core.DataUpdateManager.Register(this);
         }
 
         internal void Display(MediaTagNode tagNode)
         {
             this.mediaTagNode = tagNode;
-
-            //LOAD HERE, ONCE
-            //filter can be applied without having to hit the db again
-            //mimic SynergyV5ListDisplay user control for async load of listviews
-
-            //Mock.Utils.PopulateTestMedia(mediaTagNode.MediaTag);
-            //Mock.Utils.PopulateTestExcerpts(mediaTagNode.MediaTag);
-
-            Refresh(txtDeviceNameFilter.Text);
+            RefreshFromDb();
         }
 
-        public void Refresh(string deviceNameFilter)
+        public void RefreshFromDb()
+        {
+            //load here once, then filter can be applied 
+            //without having to hit the db again
+            
+            if (this.mediaTagNode != null && this.mediaTagNode.MediaTag != null)
+            {
+                if(this.mediaTagNode.MediaTag.MediaTagId < 1)
+                {
+                    dbMediaV5.PopulateTagIdForTagValue(
+                        this.mediaTagNode.MediaTag);
+                }
+
+                //TODO: mimic SynergyV5ListDisplay user control for async load of listviews
+                
+                dbMediaV5.LoadMediaWithDevicePathsForTag(this.mediaTagNode.MediaTag);
+                dbArchivist.LoadSourceExcerptsWithTags(this.mediaTagNode.MediaTag);
+                
+                RefreshFromObject(txtDeviceNameFilter.Text);
+            }
+        }
+
+        public void RefreshFromObject(string deviceNameFilter)
         {
             ccMediaTagDetails.Content = mediaTagNode.MediaTag;
 
             //lvMediaItems.ItemsSource = mediaTagNode.MediaTag.Media;
             lvMediaItems.ItemsSource =
                 mediaTagNode.MediaTag.Media
-                    .Where(m => m.IsDeviceNameFilterMatch(deviceNameFilter));
+                    .Where(m => m.IsDevicePathFilterMatch(deviceNameFilter));
 
             lvSourceExcerpts.ItemsSource = mediaTagNode.MediaTag.SourceExcerpts;
         }
@@ -106,7 +121,7 @@ namespace NineWorldsDeep.Tapestry.NodeUI
         {
             if (Keyboard.IsKeyDown(Key.Enter))
             {
-                Refresh(txtDeviceNameFilter.Text);
+                RefreshFromObject(txtDeviceNameFilter.Text);
                 e.Handled = true;
             }
         }
@@ -156,8 +171,11 @@ namespace NineWorldsDeep.Tapestry.NodeUI
 
             ase.SetTagsFromTagString(txtTagString.Text);
             dbArchivist.SaveExcerptTaggings(ase);
-            //may need testing (mirroring ArchivistSourceDisplay for now)
-            Refresh(txtDeviceNameFilter.Text);
+
+            ////may need testing (mirroring ArchivistSourceDisplay for now)
+            //RefreshFromObject(txtDeviceNameFilter.Text);
+
+            Core.DataUpdateManager.UpdateSourceExcerptDisplays();
 
             StackPanel spTextBlock =
                 Core.UiUtils.GetTemplateSibling<StackPanel, Button>(

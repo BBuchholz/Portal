@@ -48,10 +48,25 @@ namespace NineWorldsDeep.Mnemosyne.V5
             }
         }
 
-        internal bool IsDeviceNameFilterMatch(string deviceNameFilter)
+        internal bool IsDevicePathFilterMatch(string filter)
         {
+            return IsDeviceNameFilterMatch(filter) || IsDevicePathValueFilterMatch(filter);
+        }
+
+        internal bool IsDeviceNameFilterMatch(string filter)
+        {
+            //TODO: combine IsDeviceNameFilterMatch and IsDevicePathFilterMatch into a single method with an OR in the WHERE clause
             return DevicePaths.Keys
-                .Where(k => k.ToLower().Contains(deviceNameFilter.ToLower()))
+                .Where(k => k.ToLower().Contains(filter.ToLower()))
+                .ToList()
+                .Count > 0;
+        }
+
+        internal bool IsDevicePathValueFilterMatch(string filter)
+        {
+            //TODO: combine IsDeviceNameFilterMatch and IsDevicePathFilterMatch into a single method with an OR in the WHERE clause
+            return DevicePaths.AllValues()
+                .Where(p => p.DevicePathValue.ToLower().Contains(filter.ToLower()))
                 .ToList()
                 .Count > 0;
         }

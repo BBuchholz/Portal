@@ -78,6 +78,74 @@ namespace NineWorldsDeep.Db.Sqlite
             return lst;
         }
 
+        internal void LoadMediaWithDevicePathsForTag(MediaTag mediaTag)
+        {
+            using (var conn = new SQLiteConnection(
+                @"Data Source=" + Configuration.GetSqliteDbPath(DbName)))
+            {
+                conn.Open();
+
+                using (var cmd = new SQLiteCommand(conn))
+                {
+                    using (var transaction = conn.BeginTransaction())
+                    {
+
+                        LoadMediaWithDevicePathsForTag(mediaTag, cmd);
+                        transaction.Commit();
+                    }
+                }
+
+                conn.Close();
+            }
+        }
+
+        private void LoadMediaWithDevicePathsForTag(MediaTag tag, SQLiteCommand cmd)
+        {
+            cmd.Parameters.Clear();
+            cmd.CommandText =
+                NwdContract.SELECT_MEDIA_WITH_DEVICE_PATHS_FOR_TAG_ID_X;
+
+            cmd.Parameters.Add(new SQLiteParameter() { Value = tag.MediaTagId });
+
+            using (var rdr = cmd.ExecuteReader())
+            {
+                Dictionary<string, Media> hashToMedia = 
+                    new Dictionary<string, Media>();
+
+                while (rdr.Read())
+                {
+                    string mediaHash = DbV5Utils.GetNullableString(rdr, 0);
+                    string deviceName = DbV5Utils.GetNullableString(rdr, 1);
+                    string pathValue = DbV5Utils.GetNullableString(rdr, 2);
+
+                    if (!string.IsNullOrWhiteSpace(mediaHash))
+                    {
+                        if (!hashToMedia.ContainsKey(mediaHash))
+                        {
+                            hashToMedia[mediaHash] = new Media()
+                            {
+                                MediaHash = mediaHash
+                            };
+
+                            tag.Add(hashToMedia[mediaHash]);
+                        }
+
+                        var media = hashToMedia[mediaHash];
+
+                        if (!string.IsNullOrWhiteSpace(deviceName) &&
+                            !string.IsNullOrWhiteSpace(pathValue))
+                        {
+                            media.Add(new DevicePath()
+                            {
+                                DeviceName = deviceName,
+                                DevicePathValue = pathValue
+                            });
+                        }
+                    }
+                }
+            }
+        }
+
         internal void PopulateTagIds(List<Tag> tags)
         {
             using (var conn = new SQLiteConnection(
@@ -101,7 +169,28 @@ namespace NineWorldsDeep.Db.Sqlite
                 conn.Close();
             }
         }
-        
+
+        public void PopulateTagIdForTagValue(MediaTag tag)
+        {
+            using (var conn = new SQLiteConnection(
+                @"Data Source=" + Configuration.GetSqliteDbPath(DbName)))
+            {
+                conn.Open();
+
+                using (var cmd = new SQLiteCommand(conn))
+                {
+                    using (var transaction = conn.BeginTransaction())
+                    {
+                        tag.MediaTagId = EnsureMediaTag(tag.MediaTagValue, cmd);
+
+                        transaction.Commit();
+                    }
+                }
+
+                conn.Close();
+            }
+        }
+
         private List<MediaTagging> GetMediaTaggingsForHash(
             string hash, SQLiteCommand cmd)
         {
@@ -1123,7 +1212,7 @@ namespace NineWorldsDeep.Db.Sqlite
 
             return mediaTagId;
         }
-
+        
         private int GetMediaTagId(string tag, SQLiteCommand cmd)
         {
             int id = -1;
