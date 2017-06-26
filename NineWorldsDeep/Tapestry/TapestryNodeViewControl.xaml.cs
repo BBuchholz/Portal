@@ -170,6 +170,7 @@ namespace NineWorldsDeep.Tapestry
             contentControls.Add(ccArchivistMasterNode);
             contentControls.Add(ccArchivistSourceNode);
             contentControls.Add(ccMediaTagNode);
+            contentControls.Add(ccHiveMainNode);
         }
 
         private void ResolveContentControl(TapestryNode node)
@@ -260,6 +261,10 @@ namespace NineWorldsDeep.Tapestry
                         SetVisible(ccMediaTagNode);
                         MediaTagNode tagNode = (MediaTagNode)node;
                         mediaTagDisplay.Display(tagNode);
+                        break;
+
+                    case TapestryNodeType.HiveMain:
+                        SetVisible(ccHiveMainNode);                        
                         break;
 
                     case TapestryNodeType.SynergyV5List:

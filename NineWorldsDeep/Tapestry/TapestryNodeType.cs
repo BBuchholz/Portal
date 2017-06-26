@@ -28,6 +28,7 @@
         NullHierophantVertex,
         ArchivistMaster,
         ArchivistSource,
-        MediaTag
+        MediaTag,
+        HiveMain
     }
 }

@@ -27,7 +27,7 @@
     <UpdatePeriodically>false</UpdatePeriodically>
     <UpdateRequired>false</UpdateRequired>
     <MapFileExtensions>true</MapFileExtensions>
-    <ApplicationRevision>98</ApplicationRevision>
+    <ApplicationRevision>100</ApplicationRevision>
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <PublishWizardCompleted>true</PublishWizardCompleted>
@@ -216,6 +216,8 @@
     <Compile Include="Hierophant\VisualKabbalisticTreeTestHarness.xaml.cs">
       <DependentUpon>VisualKabbalisticTreeTestHarness.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Hive\HiveFileGrouping.cs" />
+    <Compile Include="Hive\HiveRoot.cs" />
     <Compile Include="ImageBrowser\DisplayImageAction.cs" />
     <Compile Include="ImageBrowser\ImageBrowserMainWindow.xaml.cs">
       <DependentUpon>ImageBrowserMainWindow.xaml</DependentUpon>
@@ -398,6 +400,7 @@
     <Compile Include="Tapestry\Nodes\HashNode.cs" />
     <Compile Include="Tapestry\Nodes\HierophantTreeOfLifeNode.cs" />
     <Compile Include="Tapestry\Nodes\HierophantVertexNode.cs" />
+    <Compile Include="Tapestry\Nodes\HiveMainNode.cs" />
     <Compile Include="Tapestry\Nodes\LocalConfigNode.cs" />
     <Compile Include="Tapestry\Nodes\MediaMasterNode.cs" />
     <Compile Include="Tapestry\Nodes\MediaTagNode.cs" />
@@ -469,6 +472,9 @@
     <Compile Include="Tapestry\NodeUI\HierophantUiCoupling.cs" />
     <Compile Include="Tapestry\NodeUI\HierophantVertexDisplay.xaml.cs">
       <DependentUpon>HierophantVertexDisplay.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Tapestry\NodeUI\HiveMain.xaml.cs">
+      <DependentUpon>HiveMain.xaml</DependentUpon>
     </Compile>
     <Compile Include="Tapestry\NodeUI\IAsyncStatusResponsive.cs" />
     <Compile Include="Tapestry\NodeUI\ImageNodeDisplay.xaml.cs">
@@ -725,6 +731,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Tapestry\NodeUI\HierophantVertexDisplay.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Tapestry\NodeUI\HiveMain.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

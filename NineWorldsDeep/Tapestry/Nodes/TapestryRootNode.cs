@@ -25,6 +25,7 @@ namespace NineWorldsDeep.Tapestry.Nodes
             AddChild(new MediaMasterNode());
             AddChild(new HierophantTreeOfLifeNode());
             AddChild(new ArchivistMasterNode());
+            AddChild(new HiveMainNode());
             // shelved currently, may come 
             // back, so leaving code, this is the only entry point
             // AddChild(new NullClusterNode()); 
