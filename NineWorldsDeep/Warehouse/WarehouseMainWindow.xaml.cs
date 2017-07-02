@@ -17,6 +17,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using System.Xml.Linq;
 
 namespace NineWorldsDeep.Warehouse
 {
@@ -561,6 +562,8 @@ namespace NineWorldsDeep.Warehouse
                 currentDirection == SyncDirection.Export)
             {
                 TagsV4c.ExportTagsForProfileToXml(deviceName, sp, fileModelItems);
+
+                ExportTagsForV5(fileModelItems);
             }
 
             if (failingPaths.Count == 0)
@@ -590,6 +593,76 @@ namespace NineWorldsDeep.Warehouse
                     //some succeeded, move onto verify stage (failed will be ignored)
                     RevertNonExecuted(ExecStatus.Executed);
                 }
+            }
+        }
+
+        private void ExportTagsForV5(List<FileModelItem> fileModelitems)
+        {
+            Db.Sqlite.MediaV5SubsetDb dbV5 = new Db.Sqlite.MediaV5SubsetDb();
+
+            //var hashedMedia = dbV5.GetAllMedia();
+
+            List<string> hashes = new List<string>();
+
+            foreach(FileModelItem fmi in fileModelitems)
+            {
+                foreach(HashModelItem hmi in fmi.GetHashes())
+                {
+                    hashes.Add(hmi.GetHash());
+                }
+            }
+
+            XElement mnemosyneSubsetEl = new XElement(Xml.Xml.TAG_MNEMOSYNE_SUBSET);
+            
+            foreach (string hash in hashes)
+            {
+                //create media tag with attribute set for hash
+                XElement mediaEl = Xml.Xml.CreateMediaElement(hash);
+                
+                var taggings = dbV5.GetMediaTaggingsForHash(hash);
+
+                foreach (MediaTagging tag in taggings)
+                {
+                    //create tag element and append to 
+                    XElement tagEl = Xml.Xml.CreateTagElement(tag);
+                    mediaEl.Add(tagEl);
+                }
+                
+                MultiMap<string, DevicePath> devicePaths = dbV5.GetDevicePaths(hash);
+
+                foreach (string deviceName in devicePaths.Keys)
+                {
+                    XElement deviceEl = Xml.Xml.CreateDeviceElement(deviceName);
+
+                    foreach (DevicePath path in devicePaths[deviceName])
+                    {
+                        XElement pathEl = Xml.Xml.CreatePathElement(path);
+                        deviceEl.Add(pathEl);
+                    }
+
+                    mediaEl.Add(deviceEl);
+                }
+
+                mnemosyneSubsetEl.Add(mediaEl);
+            }
+
+            XDocument doc =
+                new XDocument(
+                    new XElement("nwd", mnemosyneSubsetEl));
+
+            //here, take doc and save to all sync locations            
+            string fileName =
+                NwdUtils.GetTimeStamp_yyyyMMddHHmmss() + "-nwd-mnemosyne-v5.xml";
+
+            var allFolders =
+                Configuration.GetActiveSyncProfileIncomingXmlFolders();
+
+            foreach (string xmlIncomingFolderPath in allFolders)
+            {
+                string fullFilePath =
+                    System.IO.Path.Combine(xmlIncomingFolderPath, fileName);
+
+                doc.Save(fullFilePath);
             }
         }
 
