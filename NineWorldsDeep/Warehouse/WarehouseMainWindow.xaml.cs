@@ -564,7 +564,8 @@ namespace NineWorldsDeep.Warehouse
                 //TODO: remove this (commenting out 7/2/2017, let's see if it breaks something :)
                 //TagsV4c.ExportTagsForProfileToXml(deviceName, sp, fileModelItems);
 
-                ExportTagsForV5(fileModelItems);
+                //ExportTagsForV5(fileModelItems);
+                ExportTagsAsyncForV5(fileModelItems);
             }
 
             if (failingPaths.Count == 0)
@@ -666,6 +667,104 @@ namespace NineWorldsDeep.Warehouse
                 doc.Save(fullFilePath);
             }
         }
+
+        private async void ExportTagsAsyncForV5(List<FileModelItem> fileModelitems)
+        {
+            try
+            {
+                await Task.Run(() =>
+                {                    
+                    Db.Sqlite.MediaV5SubsetDb dbV5 = new Db.Sqlite.MediaV5SubsetDb();
+
+                    //var hashedMedia = dbV5.GetAllMedia();
+
+                    string detail = "starting export of mnemosyne subset";
+
+                    StatusDetailUpdate(detail);
+
+                    List<string> hashes = new List<string>();
+
+                    foreach (FileModelItem fmi in fileModelitems)
+                    {
+                        foreach (HashModelItem hmi in fmi.GetHashes())
+                        {
+                            hashes.Add(hmi.GetHash());
+                        }
+                    }
+                    
+                    XElement mnemosyneSubsetEl = new XElement(Xml.Xml.TAG_MNEMOSYNE_SUBSET);
+                    
+                    int total = hashes.Count;
+                    int count = 0;
+
+                    foreach (string hash in hashes)
+                    {
+                        count++;
+
+                        //create media tag with attribute set for hash
+                        XElement mediaEl = Xml.Xml.CreateMediaElement(hash);
+                        
+                        detail = count + " of " + total + ":" + hash + ": processing tags";
+                        StatusDetailUpdate(detail);
+
+                        var taggings = dbV5.GetMediaTaggingsForHash(hash);
+
+                        foreach (MediaTagging tag in taggings)
+                        {
+                            //create tag element and append to 
+                            XElement tagEl = Xml.Xml.CreateTagElement(tag);
+                            mediaEl.Add(tagEl);
+                        }
+                        
+                        detail = count + " of " + total + ":" + hash + ": processing device paths";
+                        StatusDetailUpdate(detail);
+
+                        MultiMap<string, DevicePath> devicePaths = dbV5.GetDevicePaths(hash);
+
+                        foreach (string deviceName in devicePaths.Keys)
+                        {
+                            XElement deviceEl = Xml.Xml.CreateDeviceElement(deviceName);
+
+                            foreach (DevicePath path in devicePaths[deviceName])
+                            {
+                                XElement pathEl = Xml.Xml.CreatePathElement(path);
+                                deviceEl.Add(pathEl);
+                            }
+
+                            mediaEl.Add(deviceEl);
+                        }
+
+                        mnemosyneSubsetEl.Add(mediaEl);
+                    }
+
+                    XDocument doc =
+                        new XDocument(
+                            new XElement("nwd", mnemosyneSubsetEl));
+
+                    //here, take doc and save to all sync locations            
+                    string fileName =
+                        NwdUtils.GetTimeStamp_yyyyMMddHHmmss() + "-nwd-mnemosyne-v5.xml";
+
+                    var allFolders =
+                        Configuration.GetActiveSyncProfileIncomingXmlFolders();
+
+                    foreach (string xmlIncomingFolderPath in allFolders)
+                    {
+                        string fullFilePath =
+                            System.IO.Path.Combine(xmlIncomingFolderPath, fileName);
+
+                        doc.Save(fullFilePath);
+                    }
+                });
+
+                tbStatus.Text = "finished.";
+            }
+            catch (Exception ex)
+            {
+                tbStatus.Text = "Error: " + ex.Message;
+            }
+        }
+
 
         private void btnVerify_Click(object sender, RoutedEventArgs e)
         {
