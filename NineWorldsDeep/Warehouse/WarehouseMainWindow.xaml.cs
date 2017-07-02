@@ -561,7 +561,8 @@ namespace NineWorldsDeep.Warehouse
             if (sp != null &&
                 currentDirection == SyncDirection.Export)
             {
-                TagsV4c.ExportTagsForProfileToXml(deviceName, sp, fileModelItems);
+                //TODO: remove this (commenting out 7/2/2017, let's see if it breaks something :)
+                //TagsV4c.ExportTagsForProfileToXml(deviceName, sp, fileModelItems);
 
                 ExportTagsForV5(fileModelItems);
             }
