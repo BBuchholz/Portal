@@ -64,9 +64,11 @@ namespace NineWorldsDeep.FragmentCloud
             eci.Height = 60;
             eci.MinWidth = 60;
             eci.Width = double.NaN; //equivalent to XAML Width="Auto"
+            eci.MaxWidth = 100;
             Button btn = new Button();
             TextBlock tb = new TextBlock();
             tb.Text = f.GetShortName();
+            tb.Margin = new Thickness(10);
             tb.TextWrapping = TextWrapping.WrapWithOverflow;
             tb.Height = double.NaN; //equivalent to XAML Height="Auto"
             btn.Content = tb;
