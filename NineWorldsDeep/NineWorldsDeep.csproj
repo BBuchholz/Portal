@@ -180,9 +180,6 @@
     <Compile Include="FragmentCloud\FragmentCloud.xaml.cs">
       <DependentUpon>FragmentCloud.xaml</DependentUpon>
     </Compile>
-    <Compile Include="FragmentCloud\FragmentCloudMainWindow.xaml.cs">
-      <DependentUpon>FragmentCloudMainWindow.xaml</DependentUpon>
-    </Compile>
     <Compile Include="FragmentCloud\FragmentNodeDisplay.xaml.cs">
       <DependentUpon>FragmentNodeDisplay.xaml</DependentUpon>
     </Compile>
@@ -559,10 +556,6 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="FragmentCloud\FragmentCloud.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="FragmentCloud\FragmentCloudMainWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

@@ -18,8 +18,7 @@ namespace NineWorldsDeep.FragmentCloud
     // NOTE TO SELF: 
     // this link:
     // http://stackoverflow.com/questions/7437004/how-to-make-a-user-control-property-of-type-collectionmyclass-editable-in-form
-    // maybe able to solve the issue where the tutorial says:
-    //TODO: LICENSE NOTES
+    // maybe able to solve the issue where the tutorial says:    
     //
     //   "...ElementCloud extends Grid but not UserControl. You should 
     //       not use UserControl class if you want to make a control 
