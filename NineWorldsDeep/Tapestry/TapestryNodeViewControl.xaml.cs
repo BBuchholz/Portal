@@ -43,6 +43,15 @@ namespace NineWorldsDeep.Tapestry
             hierophantTreeOfLifeDisplay.VertexClicked += HierophantTreeOfLifeDisplay_VertexClicked;
             archivistMasterDisplay.SourceSelected += ArchivistMasterDisplay_SourceSelected;
             archivistSourceDisplay.HyperlinkClicked += ArchivistSourceDisplay_HyperlinkClicked;
+            taggedMediaDisplay.PathSelected += TaggedMediaDisplay_PathSelected;
+        }
+
+        private void TaggedMediaDisplay_PathSelected(object sender, TaggedMediaDisplay.PathSelectedEventArgs e)
+        {
+            if (historyHandler != null)
+            {
+                historyHandler.PerformLoad(this, e.FileSystemNode);
+            }
         }
 
         private void ArchivistSourceDisplay_HyperlinkClicked(object sender, ArchivistSourceDisplay.HyperlinkClickedEventArgs e)

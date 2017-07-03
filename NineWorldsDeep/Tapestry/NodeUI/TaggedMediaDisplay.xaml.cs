@@ -15,6 +15,8 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Collections;
+using System.IO;
+using NineWorldsDeep.Tapestry.Nodes;
 
 namespace NineWorldsDeep.Tapestry.NodeUI
 {
@@ -24,10 +26,12 @@ namespace NineWorldsDeep.Tapestry.NodeUI
     public partial class TaggedMediaDisplay : UserControl
     {
         private TaggingMatrix taggingMatrix;
+        Db.Sqlite.MediaV5SubsetDb db;
 
         public TaggedMediaDisplay()
         {
             InitializeComponent();
+            db = new Db.Sqlite.MediaV5SubsetDb();
             RefreshTaggingMatrix();
         }
         
@@ -38,8 +42,40 @@ namespace NineWorldsDeep.Tapestry.NodeUI
 
         private void lvPaths_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            //from VerticalTaggerGrid (need to refactor to use V5, &c.)
-            //TaggerGridController.ProcessFileElementSelectionChanged();
+            //adapted from MediaMasterDisplay
+            List<string> selectedPaths = lvPaths.SelectedItems.Cast<string>().ToList();
+
+            if (selectedPaths.Count > 0)
+            {
+                //display first selected
+                string firstPath = selectedPaths[0];
+
+                if (File.Exists(firstPath) && db.LocalDeviceId > 0)
+                {
+                    PathSelectedEventArgs args =
+                        new PathSelectedEventArgs(
+                            new FileSystemNode(firstPath, true, db.LocalDeviceId));
+
+                    OnPathSelected(args);
+                }
+            }
+        }
+        
+        protected virtual void OnPathSelected(PathSelectedEventArgs args)
+        {
+            PathSelected?.Invoke(this, args);
+        }
+
+        public event EventHandler<PathSelectedEventArgs> PathSelected;
+
+        public class PathSelectedEventArgs
+        {
+            public PathSelectedEventArgs(FileSystemNode f)
+            {
+                FileSystemNode = f;
+            }
+
+            public FileSystemNode FileSystemNode { get; private set; }
         }
 
         private void lvTags_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -89,8 +125,6 @@ namespace NineWorldsDeep.Tapestry.NodeUI
 
         private void RefreshTaggingMatrix()
         {
-            Db.Sqlite.MediaV5SubsetDb db = new Db.Sqlite.MediaV5SubsetDb();
-            
             //TODO: if this takes long, make async and update status per section
             TaggingMatrix tm = db.RetrieveLocalDeviceTaggingMatrix();
 
