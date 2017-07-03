@@ -20,7 +20,7 @@ namespace NineWorldsDeep.Core
         }
 
         /// <summary>
-        /// adds key value pair to the multimap, a null value for a key 
+        /// adds key value pair to the multimap, passing null as the value for a given key 
         /// will ensure key
         /// </summary>
         /// <param name="key"></param>

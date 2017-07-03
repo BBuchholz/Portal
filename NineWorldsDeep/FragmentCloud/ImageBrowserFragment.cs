@@ -12,7 +12,7 @@ namespace NineWorldsDeep.FragmentCloud
 
         public override string GetShortName()
         {
-            return "Images";
+            return "Images Window";
         }
 
         public override bool Parallels(Tapestry.TapestryNode nd)

@@ -93,6 +93,11 @@
                         Visibility="Collapsed">
             <nodeUI:HiveMain x:Name="hiveMain"/>
         </ContentControl>
+
+        <ContentControl x:Name="ccTaggedMediaNode"
+                        Visibility="Collapsed">
+            <nodeUI:TaggedMediaDisplay x:Name="taggedMediaDisplay"/>
+        </ContentControl>
         
     </Grid>
 </UserControl>

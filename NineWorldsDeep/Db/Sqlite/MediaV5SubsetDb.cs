@@ -78,6 +78,62 @@ namespace NineWorldsDeep.Db.Sqlite
             return lst;
         }
 
+        public TaggingMatrix RetrieveLocalDeviceTaggingMatrix()
+        {
+            TaggingMatrix tm = null;
+
+            using (var conn = new SQLiteConnection(
+                @"Data Source=" + Configuration.GetSqliteDbPath(DbName)))
+            {
+                conn.Open();
+
+                using (var cmd = new SQLiteCommand(conn))
+                {
+                    using (var transaction = conn.BeginTransaction())
+                    {
+                        try
+                        {
+                            tm = RetrieveLocalDeviceTaggingMatrix(cmd);
+                            transaction.Commit();
+                        }
+                        catch (Exception ex)
+                        {
+                            //handle exception here
+                            transaction.Rollback();
+                        }
+                    }
+                }
+
+                conn.Close();
+            }
+
+            return tm;
+        }
+
+        private TaggingMatrix RetrieveLocalDeviceTaggingMatrix(SQLiteCommand cmd)
+        {
+            TaggingMatrix tm = new TaggingMatrix();
+
+            cmd.Parameters.Clear();
+            cmd.CommandText = NwdContract.GET_PATH_TAGS_FOR_DEVICE_NAME_X;
+
+            cmd.Parameters.Add(new SQLiteParameter() {
+                Value = Configuration.GetLocalDeviceDescription()
+            });            
+
+            using (var rdr = cmd.ExecuteReader())
+            {
+                while (rdr.Read())
+                {
+                    string tag = DbV5Utils.GetNullableString(rdr, 0);
+                    string path = DbV5Utils.GetNullableString(rdr, 1);
+                    tm.Link(tag, path);
+                }
+            }
+
+            return tm;
+        }
+
         internal void LoadMediaWithDevicePathsForTag(MediaTag mediaTag)
         {
             using (var conn = new SQLiteConnection(
@@ -1716,18 +1772,13 @@ namespace NineWorldsDeep.Db.Sqlite
             cmd.Parameters.Clear();
             cmd.CommandText =
                 "SELECT * FROM SomeTable WHERE Col1 = ? AND Col2 = ? ";
-
-            SQLiteParameter col1Param = new SQLiteParameter();
-            col1Param.Value = 1;
-            cmd.Parameters.Add(col1Param);
-
-            SQLiteParameter col2Param = new SQLiteParameter();
-            col2Param.Value = 2;
-            cmd.Parameters.Add(col2Param);
-
+            
+            cmd.Parameters.Add(new SQLiteParameter() { Value = 1 });
+            cmd.Parameters.Add(new SQLiteParameter() { Value = 2 });
+            
             using (var rdr = cmd.ExecuteReader())
             {
-                if (rdr.Read())
+                while (rdr.Read())
                 {
                     //do something here
                 }

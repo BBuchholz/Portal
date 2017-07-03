@@ -556,6 +556,24 @@ namespace NineWorldsDeep.Sqlite
             "ON mp." + COLUMN_MEDIA_PATH_ID + " = mdp." + COLUMN_MEDIA_PATH_ID + " " +
             "WHERE mt." + COLUMN_MEDIA_TAG_ID + " = ?  ";
 
+        internal static readonly string GET_PATH_TAGS_FOR_DEVICE_NAME_X =
+
+            "SELECT mt." + COLUMN_MEDIA_TAG_VALUE + ", " +
+            "	   mp." + COLUMN_MEDIA_PATH_VALUE + " " +
+            "FROM MediaTag mt " +
+            "JOIN MediaTagging mtg " +
+            "ON mt." + COLUMN_MEDIA_TAG_ID + " = mtg." + COLUMN_MEDIA_TAG_ID + " " +
+            "JOIN Media m " +
+            "ON mtg." + COLUMN_MEDIA_ID + " = m." + COLUMN_MEDIA_ID + " " +
+            "JOIN MediaDevicePath mdp " +
+            "ON m." + COLUMN_MEDIA_ID + " = mdp." + COLUMN_MEDIA_ID + " " +
+            "JOIN MediaPath mp " +
+            "ON mp." + COLUMN_MEDIA_PATH_ID + " = mdp." + COLUMN_MEDIA_PATH_ID + " " +
+            "JOIN MediaDevice md  " +
+            "ON mdp." + COLUMN_MEDIA_DEVICE_ID + " = md." + COLUMN_MEDIA_DEVICE_ID + " " +
+            "WHERE md." + COLUMN_MEDIA_DEVICE_DESCRIPTION + " = ? " +
+            "AND IFNULL(mtg." + COLUMN_MEDIA_TAGGING_TAGGED_AT + ", '') >= IFNULL(mtg." + COLUMN_MEDIA_TAGGING_UNTAGGED_AT + ", '') ";
+
 
 
         #endregion

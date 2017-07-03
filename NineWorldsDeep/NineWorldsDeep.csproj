@@ -27,7 +27,7 @@
     <UpdatePeriodically>false</UpdatePeriodically>
     <UpdateRequired>false</UpdateRequired>
     <MapFileExtensions>true</MapFileExtensions>
-    <ApplicationRevision>100</ApplicationRevision>
+    <ApplicationRevision>101</ApplicationRevision>
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <PublishWizardCompleted>true</PublishWizardCompleted>
@@ -149,6 +149,7 @@
     <Compile Include="Core\ReviewableFragment.cs" />
     <Compile Include="Core\NwdUtils.cs" />
     <Compile Include="Core\TaggingBase.cs" />
+    <Compile Include="Core\TaggingMatrix.cs" />
     <Compile Include="Core\TimeStamp.cs" />
     <Compile Include="Core\UiUtils.cs" />
     <Compile Include="Core\WordUtils.cs" />
@@ -236,6 +237,7 @@
     <Compile Include="Mock\Utils.cs" />
     <Compile Include="Model\MediaDeviceModelItem.cs" />
     <Compile Include="Model\MediaRootModelItem.cs" />
+    <Compile Include="Model\TagCountDisplayItem.cs" />
     <Compile Include="Model\TagModelItem.cs" />
     <Compile Include="Mtp\Extensions.cs" />
     <Compile Include="Mtp\MtpMainWindow.xaml.cs">
@@ -415,6 +417,7 @@
     <Compile Include="Tapestry\Nodes\SynergyV5ListItemNode.cs" />
     <Compile Include="Tapestry\Nodes\SynergyV5ListNode.cs" />
     <Compile Include="Tapestry\Nodes\SynergyV5MasterListNode.cs" />
+    <Compile Include="Tapestry\Nodes\TaggedMediaMainNode.cs" />
     <Compile Include="Tapestry\Nodes\TagNode.cs" />
     <Compile Include="Tapestry\Nodes\TapestryRootNode.cs" />
     <Compile Include="Tapestry\Nodes\TapestrySplitViewNode.cs" />
@@ -494,6 +497,9 @@
     </Compile>
     <Compile Include="Tapestry\NodeUI\SynergyV5MasterListDisplay.xaml.cs">
       <DependentUpon>SynergyV5MasterListDisplay.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Tapestry\NodeUI\TaggedMediaDisplay.xaml.cs">
+      <DependentUpon>TaggedMediaDisplay.xaml</DependentUpon>
     </Compile>
     <Compile Include="Tapestry\TapestrySplitViewLoadCommand.cs" />
     <Compile Include="Tapestry\TapestryNode.cs" />
@@ -752,6 +758,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Tapestry\NodeUI\SynergyV5MasterListDisplay.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Tapestry\NodeUI\TaggedMediaDisplay.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

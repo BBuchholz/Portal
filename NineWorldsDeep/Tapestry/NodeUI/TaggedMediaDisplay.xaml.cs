@@ -1,0 +1,149 @@
+﻿using NineWorldsDeep.Core;
+using NineWorldsDeep.Model;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Data;
+using System.Windows.Documents;
+using System.Windows.Input;
+using System.Windows.Media;
+using System.Windows.Media.Imaging;
+using System.Windows.Navigation;
+using System.Windows.Shapes;
+using System.Collections;
+
+namespace NineWorldsDeep.Tapestry.NodeUI
+{
+    /// <summary>
+    /// Interaction logic for TaggedMediaDisplay.xaml
+    /// </summary>
+    public partial class TaggedMediaDisplay : UserControl
+    {
+        private TaggingMatrix taggingMatrix;
+
+        public TaggedMediaDisplay()
+        {
+            InitializeComponent();
+            RefreshTaggingMatrix();
+        }
+        
+        private void MenuItemSendToTrash_Click(object sender, RoutedEventArgs e)
+        {
+            UI.Display.Message("copied from vertical tagger grid, awaiting implementation");
+        }
+
+        private void lvPaths_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            //from VerticalTaggerGrid (need to refactor to use V5, &c.)
+            //TaggerGridController.ProcessFileElementSelectionChanged();
+        }
+
+        private void lvTags_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            //from VerticalTaggerGrid (need to refactor to use V5, &c.)
+            //TaggerGridController.LoadFromSelectedTag();
+            
+            LoadPaths();
+        }
+
+        private void txtTagFilter_KeyDown(object sender, KeyEventArgs e)
+        {
+            if(e.Key == Key.Enter)
+            {
+                LoadTags();
+            }
+        }
+
+        private void LoadTags()
+        {
+            lvTags.ItemsSource = FilterTaggingMatrix(taggingMatrix, txtTagFilter.Text);
+        }
+
+        private void LoadPaths()
+        {
+            lvPaths.ItemsSource = FilterPaths(GetPathsForSelectedTag(), txtPathFilter.Text);
+        }
+
+        private List<string> GetPathsForSelectedTag()
+        {
+            List<string> paths = new List<string>();
+            TagCountDisplayItem selected = (TagCountDisplayItem)lvTags.SelectedItem;
+
+            if (taggingMatrix != null && selected != null)
+            {
+                paths = taggingMatrix.GetPathsForTag(selected.Tag);
+            }
+
+            return paths;
+        }
+
+        private List<string> FilterPaths(List<string> paths, string pathFilter)
+        {
+            //TODO: implement
+            return paths;
+        }
+
+        private void RefreshTaggingMatrix()
+        {
+            Db.Sqlite.MediaV5SubsetDb db = new Db.Sqlite.MediaV5SubsetDb();
+            
+            //TODO: if this takes long, make async and update status per section
+            TaggingMatrix tm = db.RetrieveLocalDeviceTaggingMatrix();
+
+            tm.AddFolderAndAllSubfolders(Configuration.ImagesFolder);
+            tm.AddFolderAndAllSubfolders(Configuration.VoiceMemosFolder);
+
+            taggingMatrix = tm;
+
+            LoadTags();
+        }
+
+        private List<TagCountDisplayItem> FilterTaggingMatrix(TaggingMatrix tm, string filter)
+        {
+            List<TagCountDisplayItem> items = new List<TagCountDisplayItem>();
+
+            List<string> tags = tm.Tags;
+
+            tags = tags.Where(tag => tag.ToLower().Contains(filter.ToLower())).ToList();
+
+            tags.Sort();
+
+            //get counts of tagged paths
+            foreach (string tag in tags)
+            {
+                items.Add(new TagCountDisplayItem()
+                {
+                    Tag = tag,
+                    Count = tm.PathsForTag(tag).Count
+                });
+            }
+
+            var allTag = tm.GenerateAllPathsDisplayItem();
+            var untaggedTag = tm.GenerateUntaggedPathsDisplayItem();
+
+            items = items.OrderBy(i => i.Tag).ToList();
+
+            items.Insert(0, allTag);
+            items.Insert(1, untaggedTag);
+
+            return items;
+        }
+
+        private void txtPathFilter_KeyDown(object sender, KeyEventArgs e)
+        {
+            if(e.Key == Key.Enter)
+            {
+                LoadPaths();
+            }
+        }
+
+        private void btnRefreshTaggingMatrix_Click(object sender, RoutedEventArgs e)
+        {
+            RefreshTaggingMatrix();
+        }
+    }
+}

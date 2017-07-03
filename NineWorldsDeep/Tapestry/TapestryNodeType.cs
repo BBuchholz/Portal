@@ -29,6 +29,7 @@
         ArchivistMaster,
         ArchivistSource,
         MediaTag,
-        HiveMain
+        HiveMain,
+        TaggedMediaMain
     }
 }
