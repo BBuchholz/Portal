@@ -17,20 +17,28 @@ using System.Windows.Shapes;
 using System.Collections;
 using System.IO;
 using NineWorldsDeep.Tapestry.Nodes;
+using NineWorldsDeep.Mnemosyne.V5;
+using System.Threading;
 
 namespace NineWorldsDeep.Tapestry.NodeUI
 {
     /// <summary>
     /// Interaction logic for TaggedMediaDisplay.xaml
     /// </summary>
-    public partial class TaggedMediaDisplay : UserControl
+    public partial class TaggedMediaDisplay : UserControl, IAsyncStatusResponsive
     {
         private TaggingMatrix taggingMatrix;
         Db.Sqlite.MediaV5SubsetDb db;
 
+        //async related 
+        private readonly SynchronizationContext syncContext;
+        private DateTime previousTime = DateTime.Now;
+
         public TaggedMediaDisplay()
         {
             InitializeComponent();
+            syncContext = SynchronizationContext.Current;
+
             db = new Db.Sqlite.MediaV5SubsetDb();
             RefreshTaggingMatrix();
         }
@@ -178,6 +186,52 @@ namespace NineWorldsDeep.Tapestry.NodeUI
         private void btnRefreshTaggingMatrix_Click(object sender, RoutedEventArgs e)
         {
             RefreshTaggingMatrix();
+        }
+
+        private async void btnHashAndResyncPaths_Click(object sender, RoutedEventArgs e)
+        {            
+            var pathList = lvPaths.Items.Cast<string>().ToList();
+
+            string msg = "you are about to hash and sync " + pathList.Count + 
+                " files, this could take a while. Are you sure you want to proceed?";
+
+            if (UI.Prompt.Confirm(msg, true))
+            {
+                await Task.Run(() =>
+                {
+                    List<Media> mediaList = new List<Media>();
+                    foreach (string path in pathList)
+                    {
+                        StatusDetailUpdate("preparing " + path + " for sync");
+
+                        var mli = new MediaListItem(path);
+                        mli.HashMedia();
+                        mediaList.Add(mli.Media);
+                    }
+
+                    db.SyncAsync(mediaList, this);
+
+                    StatusDetailUpdate("finished.");
+                });
+            }
+            else
+            {
+                UI.Display.Message("resync cancelled");
+            }
+        }
+
+        public void StatusDetailUpdate(string text)
+        {
+            var currentTime = DateTime.Now;
+
+            if ((DateTime.Now - previousTime).Milliseconds <= 50) return;
+
+            syncContext.Post(new SendOrPostCallback(s =>
+            {
+                tbStatus.Text = (string)s;
+            }), text);
+
+            previousTime = currentTime;
         }
     }
 }

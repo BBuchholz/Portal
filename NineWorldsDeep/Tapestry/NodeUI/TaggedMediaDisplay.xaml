@@ -44,6 +44,12 @@
                       Height="15" 
                       VerticalAlignment="Center"
                       HorizontalAlignment="Center">Tags As Intersection</CheckBox>
+
+            <Button x:Name="btnHashAndResyncPaths"
+                    Content="Resync"
+                    Margin="10 2"
+                    Click="btnHashAndResyncPaths_Click"/>
+            
         </StackPanel>
 
         <TextBox Grid.Row="3"                

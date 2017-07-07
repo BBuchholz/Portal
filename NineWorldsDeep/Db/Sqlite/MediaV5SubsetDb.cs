@@ -976,7 +976,7 @@ namespace NineWorldsDeep.Db.Sqlite
 
         internal void SyncAsync(IEnumerable<Media> multipleMediaItems, 
                                 IAsyncStatusResponsive ui,
-                                string asyncStatusDetailPrefix)
+                                string asyncStatusDetailPrefix = "")
         {
             string detail;
             int total = multipleMediaItems.Count();
