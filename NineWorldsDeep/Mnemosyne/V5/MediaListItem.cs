@@ -23,10 +23,13 @@ namespace NineWorldsDeep.Mnemosyne.V5
 
         public void AddPath(string filePath)
         {
-            Media.Add(new DevicePath() {
+            var dp = new DevicePath()
+            {
                 DeviceName = Configuration.GetLocalDeviceDescription(),
-                DevicePathValue = filePath                  
-            });
+                DevicePathValue = filePath
+            };
+            dp.VerifyPresent();
+            Media.Add(dp);
         }
 
         public void HashMedia()

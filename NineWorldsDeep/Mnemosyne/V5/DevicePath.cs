@@ -1,4 +1,5 @@
-﻿using System;
+﻿using NineWorldsDeep.Core;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -66,6 +67,16 @@ namespace NineWorldsDeep.Mnemosyne.V5
                 }
             }
 
+        }
+
+        public void VerifyPresent()
+        {
+            SetTimeStamps(TimeStamp.NowUTC(), null);
+        }
+
+        public void VerifyMissing()
+        {
+            SetTimeStamps(null, TimeStamp.NowUTC());
         }
     }
 }
