@@ -232,6 +232,7 @@
     <Compile Include="Mnemosyne\V5\Tag.cs" />
     <Compile Include="Mnemosyne\V5\Tags.cs" />
     <Compile Include="Mnemosyne\V5\TagStringHashIndex.cs" />
+    <Compile Include="Mnemosyne\V5\UtilsMnemosyneV5.cs" />
     <Compile Include="Mock\MockClusterDb.cs" />
     <Compile Include="Mock\MockClusterFileSubsetXml.cs" />
     <Compile Include="Mock\Utils.cs" />
