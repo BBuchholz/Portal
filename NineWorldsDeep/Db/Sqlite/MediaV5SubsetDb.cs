@@ -1047,38 +1047,7 @@ namespace NineWorldsDeep.Db.Sqlite
                 using (var cmd = new SQLiteCommand(conn))
                 {
                     using (var transaction = conn.BeginTransaction())
-                    {
-                        //PopulateMediaByHash(media, cmd);
-
-                        //foreach(MediaTagging tagging in media.MediaTaggings)
-                        //{
-                        //    tagging.MediaHash = media.MediaHash;
-                        //    tagging.MediaId = media.MediaId;
-
-                        //    PopulateTagByValue(tagging, cmd);
-                        //    UpsertTaggingTimeStamps(tagging, cmd);
-                        //}
-
-                        //RefreshMediaTaggingsByMediaId(media, cmd);
-
-                        //foreach(string deviceName in media.DevicePaths.Keys)
-                        //{
-                        //    int deviceId = EnsureMediaDevice(deviceName, cmd);
-
-                        //    foreach(DevicePath dp in media.DevicePaths[deviceName])
-                        //    {
-                        //        int pathId = EnsureMediaPath(dp.Path, cmd);
-
-                        //        dp.MediaDeviceId = deviceId;
-                        //        dp.MediaPathId = pathId;
-                        //        dp.MediaId = media.MediaId;
-
-                        //        UpsertMediaDevicePathTimeStamps(dp, cmd);
-                        //    }
-                        //}
-
-                        //RefreshDevicePathsByMediaId(media, cmd);
-
+                    {                        
                         Sync(media, cmd);
 
                         transaction.Commit();
