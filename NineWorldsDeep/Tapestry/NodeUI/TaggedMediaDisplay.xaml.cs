@@ -43,11 +43,6 @@ namespace NineWorldsDeep.Tapestry.NodeUI
             RefreshTaggingMatrix();
         }
         
-        private void MenuItemSendToTrash_Click(object sender, RoutedEventArgs e)
-        {
-            UI.Display.Message("copied from vertical tagger grid, awaiting implementation");
-        }
-
         private void lvPaths_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             //adapted from MediaMasterDisplay
@@ -232,6 +227,38 @@ namespace NineWorldsDeep.Tapestry.NodeUI
             }), text);
 
             previousTime = currentTime;
+        }
+
+        private void MenuItemStageForExport_Click(object sender, RoutedEventArgs e)
+        {
+            //get selected items
+            List<string> selectedPaths =
+                lvPaths.SelectedItems.Cast<string>()
+                                     .Select(s => s)
+                                     .ToList();
+            
+            UtilsMnemosyneV5.StageForExportByPath(selectedPaths);
+
+            UI.Display.Message("finished staging for export");
+        }
+        
+        private void MenuItemSendToTrash_Click(object sender, RoutedEventArgs e)
+        {
+            //get selected items
+            List<string> selectedPaths =
+                lvPaths.SelectedItems.Cast<string>()
+                                     .Select(s => s)
+                                     .ToList();
+
+            string msg = "Are you sure you want to move these " + 
+                selectedPaths.Count + " files to the trash?";
+
+            if (UI.Prompt.Confirm(msg, true))            {
+
+                UtilsMnemosyneV5.MoveToTrash(selectedPaths);
+
+                UI.Display.Message("files trashed");
+            }
         }
     }
 }

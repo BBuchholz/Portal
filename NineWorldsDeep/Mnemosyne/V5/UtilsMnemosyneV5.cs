@@ -10,7 +10,7 @@ namespace NineWorldsDeep.Mnemosyne.V5
 {
     public class UtilsMnemosyneV5
     {
-        private string CopyToImageStaging(string path)
+        private static string CopyToImageStaging(string path)
         {
             string imageStagingFolderPath = Configuration.ImageStagingFolder;
 
@@ -33,19 +33,45 @@ namespace NineWorldsDeep.Mnemosyne.V5
             }
         }
 
-        public void StageForExportByPath(IEnumerable<string> paths)
+        public static void StageForExportByPath(IEnumerable<string> paths)
         {
             foreach(string path in paths)
             {
-                //look into Folder Load Strategies, from ? 
-                //if path is image copy to image staging
-                //if path is audio copy to audio staging
-                //ignore rest but can add pdfs, &c. here in the future
-                asdf;
+                if (IsImage(path))
+                {
+                    CopyToImageStaging(path);
+                }
+                else if (IsAudio(path))
+                {
+                    CopyToVoiceMemoStaging(path);
+                }
+
+                ///////////////////////////////////////////////
+                //add more use cases here (pdfs, &c.)
+                ///////////////////////////////////////////////
+
+
+                //paths not meeting any criteria are ignored
             }
         }
 
-        private string CopyToVoiceMemoStaging(string path)
+        private static bool IsAudio(string path)
+        {
+            return path.ToLower().EndsWith(".wav") ||
+                   path.ToLower().EndsWith(".mp3");
+        }
+
+        private static bool IsImage(string path)
+        {
+            return path.ToLower().EndsWith(".bmp") ||
+                   path.ToLower().EndsWith(".gif") ||
+                   path.ToLower().EndsWith(".ico") ||
+                   path.ToLower().EndsWith(".jpg") ||
+                   path.ToLower().EndsWith(".png") ||
+                   path.ToLower().EndsWith(".tiff");
+        }
+
+        private static string CopyToVoiceMemoStaging(string path)
         {
             string vmStagingFolderPath = Configuration.VoiceMemoStagingFolder;
 
@@ -65,6 +91,33 @@ namespace NineWorldsDeep.Mnemosyne.V5
             else
             {
                 return "file exists: " + destFilePath;
+            }
+        }
+
+        public static void MoveToTrash(IEnumerable<string> paths)
+        {
+            foreach (string path in paths)
+            {
+                if (File.Exists(path))
+                {
+                    try
+                    {
+                        string destFile = Configuration.GetTrashFileFromPath(path);
+
+                        if (!File.Exists(destFile))
+                        {
+                            File.Move(path, destFile);
+                        }
+                        else
+                        {
+                            File.Delete(path);
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        UI.Display.Exception(ex);
+                    }
+                }
             }
         }
     }

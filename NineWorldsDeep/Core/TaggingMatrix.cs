@@ -112,10 +112,13 @@ namespace NineWorldsDeep.Core
 
         }
 
-        public void Link(string tag, string path)
+        public void LinkIfPathExists(string tag, string path)
         {
-            tagsToPaths[tag].Add(path);
-            pathsToTags[path].Add(tag);
+            if (File.Exists(path))
+            {
+                tagsToPaths[tag].Add(path);
+                pathsToTags[path].Add(tag);
+            }
         }
     }
 }

@@ -28,7 +28,16 @@ namespace NineWorldsDeep.Mnemosyne.V5
                 DeviceName = Configuration.GetLocalDeviceDescription(),
                 DevicePathValue = filePath
             };
-            dp.VerifyPresent();
+
+            if (File.Exists(filePath))
+            {
+                dp.VerifyPresent();
+            }
+            else
+            {
+                dp.VerifyMissing();
+            }
+
             Media.Add(dp);
         }
 

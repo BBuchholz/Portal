@@ -127,7 +127,7 @@ namespace NineWorldsDeep.Db.Sqlite
                 {
                     string tag = DbV5Utils.GetNullableString(rdr, 0);
                     string path = DbV5Utils.GetNullableString(rdr, 1);
-                    tm.Link(tag, path);
+                    tm.LinkIfPathExists(tag, path);
                 }
             }
 
