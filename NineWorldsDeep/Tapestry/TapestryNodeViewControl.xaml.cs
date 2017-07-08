@@ -181,6 +181,7 @@ namespace NineWorldsDeep.Tapestry
             contentControls.Add(ccMediaTagNode);
             contentControls.Add(ccHiveMainNode);
             contentControls.Add(ccTaggedMediaNode);
+            contentControls.Add(ccBooksApiNode);
         }
 
         private void ResolveContentControl(TapestryNode node)
@@ -253,6 +254,11 @@ namespace NineWorldsDeep.Tapestry
                     case TapestryNodeType.MediaMaster:
 
                         SetVisible(ccMediaMasterNode);
+                        break;
+
+                    case TapestryNodeType.BooksApiMain:
+
+                        SetVisible(ccBooksApiNode);
                         break;
 
                     case TapestryNodeType.ArchivistMaster:

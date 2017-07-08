@@ -98,6 +98,10 @@
                         Visibility="Collapsed">
             <nodeUI:TaggedMediaDisplay x:Name="taggedMediaDisplay"/>
         </ContentControl>
+
+        <ContentControl x:Name="ccBooksApiNode">
+            <nodeUI:GoogleBooksApiDisplay x:Name="booksApiDisplay"/>
+        </ContentControl>
         
     </Grid>
 </UserControl>

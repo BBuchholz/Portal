@@ -125,6 +125,11 @@ namespace NineWorldsDeep.Tapestry
         /// <returns>true if Add was successful, false if not</returns>
         public bool AddChild(TapestryNode frg)
         {
+            if (string.IsNullOrWhiteSpace(frg.URI))
+            {
+                throw new Exception("Node URI cannot be null or whitespace");
+            }
+
             if (!uriToChildFragments.ContainsKey(frg.URI))
             {
                 uriToChildFragments.Add(frg.URI, frg);

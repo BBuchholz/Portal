@@ -30,6 +30,7 @@
         ArchivistSource,
         MediaTag,
         HiveMain,
-        TaggedMediaMain
+        TaggedMediaMain,
+        BooksApiMain
     }
 }

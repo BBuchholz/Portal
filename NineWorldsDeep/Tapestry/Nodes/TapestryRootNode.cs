@@ -12,24 +12,20 @@ namespace NineWorldsDeep.Tapestry.Nodes
         public TapestryRootNode() 
             : base("TapestryRoot")
         {
-            //AddChild(new GardenFragment());
-            //AddChild(new SynergyFragment());
             AddChild(new StudioNode());
-            //AddChild(new HierophantNode());
-            AddChild(new WareHouseFragment());
-            AddChild(new AudioBrowserFragment());
-            AddChild(new ImageBrowserFragment());
-            //AddChild(new MtpFragment());
-            //AddChild(new GrowthAreasNode());
+
+            AddChild(new WindowedUiNode());
+            //AddChild(new WareHouseFragment());
+            //AddChild(new AudioBrowserFragment());
+            //AddChild(new ImageBrowserFragment());
+            
+            AddChild(new GoogleApiNode());
             AddChild(new SynergyV5MasterListNode());
             AddChild(new MediaMasterNode());
             AddChild(new HierophantTreeOfLifeNode());
             AddChild(new ArchivistMasterNode());
             AddChild(new HiveMainNode());
             AddChild(new TaggedMediaMainNode());
-            // shelved currently, may come 
-            // back, so leaving code, this is the only entry point
-            // AddChild(new NullClusterNode()); 
         }
 
         public override string GetShortName()
