@@ -85,16 +85,9 @@ namespace NineWorldsDeep.Tapestry.NodeUI
             return null;
         }
 
+        //adapted from: https://github.com/google/google-api-dotnet-client-samples/blob/master/Books.ListMyLibrary/Program.cs
         private async void btnRefreshBookShelves_Click(object sender, RoutedEventArgs e)
-        {
-            //authenticate and load bookshelves here
-
-            //store authentication? look into revoke/reauth in books example code
-            //check if valid, and reauth if not
-
-            //add button to "logout" (revoke credentials) to allow user switch
-
-
+        {           
             using (var stream = new FileStream("client_secrets.json", FileMode.Open, FileAccess.Read))
             {
                 credential = await GoogleWebAuthorizationBroker.AuthorizeAsync(
@@ -107,7 +100,7 @@ namespace NineWorldsDeep.Tapestry.NodeUI
             var service = new BooksService(new BaseClientService.Initializer()
             {
                 HttpClientInitializer = credential,
-                ApplicationName = "Books API Sample",
+                ApplicationName = "Nine Worlds Deep",
             });
 
             this.booksService = service;
@@ -117,9 +110,9 @@ namespace NineWorldsDeep.Tapestry.NodeUI
             lvBookshelves.ItemsSource = shelves;
         }
 
-        private async Task<List<Bookshelf>> GetShelves()
+        private async Task<List<BookshelfWrapper>> GetShelves()
         {
-            List<Bookshelf> lst = new List<Bookshelf>();
+            List<BookshelfWrapper> lst = new List<BookshelfWrapper>();
 
             if (this.booksService == null)
             {
@@ -131,15 +124,15 @@ namespace NineWorldsDeep.Tapestry.NodeUI
 
             foreach(Bookshelf b in shelves.Items)
             {
-                lst.Add(b);
+                lst.Add(new BookshelfWrapper(b));
             }
 
             return lst;
         }
 
-        private async Task<List<Volume>> GetVolumes(Bookshelf bookShelf)
+        private async Task<List<VolumeWrapper>> GetVolumes(Bookshelf bookShelf)
         {
-            List<Volume> lst = new List<Volume>();
+            List<VolumeWrapper> lst = new List<VolumeWrapper>();
 
             if(booksService == null  || bookShelf == null)
             {
@@ -162,7 +155,7 @@ namespace NineWorldsDeep.Tapestry.NodeUI
 
                 foreach (Volume volume in inBookshelf.Items)
                 {
-                    lst.Add(volume);
+                    lst.Add(new VolumeWrapper(volume));
                 }
             }
 
@@ -185,19 +178,95 @@ namespace NineWorldsDeep.Tapestry.NodeUI
 
         private async void lvBookshelves_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            var volumes = await GetVolumes(SelectedBookshelf);
+            if(SelectedBookshelfWrapper == null)
+            {
+                return;
+            }
+
+            var volumes = await GetVolumes(SelectedBookshelfWrapper.Bookshelf);
 
             lvVolumes.ItemsSource = volumes;            
         }
 
-        private Bookshelf SelectedBookshelf
+        private BookshelfWrapper SelectedBookshelfWrapper
         {
-            get { return (Bookshelf)lvBookshelves.SelectedItem; }
+            get { return (BookshelfWrapper)lvBookshelves.SelectedItem; }
         }
 
         private async void btnRevokeCredentials_Click(object sender, RoutedEventArgs e)
         {
             await credential.RevokeTokenAsync(CancellationToken.None);
+            Clear();
         }
+
+        private void Clear()
+        {
+            expDetails.Header = "Details";
+            lvBookshelves.ItemsSource = null;
+            lvVolumes.ItemsSource = null;
+            tbDetails.Text = "";
+        }
+    }
+
+    internal class VolumeWrapper
+    {
+        public Volume Volume { get; private set; }
+
+        public VolumeWrapper(Volume vol)
+        {
+            Volume = vol;
+        }
+
+        public override string ToString()
+        {
+            string output = VolumeTitle;
+            string authors = GetVolumeAuthorsAsString();
+
+            if (!string.IsNullOrWhiteSpace(authors))
+            {
+                output += " (" + authors +")";
+            }
+
+            return output;
+        }
+
+        public string VolumeDescription
+        {
+            get { return Volume.VolumeInfo.Description; }
+        }
+
+        public string VolumeTitle
+        {
+            get { return Volume.VolumeInfo.Title; }
+        }
+
+        public string GetVolumeAuthorsAsString()
+        {
+            if (Volume == null || 
+                Volume.VolumeInfo == null ||
+                Volume.VolumeInfo.Authors == null)
+            {
+                return "";
+            }
+
+            return string.Join(",", Volume.VolumeInfo.Authors);
+        }
+    }
+
+    internal class BookshelfWrapper
+    {
+        public Bookshelf Bookshelf { get; private set; }
+
+        public BookshelfWrapper(Bookshelf shelf)
+        {
+            Bookshelf = shelf;
+        }
+
+        public override string ToString()
+        {
+            return BookshelfTitle;
+        }
+
+        public string BookshelfTitle { get { return Bookshelf.Title; } }
     }
 }
