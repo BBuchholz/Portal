@@ -212,4 +212,4 @@ _Pvt_Extensions/
 ModelManifest.xml
 
 # Google APIs
-/NineWorldsDeep/client_secrets.json
+client_secrets.json
