@@ -5,8 +5,124 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:NineWorldsDeep.Tapestry.NodeUI"
              mc:Ignorable="d" 
-             d:DesignHeight="300" d:DesignWidth="300">
+             d:DesignHeight="800" d:DesignWidth="400">
     <Grid>
-        <TextBlock>IMPLEMENT</TextBlock>
+        
+        <Grid.RowDefinitions>
+            
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+            
+        </Grid.RowDefinitions>
+
+        <Expander Header="Details"
+                  x:Name="expDetails"
+                  Grid.Row="0"
+                  Margin="5"
+                  IsExpanded="True"
+                  Expanded="Expander_Expanded"
+                  Collapsed="Expander_Collapsed">
+
+            <Grid>
+                <TextBlock x:Name="tbDetails"
+                           VerticalAlignment="Center"
+                           HorizontalAlignment="Center"
+                           Margin="5">THIS</TextBlock>
+            </Grid>
+
+        </Expander>
+
+        <Expander Header="Library"
+                  x:Name="expLibrary"
+                  Grid.Row="1"
+                  Margin="5"
+                  IsExpanded="True"
+                  Expanded="Expander_Expanded"
+                  Collapsed="Expander_Collapsed">
+
+            <Grid>
+
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="40"/>
+                </Grid.RowDefinitions>
+
+                <ListView x:Name="lvBookshelves"
+                          Grid.Row="0"
+                          Margin="5"
+                          SelectionChanged="lvBookshelves_SelectionChanged"/>
+
+                <ListView x:Name="lvVolumes"
+                          Grid.Row="1"
+                          Margin="5"/>
+
+                <StatusBar Grid.Row="2"
+                           Margin="5">
+
+                    <StatusBarItem>
+
+                        <TextBlock Name="tbStatusLibrary" />
+
+                    </StatusBarItem>
+
+                </StatusBar>
+
+            </Grid>
+
+        </Expander>
+
+        <Expander Header="Utilites"
+                  Grid.Row="2"
+                  IsExpanded="True"
+                  Margin="5"
+                  Expanded="Expander_Expanded"
+                  Collapsed="Expander_Collapsed">
+
+            <Grid>
+
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+
+                <Grid.RowDefinitions>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+
+                <Button x:Name="btnRefreshBookShelves"
+                        Grid.Row="0"
+                        Grid.Column="0"
+                        Margin="5"
+                        Content="Refresh Shelves"
+                        Click="btnRefreshBookShelves_Click"/>
+
+                <Button x:Name="btnRevokeCredentials"
+                        Grid.Row="0"
+                        Grid.Column="1"
+                        Margin="5"
+                        Content="Revoke Credentials"
+                        Click="btnRevokeCredentials_Click"/>
+
+                <StackPanel Grid.Row="5"
+                            VerticalAlignment="Bottom"
+                            HorizontalAlignment="Left"
+                            Grid.ColumnSpan="3">
+
+                    <TextBlock x:Name="tbStatusUtilities" Text="status update goes here"/>
+
+                </StackPanel>
+
+            </Grid>
+
+        </Expander>
+        
     </Grid>
 </UserControl>
