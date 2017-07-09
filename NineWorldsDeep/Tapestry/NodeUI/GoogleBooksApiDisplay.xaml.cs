@@ -100,7 +100,7 @@ namespace NineWorldsDeep.Tapestry.NodeUI
                 credential = await GoogleWebAuthorizationBroker.AuthorizeAsync(
                     GoogleClientSecrets.Load(stream).Secrets,
                     new[] { BooksService.Scope.Books },
-                    "user", CancellationToken.None, new FileDataStore("Books.ListMyLibrary"));
+                    "NWD Desktop", CancellationToken.None, new FileDataStore("NWD.Google.Books"));
             }
 
             // Create the service.

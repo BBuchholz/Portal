@@ -903,7 +903,9 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="PeerIcon.ico" />
-    <Content Include="client_secrets.json" />
+    <Content Include="client_secrets.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="SQLite.Interop.dll">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
