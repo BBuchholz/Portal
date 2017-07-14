@@ -242,8 +242,10 @@
     <Compile Include="Hierophant\VisualKabbalisticTreeTestHarness.xaml.cs">
       <DependentUpon>VisualKabbalisticTreeTestHarness.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Hive\HiveFileGrouping.cs" />
+    <Compile Include="Hive\HiveLobe.cs" />
     <Compile Include="Hive\HiveRoot.cs" />
+    <Compile Include="Hive\HiveSpore.cs" />
+    <Compile Include="Hive\UtilsHive.cs" />
     <Compile Include="ImageBrowser\DisplayImageAction.cs" />
     <Compile Include="ImageBrowser\ImageBrowserMainWindow.xaml.cs">
       <DependentUpon>ImageBrowserMainWindow.xaml</DependentUpon>

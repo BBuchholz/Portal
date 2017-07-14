@@ -9,24 +9,19 @@ namespace NineWorldsDeep.Hive
 {
     public class HiveRoot
     {
-        public MultiMap<string, HiveFileGrouping> Files { private set; get; }
+        public List<HiveLobe> Lobes { private set; get; }
         public string Name { get; internal set; }
 
-        public HiveRoot()
+        public HiveRoot(string name)
         {
-            Files = new MultiMap<string, HiveFileGrouping>();
-
-            //add more here as we support more types
-            AddGrouping("xml");
-            AddGrouping("images");
-            AddGrouping("audio");
-            AddGrouping("pdfs");
+            Name = name;
+            Lobes = new List<HiveLobe>();
         }
 
-        private void AddGrouping(string groupingName)
+        public void Add(HiveLobe lobe)
         {
-            var hiveFileGrouping = new HiveFileGrouping(groupingName);
-            Files.Add(hiveFileGrouping.Name, hiveFileGrouping);
+            //TODO: configure/validate/&c.
+            Lobes.Add(lobe);
         }
     }
 }

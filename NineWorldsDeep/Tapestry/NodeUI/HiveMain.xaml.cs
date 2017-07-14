@@ -25,70 +25,89 @@ namespace NineWorldsDeep.Tapestry.NodeUI
         public HiveMain()
         {
             InitializeComponent();
-            PopulateRoots(GetAllRoots());
+            PopulateRoots(UtilsHive.GetAllRoots());
         }
 
-        //TODO: modify this to support lazy-loading
-        //http://www.wpf-tutorial.com/treeview-control/lazy-loading-treeview-items/
-        private List<HiveRoot> GetAllRoots()
-        {
-            List<HiveRoot> lst = new List<HiveRoot>();
-
-            //mockup
-            for(int i = 0; i < 4; i++)
-            {
-                HiveRoot hr = new HiveRoot() { Name = "device" + i };
-
-                //HiveFileGrouping mocks itself currently
-
-                //foreach(HiveFileGrouping hfg in hr.Files.AllValues())
-                //{
-                //    for(int j = 0; j < 5; j++)
-                //    {
-                //        hfg.Add(new DevicePath() {
-                //            DeviceName = "laptop",
-                //            DevicePathValue = @"C:\NWD-SNDBX\dummyFile" + j + ".mock"
-                //        });
-                //    }
-                //}
-
-                lst.Add(hr);
-            }
-
-            return lst;
-        }
-
-
-
-        //TODO: modify this to support lazy-loading of device paths
-        //http://www.wpf-tutorial.com/treeview-control/lazy-loading-treeview-items/
+        
         private void PopulateRoots(List<HiveRoot> allRoots)
         {
-            foreach(HiveRoot hr in allRoots)
+            foreach (HiveRoot hr in allRoots)
             {
-                TreeViewItem hrItem = new TreeViewItem() { Header = hr.Name };
-                tvHive.Items.Add(hrItem);
+                tvHive.Items.Add(CreateTreeItem(hr));
+            }
+        }
 
-                TreeViewItem filesItem = 
-                    new TreeViewItem() { Header = "files" };
-                hrItem.Items.Add(filesItem);
+        private void tvHive_Expanded(object sender, RoutedEventArgs e)
+        {
+            ProcessExpander(e);
+        }
 
-                foreach(HiveFileGrouping hfg in hr.Files.AllValues())
+        private void ProcessExpander(RoutedEventArgs e)
+        {
+            TreeViewItem item = e.Source as TreeViewItem;
+
+            if (item.Items.Count == 1 &&
+                item.Items[0] is string)
+            {
+                item.Items.Clear();
+
+                if(item.Tag is HiveRoot)
                 {
-                    TreeViewItem fileGroupingItem =
-                        new TreeViewItem() { Header = hfg.Name };                    
-                    filesItem.Items.Add(fileGroupingItem);
+                    HiveRoot hr = item.Tag as HiveRoot;
 
-                    foreach(DevicePath dp in hfg.DevicePaths)
+                    UtilsHive.RefreshLobes(hr);
+
+                    foreach(HiveLobe hl in hr.Lobes)
                     {
-                        TreeViewItem fileItem =
-                            new TreeViewItem() { Header = dp.DevicePathValue };
-                        fileGroupingItem.Items.Add(fileItem);
+                        item.Items.Add(CreateTreeItem(hl));
                     }
                 }
 
+                if(item.Tag is HiveLobe)
+                {
+                    HiveLobe hl = item.Tag as HiveLobe;
+
+                    UtilsHive.RefreshSpores(hl);
+
+                    foreach(HiveSpore hs in hl.Spores)
+                    {
+                        item.Items.Add(CreateTreeItem(hs));
+                    }
+                }
+
+                if(item.Tag is HiveSpore)
+                {
+                    //do something
+                }
             }
         }
+        
+        private TreeViewItem CreateTreeItem(HiveRoot hr)
+        {
+            TreeViewItem item = new TreeViewItem();
+            item.Header = hr.Name;
+            item.Tag = hr;
+            item.Items.Add("Loading...");
+            return item;
+        }
 
+        private TreeViewItem CreateTreeItem(HiveSpore hs)
+        {
+            TreeViewItem item = new TreeViewItem();
+            item.Header = hs.Name;
+            item.Tag = hs;
+            item.Items.Add("Loading...");
+            return item;
+        }
+
+        private TreeViewItem CreateTreeItem(HiveLobe hl)
+        {
+            TreeViewItem item = new TreeViewItem();
+            item.Header = hl.Name;
+            item.Tag = hl;
+            item.Items.Add("Loading...");
+            return item;
+        }
+        
     }
 }
