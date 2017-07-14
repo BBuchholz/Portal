@@ -5,7 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:NineWorldsDeep.Tapestry.NodeUI"
              mc:Ignorable="d" 
-             d:DesignHeight="600" d:DesignWidth="300">
+             d:DesignHeight="800" d:DesignWidth="600">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="40"></RowDefinition>
@@ -31,11 +31,14 @@
                   SelectionChanged="lvTags_SelectionChanged">
         </ListView>
 
-        <StackPanel Orientation="Horizontal" Grid.Row="2">
+        <StackPanel Orientation="Horizontal" 
+                    Grid.Row="2"
+                    HorizontalAlignment="Center">
 
             <Button x:Name="btnRefreshTaggingMatrix"
-                    Content="Refresh"
-                    Margin="10, 2"
+                    Content="Refresh Tagging Matrix"
+                    Margin="10 2"
+                    Padding="10 0"
                     Click="btnRefreshTaggingMatrix_Click"/>
 
             <CheckBox x:Name="chkMultiTagsAsIntersectionInsteadOfUnion" 
@@ -46,8 +49,9 @@
                       HorizontalAlignment="Center">Tags As Intersection</CheckBox>
 
             <Button x:Name="btnHashAndResyncPaths"
-                    Content="Resync"
+                    Content="Resync Tags By Hash"
                     Margin="10 2"
+                    Padding="10 0"
                     Click="btnHashAndResyncPaths_Click"/>
             
         </StackPanel>
