@@ -99,8 +99,19 @@
             <nodeUI:TaggedMediaDisplay x:Name="taggedMediaDisplay"/>
         </ContentControl>
 
-        <ContentControl x:Name="ccBooksApiNode">
+        <ContentControl x:Name="ccBooksApiNode"
+                        Visibility="Collapsed">
             <nodeUI:GoogleBooksApiDisplay x:Name="booksApiDisplay"/>
+        </ContentControl>
+
+        <ContentControl x:Name="ccVoiceApiNode"
+                        Visibility="Collapsed">
+            <nodeUI:GoogleVoiceApiDisplay x:Name="voiceApiDisplay"/>
+        </ContentControl>
+
+        <ContentControl x:Name="ccPhotosApiNode"
+                        Visibility="Collapsed">
+            <nodeUI:GooglePhotosApiDisplay x:Name="photosApiDisplay"/>
         </ContentControl>
         
     </Grid>

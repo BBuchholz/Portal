@@ -31,6 +31,8 @@
         MediaTag,
         HiveMain,
         TaggedMediaMain,
-        BooksApiMain
+        BooksApiMain,
+        VoiceApiMain,
+        PhotosApiMain
     }
 }

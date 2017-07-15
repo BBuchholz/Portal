@@ -27,7 +27,7 @@
     <UpdatePeriodically>false</UpdatePeriodically>
     <UpdateRequired>false</UpdateRequired>
     <MapFileExtensions>true</MapFileExtensions>
-    <ApplicationRevision>104</ApplicationRevision>
+    <ApplicationRevision>105</ApplicationRevision>
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <PublishWizardCompleted>true</PublishWizardCompleted>
@@ -442,6 +442,7 @@
     <Compile Include="Tapestry\Nodes\NullClusterNode.cs" />
     <Compile Include="Tapestry\Nodes\NullHierophantVertexNode.cs" />
     <Compile Include="Tapestry\Nodes\NullSynergyV5ListNode.cs" />
+    <Compile Include="Tapestry\Nodes\PhotosApiNode.cs" />
     <Compile Include="Tapestry\Nodes\StudioKeyboardNode.cs" />
     <Compile Include="Tapestry\Nodes\ArpaBetNode.cs" />
     <Compile Include="Tapestry\Nodes\StudioLyricsNode.cs" />
@@ -457,6 +458,7 @@
     <Compile Include="Tapestry\Nodes\TagNode.cs" />
     <Compile Include="Tapestry\Nodes\TapestryRootNode.cs" />
     <Compile Include="Tapestry\Nodes\TapestrySplitViewNode.cs" />
+    <Compile Include="Tapestry\Nodes\VoiceApiNode.cs" />
     <Compile Include="Tapestry\Nodes\WindowedUiNode.cs" />
     <Compile Include="Tapestry\NodeUI\ArchivistMasterDisplay.xaml.cs">
       <DependentUpon>ArchivistMasterDisplay.xaml</DependentUpon>
@@ -502,6 +504,12 @@
     </Compile>
     <Compile Include="Tapestry\NodeUI\GoogleBooksApiDisplay.xaml.cs">
       <DependentUpon>GoogleBooksApiDisplay.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Tapestry\NodeUI\GooglePhotosApiDisplay.xaml.cs">
+      <DependentUpon>GooglePhotosApiDisplay.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Tapestry\NodeUI\GoogleVoiceApiDisplay.xaml.cs">
+      <DependentUpon>GoogleVoiceApiDisplay.xaml</DependentUpon>
     </Compile>
     <Compile Include="Tapestry\NodeUI\HierophantCanvasElement.cs" />
     <Compile Include="Tapestry\NodeUI\HierophantCircleElement.cs" />
@@ -766,6 +774,14 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Tapestry\NodeUI\GoogleBooksApiDisplay.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Tapestry\NodeUI\GooglePhotosApiDisplay.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Tapestry\NodeUI\GoogleVoiceApiDisplay.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

@@ -12,7 +12,8 @@ namespace NineWorldsDeep.Tapestry.Nodes
             : base("GoogleAPIs")
         {
             AddChild(new BooksApiNode());
-            //AddChild(new PhotosApiNode());
+            AddChild(new VoiceApiNode());
+            AddChild(new PhotosApiNode());
             //AddChild(&c.);
         }
 
