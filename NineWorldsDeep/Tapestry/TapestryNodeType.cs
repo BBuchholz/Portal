@@ -32,7 +32,7 @@
         HiveMain,
         TaggedMediaMain,
         BooksApiMain,
-        VoiceApiMain,
+        SpeechApiMain,
         PhotosApiMain
     }
 }

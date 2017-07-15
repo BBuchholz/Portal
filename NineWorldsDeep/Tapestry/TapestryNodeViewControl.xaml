@@ -104,7 +104,7 @@
             <nodeUI:GoogleBooksApiDisplay x:Name="booksApiDisplay"/>
         </ContentControl>
 
-        <ContentControl x:Name="ccVoiceApiNode"
+        <ContentControl x:Name="ccSpeechApiNode"
                         Visibility="Collapsed">
             <nodeUI:GoogleVoiceApiDisplay x:Name="voiceApiDisplay"/>
         </ContentControl>

@@ -6,16 +6,16 @@ using System.Threading.Tasks;
 
 namespace NineWorldsDeep.Tapestry.Nodes
 {
-    public class VoiceApiNode : TapestryNode
+    public class SpeechApiNode : TapestryNode
     {
-        public VoiceApiNode()
-            : base("VoiceApi")
+        public SpeechApiNode()
+            : base("SpeechApi")
         {
         }
 
         public override string GetShortName()
         {
-            return "Voice API";
+            return "Speech API";
         }
 
         public override bool Parallels(TapestryNode nd)
@@ -38,7 +38,7 @@ namespace NineWorldsDeep.Tapestry.Nodes
         {
             get
             {
-                return TapestryNodeType.VoiceApiMain;
+                return TapestryNodeType.SpeechApiMain;
             }
         }
     }

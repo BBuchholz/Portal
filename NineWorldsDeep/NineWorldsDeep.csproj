@@ -458,7 +458,7 @@
     <Compile Include="Tapestry\Nodes\TagNode.cs" />
     <Compile Include="Tapestry\Nodes\TapestryRootNode.cs" />
     <Compile Include="Tapestry\Nodes\TapestrySplitViewNode.cs" />
-    <Compile Include="Tapestry\Nodes\VoiceApiNode.cs" />
+    <Compile Include="Tapestry\Nodes\SpeechApiNode.cs" />
     <Compile Include="Tapestry\Nodes\WindowedUiNode.cs" />
     <Compile Include="Tapestry\NodeUI\ArchivistMasterDisplay.xaml.cs">
       <DependentUpon>ArchivistMasterDisplay.xaml</DependentUpon>

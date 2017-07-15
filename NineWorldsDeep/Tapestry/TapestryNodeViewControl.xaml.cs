@@ -182,7 +182,7 @@ namespace NineWorldsDeep.Tapestry
             contentControls.Add(ccHiveMainNode);
             contentControls.Add(ccTaggedMediaNode);
             contentControls.Add(ccBooksApiNode);
-            contentControls.Add(ccVoiceApiNode);
+            contentControls.Add(ccSpeechApiNode);
             contentControls.Add(ccPhotosApiNode);
         }
 
@@ -263,9 +263,9 @@ namespace NineWorldsDeep.Tapestry
                         SetVisible(ccBooksApiNode);
                         break;
 
-                    case TapestryNodeType.VoiceApiMain:
+                    case TapestryNodeType.SpeechApiMain:
 
-                        SetVisible(ccVoiceApiNode);
+                        SetVisible(ccSpeechApiNode);
                         break;
 
                     case TapestryNodeType.PhotosApiMain:
