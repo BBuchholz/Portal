@@ -9,19 +9,79 @@ namespace NineWorldsDeep.Hive
 {
     public class HiveRoot
     {
-        public List<HiveLobe> Lobes { private set; get; }
-        public string Name { get; internal set; }
+        protected List<HiveLobe> LobesInternal { private set; get; }
+        public string HiveRootName { get; set; }
+        public int HiveRootId { get; set; }
 
-        public HiveRoot(string name)
+        public IEnumerable<HiveLobe> Lobes { get { return LobesInternal; } }
+
+        public DateTime? HiveRootActivatedAt { get; private set; }
+        public DateTime? HiveRootDeactivatedAt { get; private set; }
+
+        public HiveRoot()
         {
-            Name = name;
-            Lobes = new List<HiveLobe>();
+            LobesInternal = new List<HiveLobe>();
         }
 
         public void Add(HiveLobe lobe)
         {
             //TODO: configure/validate/&c.
-            Lobes.Add(lobe);
+            LobesInternal.Add(lobe);
         }
+
+        public override string ToString()
+        {
+            return HiveRootName;
+        }
+
+        /// <summary>
+        /// 
+        /// will resolve conflicts, newest date will always take precedence
+        /// passing null values allowed as well to just set one or two
+        /// null values always resolve to the non-null value(unless both null)
+        /// 
+        /// NOTE: THIS CONVERTS TO UTC, WHICH IS DEPENDENT ON DateTime.Kind
+        /// This property defaults to local, so if you are passing a UTC time, make
+        /// sure that the Kind is set to UTC or the conversion will
+        /// be off. 
+        /// 
+        /// </summary>
+        /// <param name="newActivatedAt"></param>
+        /// <param name="newDeactivatedAt"></param>
+        public void SetTimeStamps(DateTime? newActivatedAt,
+                                  DateTime? newDeactivatedAt)
+        {
+            if (newActivatedAt != null)
+            {
+                if (newActivatedAt.Value.Kind != DateTimeKind.Utc)
+                {
+                    newActivatedAt = newActivatedAt.Value.ToUniversalTime();
+                }
+
+                if (HiveRootActivatedAt == null ||
+                   DateTime.Compare(HiveRootActivatedAt.Value, newActivatedAt.Value) < 0)
+                {
+                    //HiveRootActivatedAt is older or null
+                    HiveRootActivatedAt = newActivatedAt;
+                }
+            }
+
+            if (newDeactivatedAt != null)
+            {
+                if (newDeactivatedAt.Value.Kind != DateTimeKind.Utc)
+                {
+                    newDeactivatedAt = newDeactivatedAt.Value.ToUniversalTime();
+                }
+
+                if (HiveRootDeactivatedAt == null ||
+                   DateTime.Compare(HiveRootDeactivatedAt.Value, newDeactivatedAt.Value) < 0)
+                {
+                    //HiveRootDeactivatedAt is older or null
+                    HiveRootDeactivatedAt = newDeactivatedAt;
+                }
+            }
+
+        }
+
     }
 }

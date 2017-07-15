@@ -191,6 +191,7 @@
     <Compile Include="Db\Sqlite\DbAdapterV4c.cs" />
     <Compile Include="Db\Sqlite\DbAdapterV5.cs" />
     <Compile Include="Db\Sqlite\DbV5Utils.cs" />
+    <Compile Include="Db\Sqlite\HiveSubsetDb.cs" />
     <Compile Include="Db\Sqlite\IDbAdapter.cs" />
     <Compile Include="Db\Sqlite\MediaV5SubsetDb.cs" />
     <Compile Include="Db\Sqlite\StudioV5SubsetDb.cs" />
@@ -245,6 +246,8 @@
     <Compile Include="Hive\HiveLobe.cs" />
     <Compile Include="Hive\HiveRoot.cs" />
     <Compile Include="Hive\HiveSpore.cs" />
+    <Compile Include="Hive\MockHiveLobe.cs" />
+    <Compile Include="Hive\MockHiveSpore.cs" />
     <Compile Include="Hive\UtilsHive.cs" />
     <Compile Include="ImageBrowser\DisplayImageAction.cs" />
     <Compile Include="ImageBrowser\ImageBrowserMainWindow.xaml.cs">

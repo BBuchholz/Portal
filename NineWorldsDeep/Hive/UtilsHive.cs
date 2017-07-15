@@ -3,32 +3,48 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace NineWorldsDeep.Hive
 {
     class UtilsHive
     {
-        internal static List<HiveRoot> GetAllRoots()
+        private static Db.Sqlite.HiveSubsetDb db = new Db.Sqlite.HiveSubsetDb();        
+
+        internal static List<HiveRoot> GetActiveRoots()
         {
-            List<HiveRoot> allRoots = new List<HiveRoot>();
-
-            allRoots.Add(new HiveRoot("test root : " + TimeStamp.NowUTC().ToString()));
-            allRoots.Add(new HiveRoot("test root 2 : " + TimeStamp.NowUTC().ToString()));
-
-            return allRoots;
+            return db.GetActiveRoots();
         }
 
         internal static void RefreshLobes(HiveRoot hr)
         {
-            hr.Add(new HiveLobe("test lobe : " + TimeStamp.NowUTC().ToString()));
-            hr.Add(new HiveLobe("test lobe 2 : " + TimeStamp.NowUTC().ToString()));
+            hr.Add(new MockHiveLobe("test lobe : " + TimeStamp.NowUTC().ToString()));
+            hr.Add(new MockHiveLobe("test lobe 2 : " + TimeStamp.NowUTC().ToString()));
         }
 
         internal static void RefreshSpores(HiveLobe hl)
         {
-            hl.Add(new HiveSpore("tst spore : " + TimeStamp.NowUTC().ToString()));
-            hl.Add(new HiveSpore("test spore 2 : " + TimeStamp.NowUTC().ToString()));
+            hl.Add(new MockHiveSpore("tst spore : " + TimeStamp.NowUTC().ToString()));
+            hl.Add(new MockHiveSpore("test spore 2 : " + TimeStamp.NowUTC().ToString()));
+        }
+
+        internal static List<HiveRoot> GetDeactivatedRoots()
+        {
+            return db.GetDeactivatedRoots();
+        }
+
+        internal static bool HiveRootNameIsValid(string input)
+        {
+            Regex regex = new Regex(@"^[0-9a-z-]*$");
+            Match match = regex.Match(input);
+
+            return match.Success;
+        }
+
+        internal static void EnsureHiveRootName(string hiveRootName)
+        {
+            db.EnsureHiveRoot(hiveRootName);
         }
     }
 }

@@ -4,21 +4,22 @@ using System.Collections.Generic;
 
 namespace NineWorldsDeep.Hive
 {
-    public class HiveLobe
+    public abstract class HiveLobe
     {
         public string Name { private set; get; }
-        public List<HiveSpore> Spores { private set; get; }
-        
+        protected List<HiveSpore> SporesInternal { private set; get; }
+        public IEnumerable<HiveSpore> Spores { get { return SporesInternal; } }
+
         public HiveLobe(string name)
         {
             this.Name = name;
-            this.Spores = new List<HiveSpore>();
+            this.SporesInternal = new List<HiveSpore>();
         }
         
-        public void Add(HiveSpore spore)
+        public virtual void Add(HiveSpore spore)
         {
             //TODO: validate, check for duplicates, &c.
-            Spores.Add(spore);
+            SporesInternal.Add(spore);
         }
     }
 }

@@ -575,6 +575,56 @@ namespace NineWorldsDeep.Sqlite
             "AND IFNULL(mtg." + COLUMN_MEDIA_TAGGING_TAGGED_AT + ", '') >= IFNULL(mtg." + COLUMN_MEDIA_TAGGING_UNTAGGED_AT + ", '') ";
 
 
+        #endregion
+
+
+        #endregion
+
+        #region "Hive Subset"
+
+        #region "naming constants"
+
+        public static string COLUMN_HIVE_ROOT_ID = "HiveRootId";
+        public static string COLUMN_HIVE_ROOT_NAME = "HiveRootName";
+        public static string COLUMN_HIVE_ROOT_ACTIVATED_AT = "HiveRootActivatedAt";
+        public static string COLUMN_HIVE_ROOT_DEACTIVATED_AT = "HiveRootDeactivatedAt";
+        public static string TABLE_HIVE_ROOT = "HiveRoot";
+
+        #endregion
+
+        #region "queries"
+
+        internal static readonly string SELECT_ACTIVE_HIVE_ROOTS =
+
+            "SELECT " + COLUMN_HIVE_ROOT_ID + ", " +
+            "       " + COLUMN_HIVE_ROOT_NAME + ", " +
+            "	    " + COLUMN_HIVE_ROOT_ACTIVATED_AT + ", " +
+            "	    " + COLUMN_HIVE_ROOT_DEACTIVATED_AT + " " +
+            "FROM " + TABLE_HIVE_ROOT + " " +
+            "WHERE IFNULL(" + COLUMN_HIVE_ROOT_ACTIVATED_AT + ", '') >= IFNULL(" + COLUMN_HIVE_ROOT_DEACTIVATED_AT + ", '') ";
+
+        internal static readonly string SELECT_HIVE_ROOT_ID_FOR_NAME_X =
+
+            "SELECT " + COLUMN_HIVE_ROOT_ID + " " +
+            "FROM " + TABLE_HIVE_ROOT + " " +
+            "WHERE " + COLUMN_HIVE_ROOT_NAME + " = ? ";
+
+        internal static readonly string INSERT_HIVE_ROOT_NAME_X =
+
+            "INSERT OR IGNORE INTO " + TABLE_HIVE_ROOT + " " +
+            "	(" + COLUMN_HIVE_ROOT_NAME + ") " +
+            "VALUES " +
+            "	(?) ";
+
+        internal static readonly string SELECT_DEACTIVATED_HIVE_ROOTS =
+
+            "SELECT " + COLUMN_HIVE_ROOT_ID + ", " +
+            "       " + COLUMN_HIVE_ROOT_NAME + ", " +
+            "	    " + COLUMN_HIVE_ROOT_ACTIVATED_AT + ", " +
+            "	    " + COLUMN_HIVE_ROOT_DEACTIVATED_AT + " " +
+            "FROM " + TABLE_HIVE_ROOT + " " +
+            "WHERE IFNULL(" + COLUMN_HIVE_ROOT_ACTIVATED_AT + ", '') < IFNULL(" + COLUMN_HIVE_ROOT_DEACTIVATED_AT + ", '') ";
+
 
         #endregion
 

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace NineWorldsDeep.Hive
 {
-    public class HiveSpore
+    public abstract class HiveSpore
     {
         public string Name { get; private set; }
 

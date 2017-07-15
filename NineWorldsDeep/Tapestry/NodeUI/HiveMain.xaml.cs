@@ -25,15 +25,35 @@ namespace NineWorldsDeep.Tapestry.NodeUI
         public HiveMain()
         {
             InitializeComponent();
-            PopulateRoots(UtilsHive.GetAllRoots());
+            Refresh();
         }
 
-        
-        private void PopulateRoots(List<HiveRoot> allRoots)
+        private void ClearTreeViews()
         {
-            foreach (HiveRoot hr in allRoots)
+            tvHive.Items.Clear();
+            tvHiveDeactivated.Items.Clear();
+        }
+
+        private void Refresh()
+        {
+            ClearTreeViews();
+            PopulateActiveRoots(UtilsHive.GetActiveRoots());
+            PopulateDeactivatedRoots(UtilsHive.GetDeactivatedRoots());
+        }
+
+        private void PopulateDeactivatedRoots(List<HiveRoot> roots)
+        {
+            foreach (HiveRoot hr in roots)
             {
-                tvHive.Items.Add(CreateTreeItem(hr));
+                tvHiveDeactivated.Items.Add(CreateTreeItem(hr, false));
+            }
+        }
+
+        private void PopulateActiveRoots(List<HiveRoot> roots)
+        {
+            foreach (HiveRoot hr in roots)
+            {
+                tvHive.Items.Add(CreateTreeItem(hr, true));
             }
         }
 
@@ -42,7 +62,12 @@ namespace NineWorldsDeep.Tapestry.NodeUI
             ProcessExpander(e);
         }
 
-        private void ProcessExpander(RoutedEventArgs e)
+        private void tvHiveDeactivated_Expanded(object sender, RoutedEventArgs e)
+        {
+            ProcessExpander(e, false);
+        }
+
+        private void ProcessExpander(RoutedEventArgs e, bool isActiveTreeView = true)
         {
             TreeViewItem item = e.Source as TreeViewItem;
 
@@ -59,7 +84,7 @@ namespace NineWorldsDeep.Tapestry.NodeUI
 
                     foreach(HiveLobe hl in hr.Lobes)
                     {
-                        item.Items.Add(CreateTreeItem(hl));
+                        item.Items.Add(CreateTreeItem(hl, isActiveTreeView));
                     }
                 }
 
@@ -71,7 +96,7 @@ namespace NineWorldsDeep.Tapestry.NodeUI
 
                     foreach(HiveSpore hs in hl.Spores)
                     {
-                        item.Items.Add(CreateTreeItem(hs));
+                        item.Items.Add(CreateTreeItem(hs, isActiveTreeView));
                     }
                 }
 
@@ -82,32 +107,104 @@ namespace NineWorldsDeep.Tapestry.NodeUI
             }
         }
         
-        private TreeViewItem CreateTreeItem(HiveRoot hr)
+        private TreeViewItem CreateTreeItem(HiveRoot hr, bool isActiveTreeView)
         {
             TreeViewItem item = new TreeViewItem();
-            item.Header = hr.Name;
+            item.Header = hr.HiveRootName;
             item.Tag = hr;
             item.Items.Add("Loading...");
+
+            item.ContextMenu = isActiveTreeView ? 
+                (ContextMenu)this.Resources["cmHiveRootMenu"] : 
+                (ContextMenu)this.Resources["cmDeactivatedHiveRootMenu"];
+
+            item.MouseRightButtonDown += SelectRightClickedTreeViewItem;
             return item;
         }
 
-        private TreeViewItem CreateTreeItem(HiveSpore hs)
-        {
-            TreeViewItem item = new TreeViewItem();
-            item.Header = hs.Name;
-            item.Tag = hs;
-            item.Items.Add("Loading...");
-            return item;
+        private void SelectRightClickedTreeViewItem(object sender, MouseButtonEventArgs e)
+        {            
+            var item = (TreeViewItem)e.Source;
+            item.IsSelected = true;            
         }
 
-        private TreeViewItem CreateTreeItem(HiveLobe hl)
+        private TreeViewItem CreateTreeItem(HiveLobe hl, bool isActiveTreeView)
         {
             TreeViewItem item = new TreeViewItem();
             item.Header = hl.Name;
             item.Tag = hl;
             item.Items.Add("Loading...");
+
+            item.ContextMenu = isActiveTreeView ? 
+                (ContextMenu)this.Resources["cmHiveLobeMenu"] :
+                (ContextMenu)this.Resources["cmDeactivatedHiveLobeMenu"]; 
+
+            item.MouseRightButtonDown += SelectRightClickedTreeViewItem;
             return item;
         }
+
+        private TreeViewItem CreateTreeItem(HiveSpore hs, bool isActiveTreeView)
+        {
+            TreeViewItem item = new TreeViewItem();
+            item.Header = hs.Name;
+            item.Tag = hs;
+            item.Items.Add("Loading...");
+
+            item.ContextMenu = isActiveTreeView ? 
+                (ContextMenu)this.Resources["cmHiveSporeMenu"] :
+                (ContextMenu)this.Resources["cmDeactivatedHiveSporeMenu"];
+
+            item.MouseRightButtonDown += SelectRightClickedTreeViewItem;
+            return item;
+        }
+
+        private void btnAddHiveRoot_Click(object sender, RoutedEventArgs e)
+        {
+            string input = UI.Prompt.Input("Enter Hive Root Name");
+
+            if (!string.IsNullOrWhiteSpace(input))
+            {
+                while (!UtilsHive.HiveRootNameIsValid(input))
+                {
+                    input = UI.Prompt.Input("Invalid name format, please correct", input);
+                }
+
+                UtilsHive.EnsureHiveRootName(input);
+                Refresh();
+            }
+            else
+            {
+                UI.Display.Message("Cancelled.");
+            }
+        }
         
+        private void MenuItemTest_Click(object sender, RoutedEventArgs e)
+        {
+            string msg = "null tag";
+
+            MenuItem mnu = sender as MenuItem;
+            TreeViewItem item = null;
+            if (mnu != null)
+            {
+                item = ((ContextMenu)mnu.Parent).PlacementTarget as TreeViewItem;
+                
+                if (item != null && item.Tag != null)
+                {
+                    msg = item.Tag.ToString();
+                }
+            }
+
+            UI.Display.Message(msg);
+        }
+
+        private void MenuItemDeactivateHiveRoot_Click(object sender, RoutedEventArgs e)
+        {
+            UI.Display.Message("deactivate hive root here");
+        }
+
+        private void MenuItemActivateHiveRoot_Click(object sender, RoutedEventArgs e)
+        {
+            UI.Display.Message("activate hive root here");
+        }
     }
 }

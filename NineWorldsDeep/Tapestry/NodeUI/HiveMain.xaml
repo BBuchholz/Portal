@@ -5,10 +5,81 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:NineWorldsDeep.Tapestry.NodeUI"
              mc:Ignorable="d" 
-             d:DesignHeight="300" d:DesignWidth="300">
+             d:DesignHeight="800" d:DesignWidth="600">
+
+    <UserControl.Resources>
+        <ContextMenu x:Key="cmHiveRootMenu">
+            <MenuItem Header="Hive Root Test Menu Item"
+                      Click="MenuItemTest_Click"/>
+            <MenuItem Header="Deactivate Hive Root"
+                      Click="MenuItemDeactivateHiveRoot_Click"/>
+        </ContextMenu>
+        <ContextMenu x:Key="cmHiveLobeMenu">
+            <MenuItem Header="Hive Lobe Test Menu Item"
+                      Click="MenuItemTest_Click"/>
+        </ContextMenu>
+        <ContextMenu x:Key="cmHiveSporeMenu">
+            <MenuItem Header="Hive Spore Test Menu Item"
+                      Click="MenuItemTest_Click"/>
+        </ContextMenu>
+        <ContextMenu x:Key="cmDeactivatedHiveRootMenu">
+            <MenuItem Header="Deactivated Hive Root Test Menu Item"
+                      Click="MenuItemTest_Click"/>
+            <MenuItem Header="Activate Hive Root"
+                      Click="MenuItemActivateHiveRoot_Click"/>
+        </ContextMenu>
+        <ContextMenu x:Key="cmDeactivatedHiveLobeMenu">
+            <MenuItem Header="Deactivated Root Lobe Test Menu Item"
+                      Click="MenuItemTest_Click"/>
+        </ContextMenu>
+        <ContextMenu x:Key="cmDeactivatedHiveSporeMenu">
+            <MenuItem Header="Deactivated Spore Test Menu Item"
+                      Click="MenuItemTest_Click"/>
+        </ContextMenu>
+    </UserControl.Resources>
+    
     <Grid>
+        
+        <Grid.RowDefinitions>
+            <RowDefinition Height="40"/>
+            <RowDefinition Height="40"/>
+            <RowDefinition/>
+            <RowDefinition Height="40"/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+
+        <TextBlock Grid.Row="0"
+                   HorizontalAlignment="Center"
+                   VerticalAlignment="Center"
+                   FontWeight="Bold"
+                   Text="Active Roots"/>
+
+        <StackPanel Orientation="Horizontal" 
+                    Grid.Row="1">
+
+            <Button x:Name="btnAddHiveRoot"
+                    Margin = "5"
+                    Padding = "5"
+                    Content="Add Hive Root"
+                    Click="btnAddHiveRoot_Click"/>
+
+        </StackPanel>
+        
         <TreeView x:Name="tvHive"
                   Margin="15"
+                  Grid.Row="2"
                   TreeViewItem.Expanded="tvHive_Expanded"/>
+
+        <TextBlock Grid.Row="3"
+                   HorizontalAlignment="Center"
+                   VerticalAlignment="Center"
+                   FontWeight="Bold"
+                   Text="Deactivated Roots"/>
+
+        <TreeView x:Name="tvHiveDeactivated"
+                  Margin="15"
+                  Grid.Row="4"
+                  TreeViewItem.Expanded="tvHiveDeactivated_Expanded"/>
+
     </Grid>
 </UserControl>
