@@ -508,8 +508,8 @@
     <Compile Include="Tapestry\NodeUI\GooglePhotosApiDisplay.xaml.cs">
       <DependentUpon>GooglePhotosApiDisplay.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Tapestry\NodeUI\GoogleVoiceApiDisplay.xaml.cs">
-      <DependentUpon>GoogleVoiceApiDisplay.xaml</DependentUpon>
+    <Compile Include="Tapestry\NodeUI\GoogleSpeechApiDisplay.xaml.cs">
+      <DependentUpon>GoogleSpeechApiDisplay.xaml</DependentUpon>
     </Compile>
     <Compile Include="Tapestry\NodeUI\HierophantCanvasElement.cs" />
     <Compile Include="Tapestry\NodeUI\HierophantCircleElement.cs" />
@@ -781,7 +781,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Tapestry\NodeUI\GoogleVoiceApiDisplay.xaml">
+    <Page Include="Tapestry\NodeUI\GoogleSpeechApiDisplay.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

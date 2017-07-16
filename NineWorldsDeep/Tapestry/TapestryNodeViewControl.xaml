@@ -106,7 +106,7 @@
 
         <ContentControl x:Name="ccSpeechApiNode"
                         Visibility="Collapsed">
-            <nodeUI:GoogleVoiceApiDisplay x:Name="voiceApiDisplay"/>
+            <nodeUI:GoogleSpeechApiDisplay x:Name="voiceApiDisplay"/>
         </ContentControl>
 
         <ContentControl x:Name="ccPhotosApiNode"

@@ -18,9 +18,9 @@ namespace NineWorldsDeep.Tapestry.NodeUI
     /// <summary>
     /// Interaction logic for GoogleVoiceApiDisplay.xaml
     /// </summary>
-    public partial class GoogleVoiceApiDisplay : UserControl
+    public partial class GoogleSpeechApiDisplay : UserControl
     {
-        public GoogleVoiceApiDisplay()
+        public GoogleSpeechApiDisplay()
         {
             InitializeComponent();
         }
