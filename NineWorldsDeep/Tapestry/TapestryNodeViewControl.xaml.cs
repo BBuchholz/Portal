@@ -165,7 +165,8 @@ namespace NineWorldsDeep.Tapestry
             contentControls = new List<ContentControl>();
             contentControls.Add(ccFragCloud);
             contentControls.Add(ccFragment);
-            contentControls.Add(ccAudioNode);
+            //contentControls.Add(ccAudioNode);
+            contentControls.Add(ccAudioV5);
             contentControls.Add(ccNodeList);
             contentControls.Add(ccImageNode);
             contentControls.Add(ccClusterNode);
@@ -213,9 +214,13 @@ namespace NineWorldsDeep.Tapestry
 
                     case TapestryNodeType.Audio:
 
-                        SetVisible(ccAudioNode);
+                        //SetVisible(ccAudioNode);
+                        //FileSystemNode nd = (FileSystemNode)node;
+                        //audioNodeDisplay.Display(nd);
+
+                        SetVisible(ccAudioV5);
                         FileSystemNode nd = (FileSystemNode)node;
-                        audioNodeDisplay.Display(nd);
+                        audioV5Display.Display(nd);
                         break;
 
                     case TapestryNodeType.Image:

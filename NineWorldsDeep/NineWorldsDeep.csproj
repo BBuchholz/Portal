@@ -467,6 +467,9 @@
       <DependentUpon>ArchivistSourceDisplay.xaml</DependentUpon>
     </Compile>
     <Compile Include="Tapestry\NodeUI\ArchivistUiTagFormatter.cs" />
+    <Compile Include="Tapestry\NodeUI\AudioV5Display.xaml.cs">
+      <DependentUpon>AudioV5Display.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Tapestry\NodeUI\AudioNodeDisplay.xaml.cs">
       <DependentUpon>AudioNodeDisplay.xaml</DependentUpon>
     </Compile>
@@ -734,6 +737,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Tapestry\NodeUI\ArchivistSourceDisplay.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Tapestry\NodeUI\AudioV5Display.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

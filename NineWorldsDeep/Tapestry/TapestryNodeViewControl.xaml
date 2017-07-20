@@ -19,12 +19,17 @@
                     Visibility="Collapsed">
             <frgCloud:FragmentNodeDisplay x:Name="nodeDisplayDefault"/>
         </ContentControl>
-
-        <ContentControl x:Name="ccAudioNode"
+        
+        <!--<ContentControl x:Name="ccAudioNode"
                     Visibility="Collapsed">
             <nodeUI:AudioNodeDisplay x:Name="audioNodeDisplay"/>
-        </ContentControl>
+        </ContentControl>-->
 
+        <ContentControl x:Name="ccAudioV5"
+                    Visibility="Collapsed">
+            <nodeUI:AudioV5Display x:Name="audioV5Display"/>
+        </ContentControl>
+        
         <ContentControl x:Name="ccImageNode"
                     Visibility="Collapsed">
             <nodeUI:ImageNodeDisplay x:Name="imageNodeDisplay"/>
