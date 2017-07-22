@@ -177,6 +177,8 @@ namespace NineWorldsDeep.Tapestry.NodeUI
             if (!string.IsNullOrWhiteSpace(listName))
             {
                 SynergyV5List synLst = new SynergyV5List(listName);
+
+                synLst.Activate();
                 synLst.Sync(db);
 
                 Load();
