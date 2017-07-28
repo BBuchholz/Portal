@@ -51,5 +51,14 @@ namespace NineWorldsDeep.Hive
         {
             db.Sync(hr);
         }
+
+        internal static void EnsureFolderStructure(HiveRoot hr)
+        {
+            foreach (string folderPath in Configuration.HiveRootFolderPaths(hr))
+            {
+                //CreateDirectory skips any pre-existing folders
+                System.IO.Directory.CreateDirectory(folderPath);
+            }
+        }
     }
 }

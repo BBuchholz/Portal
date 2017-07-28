@@ -9,8 +9,8 @@
 
     <UserControl.Resources>
         <ContextMenu x:Key="cmHiveRootMenu">
-            <MenuItem Header="Hive Root Test Menu Item"
-                      Click="MenuItemTest_Click"/>
+            <MenuItem Header="Ensure Folder Structure"
+                      Click="MenuItemEnsureFolderStructure_Click"/>
             <MenuItem Header="Deactivate Hive Root"
                       Click="MenuItemDeactivateHiveRoot_Click"/>
         </ContextMenu>
@@ -23,7 +23,7 @@
                       Click="MenuItemTest_Click"/>
         </ContextMenu>
         <ContextMenu x:Key="cmDeactivatedHiveRootMenu">
-            <MenuItem Header="Deactivated Hive Root Test Menu Item"
+            <MenuItem Header="Purge Folder Structure Remnants (MOCK)"
                       Click="MenuItemTest_Click"/>
             <MenuItem Header="Activate Hive Root"
                       Click="MenuItemActivateHiveRoot_Click"/>

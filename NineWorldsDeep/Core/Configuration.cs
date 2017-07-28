@@ -8,6 +8,7 @@ using NineWorldsDeep.Parser;
 using System.Text.RegularExpressions;
 using NineWorldsDeep.Warehouse;
 using NineWorldsDeep.Db.Sqlite;
+using NineWorldsDeep.Hive;
 
 namespace NineWorldsDeep.Core
 {
@@ -50,6 +51,37 @@ namespace NineWorldsDeep.Core
         {
             string fileName = fileNameWithoutExtension + ".txt";
             return Path.Combine(SyncRootConfigFolder(profileName), fileName);
+        }
+
+        internal static List<string> HiveRootFolderPaths(HiveRoot hr)
+        {
+            List<string> lst = new List<string>();
+
+            foreach (string subfolder in HiveRootSubfolderPaths())
+            {
+                string fullPath =
+                    System.IO.Path.Combine(
+                        SyncFolder(),
+                        "hive",
+                        hr.HiveRootName,
+                        subfolder);
+                
+                lst.Add(fullPath);
+            }
+
+            return lst;
+        }
+
+        private static List<string> HiveRootSubfolderPaths()
+        {
+            List<string> lst = new List<string>();
+
+            lst.Add("xml/incoming");
+            lst.Add("media/audio/incoming");
+            lst.Add("media/images/incoming");
+            lst.Add("media/pdfs/incoming");
+
+            return lst;
         }
 
         public static string SyncRootNewXmlExportFile(SyncProfile sp)

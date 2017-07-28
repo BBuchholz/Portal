@@ -246,5 +246,27 @@ namespace NineWorldsDeep.Tapestry.NodeUI
                 }
             }
         }
+
+        private void MenuItemEnsureFolderStructure_Click(object sender, RoutedEventArgs e)
+        {
+            MenuItem mnu = sender as MenuItem;
+            TreeViewItem item = null;
+            if (mnu != null)
+            {
+                item = ((ContextMenu)mnu.Parent).PlacementTarget as TreeViewItem;
+
+                if (item != null && item.Tag != null)
+                {
+                    if (item.Tag is HiveRoot)
+                    {
+                        var hr = item.Tag as HiveRoot;
+
+                        UtilsHive.EnsureFolderStructure(hr);
+
+                        UI.Display.Message("folder structured ensured");
+                    }
+                }
+            }
+        }
     }
 }
