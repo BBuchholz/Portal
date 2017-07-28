@@ -88,6 +88,119 @@ namespace NineWorldsDeep.Db.Sqlite
             return lst;
         }
 
+        internal void Sync(HiveRoot hr)
+        {
+            using (var conn = new SQLiteConnection(
+                @"Data Source=" + Configuration.GetSqliteDbPath(DbName)))
+            {
+                conn.Open();
+
+                using (var cmd = new SQLiteCommand(conn))
+                {
+                    using (var transaction = conn.BeginTransaction())
+                    {
+                        Sync(hr, cmd);
+
+                        transaction.Commit();
+                    }
+                }
+
+                conn.Close();
+            }
+        }
+
+        private void Sync(HiveRoot hr, SQLiteCommand cmd)
+        {
+            if(hr.HiveRootId < 1){
+
+                EnsureHiveRoot(hr.HiveRootName);
+            }
+
+            UpdateHiveRootTimeStampsByName(hr, cmd);
+
+            PopulateIdAndTimeStampsForHiveRootName(hr, cmd);            
+        }
+
+        private void PopulateIdAndTimeStampsForHiveRootName(HiveRoot hr, SQLiteCommand cmd)
+        {
+            cmd.Parameters.Clear();
+            
+            cmd.CommandText = NwdContract.HIVE_ROOT_SELECT_ID_ACTIVATED_AT_DEACTIVATED_AT_FOR_NAME;
+            
+            cmd.Parameters.Add(new SQLiteParameter() { Value = hr.HiveRootName });
+
+            using (var rdr = cmd.ExecuteReader())
+            {
+                if (rdr.Read())
+                {
+                    // 0:HiveRootId
+                    // 1:HiveRootActivatedAt
+                    // 2:HiveRootDeactivatedAt 
+
+                    int hiveRootId = rdr.GetInt32(0);
+                    string hiveRootActivatedAt = DbV5Utils.GetNullableString(rdr, 1);
+                    string hiveRootDeactivated = DbV5Utils.GetNullableString(rdr, 2);
+                    
+                    DateTime? activated =
+                        TimeStamp.YYYY_MM_DD_HH_MM_SS_UTC_ToDateTime(
+                            hiveRootActivatedAt);
+
+                    DateTime? deactivated =
+                        TimeStamp.YYYY_MM_DD_HH_MM_SS_UTC_ToDateTime(
+                            hiveRootDeactivated);
+
+                    hr.HiveRootId = hiveRootId;
+                    hr.SetTimeStamps(activated, deactivated);
+                }
+            }
+        }
+
+        private void UpdateHiveRootTimeStampsByName(HiveRoot hr, SQLiteCommand cmd)
+        {
+            cmd.Parameters.Clear();
+            cmd.CommandText =
+                NwdContract.HIVE_ROOT_UPDATE_ACTIVATE_AT_DEACTIVATED_AT_FOR_NAME_X_Y_Z;
+
+            //// ACTIVATED PARAM ///////////////////////////////////////////////////
+            SQLiteParameter activatedParam = new SQLiteParameter();
+
+            String activatedAt = TimeStamp.To_UTC_YYYY_MM_DD_HH_MM_SS(hr.HiveRootActivatedAt);
+
+            if (string.IsNullOrWhiteSpace(activatedAt))
+            {
+                activatedParam.Value = DBNull.Value;
+            }
+            else
+            {
+                activatedParam.Value = activatedAt;
+            }
+            cmd.Parameters.Add(activatedParam);
+
+            //// DEACTIVATED PARAM ////////////////////////////////////////////////
+            SQLiteParameter deactivatedParam = new SQLiteParameter();
+
+            String deactivatedAt =
+                TimeStamp.To_UTC_YYYY_MM_DD_HH_MM_SS(hr.HiveRootDeactivatedAt);
+
+            if (string.IsNullOrWhiteSpace(deactivatedAt))
+            {
+                deactivatedParam.Value = DBNull.Value;
+            }
+            else
+            {
+                deactivatedParam.Value = deactivatedAt;
+            }
+            cmd.Parameters.Add(deactivatedParam);
+
+            //// ID PARAM /////////////////////////////////////////////////////
+            cmd.Parameters.Add(new SQLiteParameter()
+            {
+                Value = hr.HiveRootName
+            });
+
+            cmd.ExecuteNonQuery();
+        }
+
         internal List<HiveRoot> GetActiveRoots()
         {
             List<HiveRoot> lst =

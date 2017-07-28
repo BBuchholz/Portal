@@ -61,12 +61,6 @@ namespace NineWorldsDeep.Tapestry.NodeUI
         
         private void UpdateButton_Click(object sender, RoutedEventArgs e)
         {
-            //string hash = Hashes.Sha1ForFilePath(fileNode.Path);
-
-            //Tags.UpdateTagStringForHash(hash, oldTagString, TagString);
-
-            //LoadTags();
-
             currentMediaListItem.SetTagsFromTagString(TagString);
             Sync();
 

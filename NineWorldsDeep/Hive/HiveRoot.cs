@@ -83,5 +83,32 @@ namespace NineWorldsDeep.Hive
 
         }
 
+        public bool IsActive()
+        {
+            if(HiveRootDeactivatedAt == null)
+            {
+                return true;
+            }
+
+            if(HiveRootActivatedAt == null)
+            {
+                //if we reach here, deactivated isn't null
+                return false;
+            }
+
+            return DateTime.Compare(HiveRootDeactivatedAt.Value, HiveRootActivatedAt.Value) < 0;
+        }
+
+        public void Deactivate()
+        {
+            SetTimeStamps(null, TimeStamp.NowUTC());
+        }
+
+        public void Activate()
+        {
+            SetTimeStamps(TimeStamp.NowUTC(), null);
+        }
+
+
     }
 }

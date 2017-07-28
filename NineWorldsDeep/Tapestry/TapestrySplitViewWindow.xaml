@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:NineWorldsDeep.Tapestry"
         mc:Ignorable="d"
-        Title="TapestrySplitViewWindow" Height="600" Width="800"
+        Title="Portal (NWD)" Height="600" Width="800"
         WindowState="Maximized">
     <DockPanel LastChildFill="True">
         <Menu DockPanel.Dock="Top" 

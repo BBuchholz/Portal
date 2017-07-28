@@ -34,6 +34,10 @@ namespace NineWorldsDeep.Tapestry.NodeUI
             tvHiveDeactivated.Items.Clear();
         }
 
+        /// <summary>
+        /// clears both treeviews and repopulates active and 
+        /// deactivated roots from the db
+        /// </summary>
         private void Refresh()
         {
             ClearTreeViews();
@@ -199,12 +203,48 @@ namespace NineWorldsDeep.Tapestry.NodeUI
 
         private void MenuItemDeactivateHiveRoot_Click(object sender, RoutedEventArgs e)
         {
-            UI.Display.Message("deactivate hive root here");
+            MenuItem mnu = sender as MenuItem;
+            TreeViewItem item = null;
+            if (mnu != null)
+            {
+                item = ((ContextMenu)mnu.Parent).PlacementTarget as TreeViewItem;
+
+                if (item != null && item.Tag != null)
+                {
+                    if(item.Tag is HiveRoot)
+                    {
+                        var hr = item.Tag as HiveRoot;
+
+                        hr.Deactivate();
+                        UtilsHive.Sync(hr);
+
+                        Refresh();
+                    }
+                }
+            }
         }
 
         private void MenuItemActivateHiveRoot_Click(object sender, RoutedEventArgs e)
         {
-            UI.Display.Message("activate hive root here");
+            MenuItem mnu = sender as MenuItem;
+            TreeViewItem item = null;
+            if (mnu != null)
+            {
+                item = ((ContextMenu)mnu.Parent).PlacementTarget as TreeViewItem;
+
+                if (item != null && item.Tag != null)
+                {
+                    if (item.Tag is HiveRoot)
+                    {
+                        var hr = item.Tag as HiveRoot;
+
+                        hr.Activate();
+                        UtilsHive.Sync(hr);
+
+                        Refresh();
+                    }
+                }
+            }
         }
     }
 }

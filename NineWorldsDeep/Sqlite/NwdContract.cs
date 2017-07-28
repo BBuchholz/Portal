@@ -625,6 +625,21 @@ namespace NineWorldsDeep.Sqlite
             "FROM " + TABLE_HIVE_ROOT + " " +
             "WHERE IFNULL(" + COLUMN_HIVE_ROOT_ACTIVATED_AT + ", '') < IFNULL(" + COLUMN_HIVE_ROOT_DEACTIVATED_AT + ", '') ";
 
+        internal static readonly string HIVE_ROOT_UPDATE_ACTIVATE_AT_DEACTIVATED_AT_FOR_NAME_X_Y_Z =
+
+            "UPDATE " + TABLE_HIVE_ROOT + "  " +
+            "SET " + COLUMN_HIVE_ROOT_ACTIVATED_AT + " = MAX(IFNULL(" + COLUMN_HIVE_ROOT_ACTIVATED_AT + ", ''), ?), " +
+            "	" + COLUMN_HIVE_ROOT_DEACTIVATED_AT + " = MAX(IFNULL(" + COLUMN_HIVE_ROOT_DEACTIVATED_AT + ", ''), ?) " +
+            "WHERE " + COLUMN_HIVE_ROOT_NAME + " = ?;  ";
+
+        internal static readonly string HIVE_ROOT_SELECT_ID_ACTIVATED_AT_DEACTIVATED_AT_FOR_NAME =
+
+            "SELECT " + COLUMN_HIVE_ROOT_ID + ", "
+                         + COLUMN_HIVE_ROOT_ACTIVATED_AT + ", "
+                         + COLUMN_HIVE_ROOT_DEACTIVATED_AT + " "
+            + "FROM " + TABLE_HIVE_ROOT + " "
+            + "WHERE " + COLUMN_HIVE_ROOT_NAME + " = ? ;";
+
 
         #endregion
 

@@ -329,7 +329,7 @@ namespace NineWorldsDeep.Db.Sqlite
         {
             cmd.Parameters.Clear();
             cmd.CommandText =
-                NwdContract.UPDATE_SOURCE_EXCERPT_TAGGING_TIMESTAMPS_X_Y_Z; //query is done in NwdSql, needs conversion to NwdContract format
+                NwdContract.UPDATE_SOURCE_EXCERPT_TAGGING_TIMESTAMPS_X_Y_Z;
 
             //// TAGGED PARAM ///////////////////////////////////////////////////
             SQLiteParameter taggedParam = new SQLiteParameter();

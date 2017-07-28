@@ -46,5 +46,10 @@ namespace NineWorldsDeep.Hive
         {
             db.EnsureHiveRoot(hiveRootName);
         }
+
+        internal static void Sync(HiveRoot hr)
+        {
+            db.Sync(hr);
+        }
     }
 }
