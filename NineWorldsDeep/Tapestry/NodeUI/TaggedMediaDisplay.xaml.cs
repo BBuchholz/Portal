@@ -104,9 +104,36 @@ namespace NineWorldsDeep.Tapestry.NodeUI
 
         private void LoadPaths()
         {
-            lvPaths.ItemsSource = FilterPaths(GetPathsForSelectedTag(), txtPathFilter.Text);
+            //lvPaths.ItemsSource = FilterPaths(GetPathsForSelectedTag(), txtPathFilter.Text);
+            lvPaths.ItemsSource = FilterPaths(GetPathsForSelectedTags(), txtPathFilter.Text);
         }
 
+        /// <summary>
+        /// all selected tags
+        /// </summary>
+        /// <returns></returns>
+        private List<string> GetPathsForSelectedTags()
+        {
+            List<string> paths = new List<string>();
+
+            List<string> selectedTags =
+                lvTags.SelectedItems.Cast<TagCountDisplayItem>()
+                                    .Select(t => t.Tag)
+                                    .ToList();
+
+            foreach(string tag in selectedTags)
+            {
+                paths.AddRange(taggingMatrix.GetPathsForTag(tag));
+            }
+
+            //return paths;
+            return paths.Distinct().OrderByDescending(s => s).ToList();
+        }
+
+        /// <summary>
+        /// just a single tag
+        /// </summary>
+        /// <returns></returns>
         private List<string> GetPathsForSelectedTag()
         {
             List<string> paths = new List<string>();
@@ -122,8 +149,7 @@ namespace NineWorldsDeep.Tapestry.NodeUI
 
         private List<string> FilterPaths(List<string> paths, string pathFilter)
         {
-            //TODO: implement
-            return paths;
+            return paths.Where(p => p.ToLower().Contains(pathFilter.ToLower())).ToList();            
         }
 
         private void RefreshTaggingMatrix()
