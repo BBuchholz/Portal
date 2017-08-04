@@ -13,6 +13,7 @@
             <RowDefinition Height="40"/>
             <RowDefinition Height="40"/>
             <RowDefinition Height="*"/>
+            <RowDefinition Height="40"/>
         </Grid.RowDefinitions>
 
         <Expander Header="Utilites"
@@ -67,14 +68,14 @@
                         Content="Purge TimeStamped V5 Lists"
                         Click="btnPurgeTimeStampedLists_Click"/>
 
-                <StackPanel Grid.Row="5"
+                <!--<StackPanel Grid.Row="5"
                             VerticalAlignment="Bottom"
                             HorizontalAlignment="Left"
                             Grid.ColumnSpan="3">
                     
                     <TextBlock x:Name="statusDetail" Text="status update goes here"/>
                     
-                </StackPanel>
+                </StackPanel>-->
 
             </Grid>
             
@@ -102,6 +103,9 @@
 
                             <MenuItem Header="Activate Selected"
                               Click="MenuItemActivateSelected_Click"/>
+                            
+                            <MenuItem Header="Export Selected To XML"
+                              Click="MenuItemExportShelvedSelectedToXml_Click"/>
 
                         </ContextMenu>
 
@@ -147,7 +151,10 @@
                             
                             <MenuItem Header="Shelve Selected"
                               Click="MenuItemShelveSelected_Click"/>
-                            
+
+                            <MenuItem Header="Export Selected To XML"
+                              Click="MenuItemExportActiveSelectedToXml_Click"/>
+
                         </ContextMenu>
                         
                     </ListView.ContextMenu>
@@ -170,8 +177,15 @@
             </Grid>
         
         </Expander>
-        
-        
-        
+
+        <StackPanel Grid.Row="3"
+                            VerticalAlignment="Bottom"
+                            HorizontalAlignment="Left"
+                            Grid.ColumnSpan="3">
+
+            <TextBlock x:Name="statusDetail" Text="status update goes here"/>
+
+        </StackPanel>
+
     </Grid>
 </UserControl>

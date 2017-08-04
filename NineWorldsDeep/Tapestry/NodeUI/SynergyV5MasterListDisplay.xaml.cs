@@ -310,44 +310,83 @@ namespace NineWorldsDeep.Tapestry.NodeUI
                     activeLists.Add(lst);
                 }
 
+                ExportLists(activeLists);
+
+                ////XDocument doc =
+                ////    new XDocument(Xml.Xml.Export(activeLists));
+                //XElement synergySubsetEl = new XElement(Xml.Xml.TAG_SYNERGY_SUBSET);
+
+                //detail = "exporting lists to XML";
+
+                //StatusDetailUpdate(detail);
+
+                //foreach (SynergyV5List lst in activeLists)
+                //{
+
+                //    synergySubsetEl.Add(Xml.Xml.Export(lst));
+                //}
+
                 //XDocument doc =
-                //    new XDocument(Xml.Xml.Export(activeLists));
-                XElement synergySubsetEl = new XElement(Xml.Xml.TAG_SYNERGY_SUBSET);
+                //    new XDocument(
+                //        new XElement("nwd",
+                //            synergySubsetEl));
 
-                detail = "exporting lists to XML";
+                ////here, take doc and save to all sync locations            
+                //string fileName =
+                //    NwdUtils.GetTimeStamp_yyyyMMddHHmmss() + "-nwd-synergy-v5.xml";
 
-                StatusDetailUpdate(detail);
+                //var allFolders =
+                //    Configuration.GetActiveSyncProfileIncomingXmlFolders();
 
-                foreach (SynergyV5List lst in activeLists)
-                {
+                //foreach (string xmlIncomingFolderPath in allFolders)
+                //{
+                //    string fullFilePath =
+                //        System.IO.Path.Combine(xmlIncomingFolderPath, fileName);
 
-                    synergySubsetEl.Add(Xml.Xml.Export(lst));
-                }
-
-                XDocument doc =
-                    new XDocument(
-                        new XElement("nwd",
-                            synergySubsetEl));
-
-                //here, take doc and save to all sync locations            
-                string fileName =
-                    NwdUtils.GetTimeStamp_yyyyMMddHHmmss() + "-nwd-synergy-v5.xml";
-
-                var allFolders =
-                    Configuration.GetActiveSyncProfileIncomingXmlFolders();
-
-                foreach (string xmlIncomingFolderPath in allFolders)
-                {
-                    string fullFilePath =
-                        System.IO.Path.Combine(xmlIncomingFolderPath, fileName);
-
-                    doc.Save(fullFilePath);
-                }
+                //    doc.Save(fullFilePath);
+                //}
 
 
             });
 
             statusDetail.Text = "finished.";
+        }
+
+        private void ExportLists(List<SynergyV5List> listsToExport)
+        {
+            string detail;
+            
+            XElement synergySubsetEl = new XElement(Xml.Xml.TAG_SYNERGY_SUBSET);
+
+            detail = "exporting lists to XML";
+
+            StatusDetailUpdate(detail);
+
+            foreach (SynergyV5List lst in listsToExport)
+            {
+
+                synergySubsetEl.Add(Xml.Xml.Export(lst));
+            }
+
+            XDocument doc =
+                new XDocument(
+                    new XElement("nwd",
+                        synergySubsetEl));
+
+            //here, take doc and save to all sync locations            
+            string fileName =
+                NwdUtils.GetTimeStamp_yyyyMMddHHmmss() + "-nwd-synergy-v5.xml";
+
+            var allFolders =
+                Configuration.GetActiveSyncProfileIncomingXmlFolders();
+
+            foreach (string xmlIncomingFolderPath in allFolders)
+            {
+                string fullFilePath =
+                    System.IO.Path.Combine(xmlIncomingFolderPath, fileName);
+
+                doc.Save(fullFilePath);
+            }
         }
 
         private void MenuItemShelveSelected_Click(object sender, RoutedEventArgs e)
@@ -402,6 +441,44 @@ namespace NineWorldsDeep.Tapestry.NodeUI
             {
                 CreateEnteredList();
             }
+        }
+
+        private async void ExportSelectedToXml(ListView listView)
+        {
+            IList items = (IList)listView.SelectedItems;
+            var selectedItems = items.Cast<SynergyV5ListNode>();
+
+            List<SynergyV5List> listsToExport =
+                new List<SynergyV5List>();
+
+            foreach (SynergyV5List sl in selectedItems.Select(x => x.List))
+            {
+                listsToExport.Add(sl);
+            }
+
+            await Task.Run(() => {
+
+                foreach (SynergyV5List sl in listsToExport)
+                {
+                    StatusDetailUpdate("syncing list: " + sl.ListName);
+                    sl.Sync(db);
+                }
+
+                StatusDetailUpdate("exporting to XML");
+                ExportLists(listsToExport);
+            });
+
+            statusDetail.Text = "finished.";
+        }
+
+        private void MenuItemExportShelvedSelectedToXml_Click(object sender, RoutedEventArgs e)
+        {
+            ExportSelectedToXml(lvSynergyV5ShelvedLists);
+        }
+
+        private void MenuItemExportActiveSelectedToXml_Click(object sender, RoutedEventArgs e)
+        {
+            ExportSelectedToXml(lvSynergyV5ActiveLists);
         }
     }
 }
