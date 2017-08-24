@@ -27,7 +27,7 @@
     <UpdatePeriodically>false</UpdatePeriodically>
     <UpdateRequired>false</UpdateRequired>
     <MapFileExtensions>true</MapFileExtensions>
-    <ApplicationRevision>109</ApplicationRevision>
+    <ApplicationRevision>110</ApplicationRevision>
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <PublishWizardCompleted>true</PublishWizardCompleted>
@@ -227,6 +227,11 @@
     <Compile Include="FragmentMetaWindow.xaml.cs">
       <DependentUpon>FragmentMetaWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Hierophant\TrinaryCorrespondenceTable.xaml.cs">
+      <DependentUpon>TrinaryCorrespondenceTable.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Hierophant\DoublesRow.cs" />
+    <Compile Include="Hierophant\ElementalsRow.cs" />
     <Compile Include="Hierophant\HierophantMainWindow.xaml.cs">
       <DependentUpon>HierophantMainWindow.xaml</DependentUpon>
     </Compile>
@@ -235,6 +240,10 @@
     </Compile>
     <Compile Include="Hierophant\HierophantVertex.cs" />
     <Compile Include="Hierophant\KabbalisticPath.cs" />
+    <Compile Include="Hierophant\LurianicTreeOfLife.xaml.cs">
+      <DependentUpon>LurianicTreeOfLife.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Hierophant\MothersRow.cs" />
     <Compile Include="Hierophant\Sephirah.cs" />
     <Compile Include="Hierophant\TreePath.cs" />
     <Compile Include="Hierophant\VisualKabbalisticTree.xaml.cs">
@@ -624,11 +633,19 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Hierophant\TrinaryCorrespondenceTable.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Hierophant\HierophantMainWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Hierophant\HierophantTreeOfLife.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Hierophant\LurianicTreeOfLife.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

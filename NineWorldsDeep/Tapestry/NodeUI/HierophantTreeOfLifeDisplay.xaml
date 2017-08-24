@@ -68,7 +68,17 @@
                   Expanded="Expander_Expanded"
                   Collapsed="Expander_Collapsed">
 
-            <hiero:HierophantTreeOfLife x:Name="hierophantTreeOfLifeInstance"/>
+            <TabControl TabStripPlacement="Right">
+
+                <TabItem Header="Golden Dawn">
+                    <hiero:HierophantTreeOfLife x:Name="hierophantTreeOfLifeInstance"/>
+                </TabItem>
+                <TabItem Header="Lurianic">
+                    <hiero:LurianicTreeOfLife x:Name="lurianicTreeOfLifeInstance"/>
+                </TabItem>
+                
+            </TabControl>
+            
 
         </Expander>
 
@@ -80,6 +90,14 @@
                   Expanded="Expander_Expanded"
                   Collapsed="Expander_Collapsed">
 
+            <TabControl TabStripPlacement="Right">
+                <TabItem Header="Trinary">
+                    <hiero:TrinaryCorrespondenceTable/>
+                </TabItem>
+                <TabItem Header="Single (777)"/>
+                <TabItem Header="Single (GD)"/>
+            </TabControl>
+             
 
         </Expander>
 
