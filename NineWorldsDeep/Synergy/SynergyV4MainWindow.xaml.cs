@@ -657,7 +657,7 @@ namespace NineWorldsDeep.Synergy
 
         private async void AsyncMenuItemImportSynergyV5_Click(object sender, RoutedEventArgs e)
         {
-            var allPaths = Configuration.GetSynergyV5XmlImportPaths();
+            var allPaths = Configuration.GetSynergyV5XmlImportFilePaths();
             var count = 0;
             var total = allPaths.Count();
 

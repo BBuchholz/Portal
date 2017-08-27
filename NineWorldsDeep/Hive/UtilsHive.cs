@@ -17,6 +17,11 @@ namespace NineWorldsDeep.Hive
             return db.GetActiveRoots();
         }
 
+        public static HiveRoot GetLocalHiveRoot()
+        {
+            return db.GetActiveRootByName(Configuration.GetLocalHiveRootName());
+        }
+
         internal static void RefreshLobes(HiveRoot hr)
         {
             hr.Add(new MockHiveLobe("test lobe : " + TimeStamp.NowUTC().ToString()));

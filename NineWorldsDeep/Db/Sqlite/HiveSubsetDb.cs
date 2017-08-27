@@ -45,6 +45,42 @@ namespace NineWorldsDeep.Db.Sqlite
             return lst;
         }
 
+        /// <summary>
+        /// Will get the hive root for the name in Configuration.GetLocalHiveRootName().
+        /// Will create it in the database if it doesn't exist.
+        /// </summary>
+        /// <param name="v"></param>
+        /// <returns></returns>
+        public HiveRoot GetActiveRootByName(string name)
+        {
+            List<HiveRoot> activeRoots = new List<HiveRoot>();
+
+            using (var conn = new SQLiteConnection(
+                @"Data Source=" + Configuration.GetSqliteDbPath(DbName)))
+            {
+                conn.Open();
+
+                using (var cmd = new SQLiteCommand(conn))
+                {
+                    using (var transaction = conn.BeginTransaction())
+                    {
+                        EnsureHiveRoot(name, cmd);
+                        activeRoots = GetActiveRoots(cmd);
+
+                        transaction.Commit();
+                    }
+                }
+
+                conn.Close();
+            }
+
+            return activeRoots
+                .Where(x => x.HiveRootName.Equals(
+                    name, 
+                    StringComparison.CurrentCultureIgnoreCase))
+                .First();
+        }
+
         private List<HiveRoot> GetDeactivatedRoots(SQLiteCommand cmd)
         {
             List<HiveRoot> lst =

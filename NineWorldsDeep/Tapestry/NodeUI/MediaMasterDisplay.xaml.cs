@@ -542,7 +542,8 @@ namespace NineWorldsDeep.Tapestry.NodeUI
 
         private async void btnImportXml_Click(object sender, RoutedEventArgs e)
         {
-            var allPaths = Configuration.GetMnemosyneXmlImportPaths();
+            var allPaths = Configuration.GetMnemosyneXmlImportFilePaths();
+            allPaths.AddRange(Configuration.GetHiveMnemosyneV5XmlImportFilePaths());
             var count = 0;
             var total = allPaths.Count();           
 
@@ -668,8 +669,13 @@ namespace NineWorldsDeep.Tapestry.NodeUI
                     var allFolders =
                         Configuration.GetActiveSyncProfileIncomingXmlFolders();
 
+                    allFolders.AddRange(Configuration.GetHiveFoldersForXmlExport());
+
                     foreach (string xmlIncomingFolderPath in allFolders)
                     {
+                        //Ensure the directory
+                        Directory.CreateDirectory(xmlIncomingFolderPath);
+
                         string fullFilePath =
                             System.IO.Path.Combine(xmlIncomingFolderPath, fileName);
 

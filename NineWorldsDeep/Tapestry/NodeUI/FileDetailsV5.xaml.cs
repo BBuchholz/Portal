@@ -5,6 +5,7 @@ using NineWorldsDeep.Tapestry.Nodes;
 using NineWorldsDeep.Warehouse;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading;
@@ -169,8 +170,13 @@ namespace NineWorldsDeep.Tapestry.NodeUI
                     var allFolders =
                         Configuration.GetActiveSyncProfileIncomingXmlFolders();
 
+                    allFolders.AddRange(Configuration.GetHiveFoldersForXmlExport());
+
                     foreach (string xmlIncomingFolderPath in allFolders)
                     {
+                        //Ensure the directory
+                        Directory.CreateDirectory(xmlIncomingFolderPath);
+
                         string fullFilePath =
                             System.IO.Path.Combine(xmlIncomingFolderPath, fileName);
 

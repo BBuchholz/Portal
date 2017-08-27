@@ -231,7 +231,8 @@ namespace NineWorldsDeep.Tapestry.NodeUI
 
         private async void btnImportXml_Click(object sender, RoutedEventArgs e)
         {
-            var allPaths = Configuration.GetSynergyV5XmlImportPaths();
+            var allPaths = Configuration.GetSynergyV5XmlImportFilePaths();
+            allPaths.AddRange(Configuration.GetHiveSynergyV5XmlImportFilePaths());
             var count = 0;
             var total = allPaths.Count();
 
@@ -312,41 +313,6 @@ namespace NineWorldsDeep.Tapestry.NodeUI
 
                 ExportLists(activeLists);
 
-                ////XDocument doc =
-                ////    new XDocument(Xml.Xml.Export(activeLists));
-                //XElement synergySubsetEl = new XElement(Xml.Xml.TAG_SYNERGY_SUBSET);
-
-                //detail = "exporting lists to XML";
-
-                //StatusDetailUpdate(detail);
-
-                //foreach (SynergyV5List lst in activeLists)
-                //{
-
-                //    synergySubsetEl.Add(Xml.Xml.Export(lst));
-                //}
-
-                //XDocument doc =
-                //    new XDocument(
-                //        new XElement("nwd",
-                //            synergySubsetEl));
-
-                ////here, take doc and save to all sync locations            
-                //string fileName =
-                //    NwdUtils.GetTimeStamp_yyyyMMddHHmmss() + "-nwd-synergy-v5.xml";
-
-                //var allFolders =
-                //    Configuration.GetActiveSyncProfileIncomingXmlFolders();
-
-                //foreach (string xmlIncomingFolderPath in allFolders)
-                //{
-                //    string fullFilePath =
-                //        System.IO.Path.Combine(xmlIncomingFolderPath, fileName);
-
-                //    doc.Save(fullFilePath);
-                //}
-
-
             });
 
             statusDetail.Text = "finished.";
@@ -380,8 +346,13 @@ namespace NineWorldsDeep.Tapestry.NodeUI
             var allFolders =
                 Configuration.GetActiveSyncProfileIncomingXmlFolders();
 
+            allFolders.AddRange(Configuration.GetHiveFoldersForXmlExport());
+
             foreach (string xmlIncomingFolderPath in allFolders)
             {
+                //Ensure the directory
+                Directory.CreateDirectory(xmlIncomingFolderPath);
+
                 string fullFilePath =
                     System.IO.Path.Combine(xmlIncomingFolderPath, fileName);
 
