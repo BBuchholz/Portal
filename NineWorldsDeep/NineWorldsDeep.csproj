@@ -445,6 +445,7 @@
     <Compile Include="Tapestry\Nodes\HierophantTreeOfLifeNode.cs" />
     <Compile Include="Tapestry\Nodes\HierophantVertexNode.cs" />
     <Compile Include="Tapestry\Nodes\HiveMainNode.cs" />
+    <Compile Include="Tapestry\Nodes\HiveMigrationRootNode.cs" />
     <Compile Include="Tapestry\Nodes\LocalConfigNode.cs" />
     <Compile Include="Tapestry\Nodes\MediaMasterNode.cs" />
     <Compile Include="Tapestry\Nodes\MediaTagNode.cs" />
@@ -535,6 +536,9 @@
     </Compile>
     <Compile Include="Tapestry\NodeUI\HiveMain.xaml.cs">
       <DependentUpon>HiveMain.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Tapestry\NodeUI\HiveMigrationsDisplay.xaml.cs">
+      <DependentUpon>HiveMigrationsDisplay.xaml</DependentUpon>
     </Compile>
     <Compile Include="Tapestry\NodeUI\IAsyncStatusResponsive.cs" />
     <Compile Include="Tapestry\NodeUI\ImageNodeDisplay.xaml.cs">
@@ -818,6 +822,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Tapestry\NodeUI\HiveMain.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Tapestry\NodeUI\HiveMigrationsDisplay.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

@@ -1,5 +1,6 @@
 ﻿using NineWorldsDeep.Hive;
 using NineWorldsDeep.Mnemosyne.V5;
+using NineWorldsDeep.Tapestry.Nodes;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -223,7 +224,7 @@ namespace NineWorldsDeep.Tapestry.NodeUI
                 }
             }
         }
-
+        
         private void MenuItemActivateHiveRoot_Click(object sender, RoutedEventArgs e)
         {
             MenuItem mnu = sender as MenuItem;
@@ -268,5 +269,85 @@ namespace NineWorldsDeep.Tapestry.NodeUI
                 }
             }
         }
+        
+        private void MenuItemOpenAsMigrationA_Click(object sender, RoutedEventArgs e)
+        {
+            MenuItem mnu = sender as MenuItem;
+            TreeViewItem item = null;
+            if (mnu != null)
+            {
+                item = ((ContextMenu)mnu.Parent).PlacementTarget as TreeViewItem;
+
+                if (item != null && item.Tag != null)
+                {
+                    if (item.Tag is HiveRoot)
+                    {
+                        var hr = item.Tag as HiveRoot;
+
+                        OpenAsMigration(hr, 
+                            HiveMigrationDisplayDestination.SteadA);
+                        
+                    }
+                }
+            }
+        }
+
+        private void OpenAsMigration(HiveRoot hr, 
+            HiveMigrationDisplayDestination destination)
+        {
+            if (hr != null)
+            {
+                var hmrn = new HiveMigrationRootNode(hr);
+                hmrn.Destination = destination;
+
+                HiveRootClickedEventArgs args =
+                    new HiveRootClickedEventArgs(hmrn);
+
+                OnHiveRootClicked(args);
+            }
+        }
+
+        private void MenuItemOpenAsMigrationB_Click(object sender, RoutedEventArgs e)
+        {
+            MenuItem mnu = sender as MenuItem;
+            TreeViewItem item = null;
+            if (mnu != null)
+            {
+                item = ((ContextMenu)mnu.Parent).PlacementTarget as TreeViewItem;
+
+                if (item != null && item.Tag != null)
+                {
+                    if (item.Tag is HiveRoot)
+                    {
+                        var hr = item.Tag as HiveRoot;
+
+                        OpenAsMigration(hr, HiveMigrationDisplayDestination.SteadB);
+                    }
+                }
+            }
+        }
+        
+        #region "hive root click event handling"
+
+        protected virtual void OnHiveRootClicked(HiveRootClickedEventArgs args)
+        {
+            HiveRootClicked?.Invoke(this, args);
+        }
+
+        public event EventHandler<HiveRootClickedEventArgs> HiveRootClicked;
+
+        public class HiveRootClickedEventArgs
+        {
+            public HiveRootClickedEventArgs(HiveMigrationRootNode nd)
+            {
+                HiveMigrationRootNode = nd;
+            }
+
+            public HiveMigrationRootNode HiveMigrationRootNode { get; private set; }
+        }
+
+        #endregion
+
     }
 }
+

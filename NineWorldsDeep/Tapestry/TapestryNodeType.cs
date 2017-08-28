@@ -33,6 +33,7 @@
         TaggedMediaMain,
         BooksApiMain,
         SpeechApiMain,
-        PhotosApiMain
+        PhotosApiMain,
+        HiveMigration
     }
 }

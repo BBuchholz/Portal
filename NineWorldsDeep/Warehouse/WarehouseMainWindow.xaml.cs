@@ -915,5 +915,6 @@ namespace NineWorldsDeep.Warehouse
         {
             UI.Utils.MaximizeMainWindow();
         }
+        
     }
 }

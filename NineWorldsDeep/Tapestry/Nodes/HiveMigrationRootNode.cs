@@ -1,4 +1,5 @@
-﻿using System;
+﻿using NineWorldsDeep.Hive;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,16 +7,19 @@ using System.Threading.Tasks;
 
 namespace NineWorldsDeep.Tapestry.Nodes
 {
-    public class HiveMainNode : TapestryNode
+    public class HiveMigrationRootNode : TapestryNode
     {
-        public HiveMainNode()
-            : base("Hive/Main")
+        public HiveRoot HiveRoot { get; set; }
+
+        public HiveMigrationRootNode(HiveRoot hr)
+            : base("Hive/Migrations/" + hr.HiveRootName)
         {
+            HiveRoot = hr;
         }
 
         public override string GetShortName()
         {
-            return "Hive";
+            return "Hive Migration " + HiveRoot.HiveRootName;
         }
 
         public override bool Parallels(TapestryNode nd)
@@ -38,8 +42,10 @@ namespace NineWorldsDeep.Tapestry.Nodes
         {
             get
             {
-                return TapestryNodeType.HiveMain;
+                return TapestryNodeType.HiveMigration;
             }
         }
+
+        public object Destination { get; internal set; }
     }
 }

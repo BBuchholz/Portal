@@ -13,6 +13,10 @@
                       Click="MenuItemEnsureFolderStructure_Click"/>
             <MenuItem Header="Deactivate Hive Root"
                       Click="MenuItemDeactivateHiveRoot_Click"/>
+            <MenuItem Header="Open As Migration A"
+                      Click="MenuItemOpenAsMigrationA_Click"/>
+            <MenuItem Header="Open As Migration B"
+                      Click="MenuItemOpenAsMigrationB_Click"/>
         </ContextMenu>
         <ContextMenu x:Key="cmHiveLobeMenu">
             <MenuItem Header="Hive Lobe Test Menu Item"

@@ -162,6 +162,18 @@
 
                 </Grid>
 
+                <Grid Grid.Column="2">
+
+                    <!--<CheckBox Content="Hive XML"
+                              x:Name="chkHiveXml"
+                              HorizontalAlignment="Center"
+                              VerticalAlignment="Center"
+                              IsChecked="False"
+                              Unchecked="chkHiveXml_checkToggled"
+                              Checked="chkHiveXml_checkToggled"/>-->
+
+                </Grid>
+                
             </Grid>
             
             <!--grid for datagrid-->

@@ -44,6 +44,15 @@ namespace NineWorldsDeep.Tapestry
             archivistMasterDisplay.SourceSelected += ArchivistMasterDisplay_SourceSelected;
             archivistSourceDisplay.HyperlinkClicked += ArchivistSourceDisplay_HyperlinkClicked;
             taggedMediaDisplay.PathSelected += TaggedMediaDisplay_PathSelected;
+            hiveMain.HiveRootClicked += HiveMain_HiveRootClicked;
+        }
+
+        private void HiveMain_HiveRootClicked(object sender, HiveMain.HiveRootClickedEventArgs e)
+        {
+            if (historyHandler != null)
+            {
+                historyHandler.PerformLoad(this, e.HiveMigrationRootNode);
+            }
         }
 
         private void TaggedMediaDisplay_PathSelected(object sender, TaggedMediaDisplay.PathSelectedEventArgs e)
@@ -185,6 +194,7 @@ namespace NineWorldsDeep.Tapestry
             contentControls.Add(ccBooksApiNode);
             contentControls.Add(ccSpeechApiNode);
             contentControls.Add(ccPhotosApiNode);
+            contentControls.Add(ccHiveMigrationsNode);
         }
 
         private void ResolveContentControl(TapestryNode node)
@@ -298,6 +308,13 @@ namespace NineWorldsDeep.Tapestry
 
                     case TapestryNodeType.HiveMain:
                         SetVisible(ccHiveMainNode);                        
+                        break;
+
+                    case TapestryNodeType.HiveMigration:
+                        SetVisible(ccHiveMigrationsNode);
+                        HiveMigrationRootNode hiveRootNode =
+                            (HiveMigrationRootNode)node;
+                        hiveMigrationsDisplay.Display(hiveRootNode);
                         break;
 
                     case TapestryNodeType.TaggedMediaMain:

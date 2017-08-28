@@ -99,6 +99,11 @@
             <nodeUI:HiveMain x:Name="hiveMain"/>
         </ContentControl>
 
+        <ContentControl x:Name="ccHiveMigrationsNode"
+                        Visibility="Collapsed">
+            <nodeUI:HiveMigrationsDisplay x:Name="hiveMigrationsDisplay"/>
+        </ContentControl>
+        
         <ContentControl x:Name="ccTaggedMediaNode"
                         Visibility="Collapsed">
             <nodeUI:TaggedMediaDisplay x:Name="taggedMediaDisplay"/>
