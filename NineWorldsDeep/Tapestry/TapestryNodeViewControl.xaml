@@ -75,7 +75,7 @@
             <nodeUI:HierophantTreeOfLifeDisplay x:Name="hierophantTreeOfLifeDisplay"/>
         </ContentControl>
 
-        <ContentControl x:Name="ccHierophantVertexNode">
+        <ContentControl x:Name="ccHierophantVertexDetailNode">
             <nodeUI:HierophantVertexDisplay x:Name="hierophantVertexDisplay"/>
         </ContentControl>
 

@@ -34,6 +34,8 @@
         BooksApiMain,
         SpeechApiMain,
         PhotosApiMain,
-        HiveMigration
+        HiveMigration,
+        HierophantVertexDetail,
+        NullHierophantVertexDetail
     }
 }

@@ -41,10 +41,23 @@
                 </Grid.RowDefinitions>
 
                 <Button x:Name="btnExample"
-                    Grid.Row="1"
+                    Grid.Row="0"
                     Grid.Column="0"
                     Margin="5"
                     Content="Example Button"/>
+
+
+                <CheckBox Content="Load Local (this UI)"
+                          Grid.Row="1"
+                          Grid.Column="0"
+                          x:Name="chkLoadLocal"
+                          HorizontalAlignment="Center"
+                          VerticalAlignment="Center"
+                          IsChecked="False"/>
+
+                <TextBlock x:Name="tbTestText"
+                           Grid.Row="2"
+                           Grid.ColumnSpan="3"/>
 
                 <StackPanel Grid.Row="5"
                             VerticalAlignment="Bottom"

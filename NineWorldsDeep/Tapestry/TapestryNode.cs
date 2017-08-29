@@ -78,6 +78,8 @@ namespace NineWorldsDeep.Tapestry
             }
         }
 
+        public bool LoadLocal { get; set; } = false;
+
         protected virtual IEnumerable<TapestryNode> GetChildren()
         {
             return uriToChildFragments.Values;

@@ -185,7 +185,7 @@ namespace NineWorldsDeep.Tapestry
             contentControls.Add(ccSynergyV5ListNode);
             contentControls.Add(ccMediaMasterNode);
             contentControls.Add(ccHierophantTreeOfLifeNode);
-            contentControls.Add(ccHierophantVertexNode);
+            contentControls.Add(ccHierophantVertexDetailNode);
             contentControls.Add(ccArchivistMasterNode);
             contentControls.Add(ccArchivistSourceNode);
             contentControls.Add(ccMediaTagNode);
@@ -255,17 +255,30 @@ namespace NineWorldsDeep.Tapestry
                         SetVisible(ccHierophantTreeOfLifeNode);
                         break;
 
+                    case TapestryNodeType.HierophantVertexDetail:
+
+                        //SetVisible(ccHierophantVertexDetailNode);
+                        //HierophantVertexDetailNode vNode = (HierophantVertexDetailNode)node;
+                        //hierophantVertexDisplay.Display(vNode);
+                        break;
+
+                    case TapestryNodeType.NullHierophantVertexDetail:
+
+                        //SetVisible(ccHierophantVertexDetailNode);
+                        //hierophantVertexDisplay.Display((HierophantVertexDetailNode)node);
+                        break;
+
                     case TapestryNodeType.HierophantVertex:
 
-                        SetVisible(ccHierophantVertexNode);
+                        SetVisible(ccHierophantTreeOfLifeNode);
                         HierophantVertexNode vNode = (HierophantVertexNode)node;
-                        hierophantVertexDisplay.Display(vNode);
+                        hierophantTreeOfLifeDisplay.Display(vNode);
                         break;
 
                     case TapestryNodeType.NullHierophantVertex:
 
-                        SetVisible(ccHierophantVertexNode);
-                        hierophantVertexDisplay.Display((HierophantVertexNode)node);
+                        SetVisible(ccHierophantTreeOfLifeNode);
+                        hierophantTreeOfLifeDisplay.Display((HierophantVertexNode)node);
                         break;
 
                     case TapestryNodeType.MediaMaster:
