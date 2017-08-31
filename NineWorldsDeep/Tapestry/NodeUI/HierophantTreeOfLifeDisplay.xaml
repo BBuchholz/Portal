@@ -41,10 +41,11 @@
                 </Grid.RowDefinitions>
 
                 <Button x:Name="btnExample"
-                    Grid.Row="0"
-                    Grid.Column="0"
-                    Margin="5"
-                    Content="Example Button"/>
+                        Grid.Row="0"
+                        Grid.Column="0"
+                        Margin="5"
+                        Content="PRESS THIS TO DEMO SEMANTIC MAP RENDER"
+                        Click="btnExample_Click"/>
 
 
                 <CheckBox Content="Load Local (this UI)"
@@ -56,7 +57,7 @@
                           IsChecked="False"/>
 
                 <TextBlock x:Name="tbTestText"
-                           Grid.Row="2"
+                           Grid.Row="4"
                            Grid.ColumnSpan="3"/>
 
                 <StackPanel Grid.Row="5"

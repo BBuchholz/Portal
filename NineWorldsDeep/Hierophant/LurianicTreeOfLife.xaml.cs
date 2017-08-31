@@ -21,10 +21,20 @@ namespace NineWorldsDeep.Hierophant
     /// <summary>
     /// Interaction logic for LurianicTreeOfLife.xaml
     /// </summary>
-    public partial class LurianicTreeOfLife : UserControl
+    public partial class LurianicTreeOfLife : UserControl, ISemanticallyAddressable
     {
         private Dictionary<Shape, HierophantUiCoupling> shapesToCouplings =
             new Dictionary<Shape, HierophantUiCoupling>();
+        private Dictionary<SemanticKey, HierophantUiCoupling> keysToCouplings =
+            new Dictionary<SemanticKey, HierophantUiCoupling>();
+
+        public IEnumerable<SemanticKey> SemanticKeys
+        {
+            get
+            {
+                return keysToCouplings.Keys;
+            }
+        }
 
         public LurianicTreeOfLife()
         {
@@ -32,13 +42,19 @@ namespace NineWorldsDeep.Hierophant
             IndexSephiroth();
             CreateAndDrawPaths();
         }
-        
+
+        public void Display(ISemanticMap semMap)
+        {
+            semMap.Render(this);
+        }
+
         private Sephirah AddSephirahCoupling(HierophantCanvasElement canvasElement, string sephirahName)
         {
             Sephirah seph = new Sephirah(sephirahName);
             HierophantUiCoupling coupling =
                 new HierophantUiCoupling(canvasElement, seph);
             shapesToCouplings[canvasElement.ShapeId] = coupling;
+            keysToCouplings[new SemanticKey(sephirahName)] = coupling;
 
             return seph;
         }
@@ -66,8 +82,9 @@ namespace NineWorldsDeep.Hierophant
         {
             TreePath tp = new TreePath(pathNameId);
 
-            shapesToCouplings[canvasElement.ShapeId] =
-                new HierophantUiCoupling(canvasElement, tp);
+            var coupling = new HierophantUiCoupling(canvasElement, tp);
+            shapesToCouplings[canvasElement.ShapeId] = coupling;
+            keysToCouplings[new SemanticKey(pathNameId)] = coupling;
 
             return tp;
         }
@@ -209,6 +226,20 @@ namespace NineWorldsDeep.Hierophant
                 new HierophantVertexClickedEventArgs(new NullHierophantVertexNode());
 
             OnVertexClicked(args);
+        }
+
+        public void Highlight(SemanticKey semanticKey)
+        {
+            var shape = keysToCouplings[semanticKey].CanvasElement.ShapeId;
+
+            shape.Fill = Brushes.Red;
+        }
+
+        public void ClearHighlight(SemanticKey semanticKey)
+        {
+            var shape = keysToCouplings[semanticKey].CanvasElement.ShapeId;
+
+            shape.Fill = Brushes.White;
         }
     }
     

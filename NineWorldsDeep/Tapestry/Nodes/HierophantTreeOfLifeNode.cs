@@ -15,7 +15,7 @@ namespace NineWorldsDeep.Tapestry.Nodes
 
         public override string GetShortName()
         {
-            return "Hierophant Tree Of Life";
+            return "Hierophant";
         }
 
         public override bool Parallels(TapestryNode nd)

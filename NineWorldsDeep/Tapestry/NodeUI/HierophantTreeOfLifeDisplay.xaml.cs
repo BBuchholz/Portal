@@ -81,6 +81,7 @@ namespace NineWorldsDeep.Tapestry.NodeUI
                 }
                 current = VisualTreeHelper.GetParent(current);
             };
+
             return null;
         }
 
@@ -95,6 +96,19 @@ namespace NineWorldsDeep.Tapestry.NodeUI
             }
 
             tbTestText.Text = details;
+        }
+
+        private void btnExample_Click(object sender, RoutedEventArgs e)
+        {
+            TreeOfLifeMap map = new TreeOfLifeMap();
+
+            map.Select(new SemanticKey("Binah-Chokmah")); //should display on both
+            map.Select(new SemanticKey("Chesed")); //should display on both
+            map.Select(new SemanticKey("Hod-Malkuth")); //should only display on GD tree
+            map.Select(new SemanticKey("Chokmah-Geburah")); //should only display on Lurianic tree
+
+            hierophantTreeOfLifeInstance.Display(map);
+            lurianicTreeOfLifeInstance.Display(map);
         }
     }
 }
