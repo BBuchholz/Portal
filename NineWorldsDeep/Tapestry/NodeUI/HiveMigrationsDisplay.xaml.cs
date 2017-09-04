@@ -40,8 +40,10 @@ namespace NineWorldsDeep.Tapestry.NodeUI
             var hr = HiveMigrationRootNode.HiveRoot;
 
 
-            lblTest.Content = hr.HiveRootName + " received into " +  
+            string msg = hr.HiveRootName + " received into " +  
                 HiveMigrationRootNode.Destination.ToString();
+
+            UI.Display.Message(msg);
         }
 
     }

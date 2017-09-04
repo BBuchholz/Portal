@@ -963,6 +963,8 @@
     <Content Include="client_secrets.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Resource Include="ResourceImages\icon_sync_black_24dp_1x.png" />
+    <Resource Include="ResourceImages\icon_sync_black_24dp_2x.png" />
     <Content Include="SQLite.Interop.dll">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
