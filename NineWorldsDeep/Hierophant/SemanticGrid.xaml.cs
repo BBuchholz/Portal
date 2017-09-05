@@ -58,10 +58,80 @@ namespace NineWorldsDeep.Hierophant
          *
          */
 
+
+        private Dictionary<SemanticKey, Dictionary<string, string>> allRows;
+
+        public Dictionary<SemanticKey, Dictionary<string, string>> AllRows
+        {
+            get { return allRows; }
+            set { allRows = value; }
+        }
+
         public SemanticGrid()
         {
             InitializeComponent();
-            Mockup();
+            //Mockup();
+            MockupWithDictionary();
+        }
+
+        private void MockupWithDictionary()
+        {
+            //adapted from: https://stackoverflow.com/a/24361223/670768 
+
+            AllRows = new Dictionary<SemanticKey, Dictionary<string, string>>();
+
+            var row = new Dictionary<string, string>();
+
+            row.Add("Planet", "Mercury");
+            row.Add("Alchemical Element", "Sulphur");
+            row.Add("Astrological Sign", "Aries");
+
+            AllRows.Add(new SemanticKey("testKey"), row);
+
+            RunListExample(dgridSemanticMapDisplayOne); //only works partially, is for list, generates columns with names but doesn't actually load values cuz dictionary...
+            RunDictExample(dgridSemanticMapDisplayTwo); //modding this one
+        }
+
+        private void RunDictExample(DataGrid dgrid)
+        {
+            int count = 0;
+
+            foreach (Dictionary<string, string> thisRow in AllRows.Values)
+            {
+                //asdsf;//this needs to change, count was for List<> in example
+                if (thisRow.Keys.Count > count)
+                {
+                    for (int i = count; i < thisRow.Keys.Count; i++)
+                    {
+                        DataGridTextColumn col = new DataGridTextColumn();
+                        col.Header = "testing " + i;
+                        col.Binding = new Binding(string.Format("Value[{0}]", i)); //asdf;//this needs to change, count was for List<> in example
+                        dgrid.Columns.Add(col);
+                    }
+                    count = thisRow.Keys.Count;
+                }
+            }
+        }
+
+
+        private void RunListExample(DataGrid dgrid)
+        {
+            int count = 0;
+
+            foreach (Dictionary<string, string> thisRow in AllRows.Values)
+            {
+                if (thisRow.Keys.Count > count)
+                {
+                    for (int i = count; i < thisRow.Keys.Count; i++)
+                    {
+                        DataGridTextColumn col = new DataGridTextColumn();
+                        col.Header = "testing " + i;
+                        col.Binding = new Binding(string.Format("Value[{0}]", i)); 
+                        dgrid.Columns.Add(col);
+                    }
+                    count = thisRow.Keys.Count;
+                }
+            }
         }
 
         private void Mockup()

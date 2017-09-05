@@ -9,13 +9,22 @@
     <Grid>
         <TabControl TabStripPlacement="Bottom">
             <TabItem Header="SemanticGroup">
-                <DataGrid x:Name="dgridSemanticMapDisplayOne"/>
+                <DataGrid x:Name="dgridSemanticMapDisplayOne"
+                          ItemsSource="{Binding AllRows}"
+                          AutoGenerateColumns="False">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="SemanticKey"
+                                            Binding="{Binding Key}"/>
+                    </DataGrid.Columns>
+                </DataGrid>
             </TabItem>
             <TabItem Header="Add And Remove">
-                <DataGrid x:Name="dgridSemanticMapDisplayTwo"/>
+                <DataGrid x:Name="dgridSemanticMapDisplayTwo"
+                          AutoGenerateColumns="False"/>
             </TabItem>
             <TabItem Header="Programmatically">
-                <DataGrid x:Name="dgridSemanticMapDisplayThree"/>
+                <DataGrid x:Name="dgridSemanticMapDisplayThree"
+                          AutoGenerateColumns="False"/>
             </TabItem>
         </TabControl>
     </Grid>
