@@ -27,7 +27,7 @@
     <UpdatePeriodically>false</UpdatePeriodically>
     <UpdateRequired>false</UpdateRequired>
     <MapFileExtensions>true</MapFileExtensions>
-    <ApplicationRevision>113</ApplicationRevision>
+    <ApplicationRevision>114</ApplicationRevision>
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <PublishWizardCompleted>true</PublishWizardCompleted>
@@ -179,7 +179,7 @@
     <Compile Include="Core\TaggingBase.cs" />
     <Compile Include="Core\TaggingMatrix.cs" />
     <Compile Include="Core\TimeStamp.cs" />
-    <Compile Include="Core\UiUtils.cs" />
+    <Compile Include="Core\UtilsUi.cs" />
     <Compile Include="Core\WordUtils.cs" />
     <Compile Include="Db\DbAdapterBase.cs" />
     <Compile Include="Db\NwdDeviceKey.cs" />
@@ -228,8 +228,17 @@
       <DependentUpon>FragmentMetaWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Hierophant\ISemanticallyAddressable.cs" />
-    <Compile Include="Hierophant\ISemanticMap.cs" />
+    <Compile Include="Hierophant\ISemanticallyRenderable.cs" />
+    <Compile Include="Hierophant\SemanticGrid.xaml.cs">
+      <DependentUpon>SemanticGrid.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Hierophant\SemanticGroup.cs" />
     <Compile Include="Hierophant\SemanticKey.cs" />
+    <Compile Include="Hierophant\SemanticMap.cs" />
+    <Compile Include="Hierophant\SemanticMatrix.xaml.cs">
+      <DependentUpon>SemanticMatrix.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Hierophant\SemanticSet.cs" />
     <Compile Include="Hierophant\TreeOfLifeMap.cs" />
     <Compile Include="Hierophant\TrinaryCorrespondenceTable.xaml.cs">
       <DependentUpon>TrinaryCorrespondenceTable.xaml</DependentUpon>
@@ -638,6 +647,14 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="FragmentMetaWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Hierophant\SemanticGrid.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Hierophant\SemanticMatrix.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

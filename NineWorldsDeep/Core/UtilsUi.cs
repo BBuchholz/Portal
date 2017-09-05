@@ -5,7 +5,7 @@ using System.Windows.Media;
 
 namespace NineWorldsDeep.Core
 {
-    internal class UiUtils
+    internal class UtilsUi
     {
         public static T FindAncestor<T>(DependencyObject current)
             where T : DependencyObject
@@ -23,6 +23,20 @@ namespace NineWorldsDeep.Core
                 current = VisualTreeHelper.GetParent(current);
             };
             return null;
+        }
+        
+        /// <summary>
+        /// manages grid rows to share space between multiple expanded expanders
+        /// </summary>
+        /// <param name="expander"></param>
+        public static void ProcessExpanderState(Expander expander)
+        {
+            Grid parent = FindAncestor<Grid>(expander);
+            int rowIndex = Grid.GetRow(expander);
+
+            if (parent.RowDefinitions.Count > rowIndex && rowIndex >= 0)
+                parent.RowDefinitions[rowIndex].Height =
+                    (expander.IsExpanded ? new GridLength(1, GridUnitType.Star) : GridLength.Auto);
         }
 
         public static T GetTemplateSibling<T,K>(K uiSibling, string siblingName)

@@ -91,7 +91,7 @@ namespace NineWorldsDeep.Tapestry.NodeUI
         /// <param name="expander"></param>
         private void ProcessExpanderState(Expander expander)
         {
-            Grid parent = Core.UiUtils.FindAncestor<Grid>(expander);
+            Grid parent = Core.UtilsUi.FindAncestor<Grid>(expander);
             int rowIndex = Grid.GetRow(expander);
 
             if (parent.RowDefinitions.Count > rowIndex && rowIndex >= 0)
@@ -133,11 +133,11 @@ namespace NineWorldsDeep.Tapestry.NodeUI
             //mimics ArchivistSourceDisplay.ButtonEditTags_Click(...)
 
             TextBlock tbTagString =
-                Core.UiUtils.GetTemplateSibling<TextBlock, Button>(
+                Core.UtilsUi.GetTemplateSibling<TextBlock, Button>(
                     (Button)sender, "tbTagString");
 
             TextBox txtTagString =
-                Core.UiUtils.GetTemplateSibling<TextBox, Button>(
+                Core.UtilsUi.GetTemplateSibling<TextBox, Button>(
                     (Button)sender, "txtTagString");
             
             ArchivistSourceExcerpt ase =
@@ -146,11 +146,11 @@ namespace NineWorldsDeep.Tapestry.NodeUI
             txtTagString.Text = ase.TagString;
 
             StackPanel spTextBlock =
-                Core.UiUtils.GetTemplateSibling<StackPanel, Button>(
+                Core.UtilsUi.GetTemplateSibling<StackPanel, Button>(
                     (Button)sender, "spTagStringTextBlock");
 
             StackPanel spTextBox =
-                Core.UiUtils.GetTemplateSibling<StackPanel, Button>(
+                Core.UtilsUi.GetTemplateSibling<StackPanel, Button>(
                     (Button)sender, "spTagStringTextBox");
 
             spTextBox.Visibility = Visibility.Visible;
@@ -163,7 +163,7 @@ namespace NineWorldsDeep.Tapestry.NodeUI
             //mimics ArchivistSourceDisplay.ButtonSaveTags_Click(...)
 
             TextBox txtTagString =
-                Core.UiUtils.GetTemplateSibling<TextBox, Button>(
+                Core.UtilsUi.GetTemplateSibling<TextBox, Button>(
                     (Button)sender, "txtTagString");
 
             ArchivistSourceExcerpt ase =
@@ -178,11 +178,11 @@ namespace NineWorldsDeep.Tapestry.NodeUI
             Core.DataUpdateManager.UpdateSourceExcerptDisplays();
 
             StackPanel spTextBlock =
-                Core.UiUtils.GetTemplateSibling<StackPanel, Button>(
+                Core.UtilsUi.GetTemplateSibling<StackPanel, Button>(
                     (Button)sender, "spTagStringTextBlock");
 
             StackPanel spTextBox =
-                Core.UiUtils.GetTemplateSibling<StackPanel, Button>(
+                Core.UtilsUi.GetTemplateSibling<StackPanel, Button>(
                     (Button)sender, "spTagStringTextBox");
 
             spTextBox.Visibility = Visibility.Collapsed;

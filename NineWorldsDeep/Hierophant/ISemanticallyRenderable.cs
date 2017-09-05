@@ -1,6 +1,6 @@
 ﻿namespace NineWorldsDeep.Hierophant
 {
-    public interface ISemanticMap
+    public interface ISemanticallyRenderable
     {
         void Render(ISemanticallyAddressable target);
     }

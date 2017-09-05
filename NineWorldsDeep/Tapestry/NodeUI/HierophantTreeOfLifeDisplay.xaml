@@ -104,14 +104,7 @@
                   Expanded="Expander_Expanded"
                   Collapsed="Expander_Collapsed">
 
-            <TabControl TabStripPlacement="Right">
-                <TabItem Header="Trinary">
-                    <hiero:TrinaryCorrespondenceTable/>
-                </TabItem>
-                <TabItem Header="Single (777)"/>
-                <TabItem Header="Single (GD)"/>
-            </TabControl>
-             
+            <hiero:SemanticMatrix x:Name="semanticMatrix"/>
 
         </Expander>
 

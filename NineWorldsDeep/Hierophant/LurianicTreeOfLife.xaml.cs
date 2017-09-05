@@ -43,7 +43,7 @@ namespace NineWorldsDeep.Hierophant
             CreateAndDrawPaths();
         }
 
-        public void Display(ISemanticMap semMap)
+        public void Display(ISemanticallyRenderable semMap)
         {
             semMap.Render(this);
         }
