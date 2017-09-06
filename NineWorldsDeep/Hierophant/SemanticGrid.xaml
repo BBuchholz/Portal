@@ -7,7 +7,9 @@
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="500">
     <Grid>
-        <TabControl TabStripPlacement="Bottom">
+        
+        <TabControl x:Name="tabControlSemanticSet" TabStripPlacement="Bottom">
+            
             <TabItem Header="SemanticGroup">
                 <DataGrid x:Name="dgridSemanticMapDisplayOne"
                           ItemsSource="{Binding AllRows}"
@@ -18,14 +20,23 @@
                     </DataGrid.Columns>
                 </DataGrid>
             </TabItem>
+            
             <TabItem Header="Add And Remove">
                 <DataGrid x:Name="dgridSemanticMapDisplayTwo"
-                          AutoGenerateColumns="False"/>
+                          ItemsSource="{Binding AllRows}"
+                          AutoGenerateColumns="False">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="SemanticKey"
+                                            Binding="{Binding Key}"/>
+                    </DataGrid.Columns>
+                </DataGrid>
             </TabItem>
+            
             <TabItem Header="Programmatically">
                 <DataGrid x:Name="dgridSemanticMapDisplayThree"
                           AutoGenerateColumns="False"/>
             </TabItem>
+            
         </TabControl>
     </Grid>
 </UserControl>

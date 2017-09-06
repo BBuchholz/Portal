@@ -50,7 +50,7 @@ namespace NineWorldsDeep.Hierophant
          * "Y" is a SemanticGroup (model item), a SemanticGroup is 
          *      a named SemanticMap with an underlying commonality
          *
-         * "Z" is a SemanticGrid (UI element), a SemanticGrid displays a SemanticMap
+         * "Z" is a SemanticGrid (UI element), a SemanticGrid displays SemanticGroups
          *
          * A SemanticMap is a Dictionary<SemanticKey, Dictionary<string, string>>(), 
          *      it binds a SemanticKey to a Dictionary of Key/Value pairs (eg. "Planet":"Mercury", 
@@ -70,6 +70,9 @@ namespace NineWorldsDeep.Hierophant
         public SemanticGrid()
         {
             InitializeComponent();
+
+            this.DataContext = this;
+
             //Mockup();
             MockupWithDictionary();
         }
@@ -88,51 +91,36 @@ namespace NineWorldsDeep.Hierophant
 
             AllRows.Add(new SemanticKey("testKey"), row);
 
-            RunListExample(dgridSemanticMapDisplayOne); //only works partially, is for list, generates columns with names but doesn't actually load values cuz dictionary...
-            RunDictExample(dgridSemanticMapDisplayTwo); //modding this one
+            RunDictExample(dgridSemanticMapDisplayOne); //modding this one
         }
 
         private void RunDictExample(DataGrid dgrid)
         {
-            int count = 0;
+            List<string> columnNames = new List<string>();
 
+            //get all column names
             foreach (Dictionary<string, string> thisRow in AllRows.Values)
             {
-                //asdsf;//this needs to change, count was for List<> in example
-                if (thisRow.Keys.Count > count)
+                foreach (string key in thisRow.Keys)
                 {
-                    for (int i = count; i < thisRow.Keys.Count; i++)
-                    {
-                        DataGridTextColumn col = new DataGridTextColumn();
-                        col.Header = "testing " + i;
-                        col.Binding = new Binding(string.Format("Value[{0}]", i)); //asdf;//this needs to change, count was for List<> in example
-                        dgrid.Columns.Add(col);
+                    //store distinct keys (for column names)
+                    if (!columnNames.Contains(key)) {
+
+                        columnNames.Add(key);
                     }
-                    count = thisRow.Keys.Count;
                 }
             }
-        }
 
-
-        private void RunListExample(DataGrid dgrid)
-        {
-            int count = 0;
-
-            foreach (Dictionary<string, string> thisRow in AllRows.Values)
+            //add column for each name
+            foreach (string colName in columnNames)
             {
-                if (thisRow.Keys.Count > count)
-                {
-                    for (int i = count; i < thisRow.Keys.Count; i++)
-                    {
-                        DataGridTextColumn col = new DataGridTextColumn();
-                        col.Header = "testing " + i;
-                        col.Binding = new Binding(string.Format("Value[{0}]", i)); 
-                        dgrid.Columns.Add(col);
-                    }
-                    count = thisRow.Keys.Count;
-                }
+                DataGridTextColumn col = new DataGridTextColumn();
+                col.Header = colName;
+                col.Binding = new Binding(string.Format("Value[{0}]", colName));
+                dgrid.Columns.Add(col);                 
             }
-        }
+        } 
+                
 
         private void Mockup()
         {

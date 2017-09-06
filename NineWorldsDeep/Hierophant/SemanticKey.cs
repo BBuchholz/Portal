@@ -26,6 +26,11 @@ namespace NineWorldsDeep.Hierophant
                 .ToList();
         }
 
+        public override string ToString()
+        {
+            return KeyString;
+        }
+
         private bool ContainsSubKey(string subKey)
         {
             return SubKeys.Contains(subKey, StringComparer.OrdinalIgnoreCase);
