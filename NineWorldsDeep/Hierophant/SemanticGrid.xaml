@@ -12,7 +12,6 @@
             
             <TabItem Header="SemanticGroup">
                 <DataGrid x:Name="dgridSemanticMapDisplayOne"
-                          ItemsSource="{Binding AllRows}"
                           AutoGenerateColumns="False">
                     <DataGrid.Columns>
                         <DataGridTextColumn Header="SemanticKey"
@@ -23,7 +22,6 @@
             
             <TabItem Header="Add And Remove">
                 <DataGrid x:Name="dgridSemanticMapDisplayTwo"
-                          ItemsSource="{Binding AllRows}"
                           AutoGenerateColumns="False">
                     <DataGrid.Columns>
                         <DataGridTextColumn Header="SemanticKey"

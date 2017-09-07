@@ -36,7 +36,7 @@ namespace NineWorldsDeep.Hierophant
      * "Y" is a SemanticGroup (model item), a SemanticGroup is 
      *      a named SemanticMap with an underlying commonality
      *
-     * "Z" is a SemanticGrid (UI element), a SemanticGrid displays a SemanticMap
+     * "Z" is a SemanticGrid (UI element), a SemanticGrid holds SemanticGroups
      *
      * A SemanticMap is a Dictionary<SemanticKey, Dictionary<string, string>>(), 
      *      it binds a SemanticKey to a Dictionary of Key/Value pairs (eg. "Planet":"Mercury", 
@@ -44,7 +44,8 @@ namespace NineWorldsDeep.Hierophant
      *
      */
 
-    public class SemanticMap
+    public class SemanticMap : Dictionary<SemanticKey, Dictionary<string, string>>
     {
+        //dictionary uses SemanticKey keys associated with semantic grid rows represented as dictionary<string, string>
     }
 }

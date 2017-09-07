@@ -59,13 +59,13 @@ namespace NineWorldsDeep.Hierophant
          */
 
 
-        private Dictionary<SemanticKey, Dictionary<string, string>> allRows;
+        //private Dictionary<SemanticKey, Dictionary<string, string>> allRows;
 
-        public Dictionary<SemanticKey, Dictionary<string, string>> AllRows
-        {
-            get { return allRows; }
-            set { allRows = value; }
-        }
+        //public Dictionary<SemanticKey, Dictionary<string, string>> AllRows
+        //{
+        //    get { return allRows; }
+        //    set { allRows = value; }
+        //}
 
         public SemanticGrid()
         {
@@ -74,32 +74,59 @@ namespace NineWorldsDeep.Hierophant
             this.DataContext = this;
 
             //Mockup();
-            MockupWithDictionary();
+            MockupDGrid1(dgridSemanticMapDisplayOne);
+            MockupDGrid2(dgridSemanticMapDisplayTwo);
         }
 
-        private void MockupWithDictionary()
+        private Dictionary<string,string> MockupRow(string planet, string alchemy, string astro)
+        {
+            var row = new Dictionary<string, string>();
+
+            row.Add("Planet", planet);
+            row.Add("Alchemical Element", alchemy);
+            row.Add("Astrological Sign", astro);
+
+            return row;
+        }
+
+        private void MockupDGrid1(DataGrid dGrid)
+        {
+            //adapted from: https://stackoverflow.com/a/24361223/670768 
+            
+            //var semanticMap = new Dictionary<SemanticKey, Dictionary<string, string>>();
+            var semanticMap = new SemanticMap();
+
+            var row = MockupRow("Mercury", "Sulphur", "Aries");
+
+            semanticMap.Add(new SemanticKey("testKey"), row);
+
+            //dGrid.ItemsSource = semanticMap;
+            RunDictExample(dGrid, semanticMap);
+        }
+
+
+        private void MockupDGrid2(DataGrid dGrid)
         {
             //adapted from: https://stackoverflow.com/a/24361223/670768 
 
-            AllRows = new Dictionary<SemanticKey, Dictionary<string, string>>();
+            //var semanticMap = new Dictionary<SemanticKey, Dictionary<string, string>>();
+            var semanticMap = new SemanticMap();
 
-            var row = new Dictionary<string, string>();
+            var row = MockupRow("Venus", "Salt", "Libra");
 
-            row.Add("Planet", "Mercury");
-            row.Add("Alchemical Element", "Sulphur");
-            row.Add("Astrological Sign", "Aries");
+            semanticMap.Add(new SemanticKey("testKey2"), row);
 
-            AllRows.Add(new SemanticKey("testKey"), row);
-
-            RunDictExample(dgridSemanticMapDisplayOne); //modding this one
+            //dGrid.ItemsSource = semanticMap;
+            RunDictExample(dGrid, semanticMap);
         }
 
-        private void RunDictExample(DataGrid dgrid)
+        private void RunDictExample(DataGrid dgrid, Dictionary<SemanticKey, Dictionary<string,string>> semanticMap)
         {
             List<string> columnNames = new List<string>();
+            dgrid.ItemsSource = semanticMap;
 
             //get all column names
-            foreach (Dictionary<string, string> thisRow in AllRows.Values)
+            foreach (Dictionary<string, string> thisRow in semanticMap.Values)
             {
                 foreach (string key in thisRow.Keys)
                 {
