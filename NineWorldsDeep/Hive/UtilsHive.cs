@@ -1,4 +1,5 @@
 ﻿using NineWorldsDeep.Core;
+using NineWorldsDeep.Hive.Lobes;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -22,16 +23,30 @@ namespace NineWorldsDeep.Hive
             return db.GetActiveRootByName(Configuration.GetLocalHiveRootName());
         }
 
-        internal static void RefreshLobes(HiveRoot hr)
+        public static void RefreshLobes(HiveRoot hr)
         {
-            hr.Add(new MockHiveLobe("test lobe : " + TimeStamp.NowUTC().ToString()));
-            hr.Add(new MockHiveLobe("test lobe 2 : " + TimeStamp.NowUTC().ToString()));
+            //these can be moved to the db (and will be) once we 
+            //start defining more complicated Lobe Types
+            //for now just a one to one mapping to sync folder hierarchy
+
+            //xml
+            hr.Add(new HiveXmlLobe(hr));
+            //images
+            hr.Add(new HiveImagesLobe(hr));
+            //audio
+            hr.Add(new HiveAudioLobe(hr));
+            //pdfs
+            hr.Add(new HivePdfsLobe(hr));
+
+            //hr.Add(new MockHiveLobe("test lobe : " + TimeStamp.NowUTC().ToString()));
+            //hr.Add(new MockHiveLobe("test lobe 2 : " + TimeStamp.NowUTC().ToString()));
         }
 
-        internal static void RefreshSpores(HiveLobe hl)
+        public static void RefreshSpores(HiveLobe hl)
         {
-            hl.Add(new MockHiveSpore("tst spore : " + TimeStamp.NowUTC().ToString()));
-            hl.Add(new MockHiveSpore("test spore 2 : " + TimeStamp.NowUTC().ToString()));
+            //for now, this is simple, but will eventually pull data from 
+            //db also, so it has a wrapper method here
+            hl.Collect();
         }
 
         internal static List<HiveRoot> GetDeactivatedRoots()

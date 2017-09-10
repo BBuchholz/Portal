@@ -9,6 +9,40 @@
     
     <UserControl.Resources>
         <BitmapImage x:Key="iconSyncSmall" UriSource="/ResourceImages/icon_sync_black_24dp_1x.png" />
+
+        <ContextMenu x:Key="cmAudio">
+            <MenuItem Header="Audio Context Menu Item"
+                      Click="MenuItemTest_Click"/>
+            <MenuItem Header="Move To Other"
+                      Click="MenuItemTest_Click"/>
+            <MenuItem Header="Copy To Other"
+                      Click="MenuItemTest_Click"/>
+        </ContextMenu>
+        <ContextMenu x:Key="cmImage">
+            <MenuItem Header="Image Context Menu Item"
+                      Click="MenuItemTest_Click"/>
+            <MenuItem Header="Move To Other"
+                      Click="MenuItemTest_Click"/>
+            <MenuItem Header="Copy To Other"
+                      Click="MenuItemTest_Click"/>
+        </ContextMenu>
+        <ContextMenu x:Key="cmPdf">
+            <MenuItem Header="Pdf Context Menu Item"
+                      Click="MenuItemTest_Click"/>
+            <MenuItem Header="Move To Other"
+                      Click="MenuItemTest_Click"/>
+            <MenuItem Header="Copy To Other"
+                      Click="MenuItemTest_Click"/>
+        </ContextMenu>
+        <ContextMenu x:Key="cmProject">
+            <MenuItem Header="Project Context Menu Item"
+                      Click="MenuItemTest_Click"/>
+            <MenuItem Header="Move To Other"
+                      Click="MenuItemTest_Click"/>
+            <MenuItem Header="Copy To Other"
+                      Click="MenuItemTest_Click"/>
+        </ContextMenu>
+
     </UserControl.Resources>
     
     <Grid>
@@ -27,7 +61,8 @@
         <ComboBox x:Name="cmbRootsA"                  
                   Grid.Row="0"
                   Grid.Column="0"
-                  Margin="5"/>
+                  Margin="5"
+                  ItemsSource="{Binding HiveRootsA}"/>
 
         <Button x:Name="btnRefreshA"  
                 Grid.Row="0" 
@@ -41,12 +76,14 @@
         <TreeView x:Name="tvHierarchyA"
                   Grid.Row="1"
                   Grid.ColumnSpan="2"
-                  Margin="5"/>
+                  Margin="5"
+                  TreeViewItem.Expanded="tvHierarchyA_Expanded"/>
 
         <ComboBox x:Name="cmbRootsB"                  
                   Grid.Row="2"
                   Grid.Column="0"
-                  Margin="5"/>
+                  Margin="5"
+                  ItemsSource="{Binding HiveRootsB}"/>
 
         <Button x:Name="btnRefreshB"  
                 Grid.Row="2" 
@@ -60,7 +97,8 @@
         <TreeView x:Name="tvHierarchyB"
                   Grid.Row="3"
                   Grid.ColumnSpan="2"
-                  Margin="5"/>
+                  Margin="5"
+                  TreeViewItem.Expanded="tvHierarchyB_Expanded"/>
         
         <!--<Label x:Name="lblTest"/>
         <Button Grid.Row="1" 

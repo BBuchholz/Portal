@@ -1,6 +1,8 @@
-﻿using NineWorldsDeep.Tapestry.Nodes;
+﻿using NineWorldsDeep.Hive;
+using NineWorldsDeep.Tapestry.Nodes;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -21,33 +23,169 @@ namespace NineWorldsDeep.Tapestry.NodeUI
     /// </summary>
     public partial class HiveMigrationsDisplay : UserControl
     {
-        public HiveMigrationRootNode HiveMigrationRootNode { get; set; }
+        public ObservableCollection<HiveRoot> HiveRootsA { get; set; }
+        public ObservableCollection<HiveRoot> HiveRootsB { get; set; }
 
         public HiveMigrationsDisplay()
         {
             InitializeComponent();
+            HiveRootsA = new ObservableCollection<HiveRoot>();
+            HiveRootsB = new ObservableCollection<HiveRoot>();
+
+            this.DataContext = this;
         }
 
         internal void Display(HiveMigrationRootNode hiveRootNode)
         {
-            HiveMigrationRootNode = hiveRootNode;
+            var hr = hiveRootNode.HiveRoot;
 
-            Refresh();
+            if (hiveRootNode.Destination == HiveMigrationDisplayDestination.SteadA)
+            {
+                if (!HiveRootsA.Contains(hr))
+                {
+                    HiveRootsA.Add(hr);
+                }
+
+                cmbRootsA.SelectedItem = hr;
+                RefreshA();
+            }
+            else
+            {
+                if (!HiveRootsB.Contains(hr))
+                {
+                    HiveRootsB.Add(hr);
+                }
+
+                cmbRootsB.SelectedItem = hr;
+                RefreshB();
+            }
         }
 
-        public void Refresh()
+        public void RefreshA()
         {
-            var hr = HiveMigrationRootNode.HiveRoot;
+            Refresh(cmbRootsA, tvHierarchyA);
+        }
 
+        public void RefreshB()
+        {
+            Refresh(cmbRootsB, tvHierarchyB);
+        }
 
-            string msg = hr.HiveRootName + " received into " +  
-                HiveMigrationRootNode.Destination.ToString();
+        private void Refresh(ComboBox cmb, TreeView tv)
+        {
+            var hr = (HiveRoot)cmb.SelectedItem;
+
+            if(hr != null && hr is HiveRoot)
+            {
+                UtilsHive.RefreshLobes(hr);
+
+                PopulateLobesTreeView(hr, tv);
+            }
+        }
+
+        private void PopulateLobesTreeView(HiveRoot hr, TreeView tv)
+        {
+            tv.Items.Clear();
+
+            foreach (HiveLobe hl in hr.Lobes)
+            {
+                tv.Items.Add(CreateTreeItem(hl));
+            }
+        }
+
+        private void SelectRightClickedTreeViewItem(object sender, MouseButtonEventArgs e)
+        {
+            var item = (TreeViewItem)e.Source;
+            item.IsSelected = true;
+        }
+
+        private TreeViewItem CreateTreeItem(HiveLobe hl)
+        {
+            TreeViewItem item = new TreeViewItem();
+            item.Header = hl.Name;
+            item.Tag = hl;
+            item.Items.Add("Loading...");
+
+            item.MouseRightButtonDown += SelectRightClickedTreeViewItem;
+            return item;
+        }
+
+        private TreeViewItem CreateTreeItem(HiveSpore hs)
+        {
+            TreeViewItem item = new TreeViewItem();
+            item.Header = hs.Name;
+            item.Tag = hs;
+            item.Items.Add("Loading...");
+
+            ////////REPLACE WITH LOGIC TO DISPLAY DIFFERENT CONTEXT MENUS FOR DIFFERENT SPORE TYPES
+            //item.ContextMenu = isActiveTreeView ?
+            //    (ContextMenu)this.Resources["cmHiveSporeMenu"] :
+            //    (ContextMenu)this.Resources["cmDeactivatedHiveSporeMenu"];
+
+            item.MouseRightButtonDown += SelectRightClickedTreeViewItem;
+            return item;
+        }
+
+        private void MenuItemTest_Click(object sender, RoutedEventArgs e)
+        {
+            string msg = "null tag";
+
+            MenuItem mnu = sender as MenuItem;
+            TreeViewItem item = null;
+            if (mnu != null)
+            {
+                item = ((ContextMenu)mnu.Parent).PlacementTarget as TreeViewItem;
+
+                if (item != null && item.Tag != null)
+                {
+                    msg = item.Tag.ToString();
+                }
+            }
 
             UI.Display.Message(msg);
         }
 
+        private void tvHierarchyA_Expanded(object sender, RoutedEventArgs e)
+        {
+            ProcessExpander(e);
+        }
+
+        private void tvHierarchyB_Expanded(object sender, RoutedEventArgs e)
+        {
+            ProcessExpander(e);
+        }
+
+        private void ProcessExpander(RoutedEventArgs e)
+        {
+            TreeViewItem item = e.Source as TreeViewItem;
+
+            if(item.Items.Count == 1 &&
+                item.Items[0] is string)
+            {
+                item.Items.Clear();
+
+                if(item.Tag is HiveLobe)
+                {
+                    HiveLobe hl = item.Tag as HiveLobe;
+
+                    UtilsHive.RefreshSpores(hl);
+
+                    foreach (HiveSpore hs in hl.Spores)
+                    {
+                        item.Items.Add(CreateTreeItem(hs));
+                    }
+                }
+                
+                if (item.Tag is HiveSpore)
+                {
+                    //do something
+                }
+            }
+        }
+
+
     }
-    
+
     public enum HiveMigrationDisplayDestination
     {
         SteadA,

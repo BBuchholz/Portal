@@ -1,4 +1,5 @@
 ﻿using NineWorldsDeep.Hive;
+using NineWorldsDeep.Tapestry.NodeUI;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -46,6 +47,6 @@ namespace NineWorldsDeep.Tapestry.Nodes
             }
         }
 
-        public object Destination { get; internal set; }
+        public HiveMigrationDisplayDestination Destination { get; internal set; }
     }
 }

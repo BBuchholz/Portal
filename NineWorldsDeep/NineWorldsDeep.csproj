@@ -27,7 +27,7 @@
     <UpdatePeriodically>false</UpdatePeriodically>
     <UpdateRequired>false</UpdateRequired>
     <MapFileExtensions>true</MapFileExtensions>
-    <ApplicationRevision>114</ApplicationRevision>
+    <ApplicationRevision>115</ApplicationRevision>
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <PublishWizardCompleted>true</PublishWizardCompleted>
@@ -268,6 +268,10 @@
     <Compile Include="Hive\HiveLobe.cs" />
     <Compile Include="Hive\HiveRoot.cs" />
     <Compile Include="Hive\HiveSpore.cs" />
+    <Compile Include="Hive\Lobes\HiveAudioLobe.cs" />
+    <Compile Include="Hive\Lobes\HiveImagesLobe.cs" />
+    <Compile Include="Hive\Lobes\HivePdfsLobe.cs" />
+    <Compile Include="Hive\Lobes\HiveXmlLobe.cs" />
     <Compile Include="Hive\MockHiveLobe.cs" />
     <Compile Include="Hive\MockHiveSpore.cs" />
     <Compile Include="Hive\UtilsHive.cs" />
