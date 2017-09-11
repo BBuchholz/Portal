@@ -30,13 +30,13 @@ namespace NineWorldsDeep.Hive
             //for now just a one to one mapping to sync folder hierarchy
 
             //xml
-            hr.Add(new HiveXmlLobe(hr));
+            hr.Add(new HiveLobeXml(hr));
             //images
-            hr.Add(new HiveImagesLobe(hr));
+            hr.Add(new HiveLobeImages(hr));
             //audio
-            hr.Add(new HiveAudioLobe(hr));
+            hr.Add(new HiveLobeAudio(hr));
             //pdfs
-            hr.Add(new HivePdfsLobe(hr));
+            hr.Add(new HiveLobePdfs(hr));
 
             //hr.Add(new MockHiveLobe("test lobe : " + TimeStamp.NowUTC().ToString()));
             //hr.Add(new MockHiveLobe("test lobe 2 : " + TimeStamp.NowUTC().ToString()));

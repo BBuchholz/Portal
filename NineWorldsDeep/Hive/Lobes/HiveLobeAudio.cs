@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace NineWorldsDeep.Hive.Lobes
 {
-    public class HivePdfsLobe : HiveLobe
+    public class HiveLobeAudio : HiveLobe
     {
-        public HivePdfsLobe(HiveRoot hr) : base("pdfs", hr)
+        public HiveLobeAudio(HiveRoot hr) : base("audio", hr)
         {
         }
 

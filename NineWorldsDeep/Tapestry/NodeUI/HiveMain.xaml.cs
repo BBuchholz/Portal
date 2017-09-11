@@ -108,6 +108,7 @@ namespace NineWorldsDeep.Tapestry.NodeUI
                 if(item.Tag is HiveSpore)
                 {
                     //do something
+                    
                 }
             }
         }

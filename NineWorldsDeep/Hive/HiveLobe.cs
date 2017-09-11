@@ -28,7 +28,11 @@ namespace NineWorldsDeep.Hive
         public virtual void Add(HiveSpore spore)
         {
             //TODO: validate, check for duplicates, &c.
-            SporesInternal.Add(spore);
+
+            if (!SporesInternal.Contains(spore))
+            {
+                SporesInternal.Add(spore);
+            }
         }
 
         public abstract void Collect();

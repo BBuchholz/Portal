@@ -26,7 +26,11 @@ namespace NineWorldsDeep.Hive
         public void Add(HiveLobe lobe)
         {
             //TODO: configure/validate/&c.
-            LobesInternal.Add(lobe);
+
+            if (!LobesInternal.Contains(lobe))
+            {
+                LobesInternal.Add(lobe);
+            }            
         }
 
         public override string ToString()

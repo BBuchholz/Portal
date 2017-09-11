@@ -53,45 +53,56 @@ namespace NineWorldsDeep.Core
             return Path.Combine(SyncRootConfigFolder(profileName), fileName);
         }
 
+        [Obsolete("use corresponding method in class Hive.ConfigHive")]
         internal static List<string> HiveRootFolderPaths(HiveRoot hr)
         {
-            List<string> lst = new List<string>();
+            //List<string> lst = new List<string>();
 
-            foreach (string subfolder in HiveRootSubfolderPaths())
-            {
-                string fullPath =
-                    System.IO.Path.Combine(
-                        SyncFolder(),
-                        "hive",
-                        hr.HiveRootName,
-                        subfolder);
-                
-                lst.Add(fullPath);
-            }
+            //foreach (string subfolder in HiveRootSubfolderPaths())
+            //{
+            //    string fullPath =
+            //        System.IO.Path.Combine(
+            //            SyncFolder(),
+            //            "hive",
+            //            hr.HiveRootName,
+            //            subfolder);
 
-            return lst;
+            //    lst.Add(fullPath);
+            //}
+
+            //return lst;
+
+            return ConfigHive.HiveRootFolderPaths(hr);
         }
 
+
+        [Obsolete("use corresponding method in class Hive.ConfigHive")]
         private static List<string> HiveRootSubfolderPaths()
         {
-            List<string> lst = new List<string>();
+            //List<string> lst = new List<string>();
 
-            lst.Add("xml/incoming");
-            lst.Add("media/audio/incoming");
-            lst.Add("media/images/incoming");
-            lst.Add("media/pdfs/incoming");
+            //lst.Add("xml/incoming");
+            //lst.Add("media/audio/incoming");
+            //lst.Add("media/images/incoming");
+            //lst.Add("media/pdfs/incoming");
 
-            return lst;
+            //return lst;
+
+            return ConfigHive.HiveRootSubfolderPaths();
         }
-
+        
+        [Obsolete("use corresponding method in class Hive.ConfigHive")]
         public static string HiveRootXmlFolderPath(HiveRoot hr)
         {
-            return Path.Combine(
-                SyncFolder(),
-                "hive",
-                hr.HiveRootName,
-                "xml/incoming");
+            //return Path.Combine(
+            //    SyncFolder(),
+            //    "hive",
+            //    hr.HiveRootName,
+            //    "xml/incoming");
+
+            return ConfigHive.HiveRootXmlFolderPath(hr);
         }
+                
 
         public static string SyncRootNewXmlExportFile(SyncProfile sp)
         {
@@ -325,47 +336,56 @@ namespace NineWorldsDeep.Core
         /// Will get the synergy xml files in the SyncRoot for the local device.        
         /// </summary>
         /// <returns></returns>
+        [Obsolete("use corresponding method in class Hive.ConfigHive")]
         public static List<string> GetHiveMnemosyneV5XmlImportFilePaths()
         {
-            return GetHiveXmlImportFilePathsBySuffix("nwd-mnemosyne-v5");
+            //return GetHiveXmlImportFilePathsBySuffix("nwd-mnemosyne-v5");
+
+            return ConfigHive.GetHiveMnemosyneV5XmlImportFilePaths();
         }
 
         /// <summary>
         /// Will get the mnemosyne xml files in the SyncRoot for the local device.        
         /// </summary>
         /// <returns></returns>
+        [Obsolete("use corresponding method in class Hive.ConfigHive")]
         public static List<string> GetHiveSynergyV5XmlImportFilePaths()
         {
-            return GetHiveXmlImportFilePathsBySuffix("nwd-synergy-v5");
-        }
+            //return GetHiveXmlImportFilePathsBySuffix("nwd-synergy-v5");
 
+            return ConfigHive.GetHiveSynergyV5XmlImportFilePaths();
+        }
+        
+        [Obsolete("use corresponding method in class Hive.ConfigHive")]
         private static List<string> GetHiveXmlImportFilePathsBySuffix(string suffix)
         {
-            /// Hive works differently from the previous version because all devices
-            /// put xml into one folder, the local device root, so we don't need
-            /// to iterate through profiles.
-            
-            List<string> allPaths = new List<string>();
-            string xmlDir = HiveRootXmlFolderPath(UtilsHive.GetLocalHiveRoot());
+            ///// Hive works differently from the previous version because all devices
+            ///// put xml into one folder, the local device root, so we don't need
+            ///// to iterate through profiles.
 
-            if (Directory.Exists(xmlDir))
-            {
-                foreach (string filePath in
-                            Directory.GetFiles(xmlDir,
-                                                "*.xml",
-                                                SearchOption.TopDirectoryOnly))
-                {
-                    string fileName = System.IO.Path.GetFileName(filePath);
+            //List<string> allPaths = new List<string>();
+            //string xmlDir = HiveRootXmlFolderPath(UtilsHive.GetLocalHiveRoot());
 
-                    if (fileName.ToLower().Contains(suffix))
-                    {
-                        allPaths.Add(filePath);
-                    }
-                }
-            }
+            //if (Directory.Exists(xmlDir))
+            //{
+            //    foreach (string filePath in
+            //                Directory.GetFiles(xmlDir,
+            //                                    "*.xml",
+            //                                    SearchOption.TopDirectoryOnly))
+            //    {
+            //        string fileName = System.IO.Path.GetFileName(filePath);
+
+            //        if (fileName.ToLower().Contains(suffix))
+            //        {
+            //            allPaths.Add(filePath);
+            //        }
+            //    }
+            //}
 
 
-            return allPaths;
+            //return allPaths;
+
+            return ConfigHive.GetHiveXmlImportFilePathsBySuffix(suffix);
         }
 
         public static List<string> GetSynergyV5XmlImportFilePaths()
@@ -403,16 +423,19 @@ namespace NineWorldsDeep.Core
         /// active hive root. all hive xml exports should go into these folders
         /// </summary>
         /// <returns></returns>
+        [Obsolete("use corresponding method in class Hive.ConfigHive")]
         public static List<string> GetHiveFoldersForXmlExport()
         {
-            List<string> allFolders = new List<string>();
+            //List<string> allFolders = new List<string>();
 
-            foreach(HiveRoot hr in UtilsHive.GetActiveRoots())
-            {
-                allFolders.Add(HiveRootXmlFolderPath(hr));
-            }
+            //foreach(HiveRoot hr in UtilsHive.GetActiveRoots())
+            //{
+            //    allFolders.Add(HiveRootXmlFolderPath(hr));
+            //}
 
-            return allFolders;
+            //return allFolders;
+
+            return ConfigHive.GetHiveFoldersForXmlExport();
         }
 
         public static List<string> GetMnemosyneXmlImportPaths(SyncProfile sp)
@@ -626,9 +649,11 @@ namespace NineWorldsDeep.Core
             return new NwdUri(trimmedPath);
         }
 
+        [Obsolete("use corresponding method in class Hive.ConfigHive")]
         public static string GetLocalHiveRootName()
         {
-            return "main-laptop";
+            //return "main-laptop";
+            return ConfigHive.GetLocalHiveRootName();
         }
 
         public static string GetLocalDeviceDescription()

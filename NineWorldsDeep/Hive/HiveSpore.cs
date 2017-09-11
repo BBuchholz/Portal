@@ -8,11 +8,16 @@ namespace NineWorldsDeep.Hive
 {
     public abstract class HiveSpore
     {
-        public string Name { get; private set; }
+        public string Name { get; protected set; }
 
         public HiveSpore(string name)
         {
             Name = name;
+        }
+
+        protected HiveSpore()
+        {
+            
         }
     }
 }

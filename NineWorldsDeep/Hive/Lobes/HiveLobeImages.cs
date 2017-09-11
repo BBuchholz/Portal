@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace NineWorldsDeep.Hive.Lobes
 {
-    public class HiveImagesLobe : HiveLobe
+    public class HiveLobeImages : HiveLobe
     {
-        public HiveImagesLobe(HiveRoot hr) : base("images", hr)
+        public HiveLobeImages(HiveRoot hr) : base("images", hr)
         {
         }
 
