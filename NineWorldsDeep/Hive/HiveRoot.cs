@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace NineWorldsDeep.Hive
 {
-    public class HiveRoot
+    public class HiveRoot : IEquatable<HiveRoot>
     {
         protected List<HiveLobe> LobesInternal { private set; get; }
         public string HiveRootName { get; set; }
@@ -114,5 +114,28 @@ namespace NineWorldsDeep.Hive
         }
 
 
+        #region "equality"
+
+        public bool Equals(HiveRoot other)
+        {
+            if (other == null) return false;
+
+            return HiveRootName.ToLower().Equals(other.HiveRootName.ToLower());
+        }
+
+        public override bool Equals(object obj)
+        {
+            if (ReferenceEquals(null, obj)) return false;
+            if (ReferenceEquals(this, obj)) return true;
+            if (obj.GetType() != GetType()) return false;
+            return Equals(obj as HiveRoot);
+        }
+
+        public override int GetHashCode()
+        {
+            return HiveRootName.ToLower().GetHashCode();
+        }
+
+        #endregion
     }
 }

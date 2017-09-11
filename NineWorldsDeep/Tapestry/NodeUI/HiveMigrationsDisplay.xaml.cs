@@ -102,7 +102,7 @@ namespace NineWorldsDeep.Tapestry.NodeUI
         private TreeViewItem CreateTreeItem(HiveLobe hl)
         {
             TreeViewItem item = new TreeViewItem();
-            item.Header = hl.Name;
+            item.Header = hl.HiveLobeName;
             item.Tag = hl;
             item.Items.Add("Loading...");
 
