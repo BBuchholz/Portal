@@ -17,7 +17,8 @@ namespace NineWorldsDeep.Hive.Lobes
 
         public override void Collect()
         {
-            string hiveRootXmlSubFolderPath = ConfigHive.HiveRootXmlFolderPath(HiveRoot);
+            string hiveRootXmlSubFolderPath = 
+                ConfigHive.HiveRootXmlFolderPath(HiveRoot);
 
             foreach(string filePath in 
                 Directory.GetFiles(hiveRootXmlSubFolderPath,

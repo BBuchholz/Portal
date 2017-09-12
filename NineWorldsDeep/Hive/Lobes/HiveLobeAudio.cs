@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -14,7 +15,15 @@ namespace NineWorldsDeep.Hive.Lobes
 
         public override void Collect()
         {
-            UI.Display.Message("Collect() method not implemented for HiveLobe: " + this.HiveLobeName); //use HiveRoot and Configuration class to get files from folder hierarchy and file type
+            string hiveRootAudioSubFolderPath =
+                ConfigHive.HiveRootAudioFolderPath(HiveRoot);
+
+            foreach (string filePath in
+                Directory.EnumerateFiles(hiveRootAudioSubFolderPath,
+                                         "*.wav", SearchOption.AllDirectories))
+            {
+                Add(new Spores.HiveSporeFilePath(filePath));
+            }
         }
     }
 }

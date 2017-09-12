@@ -14,7 +14,17 @@ namespace NineWorldsDeep.Hive.Lobes
 
         public override void Collect()
         {
-            UI.Display.Message("Collect() method not implemented for HiveLobe: " + this.HiveLobeName); //use HiveRoot and Configuration class to get files from folder hierarchy and file type
+            string hiveRootPdfsSubFolderPath =
+                ConfigHive.HiveRootPdfsFolderPath(HiveRoot);
+
+            foreach(string filePath in
+                System.IO.Directory.EnumerateFiles(
+                    hiveRootPdfsSubFolderPath, 
+                    "*.pdf",                                              
+                    System.IO.SearchOption.AllDirectories))
+            {
+                Add(new Spores.HiveSporeFilePath(filePath));
+            }
         }
     }
 }
