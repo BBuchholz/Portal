@@ -6,18 +6,51 @@
              xmlns:local="clr-namespace:NineWorldsDeep.Hierophant"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="600">
+
+    <UserControl.Resources>
+
+        <BitmapImage x:Key="iconAddSmall"
+                     UriSource="/ResourceImages/icon_add_black_24dp_1x.png"/>
+
+    </UserControl.Resources>
+    
     <Grid>
+        
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+            <ColumnDefinition Width="40"/>
+        </Grid.ColumnDefinitions>
+        
         <TabControl x:Name="tcSemanticSets" 
+                    Grid.Column="0"
                     TabStripPlacement="Right">
-            <TabItem Header="SemanticSet">
+            
+            <TabItem Header="SemanticSet1">
                 <local:SemanticGrid x:Name="sgrid1"/>
             </TabItem>
-            <TabItem Header="Add Or Remove">
+            
+            <TabItem Header="SemanticSet2">
                 <local:SemanticGrid x:Name="sgrid2"/>
             </TabItem>
-            <TabItem Header="Programmatically">
+            
+            <TabItem Header="SemanticSet3">
                 <local:SemanticGrid x:Name="sgrid3"/>
             </TabItem>
+            
         </TabControl>
+
+
+        <StackPanel Grid.Column="1" Orientation="Vertical">
+
+            <Button x:Name="btnAddSemanticSet"
+                    Margin="8"
+                    Click="btnAddSemanticSet_Click">
+                <Button.Content>
+                    <Image Source="{StaticResource iconAddSmall}"/>
+                </Button.Content>
+            </Button>
+
+        </StackPanel>
+
     </Grid>
 </UserControl>

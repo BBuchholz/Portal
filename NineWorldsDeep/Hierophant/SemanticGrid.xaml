@@ -6,11 +6,27 @@
              xmlns:local="clr-namespace:NineWorldsDeep.Hierophant"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="500">
+
+    
+    <UserControl.Resources>
+
+        <BitmapImage x:Key="iconAddSmall"
+                     UriSource="/ResourceImages/icon_add_black_24dp_1x.png"/>
+
+    </UserControl.Resources>
+
     <Grid>
+
+        <Grid.RowDefinitions>
+            <RowDefinition/>
+            <RowDefinition Height="40"/>
+        </Grid.RowDefinitions>
         
-        <TabControl x:Name="tabControlSemanticSet" TabStripPlacement="Bottom">
+        <TabControl x:Name="tcSemanticGroups" 
+                    Grid.Row="0"
+                    TabStripPlacement="Bottom">
             
-            <TabItem Header="SemanticGroup">
+            <TabItem Header="SemanticGroup1">
                 <DataGrid x:Name="dgridSemanticMapDisplayOne"
                           AutoGenerateColumns="False">
                     <DataGrid.Columns>
@@ -19,8 +35,8 @@
                     </DataGrid.Columns>
                 </DataGrid>
             </TabItem>
-            
-            <TabItem Header="Add And Remove">
+
+            <TabItem Header="SemanticGroup2">
                 <DataGrid x:Name="dgridSemanticMapDisplayTwo"
                           AutoGenerateColumns="False">
                     <DataGrid.Columns>
@@ -29,12 +45,27 @@
                     </DataGrid.Columns>
                 </DataGrid>
             </TabItem>
-            
-            <TabItem Header="Programmatically">
+
+            <TabItem Header="SemanticGroup3">
                 <DataGrid x:Name="dgridSemanticMapDisplayThree"
                           AutoGenerateColumns="False"/>
             </TabItem>
             
         </TabControl>
+
+        <StackPanel Grid.Row="1"
+                    Orientation="Horizontal"
+                    HorizontalAlignment="Right">
+
+            <Button x:Name="btnAddSemanticGroup"
+                    Margin="8"
+                    Click="btnAddSemanticGroup_Click">
+                <Button.Content>
+                    <Image Source="{StaticResource iconAddSmall}"/>
+                </Button.Content>
+            </Button>
+            
+        </StackPanel>
+        
     </Grid>
 </UserControl>

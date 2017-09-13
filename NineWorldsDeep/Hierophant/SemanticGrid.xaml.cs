@@ -20,53 +20,6 @@ namespace NineWorldsDeep.Hierophant
     /// </summary>
     public partial class SemanticGrid : UserControl
     {
-        /*
-         * SemanticMatrix Mockup With Underlying Model Definitions
-         *
-         * _____________________
-         * |Z|Z|Z|Z|Z|Z|Z|Z| X |
-         * |_|_|_|_|_|_|_|_|___|
-         * |Z|Z|Z|Z|Z|Z|Z|Z| X |
-         * |_|_|_|_|_|_|_|_|___|
-         * |Z|Z|Z|Z|Z|Z|Z|Z| X |
-         * |_|_|_|_|_|_|_|_|___|
-         * |Z|Z|Z|Z|Z|Z|Z|Z|
-         * |_|_|_|_|_|_|_|_|
-         * |Z|Z|Z|Z|Z|Z|Z|Z|
-         * |_|_|_|_|_|_|_|_|
-         * |Z|Z|Z|Z|Z|Z|Z|Z|
-         * |_|_|_|_|_|_|_|_|
-         * | Y | Y | Y | 
-         * |___|___|___|
-         *
-         * Above is a datagrid (Z) within a tab control (Y) within a tab control (X)
-         * 
-         * The entire ui control is a SemanticMatrix.
-         *
-         * Our model associates in the following manner:
-         *
-         * "X" is a SemanticSet (model item), a SemanticSet has one or more SemanticGroups
-         *
-         * "Y" is a SemanticGroup (model item), a SemanticGroup is 
-         *      a named SemanticMap with an underlying commonality
-         *
-         * "Z" is a SemanticGrid (UI element), a SemanticGrid displays SemanticGroups
-         *
-         * A SemanticMap is a Dictionary<SemanticKey, Dictionary<string, string>>(), 
-         *      it binds a SemanticKey to a Dictionary of Key/Value pairs (eg. "Planet":"Mercury", 
-         *      "Alchemical Element":"Sulphur", "Zodiacal Sign":"Aries", &c.)
-         *
-         */
-
-
-        //private Dictionary<SemanticKey, Dictionary<string, string>> allRows;
-
-        //public Dictionary<SemanticKey, Dictionary<string, string>> AllRows
-        //{
-        //    get { return allRows; }
-        //    set { allRows = value; }
-        //}
-
         public SemanticGrid()
         {
             InitializeComponent();
@@ -76,59 +29,31 @@ namespace NineWorldsDeep.Hierophant
             //Mockup();
             MockupDGrid1(dgridSemanticMapDisplayOne);
             MockupDGrid2(dgridSemanticMapDisplayTwo);
+
+            CountForTesting = 0;
         }
 
-        private Dictionary<string,string> MockupRow(string planet, string alchemy, string astro)
-        {
-            var row = new Dictionary<string, string>();
-
-            row.Add("Planet", planet);
-            row.Add("Alchemical Element", alchemy);
-            row.Add("Astrological Sign", astro);
-
-            return row;
-        }
-
+        private int CountForTesting { get; set; }
+        
         private void MockupDGrid1(DataGrid dGrid)
         {
-            //adapted from: https://stackoverflow.com/a/24361223/670768 
-            
-            //var semanticMap = new Dictionary<SemanticKey, Dictionary<string, string>>();
-            var semanticMap = new SemanticMap();
-
-            var row = MockupRow("Mercury", "Sulphur", "Aries");
-
-            semanticMap.Add(new SemanticKey("testKey"), row);
-
-            //dGrid.ItemsSource = semanticMap;
-            RunDictExample(dGrid, semanticMap);
+            DisplaySemanticMap(dGrid, UtilsHierophant.MockMap1());
         }
-
 
         private void MockupDGrid2(DataGrid dGrid)
         {
-            //adapted from: https://stackoverflow.com/a/24361223/670768 
-
-            //var semanticMap = new Dictionary<SemanticKey, Dictionary<string, string>>();
-            var semanticMap = new SemanticMap();
-
-            var row = MockupRow("Venus", "Salt", "Libra");
-
-            semanticMap.Add(new SemanticKey("testKey2"), row);
-
-            //dGrid.ItemsSource = semanticMap;
-            RunDictExample(dGrid, semanticMap);
+            DisplaySemanticMap(dGrid, UtilsHierophant.MockMap2());
         }
 
-        private void RunDictExample(DataGrid dgrid, Dictionary<SemanticKey, Dictionary<string,string>> semanticMap)
+        private void DisplaySemanticMap(DataGrid dgrid, SemanticMap semanticMap)
         {
             List<string> columnNames = new List<string>();
             dgrid.ItemsSource = semanticMap;
 
-            //get all column names
-            foreach (Dictionary<string, string> thisRow in semanticMap.Values)
+            //get all keys in all semantic definition as one list (for column names)
+            foreach (SemanticDefinition def in semanticMap.Values)
             {
-                foreach (string key in thisRow.Keys)
+                foreach (string key in def.Keys)
                 {
                     //store distinct keys (for column names)
                     if (!columnNames.Contains(key)) {
@@ -138,7 +63,7 @@ namespace NineWorldsDeep.Hierophant
                 }
             }
 
-            //add column for each name
+            //add column for each columnName
             foreach (string colName in columnNames)
             {
                 DataGridTextColumn col = new DataGridTextColumn();
@@ -147,29 +72,22 @@ namespace NineWorldsDeep.Hierophant
                 dgrid.Columns.Add(col);                 
             }
         } 
-                
-
-        private void Mockup()
+        
+        private void btnAddSemanticGroup_Click(object sender, RoutedEventArgs e)
         {
-            List<ElementalsRow> elementals = new List<ElementalsRow>();
-            
-            elementals.Add(new ElementalsRow()
-            {
-                Path = "Chokmah-Geburah",
-                Letter = "Heh",
-                Sign = "Aries"
-            });
+            TabItem tabItem = new TabItem();
+            tabItem.Header = "A new semantic set " + CountForTesting;
+            DataGrid dataGrid = new DataGrid();
+            dataGrid.AutoGenerateColumns = false;
 
-            elementals.Add(new ElementalsRow()
-            {
-                Path = "Binah-Chesed",
-                Letter = "Cheth",
-                Sign = "Cancer"
-            });
-            
-            dgridSemanticMapDisplayOne.ItemsSource = elementals;
-            dgridSemanticMapDisplayTwo.ItemsSource = elementals;
-            dgridSemanticMapDisplayThree.ItemsSource = elementals;
+            DataGridTextColumn textColumn = new DataGridTextColumn();
+            textColumn.Binding = new Binding("Key");
+            dataGrid.Columns.Add(textColumn);
+
+            tabItem.Content = dataGrid;
+            tcSemanticGroups.Items.Add(tabItem);
+
+            CountForTesting += 1;
         }
     }
 }
