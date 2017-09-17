@@ -19,5 +19,16 @@ namespace NineWorldsDeep.Hive
         {
             
         }
+
+        public abstract HiveSporeType HiveSporeType { get; protected set; }
+    }
+
+    public enum HiveSporeType
+    {
+        Audio,
+        Image,
+        Pdf,
+        Unknown,
+        Xml
     }
 }

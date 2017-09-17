@@ -55,13 +55,13 @@ namespace NineWorldsDeep.Mnemosyne.V5
             }
         }
 
-        private static bool IsAudio(string path)
+        public static bool IsAudio(string path)
         {
             return path.ToLower().EndsWith(".wav") ||
                    path.ToLower().EndsWith(".mp3");
         }
 
-        private static bool IsImage(string path)
+        public static bool IsImage(string path)
         {
             return path.ToLower().EndsWith(".bmp") ||
                    path.ToLower().EndsWith(".gif") ||

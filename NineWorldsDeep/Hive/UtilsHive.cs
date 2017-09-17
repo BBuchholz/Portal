@@ -1,7 +1,9 @@
 ﻿using NineWorldsDeep.Core;
 using NineWorldsDeep.Hive.Lobes;
+using NineWorldsDeep.Mnemosyne.V5;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -17,10 +19,35 @@ namespace NineWorldsDeep.Hive
         {
             return db.GetActiveRoots();
         }
-
+        
         public static HiveRoot GetLocalHiveRoot()
         {
-            return db.GetActiveRootByName(Configuration.GetLocalHiveRootName());
+            return db.GetActiveRootByName(ConfigHive.GetLocalHiveRootName());
+        }
+
+        public static HiveSporeType SporeTypeFromFilePath(string filePath)
+        {
+            if (filePath.ToLower().EndsWith(".xml"))
+            {
+                return HiveSporeType.Xml;
+            }
+
+            if (filePath.ToLower().EndsWith(".pdf"))
+            {
+                return HiveSporeType.Pdf;
+            }
+            
+            if (UtilsMnemosyneV5.IsAudio(filePath)){
+
+                return HiveSporeType.Audio;
+            }
+
+            if (UtilsMnemosyneV5.IsImage(filePath))
+            {
+                return HiveSporeType.Image;
+            }
+
+            return HiveSporeType.Unknown;
         }
 
         public static void RefreshLobes(HiveRoot hr)
@@ -74,7 +101,7 @@ namespace NineWorldsDeep.Hive
 
         internal static void EnsureFolderStructure(HiveRoot hr)
         {
-            foreach (string folderPath in Configuration.HiveRootFolderPaths(hr))
+            foreach (string folderPath in ConfigHive.HiveRootFolderPaths(hr))
             {
                 //CreateDirectory skips any pre-existing folders
                 System.IO.Directory.CreateDirectory(folderPath);

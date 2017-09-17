@@ -9,11 +9,14 @@ namespace NineWorldsDeep.Hive.Spores
     public class HiveSporeFilePath : HiveSpore, IEquatable<HiveSporeFilePath>
     {
         public string FilePath { get; private set; }
+        public override HiveSporeType HiveSporeType { get; protected set; }
 
         public HiveSporeFilePath(string filePath)
         {
             Name = System.IO.Path.GetFileName(filePath);
-            FilePath = filePath;            
+            FilePath = filePath;
+
+            HiveSporeType = UtilsHive.SporeTypeFromFilePath(FilePath);           
         }
         
         #region "equality"

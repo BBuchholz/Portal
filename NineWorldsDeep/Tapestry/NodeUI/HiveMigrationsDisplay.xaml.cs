@@ -122,6 +122,31 @@ namespace NineWorldsDeep.Tapestry.NodeUI
             //    (ContextMenu)this.Resources["cmHiveSporeMenu"] :
             //    (ContextMenu)this.Resources["cmDeactivatedHiveSporeMenu"];
 
+            switch (hs.HiveSporeType)
+            {
+                case HiveSporeType.Audio:
+
+                    item.ContextMenu = (ContextMenu)this.Resources["cmAudio"];
+                    break;
+
+                case HiveSporeType.Image:
+
+                    item.ContextMenu = (ContextMenu)this.Resources["cmImage"];
+                    break;
+
+
+                case HiveSporeType.Pdf:
+
+                    item.ContextMenu = (ContextMenu)this.Resources["cmPdf"];
+                    break;
+
+
+                case HiveSporeType.Xml:
+
+                    item.ContextMenu = (ContextMenu)this.Resources["cmXml"];
+                    break;                
+            }
+
             item.MouseRightButtonDown += SelectRightClickedTreeViewItem;
             return item;
         }
