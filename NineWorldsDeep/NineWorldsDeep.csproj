@@ -27,7 +27,7 @@
     <UpdatePeriodically>false</UpdatePeriodically>
     <UpdateRequired>false</UpdateRequired>
     <MapFileExtensions>true</MapFileExtensions>
-    <ApplicationRevision>119</ApplicationRevision>
+    <ApplicationRevision>120</ApplicationRevision>
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <PublishWizardCompleted>true</PublishWizardCompleted>
@@ -233,14 +233,12 @@
     <Compile Include="Hierophant\SemanticGrid.xaml.cs">
       <DependentUpon>SemanticGrid.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Hierophant\SemanticGroup.cs" />
     <Compile Include="Hierophant\SemanticKey.cs" />
     <Compile Include="Hierophant\SemanticMap.cs" />
     <Compile Include="Hierophant\SemanticMatrix.xaml.cs">
       <DependentUpon>SemanticMatrix.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Hierophant\SemanticSet.cs" />
-    <Compile Include="Hierophant\TreeOfLifeMap.cs" />
+    <Compile Include="Hierophant\SemanticRenderMap.cs" />
     <Compile Include="Hierophant\TrinaryCorrespondenceTable.xaml.cs">
       <DependentUpon>TrinaryCorrespondenceTable.xaml</DependentUpon>
     </Compile>

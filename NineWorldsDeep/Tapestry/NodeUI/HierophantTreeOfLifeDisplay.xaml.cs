@@ -68,7 +68,7 @@ namespace NineWorldsDeep.Tapestry.NodeUI
 
         private void btnExample_Click(object sender, RoutedEventArgs e)
         {
-            TreeOfLifeMap map = new TreeOfLifeMap();
+            SemanticRenderMap map = new SemanticRenderMap();
 
             map.Select(new SemanticKey("Binah-Chokmah")); //should display on both
             map.Select(new SemanticKey("Chesed")); //should display on both

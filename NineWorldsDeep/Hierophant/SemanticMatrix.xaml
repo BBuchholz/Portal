@@ -24,19 +24,7 @@
         <TabControl x:Name="tcSemanticSets" 
                     Grid.Column="0"
                     TabStripPlacement="Right">
-            
-            <TabItem Header="SemanticSet1">
-                <local:SemanticGrid x:Name="sgrid1"/>
-            </TabItem>
-            
-            <TabItem Header="SemanticSet2">
-                <local:SemanticGrid x:Name="sgrid2"/>
-            </TabItem>
-            
-            <TabItem Header="SemanticSet3">
-                <local:SemanticGrid x:Name="sgrid3"/>
-            </TabItem>
-            
+                        
         </TabControl>
 
 

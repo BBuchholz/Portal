@@ -52,5 +52,22 @@ namespace NineWorldsDeep.Hierophant
 
             return semanticMap;
         }
+
+        public static SemanticMap MockMapWithGroups(string uniqueId)
+        {
+            var semanticMap = new SemanticMap();
+
+            semanticMap.Name = "Semantic Map Mockup: " + uniqueId;
+
+            semanticMap.Add(MockDefPlanet(new SemanticKey("testKey1"), "Mercury", "Sulphur", "Aries", "Silver"));
+            semanticMap.Add(MockDefHerb(new SemanticKey("testKey4"), "Cannabis", "Emerald", "Green"));
+            
+            semanticMap.AddTo("demo group", MockDefPlanet(new SemanticKey("testKey2"), "Venus", "Salt", "Libra", "Yellow"));
+            semanticMap.AddTo("demo group", MockDefHerb(new SemanticKey("testKey3"), "Aconite", "Obsidian", "Black"));
+
+            return semanticMap;
+        }
+
+        
     }
 }

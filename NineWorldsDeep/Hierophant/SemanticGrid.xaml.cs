@@ -20,34 +20,35 @@ namespace NineWorldsDeep.Hierophant
     /// </summary>
     public partial class SemanticGrid : UserControl
     {
+        private Dictionary<string, DataGrid> semanticGroupNamesToDataGrids =
+            new Dictionary<string, DataGrid>();
+        
         public SemanticGrid()
         {
             InitializeComponent();
 
             this.DataContext = this;
-
-            //Mockup();
-            MockupDGrid1(dgridSemanticMapDisplayOne);
-            MockupDGrid2(dgridSemanticMapDisplayTwo);
-
+            
             CountForTesting = 0;
         }
 
         private int CountForTesting { get; set; }
         
-        private void MockupDGrid1(DataGrid dGrid)
+        public void DisplaySemanticMap(SemanticMap semanticMap)
         {
-            DisplaySemanticMap(dGrid, UtilsHierophant.MockMap1());
+            DisplaySemanticMap("[[ALL]]", semanticMap);
+
+            foreach(string semanticGroupName in semanticMap.SemanticGroupNames)
+            {
+                DisplaySemanticMap(semanticGroupName, semanticMap.SemanticGroup(semanticGroupName));
+            }
         }
 
-        private void MockupDGrid2(DataGrid dGrid)
-        {
-            DisplaySemanticMap(dGrid, UtilsHierophant.MockMap2());
-        }
-
-        private void DisplaySemanticMap(DataGrid dgrid, SemanticMap semanticMap)
+        private void DisplaySemanticMap(string semanticGroupName, SemanticMap semanticMap)
         {
             List<string> columnNames = new List<string>();
+            EnsureSemanticGroupGrid(semanticGroupName);
+            var dgrid = semanticGroupNamesToDataGrids[semanticGroupName];
             dgrid.ItemsSource = semanticMap;
 
             //get all keys in all semantic definition as one list (for column names)
@@ -75,19 +76,40 @@ namespace NineWorldsDeep.Hierophant
         
         private void btnAddSemanticGroup_Click(object sender, RoutedEventArgs e)
         {
-            TabItem tabItem = new TabItem();
-            tabItem.Header = "A new semantic set " + CountForTesting;
-            DataGrid dataGrid = new DataGrid();
-            dataGrid.AutoGenerateColumns = false;
-
-            DataGridTextColumn textColumn = new DataGridTextColumn();
-            textColumn.Binding = new Binding("Key");
-            dataGrid.Columns.Add(textColumn);
-
-            tabItem.Content = dataGrid;
-            tcSemanticGroups.Items.Add(tabItem);
-
+            EnsureSemanticGroupGrid("Semantic Group " + CountForTesting);
             CountForTesting += 1;
+        }
+
+        private void EnsureSemanticGroupGrid(string semanticGroupName)
+        {
+            //prevent overwrite of existing groups
+            if (!semanticGroupNamesToDataGrids.ContainsKey(semanticGroupName))
+            {
+                TabItem tabItem = new TabItem();
+                tabItem.Header = semanticGroupName;
+                DataGrid dataGrid = new DataGrid();
+                dataGrid.AutoGenerateColumns = false;
+
+                semanticGroupNamesToDataGrids[semanticGroupName] = dataGrid;
+
+                DataGridTextColumn textColumn = new DataGridTextColumn();
+                textColumn.Binding = new Binding("Key");
+                dataGrid.Columns.Add(textColumn);
+
+                tabItem.Content = dataGrid;
+                tcSemanticGroups.Items.Add(tabItem);
+            }
+        }
+
+        private void chkHighlightActiveGroup_checkToggled(object sender, RoutedEventArgs e)
+        {
+            bool? isChecked = chkHighlightActiveGroup.IsChecked;
+
+            if (isChecked.HasValue && 
+                isChecked.Value == true) //intentionally redundant for clarity
+            {
+                UI.Display.Message("do stuff here");
+            }
         }
     }
 }

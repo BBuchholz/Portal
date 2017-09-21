@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace NineWorldsDeep.Hierophant
 {
-    public class TreeOfLifeMap : ISemanticallyRenderable
+    public class SemanticRenderMap : ISemanticallyRenderable
     {
         private Dictionary<SemanticKey, bool> keysToSelectionStatus =
             new Dictionary<SemanticKey, bool>();

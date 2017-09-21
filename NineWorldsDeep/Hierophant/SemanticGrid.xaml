@@ -24,39 +24,25 @@
         
         <TabControl x:Name="tcSemanticGroups" 
                     Grid.Row="0"
-                    TabStripPlacement="Bottom">
-            
-            <TabItem Header="SemanticGroup1">
-                <DataGrid x:Name="dgridSemanticMapDisplayOne"
-                          AutoGenerateColumns="False">
-                    <DataGrid.Columns>
-                        <DataGridTextColumn Header="SemanticKey"
-                                            Binding="{Binding Key}"/>
-                    </DataGrid.Columns>
-                </DataGrid>
-            </TabItem>
-
-            <TabItem Header="SemanticGroup2">
-                <DataGrid x:Name="dgridSemanticMapDisplayTwo"
-                          AutoGenerateColumns="False">
-                    <DataGrid.Columns>
-                        <DataGridTextColumn Header="SemanticKey"
-                                            Binding="{Binding Key}"/>
-                    </DataGrid.Columns>
-                </DataGrid>
-            </TabItem>
-
-            <TabItem Header="SemanticGroup3">
-                <DataGrid x:Name="dgridSemanticMapDisplayThree"
-                          AutoGenerateColumns="False"/>
-            </TabItem>
+                    TabStripPlacement="Bottom">            
             
         </TabControl>
+        
+        
 
         <StackPanel Grid.Row="1"
                     Orientation="Horizontal"
                     HorizontalAlignment="Right">
 
+            <CheckBox Content="Highlight Active Group (diff. color)"
+                      x:Name="chkHighlightActiveGroup"
+                      HorizontalAlignment="Center"
+                      VerticalAlignment="Center"
+                      IsChecked="False"                    
+                      Margin="10 5"
+                      Unchecked="chkHighlightActiveGroup_checkToggled"
+                      Checked="chkHighlightActiveGroup_checkToggled"/>
+            
             <Button x:Name="btnAddSemanticGroup"
                     Margin="8"
                     Click="btnAddSemanticGroup_Click">
@@ -64,7 +50,8 @@
                     <Image Source="{StaticResource iconAddSmall}"/>
                 </Button.Content>
             </Button>
-            
+
+
         </StackPanel>
         
     </Grid>
