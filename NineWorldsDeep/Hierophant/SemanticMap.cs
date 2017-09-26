@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,9 +7,12 @@ using System.Threading.Tasks;
 
 namespace NineWorldsDeep.Hierophant
 {
-    public class SemanticMap : Dictionary<SemanticKey, SemanticDefinition>
+    public class SemanticMap
     {
-        private Dictionary<string, SemanticMap> semanticGroupNamesToSemanticGroupMaps =
+        private Dictionary<SemanticKey, SemanticDefinition> keysToDefs =
+            new Dictionary<SemanticKey, SemanticDefinition>();
+
+        private Dictionary<string, SemanticMap> groupNamesToGroupMaps =
             new Dictionary<string, SemanticMap>();
 
         public string Name { get; set; }
@@ -20,7 +24,7 @@ namespace NineWorldsDeep.Hierophant
         /// <param name="def"></param>
         public void Add(SemanticDefinition def)
         {
-            Add(def.SemanticKey, def);
+            keysToDefs.Add(def.SemanticKey, def);
         }        
 
         /// <summary>
@@ -44,18 +48,36 @@ namespace NineWorldsDeep.Hierophant
         /// <returns></returns>
         public SemanticMap SemanticGroup(string semanticGroupName)
         {
-            if (!semanticGroupNamesToSemanticGroupMaps.ContainsKey(semanticGroupName))
+            if (!groupNamesToGroupMaps.ContainsKey(semanticGroupName))
             {
-                semanticGroupNamesToSemanticGroupMaps[semanticGroupName] =
+                groupNamesToGroupMaps[semanticGroupName] =
                     new SemanticMap();
             }
 
-            return semanticGroupNamesToSemanticGroupMaps[semanticGroupName];
+            return groupNamesToGroupMaps[semanticGroupName];
+        }
+
+        public IEnumerable AsDictionary()
+        {
+            return keysToDefs;
         }
 
         public IEnumerable<string> SemanticGroupNames
         {
-            get { return semanticGroupNamesToSemanticGroupMaps.Keys; }
+            get { return groupNamesToGroupMaps.Keys; }
+        }
+
+        public IEnumerable<SemanticDefinition> SemanticDefinitions
+        {
+            get
+            {
+                return keysToDefs.Values;
+            }
+        }
+
+        public bool HasGroup(string groupName)
+        {
+            return groupNamesToGroupMaps.ContainsKey(groupName);
         }
     }
 }

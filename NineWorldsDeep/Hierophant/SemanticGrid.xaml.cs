@@ -22,25 +22,27 @@ namespace NineWorldsDeep.Hierophant
     {
         private Dictionary<string, DataGrid> semanticGroupNamesToDataGrids =
             new Dictionary<string, DataGrid>();
+
+        public SemanticMap CurrentSemanticMap { get; private set; }
         
         public SemanticGrid()
         {
             InitializeComponent();
 
             this.DataContext = this;
-            
-            CountForTesting = 0;
         }
 
-        private int CountForTesting { get; set; }
+        //private int CountForTesting { get; set; }
         
         public void DisplaySemanticMap(SemanticMap semanticMap)
         {
-            DisplaySemanticMap("[[ALL]]", semanticMap);
+            CurrentSemanticMap = semanticMap;
 
-            foreach(string semanticGroupName in semanticMap.SemanticGroupNames)
+            DisplaySemanticMap("[[ALL]]", CurrentSemanticMap);
+
+            foreach(string semanticGroupName in CurrentSemanticMap.SemanticGroupNames)
             {
-                DisplaySemanticMap(semanticGroupName, semanticMap.SemanticGroup(semanticGroupName));
+                DisplaySemanticMap(semanticGroupName, CurrentSemanticMap.SemanticGroup(semanticGroupName));
             }
         }
 
@@ -49,10 +51,10 @@ namespace NineWorldsDeep.Hierophant
             List<string> columnNames = new List<string>();
             EnsureSemanticGroupGrid(semanticGroupName);
             var dgrid = semanticGroupNamesToDataGrids[semanticGroupName];
-            dgrid.ItemsSource = semanticMap;
+            dgrid.ItemsSource = semanticMap.AsDictionary();
 
             //get all keys in all semantic definition as one list (for column names)
-            foreach (SemanticDefinition def in semanticMap.Values)
+            foreach (SemanticDefinition def in semanticMap.SemanticDefinitions)
             {
                 foreach (string key in def.Keys)
                 {
@@ -76,8 +78,24 @@ namespace NineWorldsDeep.Hierophant
         
         private void btnAddSemanticGroup_Click(object sender, RoutedEventArgs e)
         {
-            EnsureSemanticGroupGrid("Semantic Group " + CountForTesting);
-            CountForTesting += 1;
+            int i = 0;
+            string autoGenName;
+
+            do
+            {
+                i++;
+                autoGenName = "Semantic Group " + i;
+            }
+            while (CurrentSemanticMap.HasGroup(autoGenName));
+
+            var name = UI.Prompt.Input("enter a group name: ", autoGenName);
+            
+            if (!string.IsNullOrWhiteSpace(name))
+            {
+                //creates it if it doesn't exist
+                CurrentSemanticMap.SemanticGroup(name);
+                DisplaySemanticMap(CurrentSemanticMap);
+            }
         }
 
         private void EnsureSemanticGroupGrid(string semanticGroupName)

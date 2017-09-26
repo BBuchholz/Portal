@@ -28,8 +28,6 @@
             
         </TabControl>
         
-        
-
         <StackPanel Grid.Row="1"
                     Orientation="Horizontal"
                     HorizontalAlignment="Right">
