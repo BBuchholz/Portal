@@ -23,6 +23,9 @@ namespace NineWorldsDeep.Hierophant
         private Dictionary<string, DataGrid> semanticGroupNamesToDataGrids =
             new Dictionary<string, DataGrid>();
 
+        private Dictionary<string, SemanticGridPane> semanticGroupsToPanes =
+            new Dictionary<string, SemanticGridPane>();
+
         public SemanticMap CurrentSemanticMap { get; private set; }
         
         public SemanticGrid()
@@ -48,6 +51,26 @@ namespace NineWorldsDeep.Hierophant
 
         private void DisplaySemanticMap(string semanticGroupName, SemanticMap semanticMap)
         {
+            EnsureSemanticGroupGridPane(semanticGroupName);
+            var gridPane = semanticGroupsToPanes[semanticGroupName];
+
+            gridPane.DisplaySemanticMap(semanticGroupName, semanticMap);            
+        }
+        
+        public void DisplaySemanticMapToDataGrid(SemanticMap semanticMap)
+        {
+            CurrentSemanticMap = semanticMap;
+
+            DisplaySemanticMap("[[ALL]]", CurrentSemanticMap);
+
+            foreach (string semanticGroupName in CurrentSemanticMap.SemanticGroupNames)
+            {
+                DisplaySemanticMap(semanticGroupName, CurrentSemanticMap.SemanticGroup(semanticGroupName));
+            }
+        }
+
+        private void DisplaySemanticMapToDataGrid(string semanticGroupName, SemanticMap semanticMap)
+        {
             List<string> columnNames = new List<string>();
             EnsureSemanticGroupGrid(semanticGroupName);
             var dgrid = semanticGroupNamesToDataGrids[semanticGroupName];
@@ -59,7 +82,8 @@ namespace NineWorldsDeep.Hierophant
                 foreach (string key in def.Keys)
                 {
                     //store distinct keys (for column names)
-                    if (!columnNames.Contains(key)) {
+                    if (!columnNames.Contains(key))
+                    {
 
                         columnNames.Add(key);
                     }
@@ -72,9 +96,9 @@ namespace NineWorldsDeep.Hierophant
                 DataGridTextColumn col = new DataGridTextColumn();
                 col.Header = colName;
                 col.Binding = new Binding(string.Format("Value[{0}]", colName));
-                dgrid.Columns.Add(col);                 
+                dgrid.Columns.Add(col);
             }
-        } 
+        }
         
         private void btnAddSemanticGroup_Click(object sender, RoutedEventArgs e)
         {
@@ -115,6 +139,30 @@ namespace NineWorldsDeep.Hierophant
                 dataGrid.Columns.Add(textColumn);
 
                 tabItem.Content = dataGrid;
+                tcSemanticGroups.Items.Add(tabItem);
+            }
+        }
+        
+        private void EnsureSemanticGroupGridPane(string semanticGroupName)
+        {
+            //prevent overwrite of existing groups
+            if (!semanticGroupsToPanes.ContainsKey(semanticGroupName))
+            {
+                TabItem tabItem = new TabItem();
+                tabItem.Header = semanticGroupName;
+
+                //DataGrid dataGrid = new DataGrid();
+                //dataGrid.AutoGenerateColumns = false;
+
+                //DataGridTextColumn textColumn = new DataGridTextColumn();
+                //textColumn.Binding = new Binding("Key");
+                //dataGrid.Columns.Add(textColumn);
+
+                var gridPane = new SemanticGridPane();
+
+                semanticGroupsToPanes[semanticGroupName] = gridPane;
+
+                tabItem.Content = gridPane;
                 tcSemanticGroups.Items.Add(tabItem);
             }
         }

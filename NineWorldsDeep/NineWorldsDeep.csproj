@@ -233,6 +233,9 @@
     <Compile Include="Hierophant\SemanticGrid.xaml.cs">
       <DependentUpon>SemanticGrid.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Hierophant\SemanticGridPane.xaml.cs">
+      <DependentUpon>SemanticGridPane.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Hierophant\SemanticKey.cs" />
     <Compile Include="Hierophant\SemanticMap.cs" />
     <Compile Include="Hierophant\SemanticMatrix.xaml.cs">
@@ -657,6 +660,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Hierophant\SemanticGrid.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Hierophant\SemanticGridPane.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
