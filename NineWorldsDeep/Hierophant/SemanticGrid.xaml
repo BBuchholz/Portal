@@ -24,7 +24,8 @@
         
         <TabControl x:Name="tcSemanticGroups" 
                     Grid.Row="0"
-                    TabStripPlacement="Bottom">            
+                    TabStripPlacement="Bottom"
+                    SelectionChanged="tcSemanticGroups_SelectionChanged">            
             
         </TabControl>
         

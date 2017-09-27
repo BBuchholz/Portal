@@ -20,38 +20,120 @@ namespace NineWorldsDeep.Hierophant
     /// </summary>
     public partial class SemanticGridPane : UserControl
     {
+        private SemanticMap CurrentSemanticMap { get; set; }
+
         public SemanticGridPane()
         {
             InitializeComponent();
         }
 
-        public void DisplaySemanticMap(string semanticGroupName, SemanticMap semanticMap)
+        public void RefreshFromMap()
         {
-            List<string> columnNames = new List<string>();
+            dgrid.ItemsSource = null;
 
-            dgrid.ItemsSource = semanticMap.AsDictionary();
-
-            //get all keys in all semantic definition as one list (for column names)
-            foreach (SemanticDefinition def in semanticMap.SemanticDefinitions)
+            if (CurrentSemanticMap != null)
             {
-                foreach (string key in def.Keys)
-                {
-                    //store distinct keys (for column names)
-                    if (!columnNames.Contains(key))
-                    {
+                List<string> columnNames = new List<string>();
 
-                        columnNames.Add(key);
+                dgrid.ItemsSource = CurrentSemanticMap.AsDictionary();
+
+                //get all keys in all semantic definition as one list (for column names)
+                foreach (SemanticDefinition def in CurrentSemanticMap.SemanticDefinitions)
+                {
+                    foreach (string key in def.Keys)
+                    {
+                        //store distinct keys (for column names)
+                        if (!columnNames.Contains(key))
+                        {
+                            columnNames.Add(key);
+                        }
+                    }
+                }
+
+                //add column for each columnName
+                foreach (string colName in columnNames)
+                {
+                    if (!DataGridColumnHeaderExists(colName))
+                    {
+                        DataGridTextColumn col = new DataGridTextColumn();
+                        col.Header = colName;
+                        col.Binding = new Binding(string.Format("Value[{0}]", colName));
+                        dgrid.Columns.Add(col);
                     }
                 }
             }
+        }
 
-            //add column for each columnName
-            foreach (string colName in columnNames)
+        public void DisplaySemanticMap(SemanticMap semanticMap)
+        {
+            CurrentSemanticMap = semanticMap;
+            RefreshFromMap();
+
+            //List<string> columnNames = new List<string>();
+
+            //dgrid.ItemsSource = CurrentSemanticMap.AsDictionary();
+
+            ////get all keys in all semantic definition as one list (for column names)
+            //foreach (SemanticDefinition def in CurrentSemanticMap.SemanticDefinitions)
+            //{
+            //    foreach (string key in def.Keys)
+            //    {
+            //        //store distinct keys (for column names)
+            //        if (!columnNames.Contains(key))
+            //        {
+            //            columnNames.Add(key);
+            //        }
+            //    }
+            //}
+
+            ////add column for each columnName
+            //foreach (string colName in columnNames)
+            //{
+            //    if (!DataGridColumnHeaderExists(colName))
+            //    {
+            //        DataGridTextColumn col = new DataGridTextColumn();
+            //        col.Header = colName;
+            //        col.Binding = new Binding(string.Format("Value[{0}]", colName));
+            //        dgrid.Columns.Add(col);
+            //    }
+            //}
+        }
+
+        private bool DataGridColumnHeaderExists(string header)
+        {
+            bool exists = false;
+
+            foreach(var col in dgrid.Columns)
             {
-                DataGridTextColumn col = new DataGridTextColumn();
-                col.Header = colName;
-                col.Binding = new Binding(string.Format("Value[{0}]", colName));
-                dgrid.Columns.Add(col);
+                if (col.Header != null && 
+                    col.Header.Equals(header))
+                {
+                    exists = true;
+                }
+            }
+                
+            return exists;
+        }
+
+        private void btnAddSemanticKey_Click(object sender, RoutedEventArgs e)
+        {
+            var keyText = txtAddSemanticKey.Text;
+
+            if (!string.IsNullOrWhiteSpace(keyText))
+            {
+                var semanticKey = new SemanticKey(keyText);
+
+                if (CurrentSemanticMap != null)
+                {
+                    
+                    CurrentSemanticMap.Add(new SemanticDefinition(semanticKey));
+                    txtAddSemanticKey.Text = "";
+                    RefreshFromMap();
+                }
+                else
+                {
+                    UI.Display.Message("CurrentSemanticMap is null");
+                }
             }
         }
     }

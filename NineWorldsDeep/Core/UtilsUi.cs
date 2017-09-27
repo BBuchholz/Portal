@@ -1,12 +1,34 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 
 namespace NineWorldsDeep.Core
 {
-    internal class UtilsUi
+    public class UtilsUi
     {
+        public static List<T> FindChildren<T>(DependencyObject parent) where T : DependencyObject
+        {
+            if (parent == null) return null;
+
+            List<T> children = new List<T>();
+
+            var chidrenFromTreeHelper = LogicalTreeHelper.GetChildren(parent);
+
+            foreach(var child in chidrenFromTreeHelper)
+            {
+                T childType = child as T;
+                if (childType != null)
+                {
+                    children.Add((T)child);
+                }
+            }
+
+            return children;
+        }
+
+
         public static T FindAncestor<T>(DependencyObject current)
             where T : DependencyObject
         {

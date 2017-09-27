@@ -8,8 +8,20 @@
              d:DesignHeight="300" d:DesignWidth="300">
     <Grid>
 
+        <Grid.RowDefinitions>
+            <RowDefinition/>
+            <RowDefinition Height="40"/>
+        </Grid.RowDefinitions>
+
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+            <ColumnDefinition Width="100"/>
+        </Grid.ColumnDefinitions>
+
         <DataGrid x:Name="dgrid"
-                  AutoGenerateColumns="False">
+                  AutoGenerateColumns="False"
+                  Grid.ColumnSpan="2"
+                  Margin="5">
             
             <DataGrid.Columns>
             
@@ -18,6 +30,18 @@
             </DataGrid.Columns>
             
         </DataGrid>
-        
+
+        <TextBox x:Name="txtAddSemanticKey"
+                 Grid.Column="0"
+                 Grid.Row="1"
+                 Margin="5"/>
+
+        <Button x:Name="btnAddSemanticKey"
+                Grid.Column="1"
+                Grid.Row="1"
+                Margin="5"
+                Content="Create Key"
+                Click="btnAddSemanticKey_Click"/>
+
     </Grid>
 </UserControl>

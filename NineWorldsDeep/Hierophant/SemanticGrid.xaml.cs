@@ -54,7 +54,7 @@ namespace NineWorldsDeep.Hierophant
             EnsureSemanticGroupGridPane(semanticGroupName);
             var gridPane = semanticGroupsToPanes[semanticGroupName];
 
-            gridPane.DisplaySemanticMap(semanticGroupName, semanticMap);            
+            gridPane.DisplaySemanticMap(semanticMap);            
         }
         
         public void DisplaySemanticMapToDataGrid(SemanticMap semanticMap)
@@ -175,6 +175,19 @@ namespace NineWorldsDeep.Hierophant
                 isChecked.Value == true) //intentionally redundant for clarity
             {
                 UI.Display.Message("do stuff here");
+            }
+        }
+
+        private void tcSemanticGroups_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            TabItem selectedTab = e.AddedItems[0] as TabItem;  // Gets selected tab
+
+            SemanticGridPane pane = 
+                Core.UtilsUi.FindChildren<SemanticGridPane>(selectedTab).First();
+
+            if(pane != null)
+            {
+                pane.RefreshFromMap();
             }
         }
     }
