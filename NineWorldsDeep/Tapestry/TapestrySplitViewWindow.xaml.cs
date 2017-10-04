@@ -29,5 +29,10 @@ namespace NineWorldsDeep.Tapestry
         {
             ctrlNodeSplitView.NavigateRoot();
         }
+        
+        private void MenuItem_GlobalLoadLocalCheckChanged(object sender, RoutedEventArgs e)
+        {
+            TapestryRegistry.GlobalLoadLocal = chkGlobalLoadLocal.IsChecked;
+        }
     }
 }

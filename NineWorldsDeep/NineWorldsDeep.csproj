@@ -587,6 +587,7 @@
     <Compile Include="Tapestry\NodeUI\TaggedMediaDisplay.xaml.cs">
       <DependentUpon>TaggedMediaDisplay.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Tapestry\TapestryRegistry.cs" />
     <Compile Include="Tapestry\TapestrySplitViewLoadCommand.cs" />
     <Compile Include="Tapestry\TapestryNode.cs" />
     <Compile Include="Tapestry\TapestryNodeSplitViewControl.xaml.cs">

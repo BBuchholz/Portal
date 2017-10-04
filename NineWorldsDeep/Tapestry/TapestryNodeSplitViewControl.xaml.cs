@@ -47,8 +47,13 @@ namespace NineWorldsDeep.Tapestry
         {
             TapestrySplitViewLoadCommand lc = new TapestrySplitViewLoadCommand();
 
-            if (originator == leftNodeView)
+            if (TapestryRegistry.GlobalLoadLocal)
             {
+                nd.LoadLocal = true;
+            }
+
+            if (originator == leftNodeView)
+            {                
                 if (nd.LoadLocal)
                 {
                     lc.LeftNode = nd;
