@@ -15,6 +15,8 @@ using System.Windows.Shapes;
 using NineWorldsDeep.Hierophant;
 using NineWorldsDeep.Tapestry.Nodes;
 using NineWorldsDeep.Core;
+using System.IO;
+using NineWorldsDeep.Hive;
 
 namespace NineWorldsDeep.Tapestry.NodeUI
 {
@@ -77,6 +79,33 @@ namespace NineWorldsDeep.Tapestry.NodeUI
 
             hierophantTreeOfLifeInstance.Display(map);
             lurianicTreeOfLifeInstance.Display(map);
+        }
+
+        private void btnExportXml_Click(object sender, RoutedEventArgs e)
+        {
+            var doc = 
+                Xml.Xml.Export(UtilsHierophant.MockMapWithGroups("demo"));
+
+            string fileName =
+                NwdUtils.GetTimeStamp_yyyyMMddHHmmss() + "-nwd-hierophant.xml";
+
+            //uncomment when done testing
+            //IEnumerable<string> paths = ConfigHive.GetHiveFoldersForXmlExport();
+            List<string> paths = new List<string>();
+            paths.Add(@"C:\NWD-SYNC\hive\test-root\xml\incoming"); //just for testing
+
+            foreach (string folderPath in paths)
+            {
+                //ensure directory
+                Directory.CreateDirectory(folderPath);
+
+                string fullFilePath =
+                    System.IO.Path.Combine(folderPath, fileName);
+
+                doc.Save(fullFilePath);
+            }
+
+            tbStatus.Text = "exported as " + fileName;
         }
     }
 }

@@ -79,7 +79,7 @@ namespace NineWorldsDeep.Hierophant
             //get all keys in all semantic definition as one list (for column names)
             foreach (SemanticDefinition def in semanticMap.SemanticDefinitions)
             {
-                foreach (string key in def.Keys)
+                foreach (string key in def.ColumnNames)
                 {
                     //store distinct keys (for column names)
                     if (!columnNames.Contains(key))

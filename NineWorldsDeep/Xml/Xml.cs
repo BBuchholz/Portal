@@ -10,6 +10,7 @@ using System.Xml.Linq;
 using NineWorldsDeep.Mnemosyne.V5;
 using System.Xml;
 using NineWorldsDeep.Tapestry.NodeUI;
+using NineWorldsDeep.Hierophant;
 
 namespace NineWorldsDeep.Xml
 {
@@ -596,6 +597,127 @@ namespace NineWorldsDeep.Xml
                 new XAttribute(ATTRIBUTE_VERIFIED_MISSING, verifiedMissing));
             
             return pathEl;
+        }
+
+        public static XDocument Export(SemanticMap semMap)
+        {
+            var lst = new List<SemanticMap>();
+            lst.Add(semMap);
+            return Export(lst);
+        }
+        public static XDocument Export(IEnumerable<SemanticMap> semanticMaps)
+        {
+            /*
+             * 
+             * desired output:
+             * 
+             * <nwd>
+             *   <hierophantSubset>
+             *     <semanticMap>
+             *       <semanticDefinitions>
+             *         <semanticDefinition>
+             *           <semanticKey>key as string</semanticKey>
+             *           <columns>
+             *             <column>
+             *               <columnName>column name</columnName>
+             *               <columnValue>column value</columnValue>
+             *             </column>
+             *           </columns>
+             *         </semanticDefinition>
+             *         <semanticDefinition/>
+             *         <semanticDefinition/>
+             *       </semanticDefinitions>
+             *       <semanticGroups>
+             *         <semanticGroup>
+             *           <semanticGroupName>name</semanticGroupName>
+             *           <semanticKeys>
+             *             <semanticKey>just the key as string here</semanticKey>
+             *             <semanticKey/>
+             *             <semanticKey/>
+             *           </semanticKeys>
+             *         </semanticGroup>
+             *         <semanticGroup/>
+             *         <semanticGroup/>
+             *       </semanticGroups>
+             *     </semanticMap>
+             *     <semanticMap/>
+             *     <semanticMap/>
+             *   </hierophantSubset>
+             * </nwd>
+             * 
+            */
+            
+            XElement hierophantSubsetEl = new XElement("hierophantSubset");
+            
+            foreach (var semanticMap in semanticMaps)
+            {
+                XElement semanticMapEl = new XElement("semanticMap");
+                hierophantSubsetEl.Add(semanticMapEl);
+
+                XElement semanticDefinitionsEl =
+                    new XElement("semanticDefinitions");
+
+                semanticMapEl.Add(semanticDefinitionsEl);
+
+                foreach (var def in semanticMap.SemanticDefinitions)
+                {
+                    semanticDefinitionsEl.Add(CreateSemanticDefinitionElement(def));
+                }
+
+                XElement semanticGroupsEl = new XElement("semanticGroups");
+                semanticMapEl.Add(semanticGroupsEl);
+
+                foreach (var semGroupName in semanticMap.SemanticGroupNames)
+                {
+                    semanticGroupsEl.Add(
+                        CreateSemanticGroupElement(
+                            semanticMap.SemanticGroup(semGroupName),
+                            semGroupName));
+                }
+            }
+
+            return new XDocument(new XElement("nwd", hierophantSubsetEl));
+        }
+
+        private static XElement CreateSemanticGroupElement(
+            SemanticMap semanticMapForGroup, string semanticGroupName)
+        {
+            XElement semanticKeysEl = new XElement("semanticKeys");
+
+            XElement semanticGroupEl = 
+                new XElement("semanticGroup",
+                    new XElement("semanticGroupName", semanticGroupName),
+                    semanticKeysEl);
+
+            foreach(var semKey in semanticMapForGroup.SemanticKeys)
+            {
+                semanticKeysEl.Add( 
+                    new XElement("semanticKey", semKey.ToString()));
+            }
+
+            return semanticGroupEl;
+        }
+
+        private static XElement CreateSemanticDefinitionElement(SemanticDefinition def)
+        {
+            XElement semanticDefinitionEl =
+                new XElement("semanticDefinition");
+            
+            semanticDefinitionEl.Add(
+                new XElement("semanticKey", def.SemanticKey.ToString()));
+            
+            XElement columnsEl = new XElement("columns");
+            semanticDefinitionEl.Add(columnsEl);
+
+            foreach(var colName in def.ColumnNames)
+            {
+                columnsEl.Add(
+                    new XElement("column", 
+                        new XElement("columnName", colName),
+                        new XElement("columnValue", def[colName].ToString())));
+            }
+
+            return semanticDefinitionEl;
         }
     }
 }

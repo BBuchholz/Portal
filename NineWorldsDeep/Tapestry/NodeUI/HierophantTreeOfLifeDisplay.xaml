@@ -47,6 +47,12 @@
                         Content="PRESS THIS TO DEMO SEMANTIC MAP RENDER"
                         Click="btnExample_Click"/>
 
+                <Button x:Name="btnExportXml"
+                        Grid.Row="0"
+                        Grid.Column="1"
+                        Margin="5"
+                        Content="EXPORT SEMANTIC MAP TO XML (TESTING)"
+                        Click="btnExportXml_Click"/>
 
                 <CheckBox Content="Load Local (this UI)"
                           Grid.Row="1"
