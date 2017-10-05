@@ -51,8 +51,15 @@
                         Grid.Row="0"
                         Grid.Column="1"
                         Margin="5"
-                        Content="EXPORT SEMANTIC MAP TO XML (TESTING)"
+                        Content="EXPORT SEMANTIC MAP TO XML (TEST)"
                         Click="btnExportXml_Click"/>
+
+                <Button x:Name="btnImportXml"
+                        Grid.Row="0"
+                        Grid.Column="2"
+                        Margin="5"
+                        Content="IMPORT SEMANTIC MAP FROM XML (TEST)"
+                        Click="btnImportXml_Click"/>
 
                 <CheckBox Content="Load Local (this UI)"
                           Grid.Row="1"

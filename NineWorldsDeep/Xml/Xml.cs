@@ -33,6 +33,21 @@ namespace NineWorldsDeep.Xml
         private static string TAG_ITEM_VALUE = "itemValue";
         private static string TAG_TO_DO = "toDo";
 
+        private static string TAG_HIEROPHANT_SUBSET = "hierophantSubset";
+        private static string TAG_SEMANTIC_MAP = "semanticMap";
+        private static string TAG_SEMANTIC_DEFINITIONS = "semanticDefinitions";
+        private static string TAG_SEMANTIC_DEFINITION = "semanticDefinition";
+        private static string TAG_SEMANTIC_KEY = "semanticKey";
+        private static string TAG_COLUMNS = "columns";
+        private static string TAG_COLUMN = "column";
+        private static string TAG_COLUMN_NAME = "columnName";
+        private static string TAG_COLUMN_VALUE = "columnValue";
+        private static string TAG_SEMANTIC_GROUPS = "semanticGroups";
+        private static string TAG_SEMANTIC_GROUP = "semanticGroup";
+        private static string TAG_SEMANTIC_GROUP_NAME = "semanticGroupName";
+        private static string TAG_SEMANTIC_KEYS = "semanticKeys";
+
+
         //attributes
         private static string ATTRIBUTE_SHA1_HASH = "sha1Hash";
         private static string ATTRIBUTE_TAGS = "tags";
@@ -52,6 +67,8 @@ namespace NineWorldsDeep.Xml
         private static string ATTRIBUTE_VERIFIED_MISSING = "verifiedMissing";
 
         private static string ATTRIBUTE_FILE_NAME = "fileName";
+
+
 
         #endregion
 
@@ -148,6 +165,106 @@ namespace NineWorldsDeep.Xml
             }
 
             return synergyListEl;
+        }
+
+        public static IEnumerable<SemanticMap> ImportHierophantSemanticMaps(string path)
+        {
+            //mimic RetrieveMediaWithReaderAsync()
+            List<SemanticMap> allMaps = new List<SemanticMap>();
+            
+            using (XmlReader reader = XmlReader.Create(path))
+            {
+                while (reader.Read())
+                {
+                    if(reader.Name == TAG_SEMANTIC_MAP)
+                    {
+                        XElement semanticMapEl = (XElement)XNode.ReadFrom(reader);
+                        SemanticMap semanticMap = new SemanticMap();                        
+
+                        //process semanticDefinitionsEl
+                        XElement semanticDefinitionsEl =
+                            semanticMapEl.Element(TAG_SEMANTIC_DEFINITIONS);
+
+                        if(semanticDefinitionsEl != null)
+                        {
+                            foreach(XElement semanticDefinitionEl in
+                                semanticDefinitionsEl.Elements(
+                                    TAG_SEMANTIC_DEFINITION))
+                            {
+                                semanticMap.Add(
+                                    ImportSemanticDefinition(
+                                        semanticDefinitionEl));
+                            }
+                        }
+
+                        //process semanticGroupsEl
+                        XElement semanticGroupsEl =
+                            semanticMapEl.Element(TAG_SEMANTIC_GROUPS);
+
+                        if(semanticGroupsEl != null)
+                        {
+                            foreach(XElement semanticGroupEl in
+                                semanticGroupsEl.Elements(
+                                    TAG_SEMANTIC_GROUP))
+                            {
+                                string groupName = 
+                                    semanticGroupEl.Element(TAG_SEMANTIC_GROUP_NAME).Value;
+
+                                if (!string.IsNullOrWhiteSpace(groupName))
+                                {
+                                    XElement semanticKeysEl =
+                                        semanticGroupEl.Element(TAG_SEMANTIC_KEYS);
+
+                                    if (semanticKeysEl != null)
+                                    {
+                                        foreach (XElement semanticKeyEl in
+                                            semanticKeysEl.Elements(TAG_SEMANTIC_KEY))
+                                        {
+                                            SemanticKey semKey = ImportSemanticKey(semanticKeyEl);
+
+                                            SemanticDefinition def = semanticMap[semKey];
+
+                                            if (def != null)
+                                            {
+                                                semanticMap.SemanticGroup(groupName).Add(def);
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+
+                        allMaps.Add(semanticMap);
+                    }
+                }
+            }
+
+            return allMaps;
+        }
+
+        private static SemanticKey ImportSemanticKey(XElement semanticKeyEl)
+        {
+            return new SemanticKey(semanticKeyEl.Value);
+        }
+
+        private static SemanticDefinition ImportSemanticDefinition(XElement semanticDefinitionEl)
+        {            
+            SemanticKey semKey = 
+                ImportSemanticKey(semanticDefinitionEl.Element(TAG_SEMANTIC_KEY));
+
+            SemanticDefinition semDef = new SemanticDefinition(semKey);
+
+            XElement columnsEl = semanticDefinitionEl.Element(TAG_COLUMNS);
+
+            foreach(XElement columnEl in columnsEl.Elements(TAG_COLUMN))
+            {
+                string columnName = columnEl.Element(TAG_COLUMN_NAME).Value;
+                string columnValue = columnEl.Element(TAG_COLUMN_VALUE).Value;
+
+                semDef[columnName] = columnValue;
+            }
+
+            return semDef;
         }
 
         public static XElement Export(List<SynergyV5List> synergyV5Lists)
@@ -647,15 +764,15 @@ namespace NineWorldsDeep.Xml
              * 
             */
             
-            XElement hierophantSubsetEl = new XElement("hierophantSubset");
+            XElement hierophantSubsetEl = new XElement(TAG_HIEROPHANT_SUBSET);
             
             foreach (var semanticMap in semanticMaps)
             {
-                XElement semanticMapEl = new XElement("semanticMap");
+                XElement semanticMapEl = new XElement(TAG_SEMANTIC_MAP);
                 hierophantSubsetEl.Add(semanticMapEl);
 
                 XElement semanticDefinitionsEl =
-                    new XElement("semanticDefinitions");
+                    new XElement(TAG_SEMANTIC_DEFINITIONS);
 
                 semanticMapEl.Add(semanticDefinitionsEl);
 
@@ -664,7 +781,7 @@ namespace NineWorldsDeep.Xml
                     semanticDefinitionsEl.Add(CreateSemanticDefinitionElement(def));
                 }
 
-                XElement semanticGroupsEl = new XElement("semanticGroups");
+                XElement semanticGroupsEl = new XElement(TAG_SEMANTIC_GROUPS);
                 semanticMapEl.Add(semanticGroupsEl);
 
                 foreach (var semGroupName in semanticMap.SemanticGroupNames)
@@ -676,23 +793,23 @@ namespace NineWorldsDeep.Xml
                 }
             }
 
-            return new XDocument(new XElement("nwd", hierophantSubsetEl));
+            return new XDocument(new XElement(TAG_NWD, hierophantSubsetEl));
         }
 
         private static XElement CreateSemanticGroupElement(
             SemanticMap semanticMapForGroup, string semanticGroupName)
         {
-            XElement semanticKeysEl = new XElement("semanticKeys");
+            XElement semanticKeysEl = new XElement(TAG_SEMANTIC_KEYS);
 
             XElement semanticGroupEl = 
-                new XElement("semanticGroup",
-                    new XElement("semanticGroupName", semanticGroupName),
+                new XElement(TAG_SEMANTIC_GROUP,
+                    new XElement(TAG_SEMANTIC_GROUP_NAME, semanticGroupName),
                     semanticKeysEl);
 
             foreach(var semKey in semanticMapForGroup.SemanticKeys)
             {
                 semanticKeysEl.Add( 
-                    new XElement("semanticKey", semKey.ToString()));
+                    new XElement(TAG_SEMANTIC_KEY, semKey.ToString()));
             }
 
             return semanticGroupEl;
@@ -701,20 +818,20 @@ namespace NineWorldsDeep.Xml
         private static XElement CreateSemanticDefinitionElement(SemanticDefinition def)
         {
             XElement semanticDefinitionEl =
-                new XElement("semanticDefinition");
+                new XElement(TAG_SEMANTIC_DEFINITION);
             
             semanticDefinitionEl.Add(
-                new XElement("semanticKey", def.SemanticKey.ToString()));
+                new XElement(TAG_SEMANTIC_KEY, def.SemanticKey.ToString()));
             
-            XElement columnsEl = new XElement("columns");
+            XElement columnsEl = new XElement(TAG_COLUMNS);
             semanticDefinitionEl.Add(columnsEl);
 
             foreach(var colName in def.ColumnNames)
             {
                 columnsEl.Add(
-                    new XElement("column", 
-                        new XElement("columnName", colName),
-                        new XElement("columnValue", def[colName].ToString())));
+                    new XElement(TAG_COLUMN, 
+                        new XElement(TAG_COLUMN_NAME, colName),
+                        new XElement(TAG_COLUMN_VALUE, def[colName].ToString())));
             }
 
             return semanticDefinitionEl;

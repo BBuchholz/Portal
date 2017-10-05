@@ -25,10 +25,21 @@ namespace NineWorldsDeep.Hierophant
         {
             get { return keysToDefs.Keys; }
         }
+
+        public SemanticDefinition this[SemanticKey key]
+        {
+            get { return keysToDefs[key]; }
+        }
         
+        /// <summary>
+        /// will add definition to the map, indexed by its semantic key
+        /// if the key already exists, the new value will OVERWRITE the
+        /// previous one.
+        /// </summary>
+        /// <param name="def"></param>
         public void Add(SemanticDefinition def)
         {
-            keysToDefs.Add(def.SemanticKey, def);
+            keysToDefs[def.SemanticKey] = def;
 
             //needed so adding to submaps from grid panes will
             //propogate up the hierarchy to the top level parent

@@ -86,8 +86,7 @@ namespace NineWorldsDeep.Tapestry.NodeUI
             var doc = 
                 Xml.Xml.Export(UtilsHierophant.MockMapWithGroups("demo"));
 
-            string fileName =
-                NwdUtils.GetTimeStamp_yyyyMMddHHmmss() + "-nwd-hierophant.xml";
+            string fileName = ConfigHive.GenerateHiveHierophantXmlFileName();                
 
             //uncomment when done testing
             //IEnumerable<string> paths = ConfigHive.GetHiveFoldersForXmlExport();
@@ -106,6 +105,39 @@ namespace NineWorldsDeep.Tapestry.NodeUI
             }
 
             tbStatus.Text = "exported as " + fileName;
+        }
+
+        private void btnImportXml_Click(object sender, RoutedEventArgs e)
+        {
+            //uncomment when done testing
+            //IEnumerable<string> paths = 
+            //    ConfigHive.GetHiveHierophantXmlImportFilePaths();
+            IEnumerable<string> paths =
+                ConfigHive.TestingGetHiveHierophantXmlImportFilePaths(); //just for testing
+
+
+            List<SemanticMap> semanticMaps = new List<SemanticMap>();
+
+            foreach(string path in paths)
+            {
+                semanticMaps.AddRange(Xml.Xml.ImportHierophantSemanticMaps(path));
+            }
+
+            //just testing
+            string msg = "not found";
+
+            if(semanticMaps.Count > 0)
+            {
+                msg = "maps found: " + semanticMaps.Count;
+                msg += Environment.NewLine;
+                msg += "semantic keys in first map: " + semanticMaps.First().SemanticKeys.Count();
+                msg += Environment.NewLine;
+                msg += "semantic groups in first map: " + semanticMaps.First().SemanticGroupNames.Count();
+            }
+
+            UI.Display.Message(msg);
+
+            tbStatus.Text = "imported from xml";
         }
     }
 }

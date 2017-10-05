@@ -1,4 +1,5 @@
-﻿using System;
+﻿using NineWorldsDeep.Core;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -9,6 +10,31 @@ namespace NineWorldsDeep.Hive
 {
     public class ConfigHive
     {
+        private static string HIEROPHANT_SUFFIX = "nwd-hierophant";
+
+        public static string GenerateHiveHierophantXmlFileName()
+        {
+            return NwdUtils.GetTimeStamp_yyyyMMddHHmmss() + "-" + HIEROPHANT_SUFFIX + ".xml";
+        }
+
+        /// <summary>
+        /// Will get the hierophant xml files in the SyncRoot for the local device.        
+        /// </summary>
+        /// <returns></returns>
+        public static List<string> GetHiveHierophantXmlImportFilePaths()
+        {
+            return GetHiveXmlImportFilePathsBySuffix(HIEROPHANT_SUFFIX);
+        }
+
+        public static List<string> TestingGetHiveHierophantXmlImportFilePaths()
+        {
+            return GetHiveXmlImportFilePathsBySuffix(
+                HIEROPHANT_SUFFIX, 
+                new HiveRoot()
+                {
+                    HiveRootName = "test-root"
+                });
+        }
 
         /// <summary>
         /// Will get the synergy xml files in the SyncRoot for the local device.        
@@ -50,14 +76,26 @@ namespace NineWorldsDeep.Hive
             return "main-laptop";
         }
 
-        public static List<string> GetHiveXmlImportFilePathsBySuffix(string suffix)
+        /// <summary>
+        /// omit hiveRoot to default to local root
+        /// </summary>
+        /// <param name="suffix"></param>
+        /// <param name="hiveRoot"></param>
+        /// <returns></returns>
+        public static List<string> GetHiveXmlImportFilePathsBySuffix(string suffix, HiveRoot hiveRoot = null)
         {
             /// Hive works differently from the previous version because all devices
             /// put xml into one folder, the local device root, so we don't need
             /// to iterate through profiles.
 
             List<string> allPaths = new List<string>();
-            string xmlDir = HiveRootXmlFolderPath(UtilsHive.GetLocalHiveRoot());
+
+            if(hiveRoot == null)
+            {
+                hiveRoot = UtilsHive.GetLocalHiveRoot();
+            }
+
+            string xmlDir = HiveRootXmlFolderPath(hiveRoot);
 
             if (Directory.Exists(xmlDir))
             {
