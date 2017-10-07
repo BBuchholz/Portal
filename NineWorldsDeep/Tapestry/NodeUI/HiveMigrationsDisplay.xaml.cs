@@ -1,4 +1,5 @@
 ﻿using NineWorldsDeep.Hive;
+using NineWorldsDeep.Hive.Spores;
 using NineWorldsDeep.Tapestry.Nodes;
 using System;
 using System.Collections.Generic;
@@ -204,7 +205,40 @@ namespace NineWorldsDeep.Tapestry.NodeUI
             }
         }
 
+        private void MenuItemIntakeRootSpore_Click(object sender, RoutedEventArgs e)
+        {
+            MenuItem mnu = sender as MenuItem;
+            TreeViewItem item = null;
+            if (mnu != null)
+            {
+                item = ((ContextMenu)mnu.Parent).PlacementTarget as TreeViewItem;
 
+                if (item != null && item.Tag != null)
+                {
+                    HiveSporeFilePath spore = item.Tag as HiveSporeFilePath;
+
+                    if(spore != null)
+                    {
+                        List<string> paths = new List<string>();
+                        paths.Add(spore.FilePath);
+                        UtilsHive.Intake(paths);
+
+                        UI.Display.Message("intake processed");
+                    }
+                }
+            }
+
+        }
+
+        private void btnRefreshA_Click(object sender, RoutedEventArgs e)
+        {
+            RefreshA();
+        }
+
+        private void btnRefreshB_Click(object sender, RoutedEventArgs e)
+        {
+            RefreshB();
+        }
     }
 
     public enum HiveMigrationDisplayDestination

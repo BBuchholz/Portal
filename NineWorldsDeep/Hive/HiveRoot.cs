@@ -38,6 +38,11 @@ namespace NineWorldsDeep.Hive
             return HiveRootName;
         }
 
+        public void ClearLobes()
+        {
+            LobesInternal.Clear();
+        }
+
         /// <summary>
         /// 
         /// will resolve conflicts, newest date will always take precedence

@@ -53,6 +53,8 @@ namespace NineWorldsDeep.Hive
 
         public static void RefreshLobes(HiveRoot hr)
         {
+            hr.ClearLobes();
+
             //these can be moved to the db (and will be) once we 
             //start defining more complicated Lobe Types
             //for now just a one to one mapping to sync folder hierarchy
@@ -135,7 +137,7 @@ namespace NineWorldsDeep.Hive
                     else
                     {
                         //ignore if same, display message if they differ
-                        if (!Hashes.Sha1ForFilePath(filePathToMove).Equals(destFilePath, StringComparison.CurrentCultureIgnoreCase))
+                        if (!FileHashesAreEqual(filePathToMove, destFilePath))
                         {
                             UI.Display.Message("unable to copy file to " + destFilePath + ", file already exists and hashes do not match, aborting.");
                         }
@@ -146,7 +148,6 @@ namespace NineWorldsDeep.Hive
             {
                 UI.Display.Message("Move To Staging not supported at this time, Copy to staging instead");
             }
-
         }
 
         public static bool IsLocalRoot(HiveRoot hiveRoot)
@@ -169,6 +170,86 @@ namespace NineWorldsDeep.Hive
 
             return ConfigHive.GetHiveSubFolderForRootNameAndType(
                     ConfigHive.STAGING_ROOT_NAME, sporeType);            
+        }
+
+        public static void Intake(List<string> intakeFiles)
+        {
+            //images
+            foreach (string imageFile in
+                SiftFilesForSporeType(HiveSporeType.Image, intakeFiles))
+            {
+                MoveFile(imageFile, Configuration.ImagesFolder);
+            }
+
+            //audio
+            foreach (string audioFile in
+                SiftFilesForSporeType(HiveSporeType.Audio, intakeFiles))
+            {
+
+                MoveFile(audioFile, Configuration.VoiceMemosFolder);
+            }
+
+            //pdfs
+            foreach (string pdfFile in
+                SiftFilesForSporeType(HiveSporeType.Pdf, intakeFiles))
+            {
+
+                MoveFile(pdfFile, Configuration.PdfsFolder);
+            }
+        }
+
+        private static IEnumerable<string> SiftFilesForSporeType(
+            HiveSporeType sporeType, List<string> filePathsToSift)
+        {
+            List<string> siftedFiles = new List<string>();
+
+            foreach(string filePath in filePathsToSift)
+            {
+                if(SporeTypeFromFilePath(filePath) == sporeType)
+                {
+                    siftedFiles.Add(filePath);
+                }
+            }
+
+            return siftedFiles;
+        }
+
+        private static void MoveFile(
+            string sourceFilePath, string destinationFolderPath)
+        {
+            if(File.Exists(sourceFilePath) && 
+                Directory.Exists(destinationFolderPath))
+            {
+                string destFilePath = 
+                    Path.Combine(destinationFolderPath,
+                                 Path.GetFileName(sourceFilePath));
+
+                if (File.Exists(destFilePath))
+                {
+                    if(FileHashesAreEqual(sourceFilePath, destFilePath))
+                    {
+                        //already exists
+                        File.Delete(sourceFilePath);
+                    }
+                    else
+                    {
+                        UI.Display.Message("intake destination file " + 
+                            destFilePath + " already exists with a different" + 
+                            " hash than the intake file " + sourceFilePath + 
+                            " [aborting intake operation]");
+                    }
+                }
+                else
+                {
+                    File.Move(sourceFilePath, destFilePath);
+                }
+            }
+        }
+
+        private static bool FileHashesAreEqual(string filePathOne, string filePathTwo)
+        {
+            return Hashes.Sha1ForFilePath(filePathOne).Equals(
+                filePathTwo, StringComparison.CurrentCultureIgnoreCase);
         }
     }
 

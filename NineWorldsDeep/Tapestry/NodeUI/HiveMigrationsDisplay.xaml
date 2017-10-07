@@ -45,21 +45,21 @@
         </ContextMenu>-->
 
         <ContextMenu x:Key="cmLocalRootSpore">
-            <MenuItem Header="Local Root Spore Context Menu Item"
+            <MenuItem Header="Local Root Spore Context Menu Item (test)"
                       Click="MenuItemTest_Click"/>
             <MenuItem Header="Intake"
-                      Click="MenuItemTest_Click"/>
+                      Click="MenuItemIntakeRootSpore_Click"/>
         </ContextMenu>
 
         <ContextMenu x:Key="cmLocalRootLobe">
-            <MenuItem Header="Local Root Lobe Context Menu Item"
+            <MenuItem Header="Local Root Lobe Context Menu Item (test)"
                       Click="MenuItemTest_Click"/>
             <MenuItem Header="Intake All"
                       Click="MenuItemTest_Click"/>
         </ContextMenu>
 
         <ContextMenu x:Key="cmStagingRootSpore">
-            <MenuItem Header="Staging Root Spore Context Menu Item"
+            <MenuItem Header="Staging Root Spore Context Menu Item (test)"
                       Click="MenuItemTest_Click"/>
             <MenuItem Header="Copy To Other"
                       Click="MenuItemTest_Click"/>
@@ -68,7 +68,7 @@
         </ContextMenu>
 
         <ContextMenu x:Key="cmStagingRootLobe">
-            <MenuItem Header="Staging Root Lobe Context Menu Item"
+            <MenuItem Header="Staging Root Lobe Context Menu Item (test)"
                       Click="MenuItemTest_Click"/>
             <MenuItem Header="Copy All To Other"
                       Click="MenuItemTest_Click"/>
@@ -100,7 +100,8 @@
         <Button x:Name="btnRefreshA"  
                 Grid.Row="0" 
                 Grid.Column="1"
-                Margin="5">
+                Margin="5"
+                Click="btnRefreshA_Click">
             <Button.Content>
                 <Image Source="{StaticResource iconSyncSmall}"/>
             </Button.Content>
@@ -121,7 +122,8 @@
         <Button x:Name="btnRefreshB"  
                 Grid.Row="2" 
                 Grid.Column="1"
-                Margin="5">
+                Margin="5"
+                Click="btnRefreshB_Click">
             <Button.Content>
                 <Image Source="{StaticResource iconSyncSmall}"/>
             </Button.Content>
