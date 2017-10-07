@@ -160,6 +160,7 @@ namespace NineWorldsDeep.Tapestry.NodeUI
 
             tm.AddFolderAndAllSubfolders(Configuration.ImagesFolder);
             tm.AddFolderAndAllSubfolders(Configuration.VoiceMemosFolder);
+            tm.AddFolderAndAllSubfolders(Configuration.PdfsFolder);
 
             taggingMatrix = tm;
 

@@ -199,12 +199,14 @@ namespace NineWorldsDeep.Core
 
         public static void EnsureDirectories()
         {
-            //make sure directories exist
+            //make sure directories exist, CreateDirectory() checks if exists first
             Directory.CreateDirectory(Configuration.PhoneSyncSynergyFolder);
             Directory.CreateDirectory(Configuration.PhoneSyncSynergyArchivedFolder);
-            //Directory.CreateDirectory(Configuration.TabletSyncSynergyFolder);
-            //Directory.CreateDirectory(Configuration.TabletSyncSynergyArchivedFolder);
             Directory.CreateDirectory(Configuration.MtpSynergySyncPath);
+
+            Directory.CreateDirectory(Configuration.PdfsFolder);
+            Directory.CreateDirectory(Configuration.ImagesFolder);
+            Directory.CreateDirectory(Configuration.VoiceMemosFolder);
         }
 
         public static bool FileIsAudio(string path)
@@ -553,6 +555,11 @@ namespace NineWorldsDeep.Core
             {
                 return @"C:\NWD-AUX\voicememos";
             }
+        }
+
+        public static string PdfsFolder
+        {
+            get { return @"C:\NWD-AUX\pdfs"; }
         }
 
         public static string VoiceMemoTagFilePath
