@@ -81,6 +81,8 @@
                              Background="WhiteSmoke">
                     <MenuItem Header="Stage For Export"
                               Click="MenuItemStageForExport_Click"/>
+                    <MenuItem Header="Copy To Staging (Hive)"
+                              Click="MenuItemCopyToStagingHive_Click"/>
                     <MenuItem Header="Send To Trash"
                               Click="MenuItemSendToTrash_Click"/>
                 </ContextMenu>

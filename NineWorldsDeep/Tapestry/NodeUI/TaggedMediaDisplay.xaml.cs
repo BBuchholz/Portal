@@ -19,6 +19,7 @@ using System.IO;
 using NineWorldsDeep.Tapestry.Nodes;
 using NineWorldsDeep.Mnemosyne.V5;
 using System.Threading;
+using NineWorldsDeep.Hive;
 
 namespace NineWorldsDeep.Tapestry.NodeUI
 {
@@ -267,7 +268,19 @@ namespace NineWorldsDeep.Tapestry.NodeUI
 
             UI.Display.Message("finished staging for export");
         }
-        
+
+        private void MenuItemCopyToStagingHive_Click(object sender, RoutedEventArgs e)
+        {
+            List<string> selectedPaths =
+                lvPaths.SelectedItems.Cast<string>()
+                                     .Select(s => s)
+                                     .ToList();
+
+            UtilsHive.CopyToStaging(selectedPaths);
+
+            UI.Display.Message("copied to hive staging");
+        }
+
         private void MenuItemSendToTrash_Click(object sender, RoutedEventArgs e)
         {
             //get selected items
@@ -286,5 +299,6 @@ namespace NineWorldsDeep.Tapestry.NodeUI
                 UI.Display.Message("files trashed");
             }
         }
+
     }
 }

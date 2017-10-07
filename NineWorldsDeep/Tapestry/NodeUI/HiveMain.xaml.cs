@@ -26,6 +26,15 @@ namespace NineWorldsDeep.Tapestry.NodeUI
         public HiveMain()
         {
             InitializeComponent();
+
+            //ensure staging root
+            UtilsHive.EnsureHiveRootName(ConfigHive.STAGING_ROOT_NAME);
+            UtilsHive.EnsureFolderStructure(
+                new HiveRoot()
+                {
+                    HiveRootName = ConfigHive.STAGING_ROOT_NAME
+                });
+
             Refresh();
         }
 

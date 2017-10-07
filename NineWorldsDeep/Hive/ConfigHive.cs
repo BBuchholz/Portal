@@ -140,12 +140,12 @@ namespace NineWorldsDeep.Hive
         {
             return Core.Configuration.SyncFolder();
         }
-
-
+        
         private static string XML_SUB_FOLDER = "xml/incoming";
         private static string AUDIO_SUB_FOLDER = "media/audio/incoming";
         private static string IMAGE_SUB_FOLDER = "media/images/incoming";
         private static string PDFS_SUB_FOLDER = "media/pdfs/incoming";
+        internal static readonly string STAGING_ROOT_NAME = "staging";
 
         public static List<string> HiveRootSubfolderPaths()
         {
@@ -159,6 +159,47 @@ namespace NineWorldsDeep.Hive
             return lst;
         }
 
+        public static string GetHiveSubFolderForRootNameAndType(string hiveRootName, HiveSporeType sporeType)
+        {
+            string syncFolder = Configuration.SyncFolder();
+            string hiveFolder = Path.Combine(syncFolder, "hive");
+            string hiveRootFolder = Path.Combine(hiveFolder, hiveRootName);
+            string subFolder = Path.Combine(hiveRootFolder,
+                    GetInternalSubFolderPathForSporeType(sporeType));
+
+            return subFolder;
+        }
+
+        /// <summary>
+        /// returns null if spore type isn't audio, image, pdf, or xml
+        /// </summary>
+        /// <param name="sporeType"></param>
+        /// <returns></returns>
+        private static string GetInternalSubFolderPathForSporeType(HiveSporeType sporeType)
+        {
+            switch (sporeType)
+            {
+                case HiveSporeType.Audio:
+
+                    return AUDIO_SUB_FOLDER;
+
+                case HiveSporeType.Image:
+
+                    return IMAGE_SUB_FOLDER;
+
+                case HiveSporeType.Pdf:
+
+                    return PDFS_SUB_FOLDER;
+
+                case HiveSporeType.Xml:
+
+                    return XML_SUB_FOLDER;
+
+                default:
+
+                    return null;
+            }
+        }
 
         private static string HiveRootSubFolderPath(HiveRoot hr, string subPath)
         {

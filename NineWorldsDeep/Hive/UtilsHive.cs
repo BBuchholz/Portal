@@ -1,6 +1,7 @@
 ﻿using NineWorldsDeep.Core;
 using NineWorldsDeep.Hive.Lobes;
 using NineWorldsDeep.Mnemosyne.V5;
+using NineWorldsDeep.Warehouse;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -107,5 +108,59 @@ namespace NineWorldsDeep.Hive
                 System.IO.Directory.CreateDirectory(folderPath);
             }
         }
+
+        public static void CopyToStaging(List<string> selectedPaths)
+        {
+            AddToStaging(selectedPaths, FileMovementType.CopyTo);
+        }
+
+        private static void AddToStaging(List<string> selectedPaths, FileMovementType moveType)
+        {
+            if(moveType == FileMovementType.CopyTo)
+            {
+
+                foreach (string filePathToMove in selectedPaths)
+                {
+                    string stagingDirectoryForFileType =
+                        GetStagingDirectoryForFileType(filePathToMove);
+
+                    string destinationFileName = Path.GetFileName(filePathToMove);
+                    string destFilePath = 
+                        Path.Combine(stagingDirectoryForFileType, destinationFileName);
+
+                    if (!File.Exists(destFilePath))
+                    {
+                        File.Copy(filePathToMove, destFilePath);
+                    }
+                    else
+                    {
+                        //ignore if same, display message if they differ
+                        if (!Hashes.Sha1ForFilePath(filePathToMove).Equals(destFilePath, StringComparison.CurrentCultureIgnoreCase))
+                        {
+                            UI.Display.Message("unable to copy file to " + destFilePath + ", file already exists and hashes do not match, aborting.");
+                        }
+                    }
+                }
+            }
+            else
+            {
+                UI.Display.Message("Move To Staging not supported at this time, Copy to staging instead");
+            }
+
+        }
+
+        private static string GetStagingDirectoryForFileType(string filePath)
+        {
+            HiveSporeType sporeType = SporeTypeFromFilePath(filePath);
+
+            return ConfigHive.GetHiveSubFolderForRootNameAndType(
+                    ConfigHive.STAGING_ROOT_NAME, sporeType);            
+        }
+    }
+
+    public enum FileMovementType
+    {
+        MoveTo,
+        CopyTo
     }
 }
