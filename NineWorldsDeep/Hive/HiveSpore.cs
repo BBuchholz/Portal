@@ -9,15 +9,17 @@ namespace NineWorldsDeep.Hive
     public abstract class HiveSpore
     {
         public string Name { get; protected set; }
+        public HiveLobe HiveLobe { get; private set; }
 
-        public HiveSpore(string name)
+        public HiveSpore(string name, HiveLobe parentLobe)
         {
             Name = name;
+            HiveLobe = parentLobe;
         }
 
-        protected HiveSpore()
+        protected HiveSpore(HiveLobe parentLobe)
         {
-            
+            HiveLobe = parentLobe;
         }
 
         public abstract HiveSporeType HiveSporeType { get; protected set; }

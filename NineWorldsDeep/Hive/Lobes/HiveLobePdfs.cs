@@ -23,7 +23,7 @@ namespace NineWorldsDeep.Hive.Lobes
                     "*.pdf",                                              
                     System.IO.SearchOption.AllDirectories))
             {
-                Add(new Spores.HiveSporeFilePath(filePath));
+                Add(new Spores.HiveSporeFilePath(filePath, this));
             }
         }
     }

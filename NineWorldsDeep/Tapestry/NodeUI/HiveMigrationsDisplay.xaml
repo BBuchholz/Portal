@@ -11,7 +11,7 @@
         <BitmapImage x:Key="iconSyncSmall" 
                      UriSource="/ResourceImages/icon_sync_black_24dp_1x.png" />
 
-        <ContextMenu x:Key="cmAudio">
+        <!--<ContextMenu x:Key="cmAudio">
             <MenuItem Header="Audio Context Menu Item"
                       Click="MenuItemTest_Click"/>
             <MenuItem Header="Move To Other"
@@ -41,6 +41,38 @@
             <MenuItem Header="Move To Other"
                       Click="MenuItemTest_Click"/>
             <MenuItem Header="Copy To Other"
+                      Click="MenuItemTest_Click"/>
+        </ContextMenu>-->
+
+        <ContextMenu x:Key="cmLocalRootSpore">
+            <MenuItem Header="Local Root Spore Context Menu Item"
+                      Click="MenuItemTest_Click"/>
+            <MenuItem Header="Intake"
+                      Click="MenuItemTest_Click"/>
+        </ContextMenu>
+
+        <ContextMenu x:Key="cmLocalRootLobe">
+            <MenuItem Header="Local Root Lobe Context Menu Item"
+                      Click="MenuItemTest_Click"/>
+            <MenuItem Header="Intake All"
+                      Click="MenuItemTest_Click"/>
+        </ContextMenu>
+
+        <ContextMenu x:Key="cmStagingRootSpore">
+            <MenuItem Header="Staging Root Spore Context Menu Item"
+                      Click="MenuItemTest_Click"/>
+            <MenuItem Header="Copy To Other"
+                      Click="MenuItemTest_Click"/>
+            <MenuItem Header="Move To Other"
+                      Click="MenuItemTest_Click"/>
+        </ContextMenu>
+
+        <ContextMenu x:Key="cmStagingRootLobe">
+            <MenuItem Header="Staging Root Lobe Context Menu Item"
+                      Click="MenuItemTest_Click"/>
+            <MenuItem Header="Copy All To Other"
+                      Click="MenuItemTest_Click"/>
+            <MenuItem Header="Move All To Other"
                       Click="MenuItemTest_Click"/>
         </ContextMenu>
 

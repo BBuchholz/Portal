@@ -22,7 +22,7 @@ namespace NineWorldsDeep.Hive.Lobes
                 Directory.EnumerateFiles(hiveRootAudioSubFolderPath,
                                          "*.wav", SearchOption.AllDirectories))
             {
-                Add(new Spores.HiveSporeFilePath(filePath));
+                Add(new Spores.HiveSporeFilePath(filePath, this));
             }
         }
     }

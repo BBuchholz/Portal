@@ -28,7 +28,7 @@ namespace NineWorldsDeep.Hive.Lobes
                                                     s.EndsWith(".png") ||
                                                     s.EndsWith(".tiff")))
             {
-                Add(new Spores.HiveSporeFilePath(filePath));
+                Add(new Spores.HiveSporeFilePath(filePath, this));
             }
         }
     }

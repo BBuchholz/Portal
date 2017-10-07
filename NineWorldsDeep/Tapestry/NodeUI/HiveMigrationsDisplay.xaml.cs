@@ -105,6 +105,19 @@ namespace NineWorldsDeep.Tapestry.NodeUI
             item.Header = hl.HiveLobeName;
             item.Tag = hl;
             item.Items.Add("Loading...");
+            
+            bool rootIsLocal = UtilsHive.IsLocalRoot(hl.HiveRoot);
+            bool rootIsStaging = UtilsHive.IsStagingRoot(hl.HiveRoot);
+
+            if (rootIsLocal)
+            {
+                item.ContextMenu = (ContextMenu)this.Resources["cmLocalRootLobe"];
+            }
+
+            if (rootIsStaging)
+            {
+                item.ContextMenu = (ContextMenu)this.Resources["cmStagingRootLobe"];
+            }
 
             item.MouseRightButtonDown += SelectRightClickedTreeViewItem;
             return item;
@@ -116,37 +129,20 @@ namespace NineWorldsDeep.Tapestry.NodeUI
             item.Header = hs.Name;
             item.Tag = hs;
             item.Items.Add("Loading...");
+            
+            bool rootIsLocal = UtilsHive.IsLocalRoot(hs.HiveLobe.HiveRoot);
+            bool rootIsStaging = UtilsHive.IsStagingRoot(hs.HiveLobe.HiveRoot);
 
-            ////////REPLACE WITH LOGIC TO DISPLAY DIFFERENT CONTEXT MENUS FOR DIFFERENT SPORE TYPES
-            //item.ContextMenu = isActiveTreeView ?
-            //    (ContextMenu)this.Resources["cmHiveSporeMenu"] :
-            //    (ContextMenu)this.Resources["cmDeactivatedHiveSporeMenu"];
-
-            switch (hs.HiveSporeType)
+            if (rootIsLocal)
             {
-                case HiveSporeType.Audio:
-
-                    item.ContextMenu = (ContextMenu)this.Resources["cmAudio"];
-                    break;
-
-                case HiveSporeType.Image:
-
-                    item.ContextMenu = (ContextMenu)this.Resources["cmImage"];
-                    break;
-
-
-                case HiveSporeType.Pdf:
-
-                    item.ContextMenu = (ContextMenu)this.Resources["cmPdf"];
-                    break;
-
-
-                case HiveSporeType.Xml:
-
-                    item.ContextMenu = (ContextMenu)this.Resources["cmXml"];
-                    break;                
+                item.ContextMenu = (ContextMenu)this.Resources["cmLocalRootSpore"];
             }
 
+            if (rootIsStaging)
+            {
+                item.ContextMenu = (ContextMenu)this.Resources["cmStagingRootSpore"];
+            }
+            
             item.MouseRightButtonDown += SelectRightClickedTreeViewItem;
             return item;
         }

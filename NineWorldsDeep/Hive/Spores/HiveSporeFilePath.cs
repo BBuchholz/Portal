@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using NineWorldsDeep.Hive.Lobes;
 
 namespace NineWorldsDeep.Hive.Spores
 {
@@ -11,12 +12,13 @@ namespace NineWorldsDeep.Hive.Spores
         public string FilePath { get; private set; }
         public override HiveSporeType HiveSporeType { get; protected set; }
 
-        public HiveSporeFilePath(string filePath)
+        public HiveSporeFilePath(string filePath, HiveLobe parentLobe)
+            : base(parentLobe)
         {
             Name = System.IO.Path.GetFileName(filePath);
             FilePath = filePath;
 
-            HiveSporeType = UtilsHive.SporeTypeFromFilePath(FilePath);           
+            HiveSporeType = UtilsHive.SporeTypeFromFilePath(FilePath);          
         }
         
         #region "equality"

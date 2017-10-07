@@ -149,6 +149,20 @@ namespace NineWorldsDeep.Hive
 
         }
 
+        public static bool IsLocalRoot(HiveRoot hiveRoot)
+        {
+            return hiveRoot.HiveRootName.Equals(
+                ConfigHive.GetLocalHiveRootName(), 
+                StringComparison.CurrentCultureIgnoreCase);
+        }
+        
+        public static bool IsStagingRoot(HiveRoot hiveRoot)
+        {
+            return hiveRoot.HiveRootName.Equals(
+                ConfigHive.STAGING_ROOT_NAME,
+                StringComparison.CurrentCultureIgnoreCase);
+        }
+
         private static string GetStagingDirectoryForFileType(string filePath)
         {
             HiveSporeType sporeType = SporeTypeFromFilePath(filePath);

@@ -24,7 +24,7 @@ namespace NineWorldsDeep.Hive.Lobes
                 Directory.GetFiles(hiveRootXmlSubFolderPath,
                                    "*.xml", SearchOption.AllDirectories))
             {
-                Add(new HiveSporeFilePath(filePath));
+                Add(new HiveSporeFilePath(filePath, this));
             }
         }
     }

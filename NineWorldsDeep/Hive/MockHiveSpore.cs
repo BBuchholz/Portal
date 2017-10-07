@@ -6,7 +6,7 @@ namespace NineWorldsDeep.Hive
     {
 
 
-        public MockHiveSpore(string name) : base(name)
+        public MockHiveSpore(string name, HiveLobe parentLobe) : base(name, parentLobe)
         {
             HiveSporeType = HiveSporeType.Unknown;
         }
