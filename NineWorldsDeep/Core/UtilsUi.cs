@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
@@ -46,6 +48,7 @@ namespace NineWorldsDeep.Core
             };
             return null;
         }
+
         
         /// <summary>
         /// manages grid rows to share space between multiple expanded expanders
@@ -76,15 +79,32 @@ namespace NineWorldsDeep.Core
             return sibling;
         }
 
-        //public static T GetDataContext<T>(Control control)
-        //{
-        //    ContentPresenter contentPresenter =
-        //        FindAncestor<ContentPresenter>(control);
+        public static T ParentOfType<T>(DependencyObject element) where T : DependencyObject
+        {
+            if (element == null)
+                return default(T);
+            else
+                return Enumerable.FirstOrDefault<T>(Enumerable.OfType<T>((IEnumerable)GetParents(element)));
+        }
 
-        //    DataTemplate dataTemplate =
-        //        contentPresenter.ContentTemplate;
-
-        //    return (T)control.DataContext;
-        //}
+        public static IEnumerable<DependencyObject> GetParents(DependencyObject element)
+        {
+            if (element == null)
+                throw new ArgumentNullException("element");
+            while ((element = GetParent(element)) != null)
+                yield return element;
+        }
+        
+        private static DependencyObject GetParent(DependencyObject element)
+        {
+            DependencyObject parent = VisualTreeHelper.GetParent(element);
+            if (parent == null)
+            {
+                FrameworkElement frameworkElement = element as FrameworkElement;
+                if (frameworkElement != null)
+                    parent = frameworkElement.Parent;
+            }
+            return parent;
+        }
     }
 }

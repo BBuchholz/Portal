@@ -113,12 +113,12 @@ namespace NineWorldsDeep.Hive
 
         public static void CopyToStaging(List<string> selectedPaths)
         {
-            AddToStaging(selectedPaths, FileMovementType.CopyTo);
+            AddToStaging(selectedPaths, FileTransportOperationType.CopyTo);
         }
 
-        private static void AddToStaging(List<string> selectedPaths, FileMovementType moveType)
+        private static void AddToStaging(List<string> selectedPaths, FileTransportOperationType moveType)
         {
-            if(moveType == FileMovementType.CopyTo)
+            if(moveType == FileTransportOperationType.CopyTo)
             {
 
                 foreach (string filePathToMove in selectedPaths)
@@ -233,9 +233,9 @@ namespace NineWorldsDeep.Hive
                     }
                     else
                     {
-                        UI.Display.Message("intake destination file " + 
+                        UI.Display.Message("destination file " + 
                             destFilePath + " already exists with a different" + 
-                            " hash than the intake file " + sourceFilePath + 
+                            " hash than the source file " + sourceFilePath + 
                             " [aborting intake operation]");
                     }
                 }
@@ -246,14 +246,80 @@ namespace NineWorldsDeep.Hive
             }
         }
 
+        private static void CopyFile(
+            string sourceFilePath, string destinationFolderPath)
+        {
+            if (File.Exists(sourceFilePath) &&
+                Directory.Exists(destinationFolderPath))
+            {
+                string destFilePath =
+                    Path.Combine(destinationFolderPath,
+                                 Path.GetFileName(sourceFilePath));
+
+                if (File.Exists(destFilePath))
+                {
+                    if (FileHashesAreEqual(sourceFilePath, destFilePath))
+                    {
+                        //already exists
+                        //do nothing
+                    }
+                    else
+                    {
+                        UI.Display.Message("destination file " +
+                            destFilePath + " already exists with a different" +
+                            " hash than the source file " + sourceFilePath +
+                            " [aborting intake operation]");
+                    }
+                }
+                else
+                {
+                    File.Copy(sourceFilePath, destFilePath);
+                }
+            }
+        }
+
         private static bool FileHashesAreEqual(string filePathOne, string filePathTwo)
         {
             return Hashes.Sha1ForFilePath(filePathOne).Equals(
-                filePathTwo, StringComparison.CurrentCultureIgnoreCase);
+                Hashes.Sha1ForFilePath(filePathTwo), StringComparison.CurrentCultureIgnoreCase);
+        }
+
+        internal static void ProcessMovement(
+            IEnumerable<string> sourceFilePaths, 
+            HiveRoot destinationRoot, 
+            FileTransportOperationType fileTransportType)
+        {
+            if(destinationRoot == null)
+            {
+                UI.Display.Message("need a destination root...");
+                return;
+            }
+
+            foreach (string sourceFilePath in sourceFilePaths)
+            {
+                //create destination file path
+                string destinationFilePathFolder =
+                    ConfigHive.GetHiveSubFolderForRootNameAndType(
+                        destinationRoot.HiveRootName,
+                        SporeTypeFromFilePath(sourceFilePath));
+                
+                switch (fileTransportType)
+                {
+                    case FileTransportOperationType.CopyTo:
+
+                        CopyFile(sourceFilePath, destinationFilePathFolder);
+                        break;
+
+                    case FileTransportOperationType.MoveTo:
+
+                        MoveFile(sourceFilePath, destinationFilePathFolder);
+                        break;
+                }
+            }
         }
     }
 
-    public enum FileMovementType
+    public enum FileTransportOperationType
     {
         MoveTo,
         CopyTo

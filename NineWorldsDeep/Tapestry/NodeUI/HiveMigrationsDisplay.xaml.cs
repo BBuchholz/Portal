@@ -1,4 +1,5 @@
-﻿using NineWorldsDeep.Hive;
+﻿using NineWorldsDeep.Core;
+using NineWorldsDeep.Hive;
 using NineWorldsDeep.Hive.Spores;
 using NineWorldsDeep.Tapestry.Nodes;
 using System;
@@ -62,6 +63,19 @@ namespace NineWorldsDeep.Tapestry.NodeUI
             }
         }
 
+        public void RefreshByTreeView(TreeView tv)
+        {
+            if(tv == tvHierarchyA)
+            {
+                RefreshA();
+            }
+
+            if(tv == tvHierarchyB)
+            {
+                RefreshB();
+            }
+        }
+
         public void RefreshA()
         {
             Refresh(cmbRootsA, tvHierarchyA);
@@ -70,6 +84,34 @@ namespace NineWorldsDeep.Tapestry.NodeUI
         public void RefreshB()
         {
             Refresh(cmbRootsB, tvHierarchyB);
+        }
+
+        private TreeView GetOppositeTreeView(TreeView tv)
+        {
+            if(tv == tvHierarchyA)
+            {
+                return tvHierarchyB;
+            }
+            else
+            {
+                return tvHierarchyA;
+            }
+        }
+
+        private HiveRoot GetSelectedHiveRootForTreeView(TreeView tv)
+        {
+            ComboBox cmb;
+
+            if(tv == tvHierarchyA)
+            {
+                cmb = cmbRootsA;
+            }
+            else
+            {
+                cmb = cmbRootsB;
+            }
+
+            return (HiveRoot)cmb.SelectedItem;
         }
 
         private void Refresh(ComboBox cmb, TreeView tv)
@@ -205,6 +247,16 @@ namespace NineWorldsDeep.Tapestry.NodeUI
             }
         }
 
+        private void btnRefreshA_Click(object sender, RoutedEventArgs e)
+        {
+            RefreshA();
+        }
+
+        private void btnRefreshB_Click(object sender, RoutedEventArgs e)
+        {
+            RefreshB();
+        }
+
         private void MenuItemIntakeRootSpore_Click(object sender, RoutedEventArgs e)
         {
             MenuItem mnu = sender as MenuItem;
@@ -216,28 +268,67 @@ namespace NineWorldsDeep.Tapestry.NodeUI
                 if (item != null && item.Tag != null)
                 {
                     HiveSporeFilePath spore = item.Tag as HiveSporeFilePath;
+                    TreeView parentTreeView =
+                        UtilsUi.ParentOfType<TreeView>(item);
 
-                    if(spore != null)
+                    if (spore != null)
                     {
                         List<string> paths = new List<string>();
                         paths.Add(spore.FilePath);
                         UtilsHive.Intake(paths);
 
                         UI.Display.Message("intake processed");
+                        RefreshByTreeView(parentTreeView);
                     }
                 }
             }
-
         }
 
-        private void btnRefreshA_Click(object sender, RoutedEventArgs e)
+        private void MenuItemCopyToOther_Click(object sender, RoutedEventArgs e)
         {
-            RefreshA();
+            ProcessFileMovement(sender, FileTransportOperationType.CopyTo);
         }
 
-        private void btnRefreshB_Click(object sender, RoutedEventArgs e)
+        private void ProcessFileMovement(object sender, FileTransportOperationType fileTransportType)
         {
-            RefreshB();
+            MenuItem mnu = sender as MenuItem;
+            TreeViewItem item = null;
+            if (mnu != null)
+            {
+                item = ((ContextMenu)mnu.Parent).PlacementTarget as TreeViewItem;
+
+                if (item != null && item.Tag != null)
+                {
+                    HiveSporeFilePath spore = item.Tag as HiveSporeFilePath;
+                    TreeView parentTreeView =
+                        UtilsUi.ParentOfType<TreeView>(item);
+
+                    if (spore != null)
+                    {
+                        var destinationRoot = 
+                            GetSelectedHiveRootForTreeView(
+                                GetOppositeTreeView(parentTreeView));
+
+                        List<string> pathsToProcess = new List<string>();
+                        pathsToProcess.Add(spore.FilePath);
+
+                        UtilsHive.ProcessMovement(
+                            pathsToProcess, 
+                            destinationRoot, 
+                            fileTransportType);
+
+                        UI.Display.Message("file operation processed.");
+
+                        RefreshA();
+                        RefreshB();
+                    }
+                }
+            }
+        }
+
+        private void MenuItemMoveToOther_Click(object sender, RoutedEventArgs e)
+        {
+            ProcessFileMovement(sender, FileTransportOperationType.MoveTo);
         }
     }
 

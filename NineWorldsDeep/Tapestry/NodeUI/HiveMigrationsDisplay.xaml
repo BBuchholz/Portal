@@ -62,9 +62,9 @@
             <MenuItem Header="Staging Root Spore Context Menu Item (test)"
                       Click="MenuItemTest_Click"/>
             <MenuItem Header="Copy To Other"
-                      Click="MenuItemTest_Click"/>
+                      Click="MenuItemCopyToOther_Click"/>
             <MenuItem Header="Move To Other"
-                      Click="MenuItemTest_Click"/>
+                      Click="MenuItemMoveToOther_Click"/>
         </ContextMenu>
 
         <ContextMenu x:Key="cmStagingRootLobe">
