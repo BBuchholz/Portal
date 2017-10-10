@@ -408,8 +408,12 @@ namespace NineWorldsDeep.Xml
             }
             catch (Exception ex)
             {
-                //just here for debugging
                 string msg = ex.Message;
+
+                if(statusEnabledUi != null)
+                {
+                    statusEnabledUi.StatusDetailUpdate(prefixMessage + " ERROR: " + msg);
+                }
             }
 
             return allLists;

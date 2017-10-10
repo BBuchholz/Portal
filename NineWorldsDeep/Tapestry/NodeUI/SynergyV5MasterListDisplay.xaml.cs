@@ -1,4 +1,5 @@
 ﻿using NineWorldsDeep.Core;
+using NineWorldsDeep.Hive;
 using NineWorldsDeep.Synergy.V5;
 using NineWorldsDeep.Tapestry.Nodes;
 using System;
@@ -232,7 +233,7 @@ namespace NineWorldsDeep.Tapestry.NodeUI
         private async void btnImportXml_Click(object sender, RoutedEventArgs e)
         {
             var allPaths = Configuration.GetSynergyV5XmlImportFilePaths();
-            allPaths.AddRange(Configuration.GetHiveSynergyV5XmlImportFilePaths());
+            allPaths.AddRange(ConfigHive.GetHiveSynergyV5XmlImportFilePaths());
             var count = 0;
             var total = allPaths.Count();
 
@@ -357,7 +358,7 @@ namespace NineWorldsDeep.Tapestry.NodeUI
             var allFolders =
                 Configuration.GetActiveSyncProfileIncomingXmlFolders();
 
-            allFolders.AddRange(Configuration.GetHiveFoldersForXmlExport());
+            allFolders.AddRange(ConfigHive.GetHiveFoldersForXmlExport());
 
             foreach (string xmlIncomingFolderPath in allFolders)
             {
