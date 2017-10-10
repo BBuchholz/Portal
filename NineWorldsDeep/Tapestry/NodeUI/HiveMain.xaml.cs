@@ -27,13 +27,6 @@ namespace NineWorldsDeep.Tapestry.NodeUI
         {
             InitializeComponent();
 
-            //ensure staging root
-            UtilsHive.EnsureHiveRootName(ConfigHive.STAGING_ROOT_NAME);
-            UtilsHive.EnsureFolderStructure(
-                new HiveRoot()
-                {
-                    HiveRootName = ConfigHive.STAGING_ROOT_NAME
-                });
 
             Refresh();
         }
@@ -358,6 +351,36 @@ namespace NineWorldsDeep.Tapestry.NodeUI
 
         #endregion
 
+        private void btnRefreshHiveRoots_Click(object sender, RoutedEventArgs e)
+        {
+            Refresh();
+        }
+
+        private void btnEnsureStagingRoot_Click(object sender, RoutedEventArgs e)
+        {
+            UtilsHive.EnsureHiveRootName(ConfigHive.STAGING_ROOT_NAME);
+            UtilsHive.EnsureFolderStructure(
+                new HiveRoot()
+                {
+                    HiveRootName = ConfigHive.STAGING_ROOT_NAME
+                });
+
+            UI.Display.Message("Staging Root and associated folder structure ensured");
+
+            Refresh();
+        }
+
+        private void btnCheckForNewRoots_Click(object sender, RoutedEventArgs e)
+        {
+            int count = UtilsHive.CheckAndRegisterNewRootFolders();
+
+            if (count > 0)
+            {
+                UI.Display.Message("found " + count + " unregisted roots and added them (deactivated)");
+            }
+
+            Refresh();
+        }
     }
 }
 

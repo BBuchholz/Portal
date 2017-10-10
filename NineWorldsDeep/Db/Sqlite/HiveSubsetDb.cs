@@ -149,7 +149,7 @@ namespace NineWorldsDeep.Db.Sqlite
         {
             if(hr.HiveRootId < 1){
 
-                EnsureHiveRoot(hr.HiveRootName);
+                EnsureHiveRoot(hr.HiveRootName, cmd);
             }
 
             UpdateHiveRootTimeStampsByName(hr, cmd);
@@ -263,6 +263,32 @@ namespace NineWorldsDeep.Db.Sqlite
             return lst;
         }
 
+        internal List<HiveRoot> GetAllHiveRoots()
+        {
+            List<HiveRoot> lst =
+                new List<HiveRoot>();
+
+            using (var conn = new SQLiteConnection(
+                @"Data Source=" + Configuration.GetSqliteDbPath(DbName)))
+            {
+                conn.Open();
+
+                using (var cmd = new SQLiteCommand(conn))
+                {
+                    using (var transaction = conn.BeginTransaction())
+                    {
+                        lst = GetAllHiveRoots(cmd);
+
+                        transaction.Commit();
+                    }
+                }
+
+                conn.Close();
+            }
+
+            return lst;
+        }
+
         private List<HiveRoot> GetActiveRoots(SQLiteCommand cmd)
         {
             List<HiveRoot> lst =
@@ -305,6 +331,50 @@ namespace NineWorldsDeep.Db.Sqlite
 
             return lst;
         }
+
+        private List<HiveRoot> GetAllHiveRoots(SQLiteCommand cmd)
+        {
+            List<HiveRoot> lst =
+                new List<HiveRoot>();
+
+            cmd.Parameters.Clear();
+            cmd.CommandText =
+                NwdContract.SELECT_HIVE_ROOTS;
+
+            using (var rdr = cmd.ExecuteReader())
+            {
+                while (rdr.Read())
+                {
+                    int hiveRootId = rdr.GetInt32(0);
+                    string hiveRootName = rdr.GetString(1);
+
+                    string activatedAtString =
+                        DbV5Utils.GetNullableString(rdr, 2);
+
+                    string deactivatedAtString = DbV5Utils.
+                        GetNullableString(rdr, 3);
+
+                    DateTime? activatedAt =
+                        TimeStamp.YYYY_MM_DD_HH_MM_SS_UTC_ToDateTime(activatedAtString);
+
+                    DateTime? deactivatedAt =
+                        TimeStamp.YYYY_MM_DD_HH_MM_SS_UTC_ToDateTime(deactivatedAtString);
+
+                    var hr = new HiveRoot()
+                    {
+                        HiveRootId = hiveRootId,
+                        HiveRootName = hiveRootName
+                    };
+
+                    hr.SetTimeStamps(activatedAt, deactivatedAt);
+
+                    lst.Add(hr);
+                }
+            }
+
+            return lst;
+        }
+
 
         internal int EnsureHiveRoot(string hiveRootName)
         {

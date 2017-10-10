@@ -71,6 +71,18 @@ namespace NineWorldsDeep.Hive
             return allFolders;
         }
 
+        public static List<string> GetFileSystemTopLevelHiveRootFolders()
+        {
+            List<string> allFolders = new List<string>();
+
+            foreach(string folderPath in Directory.GetDirectories(GetHiveFolderPath()))
+            {
+                allFolders.Add(folderPath);
+            }            
+
+            return allFolders;
+        }
+
         public static string GetLocalHiveRootName()
         {
             return "main-laptop";
@@ -123,12 +135,15 @@ namespace NineWorldsDeep.Hive
 
             foreach (string subfolder in HiveRootSubfolderPaths())
             {
-                string fullPath =
-                    System.IO.Path.Combine(
-                        SyncFolder(),
-                        "hive",
-                        hr.HiveRootName,
-                        subfolder);
+                //string fullPath =
+                //    System.IO.Path.Combine(
+                //        SyncFolder(),
+                //        "hive",
+                //        hr.HiveRootName,
+                //        subfolder);
+
+                string fullPath = 
+                    Path.Combine(HiveRootTopLevelFolderPath(hr), subfolder);
 
                 lst.Add(fullPath);
             }
@@ -203,11 +218,17 @@ namespace NineWorldsDeep.Hive
 
         private static string HiveRootSubFolderPath(HiveRoot hr, string subPath)
         {
-            return Path.Combine(
-                SyncFolder(),
-                "hive",
-                hr.HiveRootName,
-                subPath);
+            return Path.Combine(HiveRootTopLevelFolderPath(hr), subPath);
+        }
+
+        public static string HiveRootTopLevelFolderPath(HiveRoot hr)
+        {
+            return Path.Combine(GetHiveFolderPath(), hr.HiveRootName);
+        }
+
+        public static string GetHiveFolderPath()
+        {
+            return Path.Combine(SyncFolder(), "hive");
         }
 
         public static string HiveRootXmlFolderPath(HiveRoot hr)

@@ -20,6 +20,11 @@ namespace NineWorldsDeep.Hive
         {
             return db.GetActiveRoots();
         }
+
+        public static List<HiveRoot> GetAllHiveRoots()
+        {
+            return db.GetAllHiveRoots();
+        }
         
         public static HiveRoot GetLocalHiveRoot()
         {
@@ -49,6 +54,55 @@ namespace NineWorldsDeep.Hive
             }
 
             return HiveSporeType.Unknown;
+        }
+
+        /// <summary>
+        /// registers any folders found in hive top level folder that aren't in the database
+        /// and returns the count of new roots registered this way. 
+        /// 
+        /// roots are added in a deactivated status
+        /// </summary>
+        /// <returns></returns>
+        public static int CheckAndRegisterNewRootFolders()
+        {
+            ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+            //copied from Gauntlet's Java implementation, PORT THIS...
+            List<string> rootNamesFromFolderNames = new List<string>();
+            List<string> unregisteredFolderNames = new List<string>();
+            List<HiveRoot> allRoots = GetAllHiveRoots();
+            
+            //get immediate sub folders of SyncRoot (NWD-SYNC/hive/)
+            foreach (string hiveRootFolderPath in 
+                    ConfigHive.GetFileSystemTopLevelHiveRootFolders())
+            {
+                bool found = false;
+
+                string dirName = new DirectoryInfo(hiveRootFolderPath).Name;
+
+                foreach (HiveRoot hr in allRoots)
+                {
+                    if(hr.HiveRootName.Equals(dirName, StringComparison.CurrentCultureIgnoreCase))
+                    {
+                        found = true;
+                    }
+                }
+
+                if (!found && !dirName.StartsWith("."))
+                {
+                    unregisteredFolderNames.Add(dirName);
+                }
+            }
+
+            //register them all
+            foreach (string unregisteredRootName in unregisteredFolderNames)
+            {
+                HiveRoot newHr = new HiveRoot() { HiveRootName = unregisteredRootName };
+                db.Sync(newHr);
+                newHr.Deactivate();
+                db.Sync(newHr);
+            }
+
+            return unregisteredFolderNames.Count();
         }
 
         public static void RefreshLobes(HiveRoot hr)

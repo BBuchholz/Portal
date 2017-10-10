@@ -66,6 +66,24 @@
                     Padding = "5"
                     Content="Add Hive Root"
                     Click="btnAddHiveRoot_Click"/>
+            
+            <Button x:Name="btnRefreshHiveRoots"
+                    Margin = "5"
+                    Padding = "5"
+                    Content="Refresh Hive Roots"
+                    Click="btnRefreshHiveRoots_Click"/>
+
+            <Button x:Name="btnEnsureStagingRoot"
+                    Margin = "5"
+                    Padding = "5"
+                    Content="Ensure Staging Root"
+                    Click="btnEnsureStagingRoot_Click"/>
+
+            <Button x:Name="btnCheckForNewRoots"
+                    Margin = "5"
+                    Padding = "5"
+                    Content="Check For New Roots"
+                    Click="btnCheckForNewRoots_Click"/>
 
         </StackPanel>
         

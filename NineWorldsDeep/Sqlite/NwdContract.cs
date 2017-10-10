@@ -603,6 +603,14 @@ namespace NineWorldsDeep.Sqlite
             "FROM " + TABLE_HIVE_ROOT + " " +
             "WHERE IFNULL(" + COLUMN_HIVE_ROOT_ACTIVATED_AT + ", '') >= IFNULL(" + COLUMN_HIVE_ROOT_DEACTIVATED_AT + ", '') ";
 
+        internal static readonly string SELECT_HIVE_ROOTS =
+
+            "SELECT " + COLUMN_HIVE_ROOT_ID + ", " +
+            "       " + COLUMN_HIVE_ROOT_NAME + ", " +
+            "	    " + COLUMN_HIVE_ROOT_ACTIVATED_AT + ", " +
+            "	    " + COLUMN_HIVE_ROOT_DEACTIVATED_AT + " " +
+            "FROM " + TABLE_HIVE_ROOT;
+
         internal static readonly string SELECT_HIVE_ROOT_ID_FOR_NAME_X =
 
             "SELECT " + COLUMN_HIVE_ROOT_ID + " " +
