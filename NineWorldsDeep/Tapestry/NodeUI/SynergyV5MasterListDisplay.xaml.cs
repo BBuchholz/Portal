@@ -238,6 +238,8 @@ namespace NineWorldsDeep.Tapestry.NodeUI
 
             await Task.Run(() =>
             {
+                StatusDetailUpdate("starting import of xml files...");
+
                 foreach (string path in allPaths)
                 {
                     count++;
@@ -248,14 +250,14 @@ namespace NineWorldsDeep.Tapestry.NodeUI
 
                         XDocument doc = Xml.Xml.DocumentFromPath(path);
 
+                        string msgPrefix = "path " + count + " of " + total + ": " + fileName + " -> ";
+
                         List<SynergyV5List> allLists =
-                            Xml.Xml.RetrieveSynergyV5Lists(doc);
+                            Xml.Xml.RetrieveSynergyV5Lists(doc, msgPrefix, this);
 
                         foreach (SynergyV5List lst in allLists)
                         {
-                            string detail = "path " + count + " of " + total;
-                            detail += ": " + fileName + " -> ";
-                            detail += "processing list: " + lst.ListName;
+                            string detail = msgPrefix + "processing list: " + lst.ListName;
 
                             StatusDetailUpdate(detail);
 
@@ -266,16 +268,25 @@ namespace NineWorldsDeep.Tapestry.NodeUI
                     }
 
                 }
+
+                StatusDetailUpdate("finished importing xml.", true);
             });
 
-            statusDetail.Text = "finished.";
+            //statusDetail.Text = "finished importing xml.";
         }
 
-        public void StatusDetailUpdate(string text)
+        /// <summary>
+        /// to prevent updating too often, only updates in 50ms increments, 
+        /// ignoring updates in between. to ensure display of a particular
+        /// update, pass parameter ensureDisplay as true
+        /// </summary>
+        /// <param name="text"></param>
+        /// <param name="ensureDisplay"></param>
+        public void StatusDetailUpdate(string text, bool ensureDisplay = false)
         {
             var currentTime = DateTime.Now;
 
-            if ((DateTime.Now - previousTime).Milliseconds <= 50) return;
+            if (!ensureDisplay && ((DateTime.Now - previousTime).Milliseconds <= 50)) return;
 
             syncContext.Post(new SendOrPostCallback(s =>
             {
@@ -315,7 +326,7 @@ namespace NineWorldsDeep.Tapestry.NodeUI
 
             });
 
-            statusDetail.Text = "finished.";
+            statusDetail.Text = "finished exporting xml.";
         }
 
         private void ExportLists(List<SynergyV5List> listsToExport)
@@ -439,7 +450,7 @@ namespace NineWorldsDeep.Tapestry.NodeUI
                 ExportLists(listsToExport);
             });
 
-            statusDetail.Text = "finished.";
+            statusDetail.Text = "finished exporting selected items to xml.";
         }
 
         private void MenuItemExportShelvedSelectedToXml_Click(object sender, RoutedEventArgs e)

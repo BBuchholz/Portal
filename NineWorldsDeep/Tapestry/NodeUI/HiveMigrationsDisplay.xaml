@@ -55,7 +55,7 @@
             <MenuItem Header="Local Root Lobe Context Menu Item (test)"
                       Click="MenuItemTest_Click"/>
             <MenuItem Header="Intake All"
-                      Click="MenuItemTest_Click"/>
+                      Click="MenuItemIntakeAllLocalLobe_Click"/>
         </ContextMenu>
 
         <ContextMenu x:Key="cmStagingRootSpore">
@@ -71,9 +71,9 @@
             <MenuItem Header="Staging Root Lobe Context Menu Item (test)"
                       Click="MenuItemTest_Click"/>
             <MenuItem Header="Copy All To Other"
-                      Click="MenuItemTest_Click"/>
+                      Click="MenuItemCopyAllToOtherStagingLobe_Click"/>
             <MenuItem Header="Move All To Other"
-                      Click="MenuItemTest_Click"/>
+                      Click="MenuItemMoveAllToOtherStagingLobe_Click"/>
         </ContextMenu>
 
     </UserControl.Resources>

@@ -526,11 +526,11 @@ namespace NineWorldsDeep.Tapestry.NodeUI
             tbStatus.Text = "finished.";
         }
 
-        public void StatusDetailUpdate(string text)
+        public void StatusDetailUpdate(string text, bool ensureDisplay = false)
         {
             var currentTime = DateTime.Now;
 
-            if ((DateTime.Now - previousTime).Milliseconds <= 50) return;
+            if (!ensureDisplay && ((DateTime.Now - previousTime).Milliseconds <= 50)) return;
 
             syncContext.Post(new SendOrPostCallback(s =>
             {

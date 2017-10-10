@@ -344,13 +344,14 @@ namespace NineWorldsDeep.Tapestry.NodeUI
                 return null;
             }
         }
-        
-        public void StatusDetailUpdate(string text)
+
+        public void StatusDetailUpdate(string text, bool ensureDisplay = false)
         {
             var currentTime = DateTime.Now;
-            
+
             //disable delay for now            
-            //if ((DateTime.Now - previousTime).Milliseconds <= 50) return;
+            ensureDisplay = false;
+            if (!ensureDisplay && ((DateTime.Now - previousTime).Milliseconds <= 50)) return;
 
             syncContext.Post(new SendOrPostCallback(s =>
             {

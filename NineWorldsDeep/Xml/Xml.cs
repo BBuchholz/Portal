@@ -346,60 +346,70 @@ namespace NineWorldsDeep.Xml
         //    return synergySubsetEl;
         //}
 
-        public static List<SynergyV5List> RetrieveSynergyV5Lists(XDocument doc)
+        public static List<SynergyV5List> RetrieveSynergyV5Lists(XDocument doc, string prefixMessage = "", IAsyncStatusResponsive statusEnabledUi = null)
         {
             List<SynergyV5List> allLists = new List<SynergyV5List>();
 
-            foreach(XElement listEl in doc.Descendants(TAG_SYNERGY_LIST))
+            try
             {
-                string listName = listEl.Attribute(ATTRIBUTE_LIST_NAME).Value;
-                string activatedAt = listEl.Attribute(ATTRIBUTE_ACTIVATED_AT).Value;
-                string shelvedAt = listEl.Attribute(ATTRIBUTE_SHELVED_AT).Value;
-
-                DateTime? activatedAtTime = ToTime(activatedAt);
-                DateTime? shelvedAtTime = ToTime(shelvedAt);
-
-                SynergyV5List lst = 
-                    new SynergyV5List(listName);
-
-                lst.SetTimeStamps(activatedAtTime, shelvedAtTime);
-
-                foreach(XElement itemEl in listEl.Descendants(TAG_SYNERGY_ITEM))
+                foreach (XElement listEl in doc.Descendants(TAG_SYNERGY_LIST))
                 {
-                    string position = itemEl.Attribute(ATTRIBUTE_POSITION).Value;
+                    string listName = listEl.Attribute(ATTRIBUTE_LIST_NAME).Value;
+                    string activatedAt = listEl.Attribute(ATTRIBUTE_ACTIVATED_AT).Value;
+                    string shelvedAt = listEl.Attribute(ATTRIBUTE_SHELVED_AT).Value;
 
-                    string itemValue = 
-                        itemEl.Descendants(TAG_ITEM_VALUE).First().Value;
+                    if (statusEnabledUi != null) statusEnabledUi.StatusDetailUpdate(prefixMessage + "found list: " + listName);
 
-                    var toDos = itemEl.Descendants(TAG_TO_DO);
+                    DateTime? activatedAtTime = ToTime(activatedAt);
+                    DateTime? shelvedAtTime = ToTime(shelvedAt);
 
-                    if(toDos.Count() > 0)
+                    SynergyV5List lst =
+                        new SynergyV5List(listName);
+
+                    lst.SetTimeStamps(activatedAtTime, shelvedAtTime);
+
+                    foreach (XElement itemEl in listEl.Descendants(TAG_SYNERGY_ITEM))
                     {
-                        XElement toDoEl = toDos.First();
+                        string position = itemEl.Attribute(ATTRIBUTE_POSITION).Value;
 
-                        string itemActivatedAt = toDoEl.Attribute(ATTRIBUTE_ACTIVATED_AT).Value;
-                        string completedAt = toDoEl.Attribute(ATTRIBUTE_COMPLETED_AT).Value;
-                        string archivedAt = toDoEl.Attribute(ATTRIBUTE_ARCHIVED_AT).Value;
+                        string itemValue =
+                            itemEl.Descendants(TAG_ITEM_VALUE).First().Value;
 
-                        DateTime? itemActivatedAtTime = ToTime(itemActivatedAt);
-                        DateTime? completedAtTime = ToTime(completedAt);
-                        DateTime? archivedAtTime = ToTime(archivedAt);
+                        var toDos = itemEl.Descendants(TAG_TO_DO);
 
-                        SynergyV5ListItem item =
-                            new SynergyV5ListItem(itemValue,
-                                                  itemActivatedAtTime,
-                                                  completedAtTime,
-                                                  archivedAtTime);
+                        if (toDos.Count() > 0)
+                        {
+                            XElement toDoEl = toDos.First();
 
-                        lst.ListItems.Add(item);
+                            string itemActivatedAt = toDoEl.Attribute(ATTRIBUTE_ACTIVATED_AT).Value;
+                            string completedAt = toDoEl.Attribute(ATTRIBUTE_COMPLETED_AT).Value;
+                            string archivedAt = toDoEl.Attribute(ATTRIBUTE_ARCHIVED_AT).Value;
+
+                            DateTime? itemActivatedAtTime = ToTime(itemActivatedAt);
+                            DateTime? completedAtTime = ToTime(completedAt);
+                            DateTime? archivedAtTime = ToTime(archivedAt);
+
+                            SynergyV5ListItem item =
+                                new SynergyV5ListItem(itemValue,
+                                                      itemActivatedAtTime,
+                                                      completedAtTime,
+                                                      archivedAtTime);
+
+                            lst.ListItems.Add(item);
+                        }
+                        else
+                        {
+                            lst.ListItems.Add(new SynergyV5ListItem(itemValue));
+                        }
                     }
-                    else
-                    {
-                        lst.ListItems.Add(new SynergyV5ListItem(itemValue));
-                    }
+
+                    allLists.Add(lst);
                 }
-
-                allLists.Add(lst);
+            }
+            catch (Exception ex)
+            {
+                //just here for debugging
+                string msg = ex.Message;
             }
 
             return allLists;

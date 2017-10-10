@@ -236,8 +236,10 @@ namespace NineWorldsDeep.Warehouse
             return profileName;
         }
 
-        public void StatusDetailUpdate(string text)
+        public void StatusDetailUpdate(string text, bool ensureDisplay = false)
         {
+            //ensureDisplay not used...
+
             Dispatcher.Invoke(() =>
             {
                 tbStatus.Text = text;

@@ -60,6 +60,11 @@ namespace NineWorldsDeep.Hive
             return HiveLobeName.ToLower().GetHashCode();
         }
 
+        public void ClearSpores()
+        {
+            SporesInternal.Clear();
+        }
+
         #endregion
     }
 }

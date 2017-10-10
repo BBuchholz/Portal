@@ -74,6 +74,7 @@ namespace NineWorldsDeep.Hive
 
         public static void RefreshSpores(HiveLobe hl)
         {
+            hl.ClearSpores();
             //for now, this is simple, but will eventually pull data from 
             //db also, so it has a wrapper method here
             hl.Collect();
@@ -172,30 +173,55 @@ namespace NineWorldsDeep.Hive
                     ConfigHive.STAGING_ROOT_NAME, sporeType);            
         }
 
-        public static void Intake(List<string> intakeFiles)
+        public static string Intake(List<string> intakeFiles)
         {
+            //we will be dealing with multiple sorts of file intake
+            List<string> responses = new List<string>();
+            int count = 0;
+
             //images
             foreach (string imageFile in
                 SiftFilesForSporeType(HiveSporeType.Image, intakeFiles))
             {
+                count++;
                 MoveFile(imageFile, Configuration.ImagesFolder);
             }
 
+            if (count > 0) responses.Add(count + " images");
+
+            count = 0;
             //audio
             foreach (string audioFile in
                 SiftFilesForSporeType(HiveSporeType.Audio, intakeFiles))
             {
-
+                count++;
                 MoveFile(audioFile, Configuration.VoiceMemosFolder);
             }
 
+            if (count > 0) responses.Add(count + " audio files");
+
+            count = 0;
             //pdfs
             foreach (string pdfFile in
                 SiftFilesForSporeType(HiveSporeType.Pdf, intakeFiles))
             {
-
+                count++;
                 MoveFile(pdfFile, Configuration.PdfsFolder);
             }
+
+            if (count > 0) responses.Add(count + " pdfs");
+
+            count = 0;
+            //xml
+            if (SiftFilesForSporeType(HiveSporeType.Xml, intakeFiles).Count() > 0)
+            {
+                count++;
+            }
+
+            if (count > 0) responses.Add(count + 
+                " xml files found, intake awaiting implementation, use Media -> Utilities -> Xml Import");
+
+            return String.Join(" : ", responses);
         }
 
         private static IEnumerable<string> SiftFilesForSporeType(

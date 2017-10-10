@@ -2,6 +2,6 @@
 {
     public interface IAsyncStatusResponsive
     {
-        void StatusDetailUpdate(string text);
+        void StatusDetailUpdate(string text, bool ensureDisplay = false);
     }
 }

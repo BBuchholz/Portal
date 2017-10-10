@@ -257,7 +257,7 @@ namespace NineWorldsDeep.Tapestry.NodeUI
             RefreshB();
         }
 
-        private void MenuItemIntakeRootSpore_Click(object sender, RoutedEventArgs e)
+        private void Intake(object sender)
         {
             MenuItem mnu = sender as MenuItem;
             TreeViewItem item = null;
@@ -267,27 +267,111 @@ namespace NineWorldsDeep.Tapestry.NodeUI
 
                 if (item != null && item.Tag != null)
                 {
-                    HiveSporeFilePath spore = item.Tag as HiveSporeFilePath;
                     TreeView parentTreeView =
                         UtilsUi.ParentOfType<TreeView>(item);
 
-                    if (spore != null)
-                    {
-                        List<string> paths = new List<string>();
-                        paths.Add(spore.FilePath);
-                        UtilsHive.Intake(paths);
+                    List<string> paths = new List<string>();
 
-                        UI.Display.Message("intake processed");
-                        RefreshByTreeView(parentTreeView);
+                    if (item.Tag is HiveSporeFilePath)
+                    {
+                        HiveSporeFilePath spore = item.Tag as HiveSporeFilePath;
+                        paths.Add(spore.FilePath);
                     }
+
+                    if (item.Tag is HiveLobe)
+                    {
+                        var lobe = item.Tag as HiveLobe;
+
+                        UtilsHive.RefreshSpores(lobe);
+
+                        foreach (HiveSpore spore in lobe.Spores)
+                        {
+                            if (spore is HiveSporeFilePath)
+                            {
+                                var fileSpore = spore as HiveSporeFilePath;
+                                paths.Add(fileSpore.FilePath);
+                            }
+                        }
+                    }
+
+                    string msg = UtilsHive.Intake(paths);
+
+                    UI.Display.Message(msg);
+                    RefreshByTreeView(parentTreeView);
                 }
             }
+        }
+
+        private void MenuItemIntakeRootSpore_Click(object sender, RoutedEventArgs e)
+        {
+            Intake(sender);
+
+            //MenuItem mnu = sender as MenuItem;
+            //TreeViewItem item = null;
+            //if (mnu != null)
+            //{
+            //    item = ((ContextMenu)mnu.Parent).PlacementTarget as TreeViewItem;
+
+            //    if (item != null && item.Tag != null)
+            //    {
+            //        HiveSporeFilePath spore = item.Tag as HiveSporeFilePath;
+            //        TreeView parentTreeView =
+            //            UtilsUi.ParentOfType<TreeView>(item);
+
+            //        if (spore != null)
+            //        {
+            //            List<string> paths = new List<string>();
+            //            paths.Add(spore.FilePath);
+            //            string msg = UtilsHive.Intake(paths);
+
+            //            UI.Display.Message(msg);
+            //            RefreshByTreeView(parentTreeView);
+            //        }
+            //    }
+            //}
         }
 
         private void MenuItemCopyToOther_Click(object sender, RoutedEventArgs e)
         {
             ProcessFileMovement(sender, FileTransportOperationType.CopyTo);
         }
+
+        //private void ProcessFileMovementPreviousVersion(object sender, FileTransportOperationType fileTransportType)
+        //{
+        //    MenuItem mnu = sender as MenuItem;
+        //    TreeViewItem item = null;
+        //    if (mnu != null)
+        //    {
+        //        item = ((ContextMenu)mnu.Parent).PlacementTarget as TreeViewItem;
+
+        //        if (item != null && item.Tag != null)
+        //        {
+        //            HiveSporeFilePath spore = item.Tag as HiveSporeFilePath;
+        //            TreeView parentTreeView =
+        //                UtilsUi.ParentOfType<TreeView>(item);
+
+        //            if (spore != null)
+        //            {
+        //                var destinationRoot = 
+        //                    GetSelectedHiveRootForTreeView(
+        //                        GetOppositeTreeView(parentTreeView));
+
+        //                List<string> pathsToProcess = new List<string>();
+        //                pathsToProcess.Add(spore.FilePath);
+
+        //                UtilsHive.ProcessMovement(
+        //                    pathsToProcess, 
+        //                    destinationRoot, 
+        //                    fileTransportType);
+
+        //                UI.Display.Message("file operation processed.");
+
+        //                RefreshA();
+        //                RefreshB();
+        //            }
+        //        }
+        //    }
+        //}
 
         private void ProcessFileMovement(object sender, FileTransportOperationType fileTransportType)
         {
@@ -299,34 +383,69 @@ namespace NineWorldsDeep.Tapestry.NodeUI
 
                 if (item != null && item.Tag != null)
                 {
-                    HiveSporeFilePath spore = item.Tag as HiveSporeFilePath;
                     TreeView parentTreeView =
                         UtilsUi.ParentOfType<TreeView>(item);
+                                        
+                    var destinationRoot =
+                        GetSelectedHiveRootForTreeView(
+                            GetOppositeTreeView(parentTreeView));
 
-                    if (spore != null)
+                    List<string> pathsToProcess = new List<string>();
+
+                    if (item.Tag is HiveSporeFilePath)
                     {
-                        var destinationRoot = 
-                            GetSelectedHiveRootForTreeView(
-                                GetOppositeTreeView(parentTreeView));
+                        HiveSporeFilePath spore = item.Tag as HiveSporeFilePath;
 
-                        List<string> pathsToProcess = new List<string>();
                         pathsToProcess.Add(spore.FilePath);
-
-                        UtilsHive.ProcessMovement(
-                            pathsToProcess, 
-                            destinationRoot, 
-                            fileTransportType);
-
-                        UI.Display.Message("file operation processed.");
-
-                        RefreshA();
-                        RefreshB();
                     }
+
+                    if (item.Tag is HiveLobe)
+                    {
+                        HiveLobe lobe = item.Tag as HiveLobe;
+
+                        UtilsHive.RefreshSpores(lobe);
+
+                        foreach(HiveSpore spore in lobe.Spores)
+                        {
+                            if(spore is HiveSporeFilePath)
+                            {
+                                var fileSpore = spore as HiveSporeFilePath;
+                                pathsToProcess.Add(fileSpore.FilePath);
+                            }
+                        }
+                    }
+
+                    UtilsHive.ProcessMovement(
+                        pathsToProcess,
+                        destinationRoot,
+                        fileTransportType);
+
+                    UI.Display.Message("file operation(s) processed.");
+
+                    RefreshA();
+                    RefreshB();
+                    
                 }
             }
         }
 
+
         private void MenuItemMoveToOther_Click(object sender, RoutedEventArgs e)
+        {
+            ProcessFileMovement(sender, FileTransportOperationType.MoveTo);
+        }
+
+        private void MenuItemIntakeAllLocalLobe_Click(object sender, RoutedEventArgs e)
+        {
+            Intake(sender);
+        }
+
+        private void MenuItemCopyAllToOtherStagingLobe_Click(object sender, RoutedEventArgs e)
+        {
+            ProcessFileMovement(sender, FileTransportOperationType.CopyTo);
+        }
+
+        private void MenuItemMoveAllToOtherStagingLobe_Click(object sender, RoutedEventArgs e)
         {
             ProcessFileMovement(sender, FileTransportOperationType.MoveTo);
         }
