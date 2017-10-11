@@ -35,6 +35,7 @@ namespace NineWorldsDeep.Xml
 
         private static string TAG_HIEROPHANT_SUBSET = "hierophantSubset";
         private static string TAG_SEMANTIC_MAP = "semanticMap";
+        private static string TAG_SEMANTIC_MAP_NAME = "semanticMapName";
         private static string TAG_SEMANTIC_DEFINITIONS = "semanticDefinitions";
         private static string TAG_SEMANTIC_DEFINITION = "semanticDefinition";
         private static string TAG_SEMANTIC_KEY = "semanticKey";
@@ -179,7 +180,15 @@ namespace NineWorldsDeep.Xml
                     if(reader.Name == TAG_SEMANTIC_MAP)
                     {
                         XElement semanticMapEl = (XElement)XNode.ReadFrom(reader);
-                        SemanticMap semanticMap = new SemanticMap();                        
+                        SemanticMap semanticMap = new SemanticMap();
+
+                        XElement semanticMapNameEl =
+                            semanticMapEl.Element(TAG_SEMANTIC_MAP_NAME);
+
+                        if(semanticMapNameEl != null)
+                        {
+                            semanticMap.Name = semanticMapNameEl.Value;
+                        }
 
                         //process semanticDefinitionsEl
                         XElement semanticDefinitionsEl =
@@ -745,6 +754,7 @@ namespace NineWorldsDeep.Xml
              * <nwd>
              *   <hierophantSubset>
              *     <semanticMap>
+             *       <semanticMapName>name</semanticMapName>
              *       <semanticDefinitions>
              *         <semanticDefinition>
              *           <semanticKey>key as string</semanticKey>
@@ -784,6 +794,11 @@ namespace NineWorldsDeep.Xml
             {
                 XElement semanticMapEl = new XElement(TAG_SEMANTIC_MAP);
                 hierophantSubsetEl.Add(semanticMapEl);
+                                
+                XElement semanticMapNameEl =
+                    new XElement(TAG_SEMANTIC_MAP_NAME);
+                
+                semanticMapNameEl.Value = semanticMap.Name;
 
                 XElement semanticDefinitionsEl =
                     new XElement(TAG_SEMANTIC_DEFINITIONS);

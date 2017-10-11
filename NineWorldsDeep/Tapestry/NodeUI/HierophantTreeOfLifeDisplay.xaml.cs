@@ -112,19 +112,21 @@ namespace NineWorldsDeep.Tapestry.NodeUI
 
         private void btnImportXmlTest_Click(object sender, RoutedEventArgs e)
         {
-            //uncomment when done testing
-            //IEnumerable<string> paths = 
-            //    ConfigHive.GetHiveHierophantXmlImportFilePaths();
-            IEnumerable<string> paths =
-                ConfigHive.TestingGetHiveHierophantXmlImportFilePaths(); //just for testing
+            ////uncomment when done testing
+            ////IEnumerable<string> paths = 
+            ////    ConfigHive.GetHiveHierophantXmlImportFilePaths();
+            //IEnumerable<string> paths =
+            //    ConfigHive.TestingGetHiveHierophantXmlImportFilePaths(); //just for testing
 
 
-            List<SemanticMap> semanticMaps = new List<SemanticMap>();
+            //List<SemanticMap> semanticMaps = new List<SemanticMap>();
 
-            foreach(string path in paths)
-            {
-                semanticMaps.AddRange(Xml.Xml.ImportHierophantSemanticMaps(path));
-            }
+            //foreach(string path in paths)
+            //{
+            //    semanticMaps.AddRange(Xml.Xml.ImportHierophantSemanticMaps(path));
+            //}
+
+            List<SemanticMap> semanticMaps = UtilsHierophant.ImportXml();
 
             //just testing
             string msg = "not found";

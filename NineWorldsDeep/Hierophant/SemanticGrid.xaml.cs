@@ -176,6 +176,8 @@ namespace NineWorldsDeep.Hierophant
 
                 tabItem.Content = gridPane;
                 tcSemanticGroups.Items.Add(tabItem);
+
+                tcSemanticGroups.SelectedItem = tabItem;
             }
         }
 
@@ -194,12 +196,15 @@ namespace NineWorldsDeep.Hierophant
         {
             TabItem selectedTab = e.AddedItems[0] as TabItem;  // Gets selected tab
 
-            SemanticGridPane pane = 
-                Core.UtilsUi.FindChildren<SemanticGridPane>(selectedTab).First();
-
-            if(pane != null)
+            if (selectedTab != null)
             {
-                pane.RefreshFromMap();
+                SemanticGridPane pane =
+                    Core.UtilsUi.FindChildren<SemanticGridPane>(selectedTab).First();
+
+                if (pane != null)
+                {
+                    pane.RefreshFromMap();
+                }
             }
         }
     }

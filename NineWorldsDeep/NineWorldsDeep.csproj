@@ -1004,6 +1004,8 @@
     <Resource Include="ResourceImages\icon_archive_black_24dp_2x.png" />
     <Resource Include="ResourceImages\icon_unarchive_black_24dp_1x.png" />
     <Resource Include="ResourceImages\icon_unarchive_black_24dp_2x.png" />
+    <Resource Include="ResourceImages\icon_delete_forever_black_24dp_1x.png" />
+    <Resource Include="ResourceImages\icon_delete_forever_black_24dp_2x.png" />
     <Content Include="SQLite.Interop.dll">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

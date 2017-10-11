@@ -120,5 +120,23 @@ namespace NineWorldsDeep.Hierophant
                 groupName, 
                 StringComparison.CurrentCultureIgnoreCase);
         }
+
+        public static List<SemanticMap> ImportXml()
+        {
+            //uncomment when done testing
+            //IEnumerable<string> paths = 
+            //    ConfigHive.GetHiveHierophantXmlImportFilePaths();
+            IEnumerable<string> paths =
+                ConfigHive.TestingGetHiveHierophantXmlImportFilePaths(); //just for testing
+            
+            List<SemanticMap> semanticMaps = new List<SemanticMap>();
+
+            foreach (string path in paths)
+            {
+                semanticMaps.AddRange(Xml.Xml.ImportHierophantSemanticMaps(path));
+            }
+
+            return semanticMaps;
+        }
     }
 }

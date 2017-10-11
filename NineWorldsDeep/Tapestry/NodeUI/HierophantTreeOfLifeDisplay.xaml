@@ -13,7 +13,7 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="40"/>
             <RowDefinition Height="*"/>
-            <RowDefinition Height="40"/>
+            <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
         <Expander Header="Utilites"
@@ -113,7 +113,7 @@
                   x:Name="expCorrespondences"
                   Grid.Row="2"
                   Margin="5"
-                  IsExpanded="False"
+                  IsExpanded="True"
                   Expanded="Expander_Expanded"
                   Collapsed="Expander_Collapsed">
 

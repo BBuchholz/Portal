@@ -20,7 +20,7 @@ namespace NineWorldsDeep.Hierophant
         private SemanticMap parentMap = null;
         
         public string Name { get; set; }
-
+        
         public IEnumerable<SemanticKey> SemanticKeys
         {
             get { return keysToDefs.Keys; }

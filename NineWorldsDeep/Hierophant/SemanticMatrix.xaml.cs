@@ -29,26 +29,57 @@ namespace NineWorldsDeep.Hierophant
 
             DisplaySemanticMap(UtilsHierophant.MockMapWithGroups("demo"));
 
-            CountForTesting = 0;
+            CountForUnnamedMaps = 0;
         }
 
-        private int CountForTesting { get; set; }
+        private int CountForUnnamedMaps { get; set; }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="incrementCount">set to false if you want to defer incrementing CountForUnnamedMaps</param>
+        /// <returns></returns>
+        private string AutoGenerateSemanticMapName(bool incrementCount = true)
+        {
+            var name = "Semantic Set " + CountForUnnamedMaps;
+
+            if (incrementCount)
+            {
+                CountForUnnamedMaps++;
+            }
+
+            return name;
+           
+        }
 
         private void btnAddSemanticSet_Click(object sender, RoutedEventArgs e)
         {
-            EnsureSemanticGrid("Semantic Set " + CountForTesting);
-            CountForTesting += 1;
+            var defaultName = AutoGenerateSemanticMapName(false);
+            var mapName = UI.Prompt.Input("Enter Name For Map", defaultName);
+
+            if(!string.IsNullOrWhiteSpace(mapName))
+            {
+                if(mapName.Equals(defaultName, StringComparison.CurrentCultureIgnoreCase))
+                {
+                    CountForUnnamedMaps += 1;
+                }
+                
+                EnsureSemanticGrid(mapName, true);
+            }
+
         }
 
         public void DisplaySemanticMap(SemanticMap semanticMap)
         {
             if(string.IsNullOrWhiteSpace(semanticMap.Name))
             {
-                throw new Exception("Display of SemanticMap requires Name property to be set");
+                semanticMap.Name = AutoGenerateSemanticMapName();
             }
 
             DisplaySemanticMap(semanticMap.Name, semanticMap);
         }
+
+
 
         public void DisplaySemanticMap(string semanticSetName, SemanticMap semanticMap)
         {
@@ -57,7 +88,7 @@ namespace NineWorldsDeep.Hierophant
             grid.DisplaySemanticMap(semanticMap);
         }
 
-        private void EnsureSemanticGrid(string semanticSetName)
+        private void EnsureSemanticGrid(string semanticSetName, bool selectEnsuredGrid = true)
         {
             //prevent overwrite of existing sets
             if (!semanticSetNamesToSemanticGrids.ContainsKey(semanticSetName))
@@ -70,12 +101,22 @@ namespace NineWorldsDeep.Hierophant
 
                 tabItem.Content = semanticGrid;
                 tcSemanticSets.Items.Add(tabItem);
+
+                if (selectEnsuredGrid)
+                {
+                    tcSemanticSets.SelectedItem = tabItem;
+                }
             }
         }
 
         private void btnImportSemanticSets_Click(object sender, RoutedEventArgs e)
         {
-            UI.Display.Message("Needs to import all Semantic Sets from xml");
+            var maps = UtilsHierophant.ImportXml();
+
+            foreach(SemanticMap map in maps)
+            {
+                DisplaySemanticMap(map);
+            }
         }
 
         private void btnExportSemanticSets_Click(object sender, RoutedEventArgs e)
@@ -99,6 +140,16 @@ namespace NineWorldsDeep.Hierophant
             }
 
             return maps;
+        }
+
+        private void btnClearSemanticSets_Click(object sender, RoutedEventArgs e)
+        {
+            if (UI.Prompt.Confirm("Are you sure? This is non-reversible", true))
+            {
+                tcSemanticSets.Items.Clear();
+                semanticSetNamesToSemanticGrids.Clear();
+                CountForUnnamedMaps = 0;
+            }
         }
     }
 }
