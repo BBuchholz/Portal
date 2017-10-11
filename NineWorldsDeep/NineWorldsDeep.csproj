@@ -27,7 +27,7 @@
     <UpdatePeriodically>false</UpdatePeriodically>
     <UpdateRequired>false</UpdateRequired>
     <MapFileExtensions>true</MapFileExtensions>
-    <ApplicationRevision>124</ApplicationRevision>
+    <ApplicationRevision>125</ApplicationRevision>
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <PublishWizardCompleted>true</PublishWizardCompleted>
@@ -227,6 +227,7 @@
     <Compile Include="FragmentMetaWindow.xaml.cs">
       <DependentUpon>FragmentMetaWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Hierophant\ConfigHierophant.cs" />
     <Compile Include="Hierophant\ISemanticallyAddressable.cs" />
     <Compile Include="Hierophant\ISemanticallyRenderable.cs" />
     <Compile Include="Hierophant\SemanticDefinition.cs" />
@@ -998,6 +999,11 @@
     <Resource Include="ResourceImages\icon_sync_black_24dp_2x.png" />
     <Resource Include="ResourceImages\icon_add_black_24dp_1x.png" />
     <Resource Include="ResourceImages\icon_add_black_24dp_2x.png" />
+    <Resource Include="ResourceImages\README.txt" />
+    <Resource Include="ResourceImages\icon_archive_black_24dp_1x.png" />
+    <Resource Include="ResourceImages\icon_archive_black_24dp_2x.png" />
+    <Resource Include="ResourceImages\icon_unarchive_black_24dp_1x.png" />
+    <Resource Include="ResourceImages\icon_unarchive_black_24dp_2x.png" />
     <Content Include="SQLite.Interop.dll">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

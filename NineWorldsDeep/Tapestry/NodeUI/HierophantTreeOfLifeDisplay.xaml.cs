@@ -81,33 +81,36 @@ namespace NineWorldsDeep.Tapestry.NodeUI
             lurianicTreeOfLifeInstance.Display(map);
         }
 
-        private void btnExportXml_Click(object sender, RoutedEventArgs e)
+        private void btnExportXmlTest_Click(object sender, RoutedEventArgs e)
         {
-            var doc = 
-                Xml.Xml.Export(UtilsHierophant.MockMapWithGroups("demo"));
+            //var doc = 
+            //    Xml.Xml.Export(UtilsHierophant.MockMapWithGroups("demo"));
 
-            string fileName = ConfigHive.GenerateHiveHierophantXmlFileName();                
+            //string fileName = ConfigHive.GenerateHiveHierophantXmlFileName();                
 
-            //uncomment when done testing
-            //IEnumerable<string> paths = ConfigHive.GetHiveFoldersForXmlExport();
-            List<string> paths = new List<string>();
-            paths.Add(@"C:\NWD-SYNC\hive\test-root\xml\incoming"); //just for testing
+            ////uncomment when done testing
+            ////IEnumerable<string> paths = ConfigHive.GetHiveFoldersForXmlExport();
+            //List<string> paths = new List<string>();
+            //paths.Add(@"C:\NWD-SYNC\hive\test-root\xml\incoming"); //just for testing
 
-            foreach (string folderPath in paths)
-            {
-                //ensure directory
-                Directory.CreateDirectory(folderPath);
+            //foreach (string folderPath in paths)
+            //{
+            //    //ensure directory
+            //    Directory.CreateDirectory(folderPath);
 
-                string fullFilePath =
-                    System.IO.Path.Combine(folderPath, fileName);
+            //    string fullFilePath =
+            //        System.IO.Path.Combine(folderPath, fileName);
 
-                doc.Save(fullFilePath);
-            }
+            //    doc.Save(fullFilePath);
+            //}
+
+            string fileName = 
+                UtilsHierophant.ExportToXml(UtilsHierophant.MockMapWithGroups("demo"));
 
             tbStatus.Text = "exported as " + fileName;
         }
 
-        private void btnImportXml_Click(object sender, RoutedEventArgs e)
+        private void btnImportXmlTest_Click(object sender, RoutedEventArgs e)
         {
             //uncomment when done testing
             //IEnumerable<string> paths = 
@@ -139,5 +142,6 @@ namespace NineWorldsDeep.Tapestry.NodeUI
 
             tbStatus.Text = "imported from xml";
         }
+        
     }
 }

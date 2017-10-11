@@ -19,7 +19,7 @@ namespace NineWorldsDeep.Hierophant
     /// Interaction logic for SemanticGrid.xaml
     /// </summary>
     public partial class SemanticGrid : UserControl
-    {
+    {        
         private Dictionary<string, DataGrid> semanticGroupNamesToDataGrids =
             new Dictionary<string, DataGrid>();
 
@@ -41,7 +41,9 @@ namespace NineWorldsDeep.Hierophant
         {
             CurrentSemanticMap = semanticMap;
 
-            DisplaySemanticMap("[[ALL]]", CurrentSemanticMap);
+            DisplaySemanticMap(
+                ConfigHierophant.ALL_KEYS_GROUP_NAME, 
+                CurrentSemanticMap);
 
             foreach(string semanticGroupName in CurrentSemanticMap.SemanticGroupNames)
             {
@@ -61,11 +63,15 @@ namespace NineWorldsDeep.Hierophant
         {
             CurrentSemanticMap = semanticMap;
 
-            DisplaySemanticMap("[[ALL]]", CurrentSemanticMap);
+            DisplaySemanticMap(
+                ConfigHierophant.ALL_KEYS_GROUP_NAME, 
+                CurrentSemanticMap);
 
             foreach (string semanticGroupName in CurrentSemanticMap.SemanticGroupNames)
             {
-                DisplaySemanticMap(semanticGroupName, CurrentSemanticMap.SemanticGroup(semanticGroupName));
+                DisplaySemanticMap(
+                    semanticGroupName, 
+                    CurrentSemanticMap.SemanticGroup(semanticGroupName));
             }
         }
 
@@ -102,6 +108,11 @@ namespace NineWorldsDeep.Hierophant
         
         private void btnAddSemanticGroup_Click(object sender, RoutedEventArgs e)
         {
+            if(CurrentSemanticMap == null)
+            {
+                CurrentSemanticMap = new SemanticMap();
+            }
+
             int i = 0;
             string autoGenName;
 
@@ -161,6 +172,7 @@ namespace NineWorldsDeep.Hierophant
                 var gridPane = new SemanticGridPane();
 
                 semanticGroupsToPanes[semanticGroupName] = gridPane;
+                gridPane.GroupName = semanticGroupName;
 
                 tabItem.Content = gridPane;
                 tcSemanticGroups.Items.Add(tabItem);

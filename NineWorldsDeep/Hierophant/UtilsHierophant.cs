@@ -1,5 +1,7 @@
-﻿using System;
+﻿using NineWorldsDeep.Hive;
+using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -8,7 +10,7 @@ namespace NineWorldsDeep.Hierophant
 {
     public class UtilsHierophant
     {
-        public static SemanticDefinition MockDefPlanet(SemanticKey semanticKey, 
+        private static SemanticDefinition MockDefPlanet(SemanticKey semanticKey, 
             string planet, string alchemy, string astro, string color)
         {
             var def = new SemanticDefinition(semanticKey);
@@ -21,7 +23,7 @@ namespace NineWorldsDeep.Hierophant
             return def;
         }
 
-        public static SemanticDefinition MockDefHerb(SemanticKey semanticKey,
+        private static SemanticDefinition MockDefHerb(SemanticKey semanticKey,
             string herb, string stone, string color)
         {
             var def = new SemanticDefinition(semanticKey);
@@ -33,25 +35,25 @@ namespace NineWorldsDeep.Hierophant
             return def;
         }
 
-        public static SemanticMap MockMap2()
-        {
-            var semanticMap = new SemanticMap();
+        //public static SemanticMap MockMap2()
+        //{
+        //    var semanticMap = new SemanticMap();
             
-            semanticMap.Add(MockDefPlanet(new SemanticKey("testKey2"), "Venus", "Salt", "Libra", "Yellow"));
-            semanticMap.Add(MockDefHerb(new SemanticKey("testKey3"), "Aconite", "Obsidian", "Black"));
+        //    semanticMap.Add(MockDefPlanet(new SemanticKey("testKey2"), "Venus", "Salt", "Libra", "Yellow"));
+        //    semanticMap.Add(MockDefHerb(new SemanticKey("testKey3"), "Aconite", "Obsidian", "Black"));
 
-            return semanticMap;
-        }
+        //    return semanticMap;
+        //}
         
-        public static SemanticMap MockMap1()
-        {
-            var semanticMap = new SemanticMap();
+        //public static SemanticMap MockMap1()
+        //{
+        //    var semanticMap = new SemanticMap();
 
-            semanticMap.Add(MockDefPlanet(new SemanticKey("testKey1"), "Mercury", "Sulphur", "Aries", "Silver"));
-            semanticMap.Add(MockDefHerb(new SemanticKey("testKey4"), "Cannabis", "Emerald", "Green"));
+        //    semanticMap.Add(MockDefPlanet(new SemanticKey("testKey1"), "Mercury", "Sulphur", "Aries", "Silver"));
+        //    semanticMap.Add(MockDefHerb(new SemanticKey("testKey4"), "Cannabis", "Emerald", "Green"));
 
-            return semanticMap;
-        }
+        //    return semanticMap;
+        //}
 
         public static SemanticMap MockMapWithGroups(string uniqueId)
         {
@@ -68,6 +70,55 @@ namespace NineWorldsDeep.Hierophant
             return semanticMap;
         }
 
-        
+        /// <summary>
+        /// convenience method. generates a one item list and
+        /// calls ExportToXml(List<SemanticMap> semanticMaps)
+        /// </summary>
+        /// <param name="sm"></param>
+        /// <returns>filename of exported file, without path</returns>
+        public static string ExportToXml(SemanticMap sm)
+        {
+            var lst = new List<SemanticMap>();
+            lst.Add(sm);
+
+            return ExportToXml(lst);
+        }
+
+        /// <summary>
+        /// generates xml file and writes it to all active hive roots
+        /// </summary>
+        /// <returns>filename of exported file, without path</returns>
+        public static string ExportToXml(IEnumerable<SemanticMap> semanticMaps)
+        {
+            var doc =
+                Xml.Xml.Export(semanticMaps);
+
+            string fileName = ConfigHive.GenerateHiveHierophantXmlFileName();
+
+            //uncomment when done testing
+            //IEnumerable<string> paths = ConfigHive.GetHiveFoldersForXmlExport();
+            List<string> paths = new List<string>();
+            paths.Add(@"C:\NWD-SYNC\hive\test-root\xml\incoming"); //just for testing
+
+            foreach (string folderPath in paths)
+            {
+                //ensure directory
+                Directory.CreateDirectory(folderPath);
+
+                string fullFilePath =
+                    System.IO.Path.Combine(folderPath, fileName);
+
+                doc.Save(fullFilePath);
+            }
+
+            return fileName;
+        }
+
+        public static bool IsAllKeysGroup(string groupName)
+        {
+            return ConfigHierophant.ALL_KEYS_GROUP_NAME.Equals(
+                groupName, 
+                StringComparison.CurrentCultureIgnoreCase);
+        }
     }
 }

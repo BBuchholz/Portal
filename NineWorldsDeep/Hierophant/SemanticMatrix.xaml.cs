@@ -72,5 +72,33 @@ namespace NineWorldsDeep.Hierophant
                 tcSemanticSets.Items.Add(tabItem);
             }
         }
+
+        private void btnImportSemanticSets_Click(object sender, RoutedEventArgs e)
+        {
+            UI.Display.Message("Needs to import all Semantic Sets from xml");
+        }
+
+        private void btnExportSemanticSets_Click(object sender, RoutedEventArgs e)
+        {
+            IEnumerable<SemanticMap> maps = GetSemanticMaps();
+            var fileName = UtilsHierophant.ExportToXml(maps);
+            UI.Display.Message("semantic maps exported as " + fileName);
+        }
+
+        private IEnumerable<SemanticMap> GetSemanticMaps()
+        {
+            List<SemanticMap> maps = new List<SemanticMap>();
+
+            foreach(SemanticGrid semanticGrid in
+                semanticSetNamesToSemanticGrids.Values)
+            {
+                if(semanticGrid.CurrentSemanticMap != null)
+                {
+                    maps.Add(semanticGrid.CurrentSemanticMap);
+                }
+            }
+
+            return maps;
+        }
     }
 }

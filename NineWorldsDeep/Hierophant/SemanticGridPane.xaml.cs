@@ -21,6 +21,7 @@ namespace NineWorldsDeep.Hierophant
     public partial class SemanticGridPane : UserControl
     {
         private SemanticMap CurrentSemanticMap { get; set; }
+        public string GroupName { get; set; }
 
         public SemanticGridPane()
         {
@@ -125,8 +126,15 @@ namespace NineWorldsDeep.Hierophant
 
                 if (CurrentSemanticMap != null)
                 {
+                    if (UtilsHierophant.IsAllKeysGroup(GroupName))
+                    {
+                        CurrentSemanticMap.Add(new SemanticDefinition(semanticKey));
+                    }
+                    else
+                    {
+                        CurrentSemanticMap.AddTo(GroupName, new SemanticDefinition(semanticKey));
+                    }
                     
-                    CurrentSemanticMap.Add(new SemanticDefinition(semanticKey));
                     txtAddSemanticKey.Text = "";
                     RefreshFromMap();
                 }

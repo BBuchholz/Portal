@@ -11,6 +11,10 @@
 
         <BitmapImage x:Key="iconAddSmall"
                      UriSource="/ResourceImages/icon_add_black_24dp_1x.png"/>
+        <BitmapImage x:Key="iconArchiveSmall"
+                     UriSource="/ResourceImages/icon_archive_black_24dp_1x.png"/>
+        <BitmapImage x:Key="iconUnarchiveSmall"
+                     UriSource="/ResourceImages/icon_unarchive_black_24dp_1x.png"/>
 
     </UserControl.Resources>
     
@@ -32,9 +36,28 @@
 
             <Button x:Name="btnAddSemanticSet"
                     Margin="8"
+                    ToolTip="Add Semantic Set"
                     Click="btnAddSemanticSet_Click">
                 <Button.Content>
                     <Image Source="{StaticResource iconAddSmall}"/>
+                </Button.Content>
+            </Button>
+
+            <Button x:Name="btnImportSemanticSets"
+                    Margin="8"
+                    ToolTip="Import Semantic Sets From Xml"
+                    Click="btnImportSemanticSets_Click">
+                <Button.Content>
+                    <Image Source="{StaticResource iconUnarchiveSmall}"/>
+                </Button.Content>
+            </Button>
+
+            <Button x:Name="btnExportSemanticSets"
+                    Margin="8"
+                    ToolTip="Export Current Semantic Sets As Xml"
+                    Click="btnExportSemanticSets_Click">
+                <Button.Content>
+                    <Image Source="{StaticResource iconArchiveSmall}"/>
                 </Button.Content>
             </Button>
 

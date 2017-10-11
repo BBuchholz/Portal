@@ -47,19 +47,19 @@
                         Content="PRESS THIS TO DEMO SEMANTIC MAP RENDER"
                         Click="btnExample_Click"/>
 
-                <Button x:Name="btnExportXml"
+                <Button x:Name="btnExportXmlTest"
                         Grid.Row="0"
                         Grid.Column="1"
                         Margin="5"
-                        Content="EXPORT SEMANTIC MAP TO XML (TEST)"
-                        Click="btnExportXml_Click"/>
+                        Content="EXPORT MAP XML (TEST)"
+                        Click="btnExportXmlTest_Click"/>
 
-                <Button x:Name="btnImportXml"
+                <Button x:Name="btnImportXmlTest"
                         Grid.Row="0"
                         Grid.Column="2"
                         Margin="5"
-                        Content="IMPORT SEMANTIC MAP FROM XML (TEST)"
-                        Click="btnImportXml_Click"/>
+                        Content="IMPORT MAP XML (TEST)"
+                        Click="btnImportXmlTest_Click"/>
 
                 <CheckBox Content="Load Local (this UI)"
                           Grid.Row="1"
@@ -71,7 +71,7 @@
 
                 <TextBlock x:Name="tbTestText"
                            Grid.Row="4"
-                           Grid.ColumnSpan="3"/>
+                           Grid.ColumnSpan="1"/>
 
                 <StackPanel Grid.Row="5"
                             VerticalAlignment="Bottom"

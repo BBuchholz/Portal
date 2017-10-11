@@ -11,39 +11,6 @@
         <BitmapImage x:Key="iconSyncSmall" 
                      UriSource="/ResourceImages/icon_sync_black_24dp_1x.png" />
 
-        <!--<ContextMenu x:Key="cmAudio">
-            <MenuItem Header="Audio Context Menu Item"
-                      Click="MenuItemTest_Click"/>
-            <MenuItem Header="Move To Other"
-                      Click="MenuItemTest_Click"/>
-            <MenuItem Header="Copy To Other"
-                      Click="MenuItemTest_Click"/>
-        </ContextMenu>
-        <ContextMenu x:Key="cmImage">
-            <MenuItem Header="Image Context Menu Item"
-                      Click="MenuItemTest_Click"/>
-            <MenuItem Header="Move To Other"
-                      Click="MenuItemTest_Click"/>
-            <MenuItem Header="Copy To Other"
-                      Click="MenuItemTest_Click"/>
-        </ContextMenu>
-        <ContextMenu x:Key="cmPdf">
-            <MenuItem Header="Pdf Context Menu Item"
-                      Click="MenuItemTest_Click"/>
-            <MenuItem Header="Move To Other"
-                      Click="MenuItemTest_Click"/>
-            <MenuItem Header="Copy To Other"
-                      Click="MenuItemTest_Click"/>
-        </ContextMenu>
-        <ContextMenu x:Key="cmXml">
-            <MenuItem Header="XML Context Menu Item"
-                      Click="MenuItemTest_Click"/>
-            <MenuItem Header="Move To Other"
-                      Click="MenuItemTest_Click"/>
-            <MenuItem Header="Copy To Other"
-                      Click="MenuItemTest_Click"/>
-        </ContextMenu>-->
-
         <ContextMenu x:Key="cmLocalRootSpore">
             <MenuItem Header="Local Root Spore Context Menu Item (test)"
                       Click="MenuItemTest_Click"/>

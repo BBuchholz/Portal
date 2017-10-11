@@ -48,20 +48,20 @@ namespace NineWorldsDeep.Hierophant
                 parentMap.Add(def);
             }
             
-        }        
+        }
 
-        ///// <summary>
-        ///// will add to both this map and the group map specified
-        ///// 
-        ///// convenience method, same as calling thisMap.Add(def) and then
-        ///// thisMap.SemanticGroup(semanticGroupName).Add(def)
-        ///// </summary>
-        ///// <param name="semanticGroupName"></param>
-        //public void AddTo(string semanticGroupName, SemanticDefinition def)
-        //{
-        //    Add(def);
-        //    SemanticGroup(semanticGroupName).Add(def);
-        //}
+        /// <summary>
+        /// will add to both this map and the group map specified
+        /// 
+        /// convenience method, same as calling thisMap.Add(def) and then
+        /// thisMap.SemanticGroup(semanticGroupName).Add(def)
+        /// </summary>
+        /// <param name="semanticGroupName"></param>
+        public void AddTo(string semanticGroupName, SemanticDefinition def)
+        {
+            Add(def);
+            SemanticGroup(semanticGroupName).Add(def);
+        }
 
         /// <summary>
         /// if semantic group with semantic group name doesn't exist, it
@@ -71,6 +71,11 @@ namespace NineWorldsDeep.Hierophant
         /// <returns></returns>
         public SemanticMap SemanticGroup(string semanticGroupName)
         {
+            if (string.IsNullOrWhiteSpace(semanticGroupName))
+            {
+                throw new Exception("semanticGroupName cannot be null or whitespace");
+            }
+
             if (!groupNamesToGroupMaps.ContainsKey(semanticGroupName))
             {
                 var newMap = new SemanticMap()
@@ -78,8 +83,7 @@ namespace NineWorldsDeep.Hierophant
                     parentMap = this
                 };
 
-                groupNamesToGroupMaps[semanticGroupName] = newMap;
-                
+                groupNamesToGroupMaps[semanticGroupName] = newMap;                
             }
 
             return groupNamesToGroupMaps[semanticGroupName];
