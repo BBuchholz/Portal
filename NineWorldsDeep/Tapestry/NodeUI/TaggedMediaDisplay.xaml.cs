@@ -270,14 +270,29 @@ namespace NineWorldsDeep.Tapestry.NodeUI
             UI.Display.Message("finished staging for export");
         }
 
-        private void MenuItemCopyToStagingHive_Click(object sender, RoutedEventArgs e)
+        private async void MenuItemCopyToStagingHive_Click(object sender, RoutedEventArgs e)
         {
             List<string> selectedPaths =
-                lvPaths.SelectedItems.Cast<string>()
-                                     .Select(s => s)
-                                     .ToList();
+            lvPaths.SelectedItems.Cast<string>()
+                                 .Select(s => s)
+                                 .ToList();
 
-            UtilsHive.CopyToStaging(selectedPaths);
+            await Task.Run(() =>
+            {
+                try
+                {
+                    this.StatusDetailUpdate("processing " + selectedPaths.Count() + " paths");
+
+                    UtilsHive.CopyToStaging(selectedPaths, this);
+
+                    //copy all tags to hive xml folders 
+                    UtilsMnemosyneV5.ExportXml(this, selectedPaths, ConfigHive.GetHiveFoldersForXmlExport());
+                }
+                catch(Exception ex)
+                {
+                    var debuggingBreakpoint = ex.Message;
+                }
+            });
 
             UI.Display.Message("copied to hive staging");
         }

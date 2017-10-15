@@ -1,6 +1,7 @@
 ﻿using NineWorldsDeep.Core;
 using NineWorldsDeep.Hive.Lobes;
 using NineWorldsDeep.Mnemosyne.V5;
+using NineWorldsDeep.Tapestry.NodeUI;
 using NineWorldsDeep.Warehouse;
 using System;
 using System.Collections.Generic;
@@ -166,18 +167,22 @@ namespace NineWorldsDeep.Hive
             }
         }
 
-        public static void CopyToStaging(List<string> selectedPaths)
+        public static void CopyToStaging(List<string> selectedPaths, IAsyncStatusResponsive ui = null)
         {
-            AddToStaging(selectedPaths, FileTransportOperationType.CopyTo);
+            AddToStaging(selectedPaths, FileTransportOperationType.CopyTo, ui);
         }
 
-        private static void AddToStaging(List<string> selectedPaths, FileTransportOperationType moveType)
+        private static void AddToStaging(List<string> selectedPaths, FileTransportOperationType moveType, IAsyncStatusResponsive ui = null)
         {
             if(moveType == FileTransportOperationType.CopyTo)
             {
+                int count = 0;
+                int total = selectedPaths.Count();
 
                 foreach (string filePathToMove in selectedPaths)
                 {
+                    count++;
+
                     string stagingDirectoryForFileType =
                         GetStagingDirectoryForFileType(filePathToMove);
 
@@ -187,6 +192,10 @@ namespace NineWorldsDeep.Hive
 
                     if (!File.Exists(destFilePath))
                     {
+                        if(ui != null)
+                        {
+                            ui.StatusDetailUpdate("copying " + count + " of " + total + " to " + destFilePath);
+                        }
                         File.Copy(filePathToMove, destFilePath);
                     }
                     else
