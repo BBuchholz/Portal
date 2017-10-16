@@ -7,16 +7,16 @@ using NineWorldsDeep.FragmentCloud;
 
 namespace NineWorldsDeep.Tapestry.Fragments
 {
-    public class StudioScalesNode : TapestryNode
+    public class MuseScalesNode : TapestryNode
     {
-        public StudioScalesNode()
-            : base("Studio/Scales")
+        public MuseScalesNode()
+            : base("Muse/Scales")
         {
         }
 
         public override string GetShortName()
         {
-            return "Studio Scales";
+            return "Scales";
         }
 
         public override bool Parallels(TapestryNode nd)

@@ -27,7 +27,7 @@
     <UpdatePeriodically>false</UpdatePeriodically>
     <UpdateRequired>false</UpdateRequired>
     <MapFileExtensions>true</MapFileExtensions>
-    <ApplicationRevision>126</ApplicationRevision>
+    <ApplicationRevision>127</ApplicationRevision>
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <PublishWizardCompleted>true</PublishWizardCompleted>
@@ -220,7 +220,7 @@
     <Compile Include="FragmentCloud\GardenFragment.cs" />
     <Compile Include="FragmentCloud\RootNode.cs" />
     <Compile Include="FragmentCloud\RotationType.cs" />
-    <Compile Include="FragmentCloud\StudioFragment.cs" />
+    <Compile Include="FragmentCloud\MuseFragment.cs" />
     <Compile Include="FragmentCloud\SynergyFragment.cs" />
     <Compile Include="FragmentCloud\WareHouseFragment.cs" />
     <Compile Include="FragmentMenuController.cs" />
@@ -318,6 +318,7 @@
     <Compile Include="Mtp\PortableDeviceFile.cs" />
     <Compile Include="Mtp\PortableDeviceFolder.cs" />
     <Compile Include="Mtp\PortableDeviceObject.cs" />
+    <Compile Include="Muse\V5\MuseV5Note.cs" />
     <Compile Include="Parser\NwdParser.cs" />
     <Compile Include="Parser\NwdUri.cs" />
     <Compile Include="Parser\NwdUriConverter.cs" />
@@ -368,6 +369,7 @@
     <Compile Include="Studio\Model\MajorScale.cs" />
     <Compile Include="Studio\Model\MinorScale.cs" />
     <Compile Include="Studio\Note.cs" />
+    <Compile Include="Studio\PatternInstance.cs" />
     <Compile Include="Studio\PatternSignature.cs" />
     <Compile Include="Studio\ProjectListEntry.cs" />
     <Compile Include="Studio\ProjectsWindow.xaml.cs">
@@ -481,7 +483,7 @@
     <Compile Include="Tapestry\Nodes\StudioLyricsNode.cs" />
     <Compile Include="Tapestry\Nodes\StudioMainNode.cs" />
     <Compile Include="Tapestry\Nodes\StudioProjectsNode.cs" />
-    <Compile Include="Tapestry\Nodes\StudioScalesNode.cs" />
+    <Compile Include="Tapestry\Nodes\MuseScalesNode.cs" />
     <Compile Include="Tapestry\Nodes\SynergyItemNode.cs" />
     <Compile Include="Tapestry\Nodes\SynergyListNode.cs" />
     <Compile Include="Tapestry\Nodes\SynergyV5ListItemNode.cs" />

@@ -6,13 +6,13 @@ namespace NineWorldsDeep.Tapestry.Nodes
     internal class ChordProgressionsNode : TapestryNode
     {
         public ChordProgressionsNode()
-            : base("Studio/ChordProgressions")
+            : base("Muse/ChordProgressions")
         {
         }
 
         public override string GetShortName()
         {
-            return "Chord Progressions";
+            return "Progressions";
         }
 
         public override void PerformSelectionAction()

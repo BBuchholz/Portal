@@ -12,7 +12,7 @@
                 ParseNameToPatternSignature(scaleName);
         }
 
-        public PatternSignature PatternSig { get { return patternSignature; } }
+        public PatternSignature PatternSignature { get { return patternSignature; } }
 
         public static PatternSignature ParseNameToPatternSignature(string name)
         {

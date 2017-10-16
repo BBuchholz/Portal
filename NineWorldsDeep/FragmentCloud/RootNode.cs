@@ -17,7 +17,7 @@ namespace NineWorldsDeep.FragmentCloud
         {
             AddChild(new GardenFragment());
             AddChild(new SynergyFragment());
-            AddChild(new StudioNode());
+            AddChild(new MuseNode());
             AddChild(new HierophantNode());
             AddChild(new WareHouseFragment());
             AddChild(new AudioBrowserFragment());

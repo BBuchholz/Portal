@@ -32,5 +32,17 @@ namespace NineWorldsDeep.Studio
                 }
             }
         }
+
+        public TwoOctaveNoteArray ToNoteArray(Note rootNote)
+        {
+            TwoOctaveNoteArray twoOctaveNoteArray = new TwoOctaveNoteArray();
+
+            foreach (int posVal in getSignaturePositionalValues())
+            {
+                twoOctaveNoteArray[rootNote.PosVal + posVal] = true;
+            }
+
+            return twoOctaveNoteArray;
+        }
     }
 }

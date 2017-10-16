@@ -7,6 +7,7 @@ using NineWorldsDeep.Studio.Utils;
 
 namespace NineWorldsDeep.Studio.Model
 {
+    [Obsolete("replacing Scale with PatternSignature and PatternInstance")]
     public abstract class Scale
     {
         protected int rootNoteAbsVal;

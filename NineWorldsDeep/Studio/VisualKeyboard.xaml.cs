@@ -20,15 +20,26 @@ namespace NineWorldsDeep.Studio
     /// </summary>
     public partial class VisualKeyboard : UserControl
     {
+        #region fields
+
         private List<VisualKey> orderedVisualKeys =
             new List<VisualKey>();
 
+        #endregion
+
+        #region creation
+        
         public VisualKeyboard()
         {
             InitializeComponent();
             Clickable = true;
             RegisterKeyDots();
         }
+
+        #endregion
+
+        #region properties
+
 
         public bool Clickable { get; set; }
 
@@ -54,6 +65,37 @@ namespace NineWorldsDeep.Studio
                 }
             }
         }
+
+        #endregion
+
+        #region public interface
+
+        public string CopyNotesMetaTagToClipboard()
+        {
+            string notesMetaTag = "Notes: " + Notes.ToString().Replace(",", "-");
+            Clipboard.SetText(notesMetaTag);
+            return notesMetaTag;
+        }
+
+        public void ClearHighlights()
+        {
+            foreach (VisualKey vk in orderedVisualKeys)
+            {
+                vk.ClearHighlight();
+            }
+        }
+
+        public void ToggleHighlights()
+        {
+            foreach (VisualKey vk in orderedVisualKeys)
+            {
+                vk.ToggleHighlight();
+            }
+        }
+
+        #endregion
+
+        #region private helper methods
 
         private void RegisterKeyDots()
         {
@@ -86,28 +128,9 @@ namespace NineWorldsDeep.Studio
             orderedVisualKeys.Add(new VisualKey(B1KeyDot, B1Key, true));
         }
 
-        public string CopyNotesMetaTagToClipboard()
-        {
-            string notesMetaTag = "Notes: " + Notes.ToString().Replace(",", "-");
-            Clipboard.SetText(notesMetaTag);
-            return notesMetaTag;
-        }
+        #endregion
 
-        public void ClearHighlights()
-        {
-            foreach (VisualKey vk in orderedVisualKeys)
-            {
-                vk.ClearHighlight();
-            }
-        }
-
-        public void ToggleHighlights()
-        {
-            foreach (VisualKey vk in orderedVisualKeys)
-            {
-                vk.ToggleHighlight();
-            }
-        }
+        #region event handlers
 
         private void Key_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
@@ -122,5 +145,7 @@ namespace NineWorldsDeep.Studio
                 }
             }
         }
+
+        #endregion
     }
 }

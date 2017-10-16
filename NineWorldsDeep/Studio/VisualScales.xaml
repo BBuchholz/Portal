@@ -44,12 +44,27 @@
             <ComboBox Grid.Row="0"
                       Grid.Column="0"
                       x:Name="cmbRoot1"
+                      Margin="5"
                       SelectionChanged="cmbRoot1_SelectionChanged"/>
 
             <ComboBox Grid.Row="0"
                       Grid.Column="1"
                       x:Name="cmbScale1"
+                      Margin="5"
                       SelectionChanged="cmbScale1_SelectionChanged"/>
+
+        </Grid>
+
+        <Grid Grid.Column="1"
+              Grid.Row="1">
+
+            <ListView x:Name="lvCompatibleScales"
+                      Margin="5"
+                      SelectionChanged="lvCompatibleScales_SelectionChanged">
+                
+                
+                
+            </ListView>            
 
         </Grid>
 

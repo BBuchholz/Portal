@@ -19,6 +19,8 @@ namespace NineWorldsDeep.Studio
     /// </summary>
     public partial class VisualScales : Window
     {
+        #region creation
+
         public VisualScales()
         {
             InitializeComponent();
@@ -27,8 +29,14 @@ namespace NineWorldsDeep.Studio
             LoadScales();
 
             keyboard1.ClearHighlights();
+            keyboard1.Clickable = false;
+
             keyboard2.ClearHighlights();
         }
+
+        #endregion
+
+        #region private helper methods
 
         private void LoadScales()
         {
@@ -52,6 +60,26 @@ namespace NineWorldsDeep.Studio
             cmbRoot1.Items.Add(new Note("B"));
         }
 
+        private void LoadScale1()
+        {
+            ScalePrevious scale = (ScalePrevious)cmbScale1.SelectedItem;
+            Note rootNote = (Note)cmbRoot1.SelectedItem;
+
+            if (scale != null && rootNote != null)
+            {
+                keyboard1.Notes = scale.PatternSignature.ToNoteArray(rootNote);
+            }
+        }
+
+        #endregion
+
+        #region event handlers
+        
+        private void lvCompatibleScales_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+
+        }
+
         private void cmbRoot1_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             LoadScale1();
@@ -62,25 +90,6 @@ namespace NineWorldsDeep.Studio
             LoadScale1();
         }
 
-        private void LoadScale1()
-        {
-            ScalePrevious s = (ScalePrevious)cmbScale1.SelectedItem;
-            Note r = (Note)cmbRoot1.SelectedItem;
-
-            if (s != null && r != null)
-            {
-                TwoOctaveNoteArray arr = new TwoOctaveNoteArray();
-
-                foreach (int i in s.PatternSig.getSignaturePositionalValues())
-                {
-                    arr[r.PosVal + i] = true;
-                }
-
-                keyboard1.Notes = arr;
-            }
-
-
-
-        }
+        #endregion
     }
 }

@@ -5,23 +5,23 @@ using NineWorldsDeep.Tapestry.Nodes;
 
 namespace NineWorldsDeep.FragmentCloud
 {
-    public class StudioNode : Tapestry.TapestryNode
+    public class MuseNode : Tapestry.TapestryNode
     {
-        public StudioNode()
-            : base("Studio")
+        public MuseNode()
+            : base("Muse")
         {
-            AddChild(new StudioMainNode());
-            AddChild(new StudioProjectsNode());
-            AddChild(new StudioLyricsNode());
-            AddChild(new StudioScalesNode());
-            AddChild(new StudioKeyboardNode());
+            //AddChild(new StudioMainNode());
+            //AddChild(new StudioProjectsNode());
+            //AddChild(new StudioLyricsNode());
+            AddChild(new MuseScalesNode());
+            //AddChild(new StudioKeyboardNode());
             AddChild(new ArpaBetNode());
             AddChild(new ChordProgressionsNode());
         }
 
         public override string GetShortName()
         {
-            return "Studio";
+            return "Muse";
         }
 
         public override bool Parallels(Tapestry.TapestryNode nd)
