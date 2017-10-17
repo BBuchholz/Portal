@@ -89,7 +89,12 @@ namespace NineWorldsDeep.Hierophant
             return groupNamesToGroupMaps[semanticGroupName];
         }
 
-        public IEnumerable AsDictionary()
+        //public IEnumerable AsDictionary()
+        //{
+        //    return keysToDefs;
+        //}
+
+        public Dictionary<SemanticKey,SemanticDefinition> AsDictionary()
         {
             return keysToDefs;
         }

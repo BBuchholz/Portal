@@ -36,7 +36,7 @@ namespace NineWorldsDeep.Hierophant
             {
                 List<string> columnNames = new List<string>();
 
-                dgrid.ItemsSource = CurrentSemanticMap.AsDictionary();
+                dgrid.ItemsSource = CurrentSemanticMap.AsDictionary().ToList();
 
                 //get all keys in all semantic definition as one list (for column names)
                 foreach (SemanticDefinition def in CurrentSemanticMap.SemanticDefinitions)

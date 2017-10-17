@@ -25,7 +25,8 @@
             
             <DataGrid.Columns>
             
-                <DataGridTextColumn Binding="{Binding Key}"/>
+                <DataGridTextColumn Binding="{Binding Key}"
+                                    IsReadOnly="True"/>
             
             </DataGrid.Columns>
             

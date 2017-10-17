@@ -19,15 +19,25 @@ namespace NineWorldsDeep.Hierophant
     /// Interaction logic for SemanticGrid.xaml
     /// </summary>
     public partial class SemanticGrid : UserControl
-    {        
+    {
+        #region fields
+             
         private Dictionary<string, DataGrid> semanticGroupNamesToDataGrids =
             new Dictionary<string, DataGrid>();
 
         private Dictionary<string, SemanticGridPane> semanticGroupsToPanes =
             new Dictionary<string, SemanticGridPane>();
 
+        #endregion
+
+        #region properties
+
         public SemanticMap CurrentSemanticMap { get; private set; }
+
+        #endregion
         
+        #region creation
+
         public SemanticGrid()
         {
             InitializeComponent();
@@ -35,21 +45,43 @@ namespace NineWorldsDeep.Hierophant
             this.DataContext = this;
         }
 
-        //private int CountForTesting { get; set; }
-        
+        #endregion
+
+        #region public interface
+
         public void DisplaySemanticMap(SemanticMap semanticMap)
         {
             CurrentSemanticMap = semanticMap;
 
             DisplaySemanticMap(
-                ConfigHierophant.ALL_KEYS_GROUP_NAME, 
+                ConfigHierophant.ALL_KEYS_GROUP_NAME,
                 CurrentSemanticMap);
 
-            foreach(string semanticGroupName in CurrentSemanticMap.SemanticGroupNames)
+            foreach (string semanticGroupName in CurrentSemanticMap.SemanticGroupNames)
             {
                 DisplaySemanticMap(semanticGroupName, CurrentSemanticMap.SemanticGroup(semanticGroupName));
             }
         }
+
+        //public void DisplaySemanticMapToDataGrid(SemanticMap semanticMap)
+        //{
+        //    CurrentSemanticMap = semanticMap;
+
+        //    DisplaySemanticMap(
+        //        ConfigHierophant.ALL_KEYS_GROUP_NAME,
+        //        CurrentSemanticMap);
+
+        //    foreach (string semanticGroupName in CurrentSemanticMap.SemanticGroupNames)
+        //    {
+        //        DisplaySemanticMap(
+        //            semanticGroupName,
+        //            CurrentSemanticMap.SemanticGroup(semanticGroupName));
+        //    }
+        //}
+
+        #endregion
+
+        #region private helper methods
 
         private void DisplaySemanticMap(string semanticGroupName, SemanticMap semanticMap)
         {
@@ -58,80 +90,37 @@ namespace NineWorldsDeep.Hierophant
 
             gridPane.DisplaySemanticMap(semanticMap);            
         }
-        
-        public void DisplaySemanticMapToDataGrid(SemanticMap semanticMap)
-        {
-            CurrentSemanticMap = semanticMap;
 
-            DisplaySemanticMap(
-                ConfigHierophant.ALL_KEYS_GROUP_NAME, 
-                CurrentSemanticMap);
+        //private void DisplaySemanticMapToDataGrid(string semanticGroupName, SemanticMap semanticMap)
+        //{
+        //    List<string> columnNames = new List<string>();
+        //    EnsureSemanticGroupGrid(semanticGroupName);
+        //    var dgrid = semanticGroupNamesToDataGrids[semanticGroupName];
+        //    dgrid.ItemsSource = semanticMap.AsDictionary();
 
-            foreach (string semanticGroupName in CurrentSemanticMap.SemanticGroupNames)
-            {
-                DisplaySemanticMap(
-                    semanticGroupName, 
-                    CurrentSemanticMap.SemanticGroup(semanticGroupName));
-            }
-        }
+        //    //get all keys in all semantic definition as one list (for column names)
+        //    foreach (SemanticDefinition def in semanticMap.SemanticDefinitions)
+        //    {
+        //        foreach (string key in def.ColumnNames)
+        //        {
+        //            //store distinct keys (for column names)
+        //            if (!columnNames.Contains(key))
+        //            {
 
-        private void DisplaySemanticMapToDataGrid(string semanticGroupName, SemanticMap semanticMap)
-        {
-            List<string> columnNames = new List<string>();
-            EnsureSemanticGroupGrid(semanticGroupName);
-            var dgrid = semanticGroupNamesToDataGrids[semanticGroupName];
-            dgrid.ItemsSource = semanticMap.AsDictionary();
+        //                columnNames.Add(key);
+        //            }
+        //        }
+        //    }
 
-            //get all keys in all semantic definition as one list (for column names)
-            foreach (SemanticDefinition def in semanticMap.SemanticDefinitions)
-            {
-                foreach (string key in def.ColumnNames)
-                {
-                    //store distinct keys (for column names)
-                    if (!columnNames.Contains(key))
-                    {
-
-                        columnNames.Add(key);
-                    }
-                }
-            }
-
-            //add column for each columnName
-            foreach (string colName in columnNames)
-            {
-                DataGridTextColumn col = new DataGridTextColumn();
-                col.Header = colName;
-                col.Binding = new Binding(string.Format("Value[{0}]", colName));
-                dgrid.Columns.Add(col);
-            }
-        }
-        
-        private void btnAddSemanticGroup_Click(object sender, RoutedEventArgs e)
-        {
-            if(CurrentSemanticMap == null)
-            {
-                CurrentSemanticMap = new SemanticMap();
-            }
-
-            int i = 0;
-            string autoGenName;
-
-            do
-            {
-                i++;
-                autoGenName = "Semantic Group " + i;
-            }
-            while (CurrentSemanticMap.HasGroup(autoGenName));
-
-            var name = UI.Prompt.Input("enter a group name: ", autoGenName);
-            
-            if (!string.IsNullOrWhiteSpace(name))
-            {
-                //creates it if it doesn't exist
-                CurrentSemanticMap.SemanticGroup(name);
-                DisplaySemanticMap(CurrentSemanticMap);
-            }
-        }
+        //    //add column for each columnName
+        //    foreach (string colName in columnNames)
+        //    {
+        //        DataGridTextColumn col = new DataGridTextColumn();
+        //        col.Header = colName;
+        //        col.Binding = new Binding(string.Format("Value[{0}]", colName));
+        //        dgrid.Columns.Add(col);
+        //    }
+        //}
 
         private void EnsureSemanticGroupGrid(string semanticGroupName)
         {
@@ -181,11 +170,42 @@ namespace NineWorldsDeep.Hierophant
             }
         }
 
+        #endregion
+
+        #region event handlers
+
+        private void btnAddSemanticGroup_Click(object sender, RoutedEventArgs e)
+        {
+            if (CurrentSemanticMap == null)
+            {
+                CurrentSemanticMap = new SemanticMap();
+            }
+
+            int i = 0;
+            string autoGenName;
+
+            do
+            {
+                i++;
+                autoGenName = "Semantic Group " + i;
+            }
+            while (CurrentSemanticMap.HasGroup(autoGenName));
+
+            var name = UI.Prompt.Input("enter a group name: ", autoGenName);
+
+            if (!string.IsNullOrWhiteSpace(name))
+            {
+                //creates it if it doesn't exist
+                CurrentSemanticMap.SemanticGroup(name);
+                DisplaySemanticMap(CurrentSemanticMap);
+            }
+        }
+
         private void chkHighlightActiveGroup_checkToggled(object sender, RoutedEventArgs e)
         {
             bool? isChecked = chkHighlightActiveGroup.IsChecked;
 
-            if (isChecked.HasValue && 
+            if (isChecked.HasValue &&
                 isChecked.Value == true) //intentionally redundant for clarity
             {
                 UI.Display.Message("do stuff here");
@@ -207,5 +227,9 @@ namespace NineWorldsDeep.Hierophant
                 }
             }
         }
+
+
+
+        #endregion
     }
 }
