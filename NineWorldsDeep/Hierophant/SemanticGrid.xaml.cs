@@ -49,6 +49,18 @@ namespace NineWorldsDeep.Hierophant
 
         #region public interface
 
+        /// <summary>
+        /// creates an empty map with the specified name
+        /// </summary>
+        /// <param name="semanticMapName"></param>
+        public void AssignNewMap(string semanticMapName)
+        {
+            CurrentSemanticMap = new SemanticMap()
+            {
+                Name = semanticMapName
+            };
+        }
+
         public void DisplaySemanticMap(SemanticMap semanticMap)
         {
             CurrentSemanticMap = semanticMap;
@@ -90,6 +102,7 @@ namespace NineWorldsDeep.Hierophant
 
             gridPane.DisplaySemanticMap(semanticMap);            
         }
+
 
         //private void DisplaySemanticMapToDataGrid(string semanticGroupName, SemanticMap semanticMap)
         //{

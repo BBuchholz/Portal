@@ -47,6 +47,15 @@
                                     </MenuItem.Style>
                                 </MenuItem>
 
+                                <MenuItem Header="Remove Set">
+                                    <MenuItem.Style>
+                                        <Style TargetType="MenuItem">
+                                            <EventSetter Event="Click"
+                                                         Handler="MenuItemRemoveSet_Click"/>
+                                        </Style>
+                                    </MenuItem.Style>
+                                </MenuItem>
+
                             </ContextMenu>
                         </Setter.Value>
                     </Setter>

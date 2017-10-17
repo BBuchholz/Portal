@@ -797,7 +797,9 @@ namespace NineWorldsDeep.Xml
                                 
                 XElement semanticMapNameEl =
                     new XElement(TAG_SEMANTIC_MAP_NAME);
-                
+
+                semanticMapEl.Add(semanticMapNameEl);
+
                 semanticMapNameEl.Value = semanticMap.Name;
 
                 XElement semanticDefinitionsEl =

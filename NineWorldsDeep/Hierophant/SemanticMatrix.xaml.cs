@@ -1,4 +1,5 @@
-﻿using System;
+﻿using NineWorldsDeep.Core;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -20,8 +21,14 @@ namespace NineWorldsDeep.Hierophant
     /// </summary>
     public partial class SemanticMatrix : UserControl
     {
+        #region fields
+
         private Dictionary<string, SemanticGrid> semanticSetNamesToSemanticGrids =
             new Dictionary<string, SemanticGrid>();
+
+        #endregion
+        
+        #region creation
 
         public SemanticMatrix()
         {
@@ -32,7 +39,36 @@ namespace NineWorldsDeep.Hierophant
             CountForUnnamedMaps = 0;
         }
 
+        #endregion
+        
+        #region private properties
+
         private int CountForUnnamedMaps { get; set; }
+
+        #endregion
+        
+        #region public interface
+        
+        public void DisplaySemanticMap(SemanticMap semanticMap)
+        {
+            if (string.IsNullOrWhiteSpace(semanticMap.Name))
+            {
+                semanticMap.Name = AutoGenerateSemanticMapName();
+            }
+
+            DisplaySemanticMap(semanticMap.Name, semanticMap);
+        }
+        
+        public void DisplaySemanticMap(string semanticSetName, SemanticMap semanticMap)
+        {
+            EnsureSemanticGrid(semanticSetName);
+            var grid = semanticSetNamesToSemanticGrids[semanticSetName];
+            grid.DisplaySemanticMap(semanticMap);
+        }
+
+        #endregion
+        
+        #region private helper methods
 
         /// <summary>
         /// 
@@ -49,9 +85,51 @@ namespace NineWorldsDeep.Hierophant
             }
 
             return name;
-           
+
         }
 
+        private IEnumerable<SemanticMap> GetSemanticMaps()
+        {
+            List<SemanticMap> maps = new List<SemanticMap>();
+
+            foreach (SemanticGrid semanticGrid in
+                semanticSetNamesToSemanticGrids.Values)
+            {
+                if (semanticGrid.CurrentSemanticMap != null)
+                {
+                    maps.Add(semanticGrid.CurrentSemanticMap);
+                }
+            }
+
+            return maps;
+        }
+        
+        private void EnsureSemanticGrid(string semanticSetName, bool selectEnsuredGrid = true)
+        {
+            //prevent overwrite of existing sets
+            if (!semanticSetNamesToSemanticGrids.ContainsKey(semanticSetName))
+            {
+                TabItem tabItem = new TabItem();
+                tabItem.Header = semanticSetName;
+                SemanticGrid semanticGrid = new SemanticGrid();
+                semanticGrid.AssignNewMap(semanticSetName);
+
+                semanticSetNamesToSemanticGrids[semanticSetName] = semanticGrid;
+
+                tabItem.Content = semanticGrid;
+                tcSemanticSets.Items.Add(tabItem);
+
+                if (selectEnsuredGrid)
+                {
+                    tcSemanticSets.SelectedItem = tabItem;
+                }
+            }
+        }
+
+        #endregion
+        
+        #region event handlers
+        
         private void btnAddSemanticSet_Click(object sender, RoutedEventArgs e)
         {
             var defaultName = AutoGenerateSemanticMapName(false);
@@ -67,46 +145,6 @@ namespace NineWorldsDeep.Hierophant
                 EnsureSemanticGrid(mapName, true);
             }
 
-        }
-
-        public void DisplaySemanticMap(SemanticMap semanticMap)
-        {
-            if(string.IsNullOrWhiteSpace(semanticMap.Name))
-            {
-                semanticMap.Name = AutoGenerateSemanticMapName();
-            }
-
-            DisplaySemanticMap(semanticMap.Name, semanticMap);
-        }
-
-
-
-        public void DisplaySemanticMap(string semanticSetName, SemanticMap semanticMap)
-        {
-            EnsureSemanticGrid(semanticSetName);
-            var grid = semanticSetNamesToSemanticGrids[semanticSetName];
-            grid.DisplaySemanticMap(semanticMap);
-        }
-
-        private void EnsureSemanticGrid(string semanticSetName, bool selectEnsuredGrid = true)
-        {
-            //prevent overwrite of existing sets
-            if (!semanticSetNamesToSemanticGrids.ContainsKey(semanticSetName))
-            {
-                TabItem tabItem = new TabItem();
-                tabItem.Header = semanticSetName;
-                SemanticGrid semanticGrid = new SemanticGrid();
-
-                semanticSetNamesToSemanticGrids[semanticSetName] = semanticGrid;
-
-                tabItem.Content = semanticGrid;
-                tcSemanticSets.Items.Add(tabItem);
-
-                if (selectEnsuredGrid)
-                {
-                    tcSemanticSets.SelectedItem = tabItem;
-                }
-            }
         }
 
         private void btnImportSemanticSets_Click(object sender, RoutedEventArgs e)
@@ -125,23 +163,7 @@ namespace NineWorldsDeep.Hierophant
             var fileName = UtilsHierophant.ExportToXml(maps);
             UI.Display.Message("semantic maps exported as " + fileName);
         }
-
-        private IEnumerable<SemanticMap> GetSemanticMaps()
-        {
-            List<SemanticMap> maps = new List<SemanticMap>();
-
-            foreach(SemanticGrid semanticGrid in
-                semanticSetNamesToSemanticGrids.Values)
-            {
-                if(semanticGrid.CurrentSemanticMap != null)
-                {
-                    maps.Add(semanticGrid.CurrentSemanticMap);
-                }
-            }
-
-            return maps;
-        }
-
+        
         private void btnClearSemanticSets_Click(object sender, RoutedEventArgs e)
         {
             if (UI.Prompt.Confirm("Are you sure? This is non-reversible", true))
@@ -154,7 +176,64 @@ namespace NineWorldsDeep.Hierophant
 
         private void MenuItemChangeName_Click(object sender, RoutedEventArgs e)
         {
-            UI.Display.Message("change name here");
+            MenuItem menuItem = sender as MenuItem;
+
+            if (menuItem != null)
+            {
+                var tabItem = 
+                    ((ContextMenu)menuItem.Parent).PlacementTarget as TabItem;
+                
+                if (tabItem != null)
+                {
+                    string header = tabItem.Header.ToString();
+                    string newName = UI.Prompt.Input("Enter new name", header);
+
+                    if (!string.IsNullOrWhiteSpace(newName) && !newName.Equals(header))
+                    {
+                        if (semanticSetNamesToSemanticGrids.ContainsKey(header))
+                        {
+                            SemanticGrid semGrid = semanticSetNamesToSemanticGrids[header];
+                            semGrid.CurrentSemanticMap.Name = newName;
+
+                            //set tabItem header to new name
+                            if (tabItem != null)
+                            {
+                                tabItem.Header = newName;
+                            }
+                        }
+                    }
+                }
+            }
         }
+
+        private void MenuItemRemoveSet_Click(object sender, RoutedEventArgs e)
+        {
+            //looked it over, this should be all we need to do, however we choose to do it:
+            //1)remove grid from semanticSetNamesToSemanticGrids
+            //2)delete tab item (ui tools find parent?)
+
+            MenuItem menuItem = sender as MenuItem;
+
+            if (menuItem != null)
+            {
+                var tabItem =
+                    ((ContextMenu)menuItem.Parent).PlacementTarget as TabItem;
+
+                if (tabItem != null)
+                {
+                    string semanticSetName = tabItem.Header.ToString();
+
+                    if (semanticSetNamesToSemanticGrids.ContainsKey(semanticSetName))
+                    {
+                        semanticSetNamesToSemanticGrids.Remove(semanticSetName);
+                    }
+
+                    this.tcSemanticSets.Items.Remove(tabItem);
+                }
+            }
+        }
+
+        #endregion
+
     }
 }
