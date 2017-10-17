@@ -151,5 +151,10 @@ namespace NineWorldsDeep.Hierophant
                 CountForUnnamedMaps = 0;
             }
         }
+
+        private void MenuItemChangeName_Click(object sender, RoutedEventArgs e)
+        {
+            UI.Display.Message("change name here");
+        }
     }
 }

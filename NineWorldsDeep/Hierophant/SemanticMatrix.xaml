@@ -30,7 +30,28 @@
         <TabControl x:Name="tcSemanticSets" 
                     Grid.Column="0"
                     TabStripPlacement="Right">
-                        
+            <TabControl.ItemContainerStyle>
+                <Style TargetType="{x:Type TabItem}">
+                    <Setter Property="ContextMenu">
+                        <Setter.Value>
+                            <ContextMenu Name="cmTabItemHeader" 
+                                         StaysOpen="true" 
+                                         Background="WhiteSmoke">
+
+                                <MenuItem Header="Change Name">
+                                    <MenuItem.Style>
+                                        <Style TargetType="MenuItem">
+                                            <EventSetter Event="Click"
+                                                         Handler="MenuItemChangeName_Click"/>
+                                        </Style>
+                                    </MenuItem.Style>
+                                </MenuItem>
+
+                            </ContextMenu>
+                        </Setter.Value>
+                    </Setter>
+                </Style>
+            </TabControl.ItemContainerStyle>
         </TabControl>
 
 

@@ -143,34 +143,34 @@ namespace NineWorldsDeep.Hierophant
         private void CreateAndDrawPaths()
         {
             //three mothers
-            CreateAndDrawPath(elBinah, elChokmah, "Binah-Chokmah");
-            CreateAndDrawPath(elGeburah, elChesed, "Geburah-Chesed");
-            CreateAndDrawPath(elHod, elNetzach, "Hod-Netzach");
+            CreateAndDrawPath(elBinah, elChokmah, "Binah::Chokmah");
+            CreateAndDrawPath(elGeburah, elChesed, "Geburah::Chesed");
+            CreateAndDrawPath(elHod, elNetzach, "Hod::Netzach");
 
             //seven doubles
-            CreateAndDrawPath(elMalkuth, elYesod, "Malkuth-Yesod");
-            CreateAndDrawPath(elYesod, elTipareth, "Yesod-Tipareth");
-            CreateAndDrawPath(elTipareth, elKether, "Tipareth-Kether");
-            CreateAndDrawPath(elGeburah, elBinah, "Geburah-Binah");
-            CreateAndDrawPath(elChesed, elChokmah, "Chesed-Chokmah");
-            CreateAndDrawPath(elHod, elGeburah, "Hod-Geburah");
-            CreateAndDrawPath(elNetzach, elChesed, "Netzach-Chesed");
+            CreateAndDrawPath(elMalkuth, elYesod, "Malkuth::Yesod");
+            CreateAndDrawPath(elYesod, elTipareth, "Yesod::Tipareth");
+            CreateAndDrawPath(elTipareth, elKether, "Tipareth::Kether");
+            CreateAndDrawPath(elGeburah, elBinah, "Geburah::Binah");
+            CreateAndDrawPath(elChesed, elChokmah, "Chesed::Chokmah");
+            CreateAndDrawPath(elHod, elGeburah, "Hod::Geburah");
+            CreateAndDrawPath(elNetzach, elChesed, "Netzach::Chesed");
 
             //twelve diagonals
-            CreateAndDrawPath(elKether, elBinah, "Kether-Binah");
-            CreateAndDrawPath(elKether, elChokmah, "Kether-Chokmah");
-            CreateAndDrawPath(elBinah, elTipareth, "Binah-Tipareth");
-            CreateAndDrawPath(elChokmah, elTipareth, "Chokmah-Tipareth");
+            CreateAndDrawPath(elKether, elBinah, "Kether::Binah");
+            CreateAndDrawPath(elKether, elChokmah, "Kether::Chokmah");
+            CreateAndDrawPath(elBinah, elTipareth, "Binah::Tipareth");
+            CreateAndDrawPath(elChokmah, elTipareth, "Chokmah::Tipareth");
 
-            CreateAndDrawPath(elGeburah, elTipareth, "Geburah-Tipareth");
-            CreateAndDrawPath(elChesed, elTipareth, "Chesed-Tipareth");
-            CreateAndDrawPath(elHod, elTipareth, "Hod-Tipareth");
-            CreateAndDrawPath(elNetzach, elTipareth, "Netzach-Tipareth");
+            CreateAndDrawPath(elGeburah, elTipareth, "Geburah::Tipareth");
+            CreateAndDrawPath(elChesed, elTipareth, "Chesed::Tipareth");
+            CreateAndDrawPath(elHod, elTipareth, "Hod::Tipareth");
+            CreateAndDrawPath(elNetzach, elTipareth, "Netzach::Tipareth");
 
-            CreateAndDrawPath(elHod, elYesod, "Hod-Yesod");
-            CreateAndDrawPath(elNetzach, elYesod, "Netzach-Yesod");
-            CreateAndDrawPath(elHod, elMalkuth, "Hod-Malkuth");
-            CreateAndDrawPath(elNetzach, elMalkuth, "Netzach-Malkuth");
+            CreateAndDrawPath(elHod, elYesod, "Hod::Yesod");
+            CreateAndDrawPath(elNetzach, elYesod, "Netzach::Yesod");
+            CreateAndDrawPath(elHod, elMalkuth, "Hod::Malkuth");
+            CreateAndDrawPath(elNetzach, elMalkuth, "Netzach::Malkuth");
         }
 
         private void Sephirah_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)

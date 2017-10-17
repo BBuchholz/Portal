@@ -18,6 +18,8 @@ namespace NineWorldsDeep.Hierophant
         private string KeyString { get; set; }
         private List<string> SubKeys { get; set; }
 
+        #region creation
+
         public SemanticKey(string keyString)
         {
             KeyString = keyString;
@@ -26,15 +28,25 @@ namespace NineWorldsDeep.Hierophant
                 .ToList();
         }
 
+        #endregion
+
+        #region public interface
+
         public override string ToString()
         {
             return KeyString;
         }
 
+        #endregion
+
+        #region private helper methods
+
         private bool ContainsSubKey(string subKey)
         {
             return SubKeys.Contains(subKey, StringComparer.OrdinalIgnoreCase);
         }
+
+        #endregion
 
         #region "equality"
 

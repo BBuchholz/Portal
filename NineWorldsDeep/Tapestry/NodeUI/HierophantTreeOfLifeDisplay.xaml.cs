@@ -72,10 +72,16 @@ namespace NineWorldsDeep.Tapestry.NodeUI
         {
             SemanticRenderMap map = new SemanticRenderMap();
 
-            map.Select(new SemanticKey("Binah-Chokmah")); //should display on both
+
+            //map.Select(new SemanticKey("Binah-Chokmah")); //should display on both
+            //map.Select(new SemanticKey("Chesed")); //should display on both
+            //map.Select(new SemanticKey("Hod-Malkuth")); //should only display on GD tree
+            //map.Select(new SemanticKey("Chokmah-Geburah")); //should only display on Lurianic tree
+            
+            map.Select(new SemanticKey("Binah::Chokmah")); //should display on both
             map.Select(new SemanticKey("Chesed")); //should display on both
-            map.Select(new SemanticKey("Hod-Malkuth")); //should only display on GD tree
-            map.Select(new SemanticKey("Chokmah-Geburah")); //should only display on Lurianic tree
+            map.Select(new SemanticKey("Hod::Malkuth")); //should only display on GD tree
+            map.Select(new SemanticKey("Chokmah::Geburah")); //should only display on Lurianic tree
 
             hierophantTreeOfLifeInstance.Display(map);
             lurianicTreeOfLifeInstance.Display(map);
