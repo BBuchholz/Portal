@@ -11,6 +11,8 @@ namespace NineWorldsDeep.Hierophant
 {
     public class SemanticMap
     {
+        #region fields
+
         private Dictionary<SemanticKey, SemanticDefinition> keysToDefs =
             new Dictionary<SemanticKey, SemanticDefinition>();
 
@@ -18,7 +20,11 @@ namespace NineWorldsDeep.Hierophant
             new Dictionary<string, SemanticMap>();
 
         private SemanticMap parentMap = null;
-        
+
+        #endregion
+
+        #region properties and accessors
+
         public string Name { get; set; }
         
         public IEnumerable<SemanticKey> SemanticKeys
@@ -30,30 +36,70 @@ namespace NineWorldsDeep.Hierophant
         {
             get { return keysToDefs[key]; }
         }
+
+        public IEnumerable<string> SemanticGroupNames
+        {
+            get { return groupNamesToGroupMaps.Keys; }
+        }
+
+        public IEnumerable<SemanticDefinition> SemanticDefinitions
+        {
+            get
+            {
+                return keysToDefs.Values;
+            }
+        }
+
+        #endregion
         
+        #region public interface
+
         /// <summary>
-        /// will add definition to the map, indexed by its semantic key
-        /// if the key already exists, the new value will OVERWRITE the
-        /// previous one.
+        /// will add definition to the map, indexed by its semantic key. 
+        /// if the key already exists, the new value will be ignored for 
+        /// this map, but Add(def) will still be called for the parent
+        /// map if one is assigned. 
         /// </summary>
         /// <param name="def"></param>
         public void Add(SemanticDefinition def)
         {
-            keysToDefs[def.SemanticKey] = def;
+            //prevent overwrite, but still add to parent map as well
+            //to propogate the add up the hierarchy (namely the [[ALL]] group)
+            //this means that adding a new def to an existing group
+            //will add it to the group without adding it to the parent 
+            //twice...
 
-            //needed so adding to submaps from grid panes will
-            //propogate up the hierarchy to the top level parent
-            if (parentMap != null)
+            //prevent overwrite
+            if (!keysToDefs.ContainsKey(def.SemanticKey))
             {
-                parentMap.Add(def);
-            }
+                //even if it isn't in this map, this map
+                //could be a group within another map
+                //and we want to get a reference to the definition
+                //with that already assigned key (to prevent 
+                //duplication errors)
+                if (parentMap != null )
+                {
+                    if (!parentMap.ContainsKey(def.SemanticKey))
+                    {
+                        //add to parentMap
+                        parentMap.Add(def);
+                    }
+                    
+                    //whether it was already there, or just got added, we replace our reference with
+                    //the def from the parent map so it's the same object in both maps
+                    def = parentMap[def.SemanticKey];                    
+                }
+
+                //finally, we add the def to this map
+                keysToDefs[def.SemanticKey] = def;
+            }           
             
         }
 
         /// <summary>
-        /// will add to both this map and the group map specified
+        /// will add to both this map and the group map specified.
         /// 
-        /// convenience method, same as calling thisMap.Add(def) and then
+        /// this is the same as calling thisMap.Add(def) followed by 
         /// thisMap.SemanticGroup(semanticGroupName).Add(def)
         /// </summary>
         /// <param name="semanticGroupName"></param>
@@ -88,33 +134,28 @@ namespace NineWorldsDeep.Hierophant
 
             return groupNamesToGroupMaps[semanticGroupName];
         }
-
-        //public IEnumerable AsDictionary()
-        //{
-        //    return keysToDefs;
-        //}
-
+        
         public Dictionary<SemanticKey,SemanticDefinition> AsDictionary()
         {
             return keysToDefs;
-        }
-
-        public IEnumerable<string> SemanticGroupNames
-        {
-            get { return groupNamesToGroupMaps.Keys; }
-        }
-
-        public IEnumerable<SemanticDefinition> SemanticDefinitions
-        {
-            get
-            {
-                return keysToDefs.Values;
-            }
         }
 
         public bool HasGroup(string groupName)
         {
             return groupNamesToGroupMaps.ContainsKey(groupName);
         }
+
+        public bool ContainsKey(SemanticKey semanticKey)
+        {
+            return this.keysToDefs.ContainsKey(semanticKey);
+        }
+
+        #endregion
+
+        #region private helper methods
+
+
+
+        #endregion
     }
 }

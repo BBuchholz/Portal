@@ -20,13 +20,23 @@ namespace NineWorldsDeep.Hierophant
     /// </summary>
     public partial class SemanticGridPane : UserControl
     {
+        #region properties
+
         private SemanticMap CurrentSemanticMap { get; set; }
         public string GroupName { get; set; }
+
+        #endregion
+
+        #region creation
 
         public SemanticGridPane()
         {
             InitializeComponent();
         }
+
+        #endregion
+
+        #region public interface
 
         public void RefreshFromMap()
         {
@@ -100,6 +110,10 @@ namespace NineWorldsDeep.Hierophant
             //}
         }
 
+        #endregion
+
+        #region private helper methods
+
         private bool DataGridColumnHeaderExists(string header)
         {
             bool exists = false;
@@ -115,6 +129,10 @@ namespace NineWorldsDeep.Hierophant
                 
             return exists;
         }
+
+        #endregion
+
+        #region event handlers
 
         private void btnAddSemanticKey_Click(object sender, RoutedEventArgs e)
         {
@@ -144,5 +162,7 @@ namespace NineWorldsDeep.Hierophant
                 }
             }
         }
+
+        #endregion
     }
 }
