@@ -214,7 +214,13 @@ namespace NineWorldsDeep.Hierophant
 
         private void tcSemanticGroups_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            TabItem selectedTab = e.AddedItems[0] as TabItem;  // Gets selected tab
+
+            TabItem selectedTab = null;
+
+            if (e.AddedItems.Count > 0)
+            {
+                selectedTab = e.AddedItems[0] as TabItem;  // Gets selected tab
+            }
 
             if (selectedTab != null)
             {
