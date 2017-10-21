@@ -194,6 +194,7 @@
     <Compile Include="Db\Sqlite\HiveSubsetDb.cs" />
     <Compile Include="Db\Sqlite\IDbAdapter.cs" />
     <Compile Include="Db\Sqlite\MediaV5SubsetDb.cs" />
+    <Compile Include="Db\Sqlite\MuseV5SubsetDb.cs" />
     <Compile Include="Db\Sqlite\StudioV5SubsetDb.cs" />
     <Compile Include="Db\Sqlite\SynergyV5SubsetDb.cs" />
     <Compile Include="DemoController.cs" />
@@ -320,6 +321,7 @@
     <Compile Include="Mtp\PortableDeviceObject.cs" />
     <Compile Include="Muse\V5\MuseV5Chord.cs" />
     <Compile Include="Muse\V5\MuseV5ChordInstance.cs" />
+    <Compile Include="Muse\V5\MuseV5ChordProgression.cs" />
     <Compile Include="Muse\V5\MuseV5Note.cs" />
     <Compile Include="Muse\V5\MuseV5PatternInstance.cs" />
     <Compile Include="Muse\V5\MuseV5PatternSignature.cs" />

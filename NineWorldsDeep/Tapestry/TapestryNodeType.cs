@@ -36,6 +36,7 @@
         PhotosApiMain,
         HiveMigration,
         HierophantVertexDetail,
-        NullHierophantVertexDetail
+        NullHierophantVertexDetail,
+        MuseV5Chord
     }
 }

@@ -7,30 +7,30 @@ using NineWorldsDeep.Studio.Utils;
 
 namespace NineWorldsDeep.Studio.Model
 {
-    [Obsolete("replacing Scale with PatternSignature and PatternInstance")]
-    public abstract class Scale
-    {
-        protected int rootNoteAbsVal;
-        protected string fullScaleName;
-        protected List<int> scaleTones;
+    //[Obsolete("replacing Scale with PatternSignature and PatternInstance")]
+    //public abstract class Scale
+    //{
+    //    protected int rootNoteAbsVal;
+    //    protected string fullScaleName;
+    //    protected List<int> scaleTones;
 
-        public Scale(string rootNoteName, string scaleName)
-        {
-            this.rootNoteAbsVal = Note.ParseAbsoluteValue(rootNoteName);
-            this.fullScaleName = rootNoteName + " " + scaleName;
-            this.scaleTones = new List<int>();
-        }
+    //    public Scale(string rootNoteName, string scaleName)
+    //    {
+    //        this.rootNoteAbsVal = Note.ParseAbsoluteValue(rootNoteName);
+    //        this.fullScaleName = rootNoteName + " " + scaleName;
+    //        this.scaleTones = new List<int>();
+    //    }
 
-        public static Scale Minor(string rootNoteName)
-        {
-            return new MinorScale(rootNoteName);
-        }
+    //    //public static Scale Minor(string rootNoteName)
+    //    //{
+    //    //    return new MinorScale(rootNoteName);
+    //    //}
 
-        public static Scale Major(string rootNoteName)
-        {
-            return new MajorScale(rootNoteName);
-        }
+    //    //public static Scale Major(string rootNoteName)
+    //    //{
+    //    //    return new MajorScale(rootNoteName);
+    //    //}
 
-        public abstract Chord ScaleDegreeToChord(string scaleDegree);
-    }
+    //    public abstract Chord ScaleDegreeToChord(string scaleDegree);
+    //}
 }

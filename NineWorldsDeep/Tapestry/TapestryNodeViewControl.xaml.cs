@@ -110,7 +110,7 @@ namespace NineWorldsDeep.Tapestry
                 historyHandler.PerformLoad(this, e.ChordNode);
             }
         }
-
+        
         private void NodeDisplay_Requested(object sender, NodeDisplayRequestedEventArgs e)
         {
             UI.Display.Message("this is where node load will occur, code is written but commented out, need to verify its triggered by the action we want first, hence this msg, in TapestryNodeViewControl");
@@ -244,6 +244,7 @@ namespace NineWorldsDeep.Tapestry
 
                         SetVisible(ccChordProgressionsNode);
                         break;
+                        
 
                     case TapestryNodeType.SynergyV5MasterList:
 

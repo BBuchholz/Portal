@@ -8,97 +8,97 @@ using System.Threading.Tasks;
 
 namespace NineWorldsDeep.Studio.Utils.Tests
 {
-    [TestClass()]
-    public class ChordTests
-    {
+    //[TestClass()]
+    //public class ChordTests
+    //{
 
-        [TestMethod()]
-        public void ParseToNodeTest()
-        {
-            // Dm/a
-            TwoOctaveNoteArray notes = new TwoOctaveNoteArray();
+    //    [TestMethod()]
+    //    public void ParseToNodeTest()
+    //    {
+    //        //// Dm/a
+    //        //TwoOctaveNoteArray notes = new TwoOctaveNoteArray();
 
-            notes[9] = true;
-            notes[14] = true;
-            notes[17] = true;
+    //        //notes[9] = true;
+    //        //notes[14] = true;
+    //        //notes[17] = true;
 
-            Chord dMa = Chord.ParseToNode("Dm/a").Chord;
+    //        //Chord dMa = Chord.ParseToNode("Dm/a").Chord;
 
-            Assert.AreEqual<TwoOctaveNoteArray>(notes, dMa.ChordNotes);
+    //        //Assert.AreEqual<TwoOctaveNoteArray>(notes, dMa.ChordNotes);
 
-            // Am
-            notes = new TwoOctaveNoteArray();
+    //        //// Am
+    //        //notes = new TwoOctaveNoteArray();
 
-            notes[9] = true;
-            notes[12] = true;
-            notes[16] = true;
+    //        //notes[9] = true;
+    //        //notes[12] = true;
+    //        //notes[16] = true;
 
-            Chord aM = Chord.ParseToNode("Am").Chord;
+    //        //Chord aM = Chord.ParseToNode("Am").Chord;
 
-            Assert.AreEqual<TwoOctaveNoteArray>(notes, aM.ChordNotes);
+    //        //Assert.AreEqual<TwoOctaveNoteArray>(notes, aM.ChordNotes);
 
-            // E/g#
-            notes = new TwoOctaveNoteArray();
+    //        //// E/g#
+    //        //notes = new TwoOctaveNoteArray();
 
-            notes[8] = true;
-            notes[11] = true;
-            notes[16] = true;
+    //        //notes[8] = true;
+    //        //notes[11] = true;
+    //        //notes[16] = true;
 
-            Chord eGsharp = Chord.ParseToNode("E/g#").Chord;
+    //        //Chord eGsharp = Chord.ParseToNode("E/g#").Chord;
 
-            Assert.AreEqual<TwoOctaveNoteArray>(notes, eGsharp.ChordNotes);
-        }
+    //        //Assert.AreEqual<TwoOctaveNoteArray>(notes, eGsharp.ChordNotes);
+    //    }
 
-        [TestMethod()]
-        public void MajorTest()
-        {
-            //c major
-            TwoOctaveNoteArray notes = new TwoOctaveNoteArray();
+    //    [TestMethod()]
+    //    public void MajorTest()
+    //    {
+    //        //c major
+    //        TwoOctaveNoteArray notes = new TwoOctaveNoteArray();
 
-            notes[0] = true;
-            notes[4] = true;
-            notes[7] = true;
+    //        notes[0] = true;
+    //        notes[4] = true;
+    //        notes[7] = true;
 
-            Chord chord = Chord.MajorTriad("C");
+    //        Chord chord = Chord.MajorTriad("C");
 
-            Assert.AreEqual(notes, chord.ChordNotes);
+    //        Assert.AreEqual(notes, chord.ChordNotes);
 
-            //e major
-            notes = new TwoOctaveNoteArray();
+    //        //e major
+    //        notes = new TwoOctaveNoteArray();
 
-            notes[4] = true;
-            notes[8] = true;
-            notes[11] = true;
+    //        notes[4] = true;
+    //        notes[8] = true;
+    //        notes[11] = true;
 
-            chord = Chord.MajorTriad("E");
+    //        chord = Chord.MajorTriad("E");
 
-            Assert.AreEqual(notes, chord.ChordNotes);
-        }
+    //        Assert.AreEqual(notes, chord.ChordNotes);
+    //    }
 
-        [TestMethod()]
-        public void MinorTest()
-        {
-            //c minor
-            TwoOctaveNoteArray notes = new TwoOctaveNoteArray();
+    //    [TestMethod()]
+    //    public void MinorTest()
+    //    {
+    //        //c minor
+    //        TwoOctaveNoteArray notes = new TwoOctaveNoteArray();
 
-            notes[0] = true;
-            notes[3] = true;
-            notes[7] = true;
+    //        notes[0] = true;
+    //        notes[3] = true;
+    //        notes[7] = true;
 
-            Chord chord = Chord.MinorTriad("C");
+    //        Chord chord = Chord.MinorTriad("C");
 
-            Assert.AreEqual(notes, chord.ChordNotes);
+    //        Assert.AreEqual(notes, chord.ChordNotes);
 
-            //e minor
-            notes = new TwoOctaveNoteArray();
+    //        //e minor
+    //        notes = new TwoOctaveNoteArray();
 
-            notes[4] = true;
-            notes[7] = true;
-            notes[11] = true;
+    //        notes[4] = true;
+    //        notes[7] = true;
+    //        notes[11] = true;
 
-            chord = Chord.MinorTriad("E");
+    //        chord = Chord.MinorTriad("E");
 
-            Assert.AreEqual(notes, chord.ChordNotes);
-        }
-    }
+    //        Assert.AreEqual(notes, chord.ChordNotes);
+    //    }
+    //}
 }
