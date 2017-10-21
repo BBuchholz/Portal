@@ -8,6 +8,15 @@
              mc:Ignorable="d" 
              d:DesignHeight="900" d:DesignWidth="600">
 
+    <UserControl.Resources>
+
+        <BitmapImage x:Key="iconSendAllKeys"
+                     UriSource="/ResourceImages/icon_format_line_spacing_black_24dp_1x.png"/>
+        <BitmapImage x:Key="iconSendHighlightedKeyGroup"
+                     UriSource="/ResourceImages/icon_low_priority_black_24dp_1x.png"/>
+
+    </UserControl.Resources>
+    
     <Grid>
 
         <Grid.RowDefinitions>
@@ -47,20 +56,6 @@
                         Content="PRESS THIS TO DEMO SEMANTIC MAP RENDER"
                         Click="btnExample_Click"/>
 
-                <Button x:Name="btnExportXmlTest"
-                        Grid.Row="0"
-                        Grid.Column="1"
-                        Margin="5"
-                        Content="EXPORT MAP XML (TEST)"
-                        Click="btnExportXmlTest_Click"/>
-
-                <Button x:Name="btnImportXmlTest"
-                        Grid.Row="0"
-                        Grid.Column="2"
-                        Margin="5"
-                        Content="IMPORT MAP XML (TEST)"
-                        Click="btnImportXmlTest_Click"/>
-
                 <CheckBox Content="Load Local (this UI)"
                           Grid.Row="1"
                           Grid.Column="0"
@@ -95,16 +90,49 @@
                   Expanded="Expander_Expanded"
                   Collapsed="Expander_Collapsed">
 
-            <TabControl TabStripPlacement="Right">
 
-                <TabItem Header="Golden Dawn">
-                    <hiero:HierophantTreeOfLife x:Name="hierophantTreeOfLifeInstance"/>
-                </TabItem>
-                <TabItem Header="Lurianic">
-                    <hiero:LurianicTreeOfLife x:Name="lurianicTreeOfLifeInstance"/>
-                </TabItem>
-                
-            </TabControl>
+            <Grid>
+
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition Width="40"/>
+                </Grid.ColumnDefinitions>
+
+                <TabControl x:Name="tcTrees" 
+                        TabStripPlacement="Right">
+
+                    <TabItem Header="Golden Dawn">
+                        <hiero:HierophantTreeOfLife x:Name="hierophantTreeOfLifeInstance"/>
+                    </TabItem>
+                    <TabItem Header="Lurianic">
+                        <hiero:LurianicTreeOfLife x:Name="lurianicTreeOfLifeInstance"/>
+                    </TabItem>
+
+                </TabControl>
+
+                <StackPanel Grid.Column="1" Orientation="Vertical">
+
+                    <Button x:Name="btnSendAllKeys"
+                            Margin="8"
+                            ToolTip="Send All Elements To New Set"
+                            Click="btnSendAllKeys_Click">
+                        <Button.Content>
+                            <Image Source="{StaticResource iconSendAllKeys}"/>
+                        </Button.Content>
+                    </Button>
+
+                    <Button x:Name="btnSendHighlightedKeyGroup"
+                            Margin="8"
+                            ToolTip="Send Highlighted Elements To New Group"
+                            Click="btnSendHighlightedKeyGroup_Click">
+                        <Button.Content>
+                            <Image Source="{StaticResource iconSendHighlightedKeyGroup}"/>
+                        </Button.Content>
+                    </Button>
+
+                </StackPanel>
+
+            </Grid>
             
 
         </Expander>

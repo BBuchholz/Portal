@@ -23,18 +23,38 @@ namespace NineWorldsDeep.Hierophant
     /// </summary>
     public partial class LurianicTreeOfLife : UserControl, ISemanticallyAddressable
     {
+        #region fields
+
         private Dictionary<Shape, HierophantUiCoupling> shapesToCouplings =
             new Dictionary<Shape, HierophantUiCoupling>();
         private Dictionary<SemanticKey, HierophantUiCoupling> keysToCouplings =
             new Dictionary<SemanticKey, HierophantUiCoupling>();
 
-        public IEnumerable<SemanticKey> SemanticKeys
+        #endregion
+
+        #region properties
+
+        public IEnumerable<SemanticKey> AllSemanticKeys
         {
             get
             {
                 return keysToCouplings.Keys;
             }
         }
+
+        public IEnumerable<SemanticKey> HighlightedSemanticKeys
+        {
+            get
+            {
+                throw new NotImplementedException();
+            }
+        }
+
+        #endregion
+
+        #region creation
+
+
 
         public LurianicTreeOfLife()
         {
@@ -43,10 +63,18 @@ namespace NineWorldsDeep.Hierophant
             CreateAndDrawPaths();
         }
 
+        #endregion
+
+        #region public interface
+
         public void Display(ISemanticallyRenderable semMap)
         {
             semMap.Render(this);
         }
+
+        #endregion
+        
+        #region private helper methods
 
         private Sephirah AddSephirahCoupling(HierophantCanvasElement canvasElement, string sephirahName)
         {
@@ -161,18 +189,6 @@ namespace NineWorldsDeep.Hierophant
             CreateAndDrawPath(elNetzach, elYesod, "Netzach::Yesod");
         }
 
-        private void Sephirah_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
-        {
-            HandleVertexClicked(sender);
-            e.Handled = true;
-        }
-
-        private void RectPath_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
-        {
-            HandleVertexClicked(sender);
-            e.Handled = true;
-        }
-
         private HierophantUiCoupling TryRetrieveCoupling(Shape shape)
         {
             HierophantUiCoupling retrieved = null;
@@ -206,20 +222,6 @@ namespace NineWorldsDeep.Hierophant
             }
         }
 
-
-        public event EventHandler<HierophantVertexClickedEventArgs> VertexClicked;
-
-        protected virtual void OnVertexClicked(HierophantVertexClickedEventArgs args)
-        {
-            VertexClicked?.Invoke(this, args);
-        }
-
-        private void Canvas_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
-        {
-            ProcessNullVertexSelection();
-            e.Handled = true;
-        }
-
         private void ProcessNullVertexSelection()
         {
             HierophantVertexClickedEventArgs args =
@@ -230,19 +232,57 @@ namespace NineWorldsDeep.Hierophant
 
         public void Highlight(SemanticKey semanticKey)
         {
-            var shape = keysToCouplings[semanticKey].CanvasElement.ShapeId;
-
-            shape.Fill = Brushes.Red;
+            //var shape = keysToCouplings[semanticKey].CanvasElement.ShapeId;
+            //shape.Fill = Brushes.Red;
+            
+            keysToCouplings[semanticKey].Highlight(Brushes.Red);
         }
 
         public void ClearHighlight(SemanticKey semanticKey)
         {
-            var shape = keysToCouplings[semanticKey].CanvasElement.ShapeId;
+            //var shape = keysToCouplings[semanticKey].CanvasElement.ShapeId;
+            //shape.Fill = Brushes.White;
 
-            shape.Fill = Brushes.White;
+            keysToCouplings[semanticKey].ClearHighlight(Brushes.White);
         }
+
+        #endregion
+
+        #region event handlers
+
+        private void Sephirah_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            HandleVertexClicked(sender);
+            e.Handled = true;
+        }
+
+        private void RectPath_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            HandleVertexClicked(sender);
+            e.Handled = true;
+        }
+
+        private void Canvas_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            ProcessNullVertexSelection();
+            e.Handled = true;
+        }
+
+        #endregion
+        
+        #region VertexClicked event
+
+        public event EventHandler<HierophantVertexClickedEventArgs> VertexClicked;
+
+        protected virtual void OnVertexClicked(HierophantVertexClickedEventArgs args)
+        {
+            VertexClicked?.Invoke(this, args);
+        }
+
+        #endregion
+
     }
-    
+
 
 }
 

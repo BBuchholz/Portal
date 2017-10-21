@@ -4,7 +4,8 @@ namespace NineWorldsDeep.Hierophant
 {
     public interface ISemanticallyAddressable
     {
-        IEnumerable<SemanticKey> SemanticKeys { get; }
+        IEnumerable<SemanticKey> AllSemanticKeys { get; }
+        IEnumerable<SemanticKey> HighlightedSemanticKeys { get; }
 
         void Highlight(SemanticKey semanticKey);
         void ClearHighlight(SemanticKey semanticKey);

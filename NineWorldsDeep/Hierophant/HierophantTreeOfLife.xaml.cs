@@ -28,11 +28,19 @@ namespace NineWorldsDeep.Hierophant
         private Dictionary<SemanticKey, HierophantUiCoupling> keysToCouplings =
             new Dictionary<SemanticKey, HierophantUiCoupling>();
 
-        public IEnumerable<SemanticKey> SemanticKeys
+        public IEnumerable<SemanticKey> AllSemanticKeys
         {
             get
             {
                 return keysToCouplings.Keys;
+            }
+        }
+
+        public IEnumerable<SemanticKey> HighlightedSemanticKeys
+        {
+            get
+            {
+                throw new NotImplementedException();
             }
         }
 
@@ -229,16 +237,18 @@ namespace NineWorldsDeep.Hierophant
 
         public void Highlight(SemanticKey semanticKey)
         {
-            var shape = keysToCouplings[semanticKey].CanvasElement.ShapeId;
+            //var shape = keysToCouplings[semanticKey].CanvasElement.ShapeId;
+            //shape.Fill = Brushes.Red;
 
-            shape.Fill = Brushes.Red;
+            keysToCouplings[semanticKey].Highlight(Brushes.Red);
         }
 
         public void ClearHighlight(SemanticKey semanticKey)
         {
-            var shape = keysToCouplings[semanticKey].CanvasElement.ShapeId;
+            //var shape = keysToCouplings[semanticKey].CanvasElement.ShapeId;
+            //shape.Fill = Brushes.White;
 
-            shape.Fill = Brushes.White;
+            keysToCouplings[semanticKey].ClearHighlight(Brushes.White);
         }
     }
 

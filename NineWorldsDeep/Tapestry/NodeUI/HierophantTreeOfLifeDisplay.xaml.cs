@@ -25,6 +25,8 @@ namespace NineWorldsDeep.Tapestry.NodeUI
     /// </summary>
     public partial class HierophantTreeOfLifeDisplay : UserControl
     {
+        #region creation
+
         public HierophantTreeOfLifeDisplay()
         {
             InitializeComponent();
@@ -32,29 +34,10 @@ namespace NineWorldsDeep.Tapestry.NodeUI
             lurianicTreeOfLifeInstance.VertexClicked += TreeOfLife_VertexClicked;
         }
 
-        public event EventHandler<HierophantVertexClickedEventArgs> VertexClicked;
+        #endregion
 
-        private void TreeOfLife_VertexClicked(object sender, HierophantVertexClickedEventArgs args)
-        {
-            args.VertexNode.LoadLocal = chkLoadLocal.IsChecked.Value;
-            OnVertexClicked(args);
-        }
+        #region public interface
 
-        protected virtual void OnVertexClicked(HierophantVertexClickedEventArgs args)
-        {
-            VertexClicked?.Invoke(this, args);
-        }
-
-        private void Expander_Expanded(object sender, RoutedEventArgs e)
-        {
-            UtilsUi.ProcessExpanderState((Expander)sender);
-        }
-
-        private void Expander_Collapsed(object sender, RoutedEventArgs e)
-        {
-            UtilsUi.ProcessExpanderState((Expander)sender);
-        }
-        
         public void Display(HierophantVertexNode vNode)
         {
             string details = "";
@@ -68,6 +51,43 @@ namespace NineWorldsDeep.Tapestry.NodeUI
             tbTestText.Text = details;
         }
 
+        #endregion
+
+        #region private helper methods
+
+
+
+        #endregion
+
+        #region VertexClicked event
+
+        public event EventHandler<HierophantVertexClickedEventArgs> VertexClicked;
+        
+        protected virtual void OnVertexClicked(HierophantVertexClickedEventArgs args)
+        {
+            VertexClicked?.Invoke(this, args);
+        }
+
+        #endregion
+
+        #region event handlers
+
+        private void TreeOfLife_VertexClicked(object sender, HierophantVertexClickedEventArgs args)
+        {
+            args.VertexNode.LoadLocal = chkLoadLocal.IsChecked.Value;
+            OnVertexClicked(args);
+        }
+
+        private void Expander_Expanded(object sender, RoutedEventArgs e)
+        {
+            UtilsUi.ProcessExpanderState((Expander)sender);
+        }
+
+        private void Expander_Collapsed(object sender, RoutedEventArgs e)
+        {
+            UtilsUi.ProcessExpanderState((Expander)sender);
+        }
+        
         private void btnExample_Click(object sender, RoutedEventArgs e)
         {
             SemanticRenderMap map = new SemanticRenderMap();
@@ -87,69 +107,17 @@ namespace NineWorldsDeep.Tapestry.NodeUI
             lurianicTreeOfLifeInstance.Display(map);
         }
 
-        private void btnExportXmlTest_Click(object sender, RoutedEventArgs e)
+        private void btnSendAllKeys_Click(object sender, RoutedEventArgs e)
         {
-            //var doc = 
-            //    Xml.Xml.Export(UtilsHierophant.MockMapWithGroups("demo"));
 
-            //string fileName = ConfigHive.GenerateHiveHierophantXmlFileName();                
-
-            ////uncomment when done testing
-            ////IEnumerable<string> paths = ConfigHive.GetHiveFoldersForXmlExport();
-            //List<string> paths = new List<string>();
-            //paths.Add(@"C:\NWD-SYNC\hive\test-root\xml\incoming"); //just for testing
-
-            //foreach (string folderPath in paths)
-            //{
-            //    //ensure directory
-            //    Directory.CreateDirectory(folderPath);
-
-            //    string fullFilePath =
-            //        System.IO.Path.Combine(folderPath, fileName);
-
-            //    doc.Save(fullFilePath);
-            //}
-
-            string fileName = 
-                UtilsHierophant.ExportToXml(UtilsHierophant.MockMapWithGroups("demo"));
-
-            tbStatus.Text = "exported as " + fileName;
         }
 
-        private void btnImportXmlTest_Click(object sender, RoutedEventArgs e)
+        private void btnSendHighlightedKeyGroup_Click(object sender, RoutedEventArgs e)
         {
-            ////uncomment when done testing
-            ////IEnumerable<string> paths = 
-            ////    ConfigHive.GetHiveHierophantXmlImportFilePaths();
-            //IEnumerable<string> paths =
-            //    ConfigHive.TestingGetHiveHierophantXmlImportFilePaths(); //just for testing
 
-
-            //List<SemanticMap> semanticMaps = new List<SemanticMap>();
-
-            //foreach(string path in paths)
-            //{
-            //    semanticMaps.AddRange(Xml.Xml.ImportHierophantSemanticMaps(path));
-            //}
-
-            List<SemanticMap> semanticMaps = UtilsHierophant.ImportXml();
-
-            //just testing
-            string msg = "not found";
-
-            if(semanticMaps.Count > 0)
-            {
-                msg = "maps found: " + semanticMaps.Count;
-                msg += Environment.NewLine;
-                msg += "semantic keys in first map: " + semanticMaps.First().SemanticKeys.Count();
-                msg += Environment.NewLine;
-                msg += "semantic groups in first map: " + semanticMaps.First().SemanticGroupNames.Count();
-            }
-
-            UI.Display.Message(msg);
-
-            tbStatus.Text = "imported from xml";
         }
-        
+
+        #endregion
+
     }
 }

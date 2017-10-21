@@ -64,13 +64,15 @@ namespace NineWorldsDeep.Hierophant
                 //add column for each columnName
                 foreach (string colName in columnNames)
                 {
-                    if (!DataGridColumnHeaderExists(colName))
-                    {
-                        DataGridTextColumn col = new DataGridTextColumn();
-                        col.Header = colName;
-                        col.Binding = new Binding(string.Format("Value[{0}]", colName));
-                        dgrid.Columns.Add(col);
-                    }
+                    //if (!DataGridColumnHeaderExists(colName))
+                    //{
+                    //    DataGridTextColumn col = new DataGridTextColumn();
+                    //    col.Header = colName;
+                    //    col.Binding = new Binding(string.Format("Value[{0}]", colName));
+                    //    dgrid.Columns.Add(col);
+                    //}
+
+                    AddColumn(colName);                
                 }
             }
         }
@@ -129,10 +131,31 @@ namespace NineWorldsDeep.Hierophant
                 
             return exists;
         }
+        
+        /// <summary>
+        /// checks where column already exists, and ignores if column name is null or whitespace
+        /// </summary>
+        /// <param name="columnName"></param>
+        private void AddColumn(string columnName)
+        {
+            if (!DataGridColumnHeaderExists(columnName) &&
+                !string.IsNullOrWhiteSpace(columnName))
+            {
+                DataGridTextColumn col = new DataGridTextColumn();
+                col.Header = columnName;
+                col.Binding = new Binding(string.Format("Value[{0}]", columnName));
+                dgrid.Columns.Add(col);
+            }
+        }
 
         #endregion
 
         #region event handlers
+
+        private void btnAddColumn_Click(object sender, RoutedEventArgs e)
+        {
+            AddColumn(txtAddColumn.Text);
+        }
 
         private void btnAddSemanticKey_Click(object sender, RoutedEventArgs e)
         {
@@ -164,5 +187,6 @@ namespace NineWorldsDeep.Hierophant
         }
 
         #endregion
+
     }
 }
