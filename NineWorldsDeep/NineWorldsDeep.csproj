@@ -318,7 +318,13 @@
     <Compile Include="Mtp\PortableDeviceFile.cs" />
     <Compile Include="Mtp\PortableDeviceFolder.cs" />
     <Compile Include="Mtp\PortableDeviceObject.cs" />
+    <Compile Include="Muse\V5\MuseV5Chord.cs" />
+    <Compile Include="Muse\V5\MuseV5ChordInstance.cs" />
     <Compile Include="Muse\V5\MuseV5Note.cs" />
+    <Compile Include="Muse\V5\MuseV5PatternInstance.cs" />
+    <Compile Include="Muse\V5\MuseV5PatternSignature.cs" />
+    <Compile Include="Muse\V5\MuseV5Scale.cs" />
+    <Compile Include="Muse\V5\MuseV5ScaleInstance.cs" />
     <Compile Include="Parser\NwdParser.cs" />
     <Compile Include="Parser\NwdUri.cs" />
     <Compile Include="Parser\NwdUriConverter.cs" />

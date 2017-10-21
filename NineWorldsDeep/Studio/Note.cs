@@ -5,6 +5,7 @@ using System.Text.RegularExpressions;
 
 namespace NineWorldsDeep.Studio
 {
+    [Obsolete("use Muse.V5.MuseV5Note, all methods have been ported over")]
     public class Note
     {
         private string noteName;

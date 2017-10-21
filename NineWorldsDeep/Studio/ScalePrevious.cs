@@ -2,8 +2,14 @@
 {
     public class ScalePrevious
     {
+
+        #region fields
+
         protected string scaleName;
         protected PatternSignature patternSignature;
+
+        #endregion
+        
 
         public ScalePrevious(string name)
         {
