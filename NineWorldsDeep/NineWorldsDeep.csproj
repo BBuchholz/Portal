@@ -327,6 +327,7 @@
     <Compile Include="Muse\V5\MuseV5PatternSignature.cs" />
     <Compile Include="Muse\V5\MuseV5Scale.cs" />
     <Compile Include="Muse\V5\MuseV5ScaleInstance.cs" />
+    <Compile Include="Muse\V5\UtilsMuseV5.cs" />
     <Compile Include="Parser\NwdParser.cs" />
     <Compile Include="Parser\NwdUri.cs" />
     <Compile Include="Parser\NwdUriConverter.cs" />

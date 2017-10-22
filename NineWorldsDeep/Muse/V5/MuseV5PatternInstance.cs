@@ -40,6 +40,28 @@ namespace NineWorldsDeep.Muse.V5
 
             return twoOctaveNoteArray;
         }
+        
+        /// <summary>
+        /// returns null if position is out of range
+        /// </summary>
+        /// <param name="zeroBasedPositionIndex"></param>
+        /// <returns></returns>
+        public MuseV5Note GetNoteAtPosition(int zeroBasedPositionIndex)
+        {
+            MuseV5Note newNote = null;
+
+            if(zeroBasedPositionIndex < 
+                PatternSignature.PositionalValues.Count())
+            {
+                int posVal = 
+                    RootNote.PositionalValue + 
+                    PatternSignature.PositionalValues[zeroBasedPositionIndex];
+
+                newNote = new MuseV5Note(posVal);
+            }
+
+            return newNote;
+        }
 
         #endregion
     }

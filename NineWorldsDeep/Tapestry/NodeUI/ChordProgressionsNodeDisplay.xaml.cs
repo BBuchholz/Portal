@@ -39,16 +39,14 @@ namespace NineWorldsDeep.Tapestry.NodeUI
         public ChordProgressionsNodeDisplay()
         {
             InitializeComponent();
-            cmbKey.ItemsSource = MuseV5Note.AllNoteNames();
+            cmbRootNote.ItemsSource = MuseV5Note.AllNotes();
             RefreshProgressionList();
         }
 
         #endregion
 
         #region properties
-
-        
-
+       
         private MuseV5ChordProgression SelectedProgression
         {
             get
@@ -71,51 +69,41 @@ namespace NineWorldsDeep.Tapestry.NodeUI
 
         private void ProcessSelection()
         {
-            //string key = (string)cmbKey.SelectedItem;
-            //MuseV5ChordProgression prog = SelectedProgression;
+            MuseV5Note rootNote = (MuseV5Note)cmbRootNote.SelectedItem;
+            MuseV5ChordProgression selectedProgression = SelectedProgression;
 
-            //if(prog != null)
-            //{
-            //    txtNotes.Text = prog.Notes;
-            //    txtNotes.IsEnabled = true;
-            //    btnUpdate.IsEnabled = true;
-
-            //    if (key != null)
-            //    {
-            //        List<ChordNode> chords = new List<ChordNode>();
-
-            //        List<MuseV5Chord> chordList = prog.ToChordList(key);
-
-            //        foreach (MuseV5Chord chord in chordList)
-            //        {
-            //            chords.Add(new ChordNode(chord));
-            //        }
-
-            //        lvChords.ItemsSource = null;
-            //        lvChords.ItemsSource = chords;
-            //    }
-            //}
-            //else
-            //{
-            //    txtNotes.IsEnabled = false;
-            //    btnUpdate.IsEnabled = false;
-            //}            
+            if (selectedProgression != null && 
+                rootNote != null)
+            {
+                txtNotes.Text = selectedProgression.TextNotes;
+                txtNotes.IsEnabled = true;
+                btnUpdate.IsEnabled = true;
+                 
+                List<MuseV5ChordInstance> chordList = 
+                    selectedProgression.ToChordList(rootNote);
+                    
+                lvChords.ItemsSource = null;
+                lvChords.ItemsSource = chordList;
+                
+            }
+            else
+            {
+                txtNotes.IsEnabled = false;
+                btnUpdate.IsEnabled = false;
+            }
         }
         
-
         private void RequestDisplayForSelectedChordNode()
         {
-            //ChordNode nd = (ChordNode)lvChords.SelectedItem;
+            //need to change this to Chord, not ChordNode(wrap it after)
+            MuseV5ChordInstance chord = (MuseV5ChordInstance)lvChords.SelectedItem;
 
-            //if (nd == null)
-            //{
-            //    nd = new ChordNode(new MuseV5Chord("empty chord", new TwoOctaveNoteArray()));
-            //}
+            ChordNode nd = new ChordNode(chord);
 
-            //ChordClickedEventArgs args =
-            //    new ChordClickedEventArgs(nd);
+            ChordClickedEventArgs args =
+                new ChordClickedEventArgs(nd);
 
-            //OnChordClicked(args);            
+            OnChordClicked(args);
         }
 
         #endregion
@@ -145,12 +133,12 @@ namespace NineWorldsDeep.Tapestry.NodeUI
 
         private void lvChords_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            //RequestDisplayForSelectedChordNode();
+            RequestDisplayForSelectedChordNode();
         }
 
         private void cmb_ProcessSelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            //ProcessSelection();
+            ProcessSelection();
         }
 
         private void btnUpdate_Click(object sender, RoutedEventArgs e)
@@ -214,9 +202,9 @@ namespace NineWorldsDeep.Tapestry.NodeUI
 
         private void btnGlobal_Click(object sender, RoutedEventArgs e)
         {
-            //Core.Configuration.GlobalNotes = !Core.Configuration.GlobalNotes;
+            Core.Configuration.GlobalNotes = !Core.Configuration.GlobalNotes;
 
-            //RequestDisplayForSelectedChordNode();
+            RequestDisplayForSelectedChordNode();
         }
 
 

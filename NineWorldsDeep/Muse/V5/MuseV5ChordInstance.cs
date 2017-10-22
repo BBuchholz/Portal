@@ -7,33 +7,30 @@ using System.Threading.Tasks;
 
 namespace NineWorldsDeep.Muse.V5
 {
-    public class MuseV5ChordInstance
+    public class MuseV5ChordInstance : MuseV5PatternInstance
     {
         #region properties
 
         public string Name { get; private set; }
 
+        #endregion
 
+        #region creation
 
-        public TwoOctaveNoteArray ChordNotes
+        public MuseV5ChordInstance(MuseV5Note rootNote, MuseV5Chord chord) 
+            : base(rootNote, chord.PatternSignature)
         {
-            get
-            {
-                //if (Core.Configuration.GlobalNotes)
-                //{
-                //    return TwoOctaveNoteArray.Global(_ChordNotes);
-                //}
-                //else
-                //{
-                //    return _ChordNotes;
-                //}
-                return new TwoOctaveNoteArray();
-            }
+            //Name = rootNote + " " + chord.ChordName;
+            Name = rootNote + chord.ChordQualitySuffix;
+        }
 
-            private set
-            {
-                //_ChordNotes = value;
-            }
+        #endregion
+
+        #region public interface
+
+        public override string ToString()
+        {
+            return Name;
         }
 
         #endregion

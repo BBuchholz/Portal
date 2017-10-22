@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using System.Collections;
 
 namespace NineWorldsDeep.Muse.V5
 {
@@ -16,6 +17,12 @@ namespace NineWorldsDeep.Muse.V5
         {
             NoteName = name;
             PositionalValue = ParseNameToAbsVal(NoteName);
+        }
+
+        public MuseV5Note(int positionalValue)
+        {
+            PositionalValue = positionalValue;
+            NoteName = ConvertNoteValueToString(PositionalValue);
         }
 
         #endregion
@@ -55,8 +62,21 @@ namespace NineWorldsDeep.Muse.V5
             return noteIndex;
         }
 
-        public static string ConvertNoteValueToString(int i,
-                                                bool includeOctaveNumeral = false)
+        public static List<MuseV5Note> AllNotes()
+        {
+            List<MuseV5Note> lst = new List<MuseV5Note>();
+
+            foreach(string noteName in AllNoteNames())
+            {
+                lst.Add(new MuseV5Note(noteName));
+            }
+
+            return lst;
+        }
+
+        public static string ConvertNoteValueToString(
+            int i,
+            bool includeOctaveNumeral = false)
         {
             i = CoaxNote(i);
 
@@ -348,24 +368,34 @@ namespace NineWorldsDeep.Muse.V5
                 case "C":
                     return 0;
                 case "C#/Db":
+                case "C#":
+                case "Db":
                     return 1;
                 case "D":
                     return 2;
                 case "D#/Eb":
+                case "D#":
+                case "Eb":
                     return 3;
                 case "E":
                     return 4;
                 case "F":
                     return 5;
                 case "F#/Gb":
+                case "F#":
+                case "Gb":
                     return 6;
                 case "G":
                     return 7;
                 case "G#/Ab":
+                case "G#":
+                case "Ab":
                     return 8;
                 case "A":
                     return 9;
                 case "A#/Bb":
+                case "A#":
+                case "Bb":
                     return 10;
                 case "B":
                     return 11;

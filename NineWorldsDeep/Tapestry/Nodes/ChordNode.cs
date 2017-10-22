@@ -12,7 +12,7 @@ namespace NineWorldsDeep.Tapestry.Nodes
     public class ChordNode : TapestryNode
     {
         public ChordNode(MuseV5ChordInstance chord) :
-            base("Chord/" + chord.ChordNotes)
+            base("Chord/" + chord.ToNoteArray())
         {
             Chord = chord;
         }

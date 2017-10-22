@@ -24,5 +24,21 @@ namespace NineWorldsDeep.Muse.V5
         }
 
         #endregion
+
+        #region public interface 
+
+        /// <summary>
+        /// takes an integer scale degree (1 based, ie. 1-7)
+        /// </summary>
+        /// <param name="scaleDegreeAsInteger"></param>
+        /// <returns></returns>
+        public MuseV5Note GetNoteForScaleDegree(int scaleDegreeAsInteger)
+        {
+            int zeroBasedScalePosition = scaleDegreeAsInteger - 1;
+
+            return GetNoteAtPosition(zeroBasedScalePosition);
+        }
+
+        #endregion
     }
 }

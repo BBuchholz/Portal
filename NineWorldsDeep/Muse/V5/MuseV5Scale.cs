@@ -8,6 +8,8 @@ namespace NineWorldsDeep.Muse.V5
 {
     public class MuseV5Scale
     {
+        private const string MAJOR_SCALE_NAME = "major";
+        private const string MINOR_SCALE_NAME = "minor";
         #region creation
 
         public MuseV5Scale(string name)
@@ -34,13 +36,23 @@ namespace NineWorldsDeep.Muse.V5
 
             switch (scaleName)
             {
-                case "major":
+                case MAJOR_SCALE_NAME:
                     return new MuseV5PatternSignature("0,2,4,5,7,9,11,12");
-                case "minor":
+                case MINOR_SCALE_NAME:
                     return new MuseV5PatternSignature("0,2,3,5,7,8,10,12");
                 default:
                     throw new Exception("could not parse unrecognized scale name: " + scaleName);
             }
+        }
+
+        public static MuseV5ScaleInstance MajorScale(MuseV5Note rootNote)
+        {
+            return new MuseV5Scale(MAJOR_SCALE_NAME).ToInstance(rootNote);
+        }
+
+        public static MuseV5ScaleInstance MinorScale(MuseV5Note rootNote)
+        {
+            return new MuseV5Scale(MINOR_SCALE_NAME).ToInstance(rootNote);
         }
 
         #endregion

@@ -34,7 +34,14 @@ namespace NineWorldsDeep.Tapestry.NodeUI
         {
             chordNode = nd;
 
-            visualKeyboard.Notes = chordNode.Chord.ChordNotes;            
+            TwoOctaveNoteArray noteArrayForDisplay = chordNode.Chord.ToNoteArray();
+
+            if (Core.Configuration.GlobalNotes)
+            {
+                noteArrayForDisplay = TwoOctaveNoteArray.Global(noteArrayForDisplay);
+            }
+
+            visualKeyboard.Notes = noteArrayForDisplay;
         }
     }
 }

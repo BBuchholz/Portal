@@ -68,32 +68,32 @@ namespace NineWorldsDeep.Studio
             return lst;
         }
 
-        //public static List<Chord> ToChordList(string keyNoteName, string progressionSignature)
-        //{
-        //    List<Chord> chordList = new List<Chord>();
-        //    List<string> scaleDegrees = ToScaleDegrees(progressionSignature);
+        public static List<Chord> ToChordList(string keyNoteName, string progressionSignature)
+        {
+            List<Chord> chordList = new List<Chord>();
+            List<string> scaleDegrees = ToScaleDegrees(progressionSignature);
 
-        //    if (IsMajorProgression(scaleDegrees))
-        //    {
-        //        Scale majorScale = Scale.Major(keyNoteName);
+            //if (IsMajorProgression(scaleDegrees))
+            //{
+            //    Scale majorScale = Scale.Major(keyNoteName);
 
-        //        foreach(string scaleDegree in scaleDegrees)
-        //        {
-        //            chordList.Add(majorScale.ScaleDegreeToChord(scaleDegree));
-        //        }
-        //    }
-        //    else if(IsMinorProgression(scaleDegrees))
-        //    {
-        //        Scale minorScale = Scale.Minor(keyNoteName);
+            //    foreach (string scaleDegree in scaleDegrees)
+            //    {
+            //        chordList.Add(majorScale.ScaleDegreeToChord(scaleDegree));
+            //    }
+            //}
+            //else if (IsMinorProgression(scaleDegrees))
+            //{
+            //    Scale minorScale = Scale.Minor(keyNoteName);
 
-        //        foreach(string scaleDegree in scaleDegrees)
-        //        {
-        //            chordList.Add(minorScale.ScaleDegreeToChord(scaleDegree));
-        //        }
-        //    }
+            //    foreach (string scaleDegree in scaleDegrees)
+            //    {
+            //        chordList.Add(minorScale.ScaleDegreeToChord(scaleDegree));
+            //    }
+            //}
 
-        //    return chordList;
-        //}
+            return chordList;
+        }
 
         private static bool IsMinorProgression(List<string> scaleDegrees)
         {

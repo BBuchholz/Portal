@@ -34,12 +34,10 @@
                 Content="New"
                 Click="btnNewProgression_Click"/>
 
-        <ComboBox x:Name="cmbKey"
+        <ComboBox x:Name="cmbRootNote"
                   Grid.Row="0"
                   Grid.Column="2"
                   Margin="5"
-                  IsEditable="True"
-                  IsReadOnly="True"
                   SelectionChanged="cmb_ProcessSelectionChanged"/>
 
         <Button x:Name="btnGlobal"
