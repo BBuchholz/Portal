@@ -10,6 +10,7 @@ namespace NineWorldsDeep.Muse.V5
     {
         private const string MAJOR_SCALE_NAME = "Major";
         private const string MINOR_SCALE_NAME = "Minor";
+        private const string HARMONIC_MINOR_SCALE_NAME = "Harmonic Minor";
         #region creation
 
         public MuseV5Scale(string name)
@@ -40,6 +41,8 @@ namespace NineWorldsDeep.Muse.V5
                     return new MuseV5PatternSignature("0,2,4,5,7,9,11,12");
                 case MINOR_SCALE_NAME:
                     return new MuseV5PatternSignature("0,2,3,5,7,8,10,12");
+                case HARMONIC_MINOR_SCALE_NAME:
+                    return new MuseV5PatternSignature("0,2,3,5,7,8,11,12");
                 default:
                     throw new Exception("could not parse unrecognized scale name: " + scaleName);
             }
@@ -50,6 +53,7 @@ namespace NineWorldsDeep.Muse.V5
             List<MuseV5Scale> scales = new List<MuseV5Scale>();
             scales.Add(new MuseV5Scale(MAJOR_SCALE_NAME));
             scales.Add(new MuseV5Scale(MINOR_SCALE_NAME));
+            scales.Add(new MuseV5Scale(HARMONIC_MINOR_SCALE_NAME));
             return scales;
         }
 
@@ -63,6 +67,11 @@ namespace NineWorldsDeep.Muse.V5
             return new MuseV5Scale(MINOR_SCALE_NAME).ToInstance(rootNote);
         }
         
+        public static MuseV5ScaleInstance HarmonicMinorScale(MuseV5Note rootNote)
+        {
+            return new MuseV5Scale(HARMONIC_MINOR_SCALE_NAME).ToInstance(rootNote);
+        }
+
         #endregion
 
         #region public interface
