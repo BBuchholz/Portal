@@ -88,6 +88,7 @@ namespace NineWorldsDeep.Tapestry.NodeUI
             }
             else
             {
+                lvChords.ItemsSource = null;
                 txtNotes.IsEnabled = false;
                 btnUpdate.IsEnabled = false;
             }
@@ -98,12 +99,15 @@ namespace NineWorldsDeep.Tapestry.NodeUI
             //need to change this to Chord, not ChordNode(wrap it after)
             MuseV5ChordInstance chord = (MuseV5ChordInstance)lvChords.SelectedItem;
 
-            ChordNode nd = new ChordNode(chord);
+            if (chord != null)
+            {
+                ChordNode nd = new ChordNode(chord);
 
-            ChordClickedEventArgs args =
-                new ChordClickedEventArgs(nd);
+                ChordClickedEventArgs args =
+                    new ChordClickedEventArgs(nd);
 
-            OnChordClicked(args);
+                OnChordClicked(args);
+            }
         }
 
         #endregion
@@ -143,61 +147,62 @@ namespace NineWorldsDeep.Tapestry.NodeUI
 
         private void btnUpdate_Click(object sender, RoutedEventArgs e)
         {
-            //MuseV5ChordProgression prog = SelectedProgression;
+            MuseV5ChordProgression prog = SelectedProgression;
 
-            //if (prog != null)
-            //{
-            //    prog.Notes = txtNotes.Text;
+            if (prog != null)
+            {
+                prog.TextNotes = txtNotes.Text;
 
-            //    db.Save(prog);
-            //}
+                db.Save(prog);
+            }
 
-            //btnUpdate.IsEnabled = false;
+            btnUpdate.IsEnabled = false;
         }
 
         private void txtNotes_TextChanged(object sender, TextChangedEventArgs e)
         {
-            //if (SelectedProgression != null)
-            //{
-            //    btnUpdate.IsEnabled = true;
-            //}
+            if (SelectedProgression != null)
+            {
+                btnUpdate.IsEnabled = true;
+            }
         }
 
         private void btnNewProgression_Click(object sender, RoutedEventArgs e)
         {
-            //string msg = "Enter progression signature to create a new progression. " +
-            //    "Progression signatures are case-sensitive, duplicates will be ignored";
+            string msg = "Enter progression signature to create a new progression. " +
+                "Progression signatures are case-sensitive, duplicates will be ignored." +
+                " Use suffixes '*' and '+' for diminished and augmented chords, respectively.";
 
-            //string progSignature = UI.Prompt.Input(msg);
+            string progSignature = UI.Prompt.Input(msg);
 
-            //if (!string.IsNullOrWhiteSpace(progSignature))
-            //{
-            //    //check for new
-            //    if (!progressions.Any(p => p.Signature.Equals(progSignature)))
-            //    {
-            //        //new entry
-            //        msg = "Would you like to create progression: \"" + progSignature + "\", last chance to cancel";
-            //        if (UI.Prompt.Confirm(msg, true))
-            //        {
-            //            if (MuseV5ChordProgression.IsValidSignature(progSignature))
-            //            {
-            //                MuseV5ChordProgression prog = new MuseV5ChordProgression(progSignature);
+            if (!string.IsNullOrWhiteSpace(progSignature))
+            {
+                //check for new
+                if (!progressions.Any(p => p.ProgressionSignature.Equals(progSignature)))
+                {
+                    //new entry
+                    msg = "Would you like to create progression: \"" + progSignature + "\", last chance to cancel";
+                    if (UI.Prompt.Confirm(msg, true))
+                    {
+                        try
+                        {
+                            MuseV5ChordProgression prog = new MuseV5ChordProgression(progSignature);
 
-            //                db.Save(prog);
+                            db.Save(prog);
 
-            //                RefreshProgressionList();
-            //            }
-            //            else
-            //            {
-            //                UI.Display.Message("invalid chord progression signature: " + progSignature);
-            //            }
-            //        }
-            //    }
-            //    else
-            //    {
-            //        UI.Display.Message("Progression already exists");
-            //    }
-            //}
+                            RefreshProgressionList();
+                        }
+                        catch(Exception ex)
+                        {
+                            UI.Display.Message("could not create chord progression : " + progSignature + " [error: " + ex.Message + "]");
+                        }
+                    }
+                }
+                else
+                {
+                    UI.Display.Message("Progression already exists");
+                }
+            }
         }
 
         private void btnGlobal_Click(object sender, RoutedEventArgs e)

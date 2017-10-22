@@ -22,21 +22,29 @@ namespace NineWorldsDeep.Muse.V5
 
         #region public static methods
 
-        public static int RomanToInteger(string romanNumeral)
+        public static int RomanScaleDegreeToInteger(string scaleDegree)
         {
             //adapted from http://stackoverflow.com/questions/14900228/roman-numbers-to-integers
+            
+            //account for diminished and augmented chords (* AND + suffixes used to denote, respectively)
+            if (scaleDegree.ContainsAny(new String[] { MuseV5Chord.DIMINISHED_CHORD_SUFFIX, MuseV5Chord.AUGMENTED_CHORD_SUFFIX }))
+            {
+                scaleDegree = scaleDegree.Trim(
+                    char.Parse(MuseV5Chord.DIMINISHED_CHORD_SUFFIX), 
+                    char.Parse(MuseV5Chord.AUGMENTED_CHORD_SUFFIX));
+            }
 
             int number = 0;
-            for (int i = 0; i < romanNumeral.Length; i++)
+            for (int i = 0; i < scaleDegree.Length; i++)
             {
-                if (i + 1 < romanNumeral.Length &&
-                    RomanMap[romanNumeral[i]] < RomanMap[romanNumeral[i + 1]])
+                if (i + 1 < scaleDegree.Length &&
+                    RomanMap[scaleDegree[i]] < RomanMap[scaleDegree[i + 1]])
                 {
-                    number -= RomanMap[romanNumeral[i]];
+                    number -= RomanMap[scaleDegree[i]];
                 }
                 else
                 {
-                    number += RomanMap[romanNumeral[i]];
+                    number += RomanMap[scaleDegree[i]];
                 }
             }
 

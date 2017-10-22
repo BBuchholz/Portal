@@ -45,7 +45,7 @@ namespace NineWorldsDeep.Muse.V5
             foreach(string scaleDegree in scaleDegrees)
             {
                 int scaleDegreeAsInteger = 
-                    UtilsMuseV5.RomanToInteger(scaleDegree);
+                    UtilsMuseV5.RomanScaleDegreeToInteger(scaleDegree);
 
                 MuseV5Note scaleDegreeNote = 
                     scaleInstance.GetNoteForScaleDegree(scaleDegreeAsInteger);
@@ -65,71 +65,103 @@ namespace NineWorldsDeep.Muse.V5
             string scaleDegree, 
             MuseV5Note rootNote)
         {
-            //TODO: these are copy-pasted from different places, so the order isn't clean, tidy these up
+            /* need to test suffixes first, or the upper 
+             * and lowercases will falsely trigger 
+             * major or minor triads
+             */
 
-            //TODO: could replace all of these with a check for upper or lowercase, returning major or minor respectively
-            switch (scaleDegree)
+            //ends with *, it's diminished
+            if (scaleDegree.EndsWith(MuseV5Chord.DIMINISHED_CHORD_SUFFIX))
             {
-                case "I":
-
-                    return MuseV5Chord.MajorTriad(rootNote);
-
-                case "ii":
-
-                    return MuseV5Chord.MinorTriad(rootNote);
-
-                case "iii":
-
-                    return MuseV5Chord.MinorTriad(rootNote);
-
-
-                case "IV":
-
-                    return MuseV5Chord.MajorTriad(rootNote);
-
-                case "V":
-
-                    return MuseV5Chord.MajorTriad(rootNote);
-
-                case "vi":
-
-                    return MuseV5Chord.MinorTriad(rootNote);
-
-                case "vii":
-
-                    return MuseV5Chord.MinorTriad(rootNote);
-
-                case "i":
-
-                    return MuseV5Chord.MinorTriad(rootNote);
-                    
-
-                case "III":
-
-                    return MuseV5Chord.MajorTriad(rootNote);
-
-                case "iv":
-
-                    return MuseV5Chord.MinorTriad(rootNote);
-
-                case "v":
-
-                    return MuseV5Chord.MinorTriad(rootNote);
-
-                case "VI":
-
-                    return MuseV5Chord.MajorTriad(rootNote);
-
-                case "VII":
-
-                    return MuseV5Chord.MajorTriad(rootNote);
-
-                default:
-
-                    throw new ArgumentException(
-                        "invalid scale degree for major scale: "
-                        + scaleDegree);
+                return MuseV5Chord.DiminishedTriad(rootNote);
             }
+
+            //ends with +, it's augmented
+            if (scaleDegree.EndsWith(MuseV5Chord.AUGMENTED_CHORD_SUFFIX))
+            {
+                return MuseV5Chord.AugmentedTriad(rootNote);
+            }
+
+            //if lower, it's minor
+            if (scaleDegree.All(c => char.IsLower(c)))
+            {
+                return MuseV5Chord.MinorTriad(rootNote);
+            }
+
+            //if upper, it's major
+            if (scaleDegree.All(c => char.IsUpper(c)))
+            {
+                return MuseV5Chord.MajorTriad(rootNote);
+            }
+
+            throw new Exception("Unrecognized scale degree: " + scaleDegree);
+
+
+            ////these are copy-pasted from different places, so the order isn't clean, tidy these up
+
+            ////could replace all of these with a check for upper or lowercase, returning major or minor respectively
+            //switch (scaleDegree)
+            //{
+            //    case "I":
+
+            //        return MuseV5Chord.MajorTriad(rootNote);
+
+            //    case "ii":
+
+            //        return MuseV5Chord.MinorTriad(rootNote);
+
+            //    case "iii":
+
+            //        return MuseV5Chord.MinorTriad(rootNote);
+
+
+            //    case "IV":
+
+            //        return MuseV5Chord.MajorTriad(rootNote);
+
+            //    case "V":
+
+            //        return MuseV5Chord.MajorTriad(rootNote);
+
+            //    case "vi":
+
+            //        return MuseV5Chord.MinorTriad(rootNote);
+
+            //    case "vii":
+
+            //        return MuseV5Chord.MinorTriad(rootNote);
+
+            //    case "i":
+
+            //        return MuseV5Chord.MinorTriad(rootNote);
+
+
+            //    case "III":
+
+            //        return MuseV5Chord.MajorTriad(rootNote);
+
+            //    case "iv":
+
+            //        return MuseV5Chord.MinorTriad(rootNote);
+
+            //    case "v":
+
+            //        return MuseV5Chord.MinorTriad(rootNote);
+
+            //    case "VI":
+
+            //        return MuseV5Chord.MajorTriad(rootNote);
+
+            //    case "VII":
+
+            //        return MuseV5Chord.MajorTriad(rootNote);
+
+            //    default:
+
+            //        throw new ArgumentException(
+            //            "invalid scale degree for major scale: "
+            //            + scaleDegree);
+            //}
         }
 
         #endregion

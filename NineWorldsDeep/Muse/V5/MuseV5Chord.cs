@@ -13,6 +13,10 @@ namespace NineWorldsDeep.Muse.V5
         private const string MINOR_TRIAD_NAME = "minor triad";
         private const string DIMINISHED_TRIAD_NAME = "diminished triad";
         private const string AUGMENTED_TRIAD_NAME = "augmented triad";
+        public const string MAJOR_CHORD_SUFFIX = "";
+        public const string MINOR_CHORD_SUFFIX = "m";
+        public const string DIMINISHED_CHORD_SUFFIX = "*";
+        public const string AUGMENTED_CHORD_SUFFIX = "+";
         #region creation
 
         public MuseV5Chord(string name)
@@ -43,25 +47,25 @@ namespace NineWorldsDeep.Muse.V5
             {
                 case MAJOR_TRIAD_NAME:
 
-                    ChordQualitySuffix = "";
+                    ChordQualitySuffix = MAJOR_CHORD_SUFFIX;
                     PatternSignature = new MuseV5PatternSignature("0,4,7");
                     break;
 
                 case MINOR_TRIAD_NAME:
 
-                    ChordQualitySuffix = "m";
+                    ChordQualitySuffix = MINOR_CHORD_SUFFIX;
                     PatternSignature = new MuseV5PatternSignature("0,3,7");
                     break;
 
                 case DIMINISHED_TRIAD_NAME:
 
-                    ChordQualitySuffix = "*";
+                    ChordQualitySuffix = DIMINISHED_CHORD_SUFFIX;
                     PatternSignature = new MuseV5PatternSignature("0,3,6");
                     break;
 
                 case AUGMENTED_TRIAD_NAME:
 
-                    ChordQualitySuffix = "+";
+                    ChordQualitySuffix = AUGMENTED_CHORD_SUFFIX;
                     PatternSignature = new MuseV5PatternSignature("0,4,8");
                     break;
 
