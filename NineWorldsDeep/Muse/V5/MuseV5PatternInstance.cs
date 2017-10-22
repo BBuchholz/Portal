@@ -29,6 +29,22 @@ namespace NineWorldsDeep.Muse.V5
 
         #region public interface
 
+        public bool Contains(TwoOctaveNoteArray noteArray)
+        {
+            bool doesContainAllNotes = true;
+            var theseNotes = ToNoteArray();
+
+            foreach(string noteName in noteArray.ToStringList())
+            {
+                if (!theseNotes.Contains(noteName))
+                {
+                    doesContainAllNotes = false;
+                }
+            }
+
+            return doesContainAllNotes;
+        }
+
         public TwoOctaveNoteArray ToNoteArray()
         {
             TwoOctaveNoteArray twoOctaveNoteArray = new TwoOctaveNoteArray();

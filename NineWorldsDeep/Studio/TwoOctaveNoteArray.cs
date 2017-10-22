@@ -1,4 +1,5 @@
-﻿using System;
+﻿using NineWorldsDeep.Muse.V5;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -40,7 +41,7 @@ namespace NineWorldsDeep.Studio
 
         public bool IsLowest(string noteName)
         {
-            return Note.AreEquivalent(GetLowestNoteName(), noteName);
+            return MuseV5Note.AreEquivalent(GetLowestNoteName(), noteName);
         }
 
         /// <summary>
@@ -56,7 +57,7 @@ namespace NineWorldsDeep.Studio
             {
                 for(int i = 0; i < 24; i++)
                 {
-                    if(Note.AbsVal(index) == Note.AbsVal(i))
+                    if(MuseV5Note.AbsoluteValue(index) == MuseV5Note.AbsoluteValue(i))
                     {
                         newArray[i] = true;
                     }
@@ -81,7 +82,7 @@ namespace NineWorldsDeep.Studio
         public string GetLowestNoteName()
         {
             int idx = noteIndexes.Min();
-            return Note.ConvertNoteValueToString(idx);
+            return MuseV5Note.ConvertNoteValueToString(idx);
         }
 
         public TwoOctaveNoteArray GetCopy()
@@ -100,7 +101,7 @@ namespace NineWorldsDeep.Studio
         {
             foreach(string thisNoteName in ToStringList())
             {
-                if(Note.AreEquivalent(thisNoteName, noteName))
+                if(MuseV5Note.AreEquivalent(thisNoteName, noteName))
                 {
                     return true;
                 }
@@ -108,7 +109,7 @@ namespace NineWorldsDeep.Studio
 
             return false;
         }
-
+        
         public void CoaxAll()
         {
             int lowestIndex = noteIndexes.Min();
@@ -173,7 +174,7 @@ namespace NineWorldsDeep.Studio
 
             foreach (int idx in noteIndexes)
             {
-                lst.Add(Note.ConvertNoteValueToString(idx));                
+                lst.Add(MuseV5Note.ConvertNoteValueToString(idx));                
             }
 
             return lst;

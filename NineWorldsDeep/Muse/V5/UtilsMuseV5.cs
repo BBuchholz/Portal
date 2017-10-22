@@ -3,12 +3,15 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using NineWorldsDeep.Studio;
 
 namespace NineWorldsDeep.Muse.V5
 {
     public class UtilsMuseV5
     {
         #region fields
+
+        private static List<MuseV5ScaleInstance> _allSupportedScales = null;
 
         private static Dictionary<char, int> RomanMap = new Dictionary<char, int>()
         {
@@ -17,6 +20,25 @@ namespace NineWorldsDeep.Muse.V5
             {'i', 1},
             {'v', 5}
         };
+
+        #endregion
+
+        public static List<MuseV5ScaleInstance> AllSupportedScaleInstances
+        {
+            get
+            {
+                if (_allSupportedScales == null)
+                {
+                    _allSupportedScales = GetAllSupportedScales();
+                }
+
+                return _allSupportedScales;
+            }
+        }
+
+        #region properties
+
+        
 
         #endregion
 
@@ -72,10 +94,42 @@ namespace NineWorldsDeep.Muse.V5
             }
         }
 
+        public static List<MuseV5ScaleInstance> GetCompatibleScaleInstances(TwoOctaveNoteArray selectedNotes)
+        {
+
+            List<MuseV5ScaleInstance> compatibleScales = new List<MuseV5ScaleInstance>();
+
+            foreach(var scaleInstance in AllSupportedScaleInstances)
+            {
+                if (scaleInstance.Contains(selectedNotes))
+                {
+                    compatibleScales.Add(scaleInstance);
+                }
+            }
+
+            return compatibleScales;
+        }
+
         #endregion
 
         #region private helper methods
-        
+
+        private static List<MuseV5ScaleInstance> GetAllSupportedScales()
+        {
+            List<MuseV5ScaleInstance> allScales = new List<MuseV5ScaleInstance>();
+
+            foreach(MuseV5Scale scale in MuseV5Scale.GetSupportedScales())
+            {
+                foreach(MuseV5Note note in MuseV5Note.GetAllNotes())
+                {
+                    allScales.Add(scale.ToInstance(note));
+                }
+            }
+
+            return allScales;
+        }
+
+
         private static int HitsForMinorProgression(List<string> scaleDegrees)
         {
             string[] minorDegrees =

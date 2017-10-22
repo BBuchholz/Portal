@@ -8,8 +8,8 @@ namespace NineWorldsDeep.Muse.V5
 {
     public class MuseV5Scale
     {
-        private const string MAJOR_SCALE_NAME = "major";
-        private const string MINOR_SCALE_NAME = "minor";
+        private const string MAJOR_SCALE_NAME = "Major";
+        private const string MINOR_SCALE_NAME = "Minor";
         #region creation
 
         public MuseV5Scale(string name)
@@ -32,7 +32,7 @@ namespace NineWorldsDeep.Muse.V5
 
         public static MuseV5PatternSignature ParseNameToSignature(string scaleName)
         {
-            scaleName = scaleName.Trim().ToLower();
+            //scaleName = scaleName.Trim().ToLower();
 
             switch (scaleName)
             {
@@ -45,6 +45,14 @@ namespace NineWorldsDeep.Muse.V5
             }
         }
 
+        public static List<MuseV5Scale> GetSupportedScales()
+        {
+            List<MuseV5Scale> scales = new List<MuseV5Scale>();
+            scales.Add(new MuseV5Scale(MAJOR_SCALE_NAME));
+            scales.Add(new MuseV5Scale(MINOR_SCALE_NAME));
+            return scales;
+        }
+
         public static MuseV5ScaleInstance MajorScale(MuseV5Note rootNote)
         {
             return new MuseV5Scale(MAJOR_SCALE_NAME).ToInstance(rootNote);
@@ -54,7 +62,7 @@ namespace NineWorldsDeep.Muse.V5
         {
             return new MuseV5Scale(MINOR_SCALE_NAME).ToInstance(rootNote);
         }
-
+        
         #endregion
 
         #region public interface

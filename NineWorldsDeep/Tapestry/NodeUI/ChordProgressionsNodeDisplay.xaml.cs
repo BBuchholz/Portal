@@ -39,7 +39,7 @@ namespace NineWorldsDeep.Tapestry.NodeUI
         public ChordProgressionsNodeDisplay()
         {
             InitializeComponent();
-            cmbRootNote.ItemsSource = MuseV5Note.AllNotes();
+            cmbRootNote.ItemsSource = MuseV5Note.GetAllNotes();
             RefreshProgressionList();
         }
 

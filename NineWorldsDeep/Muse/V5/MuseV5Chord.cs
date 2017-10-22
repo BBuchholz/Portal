@@ -9,10 +9,10 @@ namespace NineWorldsDeep.Muse.V5
 {
     public class MuseV5Chord
     {
-        private const string MAJOR_TRIAD_NAME = "major triad";
-        private const string MINOR_TRIAD_NAME = "minor triad";
-        private const string DIMINISHED_TRIAD_NAME = "diminished triad";
-        private const string AUGMENTED_TRIAD_NAME = "augmented triad";
+        private const string MAJOR_TRIAD_NAME = "Major Triad";
+        private const string MINOR_TRIAD_NAME = "Minor Triad";
+        private const string DIMINISHED_TRIAD_NAME = "Diminished Triad";
+        private const string AUGMENTED_TRIAD_NAME = "Augmented Triad";
         public const string MAJOR_CHORD_SUFFIX = "";
         public const string MINOR_CHORD_SUFFIX = "m";
         public const string DIMINISHED_CHORD_SUFFIX = "*";

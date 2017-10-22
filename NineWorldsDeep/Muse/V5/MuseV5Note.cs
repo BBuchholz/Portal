@@ -62,7 +62,7 @@ namespace NineWorldsDeep.Muse.V5
             return noteIndex;
         }
 
-        public static List<MuseV5Note> AllNotes()
+        public static List<MuseV5Note> GetAllNotes()
         {
             List<MuseV5Note> lst = new List<MuseV5Note>();
 
@@ -205,7 +205,7 @@ namespace NineWorldsDeep.Muse.V5
             return noteName;
         }
 
-        public static int AbsoluteVal(int noteValue)
+        public static int AbsoluteValue(int noteValue)
         {
             while (noteValue > 11)
             {

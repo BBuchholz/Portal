@@ -136,14 +136,46 @@ namespace NineWorldsDeep.Studio
         {
             if (Clickable)
             {
+                bool changed = false;
+
                 foreach (VisualKey vk in orderedVisualKeys)
                 {
                     if (sender == vk.KeyRectangle || sender == vk.KeyDot)
                     {
                         vk.ToggleHighlight();
+                        changed = true;
                     }
                 }
+
+                if (changed)
+                {
+                    KeyboardClickedEventArgs args =
+                        new KeyboardClickedEventArgs(Notes);
+
+                    OnKeyboardClicked(args);
+                }
             }
+        }
+
+        #endregion
+
+        #region keyboard clicked event
+
+        protected virtual void OnKeyboardClicked(KeyboardClickedEventArgs args)
+        {
+            KeyboardClicked?.Invoke(this, args);
+        }
+
+        public event EventHandler<KeyboardClickedEventArgs> KeyboardClicked;
+
+        public class KeyboardClickedEventArgs
+        {
+            public KeyboardClickedEventArgs(TwoOctaveNoteArray selectedNotes)
+            {
+                SelectedNotes = selectedNotes;
+            }
+
+            public TwoOctaveNoteArray SelectedNotes { get; private set; }
         }
 
         #endregion

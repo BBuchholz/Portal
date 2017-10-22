@@ -39,6 +39,11 @@ namespace NineWorldsDeep.Muse.V5
             return GetNoteAtPosition(zeroBasedScalePosition);
         }
 
+        public override string ToString()
+        {
+            return Name;
+        }
+
         #endregion
     }
 }

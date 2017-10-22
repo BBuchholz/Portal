@@ -33,6 +33,8 @@ namespace NineWorldsDeep.Studio
             keyboard1.Clickable = false;
 
             keyboard2.ClearHighlights();
+
+            keyboard2.KeyboardClicked += keyboard2_KeyboardClicked;
         }
 
         #endregion
@@ -80,8 +82,20 @@ namespace NineWorldsDeep.Studio
 
             if(note != null && scale != null)
             {
+                keyboard2.ClearHighlights();
+                lvCompatibleScales.ItemsSource = null;
                 LoadScaleInstanceToKeyboardOne(scale.ToInstance(note));
             }
+        }
+
+        private void PopulateCompatibleScales(TwoOctaveNoteArray selectedNotes)
+        {            
+            lvCompatibleScales.ItemsSource = null;
+
+            List<MuseV5ScaleInstance> compatibleScales =
+                UtilsMuseV5.GetCompatibleScaleInstances(selectedNotes);
+
+            lvCompatibleScales.ItemsSource = compatibleScales;
         }
 
         #endregion
@@ -93,6 +107,9 @@ namespace NineWorldsDeep.Studio
             MuseV5ScaleInstance scaleInstance = (MuseV5ScaleInstance)lvCompatibleScales.SelectedItem;
 
             if (scaleInstance != null) {
+
+                cmbRoot1.SelectedItem = null;
+                cmbScale1.SelectedItem = null;
 
                 LoadScaleInstanceToKeyboardOne(scaleInstance);
             }
@@ -107,6 +124,12 @@ namespace NineWorldsDeep.Studio
         {
             LoadScaleInstanceFromRootAndScaleSelection();
         }
+
+        private void keyboard2_KeyboardClicked(object sender, VisualKeyboard.KeyboardClickedEventArgs e)
+        {
+            PopulateCompatibleScales(e.SelectedNotes);
+        }
+
 
         #endregion
     }
