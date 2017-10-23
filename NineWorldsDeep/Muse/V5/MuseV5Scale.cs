@@ -8,6 +8,15 @@ namespace NineWorldsDeep.Muse.V5
 {
     public class MuseV5Scale
     {
+        /* TODO: all these constants just SCREAM OOP Refactor, 
+         * let's make MuseV5Scale abstract, and create major, minor and 
+         * harmonic minor derived classes 
+         * 
+         * encapsulate pattern signatures, names, &c.
+         * 
+         * too busy to jump into it at present :)
+         * 
+         */
         private const string MAJOR_SCALE_NAME = "Major";
         private const string MINOR_SCALE_NAME = "Minor";
         private const string HARMONIC_MINOR_SCALE_NAME = "Harmonic Minor";
