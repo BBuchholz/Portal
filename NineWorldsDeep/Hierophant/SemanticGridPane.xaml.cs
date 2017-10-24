@@ -22,7 +22,7 @@ namespace NineWorldsDeep.Hierophant
     {
         #region properties
 
-        private SemanticMap CurrentSemanticMap { get; set; }
+        public SemanticMap CurrentSemanticMap { get; private set; }
         public string GroupName { get; set; }
 
         #endregion

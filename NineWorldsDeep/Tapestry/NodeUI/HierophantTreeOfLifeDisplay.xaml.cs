@@ -32,6 +32,7 @@ namespace NineWorldsDeep.Tapestry.NodeUI
             InitializeComponent();
             hierophantTreeOfLifeInstance.VertexClicked += TreeOfLife_VertexClicked;
             lurianicTreeOfLifeInstance.VertexClicked += TreeOfLife_VertexClicked;
+            semanticMatrix.SemanticMatrixGroupSelected += SemanticMatrix_GroupSelected;
         }
 
         #endregion
@@ -97,6 +98,14 @@ namespace NineWorldsDeep.Tapestry.NodeUI
         {
             args.VertexNode.LoadLocal = chkLoadLocal.IsChecked.Value;
             OnVertexClicked(args);
+        }
+
+        private void SemanticMatrix_GroupSelected(object sender, SemanticGrid.SemanticGridGroupSelectedEventArgs e)
+        {
+            var semMap = e.GroupSemanticMap;
+            var renderMap = new SemanticRenderMap();
+            renderMap.SelectAllForRender(semMap);
+            GetActiveTree().Display(renderMap);
         }
 
         private void Expander_Expanded(object sender, RoutedEventArgs e)

@@ -9,5 +9,6 @@ namespace NineWorldsDeep.Hierophant
 
         void Highlight(SemanticKey semanticKey);
         void ClearHighlight(SemanticKey semanticKey);
+        void Display(ISemanticallyRenderable semanticRenderMap);
     }
 }

@@ -63,6 +63,17 @@ namespace NineWorldsDeep.Hierophant
             }
         }
 
+        public void SelectAllForRender(SemanticMap map)
+        {
+            if (map != null)
+            {
+                foreach (SemanticKey semKey in map.SemanticKeys)
+                {
+                    Select(semKey);
+                }
+            }
+        }
+
         #endregion
     }
 }

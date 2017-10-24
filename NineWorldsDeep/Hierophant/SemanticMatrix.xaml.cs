@@ -13,6 +13,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using static NineWorldsDeep.Hierophant.SemanticGrid;
 
 namespace NineWorldsDeep.Hierophant
 {
@@ -125,6 +126,7 @@ namespace NineWorldsDeep.Hierophant
                 semanticGrid.AssignNewMap(semanticSetName);
 
                 semanticSetNamesToSemanticGrids[semanticSetName] = semanticGrid;
+                semanticGrid.SemanticGridGroupSelected += SemanticGrid_GroupSelected;
 
                 tabItem.Content = semanticGrid;
                 tcSemanticSets.Items.Add(tabItem);
@@ -136,10 +138,15 @@ namespace NineWorldsDeep.Hierophant
             }
         }
 
+        private void SemanticGrid_GroupSelected(object sender, SemanticGrid.SemanticGridGroupSelectedEventArgs e)
+        {
+            OnSemanticMatrixGroupSelected(e);
+        }
+
         #endregion
-        
+
         #region event handlers
-        
+
         private void btnAddSemanticSet_Click(object sender, RoutedEventArgs e)
         {
             var defaultName = AutoGenerateSemanticMapName(false);
@@ -242,6 +249,17 @@ namespace NineWorldsDeep.Hierophant
                 }
             }
         }
+
+        #endregion
+
+        #region group selected event
+
+        public event EventHandler<SemanticGridGroupSelectedEventArgs> SemanticMatrixGroupSelected;
+
+        protected virtual void OnSemanticMatrixGroupSelected(SemanticGridGroupSelectedEventArgs args)
+        {
+            SemanticMatrixGroupSelected?.Invoke(this, args);
+        }      
 
         #endregion
 

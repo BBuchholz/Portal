@@ -239,8 +239,11 @@ namespace NineWorldsDeep.Hierophant
                     Core.UtilsUi.FindChildren<SemanticGridPane>(selectedTab).First();
 
                 if (pane != null)
-                {
+                {                    
                     pane.RefreshFromMap();
+                    OnGroupSelected(
+                        new SemanticGridGroupSelectedEventArgs(
+                            pane.CurrentSemanticMap));
                 }
             }
         }
@@ -276,6 +279,28 @@ namespace NineWorldsDeep.Hierophant
         }
 
 
+
+        #endregion
+
+        #region group selected event
+
+        public event EventHandler<SemanticGridGroupSelectedEventArgs> SemanticGridGroupSelected;
+
+        protected virtual void OnGroupSelected(SemanticGridGroupSelectedEventArgs args)
+        {
+            SemanticGridGroupSelected?.Invoke(this, args);
+        }
+
+        public class SemanticGridGroupSelectedEventArgs
+        {
+            public SemanticGridGroupSelectedEventArgs(SemanticMap semanticMap)
+            {
+                GroupSemanticMap = semanticMap;
+            }
+
+            public SemanticMap GroupSemanticMap { get; private set; }
+
+        }
 
         #endregion
     }
