@@ -203,6 +203,15 @@ namespace NineWorldsDeep.Hierophant
 
                 if(coupling != null)
                 {
+                    if (coupling.Highlighted)
+                    {
+                        coupling.ClearHighlight(UtilsHierophant.ClearHighlightBrush);
+                    }
+                    else
+                    {
+                        coupling.Highlight(UtilsHierophant.HighlightBrush);
+                    }
+
                     HierophantVertexNode nd =
                         new HierophantVertexNode(coupling);
 
@@ -240,7 +249,7 @@ namespace NineWorldsDeep.Hierophant
             //var shape = keysToCouplings[semanticKey].CanvasElement.ShapeId;
             //shape.Fill = Brushes.Red;
 
-            keysToCouplings[semanticKey].Highlight(Brushes.Red);
+            keysToCouplings[semanticKey].Highlight(UtilsHierophant.HighlightBrush);
         }
 
         public void ClearHighlight(SemanticKey semanticKey)
@@ -248,7 +257,7 @@ namespace NineWorldsDeep.Hierophant
             //var shape = keysToCouplings[semanticKey].CanvasElement.ShapeId;
             //shape.Fill = Brushes.White;
 
-            keysToCouplings[semanticKey].ClearHighlight(Brushes.White);
+            keysToCouplings[semanticKey].ClearHighlight(UtilsHierophant.ClearHighlightBrush);
         }
     }
 

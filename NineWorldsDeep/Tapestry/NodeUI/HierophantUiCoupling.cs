@@ -34,5 +34,10 @@ namespace NineWorldsDeep.Tapestry.NodeUI
             shape.Fill = Brushes.White;
             Highlighted = false;
         }
+
+        internal void Highlight(object highlightBrush)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

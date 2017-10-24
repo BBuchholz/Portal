@@ -6,11 +6,20 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Media;
 
 namespace NineWorldsDeep.Hierophant
 {
     public class UtilsHierophant
     {
+        public static SolidColorBrush HighlightBrush {
+            get { return Brushes.Red; }
+        }
+
+        public static SolidColorBrush ClearHighlightBrush {
+            get { return Brushes.White; }
+        }
+
         private static SemanticDefinition MockDefPlanet(SemanticKey semanticKey, 
             string planet, string alchemy, string astro, string color)
         {

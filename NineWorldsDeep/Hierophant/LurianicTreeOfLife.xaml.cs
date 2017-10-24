@@ -211,6 +211,15 @@ namespace NineWorldsDeep.Hierophant
 
                 if (coupling != null)
                 {
+                    if (coupling.Highlighted)
+                    {
+                        coupling.ClearHighlight(UtilsHierophant.ClearHighlightBrush);
+                    }
+                    else
+                    {
+                        coupling.Highlight(UtilsHierophant.HighlightBrush);
+                    }
+
                     HierophantVertexNode nd =
                         new HierophantVertexNode(coupling);
 
