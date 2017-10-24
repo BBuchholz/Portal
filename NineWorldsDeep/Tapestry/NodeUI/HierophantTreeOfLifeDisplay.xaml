@@ -101,10 +101,12 @@
                 <TabControl x:Name="tcTrees" 
                         TabStripPlacement="Right">
 
-                    <TabItem Header="Golden Dawn">
+                    <TabItem Header="Golden Dawn"
+                             x:Name="tiHierophantTreeOfLife">
                         <hiero:HierophantTreeOfLife x:Name="hierophantTreeOfLifeInstance"/>
                     </TabItem>
-                    <TabItem Header="Lurianic">
+                    <TabItem Header="Lurianic"
+                             x:Name="tiLurianicTreeOfLife">
                         <hiero:LurianicTreeOfLife x:Name="lurianicTreeOfLifeInstance"/>
                     </TabItem>
 

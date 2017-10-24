@@ -75,6 +75,20 @@ namespace NineWorldsDeep.Hierophant
             }
         }
 
+        public void AddAsGroupToCurrentSemanticMap(SemanticMap semanticMap)
+        {
+            if(CurrentSemanticMap != null && semanticMap != null)
+            {
+                if (string.IsNullOrWhiteSpace(semanticMap.Name))
+                {
+                    semanticMap.Name = AutoGenerateGroupName();
+                }
+
+                CurrentSemanticMap.AddAsGroup(semanticMap);
+                DisplaySemanticMap(CurrentSemanticMap); //refresh
+            }
+        }
+
         //public void DisplaySemanticMapToDataGrid(SemanticMap semanticMap)
         //{
         //    CurrentSemanticMap = semanticMap;
@@ -102,39 +116,21 @@ namespace NineWorldsDeep.Hierophant
 
             gridPane.DisplaySemanticMap(semanticMap);            
         }
+        
+        private string AutoGenerateGroupName()
+        {
+            int i = 0;
+            string autoGenName;
 
-
-        //private void DisplaySemanticMapToDataGrid(string semanticGroupName, SemanticMap semanticMap)
-        //{
-        //    List<string> columnNames = new List<string>();
-        //    EnsureSemanticGroupGrid(semanticGroupName);
-        //    var dgrid = semanticGroupNamesToDataGrids[semanticGroupName];
-        //    dgrid.ItemsSource = semanticMap.AsDictionary();
-
-        //    //get all keys in all semantic definition as one list (for column names)
-        //    foreach (SemanticDefinition def in semanticMap.SemanticDefinitions)
-        //    {
-        //        foreach (string key in def.ColumnNames)
-        //        {
-        //            //store distinct keys (for column names)
-        //            if (!columnNames.Contains(key))
-        //            {
-
-        //                columnNames.Add(key);
-        //            }
-        //        }
-        //    }
-
-        //    //add column for each columnName
-        //    foreach (string colName in columnNames)
-        //    {
-        //        DataGridTextColumn col = new DataGridTextColumn();
-        //        col.Header = colName;
-        //        col.Binding = new Binding(string.Format("Value[{0}]", colName));
-        //        dgrid.Columns.Add(col);
-        //    }
-        //}
-
+            do
+            {
+                i++;
+                autoGenName = "Semantic Group " + i;
+            }
+            while (CurrentSemanticMap.HasGroup(autoGenName));
+            return autoGenName;
+        }
+        
         private void EnsureSemanticGroupGrid(string semanticGroupName)
         {
             //prevent overwrite of existing groups
@@ -183,6 +179,16 @@ namespace NineWorldsDeep.Hierophant
             }
         }
 
+        private void RemoveSemanticGroupGridPane(string semanticGroupName)
+        {
+
+        }
+
+        private void Refresh()
+        {
+            DisplaySemanticMap(CurrentSemanticMap);
+        }
+
         #endregion
 
         #region event handlers
@@ -194,15 +200,7 @@ namespace NineWorldsDeep.Hierophant
                 CurrentSemanticMap = new SemanticMap();
             }
 
-            int i = 0;
-            string autoGenName;
-
-            do
-            {
-                i++;
-                autoGenName = "Semantic Group " + i;
-            }
-            while (CurrentSemanticMap.HasGroup(autoGenName));
+            string autoGenName = AutoGenerateGroupName();
 
             var name = UI.Prompt.Input("enter a group name: ", autoGenName);
 
@@ -210,7 +208,7 @@ namespace NineWorldsDeep.Hierophant
             {
                 //creates it if it doesn't exist
                 CurrentSemanticMap.SemanticGroup(name);
-                DisplaySemanticMap(CurrentSemanticMap);
+                Refresh();
             }
         }
 
@@ -243,6 +241,36 @@ namespace NineWorldsDeep.Hierophant
                 if (pane != null)
                 {
                     pane.RefreshFromMap();
+                }
+            }
+        }
+
+        private void MenuItemChangeName_Click(object sender, RoutedEventArgs e)
+        {
+            MenuItem menuItem = sender as MenuItem;
+
+            if (menuItem != null)
+            {
+                var tabItem =
+                    ((ContextMenu)menuItem.Parent).PlacementTarget as TabItem;
+
+                if (tabItem != null)
+                {
+                    string currentGroupName = tabItem.Header.ToString();
+                    string newName = UI.Prompt.Input("Enter new name", currentGroupName);
+
+                    if (!string.IsNullOrWhiteSpace(newName) && !newName.Equals(currentGroupName))
+                    {
+                        CurrentSemanticMap.RenameGroup(currentGroupName, newName);
+
+                        if (semanticGroupNamesToDataGrids.ContainsKey(currentGroupName))
+                        {
+                            semanticGroupNamesToDataGrids.Remove(currentGroupName);
+                        }
+
+                        tcSemanticGroups.Items.Remove(tabItem);
+                        Refresh();
+                    }
                 }
             }
         }

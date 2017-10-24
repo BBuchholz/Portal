@@ -96,6 +96,21 @@ namespace NineWorldsDeep.Hierophant
             
         }
 
+        public void AddAsGroup(SemanticMap semanticMap)
+        {
+            if (string.IsNullOrWhiteSpace(semanticMap.Name))
+            {
+                throw new Exception("semantic map must have a name to be added to another map as a group");
+            }
+
+            SemanticMap groupMap = SemanticGroup(semanticMap.Name);
+
+            foreach(var def in semanticMap.SemanticDefinitions)
+            {
+                groupMap.Add(def);
+            }
+        }
+
         /// <summary>
         /// will add to both this map and the group map specified.
         /// 
@@ -148,6 +163,20 @@ namespace NineWorldsDeep.Hierophant
         public bool ContainsKey(SemanticKey semanticKey)
         {
             return this.keysToDefs.ContainsKey(semanticKey);
+        }
+
+        public void RenameGroup(string currentGroupName, string newName)
+        {
+            if (groupNamesToGroupMaps.ContainsKey(currentGroupName))
+            {
+                var currentGroupMap = groupNamesToGroupMaps[currentGroupName];
+
+                groupNamesToGroupMaps.Remove(currentGroupName);
+
+                currentGroupMap.Name = newName;
+
+                AddAsGroup(currentGroupMap);
+            }
         }
 
         #endregion

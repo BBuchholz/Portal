@@ -66,6 +66,16 @@ namespace NineWorldsDeep.Hierophant
             grid.DisplaySemanticMap(semanticMap);
         }
 
+        public void AddAsGroupToSelectedSemanticSet(SemanticMap semanticMap)
+        {
+            SemanticGrid semGrid = tcSemanticSets.SelectedContent as SemanticGrid;
+
+            if (semGrid != null)
+            {
+                semGrid.AddAsGroupToCurrentSemanticMap(semanticMap);
+            }
+        }
+
         #endregion
         
         #region private helper methods

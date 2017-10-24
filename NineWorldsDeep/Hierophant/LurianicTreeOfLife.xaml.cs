@@ -46,7 +46,7 @@ namespace NineWorldsDeep.Hierophant
         {
             get
             {
-                throw new NotImplementedException();
+                return UtilsHierophant.GetHighlightedKeys(keysToCouplings);
             }
         }
 
@@ -73,9 +73,9 @@ namespace NineWorldsDeep.Hierophant
         }
 
         #endregion
-        
-        #region private helper methods
 
+        #region private helper methods
+        
         private Sephirah AddSephirahCoupling(HierophantCanvasElement canvasElement, string sephirahName)
         {
             Sephirah seph = new Sephirah(sephirahName);

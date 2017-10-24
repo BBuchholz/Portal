@@ -40,7 +40,7 @@ namespace NineWorldsDeep.Hierophant
         {
             get
             {
-                throw new NotImplementedException();
+                return UtilsHierophant.GetHighlightedKeys(keysToCouplings);
             }
         }
 

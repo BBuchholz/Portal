@@ -25,7 +25,31 @@
         <TabControl x:Name="tcSemanticGroups" 
                     Grid.Row="0"
                     TabStripPlacement="Bottom"
-                    SelectionChanged="tcSemanticGroups_SelectionChanged">            
+                    SelectionChanged="tcSemanticGroups_SelectionChanged">
+            
+            <!-- test adding this -->
+            <TabControl.ItemContainerStyle>
+                <Style TargetType="{x:Type TabItem}">
+                    <Setter Property="ContextMenu">
+                        <Setter.Value>
+                            <ContextMenu Name="cmTabItemHeader" 
+                                         StaysOpen="true" 
+                                         Background="WhiteSmoke">
+
+                                <MenuItem Header="Change Name">
+                                    <MenuItem.Style>
+                                        <Style TargetType="MenuItem">
+                                            <EventSetter Event="Click"
+                                                         Handler="MenuItemChangeName_Click"/>
+                                        </Style>
+                                    </MenuItem.Style>
+                                </MenuItem>
+
+                            </ContextMenu>
+                        </Setter.Value>
+                    </Setter>
+                </Style>
+            </TabControl.ItemContainerStyle>
             
         </TabControl>
         

@@ -55,8 +55,29 @@ namespace NineWorldsDeep.Tapestry.NodeUI
 
         #region private helper methods
 
+        /// <summary>
+        /// gets the tree for the currently selected tab item
+        /// </summary>
+        /// <returns></returns>
+        private ISemanticallyAddressable GetActiveTree()
+        {
+            //TabItem tabItem = tcTrees.SelectedItem as TabItem;
 
+            //if(tabItem == tiHierophantTreeOfLife)
+            //{
+            //    return hierophantTreeOfLifeInstance;
+            //}
 
+            //if(tabItem == tiLurianicTreeOfLife)
+            //{
+            //    return lurianicTreeOfLifeInstance;
+            //}
+
+            //return null;
+
+            return tcTrees.SelectedContent as ISemanticallyAddressable;
+        }
+        
         #endregion
 
         #region VertexClicked event
@@ -108,13 +129,29 @@ namespace NineWorldsDeep.Tapestry.NodeUI
         }
 
         private void btnSendAllKeys_Click(object sender, RoutedEventArgs e)
-        {
+        {            
+            ISemanticallyAddressable tree = GetActiveTree();
+            SemanticMap semanticMap = new SemanticMap();
 
+            foreach (SemanticKey semKey in tree.AllSemanticKeys)
+            {
+                semanticMap.Add(new SemanticDefinition(semKey));
+            }
+
+            semanticMatrix.DisplaySemanticMap(semanticMap);
         }
 
         private void btnSendHighlightedKeyGroup_Click(object sender, RoutedEventArgs e)
         {
+            ISemanticallyAddressable tree = GetActiveTree();
+            SemanticMap semanticMap = new SemanticMap();
 
+            foreach (SemanticKey semKey in tree.HighlightedSemanticKeys)
+            {
+                semanticMap.Add(new SemanticDefinition(semKey));
+            }
+
+            semanticMatrix.AddAsGroupToSelectedSemanticSet(semanticMap);
         }
 
         #endregion

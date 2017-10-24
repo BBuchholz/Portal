@@ -1,4 +1,5 @@
 ﻿using NineWorldsDeep.Hive;
+using NineWorldsDeep.Tapestry.NodeUI;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -35,16 +36,34 @@ namespace NineWorldsDeep.Hierophant
             return def;
         }
 
+        public static IEnumerable<SemanticKey> GetHighlightedKeys(
+            Dictionary<SemanticKey, HierophantUiCoupling> keysToCouplings)
+        {
+            List<SemanticKey> semKeys = new List<SemanticKey>();
+            
+            foreach(SemanticKey semKey in keysToCouplings.Keys)
+            {
+                var coupling = keysToCouplings[semKey];
+
+                if (coupling.Highlighted)
+                {
+                    semKeys.Add(semKey);
+                }
+            }
+
+            return semKeys;
+        }
+
         //public static SemanticMap MockMap2()
         //{
         //    var semanticMap = new SemanticMap();
-            
+
         //    semanticMap.Add(MockDefPlanet(new SemanticKey("testKey2"), "Venus", "Salt", "Libra", "Yellow"));
         //    semanticMap.Add(MockDefHerb(new SemanticKey("testKey3"), "Aconite", "Obsidian", "Black"));
 
         //    return semanticMap;
         //}
-        
+
         //public static SemanticMap MockMap1()
         //{
         //    var semanticMap = new SemanticMap();

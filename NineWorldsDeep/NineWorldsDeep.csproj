@@ -56,10 +56,10 @@
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <PropertyGroup>
-    <ManifestCertificateThumbprint>54EA530A9DD39D7246150AF6FCA463C83C9FBA29</ManifestCertificateThumbprint>
+    <ManifestCertificateThumbprint>420F9956AEF612EEA1D305B8AF03CA8E3D66FC90</ManifestCertificateThumbprint>
   </PropertyGroup>
   <PropertyGroup>
-    <ManifestKeyFile>NineWorldsDeep_1_TemporaryKey.pfx</ManifestKeyFile>
+    <ManifestKeyFile>NineWorldsDeep_2_TemporaryKey.pfx</ManifestKeyFile>
   </PropertyGroup>
   <PropertyGroup>
     <GenerateManifests>true</GenerateManifests>
@@ -961,6 +961,7 @@
     </EmbeddedResource>
     <None Include="Interop\SqliteMtpInteropBugFix.pdf" />
     <None Include="NineWorldsDeep_1_TemporaryKey.pfx" />
+    <None Include="NineWorldsDeep_2_TemporaryKey.pfx" />
     <None Include="NineWorldsDeep_TemporaryKey.pfx" />
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
