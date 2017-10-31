@@ -1,4 +1,5 @@
 ﻿using NineWorldsDeep.Core;
+using NineWorldsDeep.Hierophant;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -10,11 +11,9 @@ namespace NineWorldsDeep.Hive
 {
     public class ConfigHive
     {
-        private static string HIEROPHANT_SUFFIX = "nwd-hierophant";
-
         public static string GenerateHiveHierophantXmlFileName()
         {
-            return NwdUtils.GetTimeStamp_yyyyMMddHHmmss() + "-" + HIEROPHANT_SUFFIX + ".xml";
+            return NwdUtils.GetTimeStamp_yyyyMMddHHmmss() + "-" + ConfigHierophant.HIEROPHANT_SUFFIX + ".xml";
         }
 
         /// <summary>
@@ -23,13 +22,13 @@ namespace NineWorldsDeep.Hive
         /// <returns></returns>
         public static List<string> GetHiveHierophantXmlImportFilePaths()
         {
-            return GetHiveXmlImportFilePathsBySuffix(HIEROPHANT_SUFFIX);
+            return GetHiveXmlImportFilePathsBySuffix(ConfigHierophant.HIEROPHANT_SUFFIX);
         }
 
         public static List<string> TestingGetHiveHierophantXmlImportFilePaths()
         {
             return GetHiveXmlImportFilePathsBySuffix(
-                HIEROPHANT_SUFFIX, 
+                ConfigHierophant.HIEROPHANT_SUFFIX, 
                 new HiveRoot()
                 {
                     HiveRootName = "test-root"
@@ -171,38 +170,6 @@ namespace NineWorldsDeep.Hive
         private static string IMAGE_SUB_FOLDER = "media/images/incoming";
         private static string PDFS_SUB_FOLDER = "media/pdfs/incoming";
         internal static readonly string STAGING_ROOT_NAME = "staging";
-
-        public static string GetMostRecentHierophantV5XmlArchiveFilePath()
-        {
-            string mostRecentFilePath = null;
-
-            string xmlDir = Configuration.HierophantV5XmlFolder;
-
-            if (Directory.Exists(xmlDir))
-            {
-                List<string> hierophantFilePaths = new List<string>();
-
-                foreach (string filePath in
-                            Directory.GetFiles(xmlDir,
-                                                "*.xml",
-                                                SearchOption.TopDirectoryOnly))
-                {
-                    string fileName = System.IO.Path.GetFileName(filePath);
-
-                    if (fileName.ToLower().Contains(HIEROPHANT_SUFFIX))
-                    {
-                        hierophantFilePaths.Add(filePath);
-                    }
-                }
-
-                if(hierophantFilePaths.Count > 0)
-                {
-                    mostRecentFilePath = hierophantFilePaths.OrderBy(f => f).Last();
-                }
-            }
-
-            return mostRecentFilePath;
-        }
 
         public static List<string> HiveRootSubfolderPaths()
         {

@@ -1,6 +1,7 @@
 ﻿using Microsoft.VisualBasic;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -10,9 +11,20 @@ namespace NineWorldsDeep.UI
 {
     public class Prompt
     {
+        /// <summary>
+        /// returns selected file from file selection dialog, default
+        /// path is the folder to start in, filters to only show XML files
+        /// </summary>
+        /// <param name="defaultPath"></param>
+        /// <returns></returns>
         public static string ForXmlFileSave(string defaultPath)
         {
-            return ForFileSave(defaultPath, "Xml files (*.xml)|*.xml");
+            var savePath = ForFileSave(defaultPath, "Xml files (*.xml)|*.xml");
+
+            //ensure xml extension
+            savePath = Path.ChangeExtension(savePath, "xml");
+
+            return savePath;
         }
 
         public static string ForXmlFileLoad(string defaultPath)

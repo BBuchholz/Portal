@@ -252,12 +252,48 @@ namespace NineWorldsDeep.Hierophant
 
         private void btnOpenSemanticSetsFromXmlFile_Click(object sender, RoutedEventArgs e)
         {
-            UI.Display.Message("implement open here");
+            string importFilePath =
+                UI.Prompt.ForXmlFileLoad(ConfigHierophant.HierophantV5XmlFolder);
+
+            if (!string.IsNullOrWhiteSpace(importFilePath))
+            {
+                var maps = UtilsHierophant.ImportXml(importFilePath);
+
+                foreach (SemanticMap map in maps)
+                {
+                    if(semanticSetNamesToSemanticGrids.ContainsKey(map.Name))
+                    {
+                        UI.Display.Message("semantic set [" + map.Name + 
+                            "] already exists. Either clear or rename " + 
+                            "existing set to avoid conflicts. Open operation aborted. ");
+
+                        return;
+                    }
+
+                    DisplaySemanticMap(map);
+                }
+            }
+            else
+            {
+                UI.Display.Message("Aborted Open Operation");
+            }
         }
 
         private void btnSaveSemanticSetsToXmlFile_Click(object sender, RoutedEventArgs e)
         {
-            UI.Display.Message("implement save here");
+            string saveFilePath = 
+                UI.Prompt.ForXmlFileSave(ConfigHierophant.HierophantV5XmlFolder);
+
+            if (!string.IsNullOrWhiteSpace(saveFilePath))
+            {  
+                IEnumerable<SemanticMap> maps = GetSemanticMaps();
+                var fileName = UtilsHierophant.ExportToXml(maps, saveFilePath);
+                UI.Display.Message("semantic maps exported as " + fileName);
+            }
+            else
+            {
+                UI.Display.Message("Aborted Save Operation");
+            }
         }
 
         #endregion

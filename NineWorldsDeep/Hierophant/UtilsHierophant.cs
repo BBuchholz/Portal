@@ -113,16 +113,23 @@ namespace NineWorldsDeep.Hierophant
         }
 
         /// <summary>
-        /// generates xml file and writes it to all active hive roots
+        /// generates xml file and writes it to specified filename in 
+        /// the hierophant V5 folder (NWD/hierophant).
+        /// 
+        /// if the filename is null or whitespace, a timestamped archive
+        /// name will be generated
         /// </summary>
         /// <returns>filename of exported file, without path</returns>
-        public static string ExportToXml(IEnumerable<SemanticMap> semanticMaps)
+        public static string ExportToXml(IEnumerable<SemanticMap> semanticMaps, string fileName = null)
         {
             var doc =
                 Xml.Xml.Export(semanticMaps);
 
-            string fileName = ConfigHive.GenerateHiveHierophantXmlFileName();
-            
+            if (string.IsNullOrWhiteSpace(fileName))
+            {
+                fileName = ConfigHive.GenerateHiveHierophantXmlFileName();
+            }
+
             //this supports V5 configuration (non-Hive)
             IEnumerable<string> paths = ConfigHive.GetHiveFoldersForXmlExport();
 
@@ -151,7 +158,12 @@ namespace NineWorldsDeep.Hierophant
                 StringComparison.CurrentCultureIgnoreCase);
         }
 
-        public static List<SemanticMap> ImportXml()
+        /// <summary>
+        /// imports all maps from xml file, if importFilePath is 
+        /// null or whitespace, it defaults to most recent archive file
+        /// </summary>
+        /// <returns></returns>
+        public static List<SemanticMap> ImportXml(string importFilePath = null)
         {
             //uncomment for V6
             //IEnumerable<string> paths = 
@@ -164,14 +176,17 @@ namespace NineWorldsDeep.Hierophant
             //V5
             List<string> paths = new List<string>();
 
-            string archiveFilePath = ConfigHive.GetMostRecentHierophantV5XmlArchiveFilePath();
-            
+            if (string.IsNullOrWhiteSpace(importFilePath))
+            {
+                importFilePath = ConfigHierophant.GetMostRecentHierophantV5XmlArchiveFilePath();
+            }
+
             List<SemanticMap> semanticMaps = new List<SemanticMap>();
 
-            if (archiveFilePath != null)
+            if (importFilePath != null)
             {
                 //all this is a bit hackish for V5, V6 will change all of this, not too worried
-                paths.Add(archiveFilePath);
+                paths.Add(importFilePath);
 
                 foreach (string path in paths)
                 {
