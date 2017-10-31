@@ -61,11 +61,21 @@ namespace NineWorldsDeep.Hive
         /// <returns></returns>
         public static List<string> GetHiveFoldersForXmlExport()
         {
+            //hive support scheduled for V6
+            bool useHiveFolderList = false;
+
             List<string> allFolders = new List<string>();
 
-            foreach (HiveRoot hr in UtilsHive.GetActiveRoots())
+            if (useHiveFolderList)
             {
-                allFolders.Add(HiveRootXmlFolderPath(hr));
+                foreach (HiveRoot hr in UtilsHive.GetActiveRoots())
+                {
+                    allFolders.Add(HiveRootXmlFolderPath(hr));
+                }
+            }
+            else
+            {
+                allFolders.Add(Configuration.HierophantV5XmlFolder);
             }
 
             return allFolders;
@@ -161,6 +171,38 @@ namespace NineWorldsDeep.Hive
         private static string IMAGE_SUB_FOLDER = "media/images/incoming";
         private static string PDFS_SUB_FOLDER = "media/pdfs/incoming";
         internal static readonly string STAGING_ROOT_NAME = "staging";
+
+        public static string GetMostRecentHierophantV5XmlArchiveFilePath()
+        {
+            string mostRecentFilePath = null;
+
+            string xmlDir = Configuration.HierophantV5XmlFolder;
+
+            if (Directory.Exists(xmlDir))
+            {
+                List<string> hierophantFilePaths = new List<string>();
+
+                foreach (string filePath in
+                            Directory.GetFiles(xmlDir,
+                                                "*.xml",
+                                                SearchOption.TopDirectoryOnly))
+                {
+                    string fileName = System.IO.Path.GetFileName(filePath);
+
+                    if (fileName.ToLower().Contains(HIEROPHANT_SUFFIX))
+                    {
+                        hierophantFilePaths.Add(filePath);
+                    }
+                }
+
+                if(hierophantFilePaths.Count > 0)
+                {
+                    mostRecentFilePath = hierophantFilePaths.OrderBy(f => f).Last();
+                }
+            }
+
+            return mostRecentFilePath;
+        }
 
         public static List<string> HiveRootSubfolderPaths()
         {

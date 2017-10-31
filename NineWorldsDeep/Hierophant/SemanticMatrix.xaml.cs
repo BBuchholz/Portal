@@ -250,6 +250,16 @@ namespace NineWorldsDeep.Hierophant
             }
         }
 
+        private void btnOpenSemanticSetsFromXmlFile_Click(object sender, RoutedEventArgs e)
+        {
+            UI.Display.Message("implement open here");
+        }
+
+        private void btnSaveSemanticSetsToXmlFile_Click(object sender, RoutedEventArgs e)
+        {
+            UI.Display.Message("implement save here");
+        }
+
         #endregion
 
         #region group selected event
@@ -259,9 +269,8 @@ namespace NineWorldsDeep.Hierophant
         protected virtual void OnSemanticMatrixGroupSelected(SemanticGridGroupSelectedEventArgs args)
         {
             SemanticMatrixGroupSelected?.Invoke(this, args);
-        }      
+        }
 
         #endregion
-
     }
 }

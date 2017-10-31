@@ -17,6 +17,10 @@
                      UriSource="/ResourceImages/icon_unarchive_black_24dp_1x.png"/>
         <BitmapImage x:Key="iconDeleteForeverSmall"
                      UriSource="/ResourceImages/icon_delete_forever_black_24dp_1x.png"/>
+        <BitmapImage x:Key="iconOpen"
+                     UriSource="/ResourceImages/ic_open_in_new_black_24dp_1x.png"/>
+        <BitmapImage x:Key="iconSave"
+                     UriSource="/ResourceImages/ic_save_black_24dp_1x.png"/>
 
     </UserControl.Resources>
     
@@ -75,9 +79,27 @@
                 </Button.Content>
             </Button>
 
+            <Button x:Name="btnOpenSemanticSetsFromXmlFile"
+                    Margin="8"
+                    ToolTip="Open Semantic Sets From Xml File"
+                    Click="btnOpenSemanticSetsFromXmlFile_Click">
+                <Button.Content>
+                    <Image Source="{StaticResource iconOpen}"/>
+                </Button.Content>
+            </Button>
+
+            <Button x:Name="btnSaveSemanticSetsToXmlFile"
+                    Margin="8"
+                    ToolTip="Save Semantic Sets To Xml File"
+                    Click="btnSaveSemanticSetsToXmlFile_Click">
+                <Button.Content>
+                    <Image Source="{StaticResource iconSave}"/>
+                </Button.Content>
+            </Button>
+
             <Button x:Name="btnImportSemanticSets"
                     Margin="8"
-                    ToolTip="Import Semantic Sets From Xml"
+                    ToolTip="Import Semantic Sets From Most Recent Timestamped Xml Archive"
                     Click="btnImportSemanticSets_Click">
                 <Button.Content>
                     <Image Source="{StaticResource iconUnarchiveSmall}"/>
@@ -86,7 +108,7 @@
 
             <Button x:Name="btnExportSemanticSets"
                     Margin="8"
-                    ToolTip="Export Current Semantic Sets As Xml"
+                    ToolTip="Export All Semantic Sets To Timestamped Xml Archive"
                     Click="btnExportSemanticSets_Click">
                 <Button.Content>
                     <Image Source="{StaticResource iconArchiveSmall}"/>

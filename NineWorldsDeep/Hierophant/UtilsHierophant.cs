@@ -122,11 +122,13 @@ namespace NineWorldsDeep.Hierophant
                 Xml.Xml.Export(semanticMaps);
 
             string fileName = ConfigHive.GenerateHiveHierophantXmlFileName();
+            
+            //this supports V5 configuration (non-Hive)
+            IEnumerable<string> paths = ConfigHive.GetHiveFoldersForXmlExport();
 
-            //uncomment when done testing
-            //IEnumerable<string> paths = ConfigHive.GetHiveFoldersForXmlExport();
-            List<string> paths = new List<string>();
-            paths.Add(@"C:\NWD-SYNC\hive\test-root\xml\incoming"); //just for testing
+            //just for testing
+            //List<string> paths = new List<string>();
+            //paths.Add(@"C:\NWD-SYNC\hive\test-root\xml\incoming"); 
 
             foreach (string folderPath in paths)
             {
@@ -151,17 +153,30 @@ namespace NineWorldsDeep.Hierophant
 
         public static List<SemanticMap> ImportXml()
         {
-            //uncomment when done testing
+            //uncomment for V6
             //IEnumerable<string> paths = 
             //    ConfigHive.GetHiveHierophantXmlImportFilePaths();
-            IEnumerable<string> paths =
-                ConfigHive.TestingGetHiveHierophantXmlImportFilePaths(); //just for testing
+
+            //just for testing
+            //IEnumerable<string> paths =
+            //    ConfigHive.TestingGetHiveHierophantXmlImportFilePaths();
+
+            //V5
+            List<string> paths = new List<string>();
+
+            string archiveFilePath = ConfigHive.GetMostRecentHierophantV5XmlArchiveFilePath();
             
             List<SemanticMap> semanticMaps = new List<SemanticMap>();
 
-            foreach (string path in paths)
+            if (archiveFilePath != null)
             {
-                semanticMaps.AddRange(Xml.Xml.ImportHierophantSemanticMaps(path));
+                //all this is a bit hackish for V5, V6 will change all of this, not too worried
+                paths.Add(archiveFilePath);
+
+                foreach (string path in paths)
+                {
+                    semanticMaps.AddRange(Xml.Xml.ImportHierophantSemanticMaps(path));
+                }
             }
 
             return semanticMaps;

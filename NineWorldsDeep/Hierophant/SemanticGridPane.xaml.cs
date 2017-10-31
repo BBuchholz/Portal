@@ -20,6 +20,8 @@ namespace NineWorldsDeep.Hierophant
     /// </summary>
     public partial class SemanticGridPane : UserControl
     {
+        List<string> columnNames = new List<string>();
+
         #region properties
 
         public SemanticMap CurrentSemanticMap { get; private set; }
@@ -44,7 +46,21 @@ namespace NineWorldsDeep.Hierophant
 
             if (CurrentSemanticMap != null)
             {
-                List<string> columnNames = new List<string>();
+                
+                /* 
+                 * 
+                 * TODO: mod here to speed up column load
+                 * 
+                 * move column names to a property and if columnNames doesn't contain, add to newColumns, then just cycle
+                 * 
+                 * 
+                 * NB: currently learning MVVM and I'm nearly certain it will make this a non-issue, so
+                 * feel free to leave this as is for now, it's really slow but it works and
+                 * we will replace it in the future
+                 * 
+                 */
+
+                List<string> newColumns = new List<string>();
 
                 dgrid.ItemsSource = CurrentSemanticMap.AsDictionary().ToList();
 
@@ -56,13 +72,13 @@ namespace NineWorldsDeep.Hierophant
                         //store distinct keys (for column names)
                         if (!columnNames.Contains(colName))
                         {
-                            columnNames.Add(colName);
+                            newColumns.Add(colName);
                         }
                     }
                 }
 
                 //add column for each columnName
-                foreach (string colName in columnNames)
+                foreach (string colName in newColumns)
                 {
                     //if (!DataGridColumnHeaderExists(colName))
                     //{
@@ -141,6 +157,7 @@ namespace NineWorldsDeep.Hierophant
             if (!DataGridColumnHeaderExists(columnName) &&
                 !string.IsNullOrWhiteSpace(columnName))
             {
+                columnNames.Add(columnName);
                 DataGridTextColumn col = new DataGridTextColumn();
                 col.Header = columnName;
                 col.Binding = new Binding(string.Format("Value[{0}]", columnName));

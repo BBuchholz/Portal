@@ -27,7 +27,7 @@
     <UpdatePeriodically>false</UpdatePeriodically>
     <UpdateRequired>false</UpdateRequired>
     <MapFileExtensions>true</MapFileExtensions>
-    <ApplicationRevision>131</ApplicationRevision>
+    <ApplicationRevision>132</ApplicationRevision>
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <PublishWizardCompleted>true</PublishWizardCompleted>
@@ -1022,6 +1022,10 @@
     <Resource Include="ResourceImages\icon_format_line_spacing_black_24dp_2x.png" />
     <Resource Include="ResourceImages\icon_low_priority_black_24dp_1x.png" />
     <Resource Include="ResourceImages\icon_low_priority_black_24dp_2x.png" />
+    <Resource Include="ResourceImages\ic_open_in_new_black_24dp_1x.png" />
+    <Resource Include="ResourceImages\ic_open_in_new_black_24dp_2x.png" />
+    <Resource Include="ResourceImages\ic_save_black_24dp_1x.png" />
+    <Resource Include="ResourceImages\ic_save_black_24dp_2x.png" />
     <Content Include="SQLite.Interop.dll">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

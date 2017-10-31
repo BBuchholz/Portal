@@ -197,6 +197,8 @@ namespace NineWorldsDeep.Core
 
         public static string CameraFolder { get { return ProcessTestMode(@"NWD-AUX\camera"); } }
 
+        public static string HierophantV5XmlFolder { get { return ProcessTestMode(@"NWD\hierophant"); } }
+
         public static void EnsureDirectories()
         {
             //make sure directories exist, CreateDirectory() checks if exists first
@@ -207,6 +209,7 @@ namespace NineWorldsDeep.Core
             Directory.CreateDirectory(Configuration.PdfsFolder);
             Directory.CreateDirectory(Configuration.ImagesFolder);
             Directory.CreateDirectory(Configuration.VoiceMemosFolder);
+            Directory.CreateDirectory(Configuration.HierophantV5XmlFolder);
         }
 
         public static bool FileIsAudio(string path)
