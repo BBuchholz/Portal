@@ -21,17 +21,29 @@ namespace NineWorldsDeep.Tapestry.NodeUI
     /// </summary>
     public partial class ArchivistSourceExcerptDisplay : UserControl
     {
+        #region fields
+
         private ArchivistSourceExcerptNode sourceExcerptNode;
+
+        #endregion
+
+        #region creation
 
         public ArchivistSourceExcerptDisplay()
         {
             InitializeComponent();
         }
 
+        #endregion
+
+        #region public interface
+
         internal void Display(ArchivistSourceExcerptNode aseNode)
         {
             this.sourceExcerptNode = aseNode;
             UI.Display.Message(aseNode.SourceExcerpt.ExcerptValue);
         }
+
+        #endregion
     }
 }

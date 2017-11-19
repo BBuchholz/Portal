@@ -24,11 +24,17 @@ namespace NineWorldsDeep.Tapestry.NodeUI
     /// </summary>
     public partial class ArchivistMasterDisplay : UserControl
     {
+        #region fields
+
         private ArchivistSubsetDb db;
 
         //async related 
         private readonly SynchronizationContext syncContext;
         private DateTime previousTime = DateTime.Now;
+
+        #endregion
+
+        #region creation
 
         public ArchivistMasterDisplay()
         {
@@ -40,26 +46,29 @@ namespace NineWorldsDeep.Tapestry.NodeUI
             LoadOrderBy();
         }
 
-        private void LoadOrderBy()
+        #endregion
+
+        #region properties
+
+        private ArchivistSourceType SelectedSourceType
         {
-            List<string> tempDemo = new List<string>();
-            tempDemo.Add("Order By Options Go Here");
-            cmbOrderBy.ItemsSource = tempDemo;
+            get
+            {
+                return (ArchivistSourceType)cmbSourceTypes.SelectedItem;
+            }
         }
 
-        private void LoadSourceTypes()
+        private ArchivistSourceType SelectedSourceTypeForSourceAdd
         {
-            List<ArchivistSourceType> lst = db.GetAllSourceTypes();
-            cmbSourceTypes.ItemsSource = lst;
-            cmbAddSourceSourceType.ItemsSource = lst;
+            get
+            {
+                return (ArchivistSourceType)cmbAddSourceSourceType.SelectedItem;
+            }
         }
 
-        private void LoadSources(int sourceTypeId)
-        {
-            List<ArchivistSource> lst = 
-                db.GetSourceCoresForSourceTypeId(sourceTypeId);
-            lvSources.ItemsSource = lst;
-        }
+        #endregion
+
+        #region event handlers
 
         private void btnImportTextFiles_Click(object sender, RoutedEventArgs e)
         {
@@ -89,28 +98,7 @@ namespace NineWorldsDeep.Tapestry.NodeUI
                 OnSourceSelected(args);
             }
         }
-
-        #region SourceSelected event
-
-        protected virtual void OnSourceSelected(SourceSelectedEventArgs args)
-        {
-            SourceSelected?.Invoke(this, args);
-        }
-
-        public event EventHandler<SourceSelectedEventArgs> SourceSelected;
-
-        public class SourceSelectedEventArgs
-        {
-            public SourceSelectedEventArgs(ArchivistSourceNode sn)
-            {
-                SourceNode = sn;
-            }
-
-            public ArchivistSourceNode SourceNode { get; private set; }
-        }
-
-        #endregion
-
+        
         private void Expander_Expanded(object sender, RoutedEventArgs e)
         {
             ProcessExpanderState((Expander)sender);
@@ -119,38 +107,6 @@ namespace NineWorldsDeep.Tapestry.NodeUI
         private void Expander_Collapsed(object sender, RoutedEventArgs e)
         {
             ProcessExpanderState((Expander)sender);
-        }
-
-        /// <summary>
-        /// manages grid rows to share space between multiple expanded expanders
-        /// </summary>
-        /// <param name="expander"></param>
-        private void ProcessExpanderState(Expander expander)
-        {
-            Grid parent = FindAncestor<Grid>(expander);
-            int rowIndex = Grid.GetRow(expander);
-
-            if (parent.RowDefinitions.Count > rowIndex && rowIndex >= 0)
-                parent.RowDefinitions[rowIndex].Height =
-                    (expander.IsExpanded ? new GridLength(1, GridUnitType.Star) : GridLength.Auto);
-        }
-
-        public static T FindAncestor<T>(DependencyObject current)
-            where T : DependencyObject
-        {
-            // Need this call to avoid returning current object if it is the 
-            // same type as parent we are looking for
-            current = VisualTreeHelper.GetParent(current);
-
-            while (current != null)
-            {
-                if (current is T)
-                {
-                    return (T)current;
-                }
-                current = VisualTreeHelper.GetParent(current);
-            };
-            return null;
         }
 
         private void btnAddSourceType_Click(object sender, RoutedEventArgs e)
@@ -169,22 +125,6 @@ namespace NineWorldsDeep.Tapestry.NodeUI
             }
         }
 
-        private ArchivistSourceType SelectedSourceType
-        {
-            get
-            {
-                return (ArchivistSourceType)cmbSourceTypes.SelectedItem; 
-            }
-        }
-
-        private ArchivistSourceType SelectedSourceTypeForSourceAdd
-        {
-            get
-            {
-                return (ArchivistSourceType)cmbAddSourceSourceType.SelectedItem;
-            }
-        }
-
         private void btnAddSource_Click(object sender, RoutedEventArgs e)
         {
             /*
@@ -199,7 +139,7 @@ namespace NineWorldsDeep.Tapestry.NodeUI
             //var sType = (ArchivistSourceType)cmbAddSourceSourceType.SelectedItem;
             var sType = SelectedSourceTypeForSourceAdd;
 
-            if(sType == null)
+            if (sType == null)
             {
                 UI.Display.Message("source type not specified, aborting.");
                 return;
@@ -213,7 +153,7 @@ namespace NineWorldsDeep.Tapestry.NodeUI
             {
                 case "book":
 
-                    valid = Validate(txtAddSourceTitle) 
+                    valid = Validate(txtAddSourceTitle)
                         && Validate(txtAddSourceAuthor);
 
                     break;
@@ -259,6 +199,57 @@ namespace NineWorldsDeep.Tapestry.NodeUI
             }
         }
 
+        private void cmbOrderBy_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+
+        }
+
+        #endregion
+        
+        #region SourceSelected event
+
+        protected virtual void OnSourceSelected(SourceSelectedEventArgs args)
+        {
+            SourceSelected?.Invoke(this, args);
+        }
+
+        public event EventHandler<SourceSelectedEventArgs> SourceSelected;
+
+        public class SourceSelectedEventArgs
+        {
+            public SourceSelectedEventArgs(ArchivistSourceNode sn)
+            {
+                SourceNode = sn;
+            }
+
+            public ArchivistSourceNode SourceNode { get; private set; }
+        }
+
+        #endregion
+
+        #region private helper methods
+
+        private void LoadOrderBy()
+        {
+            List<string> tempDemo = new List<string>();
+            tempDemo.Add("Order By Options Go Here");
+            cmbOrderBy.ItemsSource = tempDemo;
+        }
+
+        private void LoadSourceTypes()
+        {
+            List<ArchivistSourceType> lst = db.GetAllSourceTypes();
+            cmbSourceTypes.ItemsSource = lst;
+            cmbAddSourceSourceType.ItemsSource = lst;
+        }
+
+        private void LoadSources(int sourceTypeId)
+        {
+            List<ArchivistSource> lst =
+                db.GetSourceCoresForSourceTypeId(sourceTypeId);
+            lvSources.ItemsSource = lst;
+        }
+
         private void ClearSourceEntryFields()
         {
             txtAddSourceTitle.Text = "";
@@ -271,7 +262,7 @@ namespace NineWorldsDeep.Tapestry.NodeUI
 
         private bool Validate(TextBox txt)
         {
-            if(txt.Text.Length == 0)
+            if (txt.Text.Length == 0)
             {
                 txt.Background = Brushes.Red;
                 return false;
@@ -282,10 +273,45 @@ namespace NineWorldsDeep.Tapestry.NodeUI
                 return true;
             }
         }
-
-        private void cmbOrderBy_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        
+        /// <summary>
+        /// manages grid rows to share space between multiple expanded expanders
+        /// </summary>
+        /// <param name="expander"></param>
+        private void ProcessExpanderState(Expander expander)
         {
+            Grid parent = FindAncestor<Grid>(expander);
+            int rowIndex = Grid.GetRow(expander);
 
+            if (parent.RowDefinitions.Count > rowIndex && rowIndex >= 0)
+                parent.RowDefinitions[rowIndex].Height =
+                    (expander.IsExpanded ? new GridLength(1, GridUnitType.Star) : GridLength.Auto);
         }
+
+        #endregion
+
+        #region public interface
+
+        public static T FindAncestor<T>(DependencyObject current)
+            where T : DependencyObject
+        {
+            // Need this call to avoid returning current object if it is the 
+            // same type as parent we are looking for
+            current = VisualTreeHelper.GetParent(current);
+
+            while (current != null)
+            {
+                if (current is T)
+                {
+                    return (T)current;
+                }
+                current = VisualTreeHelper.GetParent(current);
+            };
+            return null;
+        }
+
+        #endregion
+
+
     }
 }

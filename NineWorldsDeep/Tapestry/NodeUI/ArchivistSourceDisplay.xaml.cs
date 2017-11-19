@@ -23,8 +23,14 @@ namespace NineWorldsDeep.Tapestry.NodeUI
     /// </summary>
     public partial class ArchivistSourceDisplay : UserControl, ISourceExcerptDisplay
     {
+        #region fields
+
         private Db.Sqlite.ArchivistSubsetDb db;
         private ArchivistSourceNode sourceNode;
+
+        #endregion
+
+        #region creation
 
         public ArchivistSourceDisplay()
         {
@@ -32,6 +38,10 @@ namespace NineWorldsDeep.Tapestry.NodeUI
             db = new Db.Sqlite.ArchivistSubsetDb();
             Core.DataUpdateManager.Register(this);
         }
+
+        #endregion
+
+        #region public interface 
 
         public void Display(ArchivistSourceNode src)
         {
@@ -56,22 +66,37 @@ namespace NineWorldsDeep.Tapestry.NodeUI
             lvSourceExcerpts.ItemsSource = sourceNode.Source.Excerpts;            
         }
 
-        private void lvSourceExcerpts_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        #endregion
+
+        #region private helper methods
+
+        private void ProcessEntryInput()
         {
-            //mirrors ArchivistMasterDisplay
-            ArchivistSourceExcerpt ase = lvSourceExcerpts.SelectedItem as ArchivistSourceExcerpt;
+            string itemValue = txtSourceExcerptInput.Text;
 
-            if(ase != null)
+            if (!string.IsNullOrWhiteSpace(itemValue))
             {
-                ArchivistSourceExcerptNode nd = new ArchivistSourceExcerptNode(ase);
+                //process entry here
+                var excerpt = new ArchivistSourceExcerpt()
+                {
+                    ExcerptValue = itemValue,
+                    SourceId = sourceNode.Source.SourceId
+                };
 
-                SourceExcerptSelectedEventArgs args =
-                    new SourceExcerptSelectedEventArgs(nd);
+                excerpt.SourceExcerptId = db.EnsureCore(excerpt);
 
-                OnSourceExcerptSelected(args);
+                sourceNode.Source.Add(excerpt);
+
+                RefreshFromObject();
+
+                //for testing
+                //UI.Display.Message("you entered: " + itemValue);
             }
         }
 
+        #endregion
+
+        #region events
 
         #region SourceExcerptSelected event
 
@@ -94,6 +119,53 @@ namespace NineWorldsDeep.Tapestry.NodeUI
 
         #endregion
 
+        #region HyperlinkClicked event
+
+        //public void Hyperlink_TagClicked(object sender, RoutedEventArgs e)
+        //{
+        //    UI.Display.Message("clicked");
+        //}
+
+
+        protected virtual void OnHyperlinkClicked(HyperlinkClickedEventArgs args)
+        {
+            HyperlinkClicked?.Invoke(this, args);
+        }
+
+        public event EventHandler<HyperlinkClickedEventArgs> HyperlinkClicked;
+
+        public class HyperlinkClickedEventArgs
+        {
+            public HyperlinkClickedEventArgs(MediaTagNode tagNode)
+            {
+                MediaTagNode = tagNode;
+            }
+
+            public MediaTagNode MediaTagNode { get; private set; }
+        }
+
+        #endregion
+
+        #endregion
+
+        #region event handlers
+
+        private void lvSourceExcerpts_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            //mirrors ArchivistMasterDisplay
+            ArchivistSourceExcerpt ase = lvSourceExcerpts.SelectedItem as ArchivistSourceExcerpt;
+
+            if(ase != null)
+            {
+                ArchivistSourceExcerptNode nd = new ArchivistSourceExcerptNode(ase);
+
+                SourceExcerptSelectedEventArgs args =
+                    new SourceExcerptSelectedEventArgs(nd);
+
+                OnSourceExcerptSelected(args);
+            }
+        }
+
         private void txtSourceExcerptInput_KeyDown(object sender, KeyEventArgs e)
         {
             if (Keyboard.Modifiers == ModifierKeys.Alt && Keyboard.IsKeyDown(Key.Enter))
@@ -106,35 +178,6 @@ namespace NineWorldsDeep.Tapestry.NodeUI
         private void btnAddSourceExcerpt_Click(object sender, RoutedEventArgs e)
         {
             ProcessEntryInput();
-        }
-
-        public void Hyperlink_TagClicked(object sender, RoutedEventArgs e)
-        {
-            UI.Display.Message("clicked");
-        }
-
-        private void ProcessEntryInput()
-        {
-            string itemValue = txtSourceExcerptInput.Text;
-
-            if (!string.IsNullOrWhiteSpace(itemValue))
-            {
-                //process entry here
-                var excerpt = new ArchivistSourceExcerpt()
-                {
-                    ExcerptValue = itemValue,
-                    SourceId = sourceNode.Source.SourceId
-                };
-
-                excerpt.SourceExcerptId =  db.EnsureCore(excerpt);
-
-                sourceNode.Source.Add(excerpt);
-
-                RefreshFromObject();
-
-                //for testing
-                //UI.Display.Message("you entered: " + itemValue);
-            }
         }
 
         private void Hyperlink_OnClick(object sender, EventArgs e)
@@ -158,23 +201,6 @@ namespace NineWorldsDeep.Tapestry.NodeUI
                     OnHyperlinkClicked(args);
                 }
             }
-        }
-
-        protected virtual void OnHyperlinkClicked(HyperlinkClickedEventArgs args)
-        {
-            HyperlinkClicked?.Invoke(this, args);
-        }
-
-        public event EventHandler<HyperlinkClickedEventArgs> HyperlinkClicked;
-
-        public class HyperlinkClickedEventArgs
-        {
-            public HyperlinkClickedEventArgs(MediaTagNode tagNode)
-            {
-                MediaTagNode = tagNode;
-            }
-
-            public MediaTagNode MediaTagNode { get; private set; }
         }
 
         private void ButtonEditTags_Click(object sender, RoutedEventArgs e)
@@ -236,6 +262,6 @@ namespace NineWorldsDeep.Tapestry.NodeUI
             spTextBlock.Visibility = Visibility.Visible;
         }
 
-
+        #endregion
     }
 }
