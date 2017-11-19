@@ -37,6 +37,7 @@
         HiveMigration,
         HierophantVertexDetail,
         NullHierophantVertexDetail,
-        MuseV5Chord
+        MuseV5Chord,
+        ArchivistSourceExcerpt
     }
 }

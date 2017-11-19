@@ -58,8 +58,41 @@ namespace NineWorldsDeep.Tapestry.NodeUI
 
         private void lvSourceExcerpts_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            
+            //mirrors ArchivistMasterDisplay
+            ArchivistSourceExcerpt ase = lvSourceExcerpts.SelectedItem as ArchivistSourceExcerpt;
+
+            if(ase != null)
+            {
+                ArchivistSourceExcerptNode nd = new ArchivistSourceExcerptNode(ase);
+
+                SourceExcerptSelectedEventArgs args =
+                    new SourceExcerptSelectedEventArgs(nd);
+
+                OnSourceExcerptSelected(args);
+            }
         }
+
+
+        #region SourceExcerptSelected event
+
+        protected virtual void OnSourceExcerptSelected(SourceExcerptSelectedEventArgs args)
+        {
+            SourceExcerptSelected?.Invoke(this, args);
+        }
+
+        public event EventHandler<SourceExcerptSelectedEventArgs> SourceExcerptSelected;
+
+        public class SourceExcerptSelectedEventArgs
+        {
+            public SourceExcerptSelectedEventArgs(ArchivistSourceExcerptNode sen)
+            {
+                SourceExcerptNode = sen;
+            }
+
+            public ArchivistSourceExcerptNode SourceExcerptNode { get; private set; }
+        }
+
+        #endregion
 
         private void txtSourceExcerptInput_KeyDown(object sender, KeyEventArgs e)
         {

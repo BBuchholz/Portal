@@ -43,6 +43,7 @@ namespace NineWorldsDeep.Tapestry
             hierophantTreeOfLifeDisplay.VertexClicked += HierophantTreeOfLifeDisplay_VertexClicked;
             archivistMasterDisplay.SourceSelected += ArchivistMasterDisplay_SourceSelected;
             archivistSourceDisplay.HyperlinkClicked += ArchivistSourceDisplay_HyperlinkClicked;
+            archivistSourceDisplay.SourceExcerptSelected += ArchivistSourceDisplay_SourceExcerptSelected;
             taggedMediaDisplay.PathSelected += TaggedMediaDisplay_PathSelected;
             hiveMain.HiveRootClicked += HiveMain_HiveRootClicked;
         }
@@ -76,6 +77,14 @@ namespace NineWorldsDeep.Tapestry
             if(historyHandler != null)
             {
                 historyHandler.PerformLoad(this, e.SourceNode);
+            }
+        }
+
+        private void ArchivistSourceDisplay_SourceExcerptSelected(object sender, ArchivistSourceDisplay.SourceExcerptSelectedEventArgs e)
+        {
+            if (historyHandler != null)
+            {
+                historyHandler.PerformLoad(this, e.SourceExcerptNode);
             }
         }
 
@@ -188,6 +197,7 @@ namespace NineWorldsDeep.Tapestry
             contentControls.Add(ccHierophantVertexDetailNode);
             contentControls.Add(ccArchivistMasterNode);
             contentControls.Add(ccArchivistSourceNode);
+            contentControls.Add(ccArchivistSourceExcerptNode);
             contentControls.Add(ccMediaTagNode);
             contentControls.Add(ccHiveMainNode);
             contentControls.Add(ccTaggedMediaNode);
@@ -312,6 +322,14 @@ namespace NineWorldsDeep.Tapestry
                         SetVisible(ccArchivistSourceNode);
                         ArchivistSourceNode srcNode = (ArchivistSourceNode)node;
                         archivistSourceDisplay.Display(srcNode);
+                        break;
+                        
+                    case TapestryNodeType.ArchivistSourceExcerpt:
+                        
+                        SetVisible(ccArchivistSourceExcerptNode);
+                        ArchivistSourceExcerptNode aseNode = 
+                            (ArchivistSourceExcerptNode)node;
+                        archivistSourceExcerptDisplay.Display(aseNode);
                         break;
 
                     case TapestryNodeType.MediaTag:

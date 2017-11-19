@@ -89,6 +89,11 @@
             <nodeUI:ArchivistSourceDisplay x:Name="archivistSourceDisplay"/>
         </ContentControl>
 
+        <ContentControl x:Name="ccArchivistSourceExcerptNode"
+                        Visibility="Collapsed">
+            <nodeUI:ArchivistSourceExcerptDisplay x:Name="archivistSourceExcerptDisplay"/>
+        </ContentControl>
+        
         <ContentControl x:Name="ccMediaTagNode"
                         Visibility="Collapsed">
             <nodeUI:MediaTagDisplay x:Name="mediaTagDisplay"/>

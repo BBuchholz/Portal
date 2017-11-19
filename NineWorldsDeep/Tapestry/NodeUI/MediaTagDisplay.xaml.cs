@@ -188,6 +188,29 @@ namespace NineWorldsDeep.Tapestry.NodeUI
             spTextBox.Visibility = Visibility.Collapsed;
             spTextBlock.Visibility = Visibility.Visible;
         }
+        
+        private void ListViewMediaPaths_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            //TODO: all of this is convoluted cuz I haven't learned MVVM yet, but I'm learning it and when I'm good with it, we can make all of this clean
+            //link that has a way to handle commands MVVM style: https://msdn.microsoft.com/en-us/magazine/dd419663.aspx
 
+            if (sender != null)
+            {
+                ListView listViewContainingSelectedItem = sender as ListView;
+
+                if(listViewContainingSelectedItem != null)
+                {
+                    DevicePath devicePath = 
+                        listViewContainingSelectedItem.SelectedItem as DevicePath;
+
+                    if (devicePath != null)
+                    {
+
+                        UI.Display.Message("open " + devicePath.DevicePathValue + " goes here");
+
+                    }
+                }
+            }
+        }
     }
 }

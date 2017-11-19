@@ -27,7 +27,7 @@
     <UpdatePeriodically>false</UpdatePeriodically>
     <UpdateRequired>false</UpdateRequired>
     <MapFileExtensions>true</MapFileExtensions>
-    <ApplicationRevision>132</ApplicationRevision>
+    <ApplicationRevision>133</ApplicationRevision>
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <PublishWizardCompleted>true</PublishWizardCompleted>
@@ -466,6 +466,7 @@
       <DependentUpon>VerticalTaggerGrid.xaml</DependentUpon>
     </Compile>
     <Compile Include="Tapestry\Nodes\ArchivistMasterNode.cs" />
+    <Compile Include="Tapestry\Nodes\ArchivistSourceExcerptNode.cs" />
     <Compile Include="Tapestry\Nodes\ArchivistSourceNode.cs" />
     <Compile Include="Tapestry\Nodes\BooksApiNode.cs" />
     <Compile Include="Tapestry\Nodes\ChordNode.cs" />
@@ -509,6 +510,9 @@
     </Compile>
     <Compile Include="Tapestry\NodeUI\ArchivistSourceDisplay.xaml.cs">
       <DependentUpon>ArchivistSourceDisplay.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Tapestry\NodeUI\ArchivistSourceExcerptDisplay.xaml.cs">
+      <DependentUpon>ArchivistSourceExcerptDisplay.xaml</DependentUpon>
     </Compile>
     <Compile Include="Tapestry\NodeUI\ArchivistUiTagFormatter.cs" />
     <Compile Include="Tapestry\NodeUI\AudioV5Display.xaml.cs">
@@ -805,6 +809,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Tapestry\NodeUI\ArchivistSourceDisplay.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Tapestry\NodeUI\ArchivistSourceExcerptDisplay.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

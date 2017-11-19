@@ -37,6 +37,14 @@ namespace NineWorldsDeep.Tapestry.NodeUI
 
             db = new ArchivistSubsetDb();
             LoadSourceTypes();
+            LoadOrderBy();
+        }
+
+        private void LoadOrderBy()
+        {
+            List<string> tempDemo = new List<string>();
+            tempDemo.Add("Order By Options Go Here");
+            cmbOrderBy.ItemsSource = tempDemo;
         }
 
         private void LoadSourceTypes()
@@ -82,6 +90,8 @@ namespace NineWorldsDeep.Tapestry.NodeUI
             }
         }
 
+        #region SourceSelected event
+
         protected virtual void OnSourceSelected(SourceSelectedEventArgs args)
         {
             SourceSelected?.Invoke(this, args);
@@ -98,6 +108,8 @@ namespace NineWorldsDeep.Tapestry.NodeUI
 
             public ArchivistSourceNode SourceNode { get; private set; }
         }
+
+        #endregion
 
         private void Expander_Expanded(object sender, RoutedEventArgs e)
         {
@@ -271,6 +283,9 @@ namespace NineWorldsDeep.Tapestry.NodeUI
             }
         }
 
+        private void cmbOrderBy_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
 
+        }
     }
 }
