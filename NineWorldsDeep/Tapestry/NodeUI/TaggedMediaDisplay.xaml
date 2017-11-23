@@ -85,6 +85,8 @@
                               Click="MenuItemCopyToStagingHive_Click"/>                    
                     <MenuItem Header="Send To Trash"
                               Click="MenuItemSendToTrash_Click"/>
+                    <MenuItem Header="Copy Filenames To Clipboard"
+                              Click="MenuItemCopyFileNamesToClipboard_Click"/>
                 </ContextMenu>
             </ListView.ContextMenu>
             <!--<ListView.ItemTemplate>

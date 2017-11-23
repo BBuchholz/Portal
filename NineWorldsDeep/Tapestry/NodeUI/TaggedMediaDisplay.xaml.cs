@@ -316,5 +316,20 @@ namespace NineWorldsDeep.Tapestry.NodeUI
             }
         }
 
+        private void MenuItemCopyFileNamesToClipboard_Click(object sender, RoutedEventArgs e)
+        {
+            //get selected items
+            List<string> selectedPaths =
+                lvPaths.SelectedItems.Cast<string>()
+                                     .Select(s => s)
+                                     .ToList();
+
+            string pathsAsMultiLineString = string.Join(Environment.NewLine, selectedPaths);
+
+            Clipboard.SetText(pathsAsMultiLineString);
+
+            UI.Display.Message("copied to clipboard: " + 
+                Environment.NewLine + pathsAsMultiLineString);
+        }
     }
 }
