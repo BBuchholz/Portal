@@ -59,7 +59,7 @@ namespace NineWorldsDeep.Tapestry.NodeUI
         /// <param name="expander"></param>
         private void ProcessExpanderState(Expander expander)
         {
-            Grid parent = FindAncestor<Grid>(expander);
+            Grid parent = Core.UtilsUi.FindAncestor<Grid>(expander);
             int rowIndex = Grid.GetRow(expander);
 
             if (parent.RowDefinitions.Count > rowIndex && rowIndex >= 0)
@@ -67,6 +67,7 @@ namespace NineWorldsDeep.Tapestry.NodeUI
                     (expander.IsExpanded ? new GridLength(1, GridUnitType.Star) : GridLength.Auto);
         }
 
+        [Obsolete("use Core.UtilsUi.FindAncestor()")]
         public static T FindAncestor<T>(DependencyObject current)
             where T : DependencyObject
         {

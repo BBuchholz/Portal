@@ -205,6 +205,7 @@ namespace NineWorldsDeep.Tapestry
             contentControls.Add(ccSpeechApiNode);
             contentControls.Add(ccPhotosApiNode);
             contentControls.Add(ccHiveMigrationsNode);
+            contentControls.Add(ccThemesAndStylesSandboxNode);
         }
 
         private void ResolveContentControl(TapestryNode node)
@@ -310,6 +311,11 @@ namespace NineWorldsDeep.Tapestry
                     case TapestryNodeType.PhotosApiMain:
 
                         SetVisible(ccPhotosApiNode);
+                        break;
+
+                    case TapestryNodeType.ThemesAndStylesSandbox:
+
+                        SetVisible(ccThemesAndStylesSandboxNode);
                         break;
 
                     case TapestryNodeType.ArchivistMaster:

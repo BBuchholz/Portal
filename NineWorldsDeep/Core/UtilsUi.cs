@@ -30,7 +30,6 @@ namespace NineWorldsDeep.Core
             return children;
         }
 
-
         public static T FindAncestor<T>(DependencyObject current)
             where T : DependencyObject
         {

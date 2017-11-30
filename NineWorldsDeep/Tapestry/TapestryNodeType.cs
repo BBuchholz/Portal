@@ -38,6 +38,7 @@
         HierophantVertexDetail,
         NullHierophantVertexDetail,
         MuseV5Chord,
-        ArchivistSourceExcerpt
+        ArchivistSourceExcerpt,
+        ThemesAndStylesSandbox
     }
 }

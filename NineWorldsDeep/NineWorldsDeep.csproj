@@ -27,7 +27,7 @@
     <UpdatePeriodically>false</UpdatePeriodically>
     <UpdateRequired>false</UpdateRequired>
     <MapFileExtensions>true</MapFileExtensions>
-    <ApplicationRevision>135</ApplicationRevision>
+    <ApplicationRevision>136</ApplicationRevision>
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <PublishWizardCompleted>true</PublishWizardCompleted>
@@ -504,6 +504,7 @@
     <Compile Include="Tapestry\Nodes\TapestryRootNode.cs" />
     <Compile Include="Tapestry\Nodes\TapestrySplitViewNode.cs" />
     <Compile Include="Tapestry\Nodes\SpeechApiNode.cs" />
+    <Compile Include="Tapestry\Nodes\ThemesAndStylesSandboxNode.cs" />
     <Compile Include="Tapestry\Nodes\WindowedUiNode.cs" />
     <Compile Include="Tapestry\NodeUI\ArchivistMasterDisplay.xaml.cs">
       <DependentUpon>ArchivistMasterDisplay.xaml</DependentUpon>
@@ -602,6 +603,9 @@
     </Compile>
     <Compile Include="Tapestry\NodeUI\TaggedMediaDisplay.xaml.cs">
       <DependentUpon>TaggedMediaDisplay.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Tapestry\NodeUI\ThemesAndStylesSandboxDisplay.xaml.cs">
+      <DependentUpon>ThemesAndStylesSandboxDisplay.xaml</DependentUpon>
     </Compile>
     <Compile Include="Tapestry\TapestryRegistry.cs" />
     <Compile Include="Tapestry\TapestrySplitViewLoadCommand.cs" />
@@ -909,6 +913,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Tapestry\NodeUI\TaggedMediaDisplay.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Tapestry\NodeUI\ThemesAndStylesSandboxDisplay.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

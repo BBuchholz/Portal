@@ -26,6 +26,7 @@ namespace NineWorldsDeep.Tapestry.Nodes
             AddChild(new ArchivistMasterNode());
             AddChild(new HiveMainNode());
             AddChild(new TaggedMediaMainNode());
+            AddChild(new ThemesAndStylesSandboxNode());
         }
 
         public override string GetShortName()
