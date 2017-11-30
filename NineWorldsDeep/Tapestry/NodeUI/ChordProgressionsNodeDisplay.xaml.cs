@@ -72,25 +72,35 @@ namespace NineWorldsDeep.Tapestry.NodeUI
             MuseV5Note rootNote = (MuseV5Note)cmbRootNote.SelectedItem;
             MuseV5ChordProgression selectedProgression = SelectedProgression;
 
-            if (selectedProgression != null && 
-                rootNote != null)
+            bool portalV6 = false; //can remove this after V6 fixes the implementation
+
+            if (portalV6)
             {
-                txtNotes.Text = selectedProgression.TextNotes;
-                txtNotes.IsEnabled = true;
-                btnUpdate.IsEnabled = true;
-                 
-                List<MuseV5ChordInstance> chordList = 
-                    selectedProgression.ToChordList(rootNote);
-                    
-                lvChords.ItemsSource = null;
-                lvChords.ItemsSource = chordList;
-                
+
+                if (selectedProgression != null &&
+                    rootNote != null)
+                {
+                    txtNotes.Text = selectedProgression.TextNotes;
+                    txtNotes.IsEnabled = true;
+                    btnUpdate.IsEnabled = true;
+
+                    List<MuseV5ChordInstance> chordList =
+                        selectedProgression.ToChordList(rootNote);
+
+                    lvChords.ItemsSource = null;
+                    lvChords.ItemsSource = chordList;
+
+                }
+                else
+                {
+                    lvChords.ItemsSource = null;
+                    txtNotes.IsEnabled = false;
+                    btnUpdate.IsEnabled = false;
+                }
             }
             else
             {
-                lvChords.ItemsSource = null;
-                txtNotes.IsEnabled = false;
-                btnUpdate.IsEnabled = false;
+                UI.Display.Message("currently disabled until V6 implementation fixes issues with existing code (crashes due to a non-trivial bug)");
             }
         }
         
