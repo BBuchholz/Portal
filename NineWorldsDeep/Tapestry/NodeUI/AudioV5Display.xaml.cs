@@ -85,6 +85,11 @@ namespace NineWorldsDeep.Tapestry.NodeUI
             fileNode = nd;
             FileDetailsControl.Display(fileNode);
             meAudioMediaElement.Source = new Uri(fileNode.Path);
+
+            if (chkPlayOnSelect.IsChecked.Value)
+            {
+                PlayMedia();
+            }
         }
 
         private void PlayButton_Click(object sender, RoutedEventArgs e)
@@ -122,10 +127,24 @@ namespace NineWorldsDeep.Tapestry.NodeUI
         {
             if (!this.isPlaying && chkLoop.IsChecked.Value)
             {
-                meAudioMediaElement.Play();
-                this.isPlaying = true;
+                PlayMedia();
             }
         }
+
+        private void chkPlayOnSelect_Checked(object sender, RoutedEventArgs e)
+        {
+            if (!this.isPlaying && chkPlayOnSelect.IsChecked.Value)
+            {
+                PlayMedia();
+            }
+        }
+
+        private void PlayMedia()
+        {
+            meAudioMediaElement.Play();
+            this.isPlaying = true;
+        }
+
 
         private void OpenExternallyButton_Click(object sender, RoutedEventArgs e)
         {

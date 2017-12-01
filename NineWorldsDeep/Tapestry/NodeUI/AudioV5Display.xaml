@@ -159,14 +159,27 @@
                     Style="{StaticResource RoundButtonTemplate}"
                     Click="SendToTrashButton_Click">Send To Trash</Button>
 
-        <CheckBox Grid.Row="7"
-                  x:Name="chkLoop"
-                  IsChecked="False"
-                  Checked="chkLoop_Checked"
-                  VerticalAlignment="Center"
-                  HorizontalAlignment="Center"
-                  Foreground="WhiteSmoke">Loop</CheckBox>
+        <StackPanel Orientation="Horizontal"
+                    Grid.Row="7"
+                    HorizontalAlignment="Center">
+            
+            <CheckBox x:Name="chkLoop"
+                      IsChecked="False"
+                      Checked="chkLoop_Checked"
+                      VerticalAlignment="Center"
+                      HorizontalAlignment="Center"
+                      Margin="10"
+                      Foreground="WhiteSmoke">Loop</CheckBox>
 
+            <CheckBox x:Name="chkPlayOnSelect"
+                      IsChecked="True"
+                      Margin="10"
+                      Checked="chkPlayOnSelect_Checked"
+                      VerticalAlignment="Center"
+                      HorizontalAlignment="Center"
+                      Foreground="WhiteSmoke">Play On Select</CheckBox>
+            
+        </StackPanel>
 
 
     </Grid>
