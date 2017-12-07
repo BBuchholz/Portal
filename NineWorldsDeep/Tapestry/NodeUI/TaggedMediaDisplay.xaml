@@ -79,10 +79,13 @@
                 <ContextMenu Name="cmFileList" 
                              StaysOpen="true" 
                              Background="WhiteSmoke">
-                    <MenuItem Header="Stage For Export"
-                              Click="MenuItemStageForExport_Click"/>
+                    <!-- previous, deprecated, warehouse implementation -->
+                    <!--<MenuItem Header="Stage For Export"
+                              Click="MenuItemStageForExport_Click"/>-->
                     <MenuItem Header="Copy To Staging (Hive)"
-                              Click="MenuItemCopyToStagingHive_Click"/>                    
+                              Click="MenuItemCopyToStagingHive_Click"/>
+                    <MenuItem Header="Export Hive XML"
+                              Click="MenuItemExportHiveXml_Click"/>
                     <MenuItem Header="Send To Trash"
                               Click="MenuItemSendToTrash_Click"/>
                     <MenuItem Header="Copy Filenames To Clipboard"

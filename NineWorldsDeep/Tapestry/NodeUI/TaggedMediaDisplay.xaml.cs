@@ -20,6 +20,7 @@ using NineWorldsDeep.Tapestry.Nodes;
 using NineWorldsDeep.Mnemosyne.V5;
 using System.Threading;
 using NineWorldsDeep.Hive;
+using System.Xml.Linq;
 
 namespace NineWorldsDeep.Tapestry.NodeUI
 {
@@ -44,26 +45,6 @@ namespace NineWorldsDeep.Tapestry.NodeUI
             RefreshTaggingMatrix();
         }
         
-        private void lvPaths_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            //adapted from MediaMasterDisplay
-            List<string> selectedPaths = lvPaths.SelectedItems.Cast<string>().ToList();
-
-            if (selectedPaths.Count > 0)
-            {
-                //display first selected
-                string firstPath = selectedPaths[0];
-
-                if (File.Exists(firstPath) && db.LocalDeviceId > 0)
-                {
-                    PathSelectedEventArgs args =
-                        new PathSelectedEventArgs(
-                            new FileSystemNode(firstPath, true, db.LocalDeviceId));
-
-                    OnPathSelected(args);
-                }
-            }
-        }
         
         protected virtual void OnPathSelected(PathSelectedEventArgs args)
         {
@@ -80,22 +61,6 @@ namespace NineWorldsDeep.Tapestry.NodeUI
             }
 
             public FileSystemNode FileSystemNode { get; private set; }
-        }
-
-        private void lvTags_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            //from VerticalTaggerGrid (need to refactor to use V5, &c.)
-            //TaggerGridController.LoadFromSelectedTag();
-            
-            LoadPaths();
-        }
-
-        private void txtTagFilter_KeyDown(object sender, KeyEventArgs e)
-        {
-            if(e.Key == Key.Enter)
-            {
-                LoadTags();
-            }
         }
 
         private void LoadTags()
@@ -198,6 +163,61 @@ namespace NineWorldsDeep.Tapestry.NodeUI
             return items;
         }
 
+
+        public void StatusDetailUpdate(string text, bool ensureDisplay = false)
+        {
+            var currentTime = DateTime.Now;
+
+            if (!ensureDisplay && ((DateTime.Now - previousTime).Milliseconds <= 50)) return;
+
+            syncContext.Post(new SendOrPostCallback(s =>
+            {
+                tbStatus.Text = (string)s;
+            }), text);
+
+            previousTime = currentTime;
+        }
+
+
+        #region event handlers
+
+        private void lvPaths_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            //adapted from MediaMasterDisplay
+            List<string> selectedPaths = lvPaths.SelectedItems.Cast<string>().ToList();
+
+            if (selectedPaths.Count > 0)
+            {
+                //display first selected
+                string firstPath = selectedPaths[0];
+
+                if (File.Exists(firstPath) && db.LocalDeviceId > 0)
+                {
+                    PathSelectedEventArgs args =
+                        new PathSelectedEventArgs(
+                            new FileSystemNode(firstPath, true, db.LocalDeviceId));
+
+                    OnPathSelected(args);
+                }
+            }
+        }
+
+        private void lvTags_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            //from VerticalTaggerGrid (need to refactor to use V5, &c.)
+            //TaggerGridController.LoadFromSelectedTag();
+
+            LoadPaths();
+        }
+
+        private void txtTagFilter_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter)
+            {
+                LoadTags();
+            }
+        }
+
         private void txtPathFilter_KeyDown(object sender, KeyEventArgs e)
         {
             if(e.Key == Key.Enter)
@@ -243,20 +263,6 @@ namespace NineWorldsDeep.Tapestry.NodeUI
             }
         }
 
-        public void StatusDetailUpdate(string text, bool ensureDisplay = false)
-        {
-            var currentTime = DateTime.Now;
-
-            if (!ensureDisplay && ((DateTime.Now - previousTime).Milliseconds <= 50)) return;
-
-            syncContext.Post(new SendOrPostCallback(s =>
-            {
-                tbStatus.Text = (string)s;
-            }), text);
-
-            previousTime = currentTime;
-        }
-
         private void MenuItemStageForExport_Click(object sender, RoutedEventArgs e)
         {
             //get selected items
@@ -286,7 +292,8 @@ namespace NineWorldsDeep.Tapestry.NodeUI
                     UtilsHive.CopyToStaging(selectedPaths, this);
 
                     //copy all tags to hive xml folders 
-                    UtilsMnemosyneV5.ExportXml(this, selectedPaths, ConfigHive.GetHiveFoldersForXmlExport());
+                    //UtilsMnemosyneV5.ExportXml(this, selectedPaths, ConfigHive.GetHiveFoldersForXmlExport());
+                    
                 }
                 catch(Exception ex)
                 {
@@ -294,7 +301,96 @@ namespace NineWorldsDeep.Tapestry.NodeUI
                 }
             });
 
-            UI.Display.Message("copied to hive staging");
+            UI.Display.Message("copied to hive staging. be sure to export xml, if desired, using other menu option, this doesn't export tags, just the media files");
+        }
+        
+        private async void MenuItemExportHiveXml_Click(object sender, RoutedEventArgs e)
+        {
+            List<string> selectedPaths =
+            lvPaths.SelectedItems.Cast<string>()
+                                 .Select(s => s)
+                                 .ToList();
+
+            await Task.Run(() =>
+            {
+                try
+                {
+                    this.StatusDetailUpdate("processing " + selectedPaths.Count() + " paths");
+
+                    var mediaList = new List<Media>();
+
+                    foreach(string filePath in selectedPaths)
+                    {
+                        this.StatusDetailUpdate("hashing: " + filePath);
+
+                        var mli = new MediaListItem(filePath);
+                        mli.HashMedia();
+                        mediaList.Add(mli.Media);
+                    }
+
+                    db.SyncAsync(mediaList, this);
+
+                    
+
+                    XElement mnemosyneSubsetEl = new XElement(Xml.Xml.TAG_MNEMOSYNE_SUBSET);
+
+                    foreach (var media in mediaList)
+                    {
+                        //create media tag with attribute set for hash
+                        XElement mediaEl = 
+                            Xml.Xml.CreateMediaElement(media.MediaHash);
+
+                        foreach (MediaTagging tag in media.MediaTaggings)
+                        {
+                            //create tag element and append to 
+                            XElement tagEl = Xml.Xml.CreateTagElement(tag);
+                            mediaEl.Add(tagEl);
+                        }
+
+                        foreach (string deviceName in media.DevicePaths.Keys)
+                        {
+                            XElement deviceEl = Xml.Xml.CreateDeviceElement(deviceName);
+
+                            foreach (DevicePath path in media.DevicePaths[deviceName])
+                            {
+                                XElement pathEl = Xml.Xml.CreatePathElement(path);
+                                deviceEl.Add(pathEl);
+                            }
+
+                            mediaEl.Add(deviceEl);
+                        }
+
+                        mnemosyneSubsetEl.Add(mediaEl);
+                    }
+                    
+
+                    XDocument doc =
+                        new XDocument(
+                            new XElement("nwd", mnemosyneSubsetEl));
+
+                    string fileName =
+                        NwdUtils.GetTimeStamp_yyyyMMddHHmmss() + "-nwd-mnemosyne-v5.xml";
+                    
+                    //write to temp file
+                    var tempFolder = Configuration.TempV5XmlFolder;
+                    var xmlTempFilePath = 
+                        System.IO.Path.Combine(tempFolder, fileName);
+
+                    doc.Save(xmlTempFilePath);
+
+                    var filePathInList = new List<string>();
+                    filePathInList.Add(xmlTempFilePath);
+
+                    //just checked, we can do this and all the hive folder magic will happen
+                    UtilsHive.CopyToStaging(filePathInList, this);
+                }
+                catch (Exception ex)
+                {
+                    var debuggingBreakpoint = ex.Message;
+                }
+            });
+
+            UI.Display.Message("xml copied to hive staging. (On mobile device, be sure to intake Xml from stagin and then use Import Mnemosyne Hive Xml transfer option)");
         }
 
         private void MenuItemSendToTrash_Click(object sender, RoutedEventArgs e)
@@ -331,5 +427,7 @@ namespace NineWorldsDeep.Tapestry.NodeUI
             UI.Display.Message("copied to clipboard: " + 
                 Environment.NewLine + pathsAsMultiLineString);
         }
+
+        #endregion
     }
 }

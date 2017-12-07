@@ -59,54 +59,8 @@ namespace NineWorldsDeep.Tapestry.NodeUI
                 TagStringTextBox.Text = value;
             }
         }
-        
-        private void UpdateButton_Click(object sender, RoutedEventArgs e)
-        {
-            currentMediaListItem.SetTagsFromTagString(TagString);
-            Sync();
 
-            tbStatus.Text = "tags updated.";
-
-            UpdateButton.IsEnabled = false;
-        }
-
-        private void TagStringTextBox_KeyUp(object sender, KeyEventArgs e)
-        {
-            if (oldTagString != TagString)
-            {
-                UpdateButton.IsEnabled = true;
-                tbStatus.Text = "tag string has unsaved changes";
-            }
-        }
-
-        private void LoadTags()
-        {
-            //TagString = 
-            //    Tags.GetTagStringForHash(
-            //        Hashes.Sha1ForFilePath(fileNode.Path));
-
-            TagString = currentMediaListItem.GetTagString();
-        }
-
-        public void Display(FileSystemNode nd)
-        {
-            fileNode = nd;
-            MultiLineTextBox.Text = nd.ToMultiLineDetail();
-            SetCurrentMediaListItem(new MediaListItem(fileNode.Path));
-        }
-
-        private void SetCurrentMediaListItem(MediaListItem mli)
-        {
-            currentMediaListItem = mli;
-            currentMediaListItem.HashMedia();
-            Sync();
-        }
-
-        private void Sync()
-        {
-            Configuration.DB.MediaSubset.Sync(currentMediaListItem.Media);
-            LoadTags();
-        }
+        #region event handlers
 
         private void OpenExternallyButton_Click(object sender, RoutedEventArgs e)
         {
@@ -123,12 +77,12 @@ namespace NineWorldsDeep.Tapestry.NodeUI
             try
             {
                 await Task.Run(() =>
-                {   
+                {
                     XElement mnemosyneSubsetEl = new XElement(Xml.Xml.TAG_MNEMOSYNE_SUBSET);
-                    
+
                     //create media tag with attribute set for hash
                     XElement mediaEl = Xml.Xml.CreateMediaElement(hash);
-                    
+
                     var taggings = db.GetMediaTaggingsForHash(hash);
 
                     foreach (MediaTagging tag in taggings)
@@ -140,7 +94,7 @@ namespace NineWorldsDeep.Tapestry.NodeUI
 
                     //  db.getDevicePaths(media.Hash) <- create this
                     ///////--> return a MultiMap keyed on device name, with a list of path objects (path, verified, missing)
-                    
+
                     MultiMap<string, DevicePath> devicePaths = db.GetDevicePaths(hash);
 
                     foreach (string deviceName in devicePaths.Keys)
@@ -157,7 +111,7 @@ namespace NineWorldsDeep.Tapestry.NodeUI
                     }
 
                     mnemosyneSubsetEl.Add(mediaEl);
-                    
+
 
                     XDocument doc =
                         new XDocument(
@@ -190,6 +144,53 @@ namespace NineWorldsDeep.Tapestry.NodeUI
             {
                 UI.Display.Exception(ex);
             }
+        }
+
+        private void UpdateButton_Click(object sender, RoutedEventArgs e)
+        {
+            currentMediaListItem.SetTagsFromTagString(TagString);
+            Sync();
+
+            tbStatus.Text = "tags updated.";
+
+            UpdateButton.IsEnabled = false;
+        }
+
+        private void TagStringTextBox_KeyUp(object sender, KeyEventArgs e)
+        {
+            if (oldTagString != TagString)
+            {
+                UpdateButton.IsEnabled = true;
+                tbStatus.Text = "tag string has unsaved changes";
+            }
+        }
+
+
+        #endregion
+
+        private void LoadTags()
+        {
+            TagString = currentMediaListItem.GetTagString();
+        }
+
+        public void Display(FileSystemNode nd)
+        {
+            fileNode = nd;
+            MultiLineTextBox.Text = nd.ToMultiLineDetail();
+            SetCurrentMediaListItem(new MediaListItem(fileNode.Path));
+        }
+
+        private void SetCurrentMediaListItem(MediaListItem mli)
+        {
+            currentMediaListItem = mli;
+            currentMediaListItem.HashMedia();
+            Sync();
+        }
+
+        private void Sync()
+        {
+            Configuration.DB.MediaSubset.Sync(currentMediaListItem.Media);
+            LoadTags();
         }
 
         public void StatusDetailUpdate(string text)

@@ -131,7 +131,7 @@ namespace NineWorldsDeep.Hierophant
             }
 
             //this supports V5 configuration (non-Hive)
-            IEnumerable<string> paths = ConfigHive.GetHiveFoldersForXmlExport();
+            IEnumerable<string> paths = ConfigHive.GetHiveFoldersForHierophantXmlExport();
 
             //just for testing
             //List<string> paths = new List<string>();

@@ -58,6 +58,31 @@ namespace NineWorldsDeep.Hive
         /// active hive root. all hive xml exports should go into these folders
         /// </summary>
         /// <returns></returns>
+        public static List<string> GetHiveFoldersForHierophantXmlExport()
+        {
+            //hive support scheduled for V6
+            bool useHiveFolderList = false;
+
+            List<string> allFolders = new List<string>();
+
+            if (useHiveFolderList)
+            {
+                
+            }
+            else
+            {
+                allFolders.Add(Configuration.HierophantV5XmlFolder);
+            }
+
+            return allFolders;
+        }
+               
+
+        /// <summary>
+        /// will return the paths of the xml folders for each
+        /// active hive root. all hive xml exports should go into these folders
+        /// </summary>
+        /// <returns></returns>
         public static List<string> GetHiveFoldersForXmlExport()
         {
             //hive support scheduled for V6
@@ -71,10 +96,6 @@ namespace NineWorldsDeep.Hive
                 {
                     allFolders.Add(HiveRootXmlFolderPath(hr));
                 }
-            }
-            else
-            {
-                allFolders.Add(Configuration.HierophantV5XmlFolder);
             }
 
             return allFolders;
