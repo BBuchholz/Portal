@@ -219,10 +219,6 @@ namespace NineWorldsDeep.Tapestry.NodeUI
                         {
                             UI.Display.Message(devicePath.DevicePathValue + " does not exist on this device or local device id is not set");
                         }
-
-
-                        
-
                     }
                 }
             }

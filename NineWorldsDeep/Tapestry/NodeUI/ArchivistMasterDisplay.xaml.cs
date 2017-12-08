@@ -3,6 +3,7 @@ using NineWorldsDeep.Db.Sqlite;
 using NineWorldsDeep.Tapestry.Nodes;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading;
@@ -201,7 +202,15 @@ namespace NineWorldsDeep.Tapestry.NodeUI
 
         private void cmbOrderBy_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
+            var propertyName = cmbOrderBy.SelectedItem as string;
+            
+            CollectionView view = (CollectionView)CollectionViewSource.GetDefaultView(lvSources.ItemsSource);
+            view.SortDescriptions.Clear();
 
+            if (propertyName != null)
+            {
+                view.SortDescriptions.Add(new SortDescription(propertyName, ListSortDirection.Ascending));
+            }
         }
 
         #endregion
@@ -231,9 +240,20 @@ namespace NineWorldsDeep.Tapestry.NodeUI
 
         private void LoadOrderBy()
         {
-            List<string> tempDemo = new List<string>();
-            tempDemo.Add("Order By Options Go Here");
-            cmbOrderBy.ItemsSource = tempDemo;
+            List<string> stringPropertiesNameList = new List<string>();
+
+            foreach (var propertyInfo in typeof(ArchivistSource).GetProperties())
+            {
+                if(propertyInfo.PropertyType == typeof(string))
+                {
+                    if (!stringPropertiesNameList.Contains(propertyInfo.Name))
+                    {
+                        stringPropertiesNameList.Add(propertyInfo.Name);
+                    }
+                }
+            }            
+
+            cmbOrderBy.ItemsSource = stringPropertiesNameList;
         }
 
         private void LoadSourceTypes()
@@ -311,7 +331,6 @@ namespace NineWorldsDeep.Tapestry.NodeUI
         }
 
         #endregion
-
-
+        
     }
 }
