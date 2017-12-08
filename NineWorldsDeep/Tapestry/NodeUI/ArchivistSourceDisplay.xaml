@@ -156,7 +156,8 @@
             <Button x:Name="btnRefreshSource"
                     Content="Refresh"
                     Margin="5"
-                    Padding="5"/>
+                    Padding="5"
+                    Click="ButtonRefreshSource_Click"/>
 
             <Button x:Name="btnSourceTagAll"
                     Content="Source Tag All"

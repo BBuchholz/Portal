@@ -58,17 +58,17 @@ namespace NineWorldsDeep.Tapestry.NodeUI
             }
         }
 
-        public void RefreshFromObject()
-        {
-            ccSourceDetails.Content = sourceNode.Source;
-            
-            lvSourceExcerpts.ItemsSource = null;
-            lvSourceExcerpts.ItemsSource = sourceNode.Source.Excerpts;            
-        }
-
         #endregion
 
         #region private helper methods
+
+        private void RefreshFromObject()
+        {
+            ccSourceDetails.Content = sourceNode.Source;
+
+            lvSourceExcerpts.ItemsSource = null;
+            lvSourceExcerpts.ItemsSource = sourceNode.Source.Excerpts;
+        }
 
         private void ProcessEntryInput()
         {
@@ -262,6 +262,12 @@ namespace NineWorldsDeep.Tapestry.NodeUI
             spTextBlock.Visibility = Visibility.Visible;
         }
 
+        private void ButtonRefreshSource_Click(object sender, RoutedEventArgs e)
+        {
+            RefreshFromDb();
+        }
+
         #endregion
+
     }
 }

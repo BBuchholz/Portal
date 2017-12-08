@@ -23,9 +23,15 @@ namespace NineWorldsDeep.Tapestry.NodeUI
     /// </summary>
     public partial class MediaTagDisplay : UserControl, ISourceExcerptDisplay
     {
+        #region fields
+
         private Db.Sqlite.MediaV5SubsetDb dbMediaV5;
         private Db.Sqlite.ArchivistSubsetDb dbArchivist;
         private MediaTagNode mediaTagNode;
+
+        #endregion
+
+        #region creation
 
         public MediaTagDisplay()
         {
@@ -35,7 +41,11 @@ namespace NineWorldsDeep.Tapestry.NodeUI
             Core.DataUpdateManager.Register(this);
         }
 
-        internal void Display(MediaTagNode tagNode)
+        #endregion
+
+        #region public interface
+
+        public void Display(MediaTagNode tagNode)
         {
             this.mediaTagNode = tagNode;
             RefreshFromDb();
@@ -63,7 +73,11 @@ namespace NineWorldsDeep.Tapestry.NodeUI
             }
         }
 
-        public void RefreshFromObject(string deviceNameFilter)
+        #endregion
+
+        #region private helper methods
+
+        private void RefreshFromObject(string deviceNameFilter)
         {
             ccMediaTagDetails.Content = mediaTagNode.MediaTag;
 
@@ -74,16 +88,7 @@ namespace NineWorldsDeep.Tapestry.NodeUI
 
             lvSourceExcerpts.ItemsSource = mediaTagNode.MediaTag.SourceExcerpts;
         }
-        
-        private void Expander_Expanded(object sender, RoutedEventArgs e)
-        {
-            ProcessExpanderState((Expander)sender);
-        }
 
-        private void Expander_Collapsed(object sender, RoutedEventArgs e)
-        {
-            ProcessExpanderState((Expander)sender);
-        }
 
         /// <summary>
         /// manages grid rows to share space between multiple expanded expanders
@@ -99,24 +104,20 @@ namespace NineWorldsDeep.Tapestry.NodeUI
                     (expander.IsExpanded ? new GridLength(1, GridUnitType.Star) : GridLength.Auto);
         }
 
-        //public static T FindAncestor<T>(DependencyObject current)
-        //    where T : DependencyObject
-        //{
-        //    // Need this call to avoid returning current object if it is the 
-        //    // same type as parent we are looking for
-        //    current = VisualTreeHelper.GetParent(current);
+        #endregion
 
-        //    while (current != null)
-        //    {
-        //        if (current is T)
-        //        {
-        //            return (T)current;
-        //        }
-        //        current = VisualTreeHelper.GetParent(current);
-        //    };
-        //    return null;
-        //}
-        
+        #region event handlers
+
+        private void Expander_Expanded(object sender, RoutedEventArgs e)
+        {
+            ProcessExpanderState((Expander)sender);
+        }
+
+        private void Expander_Collapsed(object sender, RoutedEventArgs e)
+        {
+            ProcessExpanderState((Expander)sender);
+        }
+
         private void txtDeviceNameFilter_KeyDown(object sender, KeyEventArgs e)
         {
             if (Keyboard.IsKeyDown(Key.Enter))
@@ -139,7 +140,7 @@ namespace NineWorldsDeep.Tapestry.NodeUI
             TextBox txtTagString =
                 Core.UtilsUi.GetTemplateSibling<TextBox, Button>(
                     (Button)sender, "txtTagString");
-            
+
             ArchivistSourceExcerpt ase =
                 (ArchivistSourceExcerpt)tbTagString.DataContext;
 
@@ -188,7 +189,7 @@ namespace NineWorldsDeep.Tapestry.NodeUI
             spTextBox.Visibility = Visibility.Collapsed;
             spTextBlock.Visibility = Visibility.Visible;
         }
-        
+
         private void ListViewMediaPaths_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             //TODO: all of this is convoluted cuz I haven't learned MVVM yet, but I'm learning it and when I'm good with it, we can make all of this clean
@@ -198,9 +199,9 @@ namespace NineWorldsDeep.Tapestry.NodeUI
             {
                 ListView listViewContainingSelectedItem = sender as ListView;
 
-                if(listViewContainingSelectedItem != null)
+                if (listViewContainingSelectedItem != null)
                 {
-                    DevicePath devicePath = 
+                    DevicePath devicePath =
                         listViewContainingSelectedItem.SelectedItem as DevicePath;
 
                     if (devicePath != null)
@@ -212,5 +213,34 @@ namespace NineWorldsDeep.Tapestry.NodeUI
                 }
             }
         }
+
+        private void ButtonRefresh_Click(object sender, RoutedEventArgs e)
+        {
+            RefreshFromDb();
+        }
+
+        #endregion
+
+
+
+
+        //public static T FindAncestor<T>(DependencyObject current)
+        //    where T : DependencyObject
+        //{
+        //    // Need this call to avoid returning current object if it is the 
+        //    // same type as parent we are looking for
+        //    current = VisualTreeHelper.GetParent(current);
+
+        //    while (current != null)
+        //    {
+        //        if (current is T)
+        //        {
+        //            return (T)current;
+        //        }
+        //        current = VisualTreeHelper.GetParent(current);
+        //    };
+        //    return null;
+        //}
+
     }
 }

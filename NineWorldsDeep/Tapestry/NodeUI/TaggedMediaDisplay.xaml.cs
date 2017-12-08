@@ -42,7 +42,7 @@ namespace NineWorldsDeep.Tapestry.NodeUI
             syncContext = SynchronizationContext.Current;
 
             db = new Db.Sqlite.MediaV5SubsetDb();
-            RefreshTaggingMatrix();
+            
         }
         
         
