@@ -29,12 +29,18 @@ namespace NineWorldsDeep.Tapestry.NodeUI
     /// </summary>
     public partial class TaggedMediaDisplay : UserControl, IAsyncStatusResponsive
     {
+        #region fields
+
         private TaggingMatrix taggingMatrix;
         Db.Sqlite.MediaV5SubsetDb db;
 
         //async related 
         private readonly SynchronizationContext syncContext;
         private DateTime previousTime = DateTime.Now;
+
+        #endregion
+
+        #region creation
 
         public TaggedMediaDisplay()
         {
@@ -44,8 +50,11 @@ namespace NineWorldsDeep.Tapestry.NodeUI
             db = new Db.Sqlite.MediaV5SubsetDb();
             
         }
-        
-        
+
+        #endregion
+
+        #region event PathSelected
+
         protected virtual void OnPathSelected(PathSelectedEventArgs args)
         {
             PathSelected?.Invoke(this, args);
@@ -62,6 +71,10 @@ namespace NineWorldsDeep.Tapestry.NodeUI
 
             public FileSystemNode FileSystemNode { get; private set; }
         }
+
+        #endregion
+
+        #region private helper methods
 
         private void LoadTags()
         {
@@ -163,6 +176,9 @@ namespace NineWorldsDeep.Tapestry.NodeUI
             return items;
         }
 
+        #endregion
+
+        #region public interface
 
         public void StatusDetailUpdate(string text, bool ensureDisplay = false)
         {
@@ -178,6 +194,7 @@ namespace NineWorldsDeep.Tapestry.NodeUI
             previousTime = currentTime;
         }
 
+        #endregion
 
         #region event handlers
 

@@ -46,6 +46,15 @@ namespace NineWorldsDeep.Tapestry
             archivistSourceDisplay.SourceExcerptSelected += ArchivistSourceDisplay_SourceExcerptSelected;
             taggedMediaDisplay.PathSelected += TaggedMediaDisplay_PathSelected;
             hiveMain.HiveRootClicked += HiveMain_HiveRootClicked;
+            mediaTagDisplay.PathSelected += MediaTagDisplay_PathSelected;
+        }
+
+        private void MediaTagDisplay_PathSelected(object sender, MediaTagDisplay.PathSelectedEventArgs e)
+        {
+            if (historyHandler != null)
+            {
+                historyHandler.PerformLoad(this, e.FileSystemNode);
+            }
         }
 
         private void HiveMain_HiveRootClicked(object sender, HiveMain.HiveRootClickedEventArgs e)

@@ -15,6 +15,7 @@ using System.Windows.Shapes;
 using NineWorldsDeep.Mnemosyne.V5;
 using NineWorldsDeep.Tapestry.Nodes;
 using NineWorldsDeep.Archivist;
+using System.IO;
 
 namespace NineWorldsDeep.Tapestry.NodeUI
 {
@@ -206,8 +207,21 @@ namespace NineWorldsDeep.Tapestry.NodeUI
 
                     if (devicePath != null)
                     {
+                        if (File.Exists(devicePath.DevicePathValue) && dbMediaV5.LocalDeviceId > 0)
+                        {
+                            PathSelectedEventArgs args =
+                                new PathSelectedEventArgs(
+                                    new FileSystemNode(devicePath.DevicePathValue, true, dbMediaV5.LocalDeviceId));
 
-                        UI.Display.Message("open " + devicePath.DevicePathValue + " goes here");
+                            OnPathSelected(args);
+                        }
+                        else
+                        {
+                            UI.Display.Message(devicePath.DevicePathValue + " does not exist on this device or local device id is not set");
+                        }
+
+
+                        
 
                     }
                 }
@@ -220,7 +234,27 @@ namespace NineWorldsDeep.Tapestry.NodeUI
         }
 
         #endregion
+        
+        #region event PathSelected
 
+        protected virtual void OnPathSelected(PathSelectedEventArgs args)
+        {
+            PathSelected?.Invoke(this, args);
+        }
+
+        public event EventHandler<PathSelectedEventArgs> PathSelected;
+
+        public class PathSelectedEventArgs
+        {
+            public PathSelectedEventArgs(FileSystemNode f)
+            {
+                FileSystemNode = f;
+            }
+
+            public FileSystemNode FileSystemNode { get; private set; }
+        }
+
+        #endregion
 
 
 
