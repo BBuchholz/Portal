@@ -542,6 +542,7 @@ namespace NineWorldsDeep.Db.Sqlite
                     //5:SourceYear
                     //6:SourceUrl
                     //7:SourceRetrievalDate
+                    //8:SourceTag
                     
                     int sourceId = rdr.GetInt32(0);
                     //int sourceTypeId = rdr.GetInt32(1);
@@ -551,6 +552,7 @@ namespace NineWorldsDeep.Db.Sqlite
                     string sourceYear = DbV5Utils.GetNullableString(rdr, 5);
                     string sourceUrl = DbV5Utils.GetNullableString(rdr, 6);
                     string sourceRetrievalDate = DbV5Utils.GetNullableString(rdr, 7);
+                    string sourceTag = DbV5Utils.GetNullableString(rdr, 8);
 
                     lst.Add(new ArchivistSource()
                     {
@@ -561,7 +563,8 @@ namespace NineWorldsDeep.Db.Sqlite
                         Director = sourceDirector,
                         Year = sourceYear,
                         Url = sourceUrl,
-                        RetrievalDate = sourceRetrievalDate
+                        RetrievalDate = sourceRetrievalDate,
+                        SourceTag = sourceTag
                     });
                 }
             }
@@ -717,6 +720,7 @@ namespace NineWorldsDeep.Db.Sqlite
                     // 5:SourceYear
                     // 6:SourceUrl
                     // 7:SourceRetrievalDate 
+                    // 8:SourceTag
 
                     int sourceId = rdr.GetInt32(0);
                     int sourceTypeId = rdr.GetInt32(1);
@@ -726,6 +730,7 @@ namespace NineWorldsDeep.Db.Sqlite
                     string sourceYear = DbV5Utils.GetNullableString(rdr, 5);
                     string sourceUrl = DbV5Utils.GetNullableString(rdr, 6);
                     string sourceRetrievalDate = DbV5Utils.GetNullableString(rdr, 7);
+                    string sourceTag = DbV5Utils.GetNullableString(rdr, 8);
 
                     src.SourceId = sourceId;
                     src.SourceTypeId = sourceTypeId;
@@ -735,6 +740,7 @@ namespace NineWorldsDeep.Db.Sqlite
                     src.Year = sourceYear;
                     src.Url = sourceUrl;
                     src.RetrievalDate = sourceRetrievalDate;
+                    src.SourceTag = sourceTag;
                 }
             }
         }

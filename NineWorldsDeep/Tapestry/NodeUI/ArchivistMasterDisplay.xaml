@@ -291,6 +291,17 @@
 	                                           Text="{Binding RetrievalDate}" 
 	                                           TextWrapping="Wrap"/>
                                 </WrapPanel>
+                                <WrapPanel Name="wpSourceTag" 
+                                           HorizontalAlignment="Center"
+                                           Margin="5">
+                                    <TextBlock Text="SourceTag: " 
+                                               FontWeight="Bold" 
+                                               FontSize="20"/>
+                                    <TextBlock Name="tbSourceTag" 
+                                               Text="{Binding SourceTag}" 
+                                               TextWrapping="Wrap"
+                                               FontSize="20"/>
+                                </WrapPanel>
                             </StackPanel>
                             <DataTemplate.Triggers>
                                 <DataTrigger Binding="{Binding Title}" Value="">
@@ -311,6 +322,9 @@
                                 <DataTrigger Binding="{Binding RetrievalDate}" Value="">
                                     <Setter TargetName="wpRetrievalDate" Property="Visibility" Value="Collapsed"/>
                                 </DataTrigger>
+                                <DataTrigger Binding="{Binding SourceTag}" Value="">
+                                    <Setter TargetName="wpSourceTag" Property="Visibility" Value="Collapsed"/>
+                                </DataTrigger>
                                 <DataTrigger Binding="{Binding Title}" Value="{x:Null}">
                                     <Setter TargetName="wpTitle" Property="Visibility" Value="Collapsed"/>
                                 </DataTrigger>
@@ -328,6 +342,9 @@
                                 </DataTrigger>
                                 <DataTrigger Binding="{Binding RetrievalDate}" Value="{x:Null}">
                                     <Setter TargetName="wpRetrievalDate" Property="Visibility" Value="Collapsed"/>
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding SourceTag}" Value="{x:Null}">
+                                    <Setter TargetName="wpSourceTag" Property="Visibility" Value="Collapsed"/>
                                 </DataTrigger>
                             </DataTemplate.Triggers>
                         </DataTemplate>                        

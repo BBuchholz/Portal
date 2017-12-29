@@ -76,6 +76,17 @@
                                TextWrapping="Wrap"
                                FontSize="20"/>
                 </WrapPanel>
+                <WrapPanel Name="wpSourceTag" 
+                           HorizontalAlignment="Center"
+                           Margin="5">
+                    <TextBlock Text="SourceTag: " 
+                               FontWeight="Bold"
+                               FontSize="20"/>
+                    <TextBlock Name="tbSourceTag" 
+                               Text="{Binding SourceTag}" 
+                               TextWrapping="Wrap"
+                               FontSize="20"/>
+                </WrapPanel>
             </StackPanel>
             <DataTemplate.Triggers>
                 <DataTrigger Binding="{Binding Title}" Value="">
@@ -96,6 +107,9 @@
                 <DataTrigger Binding="{Binding RetrievalDate}" Value="">
                     <Setter TargetName="wpRetrievalDate" Property="Visibility" Value="Collapsed"/>
                 </DataTrigger>
+                <DataTrigger Binding="{Binding SourceTag}" Value="">
+                    <Setter TargetName="wpSourceTag" Property="Visibility" Value="Collapsed"/>
+                </DataTrigger>
                 <DataTrigger Binding="{Binding Title}" Value="{x:Null}">
                     <Setter TargetName="wpTitle" Property="Visibility" Value="Collapsed"/>
                 </DataTrigger>
@@ -113,6 +127,9 @@
                 </DataTrigger>
                 <DataTrigger Binding="{Binding RetrievalDate}" Value="{x:Null}">
                     <Setter TargetName="wpRetrievalDate" Property="Visibility" Value="Collapsed"/>
+                </DataTrigger>
+                <DataTrigger Binding="{Binding SourceTag}" Value="{x:Null}">
+                    <Setter TargetName="wpSourceTag" Property="Visibility" Value="Collapsed"/>
                 </DataTrigger>
             </DataTemplate.Triggers>
         </DataTemplate>
@@ -165,9 +182,10 @@
                     Padding="5"/>
 
             <Button x:Name="btnEnterSourceTag"
-                Content="EnterSourceTag"
-                Margin="5"
-                Padding="5"/>
+                    Content="EnterSourceTag"
+                    Margin="5"
+                    Padding="5"
+                    Click="btnEnterSourceTag_Click"/>
 
             <Button x:Name="btnCopySourceTag"
                 Content="Copy Source Tag"

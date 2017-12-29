@@ -359,6 +359,7 @@ namespace NineWorldsDeep.Sqlite
         public static string COLUMN_SOURCE_YEAR = "SourceYear";
         public static string COLUMN_SOURCE_URL = "SourceUrl";
         public static string COLUMN_SOURCE_RETRIEVAL_DATE = "SourceRetrievalDate";
+        public static string COLUMN_SOURCE_TAG = "SourceTag";
 
         //SourceExcerpt
         public static string TABLE_SOURCE_EXCERPT = "SourceExcerpt";
@@ -408,7 +409,8 @@ namespace NineWorldsDeep.Sqlite
             "	   " + COLUMN_SOURCE_DIRECTOR + ", " +
             "	   " + COLUMN_SOURCE_YEAR + ", " +
             "	   " + COLUMN_SOURCE_URL + ", " +
-            "	   " + COLUMN_SOURCE_RETRIEVAL_DATE + "  " +
+            "	   " + COLUMN_SOURCE_RETRIEVAL_DATE + ",  " +
+            "	   " + COLUMN_SOURCE_TAG + "  " +
             "FROM " + TABLE_SOURCE + " " +
             "WHERE " + COLUMN_SOURCE_TYPE_ID + " = ?; ";
 
@@ -421,7 +423,8 @@ namespace NineWorldsDeep.Sqlite
             "	    " + NwdContract.COLUMN_SOURCE_DIRECTOR + ", " +
             "	    " + NwdContract.COLUMN_SOURCE_YEAR + ", " +
             "	    " + NwdContract.COLUMN_SOURCE_URL + ", " +
-            "	    " + NwdContract.COLUMN_SOURCE_RETRIEVAL_DATE + "  " +
+            "	    " + NwdContract.COLUMN_SOURCE_RETRIEVAL_DATE + ",  " +
+            "	    " + NwdContract.COLUMN_SOURCE_TAG + "  " +
             "FROM " + TABLE_SOURCE + " " +
             "WHERE " + COLUMN_SOURCE_TYPE_ID + " = ?  " +
             "AND TRIM(IFNULL(" + COLUMN_SOURCE_TITLE + ", '')) = TRIM(IFNULL(?, ''))  " +

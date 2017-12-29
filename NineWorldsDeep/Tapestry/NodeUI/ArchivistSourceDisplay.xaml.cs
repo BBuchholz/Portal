@@ -26,7 +26,8 @@ namespace NineWorldsDeep.Tapestry.NodeUI
         #region fields
 
         private Db.Sqlite.ArchivistSubsetDb db;
-        private ArchivistSourceNode sourceNode;
+        //private ArchivistSourceNode sourceNode;
+        private ArchivistSource source;
 
         #endregion
 
@@ -45,15 +46,24 @@ namespace NineWorldsDeep.Tapestry.NodeUI
 
         public void Display(ArchivistSourceNode src)
         {
-            this.sourceNode = src;
+            //this.sourceNode = src;
+            if(src != null)
+            {
+                this.source = src.Source;
+            }
             RefreshFromDb();
         }
 
         public void RefreshFromDb()
         {
-            if (this.sourceNode != null && this.sourceNode.Source != null)
+            //if (this.sourceNode != null && this.sourceNode.Source != null)
+            //{
+            //    db.LoadSourceExcerptsWithTags(this.sourceNode.Source);
+            //    RefreshFromObject();
+            //}
+            if (this.source != null)
             {
-                db.LoadSourceExcerptsWithTags(this.sourceNode.Source);
+                db.LoadSourceExcerptsWithTags(this.source);
                 RefreshFromObject();
             }
         }
@@ -64,10 +74,19 @@ namespace NineWorldsDeep.Tapestry.NodeUI
 
         private void RefreshFromObject()
         {
-            ccSourceDetails.Content = sourceNode.Source;
+            //ccSourceDetails.Content = sourceNode.Source;
+
+            //lvSourceExcerpts.ItemsSource = null;
+            //lvSourceExcerpts.ItemsSource = sourceNode.Source.Excerpts;
+
+            ccSourceDetails.Content = source;
 
             lvSourceExcerpts.ItemsSource = null;
-            lvSourceExcerpts.ItemsSource = sourceNode.Source.Excerpts;
+
+            if (source != null)
+            {
+                lvSourceExcerpts.ItemsSource = source.Excerpts;
+            }
         }
 
         private void ProcessEntryInput()
@@ -80,12 +99,14 @@ namespace NineWorldsDeep.Tapestry.NodeUI
                 var excerpt = new ArchivistSourceExcerpt()
                 {
                     ExcerptValue = itemValue,
-                    SourceId = sourceNode.Source.SourceId
+                    //SourceId = sourceNode.Source.SourceId
+                    SourceId = source.SourceId
                 };
 
                 excerpt.SourceExcerptId = db.EnsureCore(excerpt);
 
-                sourceNode.Source.Add(excerpt);
+                //sourceNode.Source.Add(excerpt);
+                source.Add(excerpt);
 
                 RefreshFromObject();
 
@@ -267,7 +288,37 @@ namespace NineWorldsDeep.Tapestry.NodeUI
             RefreshFromDb();
         }
 
-        #endregion
+        private void btnEnterSourceTag_Click(object sender, RoutedEventArgs e)
+        {
+            asdf;
+
+            if (source != null)
+            {
+                if (!string.IsNullOrWhiteSpace(source.SourceTag))
+                {
+                    UI.Display.Message("Source Tag Already Set To: " + source.SourceTag);
+                }
+                else
+                {
+
+                    //Should[3]warn when setting that it’s a permanent distinction
+                    //[4]Set on confirm
+
+                    var tag = UI.Prompt.Input("Enter Source Tag (WARNING: THIS IS PERMANENT AND CANNOT BE CHANGED, LEAVE BLANK TO CANCEL):");
+
+                    if (!string.IsNullOrWhiteSpace(tag))
+                    {
+                        source.SourceTag = tag;
+                        db.SyncCore(source);
+
+                        RefreshFromObject();
+                    }
+                }
+            }
 
     }
+
+    #endregion
+
+}
 }

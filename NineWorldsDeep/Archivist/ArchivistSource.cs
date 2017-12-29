@@ -17,6 +17,7 @@ namespace NineWorldsDeep.Archivist
         public string Year { get; set; }
         public string Url { get; set; }
         public string RetrievalDate { get; set; }
+        public string SourceTag { get; set; }
         public List<ArchivistSourceExcerpt> Excerpts { get; private set; }
 
         public ArchivistSource()
