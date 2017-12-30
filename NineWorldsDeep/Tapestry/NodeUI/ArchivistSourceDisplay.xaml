@@ -179,7 +179,8 @@
             <Button x:Name="btnSourceTagAll"
                     Content="Source Tag All"
                     Margin="5"
-                    Padding="5"/>
+                    Padding="5"
+                    Click="btnSourceTagAll_Click"/>
 
             <Button x:Name="btnEnterSourceTag"
                     Content="EnterSourceTag"

@@ -160,5 +160,16 @@ namespace NineWorldsDeep.Archivist
 
             TagString = GenerateTagString();
         }
+
+        /// <summary>
+        /// will tag this source excerpt if it isn't already, if the tag
+        /// already exists, will do nothing
+        /// </summary>
+        /// <param name="tag"></param>
+        public void Tag(string tag)
+        {
+            GetTagging(tag).Tag();
+            TagString = GenerateTagString();
+        }
     }
 }

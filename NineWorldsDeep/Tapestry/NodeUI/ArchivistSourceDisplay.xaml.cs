@@ -116,6 +116,32 @@ namespace NineWorldsDeep.Tapestry.NodeUI
             }
         }
 
+        private void TagAllWithSourceTag()
+        {
+            if(source == null)
+            {
+                UI.Display.Message("Source is null");
+                return;
+            }
+
+            if (string.IsNullOrWhiteSpace(source.SourceTag))
+            {
+                UI.Display.Message("SourceTag not set");
+                return;
+            }
+
+            List<ArchivistSourceExcerpt> lst = lvSourceExcerpts.Items.Cast<ArchivistSourceExcerpt>().ToList();
+
+            foreach(var ase in lst)
+            {
+                ase.Tag(source.SourceTag);
+            }
+
+            db.SaveExcerptTaggings(lst);
+
+            Core.DataUpdateManager.UpdateSourceExcerptDisplays();
+        }
+
         #endregion
 
         #region events
@@ -326,9 +352,13 @@ namespace NineWorldsDeep.Tapestry.NodeUI
                 }
             }
 
+        }
+
+        private void btnSourceTagAll_Click(object sender, RoutedEventArgs e)
+        {
+            TagAllWithSourceTag();
+        }
+
+        #endregion
     }
-
-    #endregion
-
-}
 }

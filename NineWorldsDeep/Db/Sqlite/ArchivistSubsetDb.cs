@@ -296,6 +296,30 @@ namespace NineWorldsDeep.Db.Sqlite
             }
         }
 
+        public void SaveExcerptTaggings(IEnumerable<ArchivistSourceExcerpt> archivistSourceExcerpts)
+        {
+            using (var conn = new SQLiteConnection(
+                @"Data Source=" + Configuration.GetSqliteDbPath(DbName)))
+            {
+                conn.Open();
+
+                using (var cmd = new SQLiteCommand(conn))
+                {
+                    using (var transaction = conn.BeginTransaction())
+                    {
+                        foreach (ArchivistSourceExcerpt ase in archivistSourceExcerpts)
+                        {
+                            SaveExcerptTaggings(ase, cmd);
+                        }
+
+                        transaction.Commit();
+                    }
+                }
+
+                conn.Close();
+            }
+        }
+
         private void SaveExcerptTaggings(ArchivistSourceExcerpt ase, SQLiteCommand cmd)
         {
             foreach(SourceExcerptTagging set in ase.ExcerptTaggings)
