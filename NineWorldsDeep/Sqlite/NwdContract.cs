@@ -381,6 +381,12 @@ namespace NineWorldsDeep.Sqlite
 
         #region "queries"
 
+        internal static readonly string UPDATE_SOURCE_TAG_WHERE_SOURCE_ID = 
+
+            "UPDATE " + TABLE_SOURCE + " " +
+            "SET " + COLUMN_SOURCE_TAG + " = ?  " +
+            "WHERE " + COLUMN_SOURCE_ID + " = ? ;  ";
+
         internal static readonly string SELECT_TYPE_ID_TYPE_VALUE_FROM_SOURCE_TYPE =
 
             "SELECT " + NwdContract.COLUMN_SOURCE_TYPE_ID + ", " +

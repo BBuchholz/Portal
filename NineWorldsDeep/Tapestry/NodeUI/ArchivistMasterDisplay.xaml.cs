@@ -71,6 +71,11 @@ namespace NineWorldsDeep.Tapestry.NodeUI
 
         #region event handlers
 
+        private void btnRefreshSources_Click(object sender, RoutedEventArgs e)
+        {
+            LoadSources();
+        }
+
         private void btnImportTextFiles_Click(object sender, RoutedEventArgs e)
         {
 
@@ -78,10 +83,7 @@ namespace NineWorldsDeep.Tapestry.NodeUI
 
         private void cmbSourceTypes_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if(SelectedSourceType != null)
-            {
-                LoadSources(SelectedSourceType.SourceTypeId);
-            }
+            LoadSources();
         }
 
         private void lvSources_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -238,6 +240,20 @@ namespace NineWorldsDeep.Tapestry.NodeUI
 
         #region private helper methods
 
+        private void LoadSources()
+        {
+            lvSources.ItemsSource = null;
+
+            if (SelectedSourceType != null)
+            {
+                LoadSources(SelectedSourceType.SourceTypeId);
+            }
+            else
+            {
+                UI.Display.Message("Select a source type...");
+            }
+        }
+
         private void LoadOrderBy()
         {
             List<string> stringPropertiesNameList = new List<string>();
@@ -331,6 +347,6 @@ namespace NineWorldsDeep.Tapestry.NodeUI
         }
 
         #endregion
-        
+
     }
 }

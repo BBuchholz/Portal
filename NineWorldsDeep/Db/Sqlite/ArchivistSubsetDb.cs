@@ -675,7 +675,40 @@ namespace NineWorldsDeep.Db.Sqlite
                 conn.Close();
             }
         }
-        
+
+        /// <summary>
+        /// tries to set source tag, will fail if unique constraint is violated
+        /// </summary>
+        /// <param name="sourceId"></param>
+        /// <param name="sourceTag"></param>
+        /// <param name="cmd"></param>
+        /// <returns>true if successful, false if fails for any reason</returns>
+        internal bool SetSourceTag(int sourceId, string sourceTag)
+        {
+            bool success = false;
+
+            using (var conn = new SQLiteConnection(
+                @"Data Source=" + Configuration.GetSqliteDbPath(DbName)))
+            {
+                conn.Open();
+
+                using (var cmd = new SQLiteCommand(conn))
+                {
+                    using (var transaction = conn.BeginTransaction())
+                    {
+                        success = SetSourceTag(sourceId, sourceTag, cmd);
+
+                        transaction.Commit();
+                    }
+                }
+
+                conn.Close();
+
+            }
+
+            return success;
+        }
+
         /// <summary>
         /// As opposed to Sync(), this will only sync
         /// properties specific to the Source table (SourceTypeId, SourceId, 
@@ -690,7 +723,7 @@ namespace NineWorldsDeep.Db.Sqlite
         {
             //mimic Sync(Media)
             src.SourceId = EnsureSourceIdByTypeTitleYearAndUrl(src, cmd);
-            PopulateSourceByTypeTitleYearAndUrl(src, cmd);
+            PopulateSourceByTypeTitleYearAndUrl(src, cmd);            
         }
 
         private void PopulateSourceByTypeTitleYearAndUrl(ArchivistSource src, SQLiteCommand cmd)
@@ -780,44 +813,37 @@ namespace NineWorldsDeep.Db.Sqlite
             cmd.Parameters.Add(ToNullableParm(src.RetrievalDate));
 
             cmd.ExecuteNonQuery();
+            
+        }
 
+        /// <summary>
+        /// tries to set source tag, will fail if unique constraint is violated
+        /// </summary>
+        /// <param name="sourceId"></param>
+        /// <param name="sourceTag"></param>
+        /// <param name="cmd"></param>
+        /// <returns>true if successful, false if fails for any reason</returns>
+        private bool SetSourceTag(int sourceId, string sourceTag, SQLiteCommand cmd)
+        {
+            cmd.Parameters.Clear();
+            
+            cmd.CommandText = NwdContract.UPDATE_SOURCE_TAG_WHERE_SOURCE_ID;
 
-            //cmd.Parameters.Add(new SQLiteParameter()
-            //{
-            //    Value = src.SourceTypeId
-            //});
+            cmd.Parameters.Add(ToNullableParm(sourceTag));
+            cmd.Parameters.Add(ToParm(sourceId));
 
-            //cmd.Parameters.Add(new SQLiteParameter()
-            //{
-            //    Value = GetNullableValue(src.Title)
-            //});
+            //in case unique constraint fails
 
-            //cmd.Parameters.Add(new SQLiteParameter()
-            //{
-            //    Value = GetNullableValue(src.Author)
-            //});
+            try
+            {
+                cmd.ExecuteNonQuery();
+            }
+            catch
+            {
+                return false;
+            }
 
-            //cmd.Parameters.Add(new SQLiteParameter()
-            //{
-            //    Value = GetNullableValue(src.Director)
-            //});
-
-            //cmd.Parameters.Add(new SQLiteParameter()
-            //{
-            //    Value = GetNullableValue(src.Year)
-            //});
-
-            //cmd.Parameters.Add(new SQLiteParameter()
-            //{
-            //    Value = GetNullableValue(src.Url)
-            //});
-
-            //cmd.Parameters.Add(new SQLiteParameter()
-            //{
-            //    Value = GetNullableValue(src.RetrievalDate)
-            //});
-
-            //cmd.ExecuteNonQuery();
+            return true;
         }
 
         /// <summary>

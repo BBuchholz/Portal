@@ -79,6 +79,7 @@ namespace NineWorldsDeep.Tapestry.NodeUI
             //lvSourceExcerpts.ItemsSource = null;
             //lvSourceExcerpts.ItemsSource = sourceNode.Source.Excerpts;
 
+            ccSourceDetails.Content = null;
             ccSourceDetails.Content = source;
 
             lvSourceExcerpts.ItemsSource = null;
@@ -286,12 +287,12 @@ namespace NineWorldsDeep.Tapestry.NodeUI
         private void ButtonRefreshSource_Click(object sender, RoutedEventArgs e)
         {
             RefreshFromDb();
+
+            UI.Display.Message("refreshed.");
         }
 
         private void btnEnterSourceTag_Click(object sender, RoutedEventArgs e)
         {
-            asdf;
-
             if (source != null)
             {
                 if (!string.IsNullOrWhiteSpace(source.SourceTag))
@@ -300,18 +301,27 @@ namespace NineWorldsDeep.Tapestry.NodeUI
                 }
                 else
                 {
-
-                    //Should[3]warn when setting that it’s a permanent distinction
-                    //[4]Set on confirm
-
                     var tag = UI.Prompt.Input("Enter Source Tag (WARNING: THIS IS PERMANENT AND CANNOT BE CHANGED, LEAVE BLANK TO CANCEL):");
 
                     if (!string.IsNullOrWhiteSpace(tag))
                     {
-                        source.SourceTag = tag;
-                        db.SyncCore(source);
+                        if(source.SourceId < 1)
+                        {
+                            db.SyncCore(source);
+                        }
 
-                        RefreshFromObject();
+                        bool successful = db.SetSourceTag(source.SourceId, tag);
+
+                        if (successful)
+                        {
+                            db.SyncCore(source);
+                            RefreshFromDb();
+                        }
+                        else
+                        {
+                            UI.Display.Message(
+                                "error setting source tag, make sure tag is unique!");
+                        }
                     }
                 }
             }

@@ -230,6 +230,7 @@
                 <Grid.RowDefinitions>
                     <RowDefinition Height="40"/>
                     <RowDefinition Height="40"/>
+                    <RowDefinition Height="40"/>
                     <RowDefinition/>
                     <RowDefinition Height="40"/>
                 </Grid.RowDefinitions>
@@ -245,9 +246,20 @@
                           Grid.Row="1"
                           Grid.Column="0"
                           SelectionChanged="cmbOrderBy_SelectionChanged"/>
+
+                <StackPanel Orientation="Horizontal"
+                            Grid.Row="2"
+                            HorizontalAlignment="Center">
+                    
+                    <Button x:Name="btnRefreshSources"
+                            Content="Refresh Sources"
+                            Margin="5"
+                            Click="btnRefreshSources_Click"/>
+                    
+                </StackPanel>
                 
                 <ListView x:Name="lvSources"
-                          Grid.Row="2"
+                          Grid.Row="3"
                           Margin="5"
                           ItemContainerStyle="{StaticResource alternatingStyle}"
                           AlternationCount="2"
@@ -286,7 +298,8 @@
 	                                           TextWrapping="Wrap"/>
                                 </WrapPanel>
                                 <WrapPanel Name="wpRetrievalDate">
-                                    <TextBlock Text="RetrievalDate: " FontWeight="Bold"/>
+                                    <TextBlock Text="RetrievalDate: " 
+                                               FontWeight="Bold"/>
                                     <TextBlock Name="tbRetrievalDate" 
 	                                           Text="{Binding RetrievalDate}" 
 	                                           TextWrapping="Wrap"/>
@@ -295,12 +308,10 @@
                                            HorizontalAlignment="Center"
                                            Margin="5">
                                     <TextBlock Text="SourceTag: " 
-                                               FontWeight="Bold" 
-                                               FontSize="20"/>
+                                               FontWeight="Bold" />
                                     <TextBlock Name="tbSourceTag" 
                                                Text="{Binding SourceTag}" 
-                                               TextWrapping="Wrap"
-                                               FontSize="20"/>
+                                               TextWrapping="Wrap"/>
                                 </WrapPanel>
                             </StackPanel>
                             <DataTemplate.Triggers>
@@ -351,7 +362,7 @@
                     </ListView.ItemTemplate>
                 </ListView>
 
-                <StatusBar Grid.Row="3"
+                <StatusBar Grid.Row="4"
                            Margin="5">
 
                     <StatusBarItem>
