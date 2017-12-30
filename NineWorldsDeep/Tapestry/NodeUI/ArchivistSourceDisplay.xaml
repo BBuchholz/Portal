@@ -189,9 +189,10 @@
                     Click="btnEnterSourceTag_Click"/>
 
             <Button x:Name="btnCopySourceTag"
-                Content="Copy Source Tag"
-                Margin="5"
-                Padding="5"/>
+                    Content="Copy Source Tag"
+                    Margin="5"
+                    Padding="5"
+                    Click="btnCopySourceTag_Click"/>
 
         </StackPanel>
         

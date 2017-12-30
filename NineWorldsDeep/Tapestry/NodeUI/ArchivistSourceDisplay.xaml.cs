@@ -359,6 +359,25 @@ namespace NineWorldsDeep.Tapestry.NodeUI
             TagAllWithSourceTag();
         }
 
+        private void btnCopySourceTag_Click(object sender, RoutedEventArgs e)
+        {
+            if(source == null)
+            {
+                UI.Display.Message("source is null");
+                return;
+            }
+
+            if (string.IsNullOrWhiteSpace(source.SourceTag))
+            {
+                UI.Display.Message("source tag not set");
+                return;
+            }
+                        
+            Clipboard.SetText(source.SourceTag);
+            UI.Display.Message(source.SourceTag + " copied to clipboard");
+        }
+
         #endregion
+
     }
 }
