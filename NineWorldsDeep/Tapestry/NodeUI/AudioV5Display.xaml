@@ -172,7 +172,7 @@
                       Foreground="WhiteSmoke">Loop</CheckBox>
 
             <CheckBox x:Name="chkPlayOnSelect"
-                      IsChecked="True"
+                      IsChecked="False"
                       Margin="10"
                       Checked="chkPlayOnSelect_Checked"
                       VerticalAlignment="Center"
