@@ -19,20 +19,111 @@ namespace NineWorldsDeep.Tapestry
     /// </summary>
     public partial class TapestrySplitViewWindow : Window
     {
+        private Dictionary<string, MenuItem> headerNameToBreadcrumbMenuItems;
+        private Dictionary<MenuItem, CommandItemCoupling> menuItemToCommandCoupling; 
+
         public TapestrySplitViewWindow()
         {
             InitializeComponent();
             UI.Utils.MainWindow = this;
+            TapestryRegistry.MainWindow = this;
+            headerNameToBreadcrumbMenuItems = new Dictionary<string, MenuItem>();
+            menuItemToCommandCoupling = new Dictionary<MenuItem, CommandItemCoupling>();
         }
 
         private void MenuItemNavigateRoot_Click(object sender, RoutedEventArgs e)
         {
             ctrlNodeSplitView.NavigateRoot();
+            ClearBreadcrumbs();
         }
-        
+
+        private void ClearBreadcrumbs()
+        {            
+            foreach(MenuItem mi in headerNameToBreadcrumbMenuItems.Values)
+            {
+                if (mainMenu.Items.Contains(mi))
+                {
+                    mainMenu.Items.Remove(mi);
+                }
+            }
+
+            headerNameToBreadcrumbMenuItems.Clear();
+            menuItemToCommandCoupling.Clear();          
+        }
+
         private void MenuItem_GlobalLoadLocalCheckChanged(object sender, RoutedEventArgs e)
         {
             TapestryRegistry.GlobalLoadLocal = chkGlobalLoadLocal.IsChecked;
+            TapestryRegistry.MainWindow = this;
+        }
+
+        //private void AddBreadCrumbNode(TapestryNode nd)
+        //{
+        //    if (!headerNameToBreadcrumbMenuItems.ContainsKey(nd.ShortName))
+        //    {
+        //        MenuItem menuItem = new MenuItem();
+        //        menuItem.Header = nd.ShortName;
+        //        mainMenu.Items.Add(menuItem);
+        //        headerNameToBreadcrumbMenuItems[nd.ShortName] = menuItem;
+        //    }
+        //}
+
+        //public void AddBreadCrumb(TapestrySplitViewLoadCommand lc)
+        //{
+        //    if (lc.LeftNode != null)
+        //    {
+        //        TapestryRegistry.MainWindow.AddBreadCrumbNode(lc.LeftNode);
+        //    }
+
+        //    if (lc.RightNode != null)
+        //    {
+        //        TapestryRegistry.MainWindow.AddBreadCrumbNode(lc.RightNode);
+        //    }
+        //}
+
+        public void AddBreadCrumb(TapestrySplitViewLoadCommand lc)
+        {
+            CommandItemCoupling coupling = new CommandItemCoupling(lc);
+
+            if (!headerNameToBreadcrumbMenuItems.ContainsKey(coupling.Header))
+            {
+                MenuItem menuItem = new MenuItem();
+                menuItem.Header = coupling.Header;
+                mainMenu.Items.Add(menuItem);
+                menuItem.Click += LoadCommand_Click;
+                headerNameToBreadcrumbMenuItems[coupling.Header] = menuItem;
+                menuItemToCommandCoupling[menuItem] = coupling;
+            }
+        }
+
+        private void LoadCommand_Click(object sender, RoutedEventArgs e)
+        {
+            MenuItem mi = sender as MenuItem;
+
+            if(mi != null)
+            {
+                //UI.Display.Message(mi.Header as string);
+                if(TapestryRegistry.SplitViewNodeControl != null &&
+                    menuItemToCommandCoupling.ContainsKey(mi))
+                {
+                    TapestryRegistry.SplitViewNodeControl.ResolveLoadCommand(
+                        menuItemToCommandCoupling[mi].Command);
+                }
+            }
+        }
+
+        private class CommandItemCoupling
+        {
+            public TapestrySplitViewLoadCommand Command { get; private set; }
+            public string Header { get; private set; }
+
+            public CommandItemCoupling(TapestrySplitViewLoadCommand lc)
+            {
+                Header = lc.LeftNode.ShortName + "|" + lc.RightNode;
+                Command = lc;
+            }
         }
     }
+
+    
 }

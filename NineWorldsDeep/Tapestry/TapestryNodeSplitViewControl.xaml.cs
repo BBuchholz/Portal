@@ -24,11 +24,12 @@ namespace NineWorldsDeep.Tapestry
     /// </summary>
     public partial class TapestryNodeSplitViewControl : UserControl, TapestryHistoryHandler
     {
-        private Stack<TapestrySplitViewLoadCommand> history;
+        //private Stack<TapestrySplitViewLoadCommand> history;
 
         public void NavigateRoot()
         {
-            history = new Stack<TapestrySplitViewLoadCommand>();
+            //history = new Stack<TapestrySplitViewLoadCommand>();
+
             //load to left, as if from right
             PerformLoad(rightNodeView, new TapestryRootNode());
         }
@@ -37,6 +38,7 @@ namespace NineWorldsDeep.Tapestry
         {
             InitializeComponent();
 
+            TapestryRegistry.SplitViewNodeControl = this;
             leftNodeView.RegisterHistoryHandler(this);
             rightNodeView.RegisterHistoryHandler(this);
             
@@ -82,9 +84,26 @@ namespace NineWorldsDeep.Tapestry
             ResolveLoadCommand(lc);
         }
 
-        private void ResolveLoadCommand(TapestrySplitViewLoadCommand lc)
+        public void ResolveLoadCommand(TapestrySplitViewLoadCommand lc)
         {
-            history.Push(lc);
+             //replace history mechanism
+             //history.Push(lc);
+
+            if(TapestryRegistry.MainWindow != null)
+            {
+                //if(lc.LeftNode != null)
+                //{
+                //    TapestryRegistry.MainWindow.AddBreadCrumbNode(lc.LeftNode);
+                //}
+
+                //if (lc.RightNode != null)
+                //{
+                //    TapestryRegistry.MainWindow.AddBreadCrumbNode(lc.RightNode);
+                //}
+
+                TapestryRegistry.MainWindow.AddBreadCrumb(lc);
+            }
+
                      
             if(true)//leftNodeView.CurrentNode != lc.LeftNode)
             {
@@ -99,18 +118,18 @@ namespace NineWorldsDeep.Tapestry
 
         private void UserControl_KeyDown(object sender, KeyEventArgs e)
         {
-            if (e.Key == Key.Escape)
-            {
-                //check for 2 or more actions (1 for current, 1 for previous)
-                if(history.Count > 1)
-                {
-                    //pop current action to clear it from history
-                    history.Pop();
+            //if (e.Key == Key.Escape)
+            //{
+            //    //check for 2 or more actions (1 for current, 1 for previous)
+            //    if(history.Count > 1)
+            //    {
+            //        //pop current action to clear it from history
+            //        history.Pop();
 
-                    //resolve previous action from stack
-                    ResolveLoadCommand(history.Pop());
-                }
-            }
+            //        //resolve previous action from stack
+            //        ResolveLoadCommand(history.Pop());
+            //    }
+            //}
         }
     }
 }

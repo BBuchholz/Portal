@@ -16,6 +16,7 @@
             <MenuItem Header="Navigation">
                 
                 <MenuItem Header="Root"
+                          x:Name="menuItemNavigation"
                           Click="MenuItemNavigateRoot_Click"/>
                 
                 <MenuItem Header="Global Load Local"
@@ -25,7 +26,9 @@
                           Unchecked="MenuItem_GlobalLoadLocalCheckChanged"/>
                 
             </MenuItem>
-            
+
+            <Separator/>
+
         </Menu>
         
         <Grid>

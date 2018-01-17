@@ -12,5 +12,7 @@
         /// as opposed to the default behavior of loading to the opposite pane
         /// </summary>
         public static bool GlobalLoadLocal { get; internal set; }
+        public static TapestrySplitViewWindow MainWindow { get; internal set; }
+        public static TapestryNodeSplitViewControl SplitViewNodeControl { get; internal set; }
     }
 }
