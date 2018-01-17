@@ -85,15 +85,36 @@ namespace NineWorldsDeep.Tapestry
         {
             CommandItemCoupling coupling = new CommandItemCoupling(lc);
 
-            if (!headerNameToBreadcrumbMenuItems.ContainsKey(coupling.Header))
+            //if (!headerNameToBreadcrumbMenuItems.ContainsKey(coupling.Header))
+            //{
+            //    MenuItem menuItem = new MenuItem();
+            //    menuItem.Header = coupling.Header;
+            //    mainMenu.Items.Add(menuItem);
+            //    menuItem.Click += LoadCommand_Click;
+            //    headerNameToBreadcrumbMenuItems[coupling.Header] = menuItem;
+            //    menuItemToCommandCoupling[menuItem] = coupling;
+            //}
+
+            //MODIFYING TO REPLACE EXISTING WITH LAST NAVIGATED LOAD COMMAND 
+            
+            MenuItem menuItem = new MenuItem();
+            menuItem.Header = coupling.Header;
+            menuItem.Click += LoadCommand_Click;
+
+            //remove existing item with same header/key
+            foreach (MenuItem mi in headerNameToBreadcrumbMenuItems.Values)
             {
-                MenuItem menuItem = new MenuItem();
-                menuItem.Header = coupling.Header;
-                mainMenu.Items.Add(menuItem);
-                menuItem.Click += LoadCommand_Click;
-                headerNameToBreadcrumbMenuItems[coupling.Header] = menuItem;
-                menuItemToCommandCoupling[menuItem] = coupling;
+                if ((mi.Header as string).Equals((menuItem.Header as string), StringComparison.CurrentCultureIgnoreCase))
+                {
+                    mainMenu.Items.Remove(mi);
+                }
             }
+
+            mainMenu.Items.Add(menuItem);
+
+            headerNameToBreadcrumbMenuItems[coupling.Header] = menuItem;
+            menuItemToCommandCoupling[menuItem] = coupling;
+            
         }
 
         private void LoadCommand_Click(object sender, RoutedEventArgs e)
