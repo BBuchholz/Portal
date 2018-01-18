@@ -155,9 +155,13 @@
                         
                         <StackPanel Orientation="Vertical">
 
-                                <TextBlock Text="{Binding ExcerptValue}" 
-                                   TextWrapping="Wrap"
-                                   Margin="5"/>
+                                <Button Content="{Binding Source.ShortName}"
+                                        Click="ButtonNavigateSource_Click"/>
+
+                                <TextBlock Text="{Binding ExcerptValue}"
+                                           x:Name="tbExcerptValue"
+                                           TextWrapping="Wrap"
+                                           Margin="5"/>
 
                                 <StackPanel Orientation="Horizontal"
                                     x:Name="spTagStringTextBlock">

@@ -18,6 +18,37 @@ namespace NineWorldsDeep.Archivist
         public string Url { get; set; }
         public string RetrievalDate { get; set; }
         public string SourceTag { get; set; }
+        public string ShortName
+        {
+            get
+            {
+                //if title and author set, its a book
+                if(!string.IsNullOrWhiteSpace(Title) && !string.IsNullOrWhiteSpace(Author))
+                {
+                    return Title + " (" + Author + ")";
+                }
+
+                //if just author is set, its a quote
+                if (!string.IsNullOrWhiteSpace(Author))
+                {
+                    return Author;
+                }
+
+                //if title without author is set, it's a movie
+                if (!string.IsNullOrWhiteSpace(Title))
+                {
+                    return Title;
+                }
+
+                //if url is set, it's a web page
+                if (!string.IsNullOrWhiteSpace(Url))
+                {
+                    return Url;
+                }
+
+                return "unknown source";
+            }
+        }
         public List<ArchivistSourceExcerpt> Excerpts { get; private set; }
 
         public ArchivistSource()

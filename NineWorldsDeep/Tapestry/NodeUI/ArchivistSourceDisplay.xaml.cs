@@ -61,10 +61,17 @@ namespace NineWorldsDeep.Tapestry.NodeUI
             //    db.LoadSourceExcerptsWithTags(this.sourceNode.Source);
             //    RefreshFromObject();
             //}
-            if (this.source != null)
+            if (this.source != null && this.source.SourceId > 0)
             {
+                //some components load a partial source node, need to refresh actual source from id as well
+                this.source = db.GetSourceById(this.source.SourceId);
+
                 db.LoadSourceExcerptsWithTags(this.source);
                 RefreshFromObject();
+            }
+            else
+            {
+                UI.Display.Message("can't refresh if source is null or source id isn't set");
             }
         }
 

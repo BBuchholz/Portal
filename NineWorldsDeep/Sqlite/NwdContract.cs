@@ -437,12 +437,19 @@ namespace NineWorldsDeep.Sqlite
             "AND TRIM(IFNULL(" + COLUMN_SOURCE_YEAR + ", '')) = TRIM(IFNULL(?, ''))  " +
             "AND TRIM(IFNULL(" + COLUMN_SOURCE_URL + ", '')) = TRIM(IFNULL(?, '')); ";
 
-            //"SELECT " + COLUMN_SOURCE_ID + "  " +
-            //"FROM " + TABLE_SOURCE + " " +
-            //"WHERE " + COLUMN_SOURCE_TYPE_ID + " = ?  " +
-            //"AND TRIM(IFNULL(" + COLUMN_SOURCE_TITLE + ", '')) = TRIM(IFNULL(?, ''))  " +
-            //"AND TRIM(IFNULL(" + COLUMN_SOURCE_YEAR + ", '')) = TRIM(IFNULL(?, ''))  " +
-            //"AND TRIM(IFNULL(" + COLUMN_SOURCE_URL + ", '')) = TRIM(IFNULL(?, '')); ";
+        internal static readonly string SELECT_SOURCE_BY_ID =
+
+            "SELECT " + NwdContract.COLUMN_SOURCE_ID + ", " +
+            "	    " + NwdContract.COLUMN_SOURCE_TYPE_ID + ", " +
+            "	    " + NwdContract.COLUMN_SOURCE_TITLE + ", " +
+            "	    " + NwdContract.COLUMN_SOURCE_AUTHOR + ", " +
+            "	    " + NwdContract.COLUMN_SOURCE_DIRECTOR + ", " +
+            "	    " + NwdContract.COLUMN_SOURCE_YEAR + ", " +
+            "	    " + NwdContract.COLUMN_SOURCE_URL + ", " +
+            "	    " + NwdContract.COLUMN_SOURCE_RETRIEVAL_DATE + ",  " +
+            "	    " + NwdContract.COLUMN_SOURCE_TAG + "  " +
+            "FROM " + TABLE_SOURCE + " " +
+            "WHERE " + COLUMN_SOURCE_ID + " = ? ; "; 
 
         internal static readonly string INSERT_SOURCE_T_U_V_W_X_Y_Z =
 

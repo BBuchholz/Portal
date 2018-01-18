@@ -131,7 +131,7 @@ namespace NineWorldsDeep.Db.Sqlite
             }
         }
 
-        public void LoadSourceExcerptsWithTags(MediaTag tag)
+        public void LoadSourceExcerptsWithTagsAndSource(MediaTag tag)
         {
             using (var conn = new SQLiteConnection(
                 @"Data Source=" + Configuration.GetSqliteDbPath(DbName)))
@@ -143,7 +143,7 @@ namespace NineWorldsDeep.Db.Sqlite
                     using (var transaction = conn.BeginTransaction())
                     {
 
-                        LoadSourceExcerptsWithTags(tag, cmd);
+                        LoadSourceExcerptsWithTagsAndSource(tag, cmd);
                         transaction.Commit();
                     }
                 }
@@ -152,7 +152,7 @@ namespace NineWorldsDeep.Db.Sqlite
             }
         }
 
-        private void LoadSourceExcerptsWithTags(MediaTag tag, SQLiteCommand cmd)
+        private void LoadSourceExcerptsWithTagsAndSource(MediaTag tag, SQLiteCommand cmd)
         {
             cmd.Parameters.Clear();
             cmd.CommandText =
@@ -164,6 +164,9 @@ namespace NineWorldsDeep.Db.Sqlite
             {
                 Dictionary<int, ArchivistSourceExcerpt> idToExcerpt =
                     new Dictionary<int, ArchivistSourceExcerpt>();
+
+                Dictionary<int, ArchivistSource> idToSource =
+                    new Dictionary<int, ArchivistSource>();
 
                 while (rdr.Read())
                 {                    
@@ -178,12 +181,24 @@ namespace NineWorldsDeep.Db.Sqlite
                     string sourceUrl = DbV5Utils.GetNullableString(rdr, 8);
                     string sourceTypeValue = rdr.GetString(9);
 
+                    if (!idToSource.ContainsKey(sourceId))
+                    {
+                        idToSource[sourceId] = new ArchivistSource()
+                        {
+                            Author = sourceAuthor,
+                            Title = sourceTitle,
+                            Url = sourceUrl,
+                            SourceId = sourceId
+                        };
+                    }
+
                     if (!idToExcerpt.ContainsKey(excerptId))
                     {
                         idToExcerpt[excerptId] = new ArchivistSourceExcerpt()
                         {
                             SourceExcerptId = excerptId,
                             SourceId = sourceId,
+                            Source = idToSource[sourceId],
                             ExcerptValue = exVal
                         };
 
@@ -748,6 +763,95 @@ namespace NineWorldsDeep.Db.Sqlite
             //mimic Sync(Media)
             src.SourceId = EnsureSourceIdByTypeTitleYearAndUrl(src, cmd);
             PopulateSourceByTypeTitleYearAndUrl(src, cmd);            
+        }
+
+        public ArchivistSource GetSourceById(int sourceId)
+        {
+            ArchivistSource src = null;
+
+            using (var conn = new SQLiteConnection(
+                @"Data Source=" + Configuration.GetSqliteDbPath(DbName)))
+            {
+                conn.Open();
+
+                using (var cmd = new SQLiteCommand(conn))
+                {
+                    using (var transaction = conn.BeginTransaction())
+                    {
+                        src = GetSourceById(sourceId, cmd);
+                        transaction.Commit();
+                    }
+                }
+
+                conn.Close();
+            }
+
+            return src;
+        }
+
+        private ArchivistSource GetSourceById(int sourceId , SQLiteCommand cmd)
+        {
+            ArchivistSource src = null;
+
+            cmd.Parameters.Clear();
+
+            // W = SourceTypeId
+            // X = SourceTitle
+            // Y = SourceYear
+            // Z = SourceUrl
+            cmd.CommandText = NwdContract.SELECT_SOURCE_BY_ID;
+
+            cmd.Parameters.Add(ToParm(sourceId));
+
+            using (var rdr = cmd.ExecuteReader())
+            {
+                if (rdr.Read())
+                {
+                    // 0:SourceId
+                    // 1:SourceTypeId
+                    // 2:SourceTitle
+                    // 3:SourceAuthor
+                    // 4:SourceDirector
+                    // 5:SourceYear
+                    // 6:SourceUrl
+                    // 7:SourceRetrievalDate 
+                    // 8:SourceTag
+
+                    int sourceTypeId = rdr.GetInt32(1);
+                    string sourceTitle = DbV5Utils.GetNullableString(rdr, 2);
+                    string sourceAuthor = DbV5Utils.GetNullableString(rdr, 3);
+                    string sourceDirector = DbV5Utils.GetNullableString(rdr, 4);
+                    string sourceYear = DbV5Utils.GetNullableString(rdr, 5);
+                    string sourceUrl = DbV5Utils.GetNullableString(rdr, 6);
+                    string sourceRetrievalDate = DbV5Utils.GetNullableString(rdr, 7);
+                    string sourceTag = DbV5Utils.GetNullableString(rdr, 8);
+
+                    src = new ArchivistSource()
+                    {
+                        SourceId = sourceId,
+                        SourceTypeId = sourceTypeId,
+                        Title = sourceTitle,
+                        Author = sourceAuthor,
+                        Director = sourceDirector,
+                        Year = sourceYear,
+                        Url = sourceUrl,
+                        RetrievalDate = sourceRetrievalDate,
+                        SourceTag = sourceTag
+                    };
+
+                    //src.SourceId = sourceId;
+                    //src.SourceTypeId = sourceTypeId;
+                    //src.Title = sourceTitle;
+                    //src.Author = sourceAuthor;
+                    //src.Director = sourceDirector;
+                    //src.Year = sourceYear;
+                    //src.Url = sourceUrl;
+                    //src.RetrievalDate = sourceRetrievalDate;
+                    //src.SourceTag = sourceTag;
+                }
+            }
+
+            return src;
         }
 
         private void PopulateSourceByTypeTitleYearAndUrl(ArchivistSource src, SQLiteCommand cmd)

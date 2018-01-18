@@ -68,7 +68,7 @@ namespace NineWorldsDeep.Tapestry.NodeUI
                 //TODO: mimic SynergyV5ListDisplay user control for async load of listviews
                 
                 dbMediaV5.LoadMediaWithDevicePathsForTag(this.mediaTagNode.MediaTag);
-                dbArchivist.LoadSourceExcerptsWithTags(this.mediaTagNode.MediaTag);
+                dbArchivist.LoadSourceExcerptsWithTagsAndSource(this.mediaTagNode.MediaTag);
                 
                 RefreshFromObject(txtDeviceNameFilter.Text);
             }
@@ -128,6 +128,30 @@ namespace NineWorldsDeep.Tapestry.NodeUI
             }
         }
 
+        private void ButtonNavigateSource_Click(object sender, RoutedEventArgs e)
+        {
+            TextBlock tbExcerptValue =
+                Core.UtilsUi.GetTemplateSibling<TextBlock, Button>(
+                    (Button)sender, "tbExcerptValue");
+
+            ArchivistSourceExcerpt ase =
+                (ArchivistSourceExcerpt)tbExcerptValue.DataContext;
+
+
+            //UI.Display.Message("source: " + ase.Source.ShortName);
+
+            var src = ase.Source;
+
+            if (src != null)
+            {
+                ArchivistSourceNode nd = new ArchivistSourceNode(src);
+
+                SourceSelectedEventArgs args =
+                    new SourceSelectedEventArgs(nd);
+
+                OnSourceSelected(args);
+            }
+        }
 
         private void ButtonEditTags_Click(object sender, RoutedEventArgs e)
         {
@@ -252,6 +276,27 @@ namespace NineWorldsDeep.Tapestry.NodeUI
 
         #endregion
 
+
+        #region event SourceSelected 
+
+        protected virtual void OnSourceSelected(SourceSelectedEventArgs args)
+        {
+            SourceSelected?.Invoke(this, args);
+        }
+
+        public event EventHandler<SourceSelectedEventArgs> SourceSelected;
+
+        public class SourceSelectedEventArgs
+        {
+            public SourceSelectedEventArgs(ArchivistSourceNode sn)
+            {
+                SourceNode = sn;
+            }
+
+            public ArchivistSourceNode SourceNode { get; private set; }
+        }
+
+        #endregion
 
 
         //public static T FindAncestor<T>(DependencyObject current)

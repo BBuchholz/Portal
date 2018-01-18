@@ -47,6 +47,7 @@ namespace NineWorldsDeep.Tapestry
             taggedMediaDisplay.PathSelected += TaggedMediaDisplay_PathSelected;
             hiveMain.HiveRootClicked += HiveMain_HiveRootClicked;
             mediaTagDisplay.PathSelected += MediaTagDisplay_PathSelected;
+            mediaTagDisplay.SourceSelected += MediaTagDisplay_SourceSelected;
         }
 
         private void MediaTagDisplay_PathSelected(object sender, MediaTagDisplay.PathSelectedEventArgs e)
@@ -54,6 +55,14 @@ namespace NineWorldsDeep.Tapestry
             if (historyHandler != null)
             {
                 historyHandler.PerformLoad(this, e.FileSystemNode);
+            }
+        }
+
+        private void MediaTagDisplay_SourceSelected(object sender, MediaTagDisplay.SourceSelectedEventArgs e)
+        {
+            if (historyHandler != null)
+            {
+                historyHandler.PerformLoad(this, e.SourceNode);
             }
         }
 
