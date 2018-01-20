@@ -5,117 +5,97 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:NineWorldsDeep.Tapestry.NodeUI"
              mc:Ignorable="d" 
-             d:DesignHeight="800" d:DesignWidth="400">
+             d:DesignHeight="800" d:DesignWidth="600">
 
 
     <UserControl.Resources>
-        <DataTemplate x:Key="SourceTemplate">
-            <!--<StackPanel Orientation="Vertical" HorizontalAlignment="Center">
-                <WrapPanel Name="wpTitle" 
-                           HorizontalAlignment="Center"
-                           Margin="5">
-                    <TextBlock Text="Title: " 
-                               FontWeight="Bold"
-                               FontSize="20"/>
-                    <TextBlock Name="tbTitle" 
-                               Text="{Binding Title}" 
-                               TextWrapping="Wrap"
-                               FontSize="20"/>
-                </WrapPanel>
-                <WrapPanel Name="wpAuthor" 
-                           HorizontalAlignment="Center"
-                           Margin="5">
-                    <TextBlock Text ="Author: " 
-                               FontWeight="Bold"
-                               FontSize="20"/>
-                    <TextBlock Name="tbAuthor" 
-                               Text="{Binding Author}" 
-                               TextWrapping="Wrap"
-                               FontSize="20"/>
-                </WrapPanel>
-                <WrapPanel Name="wpDirector" 
-                           HorizontalAlignment="Center"
-                           Margin="5">
-                    <TextBlock Text="Director: " 
-                               FontWeight="Bold"
-                               FontSize="20"/>
-                    <TextBlock Name="tbDirector" 
-                               Text="{Binding Director}" 
-                               TextWrapping="Wrap"
-                               FontSize="20"/>
-                </WrapPanel>
-                <WrapPanel Name="wpYear" 
-                           HorizontalAlignment="Center"
-                           Margin="5">
-                    <TextBlock Text="Year: " 
-                               FontWeight="Bold"
-                               FontSize="20"/>
-                    <TextBlock Name="tbYear" 
-                               Text="{Binding Year}" 
-                               TextWrapping="Wrap"
-                               FontSize="20"/>
-                </WrapPanel>
-                <WrapPanel Name="wpUrl" 
-                           HorizontalAlignment="Center"
-                           Margin="5">
-                    <TextBlock Text="Url: " 
-                               FontWeight="Bold"
-                               FontSize="20"/>
-                    <TextBlock Name="tbUrl" 
-                               Text="{Binding Url}" 
-                               TextWrapping="Wrap"
-                               FontSize="20"/>
-                </WrapPanel>
-                <WrapPanel Name="wpRetrievalDate" 
-                           HorizontalAlignment="Center"
-                           Margin="5">
-                    <TextBlock Text="RetrievalDate: " 
-                               FontWeight="Bold"
-                               FontSize="20"/>
-                    <TextBlock Name="tbRetrievalDate" 
-                               Text="{Binding RetrievalDate}" 
-                               TextWrapping="Wrap"
-                               FontSize="20"/>
-                </WrapPanel>
-            </StackPanel>
+        <DataTemplate x:Key="SourceExcerptTemplate">
+            <Grid>
+                
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="40"/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+                
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+
+                <StackPanel Orientation="Vertical"
+                            Grid.Row="0">
+                
+                    <StackPanel Orientation="Horizontal">
+                        
+                        <TextBlock Text="Source: "
+                                   FontWeight="Bold"/>       
+                        
+                        <TextBlock Name="tbTitle" 
+                                   Text="{Binding Source.ShortName}" 
+                                   TextWrapping="Wrap"/>
+                        
+                    </StackPanel>
+
+                    <StackPanel Orientation="Horizontal">
+                        
+                        <WrapPanel Name="wpPages" 
+                                   HorizontalAlignment="Center"
+                                   Margin="5">
+                            <TextBlock Text="Pages: " 
+                                       FontWeight="Bold"/>
+                            <TextBlock Name="tbPages" 
+                                       Text="{Binding ExcerptPages}"/>
+                        </WrapPanel>
+                        
+                        <WrapPanel Name="wpBeginTime" 
+                                   HorizontalAlignment="Center"
+                                   Margin="5">
+                            <TextBlock Text ="Begin Time: " 
+                                       FontWeight="Bold"/>
+                            <TextBlock Name="tbBeginTime" 
+                                       Text="{Binding ExcerptBeginTime}"/>
+                        </WrapPanel>
+                        
+                        <WrapPanel Name="wpExcerptEndTime" 
+                                   HorizontalAlignment="Center"
+                                   Margin="5">
+                            <TextBlock Text="End Time: " 
+                                       FontWeight="Bold"/>
+                            <TextBlock Name="tbDirector" 
+                                       Text="{Binding ExcerptEndTime}"/>
+                        </WrapPanel>
+                        
+                    </StackPanel>
+                    
+                </StackPanel>
+                
+                <ScrollViewer HorizontalScrollBarVisibility="Disabled"
+                              Grid.Row="2">
+                    <TextBlock TextWrapping="Wrap"
+                               Text="{Binding ExcerptValue}"
+                               Margin="10"/>
+                </ScrollViewer>
+
+            </Grid>
             <DataTemplate.Triggers>
-                <DataTrigger Binding="{Binding Title}" Value="">
-                    <Setter TargetName="wpTitle" Property="Visibility" Value="Collapsed"/>
+                <DataTrigger Binding="{Binding ExcerptPages}" Value="">
+                    <Setter TargetName="wpPages" Property="Visibility" Value="Collapsed"/>
                 </DataTrigger>
-                <DataTrigger Binding="{Binding Author}" Value="">
-                    <Setter TargetName="wpAuthor" Property="Visibility" Value="Collapsed"/>
+                <DataTrigger Binding="{Binding ExcerptBeginTime}" Value="">
+                    <Setter TargetName="wpBeginTime" Property="Visibility" Value="Collapsed"/>
                 </DataTrigger>
-                <DataTrigger Binding="{Binding Director}" Value="">
-                    <Setter TargetName="wpDirector" Property="Visibility" Value="Collapsed"/>
+                <DataTrigger Binding="{Binding ExcerptEndTime}" Value="">
+                    <Setter TargetName="wpExcerptEndTime" Property="Visibility" Value="Collapsed"/>
                 </DataTrigger>
-                <DataTrigger Binding="{Binding Year}" Value="">
-                    <Setter TargetName="wpYear" Property="Visibility" Value="Collapsed"/>
+                <DataTrigger Binding="{Binding ExcerptPages}" Value="{x:Null}">
+                    <Setter TargetName="wpPages" Property="Visibility" Value="Collapsed"/>
                 </DataTrigger>
-                <DataTrigger Binding="{Binding Url}" Value="">
-                    <Setter TargetName="wpUrl" Property="Visibility" Value="Collapsed"/>
+                <DataTrigger Binding="{Binding ExcerptBeginTime}" Value="{x:Null}">
+                    <Setter TargetName="wpBeginTime" Property="Visibility" Value="Collapsed"/>
                 </DataTrigger>
-                <DataTrigger Binding="{Binding RetrievalDate}" Value="">
-                    <Setter TargetName="wpRetrievalDate" Property="Visibility" Value="Collapsed"/>
+                <DataTrigger Binding="{Binding ExcerptEndTime}" Value="{x:Null}">
+                    <Setter TargetName="wpExcerptEndTime" Property="Visibility" Value="Collapsed"/>
                 </DataTrigger>
-                <DataTrigger Binding="{Binding Title}" Value="{x:Null}">
-                    <Setter TargetName="wpTitle" Property="Visibility" Value="Collapsed"/>
-                </DataTrigger>
-                <DataTrigger Binding="{Binding Author}" Value="{x:Null}">
-                    <Setter TargetName="wpAuthor" Property="Visibility" Value="Collapsed"/>
-                </DataTrigger>
-                <DataTrigger Binding="{Binding Director}" Value="{x:Null}">
-                    <Setter TargetName="wpDirector" Property="Visibility" Value="Collapsed"/>
-                </DataTrigger>
-                <DataTrigger Binding="{Binding Year}" Value="{x:Null}">
-                    <Setter TargetName="wpYear" Property="Visibility" Value="Collapsed"/>
-                </DataTrigger>
-                <DataTrigger Binding="{Binding Url}" Value="{x:Null}">
-                    <Setter TargetName="wpUrl" Property="Visibility" Value="Collapsed"/>
-                </DataTrigger>
-                <DataTrigger Binding="{Binding RetrievalDate}" Value="{x:Null}">
-                    <Setter TargetName="wpRetrievalDate" Property="Visibility" Value="Collapsed"/>
-                </DataTrigger>
-            </DataTemplate.Triggers>-->
+            </DataTemplate.Triggers>
         </DataTemplate>
         <Style x:Key="alternatingStyle" TargetType="{x:Type ListViewItem}">
             <Style.Triggers>
@@ -130,9 +110,6 @@
                 </Trigger>
             </Style.Triggers>
         </Style>
-        <!--<Style TargetType="{x:Type Hyperlink}">
-            <EventSetter Event="Click" Handler="Hyperlink_OnClick"/>
-        </Style>-->
     </UserControl.Resources>
 
     <Grid>
@@ -145,36 +122,22 @@
         </Grid.RowDefinitions>
 
         <ContentControl Grid.Row="0"
-                        x:Name="ccSourceDetails"
-                        Margin="30"
+                        x:Name="ccSourceExcerptDetails"
+                        Margin="10"
                         Content="{Binding}"
-                        ContentTemplate="{StaticResource SourceTemplate}"/>
+                        ContentTemplate="{StaticResource SourceExcerptTemplate}"/>
 
-        <!--<StackPanel Orientation="Horizontal"
+        <StackPanel Orientation="Horizontal"
                     Grid.Row="1"
                     HorizontalAlignment="Center">
 
-            <Button x:Name="btnRefreshSource"
+            <Button x:Name="btnRefresh"
                     Content="Refresh"
                     Margin="5"
-                    Padding="5"/>
+                    Padding="5"
+                    Click="ButtonRefreshSourceExcerpt_Click"/>
 
-            <Button x:Name="btnSourceTagAll"
-                    Content="Source Tag All"
-                    Margin="5"
-                    Padding="5"/>
-
-            <Button x:Name="btnEnterSourceTag"
-                Content="EnterSourceTag"
-                Margin="5"
-                Padding="5"/>
-
-            <Button x:Name="btnCopySourceTag"
-                Content="Copy Source Tag"
-                Margin="5"
-                Padding="5"/>
-
-        </StackPanel>-->
+        </StackPanel>
 
         <ListView x:Name="lvSourceExcerptAnnotations"
                   Grid.Row="2"
@@ -183,44 +146,13 @@
                   AlternationCount="2"
                   ScrollViewer.HorizontalScrollBarVisibility="Disabled">
 
-            <!--<ListView.ItemTemplate>
+            <ListView.ItemTemplate>
                 <DataTemplate>
-                    <StackPanel Orientation="Vertical">
-
-                        <TextBlock Text="{Binding ExcerptValue}" 
-                                   TextWrapping="Wrap"
-                                   Margin="5"/>
-
-                        <StackPanel Orientation="Horizontal"
-                                    x:Name="spTagStringTextBlock">
-
-                            <TextBlock local:ArchivistUiTagFormatter.FormattedText="{Binding TagString}" 
-                                       x:Name="tbTagString"
-                                       TextWrapping="Wrap" 
-                                       FontWeight="Bold"
-                                       Margin="5"/>
-
-                            <Button Content="Edit"
-                                    Click="ButtonEditTags_Click"/>
-
-                        </StackPanel>
-
-                        <StackPanel Orientation="Horizontal"
-                                    x:Name="spTagStringTextBox"
-                                    Visibility="Collapsed">
-
-                            <TextBox  x:Name="txtTagString"
-                                      TextWrapping="Wrap" 
-                                      FontWeight="Bold"
-                                      Margin="5"/>
-
-                            <Button Content="Save"
-                                    Click="ButtonSaveTags_Click"/>
-
-                        </StackPanel>
-                    </StackPanel>
+                    <Grid>
+                        <TextBlock Text="{Binding ExcerptAnnotationValue}"/>
+                    </Grid>
                 </DataTemplate>
-            </ListView.ItemTemplate>-->
+            </ListView.ItemTemplate>
         </ListView>
 
         <Grid Grid.Row="3">

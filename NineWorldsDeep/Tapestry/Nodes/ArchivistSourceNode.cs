@@ -25,7 +25,8 @@ namespace NineWorldsDeep.Tapestry.Nodes
 
         public override string GetShortName()
         {
-            return Source.ToString();
+            //return Source.ToString();
+            return "Archivist Source";
         }
 
         public override bool Parallels(TapestryNode nd)

@@ -20,6 +20,7 @@ namespace NineWorldsDeep.Archivist
         public string ExcerptBeginTime { get; set; }
         public string ExcerptEndTime { get; set; }
         public ArchivistSource Source { get; set; }
+        public List<ArchivistSourceExcerptAnnotation> Annotations { get; private set; }
         public List<SourceExcerptTagging> ExcerptTaggings
         {
             get { return Taggings.Values.ToList(); }
@@ -30,6 +31,7 @@ namespace NineWorldsDeep.Archivist
         public ArchivistSourceExcerpt()
         {
             Taggings = new Dictionary<string, SourceExcerptTagging>();
+            Annotations = new List<ArchivistSourceExcerptAnnotation>();
         }
 
         public string TagString
