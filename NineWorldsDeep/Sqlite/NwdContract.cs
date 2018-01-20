@@ -394,6 +394,27 @@ namespace NineWorldsDeep.Sqlite
 
         #region "queries"
 
+        internal static readonly string INSERT_OR_IGNORE_SOURCE_EXCERPT_ANNOTATION_EXCERPT_ID_ANNOTATION_ID_X_Y =
+
+            "INSERT OR IGNORE INTO " + TABLE_SOURCE_EXCERPT_ANNOTATION + " " +
+            "	(" + COLUMN_SOURCE_EXCERPT_ID + ", " +
+            "	 " + COLUMN_SOURCE_ANNOTATION_ID + ") " +
+            "VALUES " +
+            "	(?,?) ; ";
+
+        internal static readonly string INSERT_OR_IGNORE_SOURCE_ANNOTATION_VALUE =
+
+            "INSERT OR IGNORE INTO " + TABLE_SOURCE_ANNOTATION + " " +
+            "	(" + COLUMN_SOURCE_ANNOTATION_VALUE + ") " +
+            "VALUES " +
+            "	(?) ; ";
+
+        internal static readonly string SELECT_SOURCE_ANNOTATION_ID_FOR_ANNOTATION_VALUE =
+
+            "SELECT " + COLUMN_SOURCE_ANNOTATION_ID + " " +
+            "FROM " + TABLE_SOURCE_ANNOTATION + " " +
+            "WHERE " + COLUMN_SOURCE_ANNOTATION_VALUE + " = ? ; ";
+
         internal static readonly string SELECT_SOURCE_EXCERPT_ANNOTATIONS_BY_SOURCE_EXCERPT_ID =
 
             "SELECT sea." + COLUMN_SOURCE_EXCERPT_ANNOTATION_ID + ",  " +
@@ -698,7 +719,7 @@ namespace NineWorldsDeep.Sqlite
                          + COLUMN_HIVE_ROOT_DEACTIVATED_AT + " "
             + "FROM " + TABLE_HIVE_ROOT + " "
             + "WHERE " + COLUMN_HIVE_ROOT_NAME + " = ? ;";
-
+        
         #endregion
 
         #endregion

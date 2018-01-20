@@ -1167,6 +1167,33 @@ namespace NineWorldsDeep.Db.Sqlite
 
         #region ArchvistSourceExcerptAnnotation
         
+        public void InsertSourceExcerptAnnotation(int sourceExcerptId, string annotationValue)
+        {            
+            using (var conn = new SQLiteConnection(
+                @"Data Source=" + Configuration.GetSqliteDbPath(DbName)))
+            {
+                conn.Open();
+
+                using (var cmd = new SQLiteCommand(conn))
+                {
+                    using (var transaction = conn.BeginTransaction())
+                    {
+                        InsertSourceExcerptAnnotation(sourceExcerptId, annotationValue, cmd);
+                        transaction.Commit();
+                    }
+                }
+
+                conn.Close();
+            }
+        }
+
+        private void InsertSourceExcerptAnnotation(int sourceExcerptId, string annotationValue, SQLiteCommand cmd)
+        {
+            int annotationId = EnsureSourceAnnotation(annotationValue, cmd);
+
+            InsertOrIgnoreSourceExcerptAnnotationRecord(sourceExcerptId, annotationId, cmd);
+        }
+
         private List<ArchivistSourceExcerptAnnotation> GetSourceExcerptAnnotationsById(int sourceExcerptId, SQLiteCommand cmd)
         {
             List<ArchivistSourceExcerptAnnotation> lst =
@@ -1206,6 +1233,64 @@ namespace NineWorldsDeep.Db.Sqlite
             return lst;
         }
 
+        private int EnsureSourceAnnotation(string annotationValue, SQLiteCommand cmd)
+        {
+            int annotationId = GetSourceAnnotationId(annotationValue, cmd);
+
+            if (annotationId < 1)
+            {
+                InsertOrIgnoreSourceAnnotation(annotationValue, cmd);
+                annotationId = GetSourceAnnotationId(annotationValue, cmd);
+            }
+
+            return annotationId;
+        }
+
+        private int GetSourceAnnotationId(string annotationValue, SQLiteCommand cmd)
+        {
+            int id = -1;
+
+            cmd.Parameters.Clear();
+            cmd.CommandText =
+                NwdContract.SELECT_SOURCE_ANNOTATION_ID_FOR_ANNOTATION_VALUE;
+
+            cmd.Parameters.Add(new SQLiteParameter() { Value = annotationValue });
+
+            using (var rdr = cmd.ExecuteReader())
+            {
+                if (rdr.Read())
+                {
+                    id = rdr.GetInt32(0);
+                }
+            }
+
+            return id;
+        }
+
+        private void InsertOrIgnoreSourceAnnotation(string annotationValue, SQLiteCommand cmd)
+        {
+            cmd.Parameters.Clear();
+
+            cmd.CommandText = NwdContract.INSERT_OR_IGNORE_SOURCE_ANNOTATION_VALUE;
+
+            cmd.Parameters.Add(new SQLiteParameter() { Value = annotationValue });
+
+            cmd.ExecuteNonQuery();
+        }
+
+        private void InsertOrIgnoreSourceExcerptAnnotationRecord(int sourceExcerptId, int sourceAnnotationId, SQLiteCommand cmd)
+        {
+            cmd.Parameters.Clear();
+
+            cmd.CommandText = NwdContract.INSERT_OR_IGNORE_SOURCE_EXCERPT_ANNOTATION_EXCERPT_ID_ANNOTATION_ID_X_Y;
+
+            cmd.Parameters.Add(new SQLiteParameter() { Value = sourceExcerptId });
+            cmd.Parameters.Add(new SQLiteParameter() { Value = sourceAnnotationId });
+
+            cmd.ExecuteNonQuery();
+        }
+
         #endregion
+
     }
 }

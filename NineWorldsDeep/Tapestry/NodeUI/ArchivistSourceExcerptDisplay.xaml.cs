@@ -153,9 +153,14 @@ namespace NineWorldsDeep.Tapestry.NodeUI
 
             if (!string.IsNullOrWhiteSpace(annotationValue))
             {
-                if (this.sourceExcerpt != null && this.sourceExcerpt.SourceExcerptId > 0)
+                if (this.sourceExcerpt != null && 
+                    this.sourceExcerpt.SourceExcerptId > 0)
                 {
-                    UI.Display.Message("do stuff here. currently using a dummy id and will mess up database if we don't implement the load functionality first");
+                    //UI.Display.Message("do stuff here. currently using a dummy id and will mess up database if we don't implement the load functionality first");
+
+                    db.InsertSourceExcerptAnnotation(
+                        this.sourceExcerpt.SourceExcerptId,
+                        annotationValue);
 
                     RefreshFromDb();
 
