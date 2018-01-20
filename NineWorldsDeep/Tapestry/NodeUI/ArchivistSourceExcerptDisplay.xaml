@@ -10,72 +10,64 @@
 
     <UserControl.Resources>
         <DataTemplate x:Key="SourceExcerptTemplate">
-            <Grid>
-                
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="40"/>
-                    <RowDefinition/>
-                </Grid.RowDefinitions>
-                
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition/>
-                </Grid.ColumnDefinitions>
+            
+            <DockPanel LastChildFill="True">
 
                 <StackPanel Orientation="Vertical"
-                            Grid.Row="0">
-                
+                            DockPanel.Dock="Top">
+
                     <StackPanel Orientation="Horizontal">
-                        
+
                         <TextBlock Text="Source: "
-                                   FontWeight="Bold"/>       
-                        
+                                   FontWeight="Bold"/>
+
                         <TextBlock Name="tbTitle" 
                                    Text="{Binding Source.ShortName}" 
                                    TextWrapping="Wrap"/>
-                        
+
                     </StackPanel>
 
                     <StackPanel Orientation="Horizontal">
-                        
+
                         <WrapPanel Name="wpPages" 
                                    HorizontalAlignment="Center"
-                                   Margin="5">
+                                   Margin="0 10 5 0">
                             <TextBlock Text="Pages: " 
                                        FontWeight="Bold"/>
                             <TextBlock Name="tbPages" 
                                        Text="{Binding ExcerptPages}"/>
                         </WrapPanel>
-                        
+
                         <WrapPanel Name="wpBeginTime" 
                                    HorizontalAlignment="Center"
-                                   Margin="5">
+                                   Margin="0 10 5 0">
                             <TextBlock Text ="Begin Time: " 
                                        FontWeight="Bold"/>
                             <TextBlock Name="tbBeginTime" 
                                        Text="{Binding ExcerptBeginTime}"/>
                         </WrapPanel>
-                        
+
                         <WrapPanel Name="wpExcerptEndTime" 
                                    HorizontalAlignment="Center"
-                                   Margin="5">
+                                   Margin="0 10 5 0">
                             <TextBlock Text="End Time: " 
                                        FontWeight="Bold"/>
                             <TextBlock Name="tbDirector" 
                                        Text="{Binding ExcerptEndTime}"/>
                         </WrapPanel>
-                        
+
                     </StackPanel>
-                    
+
                 </StackPanel>
-                
+
                 <ScrollViewer HorizontalScrollBarVisibility="Disabled"
-                              Grid.Row="2">
+                              Grid.Row="2"
+                              Margin="0 10 0 0">
                     <TextBlock TextWrapping="Wrap"
-                               Text="{Binding ExcerptValue}"
-                               Margin="10"/>
+                               Text="{Binding ExcerptValue}"/>
                 </ScrollViewer>
 
-            </Grid>
+            </DockPanel>
             <DataTemplate.Triggers>
                 <DataTrigger Binding="{Binding ExcerptPages}" Value="">
                     <Setter TargetName="wpPages" Property="Visibility" Value="Collapsed"/>
@@ -116,62 +108,109 @@
 
         <Grid.RowDefinitions>
             <RowDefinition/>
-            <RowDefinition Height="40"/>
-            <RowDefinition Height="3*"/>
-            <RowDefinition Height="40"/>
+            <RowDefinition/>
+            <RowDefinition/>
         </Grid.RowDefinitions>
 
-        <ContentControl Grid.Row="0"
-                        x:Name="ccSourceExcerptDetails"
-                        Margin="10"
-                        Content="{Binding}"
-                        ContentTemplate="{StaticResource SourceExcerptTemplate}"/>
+        <Expander Header="Source Excerpt"
+                  x:Name="expSourceExcerptDetail"
+                  Grid.Row="0"
+                  IsExpanded="True"
+                  Margin="5"
+                  Expanded="Expander_Expanded"
+                  Collapsed="Expander_Collapsed">
 
-        <StackPanel Orientation="Horizontal"
-                    Grid.Row="1"
-                    HorizontalAlignment="Center">
+            <Grid>
+                
+                <Grid.RowDefinitions>
+                    <RowDefinition/>
+                    <RowDefinition Height="40"/>
+                </Grid.RowDefinitions>
 
-            <Button x:Name="btnRefresh"
-                    Content="Refresh"
-                    Margin="5"
-                    Padding="5"
-                    Click="ButtonRefreshSourceExcerpt_Click"/>
+                <ContentControl Grid.Row="0"
+                                x:Name="ccSourceExcerptDetails"
+                                Margin="10"
+                                Content="{Binding}"
+                                ContentTemplate="{StaticResource SourceExcerptTemplate}"/>
 
-        </StackPanel>
+                <StackPanel Orientation="Horizontal"
+                            Grid.Row="1"
+                            HorizontalAlignment="Center">
 
-        <ListView x:Name="lvSourceExcerptAnnotations"
+                    <Button x:Name="btnRefresh"
+                            Content="Refresh"
+                            Margin="5"
+                            Width="100"
+                            Click="ButtonRefreshSourceExcerpt_Click"/>
+
+                </StackPanel>
+                
+            </Grid>
+            
+        </Expander>
+
+        <Expander Header="Annotations"
+                  x:Name="expAnnotations"
+                  Grid.Row="1"
+                  Margin="5"
+                  IsExpanded="True"
+                  Expanded="Expander_Expanded"
+                  Collapsed="Expander_Collapsed">
+
+            <ListView x:Name="lvSourceExcerptAnnotations"
                   Grid.Row="2"
                   Margin="5"
                   ItemContainerStyle="{StaticResource alternatingStyle}"
                   AlternationCount="2"
                   ScrollViewer.HorizontalScrollBarVisibility="Disabled">
 
-            <ListView.ItemTemplate>
-                <DataTemplate>
-                    <Grid>
-                        <TextBlock Text="{Binding ExcerptAnnotationValue}"/>
-                    </Grid>
-                </DataTemplate>
-            </ListView.ItemTemplate>
-        </ListView>
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <Grid>
+                            <TextBlock Text="{Binding ExcerptAnnotationValue}"/>
+                        </Grid>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
 
-        <Grid Grid.Row="3">
+        </Expander>
 
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="4*"/>
-                <ColumnDefinition/>
-            </Grid.ColumnDefinitions>
+        <Expander Header="Add Annotation"
+                  x:Name="expAddAnnotation"
+                  Grid.Row="2"
+                  Margin="5"
+                  IsExpanded="True"
+                  Expanded="Expander_Expanded"
+                  Collapsed="Expander_Collapsed">
 
-            <TextBox x:Name="txtSourceExcerptAnnotationInput"
-                     Margin="5"
-                     TextWrapping="Wrap"
-                     AcceptsReturn="True"/>
+            <Grid>
 
-            <Button x:Name="btnAddSourceExcerptAnnotation"
-                    Grid.Column="1"
-                    Margin="5"
-                    Content="Add"/>
-        </Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition/>
+                    <RowDefinition Height="40"/>
+                </Grid.RowDefinitions>
+
+                <TextBox x:Name="txtSourceExcerptAnnotationInput"
+                         Margin="5"
+                         TextWrapping="Wrap"
+                         AcceptsReturn="True"/>
+                
+                <StackPanel Orientation="Horizontal"
+                            Grid.Row="1"
+                            HorizontalAlignment="Center">
+                
+                    <Button x:Name="btnAddSourceExcerptAnnotation"
+                            Grid.Row="1"
+                            Margin="5"
+                            Width="100"
+                            Content="Add"/>
+            
+                </StackPanel>
+            
+            </Grid> 
+            
+        </Expander>
 
     </Grid>
+    
 </UserControl>

@@ -85,12 +85,33 @@ namespace NineWorldsDeep.Tapestry.NodeUI
                 "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer quis blandit risus. In eget augue id ante convallis volutpat eget vitae ex. Aliquam vehicula justo quis hendrerit eleifend. Ut porttitor placerat leo fringilla faucibus. Phasellus pharetra nunc id tempus vestibulum. Donec sit amet ex ipsum. Sed nec erat dui. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Interdum et malesuada fames ac ante ipsum primis in faucibus. Fusce non lectus eget felis venenatis gravida quis ac turpis. Donec et mi vitae enim tincidunt viverra eu ut velit. Nullam eget rutrum sapien. Ut auctor erat at sem ullamcorper, in condimentum mi congue. Proin non tempus turpis. Etiam sagittis neque eget elit efficitur tempus a et sapien." + Environment.NewLine +
                 Environment.NewLine +  "Nam ut sem vulputate, hendrerit est id, scelerisque dui.Cras ultricies, metus eu dictum ultrices, metus magna auctor risus, ut accumsan augue massa eu justo.Pellentesque ac diam quis leo suscipit hendrerit.Ut id neque tempor, condimentum dui ac, euismod nisl.Etiam vitae varius justo, egestas pretium dui. Pellentesque velit ante, faucibus vel purus id, malesuada finibus nunc. Vivamus sit amet venenatis sem.Nulla at justo et massa accumsan ultrices.Vestibulum pharetra tristique tempus. Vestibulum et nisl eu tellus consequat aliquam.Morbi facilisis vehicula ligula, vel suscipit dolor imperdiet a. Mauris congue libero vel eros viverra facilisis.Proin facilisis augue eget congue luctus.";
 
+            var bt = "0:00:00";
+            var et = "0:11:11";
+            var ep = "111-156";
+
+            if(demoCount > 1)
+            {
+                bt = "";
+                et = "";
+            }
+
+            if(demoCount > 2)
+            {
+                ep = "";
+            }
+
+            if(demoCount > 3)
+            {
+                demoCount = 1;
+            }
+
             var ase = new ArchivistSourceExcerpt()
             {
+                SourceExcerptId = 1,
                 Source = new ArchivistSource() { Title = "hard coded demo source" },
-                ExcerptBeginTime = "0:00:00",
-                ExcerptEndTime = "0:11:11",
-                ExcerptPages = "111-156",
+                ExcerptBeginTime = bt,
+                ExcerptEndTime = et,
+                ExcerptPages = ep,
                 ExcerptValue = valText,
             };
 
@@ -138,6 +159,16 @@ namespace NineWorldsDeep.Tapestry.NodeUI
             {
                 UI.Display.Message("error refreshing from database, possible causes include a null excerpt or excerpt id not being set");
             }
+        }
+
+        private void Expander_Expanded(object sender, RoutedEventArgs e)
+        {
+            Core.UtilsUi.ProcessExpanderState((Expander)sender);
+        }
+
+        private void Expander_Collapsed(object sender, RoutedEventArgs e)
+        {
+            Core.UtilsUi.ProcessExpanderState((Expander)sender);
         }
 
         #endregion

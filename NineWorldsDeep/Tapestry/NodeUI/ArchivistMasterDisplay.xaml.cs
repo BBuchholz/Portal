@@ -104,12 +104,12 @@ namespace NineWorldsDeep.Tapestry.NodeUI
         
         private void Expander_Expanded(object sender, RoutedEventArgs e)
         {
-            ProcessExpanderState((Expander)sender);
+            Core.UtilsUi.ProcessExpanderState((Expander)sender);
         }
 
         private void Expander_Collapsed(object sender, RoutedEventArgs e)
         {
-            ProcessExpanderState((Expander)sender);
+            Core.UtilsUi.ProcessExpanderState((Expander)sender);
         }
 
         private void btnAddSourceType_Click(object sender, RoutedEventArgs e)
@@ -310,19 +310,19 @@ namespace NineWorldsDeep.Tapestry.NodeUI
             }
         }
         
-        /// <summary>
-        /// manages grid rows to share space between multiple expanded expanders
-        /// </summary>
-        /// <param name="expander"></param>
-        private void ProcessExpanderState(Expander expander)
-        {
-            Grid parent = FindAncestor<Grid>(expander);
-            int rowIndex = Grid.GetRow(expander);
+        ///// <summary>
+        ///// manages grid rows to share space between multiple expanded expanders
+        ///// </summary>
+        ///// <param name="expander"></param>
+        //private void ProcessExpanderState(Expander expander)
+        //{
+        //    Grid parent = FindAncestor<Grid>(expander);
+        //    int rowIndex = Grid.GetRow(expander);
 
-            if (parent.RowDefinitions.Count > rowIndex && rowIndex >= 0)
-                parent.RowDefinitions[rowIndex].Height =
-                    (expander.IsExpanded ? new GridLength(1, GridUnitType.Star) : GridLength.Auto);
-        }
+        //    if (parent.RowDefinitions.Count > rowIndex && rowIndex >= 0)
+        //        parent.RowDefinitions[rowIndex].Height =
+        //            (expander.IsExpanded ? new GridLength(1, GridUnitType.Star) : GridLength.Auto);
+        //}
 
         #endregion
 
