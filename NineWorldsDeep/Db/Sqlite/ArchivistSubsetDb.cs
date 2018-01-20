@@ -71,6 +71,7 @@ namespace NineWorldsDeep.Db.Sqlite
             }
         }
 
+
         private void LoadSourceExcerptsWithTags(ArchivistSource source, SQLiteCommand cmd)
         {
             cmd.Parameters.Clear();
@@ -1068,5 +1069,143 @@ namespace NineWorldsDeep.Db.Sqlite
 
             return outputValue;
         }
+
+        #region ArchivistSourceExcerpt
+        
+        public ArchivistSourceExcerpt GetSourceExcerptByIdWithSourceAndAnnotations(int sourceExcerptId)
+        {
+            ArchivistSourceExcerpt ase = null;
+
+            using (var conn = new SQLiteConnection(
+                @"Data Source=" + Configuration.GetSqliteDbPath(DbName)))
+            {
+                conn.Open();
+
+                using (var cmd = new SQLiteCommand(conn))
+                {
+                    using (var transaction = conn.BeginTransaction())
+                    {
+                        ase = GetSourceExcerptByIdWithSourceAndAnnotations(sourceExcerptId, cmd);
+                        transaction.Commit();
+                    }
+                }
+
+                conn.Close();
+            }
+
+            return ase;
+        }
+
+        private ArchivistSourceExcerpt GetSourceExcerptByIdWithSourceAndAnnotations(int sourceExcerptId, SQLiteCommand cmd)
+        {
+            //get excerpt by id
+            ArchivistSourceExcerpt ase = GetSourceExcerptById(sourceExcerptId, cmd);
+
+            if (ase != null)
+            {
+                //populate source
+                if(ase.SourceId > 0)
+                {
+                    ase.Source = GetSourceById(ase.SourceId, cmd);
+                }
+
+                //populate annotations
+                foreach(ArchivistSourceExcerptAnnotation annotation in GetSourceExcerptAnnotationsById(ase.SourceExcerptId, cmd))
+                {
+                    ase.Annotations.Add(annotation);
+                }
+            }
+
+            return ase;
+        }
+        
+        private ArchivistSourceExcerpt GetSourceExcerptById(int sourceExcerptId, SQLiteCommand cmd)
+        {
+            ArchivistSourceExcerpt ase = null;
+
+            cmd.Parameters.Clear();
+            
+            cmd.CommandText = NwdContract.SELECT_SOURCE_EXCERPT_BY_ID;
+
+            cmd.Parameters.Add(ToParm(sourceExcerptId));
+
+            using (var rdr = cmd.ExecuteReader())
+            {
+                if (rdr.Read())
+                {
+                    // 0:SourceExcerptId
+                    // 1:SourceId
+                    // 2:SourceExcerptValue
+                    // 3:SourceExcerptPages
+                    // 4:SourceExcerptBeginTime
+                    // 5:SourceExcerptEndTime 
+
+                    sourceExcerptId = rdr.GetInt32(0);
+                    int sourceId = rdr.GetInt32(1);
+                    string sourceExcerptValue = DbV5Utils.GetNullableString(rdr, 2);
+                    string sourceExcerptPages = DbV5Utils.GetNullableString(rdr, 3);
+                    string sourceExcerptBeginTime = DbV5Utils.GetNullableString(rdr, 4);
+                    string sourceExcerptEndTime = DbV5Utils.GetNullableString(rdr, 5);
+
+                    ase = new ArchivistSourceExcerpt()
+                    {
+                        SourceExcerptId = sourceExcerptId,
+                        SourceId = sourceId,
+                        ExcerptValue = sourceExcerptValue,
+                        ExcerptPages = sourceExcerptPages,
+                        ExcerptBeginTime = sourceExcerptBeginTime,
+                        ExcerptEndTime = sourceExcerptEndTime
+                    };
+                    
+                }
+            }
+
+            return ase;
+        }
+
+        #endregion
+
+        #region ArchvistSourceExcerptAnnotation
+        
+        private List<ArchivistSourceExcerptAnnotation> GetSourceExcerptAnnotationsById(int sourceExcerptId, SQLiteCommand cmd)
+        {
+            List<ArchivistSourceExcerptAnnotation> lst =
+                new List<ArchivistSourceExcerptAnnotation>();
+
+            cmd.Parameters.Clear();
+            cmd.CommandText =
+                NwdContract.SELECT_SOURCE_EXCERPT_ANNOTATIONS_BY_SOURCE_EXCERPT_ID;
+
+            cmd.Parameters.Add(ToParm(sourceExcerptId));
+
+            using (var rdr = cmd.ExecuteReader())
+            {
+                while (rdr.Read())
+                {
+                    //query field order
+                    //0:SourceExcerptAnnotationId
+                    //1:SourceExcerptId
+                    //2:SourceAnnotationId
+                    //3:SourceAnnotationValue 
+
+                    int sourceExcerptAnnotationId = rdr.GetInt32(0);
+                    sourceExcerptId = rdr.GetInt32(1);
+                    int sourceAnnotationId = rdr.GetInt32(2);
+                    string sourceAnnotationValue = DbV5Utils.GetNullableString(rdr, 3);
+
+                    lst.Add(new ArchivistSourceExcerptAnnotation()
+                    {
+                        SourceExcerptAnnotationId = sourceExcerptAnnotationId,
+                        SourceExcerptId = sourceExcerptId,
+                        SourceAnnotationId = sourceAnnotationId,
+                        SourceAnnotationValue = sourceAnnotationValue
+                    });
+                }
+            }
+
+            return lst;
+        }
+
+        #endregion
     }
 }

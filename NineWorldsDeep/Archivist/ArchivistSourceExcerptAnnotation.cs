@@ -8,7 +8,9 @@ namespace NineWorldsDeep.Archivist
 {
     public class ArchivistSourceExcerptAnnotation
     {
-        public int ExcerptAnnotationId { get; set; }
-        public string ExcerptAnnotationValue { get; set; }
+        public int SourceExcerptAnnotationId { get; set; }
+        public int SourceExcerptId { get; set; }
+        public int SourceAnnotationId { get; set; }
+        public string SourceAnnotationValue { get; set; }
     }
 }

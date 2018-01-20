@@ -35,6 +35,7 @@ namespace NineWorldsDeep.Tapestry.NodeUI
         public ArchivistSourceExcerptDisplay()
         {
             InitializeComponent();
+            db = new Db.Sqlite.ArchivistSubsetDb();
         }
 
         #endregion
@@ -60,8 +61,9 @@ namespace NineWorldsDeep.Tapestry.NodeUI
                 this.sourceExcerpt.SourceExcerptId > 0)
             {
                 //some component load partial, just id, need to pull fresh from db
-                this.sourceExcerpt = GenerateDemo();
-                //    db.GetSourceExcerptById(this.sourceExcerpt.SourceExcerptId);
+                //this.sourceExcerpt = GenerateDemo();
+                this.sourceExcerpt = 
+                    db.GetSourceExcerptByIdWithSourceAndAnnotations(this.sourceExcerpt.SourceExcerptId);
                 RefreshFromObject();
                 return true;
             }
@@ -117,12 +119,12 @@ namespace NineWorldsDeep.Tapestry.NodeUI
 
             ase.Annotations.Add(new ArchivistSourceExcerptAnnotation()
             {
-                ExcerptAnnotationValue = "demo annotation hard coded"
+                SourceAnnotationValue = "demo annotation hard coded"
             });
 
             ase.Annotations.Add(new ArchivistSourceExcerptAnnotation()
             {
-                ExcerptAnnotationValue = "demo annotation hard coded two"
+                SourceAnnotationValue = "demo annotation hard coded two"
             });
 
             return ase;
@@ -142,6 +144,23 @@ namespace NineWorldsDeep.Tapestry.NodeUI
             if(sourceExcerpt != null)
             {
                 lvSourceExcerptAnnotations.ItemsSource = sourceExcerpt.Annotations;
+            }
+        }
+
+        private void ProcessEntryInput()
+        {
+            string annotationValue = txtSourceExcerptAnnotationInput.Text;
+
+            if (!string.IsNullOrWhiteSpace(annotationValue))
+            {
+                if (this.sourceExcerpt != null && this.sourceExcerpt.SourceExcerptId > 0)
+                {
+                    UI.Display.Message("do stuff here. currently using a dummy id and will mess up database if we don't implement the load functionality first");
+
+                    RefreshFromDb();
+
+                    txtSourceExcerptAnnotationInput.Text = "";
+                }
             }
         }
 
@@ -171,7 +190,20 @@ namespace NineWorldsDeep.Tapestry.NodeUI
             Core.UtilsUi.ProcessExpanderState((Expander)sender);
         }
 
-        #endregion
+        private void btnAddSourceExcerptAnnotation_Click(object sender, RoutedEventArgs e)
+        {
+            ProcessEntryInput();
+        }
 
+        private void txtSourceExcerptAnnotationInput_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (Keyboard.Modifiers == ModifierKeys.Alt && Keyboard.IsKeyDown(Key.Enter))
+            {
+                ProcessEntryInput();
+                e.Handled = true;
+            }
+        }
+
+        #endregion
     }
 }

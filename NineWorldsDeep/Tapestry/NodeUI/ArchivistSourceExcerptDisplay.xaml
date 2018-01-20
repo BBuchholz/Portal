@@ -167,7 +167,7 @@
                 <ListView.ItemTemplate>
                     <DataTemplate>
                         <Grid>
-                            <TextBlock Text="{Binding ExcerptAnnotationValue}"/>
+                            <TextBlock Text="{Binding SourceAnnotationValue}"/>
                         </Grid>
                     </DataTemplate>
                 </ListView.ItemTemplate>
@@ -193,7 +193,8 @@
                 <TextBox x:Name="txtSourceExcerptAnnotationInput"
                          Margin="5"
                          TextWrapping="Wrap"
-                         AcceptsReturn="True"/>
+                         AcceptsReturn="True"
+                         KeyDown="txtSourceExcerptAnnotationInput_KeyDown"/>
                 
                 <StackPanel Orientation="Horizontal"
                             Grid.Row="1"
@@ -203,7 +204,9 @@
                             Grid.Row="1"
                             Margin="5"
                             Width="100"
-                            Content="Add"/>
+                            Content="Add"
+                            ToolTip="ALT+ENTER"
+                            Click="btnAddSourceExcerptAnnotation_Click"/>
             
                 </StackPanel>
             

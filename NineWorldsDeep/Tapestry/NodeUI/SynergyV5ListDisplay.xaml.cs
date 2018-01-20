@@ -308,6 +308,8 @@ namespace NineWorldsDeep.Tapestry.NodeUI
             //}
         }
 
+        #region private helper methods
+
         private void ProcessEntryInput()
         {
             string itemValue = txtListItemValueEntry.Text;
@@ -331,6 +333,8 @@ namespace NineWorldsDeep.Tapestry.NodeUI
                 }
             }
         }
+
+        #endregion
 
         private SynergyV5List CurrentList
         {
@@ -374,6 +378,8 @@ namespace NineWorldsDeep.Tapestry.NodeUI
             Clipboard.SetText(selectedItems.First().ItemValue);
         }
 
+        #region event handlers
+
         private void txtListItemValueEntry_KeyDown(object sender, KeyEventArgs e)
         {
             if (Keyboard.Modifiers == ModifierKeys.Alt && Keyboard.IsKeyDown(Key.Enter))
@@ -382,5 +388,7 @@ namespace NineWorldsDeep.Tapestry.NodeUI
                 e.Handled = true;
             }
         }
+
+        #endregion
     }
 }

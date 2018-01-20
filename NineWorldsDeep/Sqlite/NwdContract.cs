@@ -365,6 +365,9 @@ namespace NineWorldsDeep.Sqlite
         public static string TABLE_SOURCE_EXCERPT = "SourceExcerpt";
         public static string COLUMN_SOURCE_EXCERPT_ID = "SourceExcerptId";
         public static string COLUMN_SOURCE_EXCERPT_VALUE = "SourceExcerptValue";
+        public static string COLUMN_SOURCE_EXCERPT_PAGES = "SourceExcerptPages";
+        public static string COLUMN_SOURCE_EXCERPT_BEGIN_TIME = "SourceExcerptBeginTime";
+        public static string COLUMN_SOURCE_EXCERPT_END_TIME = "SourceExcerptEndTime";
 
         //SourceExcerptTagging
         public static string TABLE_SOURCE_EXCERPT_TAGGING = 
@@ -377,9 +380,41 @@ namespace NineWorldsDeep.Sqlite
         public static string COLUMN_SOURCE_EXCERPT_TAGGING_UNTAGGED_AT = 
             "SourceExcerptTaggingUntaggedAt";
 
+        //SourceExcerptAnnotation
+        public static string TABLE_SOURCE_EXCERPT_ANNOTATION = "SourceExcerptAnnotation";
+        public static string COLUMN_SOURCE_EXCERPT_ANNOTATION_ID = "SourceExcerptAnnotationId";
+
+        //SourceAnnotation
+        public static string TABLE_SOURCE_ANNOTATION = "SourceAnnotation";
+        public static string COLUMN_SOURCE_ANNOTATION_ID = "SourceAnnotationId";
+        public static string COLUMN_SOURCE_ANNOTATION_VALUE = "SourceAnnotationValue ";
+
+
         #endregion
 
         #region "queries"
+
+        internal static readonly string SELECT_SOURCE_EXCERPT_ANNOTATIONS_BY_SOURCE_EXCERPT_ID =
+
+            "SELECT sea." + COLUMN_SOURCE_EXCERPT_ANNOTATION_ID + ",  " +
+            "	    sea." + COLUMN_SOURCE_EXCERPT_ID + ",  " +
+            "	    sa." + COLUMN_SOURCE_ANNOTATION_ID + ",  " +
+            "	    sa." + COLUMN_SOURCE_ANNOTATION_VALUE + "  " +
+            "FROM " + TABLE_SOURCE_EXCERPT_ANNOTATION + " sea  " +
+            "JOIN " + TABLE_SOURCE_ANNOTATION + " sa  " +
+            "ON sea." + COLUMN_SOURCE_ANNOTATION_ID + " = sa." + COLUMN_SOURCE_ANNOTATION_ID + " " +
+            "WHERE sea." + COLUMN_SOURCE_EXCERPT_ID + " = ? ; ";
+
+        internal static readonly string SELECT_SOURCE_EXCERPT_BY_ID =
+
+            "SELECT " + COLUMN_SOURCE_EXCERPT_ID + ", " +
+            "	    " + COLUMN_SOURCE_ID + ", " +
+            "	    " + COLUMN_SOURCE_EXCERPT_VALUE + ", " +
+            "	    " + COLUMN_SOURCE_EXCERPT_PAGES + ", " +
+            "	    " + COLUMN_SOURCE_EXCERPT_BEGIN_TIME + ", " +
+            "	    " + COLUMN_SOURCE_EXCERPT_END_TIME + " " +
+            "FROM " + TABLE_SOURCE_EXCERPT + "  " +
+            "WHERE " + COLUMN_SOURCE_EXCERPT_ID + " = ? ; ";
 
         internal static readonly string UPDATE_SOURCE_TAG_WHERE_SOURCE_ID = 
 
@@ -663,7 +698,6 @@ namespace NineWorldsDeep.Sqlite
                          + COLUMN_HIVE_ROOT_DEACTIVATED_AT + " "
             + "FROM " + TABLE_HIVE_ROOT + " "
             + "WHERE " + COLUMN_HIVE_ROOT_NAME + " = ? ;";
-
 
         #endregion
 
