@@ -27,7 +27,7 @@ namespace NineWorldsDeep.Parser
             set { pdo = value; }
         }
 
-        public NwdPortableDevice PortableDevice { get; set; }
+        //public NwdPortableDevice PortableDevice { get; set; }
 
         public NwdUri NwdUri { get { return nwdUri; } }
 

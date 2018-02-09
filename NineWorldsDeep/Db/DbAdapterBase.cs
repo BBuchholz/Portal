@@ -760,28 +760,28 @@ namespace NineWorldsDeep.Db
             return DeleteFile(null, path);
         }
 
-        protected void ConvertNullsToEmptyStrings(NwdPortableDevice device)
-        {
-            if (device.Description == null)
-            {
-                device.Description = "";
-            }
+        //protected void ConvertNullsToEmptyStrings(NwdPortableDevice device)
+        //{
+        //    if (device.Description == null)
+        //    {
+        //        device.Description = "";
+        //    }
 
-            if (device.Model == null)
-            {
-                device.Model = "";
-            }
+        //    if (device.Model == null)
+        //    {
+        //        device.Model = "";
+        //    }
 
-            if (device.DeviceType == null)
-            {
-                device.DeviceType = "";
-            }
+        //    if (device.DeviceType == null)
+        //    {
+        //        device.DeviceType = "";
+        //    }
 
-            if (device.FriendlyName == null)
-            {
-                device.FriendlyName = "";
-            }
-        }
+        //    if (device.FriendlyName == null)
+        //    {
+        //        device.FriendlyName = "";
+        //    }
+        //}
 
         //protected NwdDeviceKey ToDeviceKey(NwdPortableDevice device)
         //{

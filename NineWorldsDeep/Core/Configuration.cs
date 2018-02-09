@@ -673,7 +673,7 @@ namespace NineWorldsDeep.Core
         {
             //TODO: this is a hack; NEED DEVICE NAME AFTER DB REFACTOR (Device table should mimic Android)
             string deviceName = "Main Laptop";
-
+            //asdf; //let's make a config file like android and throw error if not found (for other laptop)
             return deviceName;
         }
 

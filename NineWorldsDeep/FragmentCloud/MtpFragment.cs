@@ -22,8 +22,10 @@ namespace NineWorldsDeep.FragmentCloud
 
         public override void PerformSelectionAction()
         {
-            var window = new Mtp.MtpMainWindow();
-            window.Show();
+            //var window = new Mtp.MtpMainWindow();
+            //window.Show();
+
+            UI.Display.Message("defunct");
         }
     }
 }

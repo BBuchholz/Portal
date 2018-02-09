@@ -31,14 +31,14 @@ namespace NineWorldsDeep.Mtp
             return "Folder: " + Name;
         }
 
-        public void Refresh(NwdPortableDevice device)
-        {
-            Files.Clear();
+        //public void Refresh(NwdPortableDevice device)
+        //{
+        //    Files.Clear();
 
-            if (device != null)
-            {
-                device.FillFolder(this);
-            }
-        }
+        //    if (device != null)
+        //    {
+        //        device.FillFolder(this);
+        //    }
+        //}
     }
 }
