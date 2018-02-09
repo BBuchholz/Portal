@@ -15,6 +15,7 @@ namespace NineWorldsDeep.Core
     public class Configuration
     {
         private static bool _testMode = false;
+        private static string _localDeviceName;
         
         public static bool GlobalNotes { get; internal set; }
         public static DatabaseMasterAccessPoint DB { get; internal set; }
@@ -30,6 +31,11 @@ namespace NineWorldsDeep.Core
         public static string GetArphaBetFilePath()
         {
             return @"C:\NWD\config\studio\arpaBet\cmudict.0.7a.txt";
+        }
+
+        public static string ConfigFilePath()
+        {
+            return @"C:\NWD\config\config.txt";
         }
 
         //TODO: hard-coded values need to be transformed into config files and defaults
@@ -671,10 +677,35 @@ namespace NineWorldsDeep.Core
 
         public static string GetLocalDeviceDescription()
         {
-            //TODO: this is a hack; NEED DEVICE NAME AFTER DB REFACTOR (Device table should mimic Android)
-            string deviceName = "Main Laptop";
-            //asdf; //let's make a config file like android and throw error if not found (for other laptop)
-            return deviceName;
+            if (string.IsNullOrWhiteSpace(_localDeviceName))
+            {
+                //TODO: this is a hack; NEED DEVICE NAME AFTER DB REFACTOR (Device table should mimic Android)
+                //string deviceName = "Main Laptop";
+                
+                               
+                ConfigFile cfg = new ConfigFile();
+
+                if (string.IsNullOrWhiteSpace(cfg.LocalDeviceName))
+                {
+                    var deviceName = "";
+
+                    while (string.IsNullOrWhiteSpace(deviceName))
+                    {
+                        deviceName = UI.Prompt.Input("Enter local device name");
+                    }
+                    
+                    cfg.LocalDeviceName = deviceName;
+
+                    _localDeviceName = cfg.LocalDeviceName;
+                    
+                }
+                else
+                {
+                    _localDeviceName = cfg.LocalDeviceName;
+                }
+            }
+
+            return _localDeviceName;
         }
 
         /// <summary>

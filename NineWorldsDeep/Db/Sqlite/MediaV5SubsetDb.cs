@@ -852,6 +852,11 @@ namespace NineWorldsDeep.Db.Sqlite
             int id = -1;
             string deviceDescription = Configuration.GetLocalDeviceDescription();
 
+            if (string.IsNullOrWhiteSpace(deviceDescription))
+            {
+                throw new Exception("Device Description cannot be null or whitespace");
+            }
+
             using (var conn = new SQLiteConnection(
                 @"Data Source=" + Configuration.GetSqliteDbPath(DbName)))
             {
@@ -1645,7 +1650,7 @@ namespace NineWorldsDeep.Db.Sqlite
 
         #region "queries"
 
-        private static string INSERT_INTO_MEDIA_DEVICE = 
+        private static string INSERT_INTO_MEDIA_DEVICE =
             "INSERT OR IGNORE INTO " + NwdContract.TABLE_MEDIA_DEVICE + " "
             + "	(" + NwdContract.COLUMN_MEDIA_DEVICE_DESCRIPTION + ") "
             + "VALUES "

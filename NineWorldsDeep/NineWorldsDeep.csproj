@@ -157,6 +157,7 @@
     <Compile Include="AudioBrowser\FileElementTagExtractionAction.cs" />
     <Compile Include="AudioBrowser\FileNameTagExtractor.cs" />
     <Compile Include="AudioBrowser\PlayAction.cs" />
+    <Compile Include="Core\ConfigFile.cs" />
     <Compile Include="Core\Configuration.cs" />
     <Compile Include="Core\DataUpdateManager.cs" />
     <Compile Include="Core\Extensions.cs" />
