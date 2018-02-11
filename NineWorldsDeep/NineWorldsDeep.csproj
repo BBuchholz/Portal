@@ -462,6 +462,7 @@
     <Compile Include="Tapestry\Nodes\ChordProgressionsNode.cs" />
     <Compile Include="Tapestry\Nodes\ClusterNode.cs" />
     <Compile Include="Tapestry\Nodes\DevicePathNode.cs" />
+    <Compile Include="Tapestry\Nodes\EcosystemConfigurationNode.cs" />
     <Compile Include="Tapestry\Nodes\FileSystemNode.cs" />
     <Compile Include="Tapestry\Nodes\GoogleApiNode.cs" />
     <Compile Include="Tapestry\Nodes\GrowthAreasNode.cs" />
@@ -537,6 +538,9 @@
       <DependentUpon>ClusterNodeDisplay.xaml</DependentUpon>
     </Compile>
     <Compile Include="Tapestry\NodeUI\ClusterRegistry.cs" />
+    <Compile Include="Tapestry\NodeUI\EcosystemConfigurationDisplay.xaml.cs">
+      <DependentUpon>EcosystemConfigurationDisplay.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Tapestry\NodeUI\FileDetails.xaml.cs">
       <DependentUpon>FileDetails.xaml</DependentUpon>
     </Compile>
@@ -834,6 +838,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Tapestry\NodeUI\ClusterNodeDisplay.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Tapestry\NodeUI\EcosystemConfigurationDisplay.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

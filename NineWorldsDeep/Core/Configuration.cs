@@ -50,7 +50,8 @@ namespace NineWorldsDeep.Core
 
         public static string SyncRoot(string name)
         {
-            return ProcessTestMode(@"NWD-SYNC\" + name);
+            //return ProcessTestMode(@"NWD-SYNC\" + name);
+            return SyncFolder() + name;
         }
 
         public static string SyncRootConfigFile(string profileName, string fileNameWithoutExtension)
@@ -210,9 +211,9 @@ namespace NineWorldsDeep.Core
         public static void EnsureDirectories()
         {
             //make sure directories exist, CreateDirectory() checks if exists first
-            Directory.CreateDirectory(Configuration.PhoneSyncSynergyFolder);
-            Directory.CreateDirectory(Configuration.PhoneSyncSynergyArchivedFolder);
-            Directory.CreateDirectory(Configuration.MtpSynergySyncPath);
+            //Directory.CreateDirectory(Configuration.PhoneSyncSynergyFolder);
+            //Directory.CreateDirectory(Configuration.PhoneSyncSynergyArchivedFolder);
+            //Directory.CreateDirectory(Configuration.MtpSynergySyncPath);
 
             Directory.CreateDirectory(Configuration.PdfsFolder);
             Directory.CreateDirectory(Configuration.ImagesFolder);
@@ -236,18 +237,18 @@ namespace NineWorldsDeep.Core
                         path.ToLower().EndsWith(".tiff");
         }
 
-        public static string GetPhoneSyncConfigFilePath(string fileNameWithoutExtension)
-        {
-            return PhoneSyncConfigFolder + "\\" + fileNameWithoutExtension + ".txt";
-        }
+        //public static string GetPhoneSyncConfigFilePath(string fileNameWithoutExtension)
+        //{
+        //    return PhoneSyncConfigFolder + "\\" + fileNameWithoutExtension + ".txt";
+        //}
 
-        public static string PhoneSyncConfigFolder
-        {
-            get
-            {
-                return ProcessTestMode(@"NWD-SYNC\phone\NWD\config");
-            }
-        }
+        //public static string PhoneSyncConfigFolder
+        //{
+        //    get
+        //    {
+        //        return ProcessTestMode(@"NWD-SYNC\phone\NWD\config");
+        //    }
+        //}
 
         public static string MySqlProjectsFolder
         {
@@ -257,13 +258,13 @@ namespace NineWorldsDeep.Core
             }
         }
 
-        public static string PhoneSyncSynergyArchivedFolder
-        {
-            get
-            {
-                return ProcessTestMode(@"NWD-SYNC\phone\NWD\synergy\archived");
-            }
-        }
+        //public static string PhoneSyncSynergyArchivedFolder
+        //{
+        //    get
+        //    {
+        //        return ProcessTestMode(@"NWD-SYNC\phone\NWD\synergy\archived");
+        //    }
+        //}
 
         private static string ProcessTestMode(string pathWithoutRoot)
         {
@@ -279,53 +280,53 @@ namespace NineWorldsDeep.Core
             return path;
         }
 
-        [Obsolete("hard-coded entry for deactivated device")]
-        public static string TabletSyncSynergyArchivedFolder
-        {
-            get
-            {
-                return ProcessTestMode(@"NWD-SYNC\tablet\NWD\synergy\archived");
-            }
-        }
+        //[Obsolete("hard-coded entry for deactivated device")]
+        //public static string TabletSyncSynergyArchivedFolder
+        //{
+        //    get
+        //    {
+        //        return ProcessTestMode(@"NWD-SYNC\tablet\NWD\synergy\archived");
+        //    }
+        //}
 
-        [Obsolete("hard-coded entry for deactivated device")]
-        public static string TabletSyncSynergyFolder
-        {
-            get
-            {
-                return ProcessTestMode(@"NWD-SYNC\tablet\NWD\synergy");
-            }
-        }
+        //[Obsolete("hard-coded entry for deactivated device")]
+        //public static string TabletSyncSynergyFolder
+        //{
+        //    get
+        //    {
+        //        return ProcessTestMode(@"NWD-SYNC\tablet\NWD\synergy");
+        //    }
+        //}
 
-        public static string PhoneSyncSynergyFolder
-        {
-            get
-            {
-                return ProcessTestMode(@"NWD-SYNC\phone\NWD\synergy");
-            }
-        }
+        //public static string PhoneSyncSynergyFolder
+        //{
+        //    get
+        //    {
+        //        return ProcessTestMode(@"NWD-SYNC\phone\NWD\synergy");
+        //    }
+        //}
 
-        public static string SyncFolderSynergy(string profileName)
-        {
-            return Path.Combine(ProcessTestMode("NWD-SYNC"), profileName, @"NWD\synergy");
-        }
+        //public static string SyncFolderSynergy(string profileName)
+        //{
+        //    return Path.Combine(ProcessTestMode("NWD-SYNC"), profileName, @"NWD\synergy");
+        //}
 
-        public static string SyncFolderSynergyArchive(string profileName)
-        {
-            return Path.Combine(SyncFolderSynergy(profileName), "archived");
-        }
+        //public static string SyncFolderSynergyArchive(string profileName)
+        //{
+        //    return Path.Combine(SyncFolderSynergy(profileName), "archived");
+        //}
 
-        public static string GetPhoneSyncSynergyArchiveFilePath(string listName)
-        {
-            return PhoneSyncSynergyArchivedFolder + "\\" + listName + ".txt";
-        }
+        //public static string GetPhoneSyncSynergyArchiveFilePath(string listName)
+        //{
+        //    return PhoneSyncSynergyArchivedFolder + "\\" + listName + ".txt";
+        //}
 
-        public static string SynergyV3SyncFilePath(string profileName, string listName)
-        {
-            return Path.Combine(ProcessTestMode("NWD-SYNC"), 
-                                profileName, 
-                                @"NWD\synergy\" + listName + ".txt");
-        }
+        //public static string SynergyV3SyncFilePath(string profileName, string listName)
+        //{
+        //    return Path.Combine(ProcessTestMode("NWD-SYNC"), 
+        //                        profileName, 
+        //                        @"NWD\synergy\" + listName + ".txt");
+        //}
 
         public static List<string> GetActiveSyncProfileIncomingXmlFolders()
         {
@@ -333,7 +334,7 @@ namespace NineWorldsDeep.Core
 
             foreach(string profileName in GetAllActiveSyncProfileNames())
             {
-                string xmlDir = Path.Combine(ProcessTestMode("NWD-SYNC"),
+                string xmlDir = Path.Combine(SyncFolder(),
                                              profileName,
                                              @"NWD\xml\incoming");
 
@@ -408,7 +409,7 @@ namespace NineWorldsDeep.Core
             
             foreach(string profileName in GetAllActiveSyncProfileNames())
             {
-                string xmlDir = Path.Combine(ProcessTestMode("NWD-SYNC"),
+                string xmlDir = Path.Combine(SyncFolder(),
                                              profileName,
                                              @"NWD\xml\outgoing");
 
@@ -497,7 +498,7 @@ namespace NineWorldsDeep.Core
             string profileName,
             List<string> pathList)
         {
-            string xmlDir = Path.Combine(ProcessTestMode("NWD-SYNC"),
+            string xmlDir = Path.Combine(SyncFolder(),
                              profileName,
                              @"NWD\xml\outgoing");
 
@@ -531,22 +532,22 @@ namespace NineWorldsDeep.Core
             return profileNames;
         }
 
-        public static string GetPhoneSyncSynergyFilePath(string listName)
-        {
-            return PhoneSyncSynergyFolder + "\\" + listName + ".txt";
-        }
+        //public static string GetPhoneSyncSynergyFilePath(string listName)
+        //{
+        //    return PhoneSyncSynergyFolder + "\\" + listName + ".txt";
+        //}
 
-        [Obsolete("hard-coded entry for deactivated device")]
-        public static string GetTabletSyncSynergyFilePath(string listName)
-        {
-            return TabletSyncSynergyFolder + "\\" + listName + ".txt";
-        }
+        //[Obsolete("hard-coded entry for deactivated device")]
+        //public static string GetTabletSyncSynergyFilePath(string listName)
+        //{
+        //    return TabletSyncSynergyFolder + "\\" + listName + ".txt";
+        //}
 
-        [Obsolete("hard-coded entry for deactivated device")]
-        public static string GetTabletSyncSynergyArchiveFilePath(string listName)
-        {
-            return TabletSyncSynergyArchivedFolder + "\\" + listName + ".txt";
-        }
+        //[Obsolete("hard-coded entry for deactivated device")]
+        //public static string GetTabletSyncSynergyArchiveFilePath(string listName)
+        //{
+        //    return TabletSyncSynergyArchivedFolder + "\\" + listName + ".txt";
+        //}
 
         public static string VisualStudioProjectsFolder
         {
@@ -582,21 +583,21 @@ namespace NineWorldsDeep.Core
             }
         }
 
-        public static string PhoneSyncDisplayNameIndexFile
-        {
-            get
-            {
-                return @"C:\NWD-SYNC\phone\NWD\config\DisplayNameIndex.txt";
-            }
-        }
+        //public static string PhoneSyncDisplayNameIndexFile
+        //{
+        //    get
+        //    {
+        //        return @"C:\NWD-SYNC\phone\NWD\config\DisplayNameIndex.txt";
+        //    }
+        //}
 
-        public static string PhoneSyncFileHashIndexFile
-        {
-            get
-            {
-                return @"C:\NWD-SYNC\phone\NWD\config\FileHashIndex.txt";
-            }
-        }
+        //public static string PhoneSyncFileHashIndexFile
+        //{
+        //    get
+        //    {
+        //        return @"C:\NWD-SYNC\phone\NWD\config\FileHashIndex.txt";
+        //    }
+        //}
         
         public static bool TestMode
         {
@@ -781,13 +782,13 @@ namespace NineWorldsDeep.Core
         /// </summary>
         /// <param name="name">file name with extension</param>
         /// <returns></returns>
-        public static string MtpSynergySyncPath
-        {
-            get
-            {
-                return ProcessTestMode(@"NWD-SYNC\mtp\NWD\synergy");
-            }
-        }
+        //public static string MtpSynergySyncPath
+        //{
+        //    get
+        //    {
+        //        return ProcessTestMode(@"NWD-SYNC\mtp\NWD\synergy");
+        //    }
+        //}
 
         public static string NwdAuxFolder
         {

@@ -1,0 +1,98 @@
+﻿<UserControl x:Class="NineWorldsDeep.Tapestry.NodeUI.EcosystemConfigurationDisplay"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:NineWorldsDeep.Tapestry.NodeUI"
+             mc:Ignorable="d" 
+             d:DesignHeight="800" d:DesignWidth="600">
+    <Grid>
+
+        <Grid.RowDefinitions>
+            <RowDefinition/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+
+        <Expander Header="Config Folders"
+                  Grid.Row="0"
+                  IsExpanded="True"
+                  Margin="5"
+                  Expanded="Expander_Expanded"
+                  Collapsed="Expander_Collapsed">
+
+            <Grid>
+                
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="40"/>
+                    <RowDefinition Height="40"/>
+                    <RowDefinition Height="40"/>
+                    <RowDefinition Height="40"/>
+                </Grid.RowDefinitions>
+
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="5*"/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+
+                <Label Content="Sync Folder"
+                       Grid.Row="0"
+                       VerticalAlignment="Bottom"/>
+
+                <Label x:Name="lblSyncFolderPath"
+                       Content="folder/path/goes/here"
+                       Grid.Row="1"
+                       VerticalAlignment="Center"/>
+
+                <Button Content="Refresh"
+                        x:Name="btnRefreshSyncFolderPath"
+                        Grid.Row="1"
+                        Grid.Column="1"
+                        Margin="20 5"/>
+
+                <Label Content="Trash Folder"
+                       Grid.Row="2"
+                       VerticalAlignment="Bottom"/>
+
+                <Label x:Name="lblTrashFolderPath"
+                       Content="folder/path/goes/here"
+                       Grid.Row="3"
+                       VerticalAlignment="Center"/>
+
+                <Button Content="Select"
+                        x:Name="btnSelectTrashFolderPath"
+                        Grid.Row="3"
+                        Grid.Column="1"
+                        Margin="20 5"/>
+
+            </Grid>
+            
+        </Expander>
+
+        <Expander Header="Found Folders"
+                  Grid.Row="1"
+                  IsExpanded="True"
+                  Margin="5"
+                  Expanded="Expander_Expanded"
+                  Collapsed="Expander_Collapsed">
+
+            <Grid>
+
+                <Grid.RowDefinitions>
+                    <RowDefinition/>
+                    <RowDefinition Height="40"/>
+                </Grid.RowDefinitions>
+                
+                <ListView x:Name="lvFoundFolders"
+                          Margin="5"/>
+
+                <Button x:Name="btnRefreshFoundFolders"
+                        Content="Refresh"
+                        Grid.Row="1"
+                        Margin="20 0 20 5"/>
+
+            </Grid>
+
+        </Expander>
+
+    </Grid>
+</UserControl>

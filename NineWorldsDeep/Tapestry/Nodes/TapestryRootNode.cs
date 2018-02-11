@@ -14,7 +14,7 @@ namespace NineWorldsDeep.Tapestry.Nodes
         {
             AddChild(new MuseNode());
 
-            AddChild(new WindowedUiNode());
+            //AddChild(new WindowedUiNode());
             //AddChild(new WareHouseFragment());
             //AddChild(new AudioBrowserFragment());
             //AddChild(new ImageBrowserFragment());
@@ -26,6 +26,7 @@ namespace NineWorldsDeep.Tapestry.Nodes
             AddChild(new ArchivistMasterNode());
             AddChild(new HiveMainNode());
             AddChild(new TaggedMediaMainNode());
+            AddChild(new EcosystemConfigurationNode());
             AddChild(new ThemesAndStylesSandboxNode());
         }
 

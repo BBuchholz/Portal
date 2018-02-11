@@ -133,6 +133,11 @@
                         Visibility="Collapsed">
             <nodeUI:ThemesAndStylesSandboxDisplay x:Name="themesAndStylesSandboxDisplay"/>
         </ContentControl>
+
+        <ContentControl x:Name="ccEcosystemConfigurationDisplay"
+                        Visibility="Collapsed">
+            <nodeUI:EcosystemConfigurationDisplay x:Name="ecosystemConfigurationDisplay"/>
+        </ContentControl>
         
     </Grid>
 </UserControl>

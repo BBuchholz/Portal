@@ -224,6 +224,7 @@ namespace NineWorldsDeep.Tapestry
             contentControls.Add(ccPhotosApiNode);
             contentControls.Add(ccHiveMigrationsNode);
             contentControls.Add(ccThemesAndStylesSandboxNode);
+            contentControls.Add(ccEcosystemConfigurationDisplay);
         }
 
         private void ResolveContentControl(TapestryNode node)
@@ -375,6 +376,10 @@ namespace NineWorldsDeep.Tapestry
 
                     case TapestryNodeType.TaggedMediaMain:
                         SetVisible(ccTaggedMediaNode);
+                        break;
+
+                    case TapestryNodeType.EcosystemConfiguration:
+                        SetVisible(ccEcosystemConfigurationDisplay);
                         break;
 
                     case TapestryNodeType.SynergyV5List:

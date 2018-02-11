@@ -339,7 +339,7 @@ namespace NineWorldsDeep.Synergy
             {
                 Stopwatch sw = Stopwatch.StartNew();
 
-                _sh.ImportSyncedArchiveFiles();
+                //_sh.ImportSyncedArchiveFiles();
 
                 foreach (var sl in _sh.Lists)
                 {

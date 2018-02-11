@@ -34,7 +34,14 @@ namespace NineWorldsDeep.Hierophant
         {
             get
             {
-                return ColumnValues[columnName];
+                if (ColumnValues.ContainsKey(columnName))
+                {
+                    return ColumnValues[columnName];
+                }
+                else
+                {
+                    return null;
+                }
             }
             set
             {

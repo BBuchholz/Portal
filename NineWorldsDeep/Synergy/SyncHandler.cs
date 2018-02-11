@@ -34,13 +34,13 @@ namespace NineWorldsDeep.Synergy
             foreach (SynergyList lst in lists)
             {
                 //TODO: replacewith Configuration.GetSynergyV3SyncFilePaths(lst.Name) <-- should return list of paths, processed like below, for each sync root in Configuration (hard code for now)
-                string phoneListPath = Configuration.GetPhoneSyncSynergyFilePath(lst.Name);
-                string tabletListPath = Configuration.SynergyV3SyncFilePath("galaxy-a", lst.Name);
-                string logosListPath = Configuration.SynergyV3SyncFilePath("logos", lst.Name);
+                //string phoneListPath = Configuration.GetPhoneSyncSynergyFilePath(lst.Name);
+                //string tabletListPath = Configuration.SynergyV3SyncFilePath("galaxy-a", lst.Name);
+                //string logosListPath = Configuration.SynergyV3SyncFilePath("logos", lst.Name);
 
-                WriteListToPath(lst, phoneListPath, ignoredCount);
-                WriteListToPath(lst, tabletListPath, ignoredCount);
-                WriteListToPath(lst, logosListPath, ignoredCount);
+                //WriteListToPath(lst, phoneListPath, ignoredCount);
+                //WriteListToPath(lst, tabletListPath, ignoredCount);
+                //WriteListToPath(lst, logosListPath, ignoredCount);
                                 
             }
 
@@ -105,74 +105,74 @@ namespace NineWorldsDeep.Synergy
         {
             List<string> filePaths = new List<string>();
 
-            if (Directory.Exists(Configuration.PhoneSyncSynergyFolder))
-            {
-                IEnumerable<string> phoneFilePaths =
-                    Directory.GetFiles(Configuration.PhoneSyncSynergyFolder,
-                                       "*.txt", SearchOption.TopDirectoryOnly);
+            //if (Directory.Exists(Configuration.PhoneSyncSynergyFolder))
+            //{
+            //    IEnumerable<string> phoneFilePaths =
+            //        Directory.GetFiles(Configuration.PhoneSyncSynergyFolder,
+            //                           "*.txt", SearchOption.TopDirectoryOnly);
 
-                filePaths.AddRange(phoneFilePaths);
-            }
+            //    filePaths.AddRange(phoneFilePaths);
+            //}
 
-            if (Directory.Exists(Configuration.SyncFolderSynergy("galaxy-a")))
-            {
-                IEnumerable<string> tabletFilePaths =
-                    Directory.GetFiles(Configuration.SyncFolderSynergy("galaxy-a"),
-                                       "*.txt", SearchOption.TopDirectoryOnly);
+            //if (Directory.Exists(Configuration.SyncFolderSynergy("galaxy-a")))
+            //{
+            //    IEnumerable<string> tabletFilePaths =
+            //        Directory.GetFiles(Configuration.SyncFolderSynergy("galaxy-a"),
+            //                           "*.txt", SearchOption.TopDirectoryOnly);
 
-                filePaths.AddRange(tabletFilePaths);
-            }
+            //    filePaths.AddRange(tabletFilePaths);
+            //}
 
-            if (Directory.Exists(Configuration.SyncFolderSynergy("logos")))
-            {
-                IEnumerable<string> logosFilePaths =
-                    Directory.GetFiles(Configuration.SyncFolderSynergy("logos"),
-                                       "*.txt", SearchOption.TopDirectoryOnly);
+            //if (Directory.Exists(Configuration.SyncFolderSynergy("logos")))
+            //{
+            //    IEnumerable<string> logosFilePaths =
+            //        Directory.GetFiles(Configuration.SyncFolderSynergy("logos"),
+            //                           "*.txt", SearchOption.TopDirectoryOnly);
 
-                filePaths.AddRange(logosFilePaths);
-            }
+            //    filePaths.AddRange(logosFilePaths);
+            //}
 
             return filePaths;
         }
 
-        public void ImportSyncedArchiveFiles()
-        {
-            ImportFiles(GetAllSyncArchiveFilePaths(), true);
-        }
+        //public void ImportSyncedArchiveFiles()
+        //{
+        //    ImportFiles(GetAllSyncArchiveFilePaths(), true);
+        //}
 
-        private IEnumerable<string> GetAllSyncArchiveFilePaths()
-        {
-            List<string> filePaths = new List<string>();
+        //private IEnumerable<string> GetAllSyncArchiveFilePaths()
+        //{
+        //    List<string> filePaths = new List<string>();
 
-            if (Directory.Exists(Configuration.PhoneSyncSynergyArchivedFolder))
-            {
-                List<string> phoneFilePaths =
-                    Directory.GetFiles(Configuration.PhoneSyncSynergyArchivedFolder,
-                                       "*.txt", SearchOption.TopDirectoryOnly).ToList();
+        //    if (Directory.Exists(Configuration.PhoneSyncSynergyArchivedFolder))
+        //    {
+        //        List<string> phoneFilePaths =
+        //            Directory.GetFiles(Configuration.PhoneSyncSynergyArchivedFolder,
+        //                               "*.txt", SearchOption.TopDirectoryOnly).ToList();
 
-                filePaths.AddRange(phoneFilePaths);
-            }
+        //        filePaths.AddRange(phoneFilePaths);
+        //    }
 
-            if (Directory.Exists(Configuration.SyncFolderSynergyArchive("galaxy-a")))
-            {
-                List<string> galaxyFilePaths =
-                    Directory.GetFiles(Configuration.SyncFolderSynergyArchive("galaxy-a"),
-                                       "*.txt", SearchOption.TopDirectoryOnly).ToList();
+        //    if (Directory.Exists(Configuration.SyncFolderSynergyArchive("galaxy-a")))
+        //    {
+        //        List<string> galaxyFilePaths =
+        //            Directory.GetFiles(Configuration.SyncFolderSynergyArchive("galaxy-a"),
+        //                               "*.txt", SearchOption.TopDirectoryOnly).ToList();
 
-                filePaths.AddRange(galaxyFilePaths);
-            }
+        //        filePaths.AddRange(galaxyFilePaths);
+        //    }
             
-            if (Directory.Exists(Configuration.SyncFolderSynergyArchive("logos")))
-            {
-                List<string> logosFilePaths =
-                    Directory.GetFiles(Configuration.SyncFolderSynergyArchive("logos"),
-                                       "*.txt", SearchOption.TopDirectoryOnly).ToList();
+        //    if (Directory.Exists(Configuration.SyncFolderSynergyArchive("logos")))
+        //    {
+        //        List<string> logosFilePaths =
+        //            Directory.GetFiles(Configuration.SyncFolderSynergyArchive("logos"),
+        //                               "*.txt", SearchOption.TopDirectoryOnly).ToList();
 
-                filePaths.AddRange(logosFilePaths);
-            }
+        //        filePaths.AddRange(logosFilePaths);
+        //    }
 
-            return filePaths;
-        }
+        //    return filePaths;
+        //}
 
         public void ImportSynergyFiles()
         {

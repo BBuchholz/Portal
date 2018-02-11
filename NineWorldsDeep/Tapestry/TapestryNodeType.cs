@@ -31,6 +31,7 @@
         MediaTag,
         HiveMain,
         TaggedMediaMain,
+        EcosystemConfiguration,
         BooksApiMain,
         SpeechApiMain,
         PhotosApiMain,
