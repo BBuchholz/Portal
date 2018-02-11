@@ -668,12 +668,12 @@ namespace NineWorldsDeep.Core
             return new NwdUri(trimmedPath);
         }
 
-        [Obsolete("use corresponding method in class Hive.ConfigHive")]
-        public static string GetLocalHiveRootName()
-        {
-            //return "main-laptop";
-            return ConfigHive.GetLocalHiveRootName();
-        }
+        //[Obsolete("use corresponding method in class Hive.ConfigHive")]
+        //public static string GetLocalHiveRootName()
+        //{
+        //    //return "main-laptop";
+        //    return ConfigHive.GetLocalHiveRootName();
+        //}
 
         public static string GetLocalDeviceDescription()
         {
@@ -685,13 +685,13 @@ namespace NineWorldsDeep.Core
                                
                 ConfigFile cfg = new ConfigFile();
 
-                if (string.IsNullOrWhiteSpace(cfg.LocalDeviceName))
+                if (string.IsNullOrWhiteSpace(cfg.LocalDeviceName) || !UtilsHive.HiveRootNameIsValid(cfg.LocalDeviceName))
                 {
                     var deviceName = "";
 
-                    while (string.IsNullOrWhiteSpace(deviceName))
+                    while (string.IsNullOrWhiteSpace(deviceName) || !UtilsHive.HiveRootNameIsValid(deviceName))
                     {
-                        deviceName = UI.Prompt.Input("Enter local device name");
+                        deviceName = UI.Prompt.Input("Enter local device name (use only lowercase letters, numbers, and hyphens)");
                     }
                     
                     cfg.LocalDeviceName = deviceName;

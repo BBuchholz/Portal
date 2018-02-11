@@ -115,7 +115,9 @@ namespace NineWorldsDeep.Hive
 
         public static string GetLocalHiveRootName()
         {
-            return "main-laptop";
+            //return "main-laptop";
+
+            return Core.Configuration.GetLocalDeviceDescription();
         }
 
         /// <summary>
