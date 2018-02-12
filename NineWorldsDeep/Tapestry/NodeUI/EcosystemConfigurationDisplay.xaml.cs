@@ -52,12 +52,67 @@ namespace NineWorldsDeep.Tapestry.NodeUI
             RefreshFolderList();
         }
 
+        private void btnRefreshDatabaseLocationPath_Click(object sender, RoutedEventArgs e)
+        {
+            Configuration.RefreshDatabaseLocation();
+            RefreshFolderLabels();
+        }
+
+        private void btnRefreshSyncFolderPath_Click(object sender, RoutedEventArgs e)
+        {
+            Configuration.RefreshSyncFolderLocation();
+            RefreshFolderLabels();
+        }
+
+        private void btnSelectTrashFolderPath_Click(object sender, RoutedEventArgs e)
+        {
+            var newPath = UI.Prompt.ForFolder(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile));
+            if (!string.IsNullOrWhiteSpace(newPath))
+            {
+                Configuration.TrashFolder = newPath;
+                RefreshFolderLabels();
+            }
+        }
+
+        private void btnSelectIntakePdfsFolderPath_Click(object sender, RoutedEventArgs e)
+        {
+            var newPath = UI.Prompt.ForFolder(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile));
+            if (!string.IsNullOrWhiteSpace(newPath))
+            {
+                Configuration.IntakePdfsFolder = newPath;
+                RefreshFolderLabels();
+            }
+        }
+
+        private void btnSelectIntakeImagesFolderPath_Click(object sender, RoutedEventArgs e)
+        {
+            var newPath = UI.Prompt.ForFolder(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile));
+            if (!string.IsNullOrWhiteSpace(newPath))
+            {
+                Configuration.IntakeImagesFolder = newPath;
+                RefreshFolderLabels();
+            }
+        }
+
+        private void btnSelectIntakeVoicememosFolderPath_Click(object sender, RoutedEventArgs e)
+        {
+            var newPath = UI.Prompt.ForFolder(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile));
+            if (!string.IsNullOrWhiteSpace(newPath))
+            {
+                Configuration.IntakeVoiceMemosFolder = newPath;
+                RefreshFolderLabels();
+            }
+        }
+
         #endregion
 
         #region private helper methods
 
         private void RefreshFolderLabels()
         {
+            //database location
+            lblDatabaseLocationPath.Content = Configuration.DatabaseLocationFolder;
+
             //sync folder
             lblSyncFolderPath.Content = Configuration.SyncFolder;
 

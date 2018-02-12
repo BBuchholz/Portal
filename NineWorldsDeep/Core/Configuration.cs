@@ -23,6 +23,8 @@ namespace NineWorldsDeep.Core
         private static string _intakeVoicememosFolder;
         private static string _intakePdfsFolder;
         private static string _trashFolder;
+        private static string _syncFolder;
+        private static string _databaseLocationFolder;
 
         #endregion
 
@@ -36,9 +38,30 @@ namespace NineWorldsDeep.Core
             get
             {
                 //return ProcessTestMode(@"NWD-SYNC\");
-                return @"C:\NWD-SYNC\";
+
+                if (string.IsNullOrWhiteSpace(_syncFolder))
+                {
+                    //_syncFolder = @"C:\NWD-SYNC\";
+                    _syncFolder = FindSyncFolderLocation();
+                }
+
+                return _syncFolder;
             }
         }
+
+        public static string DatabaseLocationFolder
+        {
+            get
+            {
+                if (string.IsNullOrWhiteSpace(_databaseLocationFolder))
+                {
+                    _databaseLocationFolder = FindDatabaseFolderLocation();
+                }
+
+                return _databaseLocationFolder;
+            }
+        }
+
 
         #region configurable ecosystem folders 
 
@@ -193,7 +216,7 @@ namespace NineWorldsDeep.Core
             //check logical drives
             foreach(string driveName in GetAllLogicalDriveNames())
             {
-                foreach(string possiblePath in PossibleEcosystemDrivesForLocationPath(driveName))
+                foreach(string possiblePath in PossibleEcosystemFoldersForLocationPath(driveName))
                 {
                     if (Directory.Exists(possiblePath))
                     {
@@ -206,7 +229,7 @@ namespace NineWorldsDeep.Core
             //check user folder
             var userFolderPath = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
 
-            foreach (string possiblePath in PossibleEcosystemDrivesForLocationPath(userFolderPath))
+            foreach (string possiblePath in PossibleEcosystemFoldersForLocationPath(userFolderPath))
             {
                 if (Directory.Exists(possiblePath))
                 {
@@ -217,7 +240,7 @@ namespace NineWorldsDeep.Core
             //check for dropbox
             var dropboxPath = Path.Combine(userFolderPath, "Dropbox");
 
-            foreach (string possiblePath in PossibleEcosystemDrivesForLocationPath(dropboxPath))
+            foreach (string possiblePath in PossibleEcosystemFoldersForLocationPath(dropboxPath))
             {
                 if (Directory.Exists(possiblePath))
                 {
@@ -228,7 +251,7 @@ namespace NineWorldsDeep.Core
             //check for google drive
             var googleDrivePath = Path.Combine(userFolderPath, "Google Drive");
 
-            foreach (string possiblePath in PossibleEcosystemDrivesForLocationPath(googleDrivePath))
+            foreach (string possiblePath in PossibleEcosystemFoldersForLocationPath(googleDrivePath))
             {
                 if (Directory.Exists(possiblePath))
                 {
@@ -291,19 +314,162 @@ namespace NineWorldsDeep.Core
             return allFolders;
         }
 
-        
 
         public static IEnumerable<FolderFileCountDisplayItem> GetEcosystemFolderCounts()
         {
             return GetFolderFileCounts(GetAllEcosystemFolders());
         }
 
+        public static void RefreshDatabaseLocation()
+        {
+            _databaseLocationFolder = FindDatabaseFolderLocation();
+        }
 
+        public static void RefreshSyncFolderLocation()
+        {
+            _syncFolder = FindSyncFolderLocation();
+        }
 
         #endregion
 
         #region private static ecosystem folder helper methods
-        
+
+        private static string FindSyncFolderLocation()
+        {
+            var allFolders = new List<string>();
+            var possiblePath = "";
+            var subFolder = @"NWD-SYNC";
+
+            //check logical drives
+            foreach (string locationPath in GetAllLogicalDriveNames())
+            {
+                possiblePath = Path.Combine(locationPath, subFolder);
+
+                if (Directory.Exists(possiblePath))
+                {
+                    allFolders.Add(possiblePath);
+                }
+            }
+
+            //check user folder
+            var userFolderPath = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
+
+            possiblePath = Path.Combine(userFolderPath, subFolder);
+
+            if (Directory.Exists(possiblePath))
+            {
+                allFolders.Add(possiblePath);
+            }
+
+            //check for dropbox
+            var dropboxPath = Path.Combine(userFolderPath, "Dropbox");
+
+            possiblePath = Path.Combine(dropboxPath, subFolder);
+
+            if (Directory.Exists(possiblePath))
+            {
+                allFolders.Add(possiblePath);
+            }
+
+            //check for google drive
+            var googleDrivePath = Path.Combine(userFolderPath, "Google Drive");
+
+            possiblePath = Path.Combine(googleDrivePath, subFolder);
+
+            if (Directory.Exists(possiblePath))
+            {
+                allFolders.Add(possiblePath);
+            }
+
+            if (allFolders.Count > 1)
+            {
+                var msg = "More than one " + subFolder + " folder found, can only have one " + subFolder + " folder: " +
+                    Environment.NewLine + Environment.NewLine + string.Join(Environment.NewLine, allFolders);
+
+                UI.Display.Message(msg);
+                throw new Exception(msg);
+            }
+
+            if (allFolders.Count < 1)
+            {
+                var msg = "Cannot find " + subFolder + " folder. Ecosystem requires " + subFolder + " " +
+                    "folder to be placed in a standard ecosystem folder location";
+
+                UI.Display.Message(msg);
+                throw new Exception(msg);
+            }
+
+            return allFolders.First();
+        }
+
+        private static string FindDatabaseFolderLocation()
+        {
+            var allFolders = new List<string>();
+            var possiblePath = "";
+            var subFolder = @"NWD\sqlite\";
+
+            //check logical drives
+            foreach (string locationPath in GetAllLogicalDriveNames())
+            {
+                possiblePath = Path.Combine(locationPath, subFolder);
+
+                if (Directory.Exists(possiblePath))
+                {
+                    allFolders.Add(possiblePath);
+                }
+            }
+
+            //check user folder
+            var userFolderPath = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
+
+            possiblePath = Path.Combine(userFolderPath, subFolder);
+
+            if (Directory.Exists(possiblePath))
+            {
+                allFolders.Add(possiblePath);
+            }
+
+            //check for dropbox
+            var dropboxPath = Path.Combine(userFolderPath, "Dropbox");
+
+            possiblePath = Path.Combine(dropboxPath, subFolder);
+
+            if (Directory.Exists(possiblePath))
+            {
+                allFolders.Add(possiblePath);
+            }
+
+            //check for google drive
+            var googleDrivePath = Path.Combine(userFolderPath, "Google Drive");
+
+            possiblePath = Path.Combine(googleDrivePath, subFolder);
+
+            if (Directory.Exists(possiblePath))
+            {
+                allFolders.Add(possiblePath);
+            }
+
+            if (allFolders.Count > 1)
+            {
+                var msg = "More than one " + subFolder + " folder found, can only have one " + subFolder + " folder: " +
+                    Environment.NewLine + Environment.NewLine + string.Join(System.Environment.NewLine, allFolders);
+
+                UI.Display.Message(msg);
+                throw new Exception(msg);
+            }
+
+            if (allFolders.Count < 1)
+            {
+                var msg = "Cannot find " + subFolder + " folder. Ecosystem requires " + subFolder + " " +
+                    "folder to be placed in a standard ecosystem folder location";
+
+                UI.Display.Message(msg);
+                throw new Exception(msg);
+            }
+
+            return allFolders.First();
+        }
+
         public static IEnumerable<FolderFileCountDisplayItem> GetFolderFileCounts(IEnumerable<string> folderPaths)
         {
             var allCounts = new List<FolderFileCountDisplayItem>();
@@ -325,7 +491,7 @@ namespace NineWorldsDeep.Core
             return DriveInfo.GetDrives().Select(x => x.Name);
         }
 
-        private static IEnumerable<string> PossibleEcosystemDrivesForLocationPath(string locationPath)
+        private static IEnumerable<string> PossibleEcosystemFoldersForLocationPath(string locationPath)
         {
             var allPaths = new List<string>
             {
@@ -350,7 +516,7 @@ namespace NineWorldsDeep.Core
 
             return allPaths;
         }
-
+        
         #endregion
 
         public static string GetArphaBetFilePath()
@@ -482,7 +648,10 @@ namespace NineWorldsDeep.Core
         public static string GetSqliteDbPath(string dbNameWithoutExtension)
         {
             string dbName = dbNameWithoutExtension + ".sqlite";
-            return Path.Combine(ProcessTestMode("NWD/sqlite"), dbName);
+
+            //return Path.Combine(ProcessTestMode("NWD/sqlite"), dbName);
+
+            return Path.Combine(DatabaseLocationFolder, dbName);
         }
 
         public static string SyncRootConfigFolder(string name)
