@@ -1,4 +1,5 @@
-﻿using System;
+﻿using NineWorldsDeep.Core;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -28,6 +29,8 @@ namespace NineWorldsDeep.Tapestry.NodeUI
         public EcosystemConfigurationDisplay()
         {
             InitializeComponent();
+
+            RefreshFolderLabels();
         }
 
         #endregion
@@ -44,6 +47,41 @@ namespace NineWorldsDeep.Tapestry.NodeUI
             Core.UtilsUi.ProcessExpanderState((Expander)sender);
         }
 
+        private void RefreshFoundFolders_Click(object sender, RoutedEventArgs e)
+        {
+            RefreshFolderList();
+        }
+
         #endregion
+
+        #region private helper methods
+
+        private void RefreshFolderLabels()
+        {
+            //sync folder
+            lblSyncFolderPath.Content = Configuration.SyncFolder;
+
+            //trash folder
+            lblTrashFolderPath.Content = Configuration.TrashFolder;
+
+            //intake images
+            lblIntakeImagesFolderPath.Content = Configuration.IntakeImagesFolder;
+
+            //intake pdfs
+            lblIntakePdfsFolderPath.Content = Configuration.IntakePdfsFolder;
+
+            //intake voicememos
+            lblIntakeVoiceMemosFolderPath.Content = Configuration.IntakeVoiceMemosFolder;
+        }
+
+        private void RefreshFolderList()
+        {
+            //mimic tagged media tag list view (which uses tag counts)
+            lvFoundFolders.ItemsSource = null;
+            lvFoundFolders.ItemsSource = Configuration.GetEcosystemFolderCounts();
+        }
+
+        #endregion
+
     }
 }

@@ -20,51 +20,89 @@
                   Expanded="Expander_Expanded"
                   Collapsed="Expander_Collapsed">
 
-            <Grid>
+            <StackPanel>
                 
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="40"/>
-                    <RowDefinition Height="40"/>
-                    <RowDefinition Height="40"/>
-                    <RowDefinition Height="40"/>
-                </Grid.RowDefinitions>
-
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="5*"/>
-                    <ColumnDefinition/>
-                </Grid.ColumnDefinitions>
-
                 <Label Content="Sync Folder"
-                       Grid.Row="0"
+                       FontWeight="Bold"
                        VerticalAlignment="Bottom"/>
 
+                <StackPanel Orientation="Horizontal">
+                    
                 <Label x:Name="lblSyncFolderPath"
                        Content="folder/path/goes/here"
-                       Grid.Row="1"
                        VerticalAlignment="Center"/>
 
                 <Button Content="Refresh"
                         x:Name="btnRefreshSyncFolderPath"
-                        Grid.Row="1"
-                        Grid.Column="1"
                         Margin="20 5"/>
+                    
+                </StackPanel>
 
                 <Label Content="Trash Folder"
-                       Grid.Row="2"
+                       FontWeight="Bold"
                        VerticalAlignment="Bottom"/>
 
-                <Label x:Name="lblTrashFolderPath"
+                <StackPanel Orientation="Horizontal">
+
+                    <Label x:Name="lblTrashFolderPath"
                        Content="folder/path/goes/here"
-                       Grid.Row="3"
                        VerticalAlignment="Center"/>
 
-                <Button Content="Select"
+                    <Button Content="Select"
                         x:Name="btnSelectTrashFolderPath"
-                        Grid.Row="3"
-                        Grid.Column="1"
                         Margin="20 5"/>
 
-            </Grid>
+                </StackPanel>
+
+                <Label Content="Intake Pdfs Folder"
+                       FontWeight="Bold"
+                       VerticalAlignment="Bottom"/>
+
+                <StackPanel Orientation="Horizontal">
+
+                    <Label x:Name="lblIntakePdfsFolderPath"
+                           Content="folder/path/goes/here"
+                           VerticalAlignment="Center"/>
+
+                    <Button Content="Select"
+                            x:Name="btnSelectIntakePdfsFolderPath"
+                            Margin="20 5"/>
+                    
+                </StackPanel>
+
+                <Label Content="Intake Images Folder"
+                       FontWeight="Bold"
+                       VerticalAlignment="Bottom"/>
+
+                <StackPanel Orientation="Horizontal">
+
+                    <Label x:Name="lblIntakeImagesFolderPath"
+                           Content="folder/path/goes/here"
+                           VerticalAlignment="Center"/>
+
+                    <Button Content="Select"
+                            x:Name="btnSelectIntakeImagesFolderPath"
+                            Margin="20 5"/>
+                    
+                </StackPanel>
+
+                <Label Content="Intake Voicememos Folder"
+                       FontWeight="Bold"
+                       VerticalAlignment="Bottom"/>
+
+                <StackPanel Orientation="Horizontal">
+                    
+                    <Label x:Name="lblIntakeVoiceMemosFolderPath"
+                       Content="folder/path/goes/here"
+                       VerticalAlignment="Center"/>
+
+                    <Button Content="Select"
+                        x:Name="btnSelectIntakeVoicememosFolderPath"
+                        Margin="20 5"/>
+
+                </StackPanel>
+
+            </StackPanel>
             
         </Expander>
 
@@ -88,7 +126,8 @@
                 <Button x:Name="btnRefreshFoundFolders"
                         Content="Refresh"
                         Grid.Row="1"
-                        Margin="20 0 20 5"/>
+                        Margin="20 0 20 5"
+                        Click="RefreshFoundFolders_Click"/>
 
             </Grid>
 

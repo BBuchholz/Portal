@@ -136,9 +136,14 @@ namespace NineWorldsDeep.Tapestry.NodeUI
             //TODO: if this takes long, make async and update status per section
             TaggingMatrix tm = db.RetrieveLocalDeviceTaggingMatrix();
 
-            tm.AddFolderAndAllSubfolders(Configuration.ImagesFolder);
-            tm.AddFolderAndAllSubfolders(Configuration.VoiceMemosFolder);
-            tm.AddFolderAndAllSubfolders(Configuration.PdfsFolder);
+            //tm.AddFolderAndAllSubfolders(Configuration.ImagesFolder);
+            //tm.AddFolderAndAllSubfolders(Configuration.VoiceMemosFolder);
+            //tm.AddFolderAndAllSubfolders(Configuration.PdfsFolder);
+
+            foreach(string folderPath in Configuration.GetAllEcosystemMediaFolders())
+            {
+                tm.AddFolderAndAllSubfolders(folderPath);
+            }
 
             taggingMatrix = tm;
 

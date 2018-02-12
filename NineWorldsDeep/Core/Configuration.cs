@@ -9,16 +9,164 @@ using System.Text.RegularExpressions;
 using NineWorldsDeep.Warehouse;
 using NineWorldsDeep.Db.Sqlite;
 using NineWorldsDeep.Hive;
+using NineWorldsDeep.Model;
 
 namespace NineWorldsDeep.Core
 {
     public class Configuration
     {
+        #region static fields
+
         private static bool _testMode = false;
         private static string _localDeviceName;
-        
+        private static string _intakeImagesFolder;
+        private static string _intakeVoicememosFolder;
+        private static string _intakePdfsFolder;
+        private static string _trashFolder;
+
+        #endregion
+
+        #region static properties
+
         public static bool GlobalNotes { get; internal set; }
         public static DatabaseMasterAccessPoint DB { get; internal set; }
+        
+        public static string SyncFolder
+        {
+            get
+            {
+                //return ProcessTestMode(@"NWD-SYNC\");
+                return @"C:\NWD-SYNC\";
+            }
+        }
+
+        #region configurable ecosystem folders 
+
+        public static string TrashFolder
+        {
+            get
+            {
+                if (string.IsNullOrWhiteSpace(_trashFolder))
+                {
+                    ConfigFile cfgFile = new ConfigFile();
+
+                    if (!string.IsNullOrWhiteSpace(
+                        cfgFile.TrashFolderPath))
+                    {
+                        _trashFolder = cfgFile.TrashFolderPath;
+                    }
+                    else
+                    {
+                        _trashFolder = @"C:\NWD-AUX\trash";
+                    }
+                }
+
+                return _trashFolder;
+            }
+
+            set
+            {
+                ConfigFile cfgFile = new ConfigFile();
+                cfgFile.TrashFolderPath = value;
+                cfgFile.Save();
+            }
+        }
+        
+        public static string IntakeVoiceMemosFolder
+        {
+            get
+            {
+                if (string.IsNullOrWhiteSpace(_intakeVoicememosFolder))
+                {
+                    ConfigFile cfgFile = new ConfigFile();
+
+                    if (!string.IsNullOrWhiteSpace(
+                        cfgFile.IntakeVoicememosPath))
+                    {
+                        _intakeVoicememosFolder = cfgFile.IntakeVoicememosPath;
+                    }
+                    else
+                    {
+                        _intakeVoicememosFolder = @"C:\NWD-AUX\voicememos";
+                    }
+                }
+
+                return _intakeVoicememosFolder;
+            }
+
+            set
+            {
+                ConfigFile cfgFile = new ConfigFile();
+                cfgFile.IntakeVoicememosPath = value;
+                cfgFile.Save();
+            }
+        }
+
+        public static string IntakePdfsFolder
+        {
+            get
+            {
+                if (string.IsNullOrWhiteSpace(_intakePdfsFolder))
+                {
+                    ConfigFile cfgFile = new ConfigFile();
+
+                    if (!string.IsNullOrWhiteSpace(
+                        cfgFile.IntakePdfsPath))
+                    {
+                        _intakePdfsFolder = cfgFile.IntakePdfsPath;
+                    }
+                    else
+                    {
+                        _intakePdfsFolder = @"C:\NWD-AUX\pdfs";
+                    }
+                }
+
+                return _intakePdfsFolder;
+            }
+
+            set
+            {
+                ConfigFile cfgFile = new ConfigFile();
+                cfgFile.IntakePdfsPath = value;
+                cfgFile.Save();
+            }
+        }
+
+        public static string IntakeImagesFolder
+        {
+            get
+            {
+                if (string.IsNullOrWhiteSpace(_intakeImagesFolder))
+                {
+                    ConfigFile cfgFile = new ConfigFile();
+
+                    if (!string.IsNullOrWhiteSpace(
+                        cfgFile.IntakeImagesPath))
+                    {
+                        _intakeImagesFolder = cfgFile.IntakeImagesPath;
+                    }
+                    else
+                    {
+                        _intakeImagesFolder = @"C:\NWD-AUX\images";
+                    }
+                }
+
+                return _intakeImagesFolder;
+            }
+
+            set
+            {
+                ConfigFile cfgFile = new ConfigFile();
+                cfgFile.IntakeImagesPath = value;
+                cfgFile.Save();
+            }
+        }
+
+        #endregion
+
+        #endregion
+
+        #region static creation
 
         static Configuration()
         {
@@ -27,6 +175,183 @@ namespace NineWorldsDeep.Core
 
             GlobalNotes = false;
         }
+
+        #endregion
+
+        #region public static ecosystem folder methods
+
+        /// <summary>
+        /// returns the folder paths of all ecosystem folders (NWD, NWD-AUX, NWD-MEDIA, NWD-SYNC) in 
+        /// all logical drives (such as C:\, D:\, G:\, etc.) or in
+        /// supported auxilliary locations (currently Dropbox or Google Drive)
+        /// </summary>
+        /// <returns></returns>
+        public static IEnumerable<string> GetAllEcosystemFolders()
+        {
+            var allFolders = new List<string>();
+
+            //check logical drives
+            foreach(string driveName in GetAllLogicalDriveNames())
+            {
+                foreach(string possiblePath in PossibleEcosystemDrivesForLocationPath(driveName))
+                {
+                    if (Directory.Exists(possiblePath))
+                    {
+                        allFolders.Add(possiblePath);
+                    }
+                }
+            }
+
+
+            //check user folder
+            var userFolderPath = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
+
+            foreach (string possiblePath in PossibleEcosystemDrivesForLocationPath(userFolderPath))
+            {
+                if (Directory.Exists(possiblePath))
+                {
+                    allFolders.Add(possiblePath);
+                }
+            }
+
+            //check for dropbox
+            var dropboxPath = Path.Combine(userFolderPath, "Dropbox");
+
+            foreach (string possiblePath in PossibleEcosystemDrivesForLocationPath(dropboxPath))
+            {
+                if (Directory.Exists(possiblePath))
+                {
+                    allFolders.Add(possiblePath);
+                }
+            }
+
+            //check for google drive
+            var googleDrivePath = Path.Combine(userFolderPath, "Google Drive");
+
+            foreach (string possiblePath in PossibleEcosystemDrivesForLocationPath(googleDrivePath))
+            {
+                if (Directory.Exists(possiblePath))
+                {
+                    allFolders.Add(possiblePath);
+                }
+            }
+
+            return allFolders;
+        }
+
+        public static IEnumerable<string> GetAllEcosystemMediaFolders()
+        {
+            var allFolders = new List<string>();
+
+            //check logical drives
+            foreach (string driveName in GetAllLogicalDriveNames())
+            {
+                foreach (string possiblePath in PossibleEcosystemMediaFoldersForLocationPath(driveName))
+                {
+                    if (Directory.Exists(possiblePath))
+                    {
+                        allFolders.Add(possiblePath);
+                    }
+                }
+            }
+            
+            //check user folder
+            var userFolderPath = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
+
+            foreach (string possiblePath in PossibleEcosystemMediaFoldersForLocationPath(userFolderPath))
+            {
+                if (Directory.Exists(possiblePath))
+                {
+                    allFolders.Add(possiblePath);
+                }
+            }
+
+            //check for dropbox
+            var dropboxPath = Path.Combine(userFolderPath, "Dropbox");
+
+            foreach (string possiblePath in PossibleEcosystemMediaFoldersForLocationPath(dropboxPath))
+            {
+                if (Directory.Exists(possiblePath))
+                {
+                    allFolders.Add(possiblePath);
+                }
+            }
+
+            //check for google drive
+            var googleDrivePath = Path.Combine(userFolderPath, "Google Drive");
+
+            foreach (string possiblePath in PossibleEcosystemMediaFoldersForLocationPath(googleDrivePath))
+            {
+                if (Directory.Exists(possiblePath))
+                {
+                    allFolders.Add(possiblePath);
+                }
+            }
+
+            return allFolders;
+        }
+
+        
+
+        public static IEnumerable<FolderFileCountDisplayItem> GetEcosystemFolderCounts()
+        {
+            return GetFolderFileCounts(GetAllEcosystemFolders());
+        }
+
+
+
+        #endregion
+
+        #region private static ecosystem folder helper methods
+        
+        public static IEnumerable<FolderFileCountDisplayItem> GetFolderFileCounts(IEnumerable<string> folderPaths)
+        {
+            var allCounts = new List<FolderFileCountDisplayItem>();
+
+            foreach (string path in folderPaths)
+            {
+                allCounts.Add(new FolderFileCountDisplayItem()
+                {
+                    FolderName = path,
+                    FileCount = Directory.GetFiles(path, "*.*", SearchOption.AllDirectories).Length
+                });
+            }
+
+            return allCounts;
+        }
+
+        private static IEnumerable<string> GetAllLogicalDriveNames()
+        {
+            return DriveInfo.GetDrives().Select(x => x.Name);
+        }
+
+        private static IEnumerable<string> PossibleEcosystemDrivesForLocationPath(string locationPath)
+        {
+            var allPaths = new List<string>
+            {
+                Path.Combine(locationPath, "NWD"),
+                Path.Combine(locationPath, "NWD-AUX"),
+                Path.Combine(locationPath, "NWD-MEDIA"),
+                Path.Combine(locationPath, "NWD-SYNC")
+            };
+
+            return allPaths;
+        }
+
+
+        private static IEnumerable<string> PossibleEcosystemMediaFoldersForLocationPath(string locationPath)
+        {
+            var allPaths = new List<string>
+            {
+                Path.Combine(locationPath, @"NWD-AUX\images"),
+                Path.Combine(locationPath, @"NWD-AUX\pdfs"),
+                Path.Combine(locationPath, @"NWD-AUX\voicememos")
+            };
+
+            return allPaths;
+        }
+
+        #endregion
 
         public static string GetArphaBetFilePath()
         {
@@ -43,15 +368,11 @@ namespace NineWorldsDeep.Core
         //public static string AbletonProjectsFolder { get { return @"C:\NWD-AUX\abletonProjects"; } }
         public static string AbletonProjectsFolder { get { return ProcessTestMode(@"NWD-AUX\abletonProjects"); } }
 
-        public static string SyncFolder()
-        {
-            return ProcessTestMode(@"NWD-SYNC\");
-        }
 
         public static string SyncRoot(string name)
         {
             //return ProcessTestMode(@"NWD-SYNC\" + name);
-            return SyncFolder() + name;
+            return SyncFolder + name;
         }
 
         public static string SyncRootConfigFile(string profileName, string fileNameWithoutExtension)
@@ -147,14 +468,15 @@ namespace NineWorldsDeep.Core
 
             return mostRecentPath;            
         }
-
+        
         public static string GetTrashFileFromPath(string path)
         {
-            string trashDir = ProcessTestMode("NWD-AUX/trash");
+            //string trashDir = ProcessTestMode("NWD-AUX/trash");
+            
             //ensure it exists
-            Directory.CreateDirectory(trashDir);
+            Directory.CreateDirectory(TrashFolder);
             string fName = Path.GetFileName(path);
-            return Path.Combine(trashDir, fName);
+            return Path.Combine(TrashFolder, fName);
         }
 
         public static string GetSqliteDbPath(string dbNameWithoutExtension)
@@ -334,7 +656,7 @@ namespace NineWorldsDeep.Core
 
             foreach(string profileName in GetAllActiveSyncProfileNames())
             {
-                string xmlDir = Path.Combine(SyncFolder(),
+                string xmlDir = Path.Combine(SyncFolder,
                                              profileName,
                                              @"NWD\xml\incoming");
 
@@ -409,7 +731,7 @@ namespace NineWorldsDeep.Core
             
             foreach(string profileName in GetAllActiveSyncProfileNames())
             {
-                string xmlDir = Path.Combine(SyncFolder(),
+                string xmlDir = Path.Combine(SyncFolder,
                                              profileName,
                                              @"NWD\xml\outgoing");
 
@@ -498,7 +820,7 @@ namespace NineWorldsDeep.Core
             string profileName,
             List<string> pathList)
         {
-            string xmlDir = Path.Combine(SyncFolder(),
+            string xmlDir = Path.Combine(SyncFolder,
                              profileName,
                              @"NWD\xml\outgoing");
 
@@ -570,10 +892,12 @@ namespace NineWorldsDeep.Core
             }
         }
 
+
         public static string PdfsFolder
         {
             get { return @"C:\NWD-AUX\pdfs"; }
         }
+
 
         public static string VoiceMemoTagFilePath
         {
@@ -696,6 +1020,7 @@ namespace NineWorldsDeep.Core
                     }
                     
                     cfg.LocalDeviceName = deviceName;
+                    cfg.Save();
 
                     _localDeviceName = cfg.LocalDeviceName;
                     

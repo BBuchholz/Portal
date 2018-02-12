@@ -294,6 +294,7 @@
     <Compile Include="Mock\MockClusterDb.cs" />
     <Compile Include="Mock\MockClusterFileSubsetXml.cs" />
     <Compile Include="Mock\Utils.cs" />
+    <Compile Include="Model\FolderFileCountDisplayItem.cs" />
     <Compile Include="Model\MediaDeviceModelItem.cs" />
     <Compile Include="Model\MediaRootModelItem.cs" />
     <Compile Include="Model\TagCountDisplayItem.cs" />

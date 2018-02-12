@@ -185,7 +185,7 @@ namespace NineWorldsDeep.Hive
 
         public static string SyncFolder()
         {
-            return Core.Configuration.SyncFolder();
+            return Core.Configuration.SyncFolder;
         }
         
         private static string XML_SUB_FOLDER = "xml/incoming";
@@ -208,7 +208,7 @@ namespace NineWorldsDeep.Hive
 
         public static string GetHiveSubFolderForRootNameAndType(string hiveRootName, HiveSporeType sporeType)
         {
-            string syncFolder = Configuration.SyncFolder();
+            string syncFolder = Configuration.SyncFolder;
             string hiveFolder = Path.Combine(syncFolder, "hive");
             string hiveRootFolder = Path.Combine(hiveFolder, hiveRootName);
             string subFolder = Path.Combine(hiveRootFolder,

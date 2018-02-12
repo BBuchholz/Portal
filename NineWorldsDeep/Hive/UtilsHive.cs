@@ -247,7 +247,7 @@ namespace NineWorldsDeep.Hive
                 SiftFilesForSporeType(HiveSporeType.Image, intakeFiles))
             {
                 count++;
-                MoveFile(imageFile, Configuration.ImagesFolder);
+                MoveFile(imageFile, Configuration.IntakeImagesFolder);
             }
 
             if (count > 0) responses.Add(count + " images");
@@ -258,7 +258,7 @@ namespace NineWorldsDeep.Hive
                 SiftFilesForSporeType(HiveSporeType.Audio, intakeFiles))
             {
                 count++;
-                MoveFile(audioFile, Configuration.VoiceMemosFolder);
+                MoveFile(audioFile, Configuration.IntakeVoiceMemosFolder);
             }
 
             if (count > 0) responses.Add(count + " audio files");
@@ -269,7 +269,7 @@ namespace NineWorldsDeep.Hive
                 SiftFilesForSporeType(HiveSporeType.Pdf, intakeFiles))
             {
                 count++;
-                MoveFile(pdfFile, Configuration.PdfsFolder);
+                MoveFile(pdfFile, Configuration.IntakePdfsFolder);
             }
 
             if (count > 0) responses.Add(count + " pdfs");
