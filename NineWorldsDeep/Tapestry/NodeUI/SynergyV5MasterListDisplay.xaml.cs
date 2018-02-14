@@ -355,21 +355,35 @@ namespace NineWorldsDeep.Tapestry.NodeUI
             string fileName =
                 NwdUtils.GetTimeStamp_yyyyMMddHHmmss() + "-nwd-synergy-v5.xml";
 
-            var allFolders =
-                Configuration.GetActiveSyncProfileIncomingXmlFolders();
+            //var allFolders =
+            //    Configuration.GetActiveSyncProfileIncomingXmlFolders();
 
-            allFolders.AddRange(ConfigHive.GetHiveFoldersForXmlExport());
+            //allFolders.AddRange(ConfigHive.GetHiveFoldersForXmlExport());
 
-            foreach (string xmlIncomingFolderPath in allFolders)
-            {
-                //Ensure the directory
-                Directory.CreateDirectory(xmlIncomingFolderPath);
+            //foreach (string xmlIncomingFolderPath in allFolders)
+            //{
+            //    //Ensure the directory
+            //    Directory.CreateDirectory(xmlIncomingFolderPath);
 
-                string fullFilePath =
-                    System.IO.Path.Combine(xmlIncomingFolderPath, fileName);
+            //    string fullFilePath =
+            //        System.IO.Path.Combine(xmlIncomingFolderPath, fileName);
 
-                doc.Save(fullFilePath);
-            }
+            //    doc.Save(fullFilePath);
+            //}
+
+            //COPIED FROM MediaMasterDisplay to use new Hive utilities
+            //write to temp file
+            var tempFolder = Configuration.TempV5XmlFolder;
+            var xmlTempFilePath =
+                System.IO.Path.Combine(tempFolder, fileName);
+
+            doc.Save(xmlTempFilePath);
+
+            var filePathInList = new List<string>();
+            filePathInList.Add(xmlTempFilePath);
+
+            //we can do this and all the hive folder magic will happen
+            Hive.UtilsHive.CopyToAllActiveRoots(filePathInList);
         }
 
         private void MenuItemShelveSelected_Click(object sender, RoutedEventArgs e)
