@@ -94,7 +94,7 @@ namespace NineWorldsDeep.Core
                 cfgFile.Save();
             }
         }
-        
+
         public static string IntakeVoiceMemosFolder
         {
             get
@@ -121,6 +121,7 @@ namespace NineWorldsDeep.Core
             {
                 ConfigFile cfgFile = new ConfigFile();
                 cfgFile.IntakeVoicememosPath = value;
+                _intakeVoicememosFolder = cfgFile.IntakeVoicememosPath;
                 cfgFile.Save();
             }
         }
@@ -151,6 +152,7 @@ namespace NineWorldsDeep.Core
             {
                 ConfigFile cfgFile = new ConfigFile();
                 cfgFile.IntakePdfsPath = value;
+                _intakePdfsFolder = cfgFile.IntakePdfsPath;
                 cfgFile.Save();
             }
         }
@@ -181,6 +183,7 @@ namespace NineWorldsDeep.Core
             {
                 ConfigFile cfgFile = new ConfigFile();
                 cfgFile.IntakeImagesPath = value;
+                _intakeImagesFolder = cfgFile.IntakeImagesPath;
                 cfgFile.Save();
             }
         }
