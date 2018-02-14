@@ -167,6 +167,11 @@ namespace NineWorldsDeep.Hive
             }
         }
 
+        public static void CopyToAllActiveRoots(IEnumerable<string> sourceFilePaths)
+        {
+            ProcessMovement(sourceFilePaths, GetActiveRoots());
+        }
+
         public static void CopyToStaging(List<string> selectedPaths, IAsyncStatusResponsive ui = null)
         {
             AddToStaging(selectedPaths, FileTransportOperationType.CopyTo, ui);
@@ -403,6 +408,31 @@ namespace NineWorldsDeep.Hive
 
                         MoveFile(sourceFilePath, destinationFilePathFolder);
                         break;
+                }
+            }
+        }
+
+        internal static void ProcessMovement(
+            IEnumerable<string> sourceFilePaths,
+            IEnumerable<HiveRoot> destinationRoots)
+        {
+            if (destinationRoots == null || destinationRoots.Count() < 1)
+            {
+                UI.Display.Message("need at least one destination root to copy to...");
+                return;
+            }
+            
+            foreach (string sourceFilePath in sourceFilePaths)
+            {
+                foreach (var destinationRoot in destinationRoots)
+                {
+                    //create destination file path
+                    string destinationFilePathFolder =
+                        ConfigHive.GetHiveSubFolderForRootNameAndType(
+                            destinationRoot.HiveRootName,
+                            SporeTypeFromFilePath(sourceFilePath));
+
+                    CopyFile(sourceFilePath, destinationFilePathFolder);
                 }
             }
         }

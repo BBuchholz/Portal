@@ -611,7 +611,8 @@ namespace NineWorldsDeep.Tapestry.NodeUI
                     {
                         count++;
 
-                        //just for testing
+                        //// just for testing
+                        //// will only export 10 items (there's like 4,000 currently) leave this code here, you want this for testing...
                         //if (count > 10)
                         //{
                         //    break;
@@ -666,21 +667,38 @@ namespace NineWorldsDeep.Tapestry.NodeUI
                     string fileName =
                         NwdUtils.GetTimeStamp_yyyyMMddHHmmss() + "-nwd-mnemosyne-v5.xml";
 
-                    var allFolders =
-                        Configuration.GetActiveSyncProfileIncomingXmlFolders();
 
-                    allFolders.AddRange(Configuration.GetHiveFoldersForXmlExport());
+                    //List<string> allFolders =
+                    //    Configuration.GetActiveSyncProfileIncomingXmlFolders();
 
-                    foreach (string xmlIncomingFolderPath in allFolders)
-                    {
-                        //Ensure the directory
-                        Directory.CreateDirectory(xmlIncomingFolderPath);
+                    //var allFolders = new List<string>();
 
-                        string fullFilePath =
-                            System.IO.Path.Combine(xmlIncomingFolderPath, fileName);
+                    //allFolders.AddRange(Hive.ConfigHive.GetHiveFoldersForXmlExport());
 
-                        doc.Save(fullFilePath);
-                    }
+                    //foreach (string xmlIncomingFolderPath in allFolders)
+                    //{
+                    //    //Ensure the directory
+                    //    Directory.CreateDirectory(xmlIncomingFolderPath);
+
+                    //    string fullFilePath =
+                    //        System.IO.Path.Combine(xmlIncomingFolderPath, fileName);
+
+                    //    doc.Save(fullFilePath);
+                    //}
+
+                    //COPIED FROM TaggedMediaDisplay to use new Hive utilities
+                    //write to temp file
+                    var tempFolder = Configuration.TempV5XmlFolder;
+                    var xmlTempFilePath =
+                        System.IO.Path.Combine(tempFolder, fileName);
+
+                    doc.Save(xmlTempFilePath);
+
+                    var filePathInList = new List<string>();
+                    filePathInList.Add(xmlTempFilePath);
+
+                    //we can do this and all the hive folder magic will happen
+                    Hive.UtilsHive.CopyToAllActiveRoots(filePathInList);
 
                 });
 
