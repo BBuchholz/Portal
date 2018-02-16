@@ -470,8 +470,11 @@ namespace NineWorldsDeep.Tapestry.NodeUI
             //get selected items
             List<string> selectedPaths =
                 lvPaths.SelectedItems.Cast<string>()
-                                     .Select(s => s)
+                                     .Select(s => System.IO.Path.GetFileName(s))
+                                     .Distinct()
                                      .ToList();
+
+            
 
             string pathsAsMultiLineString = string.Join(Environment.NewLine, selectedPaths);
 

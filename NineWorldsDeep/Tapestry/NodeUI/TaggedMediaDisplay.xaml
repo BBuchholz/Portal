@@ -88,7 +88,7 @@
                               Click="MenuItemExportHiveXml_Click"/>
                     <MenuItem Header="Send To Trash"
                               Click="MenuItemSendToTrash_Click"/>
-                    <MenuItem Header="Copy Filenames To Clipboard"
+                    <MenuItem Header="Copy Distinct Filenames To Clipboard"
                               Click="MenuItemCopyFileNamesToClipboard_Click"/>
                 </ContextMenu>
             </ListView.ContextMenu>
