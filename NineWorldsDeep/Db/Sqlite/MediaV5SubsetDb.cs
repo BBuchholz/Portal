@@ -148,12 +148,20 @@ namespace NineWorldsDeep.Db.Sqlite
             TaggingMatrix tm = new TaggingMatrix();
 
             cmd.Parameters.Clear();
-            cmd.CommandText = NwdContract.GET_PATH_TAGS_FOR_DEVICE_NAME_X;
 
-            cmd.Parameters.Add(new SQLiteParameter()
+            if (!includeNonLocalFiles)
             {
-                Value = Configuration.GetLocalDeviceDescription()
-            });
+                cmd.CommandText = NwdContract.GET_PATH_TAGS_FOR_DEVICE_NAME_X;
+
+                cmd.Parameters.Add(new SQLiteParameter()
+                {
+                    Value = Configuration.GetLocalDeviceDescription()
+                });
+            }
+            else
+            {
+                cmd.CommandText = NwdContract.GET_PATH_TAGS_FOR_ALL_DEVICES;
+            }
 
             using (var rdr = cmd.ExecuteReader())
             {
@@ -1051,6 +1059,11 @@ namespace NineWorldsDeep.Db.Sqlite
 
         internal void Sync(Media media, SQLiteCommand cmd)
         {
+            if (string.IsNullOrWhiteSpace(media.MediaHash))
+            {
+                return;
+            }
+
             media.MediaId = EnsureMediaIdForHash(media.MediaHash, cmd);
             PopulateMediaByHash(media, cmd);
 

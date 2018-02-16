@@ -646,6 +646,7 @@ namespace NineWorldsDeep.Sqlite
             "WHERE md." + COLUMN_MEDIA_DEVICE_DESCRIPTION + " = ? " +
             "AND IFNULL(mtg." + COLUMN_MEDIA_TAGGING_TAGGED_AT + ", '') >= IFNULL(mtg." + COLUMN_MEDIA_TAGGING_UNTAGGED_AT + ", '') ";
 
+        
 
         #endregion
 
@@ -735,6 +736,23 @@ namespace NineWorldsDeep.Sqlite
             "JOIN " + TABLE_MEDIA + " m " +
             "ON mdp." + COLUMN_MEDIA_ID + " = m." + COLUMN_MEDIA_ID + " " +
             "WHERE mp." + COLUMN_MEDIA_PATH_VALUE + " = ? ; ";
+
+        internal static readonly string GET_PATH_TAGS_FOR_ALL_DEVICES =
+
+            "SELECT mt." + COLUMN_MEDIA_TAG_VALUE + ", " +
+            "	   mp." + COLUMN_MEDIA_PATH_VALUE + " " +
+            "FROM MediaTag mt " +
+            "JOIN MediaTagging mtg " +
+            "ON mt." + COLUMN_MEDIA_TAG_ID + " = mtg." + COLUMN_MEDIA_TAG_ID + " " +
+            "JOIN " + TABLE_MEDIA + " m " +
+            "ON mtg." + COLUMN_MEDIA_ID + " = m." + COLUMN_MEDIA_ID + " " +
+            "JOIN " + TABLE_MEDIA_DEVICE_PATH + " mdp " +
+            "ON m." + COLUMN_MEDIA_ID + " = mdp." + COLUMN_MEDIA_ID + " " +
+            "JOIN MediaPath mp " +
+            "ON mp." + COLUMN_MEDIA_PATH_ID + " = mdp." + COLUMN_MEDIA_PATH_ID + " " +
+            "JOIN MediaDevice md  " +
+            "ON mdp." + COLUMN_MEDIA_DEVICE_ID + " = md." + COLUMN_MEDIA_DEVICE_ID + " " +
+            "WHERE IFNULL(mtg." + COLUMN_MEDIA_TAGGING_TAGGED_AT + ", '') >= IFNULL(mtg." + COLUMN_MEDIA_TAGGING_UNTAGGED_AT + ", '') "; 
 
         #endregion
     }
