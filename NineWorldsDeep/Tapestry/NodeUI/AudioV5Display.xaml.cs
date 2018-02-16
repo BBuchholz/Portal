@@ -84,11 +84,15 @@ namespace NineWorldsDeep.Tapestry.NodeUI
             this.isPlaying = false;
             fileNode = nd;
             FileDetailsControl.Display(fileNode);
-            meAudioMediaElement.Source = new Uri(fileNode.Path);
 
-            if (chkPlayOnSelect.IsChecked.Value)
+            if (File.Exists(fileNode.Path))
             {
-                PlayMedia();
+                meAudioMediaElement.Source = new Uri(fileNode.Path);
+
+                if (chkPlayOnSelect.IsChecked.Value)
+                {
+                    PlayMedia();
+                }
             }
         }
 
