@@ -45,7 +45,7 @@
                           MaxHeight="100"
                           VerticalScrollBarVisibility="Auto">
                 
-                <TextBox x:Name="TagStringTextBox"                 
+                <TextBox x:Name="tbTagString"                 
                          Margin="10, 2, 10, 4"
                          TextWrapping="Wrap"
                          KeyUp="TagStringTextBox_KeyUp"/>
@@ -75,6 +75,15 @@
             <TextBlock x:Name="tbStatus" Text="status update goes here"/>
 
         </StackPanel>
+
+        <TextBlock x:Name="tbFileIsNonLocalLabel"
+                   Grid.Column="1"
+                   Grid.Row="1"
+                   HorizontalAlignment="Center"
+                   VerticalAlignment="Center"
+                   Foreground="Red"
+                   FontWeight="Bold"
+                   Text="NonLocal File"/>
 
     </Grid>
 </UserControl>

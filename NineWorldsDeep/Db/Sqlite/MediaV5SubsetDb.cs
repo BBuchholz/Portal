@@ -78,6 +78,39 @@ namespace NineWorldsDeep.Db.Sqlite
             return lst;
         }
 
+        public TaggingMatrix RetrieveTaggingMatrix(bool includeNonLocalFiles)
+        {
+            TaggingMatrix tm = null;
+
+            using (var conn = new SQLiteConnection(
+                @"Data Source=" + Configuration.GetSqliteDbPath(DbName)))
+            {
+                conn.Open();
+
+                using (var cmd = new SQLiteCommand(conn))
+                {
+                    using (var transaction = conn.BeginTransaction())
+                    {
+                        try
+                        {
+                            tm = RetrieveTaggingMatrix(includeNonLocalFiles, cmd);
+                            transaction.Commit();
+                        }
+                        catch (Exception ex)
+                        {
+                            //handle exception here
+                            transaction.Rollback();
+                        }
+                    }
+                }
+
+                conn.Close();
+            }
+
+            return tm;
+        }
+
+        [Obsolete("use RetrieveTaggingMatrix(false)")]
         public TaggingMatrix RetrieveLocalDeviceTaggingMatrix()
         {
             TaggingMatrix tm = null;
@@ -110,6 +143,32 @@ namespace NineWorldsDeep.Db.Sqlite
             return tm;
         }
 
+        private TaggingMatrix RetrieveTaggingMatrix(bool includeNonLocalFiles, SQLiteCommand cmd)
+        {
+            TaggingMatrix tm = new TaggingMatrix();
+
+            cmd.Parameters.Clear();
+            cmd.CommandText = NwdContract.GET_PATH_TAGS_FOR_DEVICE_NAME_X;
+
+            cmd.Parameters.Add(new SQLiteParameter()
+            {
+                Value = Configuration.GetLocalDeviceDescription()
+            });
+
+            using (var rdr = cmd.ExecuteReader())
+            {
+                while (rdr.Read())
+                {
+                    string tag = DbV5Utils.GetNullableString(rdr, 0);
+                    string path = DbV5Utils.GetNullableString(rdr, 1);
+                    tm.LinkTagToPath(tag, path, includeNonLocalFiles);
+                }
+            }
+
+            return tm;
+        }
+
+        [Obsolete("use RetrieveTaggingMatrix(false, cmd)")]
         private TaggingMatrix RetrieveLocalDeviceTaggingMatrix(SQLiteCommand cmd)
         {
             TaggingMatrix tm = new TaggingMatrix();
@@ -127,7 +186,7 @@ namespace NineWorldsDeep.Db.Sqlite
                 {
                     string tag = DbV5Utils.GetNullableString(rdr, 0);
                     string path = DbV5Utils.GetNullableString(rdr, 1);
-                    tm.LinkIfPathExists(tag, path);
+                    tm.LinkTagToPath(tag, path);
                 }
             }
 
@@ -200,6 +259,52 @@ namespace NineWorldsDeep.Db.Sqlite
                     }
                 }
             }
+        }
+
+        internal string GetMediaHashByPath(string filePath)
+        {
+            string hash = "";
+
+            using (var conn = new SQLiteConnection(
+                @"Data Source=" + Configuration.GetSqliteDbPath(DbName)))
+            {
+                conn.Open();
+
+                using (var cmd = new SQLiteCommand(conn))
+                {
+                    using (var transaction = conn.BeginTransaction())
+                    {
+                        hash = GetMediaHashByPath(filePath, cmd);
+
+                        transaction.Commit();
+                    }
+                }
+
+                conn.Close();
+            }
+
+            return hash;
+        }
+
+        private string GetMediaHashByPath(string filePath, SQLiteCommand cmd)
+        {
+            string hash = "";
+
+            cmd.Parameters.Clear();
+            cmd.CommandText =
+                NwdContract.SELECT_MEDIA_HASH_FOR_MEDIA_PATH;
+            
+            cmd.Parameters.Add(new SQLiteParameter() { Value = filePath });
+
+            using (var rdr = cmd.ExecuteReader())
+            {
+                if (rdr.Read())
+                {
+                    hash = DbV5Utils.GetNullableString(rdr, 0);
+                }
+            }
+
+            return hash;
         }
 
         internal void PopulateTagIds(List<Tag> tags)

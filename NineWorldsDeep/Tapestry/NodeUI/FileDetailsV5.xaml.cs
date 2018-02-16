@@ -50,13 +50,13 @@ namespace NineWorldsDeep.Tapestry.NodeUI
         {
             get
             {
-                return TagStringTextBox.Text;
+                return tbTagString.Text;
             }
 
             set
             {
-                oldTagString = TagStringTextBox.Text;
-                TagStringTextBox.Text = value;
+                oldTagString = tbTagString.Text;
+                tbTagString.Text = value;
             }
         }
 
@@ -177,15 +177,45 @@ namespace NineWorldsDeep.Tapestry.NodeUI
         {
             fileNode = nd;
             MultiLineTextBox.Text = nd.ToMultiLineDetail();
-            SetCurrentMediaListItem(new MediaListItem(fileNode.Path));
+            //SetCurrentMediaListItem(new MediaListItem(fileNode.Path));
+            SetCurrentMediaListItemByPath(fileNode.Path);
+
+            //if file does not exists locally, disable editing on tag box and display notification
+            if (!File.Exists(fileNode.Path))
+            {
+                tbTagString.IsReadOnly = true;
+                tbFileIsNonLocalLabel.Visibility = Visibility.Visible;
+            }
+            else
+            {
+                tbTagString.IsReadOnly = false;
+                tbFileIsNonLocalLabel.Visibility = Visibility.Hidden;
+            }
+
         }
 
-        private void SetCurrentMediaListItem(MediaListItem mli)
+        private void SetCurrentMediaListItemByPath(string filePath)
         {
-            currentMediaListItem = mli;
-            currentMediaListItem.HashMedia();
-            Sync();
+            if (File.Exists(filePath))
+            {
+                currentMediaListItem = new MediaListItem(filePath);
+                currentMediaListItem.HashMedia();
+                Sync();
+            }
+            else
+            {
+                string mediaHash = Configuration.DB.MediaSubset.GetMediaHashByPath(filePath);
+                currentMediaListItem = new MediaListItem(filePath, mediaHash);
+                Sync();
+            }
         }
+
+        //private void SetCurrentMediaListItem(MediaListItem mli)
+        //{
+        //    currentMediaListItem = mli;
+        //    currentMediaListItem.HashMedia();
+        //    Sync();
+        //}
 
         private void Sync()
         {

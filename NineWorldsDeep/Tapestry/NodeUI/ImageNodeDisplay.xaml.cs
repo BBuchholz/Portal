@@ -57,17 +57,22 @@ namespace NineWorldsDeep.Tapestry.NodeUI
             fileNode = nd;
             FileDetailsControl.Display(nd);
 
-            BitmapImage image = new BitmapImage();
+            ImageControl.Source = null;
 
-            using (FileStream stream = File.OpenRead(nd.Path))
+            if (File.Exists(nd.Path))
             {
-                image.BeginInit();
-                image.StreamSource = stream;
-                image.CacheOption = BitmapCacheOption.OnLoad;
-                image.EndInit();
-            }
+                BitmapImage image = new BitmapImage();
 
-            ImageControl.Source = image;
+                using (FileStream stream = File.OpenRead(nd.Path))
+                {
+                    image.BeginInit();
+                    image.StreamSource = stream;
+                    image.CacheOption = BitmapCacheOption.OnLoad;
+                    image.EndInit();
+                }
+
+                ImageControl.Source = image;
+            }
         }
 
         private void MenuItemSendToTrash_Click(object sender, RoutedEventArgs e)

@@ -41,12 +41,12 @@
                     Padding="10 0"
                     Click="btnRefreshTaggingMatrix_Click"/>
 
-            <CheckBox x:Name="chkMultiTagsAsIntersectionInsteadOfUnion" 
+            <CheckBox x:Name="chkIncludeNonLocalFiles" 
                       IsChecked="False" 
                       Margin="5" 
                       Height="15" 
                       VerticalAlignment="Center"
-                      HorizontalAlignment="Center">Tags As Intersection</CheckBox>
+                      HorizontalAlignment="Center">Include NonLocal Files</CheckBox>
 
             <Button x:Name="btnHashAndResyncPaths"
                     Content="Resync Tags By Hash"

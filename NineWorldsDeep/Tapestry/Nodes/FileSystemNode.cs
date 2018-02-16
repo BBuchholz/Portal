@@ -17,7 +17,8 @@ namespace NineWorldsDeep.Tapestry.Nodes
         public FileSystemNode(string uri, bool lazyLoadChildren, int mediaDeviceId, params Tapestry.TapestryNode[] children)
             : base(uri, children)
         {
-            Path = Converter.NwdUriToFileSystemPath(uri);
+            //Path = Converter.NwdUriToFileSystemPath(uri);
+            Path = uri;
             MediaDevicePathId = -1;
             MediaId = -1;
             MediaDeviceId = mediaDeviceId;
@@ -112,7 +113,8 @@ namespace NineWorldsDeep.Tapestry.Nodes
             string newestHash = Hashes.Sha1ForFilePath(Path);
 
             //only hit the database if we have to
-            if(!newestHash.Equals(Hash, StringComparison.CurrentCultureIgnoreCase))
+            if (!newestHash.Equals(Hash, StringComparison.CurrentCultureIgnoreCase)
+                 && MediaDeviceId > 0 && File.Exists(Path))
             {
                 Hash = newestHash;
 
@@ -126,7 +128,7 @@ namespace NineWorldsDeep.Tapestry.Nodes
         //private string GetHashAndStatus(string path)
         //{
         //    string hash = Hashes.Sha1ForFilePath(path);
-            
+
         //    string msg = hash + " (Error)";
 
         //    try
@@ -235,7 +237,8 @@ namespace NineWorldsDeep.Tapestry.Nodes
 
             if(MediaDeviceId < 1)
             {
-                throw new Exception("invalid MediaDeviceId: " + MediaDeviceId);
+                //throw new Exception("invalid MediaDeviceId: " + MediaDeviceId);
+                UI.Display.Message("Warning: MediaDeviceId is not set, be advised that it has the potential to cause issues");
             }
 
             Tapestry.TapestryNode f = new FileSystemNode(frgUri, true, MediaDeviceId);

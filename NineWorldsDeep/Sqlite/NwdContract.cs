@@ -719,8 +719,22 @@ namespace NineWorldsDeep.Sqlite
                          + COLUMN_HIVE_ROOT_DEACTIVATED_AT + " "
             + "FROM " + TABLE_HIVE_ROOT + " "
             + "WHERE " + COLUMN_HIVE_ROOT_NAME + " = ? ;";
-        
+
         #endregion
+
+        #endregion
+
+        #region Mnemosyne V5 Subset
+
+        internal static readonly string SELECT_MEDIA_HASH_FOR_MEDIA_PATH =
+
+            "SELECT m." + COLUMN_MEDIA_HASH + "  " +
+            "FROM " + TABLE_MEDIA_PATH + " mp " +
+            "JOIN " + TABLE_MEDIA_DEVICE_PATH + " mdp " +
+            "ON mp." + COLUMN_MEDIA_PATH_ID + " = mdp." + COLUMN_MEDIA_PATH_ID + " " +
+            "JOIN " + TABLE_MEDIA + " m " +
+            "ON mdp." + COLUMN_MEDIA_ID + " = m." + COLUMN_MEDIA_ID + " " +
+            "WHERE mp." + COLUMN_MEDIA_PATH_VALUE + " = ? ; ";
 
         #endregion
     }

@@ -133,8 +133,10 @@ namespace NineWorldsDeep.Tapestry.NodeUI
 
         private void RefreshTaggingMatrix()
         {
+            bool includeNonLocal = chkIncludeNonLocalFiles.IsChecked.Value;
+
             //TODO: if this takes long, make async and update status per section
-            TaggingMatrix tm = db.RetrieveLocalDeviceTaggingMatrix();
+            TaggingMatrix tm = db.RetrieveTaggingMatrix(includeNonLocal);
 
             //tm.AddFolderAndAllSubfolders(Configuration.ImagesFolder);
             //tm.AddFolderAndAllSubfolders(Configuration.VoiceMemosFolder);
@@ -213,14 +215,27 @@ namespace NineWorldsDeep.Tapestry.NodeUI
                 //display first selected
                 string firstPath = selectedPaths[0];
 
+                //if (File.Exists(firstPath) && db.LocalDeviceId > 0)
+                //{
+                //    PathSelectedEventArgs args =
+                //        new PathSelectedEventArgs(
+                //            new FileSystemNode(firstPath, true, db.LocalDeviceId));
+
+                //    OnPathSelected(args);
+                //}
+
+                var deviceId = -1;
+
                 if (File.Exists(firstPath) && db.LocalDeviceId > 0)
                 {
-                    PathSelectedEventArgs args =
-                        new PathSelectedEventArgs(
-                            new FileSystemNode(firstPath, true, db.LocalDeviceId));
-
-                    OnPathSelected(args);
+                    deviceId = db.LocalDeviceId;
                 }
+                
+                PathSelectedEventArgs args =
+                    new PathSelectedEventArgs(
+                        new FileSystemNode(firstPath, true, deviceId));
+
+                OnPathSelected(args);
             }
         }
 

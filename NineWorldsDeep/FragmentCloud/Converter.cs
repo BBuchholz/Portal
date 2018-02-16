@@ -6,34 +6,34 @@ namespace NineWorldsDeep.FragmentCloud
 {
     public class Converter
     {
-        public static string NwdUriToFileSystemPath(string uri)
-        {
-            if (File.Exists(uri) || Directory.Exists(uri))
-            {
-                return uri;
-            }
+        //public static string NwdUriToFileSystemPath(string uri)
+        //{
+        //    if (File.Exists(uri) || Directory.Exists(uri))
+        //    {
+        //        return uri;
+        //    }
 
-            Stack<string> nodeStack = UriToNodeNameStack(uri);
+        //    Stack<string> nodeStack = UriToNodeNameStack(uri);
 
-            string path = "";
+        //    string path = "";
 
-            while (nodeStack.Count > 0)
-            {
-                if (!string.IsNullOrWhiteSpace(path))
-                {
-                    path = nodeStack.Pop() + @"\" + path;
-                }
-                else
-                {
-                    path = nodeStack.Pop();
-                }
-            }
+        //    while (nodeStack.Count > 0)
+        //    {
+        //        if (!string.IsNullOrWhiteSpace(path))
+        //        {
+        //            path = nodeStack.Pop() + @"\" + path;
+        //        }
+        //        else
+        //        {
+        //            path = nodeStack.Pop();
+        //        }
+        //    }
 
-            path = @"C:\" + path;
+        //    path = @"C:\" + path;
 
-            return path;
+        //    return path;
 
-        }
+        //}
 
         /// <summary>
         /// cleans extra '/' characters from a uri

@@ -32,7 +32,7 @@ namespace NineWorldsDeep.FragmentCloud
             {
                 FileDetailsControl.Visibility = Visibility.Visible;
                 MultiLineTextBox.Visibility = Visibility.Collapsed;
-                FileDetailsControl.Display((FileSystemNode)frg);
+                //FileDetailsControl.Display((FileSystemNode)frg);
             }
             else
             {
@@ -40,6 +40,8 @@ namespace NineWorldsDeep.FragmentCloud
                 FileDetailsControl.Visibility = Visibility.Collapsed;
                 MultiLineTextBox.Text = frg.ToMultiLineDetail();
             }
+
+            FileDetailsControl.Display((FileSystemNode)frg);
 
             frg.PerformSelectionAction();
         }

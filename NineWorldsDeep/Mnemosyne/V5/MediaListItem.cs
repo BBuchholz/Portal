@@ -21,6 +21,17 @@ namespace NineWorldsDeep.Mnemosyne.V5
             AddPath(path);
         }
 
+        public MediaListItem(string path, string mediaHash)
+        {
+            Media = new Media()
+            {
+                MediaHash = mediaHash
+            };
+
+            initializedPath = path;
+            AddPath(path);
+        }
+
         public void AddPath(string filePath)
         {
             var dp = new DevicePath()

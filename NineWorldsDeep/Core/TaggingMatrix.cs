@@ -112,9 +112,9 @@ namespace NineWorldsDeep.Core
 
         }
 
-        public void LinkIfPathExists(string tag, string path)
+        public void LinkTagToPath(string tag, string path, bool includeNonLocalFiles = false)
         {
-            if (File.Exists(path))
+            if (includeNonLocalFiles || File.Exists(path))
             {
                 tagsToPaths[tag].Add(path);
                 pathsToTags[path].Add(tag);
