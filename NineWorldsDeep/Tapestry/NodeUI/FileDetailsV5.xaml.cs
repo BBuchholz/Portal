@@ -205,7 +205,8 @@ namespace NineWorldsDeep.Tapestry.NodeUI
             else
             {
                 string mediaHash = Configuration.DB.MediaSubset.GetMediaHashByPath(filePath);
-                currentMediaListItem = new MediaListItem(filePath, mediaHash);
+                string deviceName = Configuration.DB.MediaSubset.GetMediaDeviceNameByPath(filePath);
+                currentMediaListItem = new MediaListItem(filePath, deviceName, mediaHash);
                 Sync();
             }
         }

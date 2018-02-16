@@ -358,10 +358,24 @@ namespace NineWorldsDeep.Tapestry.NodeUI
 
                     foreach(string filePath in selectedPaths)
                     {
-                        this.StatusDetailUpdate("hashing: " + filePath);
+                        MediaListItem mli;
 
-                        var mli = new MediaListItem(filePath);
-                        mli.HashMedia();
+                        if (File.Exists(filePath))
+                        {
+                            this.StatusDetailUpdate("hashing: " + filePath);
+
+                            mli = new MediaListItem(filePath);
+                            mli.HashMedia();
+                        }
+                        else
+                        {
+                            this.StatusDetailUpdate("nonlocal file, retrieving hash from database: " + filePath);
+                            //sync by path
+                            string mediaHash = Configuration.DB.MediaSubset.GetMediaHashByPath(filePath);
+                            string deviceName = Configuration.DB.MediaSubset.GetMediaDeviceNameByPath(filePath);
+                            mli = new MediaListItem(filePath, deviceName, mediaHash);
+                        }
+
                         mediaList.Add(mli.Media);
                     }
 
@@ -419,7 +433,8 @@ namespace NineWorldsDeep.Tapestry.NodeUI
                     filePathInList.Add(xmlTempFilePath);
 
                     //just checked, we can do this and all the hive folder magic will happen
-                    UtilsHive.CopyToStaging(filePathInList, this);
+                    //UtilsHive.CopyToStaging(filePathInList, this);
+                    UtilsHive.CopyToAllActiveRoots(filePathInList);
                 }
                 catch (Exception ex)
                 {
@@ -427,7 +442,8 @@ namespace NineWorldsDeep.Tapestry.NodeUI
                 }
             });
 
-            UI.Display.Message("xml copied to hive staging. (On mobile device, be sure to intake Xml from stagin and then use Import Mnemosyne Hive Xml transfer option)");
+            //UI.Display.Message("xml copied to hive staging. (On mobile device, be sure to intake Xml from stagin and then use Import Mnemosyne Hive Xml transfer option)");
+            UI.Display.Message("xml copied to hive, on mobile device use Import Mnemosyne Hive Xml transfer option)");
         }
 
         private void MenuItemSendToTrash_Click(object sender, RoutedEventArgs e)

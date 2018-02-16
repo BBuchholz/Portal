@@ -269,6 +269,31 @@ namespace NineWorldsDeep.Db.Sqlite
             }
         }
 
+        internal string GetMediaDeviceNameByPath(string filePath)
+        {
+            string deviceDescription = "";
+
+            using (var conn = new SQLiteConnection(
+                @"Data Source=" + Configuration.GetSqliteDbPath(DbName)))
+            {
+                conn.Open();
+
+                using (var cmd = new SQLiteCommand(conn))
+                {
+                    using (var transaction = conn.BeginTransaction())
+                    {
+                        deviceDescription = GetMediaDeviceNameByPath(filePath, cmd);
+
+                        transaction.Commit();
+                    }
+                }
+
+                conn.Close();
+            }
+
+            return deviceDescription;
+        }
+
         internal string GetMediaHashByPath(string filePath)
         {
             string hash = "";
@@ -292,6 +317,27 @@ namespace NineWorldsDeep.Db.Sqlite
             }
 
             return hash;
+        }
+
+        private string GetMediaDeviceNameByPath(string filePath, SQLiteCommand cmd)
+        {
+            string deviceDescription = "";
+
+            cmd.Parameters.Clear();
+            cmd.CommandText =
+                NwdContract.SELECT_MEDIA_DEVICE_DESCRIPTION_FOR_MEDIA_PATH;
+
+            cmd.Parameters.Add(new SQLiteParameter() { Value = filePath });
+
+            using (var rdr = cmd.ExecuteReader())
+            {
+                if (rdr.Read())
+                {
+                    deviceDescription = DbV5Utils.GetNullableString(rdr, 0);
+                }
+            }
+
+            return deviceDescription;
         }
 
         private string GetMediaHashByPath(string filePath, SQLiteCommand cmd)

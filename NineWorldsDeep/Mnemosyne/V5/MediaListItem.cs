@@ -12,24 +12,35 @@ namespace NineWorldsDeep.Mnemosyne.V5
     public class MediaListItem
     {
         public Media Media { get; private set; }
-        private string initializedPath = "";
+        private string localPath = "";
 
         public MediaListItem(string path)
         {
             Media = new Media();
-            initializedPath = path;
+            localPath = path;
             AddPath(path);
         }
 
-        public MediaListItem(string path, string mediaHash)
+        public MediaListItem(string path, string deviceName, string mediaHash)
         {
             Media = new Media()
             {
                 MediaHash = mediaHash
             };
 
-            initializedPath = path;
-            AddPath(path);
+            localPath = path;
+            AddPath(path, deviceName);
+        }
+
+        public void AddPath(string filePath, string deviceName)
+        {
+            var dp = new DevicePath()
+            {
+                DeviceName = deviceName,
+                DevicePathValue = filePath
+            };
+            
+            Media.Add(dp);
         }
 
         public void AddPath(string filePath)
@@ -54,9 +65,9 @@ namespace NineWorldsDeep.Mnemosyne.V5
 
         public void HashMedia()
         {
-            if (File.Exists(initializedPath))
+            if (File.Exists(localPath))
             {
-                Media.MediaHash = Hashes.Sha1ForFilePath(initializedPath);
+                Media.MediaHash = Hashes.Sha1ForFilePath(localPath);
             }
         }
 

@@ -737,6 +737,16 @@ namespace NineWorldsDeep.Sqlite
             "ON mdp." + COLUMN_MEDIA_ID + " = m." + COLUMN_MEDIA_ID + " " +
             "WHERE mp." + COLUMN_MEDIA_PATH_VALUE + " = ? ; ";
 
+        internal static readonly string SELECT_MEDIA_DEVICE_DESCRIPTION_FOR_MEDIA_PATH =
+
+            "SELECT md." + COLUMN_MEDIA_DEVICE_DESCRIPTION + "  " +
+            "FROM " + TABLE_MEDIA_PATH + " mp " +
+            "JOIN " + TABLE_MEDIA_DEVICE_PATH + " mdp " +
+            "ON mp." + COLUMN_MEDIA_PATH_ID + " = mdp." + COLUMN_MEDIA_PATH_ID + " " +
+            "JOIN " + TABLE_MEDIA_DEVICE + " md " +
+            "ON mdp." + COLUMN_MEDIA_DEVICE_ID + " = md." + COLUMN_MEDIA_DEVICE_ID + " " +
+            "WHERE mp." + COLUMN_MEDIA_PATH_VALUE + " = ? ; ";
+
         internal static readonly string GET_PATH_TAGS_FOR_ALL_DEVICES =
 
             "SELECT mt." + COLUMN_MEDIA_TAG_VALUE + ", " +
