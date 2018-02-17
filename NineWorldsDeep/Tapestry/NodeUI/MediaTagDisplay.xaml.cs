@@ -231,18 +231,33 @@ namespace NineWorldsDeep.Tapestry.NodeUI
 
                     if (devicePath != null)
                     {
+                        //commenting out to support nonlocal files, mimicking TaggedMediaDisplay
+                        //if (File.Exists(devicePath.DevicePathValue) && dbMediaV5.LocalDeviceId > 0)
+                        //{
+                        //    PathSelectedEventArgs args =
+                        //        new PathSelectedEventArgs(
+                        //            new FileSystemNode(devicePath.DevicePathValue, true, dbMediaV5.LocalDeviceId));
+
+                        //    OnPathSelected(args);
+                        //}
+                        //else
+                        //{
+                        //    UI.Display.Message(devicePath.DevicePathValue + " does not exist on this device or local device id is not set");
+                        //}
+
+                        //mimicking TaggedMediaDisplay
+                        var deviceId = -1;
+
                         if (File.Exists(devicePath.DevicePathValue) && dbMediaV5.LocalDeviceId > 0)
                         {
-                            PathSelectedEventArgs args =
-                                new PathSelectedEventArgs(
-                                    new FileSystemNode(devicePath.DevicePathValue, true, dbMediaV5.LocalDeviceId));
+                            deviceId = dbMediaV5.LocalDeviceId;
+                        }
 
-                            OnPathSelected(args);
-                        }
-                        else
-                        {
-                            UI.Display.Message(devicePath.DevicePathValue + " does not exist on this device or local device id is not set");
-                        }
+                        PathSelectedEventArgs args =
+                            new PathSelectedEventArgs(
+                                new FileSystemNode(devicePath.DevicePathValue, true, deviceId));
+
+                        OnPathSelected(args);
                     }
                 }
             }
