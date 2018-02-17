@@ -43,6 +43,16 @@
                       Click="MenuItemMoveAllToOtherStagingLobe_Click"/>
         </ContextMenu>
 
+        <ContextMenu x:Key="cmNonLocalRootSpore">
+            <MenuItem Header="Copy To Other"
+                      Click="MenuItemCopyToOther_Click"/>
+        </ContextMenu>
+
+        <ContextMenu x:Key="cmNonLocalRootLobe">
+            <MenuItem Header="Copy All To Other"
+                      Click="MenuItemCopyAllToOtherStagingLobe_Click"/>
+        </ContextMenu>
+
     </UserControl.Resources>
     
     <Grid>

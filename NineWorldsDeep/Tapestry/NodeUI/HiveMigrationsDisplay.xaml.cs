@@ -156,10 +156,13 @@ namespace NineWorldsDeep.Tapestry.NodeUI
             {
                 item.ContextMenu = (ContextMenu)this.Resources["cmLocalRootLobe"];
             }
-
-            if (rootIsStaging)
+            else if (rootIsStaging)
             {
                 item.ContextMenu = (ContextMenu)this.Resources["cmStagingRootLobe"];
+            }
+            else
+            {
+                item.ContextMenu = (ContextMenu)this.Resources["cmNonLocalRootLobe"];
             }
 
             item.MouseRightButtonDown += SelectRightClickedTreeViewItem;
@@ -180,10 +183,13 @@ namespace NineWorldsDeep.Tapestry.NodeUI
             {
                 item.ContextMenu = (ContextMenu)this.Resources["cmLocalRootSpore"];
             }
-
-            if (rootIsStaging)
+            else if (rootIsStaging)
             {
                 item.ContextMenu = (ContextMenu)this.Resources["cmStagingRootSpore"];
+            }
+            else
+            {
+                item.ContextMenu = (ContextMenu)this.Resources["cmNonLocalRootSpore"];
             }
             
             item.MouseRightButtonDown += SelectRightClickedTreeViewItem;
