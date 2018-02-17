@@ -60,7 +60,26 @@ namespace NineWorldsDeep.Tapestry.Nodes
                 return GetMultiLineFileDetails();
             }
 
-            return "[[[FILESYSTEM OBJECT NOT FOUND]]]";
+            //return "[[[FILESYSTEM OBJECT NOT FOUND]]]";
+
+            return GetNonlocalMultilineFileDetails();
+        }
+
+        private string GetNonlocalMultilineFileDetails()
+        {
+            string detail = "";
+
+            //created at
+            detail += "Nonlocal File Name: " +
+                System.IO.Path.GetFileName(Path) +
+                Environment.NewLine +
+                Environment.NewLine;
+
+            //path
+            detail += "Nonlocal File Path: " + Path +
+                Environment.NewLine;
+
+            return detail;
         }
 
         private string GetMultiLineFileDetails()
