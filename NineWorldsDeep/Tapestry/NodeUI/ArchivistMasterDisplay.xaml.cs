@@ -71,6 +71,16 @@ namespace NineWorldsDeep.Tapestry.NodeUI
 
         #region event handlers
 
+        private void btnAddSourceLocation_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void btnAddSourceLocationSubset_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
         private void btnRefreshSources_Click(object sender, RoutedEventArgs e)
         {
             LoadSources();
@@ -347,6 +357,5 @@ namespace NineWorldsDeep.Tapestry.NodeUI
         }
 
         #endregion
-
     }
 }
