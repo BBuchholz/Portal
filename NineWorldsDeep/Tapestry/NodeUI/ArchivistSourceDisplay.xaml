@@ -151,7 +151,7 @@
         </Style>
     </UserControl.Resources>
     
-    <Grid>
+    <!--<Grid>
 
         <Grid.RowDefinitions>
             <RowDefinition/>
@@ -264,5 +264,214 @@
                     Click="btnAddSourceExcerpt_Click"/>
         </Grid>
         
+    </Grid>-->
+
+    <Grid>
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="40"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        
+        <Expander Header="Source Details"
+                  Grid.Row="0"
+                  IsExpanded="False"
+                  Margin="5"
+                  Expanded="Expander_Expanded"
+                  Collapsed="Expander_Collapsed">
+        
+            <ContentControl Grid.Row="0"
+                            x:Name="ccSourceDetails"
+                            Margin="30"
+                            Content="{Binding}"
+                            ContentTemplate="{StaticResource SourceTemplate}"/>
+        </Expander>
+
+        <Expander Header="Utilities"
+                  Grid.Row="1"
+                  IsExpanded="True"
+                  Margin="5"
+                  Expanded="Expander_Expanded"
+                  Collapsed="Expander_Collapsed">
+
+            <Grid>
+
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="40"/>
+                    <RowDefinition Height="40"/>
+                </Grid.RowDefinitions>
+                
+                <StackPanel Orientation="Horizontal"
+                        Grid.Row="0"
+                        HorizontalAlignment="Center">
+
+                    <Button x:Name="btnRefreshSource"
+                        Content="Refresh"
+                        Margin="5"
+                        Padding="5"
+                        Click="ButtonRefreshSource_Click"/>
+
+                    <Button x:Name="btnSourceTagAll"
+                        Content="Source Tag All"
+                        Margin="5"
+                        Padding="5"
+                        Click="btnSourceTagAll_Click"/>
+
+                    <Button x:Name="btnEnterSourceTag"
+                        Content="EnterSourceTag"
+                        Margin="5"
+                        Padding="5"
+                        Click="btnEnterSourceTag_Click"/>
+
+                    <Button x:Name="btnCopySourceTag"
+                        Content="Copy Source Tag"
+                        Margin="5"
+                        Padding="5"
+                        Click="btnCopySourceTag_Click"/>
+
+
+                </StackPanel>
+
+                <Grid Grid.Row="1">
+
+                    <Grid.ColumnDefinitions>
+                        
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                        
+                    </Grid.ColumnDefinitions>
+
+                    <ComboBox Grid.Column="0"
+                              Margin="5"
+                              x:Name="cmbSourceLocations"/>
+
+                    <ComboBox Grid.Column="1"
+                              Margin="5"
+                              x:Name="cmbLocationSubsets"/>
+
+                    <Button Grid.Column="2"
+                            Margin="5"
+                            x:Name="btnAddLocationSubset"
+                            Content="Add Subset"/>
+
+                </Grid>
+            </Grid>
+        </Expander>
+
+        <Expander Header="Source Locations"
+                  Grid.Row="2"
+                  IsExpanded="True"
+                  Margin="5"
+                  Expanded="Expander_Expanded"
+                  Collapsed="Expander_Collapsed">
+
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="40"/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+
+                <CheckBox x:Name="chkFilterExcludeMissingLocationEntries"
+                          HorizontalAlignment="Center"
+                          VerticalAlignment="Center"
+                          Content="Exclude Missing Entries"/>
+
+                <ListView x:Name="lvSourceLocationEntries"
+                          Grid.Row="1"
+                          Margin="5"/>
+
+            </Grid>
+            
+        </Expander>
+
+        <Expander Header="Source Excerpts"
+                  Grid.Row="3"
+                  IsExpanded="True"
+                  Margin="5"
+                  Expanded="Expander_Expanded"
+                  Collapsed="Expander_Collapsed">
+            
+            <Grid>
+
+                <Grid.RowDefinitions>
+
+                    <RowDefinition/>
+                    <RowDefinition Height="60"/>
+                    
+                </Grid.RowDefinitions>
+                
+                <ListView x:Name="lvSourceExcerpts"
+                  Grid.Row="0"
+                  Margin="5"
+                  ItemContainerStyle="{StaticResource alternatingStyle}"
+                  AlternationCount="2"
+                  ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                  SelectionChanged="lvSourceExcerpts_SelectionChanged">
+
+                    <ListView.ItemTemplate>
+                        <DataTemplate>
+                            <StackPanel Orientation="Vertical">
+
+                                <TextBlock Text="{Binding ExcerptValue}" 
+                                   TextWrapping="Wrap"
+                                   Margin="5"/>
+
+                                <StackPanel Orientation="Horizontal"
+                                    x:Name="spTagStringTextBlock">
+
+                                    <TextBlock local:ArchivistUiTagFormatter.FormattedText="{Binding TagString}" 
+                                       x:Name="tbTagString"
+                                       TextWrapping="Wrap" 
+                                       FontWeight="Bold"
+                                       Margin="5"/>
+
+                                    <Button Content="Edit"
+                                    Click="ButtonEditTags_Click"/>
+
+                                </StackPanel>
+
+                                <StackPanel Orientation="Horizontal"
+                                    x:Name="spTagStringTextBox"
+                                    Visibility="Collapsed">
+
+                                    <TextBox  x:Name="txtTagString"
+                                      TextWrapping="Wrap" 
+                                      FontWeight="Bold"
+                                      Margin="5"/>
+
+                                    <Button Content="Save"
+                                    Click="ButtonSaveTags_Click"/>
+
+                                </StackPanel>
+                            </StackPanel>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
+
+                <Grid Grid.Row="1">
+
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="4*"/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+
+                    <TextBox x:Name="txtSourceExcerptInput"
+                     Margin="5"
+                     TextWrapping="Wrap"
+                     AcceptsReturn="True"
+                     KeyDown="txtSourceExcerptInput_KeyDown"/>
+
+                    <Button x:Name="btnAddSourceExcerpt"
+                    Grid.Column="1"
+                    Margin="5"
+                    Content="Add"
+                    Click="btnAddSourceExcerpt_Click"/>
+                </Grid>
+            </Grid>
+        </Expander>
     </Grid>
+
 </UserControl>
