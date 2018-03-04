@@ -51,10 +51,11 @@ namespace NineWorldsDeep.Tapestry.NodeUI
             {
                 this.source = src.Source;
             }
-            RefreshFromDb();
+            RefreshSourceAndExcerptsFromDb();
+            RefreshSourceLocationsFromDb();
         }
 
-        public void RefreshFromDb()
+        public void RefreshSourceAndExcerptsFromDb()
         {
             //if (this.sourceNode != null && this.sourceNode.Source != null)
             //{
@@ -67,7 +68,7 @@ namespace NineWorldsDeep.Tapestry.NodeUI
                 this.source = db.GetSourceById(this.source.SourceId);
 
                 db.LoadSourceExcerptsWithTags(this.source);
-                RefreshFromObject();
+                RefreshSourceAndExcerptsFromObject();
             }
             else
             {
@@ -79,6 +80,27 @@ namespace NineWorldsDeep.Tapestry.NodeUI
 
         #region private helper methods
 
+        private void RefreshSourceLocationsFromDb()
+        {
+            List<ArchivistSourceLocation> lst = db.GetAllSourceLocations();
+
+            cmbSourceLocations.ItemsSource = null;
+            cmbSourceLocations.ItemsSource = lst;
+        }
+
+        private void RefreshSourceLocationSubsetsForSelectedLocation()
+        {
+            cmbLocationSubsets.ItemsSource = null;
+
+            if (cmbSourceLocations.SelectedItem is ArchivistSourceLocation location)
+            {
+                List<ArchivistSourceLocationSubset> subsets =
+                    db.GetSourceLocationSubsetsForLocationId(location.SourceLocationId);
+
+                cmbLocationSubsets.ItemsSource = subsets;
+            }
+        }
+
         private void Expander_Expanded(object sender, RoutedEventArgs e)
         {
             Core.UtilsUi.ProcessExpanderState((Expander)sender);
@@ -89,7 +111,7 @@ namespace NineWorldsDeep.Tapestry.NodeUI
             Core.UtilsUi.ProcessExpanderState((Expander)sender);
         }
 
-        private void RefreshFromObject()
+        private void RefreshSourceAndExcerptsFromObject()
         {
             //ccSourceDetails.Content = sourceNode.Source;
 
@@ -126,7 +148,7 @@ namespace NineWorldsDeep.Tapestry.NodeUI
                 //sourceNode.Source.Add(excerpt);
                 source.Add(excerpt);
 
-                RefreshFromObject();
+                RefreshSourceAndExcerptsFromObject();
 
                 //for testing
                 //UI.Display.Message("you entered: " + itemValue);
@@ -214,6 +236,11 @@ namespace NineWorldsDeep.Tapestry.NodeUI
         #endregion
 
         #region event handlers
+
+        private void SourceLocations_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            RefreshSourceLocationSubsetsForSelectedLocation();
+        }
 
         private void lvSourceExcerpts_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
@@ -329,12 +356,12 @@ namespace NineWorldsDeep.Tapestry.NodeUI
 
         private void ButtonRefreshSource_Click(object sender, RoutedEventArgs e)
         {
-            RefreshFromDb();
-
+            RefreshSourceAndExcerptsFromDb();
+            RefreshSourceLocationsFromDb();
             UI.Display.Message("refreshed.");
         }
 
-        private void btnEnterSourceTag_Click(object sender, RoutedEventArgs e)
+        private void EnterSourceTag_Click(object sender, RoutedEventArgs e)
         {
             if (source != null)
             {
@@ -358,7 +385,7 @@ namespace NineWorldsDeep.Tapestry.NodeUI
                         if (successful)
                         {
                             db.SyncCore(source);
-                            RefreshFromDb();
+                            RefreshSourceAndExcerptsFromDb();
                         }
                         else
                         {

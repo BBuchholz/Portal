@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace NineWorldsDeep.Archivist
 {
-    class ArchivistSourceLocationSubset
+    internal class ArchivistSourceLocationSubset
     {
         public int SourceLocationSubsetId { get; set; }
         public int SourceLocationId { get; set; }

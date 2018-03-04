@@ -394,9 +394,37 @@ namespace NineWorldsDeep.Sqlite
         public static string COLUMN_SOURCE_LOCATION_VALUE = "SourceLocationValue";
         public static string TABLE_SOURCE_LOCATION = "SourceLocation";
 
+        //SourceLocationSubset
+        public static string COLUMN_SOURCE_LOCATION_SUBSET_ID = "SourceLocationSubsetId";
+        public static string COLUMN_SOURCE_LOCATION_SUBSET_VALUE = "SourceLocationSubsetValue";
+        public static string TABLE_SOURCE_LOCATION_SUBSET = "SourceLocationSubset";
+
         #endregion
 
         #region "queries"
+
+        internal static readonly string SELECT_SOURCE_LOCATION_SUBSET_ID_FOR_LOCATION_ID_AND_SUBSET_VALUE_X_Y =
+
+            "SELECT " + COLUMN_SOURCE_LOCATION_SUBSET_ID + " " +
+            "FROM " + TABLE_SOURCE_LOCATION_SUBSET + " " +
+            "WHERE " + COLUMN_SOURCE_LOCATION_ID + " = ?  " +
+            "AND " + COLUMN_SOURCE_LOCATION_SUBSET_VALUE + " = ? ; ";
+
+        internal static readonly string INSERT_OR_IGNORE_SOURCE_LOCATION_SUBSET_FOR_LOCATION_ID_AND_SUBSET_VALUE_X_Y =
+
+            "INSERT OR IGNORE INTO " + TABLE_SOURCE_LOCATION_SUBSET + "  " +
+            "	(" + COLUMN_SOURCE_LOCATION_ID + ",  " +
+            "	 " + COLUMN_SOURCE_LOCATION_SUBSET_VALUE + ") " +
+            "VALUES  " +
+            "	(?,?); ";
+
+        internal static readonly string SELECT_SOURCE_LOCATION_SUBSETS_BY_LOCATION_ID_X =
+
+            "SELECT " + COLUMN_SOURCE_LOCATION_SUBSET_ID + ", " +
+            "	   " + COLUMN_SOURCE_LOCATION_ID + ", " +
+            "	   " + COLUMN_SOURCE_LOCATION_SUBSET_VALUE + " " +
+            "FROM " + TABLE_SOURCE_LOCATION_SUBSET + " " +
+            "WHERE " + COLUMN_SOURCE_LOCATION_ID + " = ? ; ";
 
         internal static readonly string INSERT_OR_IGNORE_SOURCE_LOCATION_VALUE =
 
@@ -669,6 +697,8 @@ namespace NineWorldsDeep.Sqlite
             "WHERE md." + COLUMN_MEDIA_DEVICE_DESCRIPTION + " = ? " +
             "AND IFNULL(mtg." + COLUMN_MEDIA_TAGGING_TAGGED_AT + ", '') >= IFNULL(mtg." + COLUMN_MEDIA_TAGGING_UNTAGGED_AT + ", '') ";
 
+
+
         #endregion
         
         #endregion
@@ -783,7 +813,7 @@ namespace NineWorldsDeep.Sqlite
             "JOIN MediaDevice md  " +
             "ON mdp." + COLUMN_MEDIA_DEVICE_ID + " = md." + COLUMN_MEDIA_DEVICE_ID + " " +
             "WHERE IFNULL(mtg." + COLUMN_MEDIA_TAGGING_TAGGED_AT + ", '') >= IFNULL(mtg." + COLUMN_MEDIA_TAGGING_UNTAGGED_AT + ", '') ";
-        
+
 
 
 

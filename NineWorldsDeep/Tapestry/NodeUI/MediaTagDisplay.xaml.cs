@@ -49,10 +49,10 @@ namespace NineWorldsDeep.Tapestry.NodeUI
         public void Display(MediaTagNode tagNode)
         {
             this.mediaTagNode = tagNode;
-            RefreshFromDb();
+            RefreshSourceAndExcerptsFromDb();
         }
 
-        public void RefreshFromDb()
+        public void RefreshSourceAndExcerptsFromDb()
         {
             //load here once, then filter can be applied 
             //without having to hit the db again
@@ -265,7 +265,7 @@ namespace NineWorldsDeep.Tapestry.NodeUI
 
         private void ButtonRefresh_Click(object sender, RoutedEventArgs e)
         {
-            RefreshFromDb();
+            RefreshSourceAndExcerptsFromDb();
         }
 
         #endregion

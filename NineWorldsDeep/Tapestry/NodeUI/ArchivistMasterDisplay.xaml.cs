@@ -100,7 +100,33 @@ namespace NineWorldsDeep.Tapestry.NodeUI
 
         private void AddSourceLocationSubset_Click(object sender, RoutedEventArgs e)
         {
+            var subsetName = txtAddSourceLocationSubsetName.Text;
 
+            if (string.IsNullOrWhiteSpace(subsetName))
+            {
+                UI.Display.Message("subset name cannot be empty");
+                return;
+            }
+
+            if(cmbAddSourceLocationSubsetSourceLocation.SelectedItem
+                is ArchivistSourceLocation sourceLocation)
+            {
+                try
+                {
+                    db.EnsureSourceLocationSubset(
+                        sourceLocation.SourceLocationId, subsetName);
+
+                    txtAddSourceLocationSubsetName.Text = "";
+                }
+                catch(Exception ex)
+                {
+                    UI.Display.Message("error ensuring subset: " + ex.Message);
+                }
+            }
+            else
+            {
+                UI.Display.Message("select source location");
+            }
         }
 
         private void RefreshSources_Click(object sender, RoutedEventArgs e)
@@ -224,14 +250,13 @@ namespace NineWorldsDeep.Tapestry.NodeUI
             }
         }
 
-        private void cmbOrderBy_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private void OrderBy_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            var propertyName = cmbOrderBy.SelectedItem as string;
-            
+
             CollectionView view = (CollectionView)CollectionViewSource.GetDefaultView(lvSources.ItemsSource);
             view.SortDescriptions.Clear();
 
-            if (propertyName != null)
+            if (cmbOrderBy.SelectedItem is string propertyName)
             {
                 view.SortDescriptions.Add(new SortDescription(propertyName, ListSortDirection.Ascending));
             }

@@ -1419,5 +1419,148 @@ namespace NineWorldsDeep.Db.Sqlite
 
         #endregion
 
+        #region ArchivistSourceLocationSubset
+
+        internal List<ArchivistSourceLocationSubset> GetSourceLocationSubsetsForLocationId(int locationId)
+        {
+            List<ArchivistSourceLocationSubset> lst =
+                new List<ArchivistSourceLocationSubset>();
+
+            using (var conn = new SQLiteConnection(
+                @"Data Source=" + Configuration.GetSqliteDbPath(DbName)))
+            {
+                conn.Open();
+
+                using (var cmd = new SQLiteCommand(conn))
+                {
+                    using (var transaction = conn.BeginTransaction())
+                    {
+                        lst = SelectLocationSubsetsForSourceLocationId(locationId, cmd);
+
+                        transaction.Commit();
+                    }
+                }
+
+                conn.Close();
+            }
+
+            return lst;
+        }
+
+        private List<ArchivistSourceLocationSubset> SelectLocationSubsetsForSourceLocationId(int locationId, SQLiteCommand cmd)
+        {
+            List<ArchivistSourceLocationSubset> lst =
+                new List<ArchivistSourceLocationSubset>();
+
+            cmd.Parameters.Clear();
+            cmd.CommandText =
+                NwdContract.SELECT_SOURCE_LOCATION_SUBSETS_BY_LOCATION_ID_X;
+
+            cmd.Parameters.Add(new SQLiteParameter() { Value = locationId });
+
+            using (var rdr = cmd.ExecuteReader())
+            {
+                while (rdr.Read())
+                {
+                    //query field order
+                    //0:SourceLocationSubsetId
+                    //1:SourceLocationId
+                    //2:SourceLocationSubsetValue
+
+                    int sourceLocationSubsetId = rdr.GetInt32(0);
+                    string sourceLocationSubsetValue = DbV5Utils.GetNullableString(rdr, 2);
+
+                    lst.Add(new ArchivistSourceLocationSubset()
+                    {
+                        SourceLocationId = locationId,
+                        SourceLocationSubsetId = sourceLocationSubsetId,
+                        SourceLocationSubsetValue = sourceLocationSubsetValue
+                    });
+                }
+            }
+
+            return lst;
+        }
+        
+        /// <summary>
+        /// ensure location subset and returns subset id, whether found or created
+        /// </summary>
+        /// <param name="sourceLocationId"></param>
+        /// <param name="subsetName"></param>
+        /// <returns></returns>
+        internal int EnsureSourceLocationSubset(int sourceLocationId, string subsetName)
+        {
+            int id = -1;
+
+            using (var conn = new SQLiteConnection(
+                @"Data Source=" + Configuration.GetSqliteDbPath(DbName)))
+            {
+                conn.Open();
+
+                using (var cmd = new SQLiteCommand(conn))
+                {
+                    using (var transaction = conn.BeginTransaction())
+                    {
+                        id = EnsureSourceLocationSubset(sourceLocationId, subsetName, cmd);
+                        transaction.Commit();
+                    }
+                }
+
+                conn.Close();
+            }
+
+            return id;
+        }
+
+        internal int EnsureSourceLocationSubset(int sourceLocationId, string subsetName, SQLiteCommand cmd)
+        {
+            int sourceLocationSubsetId =
+                GetSourceLocationSubsetId(sourceLocationId, subsetName, cmd);
+
+            if (sourceLocationSubsetId < 1)
+            {
+                InsertOrIgnoreSourceLocationSubset(sourceLocationId, subsetName, cmd);
+                sourceLocationSubsetId =
+                    GetSourceLocationSubsetId(sourceLocationId, subsetName, cmd);
+            }
+
+            return sourceLocationSubsetId;
+        }
+
+        private void InsertOrIgnoreSourceLocationSubset(int sourceLocationId, string subsetName, SQLiteCommand cmd)
+        {
+            cmd.Parameters.Clear();
+
+            cmd.CommandText = NwdContract.INSERT_OR_IGNORE_SOURCE_LOCATION_SUBSET_FOR_LOCATION_ID_AND_SUBSET_VALUE_X_Y;
+
+            cmd.Parameters.Add(new SQLiteParameter() { Value = sourceLocationId });
+            cmd.Parameters.Add(new SQLiteParameter() { Value = subsetName });
+
+            cmd.ExecuteNonQuery();
+        }
+
+        private int GetSourceLocationSubsetId(int sourceLocationId, string subsetName, SQLiteCommand cmd)
+        {
+            int id = -1;
+
+            cmd.Parameters.Clear();
+            cmd.CommandText =
+                NwdContract.SELECT_SOURCE_LOCATION_SUBSET_ID_FOR_LOCATION_ID_AND_SUBSET_VALUE_X_Y;
+
+            cmd.Parameters.Add(new SQLiteParameter() { Value = sourceLocationId });
+            cmd.Parameters.Add(new SQLiteParameter() { Value = subsetName });
+
+            using (var rdr = cmd.ExecuteReader())
+            {
+                if (rdr.Read())
+                {
+                    id = rdr.GetInt32(0);
+                }
+            }
+
+            return id;
+        }
+
+        #endregion
     }
 }

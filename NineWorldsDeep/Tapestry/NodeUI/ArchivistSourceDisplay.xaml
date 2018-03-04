@@ -323,7 +323,7 @@
                         Content="EnterSourceTag"
                         Margin="5"
                         Padding="5"
-                        Click="btnEnterSourceTag_Click"/>
+                        Click="EnterSourceTag_Click"/>
 
                     <Button x:Name="btnCopySourceTag"
                         Content="Copy Source Tag"
@@ -346,7 +346,8 @@
 
                     <ComboBox Grid.Column="0"
                               Margin="5"
-                              x:Name="cmbSourceLocations"/>
+                              x:Name="cmbSourceLocations"
+                              SelectionChanged="SourceLocations_SelectionChanged"/>
 
                     <ComboBox Grid.Column="1"
                               Margin="5"

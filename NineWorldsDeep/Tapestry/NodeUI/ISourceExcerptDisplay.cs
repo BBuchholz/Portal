@@ -8,6 +8,6 @@ namespace NineWorldsDeep.Tapestry.NodeUI
 {
     public interface ISourceExcerptDisplay
     {
-        void RefreshFromDb();
+        void RefreshSourceAndExcerptsFromDb();
     }
 }

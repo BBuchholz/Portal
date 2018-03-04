@@ -329,7 +329,7 @@
                           Margin="5"
                           Grid.Row="1"
                           Grid.Column="0"
-                          SelectionChanged="cmbOrderBy_SelectionChanged"/>
+                          SelectionChanged="OrderBy_SelectionChanged"/>
 
                 <StackPanel Orientation="Horizontal"
                             Grid.Row="2"

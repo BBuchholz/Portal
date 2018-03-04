@@ -28,7 +28,7 @@ namespace NineWorldsDeep.Core
         {
             foreach(ISourceExcerptDisplay sed in excerptDisplays)
             {
-                sed.RefreshFromDb();
+                sed.RefreshSourceAndExcerptsFromDb();
             }
         }
     }
