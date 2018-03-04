@@ -75,7 +75,7 @@
                     Grid.Column="0"
                     Margin="5"
                     Content="Add Source Type"
-                    Click="btnAddSourceType_Click"/>
+                    Click="AddSourceType_Click"/>
 
                 <StackPanel Grid.Row="5"
                             VerticalAlignment="Bottom"
@@ -132,7 +132,7 @@
                         Grid.Column="1"
                         Margin="5"
                         Content="Add Source Location"
-                        Click="btnAddSourceLocation_Click"/>
+                        Click="AddSourceLocation_Click"/>
                 
                 <Label Content="Source Location"
                        Grid.Row="2"
@@ -167,7 +167,7 @@
                         Grid.Column="1"
                         Margin="5"
                         Content="Add Source Location Subset"
-                        Click="btnAddSourceLocationSubset_Click"/>
+                        Click="AddSourceLocationSubset_Click"/>
 
             </Grid>
 
@@ -295,7 +295,7 @@
                     Grid.Column="1"
                     Margin="5"
                     Content="Add Source"
-                    Click="btnAddSource_Click"/>
+                    Click="AddSource_Click"/>
 
             </Grid>
             
@@ -338,7 +338,7 @@
                     <Button x:Name="btnRefreshSources"
                             Content="Refresh Sources"
                             Margin="5"
-                            Click="btnRefreshSources_Click"/>
+                            Click="RefreshSources_Click"/>
                     
                 </StackPanel>
                 

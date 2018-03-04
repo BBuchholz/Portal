@@ -45,6 +45,7 @@ namespace NineWorldsDeep.Tapestry.NodeUI
             db = new ArchivistSubsetDb();
             LoadSourceTypes();
             LoadOrderBy();
+            RefreshSourceLocations();
         }
 
         #endregion
@@ -71,17 +72,38 @@ namespace NineWorldsDeep.Tapestry.NodeUI
 
         #region event handlers
 
-        private void btnAddSourceLocation_Click(object sender, RoutedEventArgs e)
+        private void AddSourceLocation_Click(object sender, RoutedEventArgs e)
+        {
+            //mimics add source type
+            string locationName = txtAddSourceLocationName.Text;
+
+            if (string.IsNullOrWhiteSpace(locationName))
+            {
+                UI.Display.Message("Name cannot be empty");
+                return;
+            }
+
+            try
+            {
+
+                db.EnsureSourceLocation(locationName);
+                UI.Display.Message("ensured location: " + locationName);
+                txtAddSourceLocationName.Text = "";
+                RefreshSourceLocations();
+
+            }
+            catch(Exception ex)
+            {
+                UI.Display.Message("error ensuring source location: " + ex.Message);
+            }
+        }
+
+        private void AddSourceLocationSubset_Click(object sender, RoutedEventArgs e)
         {
 
         }
 
-        private void btnAddSourceLocationSubset_Click(object sender, RoutedEventArgs e)
-        {
-
-        }
-
-        private void btnRefreshSources_Click(object sender, RoutedEventArgs e)
+        private void RefreshSources_Click(object sender, RoutedEventArgs e)
         {
             LoadSources();
         }
@@ -112,17 +134,7 @@ namespace NineWorldsDeep.Tapestry.NodeUI
             }
         }
         
-        private void Expander_Expanded(object sender, RoutedEventArgs e)
-        {
-            Core.UtilsUi.ProcessExpanderState((Expander)sender);
-        }
-
-        private void Expander_Collapsed(object sender, RoutedEventArgs e)
-        {
-            Core.UtilsUi.ProcessExpanderState((Expander)sender);
-        }
-
-        private void btnAddSourceType_Click(object sender, RoutedEventArgs e)
+        private void AddSourceType_Click(object sender, RoutedEventArgs e)
         {
             string typeName = UI.Prompt.Input("Enter Source Type Name");
 
@@ -138,7 +150,7 @@ namespace NineWorldsDeep.Tapestry.NodeUI
             }
         }
 
-        private void btnAddSource_Click(object sender, RoutedEventArgs e)
+        private void AddSource_Click(object sender, RoutedEventArgs e)
         {
             /*
              * Validate needed fields based on source type
@@ -250,6 +262,24 @@ namespace NineWorldsDeep.Tapestry.NodeUI
 
         #region private helper methods
 
+        private void RefreshSourceLocations()
+        {
+            List<ArchivistSourceLocation> lst = db.GetAllSourceLocations();
+
+            cmbAddSourceLocationSubsetSourceLocation.ItemsSource = null;
+            cmbAddSourceLocationSubsetSourceLocation.ItemsSource = lst;
+        }
+
+        private void Expander_Expanded(object sender, RoutedEventArgs e)
+        {
+            Core.UtilsUi.ProcessExpanderState((Expander)sender);
+        }
+
+        private void Expander_Collapsed(object sender, RoutedEventArgs e)
+        {
+            Core.UtilsUi.ProcessExpanderState((Expander)sender);
+        }
+
         private void LoadSources()
         {
             lvSources.ItemsSource = null;
@@ -285,6 +315,10 @@ namespace NineWorldsDeep.Tapestry.NodeUI
         private void LoadSourceTypes()
         {
             List<ArchivistSourceType> lst = db.GetAllSourceTypes();
+
+            cmbSourceTypes.ItemsSource = null;
+            cmbAddSourceSourceType.ItemsSource = null;
+
             cmbSourceTypes.ItemsSource = lst;
             cmbAddSourceSourceType.ItemsSource = lst;
         }

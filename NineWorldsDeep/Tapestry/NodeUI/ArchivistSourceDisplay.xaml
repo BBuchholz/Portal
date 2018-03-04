@@ -269,7 +269,7 @@
     <Grid>
 
         <Grid.RowDefinitions>
-            <RowDefinition Height="40"/>
+            <RowDefinition Height="*"/>
             <RowDefinition Height="*"/>
             <RowDefinition Height="*"/>
             <RowDefinition Height="*"/>
@@ -277,7 +277,7 @@
         
         <Expander Header="Source Details"
                   Grid.Row="0"
-                  IsExpanded="False"
+                  IsExpanded="True"
                   Margin="5"
                   Expanded="Expander_Expanded"
                   Collapsed="Expander_Collapsed">

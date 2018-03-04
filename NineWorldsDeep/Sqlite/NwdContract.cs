@@ -389,10 +389,33 @@ namespace NineWorldsDeep.Sqlite
         public static string COLUMN_SOURCE_ANNOTATION_ID = "SourceAnnotationId";
         public static string COLUMN_SOURCE_ANNOTATION_VALUE = "SourceAnnotationValue ";
 
+        //SourceLocation
+        public static string COLUMN_SOURCE_LOCATION_ID = "SourceLocationId";
+        public static string COLUMN_SOURCE_LOCATION_VALUE = "SourceLocationValue";
+        public static string TABLE_SOURCE_LOCATION = "SourceLocation";
 
         #endregion
 
         #region "queries"
+
+        internal static readonly string INSERT_OR_IGNORE_SOURCE_LOCATION_VALUE =
+
+            "INSERT OR IGNORE INTO " + NwdContract.TABLE_SOURCE_LOCATION + " " +
+            "	(" + NwdContract.COLUMN_SOURCE_LOCATION_VALUE + ") " +
+            "VALUES " +
+            "	(?); ";
+
+        internal static readonly string SELECT_SOURCE_LOCATION_ID_FOR_VALUE_X =
+
+            "SELECT " + NwdContract.COLUMN_SOURCE_LOCATION_ID + " " +
+            "FROM " + NwdContract.TABLE_SOURCE_LOCATION + " " +
+            "WHERE " + NwdContract.COLUMN_SOURCE_LOCATION_VALUE + " = ? ; ";
+
+        internal static readonly string SELECT_LOCATION_ID_LOCATION_VALUE_FROM_SOURCE_TYPE =
+
+            "SELECT " + NwdContract.COLUMN_SOURCE_LOCATION_ID + ", " +
+            "	    " + NwdContract.COLUMN_SOURCE_LOCATION_VALUE + " " +
+            "FROM " + NwdContract.TABLE_SOURCE_LOCATION + "; ";
 
         internal static readonly string INSERT_OR_IGNORE_SOURCE_EXCERPT_ANNOTATION_EXCERPT_ID_ANNOTATION_ID_X_Y =
 
@@ -646,11 +669,8 @@ namespace NineWorldsDeep.Sqlite
             "WHERE md." + COLUMN_MEDIA_DEVICE_DESCRIPTION + " = ? " +
             "AND IFNULL(mtg." + COLUMN_MEDIA_TAGGING_TAGGED_AT + ", '') >= IFNULL(mtg." + COLUMN_MEDIA_TAGGING_UNTAGGED_AT + ", '') ";
 
-        
-
         #endregion
-
-
+        
         #endregion
 
         #region "Hive Subset"
@@ -762,7 +782,10 @@ namespace NineWorldsDeep.Sqlite
             "ON mp." + COLUMN_MEDIA_PATH_ID + " = mdp." + COLUMN_MEDIA_PATH_ID + " " +
             "JOIN MediaDevice md  " +
             "ON mdp." + COLUMN_MEDIA_DEVICE_ID + " = md." + COLUMN_MEDIA_DEVICE_ID + " " +
-            "WHERE IFNULL(mtg." + COLUMN_MEDIA_TAGGING_TAGGED_AT + ", '') >= IFNULL(mtg." + COLUMN_MEDIA_TAGGING_UNTAGGED_AT + ", '') "; 
+            "WHERE IFNULL(mtg." + COLUMN_MEDIA_TAGGING_TAGGED_AT + ", '') >= IFNULL(mtg." + COLUMN_MEDIA_TAGGING_UNTAGGED_AT + ", '') ";
+        
+
+
 
         #endregion
     }

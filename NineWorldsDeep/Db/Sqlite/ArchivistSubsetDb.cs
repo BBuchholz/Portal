@@ -24,6 +24,8 @@ namespace NineWorldsDeep.Db.Sqlite
             mediaDb = new MediaV5SubsetDb();
         }
 
+        #region ArchivistSourceType
+
         public List<ArchivistSourceType> GetAllSourceTypes()
         {
             List<ArchivistSourceType> lst =
@@ -49,6 +51,36 @@ namespace NineWorldsDeep.Db.Sqlite
 
             return lst;
         }
+
+        private List<ArchivistSourceType> SelectSourceTypes(SQLiteCommand cmd)
+        {
+            List<ArchivistSourceType> lst =
+                new List<ArchivistSourceType>();
+
+            cmd.Parameters.Clear();
+            cmd.CommandText =
+                NwdContract.SELECT_TYPE_ID_TYPE_VALUE_FROM_SOURCE_TYPE;
+
+
+            using (var rdr = cmd.ExecuteReader())
+            {
+                while (rdr.Read())
+                {
+                    int id = rdr.GetInt32(0);
+                    string typeValue = rdr.GetString(1);
+
+                    lst.Add(new ArchivistSourceType()
+                    {
+                        SourceTypeId = id,
+                        SourceTypeValue = typeValue
+                    });
+                }
+            }
+
+            return lst;
+        }
+
+        #endregion
 
         public void LoadSourceExcerptsWithTags(ArchivistSource source)
         {
@@ -230,34 +262,6 @@ namespace NineWorldsDeep.Db.Sqlite
                     }
                 }
             }
-        }
-
-        private List<ArchivistSourceType> SelectSourceTypes(SQLiteCommand cmd)
-        {
-            List<ArchivistSourceType> lst =
-                new List<ArchivistSourceType>();
-
-            cmd.Parameters.Clear();
-            cmd.CommandText =
-                NwdContract.SELECT_TYPE_ID_TYPE_VALUE_FROM_SOURCE_TYPE;
-
-
-            using (var rdr = cmd.ExecuteReader())
-            {
-                while (rdr.Read())
-                {
-                    int id = rdr.GetInt32(0);
-                    string typeValue = rdr.GetString(1);
-
-                    lst.Add(new ArchivistSourceType()
-                    {
-                        SourceTypeId = id,
-                        SourceTypeValue = typeValue
-                    });
-                }
-            }
-
-            return lst;
         }
 
         /// <summary>
@@ -1288,6 +1292,129 @@ namespace NineWorldsDeep.Db.Sqlite
             cmd.Parameters.Add(new SQLiteParameter() { Value = sourceAnnotationId });
 
             cmd.ExecuteNonQuery();
+        }
+
+        #endregion
+
+        #region ArchivistSourceLocation
+
+        internal void EnsureSourceLocation(string locationName)
+        {
+            using (var conn = new SQLiteConnection(
+                @"Data Source=" + Configuration.GetSqliteDbPath(DbName)))
+            {
+                conn.Open();
+
+                using (var cmd = new SQLiteCommand(conn))
+                {
+                    using (var transaction = conn.BeginTransaction())
+                    {
+                        EnsureSourceLocation(locationName, cmd);
+
+                        transaction.Commit();
+                    }
+                }
+
+                conn.Close();
+            }
+        }
+
+        private int EnsureSourceLocation(string locationName, SQLiteCommand cmd)
+        {
+            int typeId = GetSourceLocationId(locationName, cmd);
+
+            if (typeId < 1)
+            {
+                InsertOrIgnoreSourceLocation(locationName, cmd);
+                typeId = GetSourceLocationId(locationName, cmd);
+            }
+
+            return typeId;
+        }
+
+        private void InsertOrIgnoreSourceLocation(string locationName, SQLiteCommand cmd)
+        {
+            cmd.Parameters.Clear();
+
+            cmd.CommandText = NwdContract.INSERT_OR_IGNORE_SOURCE_LOCATION_VALUE;
+
+            cmd.Parameters.Add(new SQLiteParameter() { Value = locationName });
+
+            cmd.ExecuteNonQuery();
+        }
+
+        private int GetSourceLocationId(string locationName, SQLiteCommand cmd)
+        {
+            int id = -1;
+
+            cmd.Parameters.Clear();
+            cmd.CommandText =
+                NwdContract.SELECT_SOURCE_LOCATION_ID_FOR_VALUE_X;
+
+            cmd.Parameters.Add(new SQLiteParameter() { Value = locationName });
+
+            using (var rdr = cmd.ExecuteReader())
+            {
+                if (rdr.Read())
+                {
+                    id = rdr.GetInt32(0);
+                }
+            }
+
+            return id;
+        }
+
+        internal List<ArchivistSourceLocation> GetAllSourceLocations()
+        {
+            List<ArchivistSourceLocation> lst =
+                new List<ArchivistSourceLocation>();
+
+            using (var conn = new SQLiteConnection(
+                @"Data Source=" + Configuration.GetSqliteDbPath(DbName)))
+            {
+                conn.Open();
+
+                using (var cmd = new SQLiteCommand(conn))
+                {
+                    using (var transaction = conn.BeginTransaction())
+                    {
+                        lst = SelectSourceLocations(cmd);
+
+                        transaction.Commit();
+                    }
+                }
+
+                conn.Close();
+            }
+
+            return lst;
+        }
+
+        private List<ArchivistSourceLocation> SelectSourceLocations(SQLiteCommand cmd)
+        {
+            List<ArchivistSourceLocation> lst =
+                new List<ArchivistSourceLocation>();
+
+            cmd.Parameters.Clear();
+            cmd.CommandText =
+                NwdContract.SELECT_LOCATION_ID_LOCATION_VALUE_FROM_SOURCE_TYPE;
+            
+            using (var rdr = cmd.ExecuteReader())
+            {
+                while (rdr.Read())
+                {
+                    int id = rdr.GetInt32(0);
+                    string typeValue = rdr.GetString(1);
+
+                    lst.Add(new ArchivistSourceLocation()
+                    {
+                        SourceLocationId = id,
+                        SourceLocationValue = typeValue
+                    });
+                }
+            }
+
+            return lst;
         }
 
         #endregion

@@ -79,6 +79,16 @@ namespace NineWorldsDeep.Tapestry.NodeUI
 
         #region private helper methods
 
+        private void Expander_Expanded(object sender, RoutedEventArgs e)
+        {
+            Core.UtilsUi.ProcessExpanderState((Expander)sender);
+        }
+
+        private void Expander_Collapsed(object sender, RoutedEventArgs e)
+        {
+            Core.UtilsUi.ProcessExpanderState((Expander)sender);
+        }
+
         private void RefreshFromObject()
         {
             //ccSourceDetails.Content = sourceNode.Source;
