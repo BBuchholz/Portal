@@ -11,6 +11,8 @@ namespace NineWorldsDeep.Archivist
         public int SourceLocationSubsetEntryId { get; set; }
         public int SourceLocationSubsetId { get; set; }
         public int SourceId { get; set; }
+        public string SourceLocationValue { get; set; }
+        public string SourceLocationSubsetValue { get; set; }
         public string SourceLocationSubsetEntryValue { get; set; }
 
         public override string ToString()

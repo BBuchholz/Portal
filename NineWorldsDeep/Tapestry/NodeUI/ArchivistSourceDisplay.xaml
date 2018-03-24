@@ -8,6 +8,43 @@
              d:DesignHeight="800" d:DesignWidth="400">
     
     <UserControl.Resources>
+        <DataTemplate x:Key="SourceLocationSubsetEntryTemplate">
+            <StackPanel Orientation="Vertical" HorizontalAlignment="Center">
+                <WrapPanel Name="wp" 
+                           HorizontalAlignment="Center"
+                           Margin="5">
+                    <TextBlock Text="SourceLocation: " 
+                               FontWeight="Bold"
+                               FontSize="10"/>
+                    <TextBlock Name="tbSourceLocation" 
+                               Text="{Binding SourceLocationValue}" 
+                               TextWrapping="Wrap"
+                               FontSize="10"/>
+                </WrapPanel>
+                <WrapPanel Name="wpSourceLocationSubset" 
+                           HorizontalAlignment="Center"
+                           Margin="5">
+                    <TextBlock Text ="Location Subset: " 
+                               FontWeight="Bold"
+                               FontSize="10"/>
+                    <TextBlock Name="tbLocationSubset" 
+                               Text="{Binding SourceLocationSubsetValue}" 
+                               TextWrapping="Wrap"
+                               FontSize="10"/>
+                </WrapPanel>
+                <WrapPanel Name="wpSourceLocationSubsetEntry" 
+                           HorizontalAlignment="Center"
+                           Margin="5">
+                    <TextBlock Text="Subset Entry: " 
+                               FontWeight="Bold"
+                               FontSize="10"/>
+                    <TextBlock Name="tbSubsetEntry" 
+                               Text="{Binding SourceLocationSubsetEntryValue}" 
+                               TextWrapping="Wrap"
+                               FontSize="10"/>
+                </WrapPanel>
+            </StackPanel>
+        </DataTemplate>
         <DataTemplate x:Key="SourceTemplate">
             <StackPanel Orientation="Vertical" HorizontalAlignment="Center">
                 <WrapPanel Name="wpTitle" 
@@ -15,77 +52,77 @@
                            Margin="5">
                     <TextBlock Text="Title: " 
                                FontWeight="Bold"
-                               FontSize="20"/>
+                               FontSize="10"/>
                     <TextBlock Name="tbTitle" 
                                Text="{Binding Title}" 
                                TextWrapping="Wrap"
-                               FontSize="20"/>
+                               FontSize="10"/>
                 </WrapPanel>
                 <WrapPanel Name="wpAuthor" 
                            HorizontalAlignment="Center"
                            Margin="5">
                     <TextBlock Text ="Author: " 
                                FontWeight="Bold"
-                               FontSize="20"/>
+                               FontSize="10"/>
                     <TextBlock Name="tbAuthor" 
                                Text="{Binding Author}" 
                                TextWrapping="Wrap"
-                               FontSize="20"/>
+                               FontSize="10"/>
                 </WrapPanel>
                 <WrapPanel Name="wpDirector" 
                            HorizontalAlignment="Center"
                            Margin="5">
                     <TextBlock Text="Director: " 
                                FontWeight="Bold"
-                               FontSize="20"/>
+                               FontSize="10"/>
                     <TextBlock Name="tbDirector" 
                                Text="{Binding Director}" 
                                TextWrapping="Wrap"
-                               FontSize="20"/>
+                               FontSize="10"/>
                 </WrapPanel>
                 <WrapPanel Name="wpYear" 
                            HorizontalAlignment="Center"
                            Margin="5">
                     <TextBlock Text="Year: " 
                                FontWeight="Bold"
-                               FontSize="20"/>
+                               FontSize="10"/>
                     <TextBlock Name="tbYear" 
                                Text="{Binding Year}" 
                                TextWrapping="Wrap"
-                               FontSize="20"/>
+                               FontSize="10"/>
                 </WrapPanel>
                 <WrapPanel Name="wpUrl" 
                            HorizontalAlignment="Center"
                            Margin="5">
                     <TextBlock Text="Url: " 
                                FontWeight="Bold"
-                               FontSize="20"/>
+                               FontSize="10"/>
                     <TextBlock Name="tbUrl" 
                                Text="{Binding Url}" 
                                TextWrapping="Wrap"
-                               FontSize="20"/>
+                               FontSize="10"/>
                 </WrapPanel>
                 <WrapPanel Name="wpRetrievalDate" 
                            HorizontalAlignment="Center"
                            Margin="5">
                     <TextBlock Text="RetrievalDate: " 
                                FontWeight="Bold"
-                               FontSize="20"/>
+                               FontSize="10"/>
                     <TextBlock Name="tbRetrievalDate" 
                                Text="{Binding RetrievalDate}" 
                                TextWrapping="Wrap"
-                               FontSize="20"/>
+                               FontSize="10"/>
                 </WrapPanel>
                 <WrapPanel Name="wpSourceTag" 
                            HorizontalAlignment="Center"
                            Margin="5">
                     <TextBlock Text="SourceTag: " 
                                FontWeight="Bold"
-                               FontSize="20"/>
+                               FontSize="10"/>
                     <TextBlock Name="tbSourceTag" 
                                Text="{Binding SourceTag}" 
                                TextWrapping="Wrap"
-                               FontSize="20"/>
+                               FontSize="10"/>
                 </WrapPanel>
             </StackPanel>
             <DataTemplate.Triggers>
@@ -151,157 +188,28 @@
         </Style>
     </UserControl.Resources>
     
-    <!--<Grid>
-
-        <Grid.RowDefinitions>
-            <RowDefinition/>
-            <RowDefinition Height="40"/>
-            <RowDefinition Height="2*"/>
-            <RowDefinition Height="40"/>
-        </Grid.RowDefinitions>
-
-        <ContentControl Grid.Row="0"
-                        x:Name="ccSourceDetails"
-                        Margin="30"
-                        Content="{Binding}"
-                        ContentTemplate="{StaticResource SourceTemplate}"/>
-
-        <StackPanel Orientation="Horizontal"
-                    Grid.Row="1"
-                    HorizontalAlignment="Center">
-
-            <Button x:Name="btnRefreshSource"
-                    Content="Refresh"
-                    Margin="5"
-                    Padding="5"
-                    Click="ButtonRefreshSource_Click"/>
-
-            <Button x:Name="btnSourceTagAll"
-                    Content="Source Tag All"
-                    Margin="5"
-                    Padding="5"
-                    Click="btnSourceTagAll_Click"/>
-
-            <Button x:Name="btnEnterSourceTag"
-                    Content="EnterSourceTag"
-                    Margin="5"
-                    Padding="5"
-                    Click="btnEnterSourceTag_Click"/>
-
-            <Button x:Name="btnCopySourceTag"
-                    Content="Copy Source Tag"
-                    Margin="5"
-                    Padding="5"
-                    Click="btnCopySourceTag_Click"/>
-
-        </StackPanel>
-        
-        <ListView x:Name="lvSourceExcerpts"
-                  Grid.Row="2"
-                  Margin="5"
-                  ItemContainerStyle="{StaticResource alternatingStyle}"
-                  AlternationCount="2"
-                  ScrollViewer.HorizontalScrollBarVisibility="Disabled"
-                  SelectionChanged="lvSourceExcerpts_SelectionChanged">
-            
-            <ListView.ItemTemplate>
-                <DataTemplate>
-                    <StackPanel Orientation="Vertical">
-                        
-                        <TextBlock Text="{Binding ExcerptValue}" 
-                                   TextWrapping="Wrap"
-                                   Margin="5"/>
-                        
-                        <StackPanel Orientation="Horizontal"
-                                    x:Name="spTagStringTextBlock">
-                        
-                            <TextBlock local:ArchivistUiTagFormatter.FormattedText="{Binding TagString}" 
-                                       x:Name="tbTagString"
-                                       TextWrapping="Wrap" 
-                                       FontWeight="Bold"
-                                       Margin="5"/>
-                            
-                            <Button Content="Edit"
-                                    Click="ButtonEditTags_Click"/>
-                            
-                        </StackPanel>
-
-                        <StackPanel Orientation="Horizontal"
-                                    x:Name="spTagStringTextBox"
-                                    Visibility="Collapsed">
-
-                            <TextBox  x:Name="txtTagString"
-                                      TextWrapping="Wrap" 
-                                      FontWeight="Bold"
-                                      Margin="5"/>
-
-                            <Button Content="Save"
-                                    Click="ButtonSaveTags_Click"/>
-
-                        </StackPanel>
-                    </StackPanel>
-                </DataTemplate>
-            </ListView.ItemTemplate>
-        </ListView>
-
-        <Grid Grid.Row="3">
-
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="4*"/>
-                <ColumnDefinition/>
-            </Grid.ColumnDefinitions>
-
-            <TextBox x:Name="txtSourceExcerptInput"
-                     Margin="5"
-                     TextWrapping="Wrap"
-                     AcceptsReturn="True"
-                     KeyDown="txtSourceExcerptInput_KeyDown"/>
-
-            <Button x:Name="btnAddSourceExcerpt"
-                    Grid.Column="1"
-                    Margin="5"
-                    Content="Add"
-                    Click="btnAddSourceExcerpt_Click"/>
-        </Grid>
-        
-    </Grid>-->
-
     <Grid>
 
         <Grid.RowDefinitions>
-            <RowDefinition Height="*"/>
-            <RowDefinition Height="*"/>
+            <RowDefinition Height="40"/>
             <RowDefinition Height="*"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
         
         <Expander Header="Source Details"
                   Grid.Row="0"
-                  IsExpanded="True"
+                  x:Name="expanderSourceDetails"
+                  IsExpanded="False"
                   Margin="5"
                   Expanded="Expander_Expanded"
                   Collapsed="Expander_Collapsed">
-        
-            <ContentControl Grid.Row="0"
+
+            <StackPanel Orientation="Vertical">
+
+                <ContentControl Grid.Row="0"
                             x:Name="ccSourceDetails"
-                            Margin="30"
                             Content="{Binding}"
                             ContentTemplate="{StaticResource SourceTemplate}"/>
-        </Expander>
-
-        <Expander Header="Utilities"
-                  Grid.Row="1"
-                  IsExpanded="True"
-                  Margin="5"
-                  Expanded="Expander_Expanded"
-                  Collapsed="Expander_Collapsed">
-
-            <Grid>
-
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="40"/>
-                    <RowDefinition Height="40"/>
-                </Grid.RowDefinitions>
                 
                 <StackPanel Orientation="Horizontal"
                         Grid.Row="0"
@@ -334,14 +242,58 @@
 
                 </StackPanel>
 
-                <Grid Grid.Row="1">
+            </StackPanel>
+            
+        </Expander>
+
+
+        <Expander Header="Source Locations"
+                  Grid.Row="1"
+                  IsExpanded="True"
+                  Margin="5"
+                  Expanded="Expander_Expanded"
+                  Collapsed="Expander_Collapsed">
+
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="40"/>
+                    <RowDefinition/>
+                    <RowDefinition Height="40"/>
+                    <RowDefinition Height="40"/>
+                </Grid.RowDefinitions>
+
+                <CheckBox x:Name="chkFilterExcludeMissingLocationEntries"
+                          HorizontalAlignment="Center"
+                          VerticalAlignment="Center"
+                          Content="Exclude Missing Entries"/>
+
+                <ListView x:Name="lvSourceLocationEntries"
+                          Grid.Row="1"
+                          Margin="5"
+                          ItemContainerStyle="{StaticResource alternatingStyle}"
+                          AlternationCount="2"
+                          ItemTemplate="{StaticResource SourceLocationSubsetEntryTemplate}">
+                </ListView>
+
+                <!--<ListView x:Name="lvSourceLocationEntries"
+                          Grid.Row="1"
+                          Margin="5"                          >
+                </ListView>-->
+
+                <Button Grid.Row="2"
+                        Margin="5"
+                        Content="Add Location Subset Entry"
+                        x:Name="btnAddLocationSubsetEntry"
+                        Click="btnAddLocationSubsetEntry_Click"/>
+
+                <Grid Grid.Row="3">
 
                     <Grid.ColumnDefinitions>
-                        
+
                         <ColumnDefinition/>
                         <ColumnDefinition/>
                         <ColumnDefinition/>
-                        
+
                     </Grid.ColumnDefinitions>
 
                     <ComboBox Grid.Column="0"
@@ -356,40 +308,17 @@
                     <Button Grid.Column="2"
                             Margin="5"
                             x:Name="btnAddLocationSubset"
-                            Content="Add Subset"/>
+                            Content="Add Subset"
+                            Click="btnAddLocationSubset_Click"/>
 
                 </Grid>
-            </Grid>
-        </Expander>
-
-        <Expander Header="Source Locations"
-                  Grid.Row="2"
-                  IsExpanded="True"
-                  Margin="5"
-                  Expanded="Expander_Expanded"
-                  Collapsed="Expander_Collapsed">
-
-            <Grid>
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="40"/>
-                    <RowDefinition/>
-                </Grid.RowDefinitions>
-
-                <CheckBox x:Name="chkFilterExcludeMissingLocationEntries"
-                          HorizontalAlignment="Center"
-                          VerticalAlignment="Center"
-                          Content="Exclude Missing Entries"/>
-
-                <ListView x:Name="lvSourceLocationEntries"
-                          Grid.Row="1"
-                          Margin="5"/>
 
             </Grid>
             
         </Expander>
 
         <Expander Header="Source Excerpts"
-                  Grid.Row="3"
+                  Grid.Row="2"
                   IsExpanded="True"
                   Margin="5"
                   Expanded="Expander_Expanded"
@@ -463,7 +392,13 @@
                      Margin="5"
                      TextWrapping="Wrap"
                      AcceptsReturn="True"
-                     KeyDown="txtSourceExcerptInput_KeyDown"/>
+                     KeyDown="txtSourceExcerptInput_KeyDown">
+                        <TextBox.ToolTip>
+                            <ToolTip Name="toolTipAddExcerpt">
+                                Alt+Enter to Add
+                            </ToolTip>
+                        </TextBox.ToolTip>
+                    </TextBox>
 
                     <Button x:Name="btnAddSourceExcerpt"
                     Grid.Column="1"

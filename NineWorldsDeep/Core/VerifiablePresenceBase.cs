@@ -8,8 +8,8 @@ namespace NineWorldsDeep.Core
 {
     public abstract class VerifiablePresenceBase
     {
-        public DateTime? VerifiedPresent { get; private set; }
-        public DateTime? VerifiedMissing { get; private set; }
+        public DateTime? VerifiedPresent { get; set; }
+        public DateTime? VerifiedMissing { get; set; }
 
         /// <summary>
         /// 

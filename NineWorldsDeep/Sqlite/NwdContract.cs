@@ -399,9 +399,47 @@ namespace NineWorldsDeep.Sqlite
         public static string COLUMN_SOURCE_LOCATION_SUBSET_VALUE = "SourceLocationSubsetValue";
         public static string TABLE_SOURCE_LOCATION_SUBSET = "SourceLocationSubset";
 
+        //SourceLocationSubsetEntry
+        public static string COLUMN_SOURCE_LOCATION_SUBSET_ENTRY_ID = "SourceLocationSubsetEntryId";
+        public static string COLUMN_SOURCE_LOCATION_SUBSET_ENTRY_VALUE = "SourceLocationSubsetEntryValue";
+        public static string COLUMN_SOURCE_LOCATION_SUBSET_ENTRY_VERIFIED_PRESENT_AT = "SourceLocationSubsetEntryVerifiedPresentAt";
+        public static string COLUMN_SOURCE_LOCATION_SUBSET_ENTRY_VERIFIED_MISSING_AT = "SourceLocationSubsetEntryVerifiedMissingAt";
+        public static string TABLE_SOURCE_LOCATION_SUBSET_ENTRY = "SourceLocationSubsetEntry";
         #endregion
 
         #region "queries"
+
+        internal static readonly string INSERT_OR_IGNORE_INTO_SOURCE_LOCATION_SUBSET_ENTRY_VALUES_SUBSET_ID_SOURCE_ID_ENTRY_VALUE_X_Y_Z =
+
+            "INSERT INTO " + TABLE_SOURCE_LOCATION_SUBSET_ENTRY + " " +
+            "	(" + COLUMN_SOURCE_LOCATION_SUBSET_ID + ", " +
+            "	 " + COLUMN_SOURCE_ID + ", " +
+            "	 " + COLUMN_SOURCE_LOCATION_SUBSET_ENTRY_VALUE + ") " +
+            " VALUES (?,?,?); ";
+
+        internal static readonly string SELECT_SOURCE_LOCATION_SUBSET_ENTRY_ID_FOR_SUBSET_ID_AND_SOURCE_ID_AND_ENTRY_VALUE_X_Y_Z =
+
+            "SELECT " + COLUMN_SOURCE_LOCATION_SUBSET_ENTRY_ID + " " +
+            "FROM " + TABLE_SOURCE_LOCATION_SUBSET_ENTRY + " " +
+            "WHERE " + COLUMN_SOURCE_LOCATION_SUBSET_ID + " = ? " +
+            "AND " + COLUMN_SOURCE_ID + " = ? " +
+            "AND " + COLUMN_SOURCE_LOCATION_SUBSET_ENTRY_VALUE + " = ?; ";
+
+        internal static readonly string SELECT_SOURCE_LOCATION_SUBSET_ENTRIES_FOR_SOURCE_ID_X =
+
+            "SELECT slse." + COLUMN_SOURCE_LOCATION_SUBSET_ENTRY_ID + ", " +
+            "	   slse." + COLUMN_SOURCE_LOCATION_SUBSET_ID + ", " +
+            "	   sl." + COLUMN_SOURCE_LOCATION_VALUE + ", " +
+            "	   sls." + COLUMN_SOURCE_LOCATION_SUBSET_VALUE + ", " +
+            "	   slse." + COLUMN_SOURCE_LOCATION_SUBSET_ENTRY_VALUE + ", " +
+            "	   slse." + COLUMN_SOURCE_LOCATION_SUBSET_ENTRY_VERIFIED_PRESENT_AT + ", " +
+            "	   slse." + COLUMN_SOURCE_LOCATION_SUBSET_ENTRY_VERIFIED_MISSING_AT + "	    " +
+            "FROM " + TABLE_SOURCE_LOCATION + " sl " +
+            "JOIN " + TABLE_SOURCE_LOCATION_SUBSET + " sls " +
+            "ON sl." + COLUMN_SOURCE_LOCATION_ID + " = sls." + COLUMN_SOURCE_LOCATION_ID + " " +
+            "JOIN " + TABLE_SOURCE_LOCATION_SUBSET_ENTRY + " slse " +
+            "ON sls." + COLUMN_SOURCE_LOCATION_SUBSET_ID + " = slse." + COLUMN_SOURCE_LOCATION_SUBSET_ID + " " +
+            "WHERE slse." + COLUMN_SOURCE_ID + " = ? ; ";
 
         internal static readonly string SELECT_SOURCE_LOCATION_SUBSET_ID_FOR_LOCATION_ID_AND_SUBSET_VALUE_X_Y =
 
@@ -813,6 +851,7 @@ namespace NineWorldsDeep.Sqlite
             "JOIN MediaDevice md  " +
             "ON mdp." + COLUMN_MEDIA_DEVICE_ID + " = md." + COLUMN_MEDIA_DEVICE_ID + " " +
             "WHERE IFNULL(mtg." + COLUMN_MEDIA_TAGGING_TAGGED_AT + ", '') >= IFNULL(mtg." + COLUMN_MEDIA_TAGGING_UNTAGGED_AT + ", '') ";
+
 
 
 

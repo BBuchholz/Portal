@@ -50,9 +50,11 @@ namespace NineWorldsDeep.Tapestry.NodeUI
             if(src != null)
             {
                 this.source = src.Source;
+                expanderSourceDetails.Header = this.source.ShortName;
             }
             RefreshSourceAndExcerptsFromDb();
             RefreshSourceLocationsFromDb();
+            RefreshSourceLocationSubsetEntriesFromDb();
         }
 
         public void RefreshSourceAndExcerptsFromDb()
@@ -86,6 +88,19 @@ namespace NineWorldsDeep.Tapestry.NodeUI
 
             cmbSourceLocations.ItemsSource = null;
             cmbSourceLocations.ItemsSource = lst;
+        }
+
+        private void RefreshSourceLocationSubsetEntriesFromDb()
+        {
+            if(source == null || source.SourceId < 1)
+            {
+                UI.Display.Message("source not set or source id less than 1");
+                return;
+            }
+
+            List<ArchivistSourceLocationSubsetEntry> lst = db.GetAllSourceLocationSubsetEntriesForSourceId(source.SourceId);
+            lvSourceLocationEntries.ItemsSource = null;
+            lvSourceLocationEntries.ItemsSource = lst;
         }
 
         private void RefreshSourceLocationSubsetsForSelectedLocation()
@@ -152,6 +167,10 @@ namespace NineWorldsDeep.Tapestry.NodeUI
 
                 //for testing
                 //UI.Display.Message("you entered: " + itemValue);
+            }
+            else
+            {
+                UI.Display.Message("excerpt value empty");
             }
         }
 
@@ -358,6 +377,7 @@ namespace NineWorldsDeep.Tapestry.NodeUI
         {
             RefreshSourceAndExcerptsFromDb();
             RefreshSourceLocationsFromDb();
+            RefreshSourceLocationSubsetEntriesFromDb();
             UI.Display.Message("refreshed.");
         }
 
@@ -421,7 +441,76 @@ namespace NineWorldsDeep.Tapestry.NodeUI
             UI.Display.Message(source.SourceTag + " copied to clipboard");
         }
 
+        private void btnAddLocationSubset_Click(object sender, RoutedEventArgs e)
+        {
+            var subsetName = UI.Prompt.Input("Enter Subset Name");
+
+            if (string.IsNullOrWhiteSpace(subsetName))
+            {
+                UI.Display.Message("subset name cannot be empty");
+                return;
+            }
+
+            if (cmbSourceLocations.SelectedItem
+                is ArchivistSourceLocation sourceLocation)
+            {
+                try
+                {
+                    db.EnsureSourceLocationSubset(
+                        sourceLocation.SourceLocationId, subsetName);
+
+                    RefreshSourceLocationSubsetsForSelectedLocation();
+                }
+                catch (Exception ex)
+                {
+                    UI.Display.Message("error ensuring subset: " + ex.Message);
+                }
+            }
+            else
+            {
+                UI.Display.Message("select source location");
+            }
+        }
+
         #endregion
 
+        private void btnAddLocationSubsetEntry_Click(object sender, RoutedEventArgs e)
+        {
+            //check source not null and id is set
+            if(source == null || source.SourceId < 1)
+            {
+                UI.Display.Message("source id unavailable");
+                return;
+            }
+
+            //check location subset selected
+            if (cmbLocationSubsets.SelectedItem
+                    is ArchivistSourceLocationSubset sourceLocationSubset)
+            {
+
+                //verify entry value is not null or whitespace
+                var subsetEntryValue = UI.Prompt.Input("Enter subset entry value (most commonly, a filename):");
+
+                try
+                {
+                    db.EnsureSourceLocationSubsetEntry(
+                        source.SourceId,
+                        sourceLocationSubset.SourceLocationSubsetId, 
+                        subsetEntryValue);
+
+                    //RefreshSourceLocationSubsetsForSelectedLocation();
+                    RefreshSourceLocationSubsetEntriesFromDb();
+                }
+                catch (Exception ex)
+                {
+                    UI.Display.Message("error ensuring subset: " + ex.Message);
+                }
+
+            }
+            else
+            {
+                UI.Display.Message("select source location and subset");
+            }
+        }
     }
 }
