@@ -98,7 +98,11 @@ namespace NineWorldsDeep.Tapestry.NodeUI
                 return;
             }
 
-            List<ArchivistSourceLocationSubsetEntry> lst = db.GetAllSourceLocationSubsetEntriesForSourceId(source.SourceId);
+            List<ArchivistSourceLocationSubsetEntry> lst = 
+                db.GetSourceLocationSubsetEntriesForSourceId(
+                    source.SourceId, 
+                    chkFilterExcludeMissingLocationEntries.IsChecked.Value);
+           
             lvSourceLocationEntries.ItemsSource = null;
             lvSourceLocationEntries.ItemsSource = lst;
         }
@@ -343,7 +347,39 @@ namespace NineWorldsDeep.Tapestry.NodeUI
             spTextBox.Visibility = Visibility.Visible;
             spTextBlock.Visibility = Visibility.Collapsed;
         }
-        
+
+        private void ButtonVerifyPresent_Click(object sender, RoutedEventArgs e)
+        {
+            TextBlock tbSubsetEntryStatusDetail =
+                Core.UtilsUi.GetTemplateSibling<TextBlock, Button>(
+                    (Button)sender, "tbSubsetEntryStatusDetail");
+
+            ArchivistSourceLocationSubsetEntry slse =
+                (ArchivistSourceLocationSubsetEntry)tbSubsetEntryStatusDetail.DataContext;
+            
+            slse.VerifyPresent();
+
+            db.UpdateSourceLocationSubsetEntryTimeStamps(slse);
+
+            RefreshSourceLocationSubsetEntriesFromDb();
+        }
+
+        private void ButtonVerifyMissing_Click(object sender, RoutedEventArgs e)
+        {
+            TextBlock tbSubsetEntryStatusDetail =
+                Core.UtilsUi.GetTemplateSibling<TextBlock, Button>(
+                    (Button)sender, "tbSubsetEntryStatusDetail");
+
+            ArchivistSourceLocationSubsetEntry slse =
+                (ArchivistSourceLocationSubsetEntry)tbSubsetEntryStatusDetail.DataContext;
+            
+            slse.VerifyMissing();
+
+            db.UpdateSourceLocationSubsetEntryTimeStamps(slse);
+
+            RefreshSourceLocationSubsetEntriesFromDb();
+        }
+
         private void ButtonSaveTags_Click(object sender, RoutedEventArgs e)
         {
             //TODO: refactor to common UI utility method?
@@ -495,8 +531,7 @@ namespace NineWorldsDeep.Tapestry.NodeUI
                         source.SourceId,
                         sourceLocationSubset.SourceLocationSubsetId,
                         subsetEntryValue);
-
-                    //RefreshSourceLocationSubsetsForSelectedLocation();
+                    
                     RefreshSourceLocationSubsetEntriesFromDb();
                 }
                 catch (Exception ex)
@@ -511,6 +546,12 @@ namespace NineWorldsDeep.Tapestry.NodeUI
             }
         }
 
+        private void chkFilterExcludeMissingLocationEntries_CheckChanged(object sender, RoutedEventArgs e)
+        {
+            RefreshSourceLocationSubsetEntriesFromDb();
+        }
+
         #endregion
+
     }
 }

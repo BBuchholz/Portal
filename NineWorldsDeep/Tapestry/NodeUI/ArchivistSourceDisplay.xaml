@@ -8,45 +8,65 @@
              d:DesignHeight="800" d:DesignWidth="400">
     
     <UserControl.Resources>
+        <local:VerifiablePresentStatusConverter 
+            x:Key="VerifiablePresentStatusConverter"/>
+        <local:VerifiableMissingStatusConverter 
+            x:Key="VerifiableMissingStatusConverter"/>
         <DataTemplate x:Key="SourceLocationSubsetEntryTemplate">
-            <StackPanel Orientation="Vertical" 
-                        HorizontalAlignment="Center"
+            <StackPanel Orientation="Horizontal"
                         Margin="5">
-                <WrapPanel Name="wp" >
-                    <TextBlock Text="SourceLocation: " 
+                <StackPanel Orientation="Vertical" 
+                        HorizontalAlignment="Center">
+                    <WrapPanel Name="wp" >
+                        <TextBlock Text="SourceLocation: " 
                                FontWeight="Bold"
                                FontSize="10"/>
-                    <TextBlock Name="tbSourceLocation" 
+                        <TextBlock Name="tbSourceLocation" 
                                Text="{Binding SourceLocationValue}" 
                                TextWrapping="Wrap"
                                FontSize="10"/>
-                </WrapPanel>
-                <WrapPanel Name="wpSourceLocationSubset" >
-                    <TextBlock Text ="Location Subset: " 
+                    </WrapPanel>
+                    <WrapPanel Name="wpSourceLocationSubset" >
+                        <TextBlock Text ="Location Subset: " 
                                FontWeight="Bold"
                                FontSize="10"/>
-                    <TextBlock Name="tbLocationSubset" 
+                        <TextBlock Name="tbLocationSubset" 
                                Text="{Binding SourceLocationSubsetValue}" 
                                TextWrapping="Wrap"
                                FontSize="10"/>
-                </WrapPanel>
-                <WrapPanel Name="wpSourceLocationSubsetEntry" >
-                    <TextBlock Text="Subset Entry: " 
+                    </WrapPanel>
+                    <WrapPanel Name="wpSourceLocationSubsetEntry" >
+                        <TextBlock Text="Subset Entry: " 
                                FontWeight="Bold"
                                FontSize="10"/>
-                    <TextBlock Name="tbSubsetEntry" 
+                        <TextBlock Name="tbSubsetEntry" 
                                Text="{Binding SourceLocationSubsetEntryValue}" 
                                TextWrapping="Wrap"
                                FontSize="10"/>
-                </WrapPanel>
-                <WrapPanel Name="wpSourceLocationSubsetEntryStatusDetail" >
-                    <TextBlock Text="Status: " 
+                    </WrapPanel>
+                    <WrapPanel Name="wpSourceLocationSubsetEntryStatusDetail" >
+                        <TextBlock Text="Status: " 
                                FontWeight="Bold"
                                FontSize="10"/>
-                    <TextBlock Name="tbSubsetEntryStatusDetail" 
+                        <TextBlock Name="tbSubsetEntryStatusDetail" 
                                Text="{Binding StatusDetail}" 
                                TextWrapping="Wrap"
                                FontSize="10"/>
+                    </WrapPanel>
+                </StackPanel>
+                <WrapPanel Margin="20 0 0 0"
+                           Name="wpVerifyPresentButton"
+                           Visibility="{Binding Path=StatusDetail, 
+                                        Converter={StaticResource ResourceKey=VerifiablePresentStatusConverter}}">
+                    <Button Content="Verify Present"
+                            Click="ButtonVerifyPresent_Click"/>
+                </WrapPanel>
+                <WrapPanel Margin="20 0 0 0"
+                           Name="wpVerifyMissingButton"
+                           Visibility="{Binding Path=StatusDetail, 
+                                        Converter={StaticResource ResourceKey=VerifiableMissingStatusConverter}}">
+                    <Button Content="Verify Missing"
+                            Click="ButtonVerifyMissing_Click"/>
                 </WrapPanel>
             </StackPanel>
         </DataTemplate>
@@ -270,7 +290,9 @@
                 <CheckBox x:Name="chkFilterExcludeMissingLocationEntries"
                           HorizontalAlignment="Center"
                           VerticalAlignment="Center"
-                          Content="Exclude Missing Entries"/>
+                          Content="Exclude Missing Entries"
+                          Checked="chkFilterExcludeMissingLocationEntries_CheckChanged"
+                          Unchecked="chkFilterExcludeMissingLocationEntries_CheckChanged"/>
 
                 <ListView x:Name="lvSourceLocationEntries"
                           Grid.Row="1"

@@ -608,6 +608,8 @@
     <Compile Include="Tapestry\NodeUI\ThemesAndStylesSandboxDisplay.xaml.cs">
       <DependentUpon>ThemesAndStylesSandboxDisplay.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Tapestry\NodeUI\VerifiableMissingStatusConverter.cs" />
+    <Compile Include="Tapestry\NodeUI\VerifiablePresentStatusConverter.cs" />
     <Compile Include="Tapestry\TapestryRegistry.cs" />
     <Compile Include="Tapestry\TapestrySplitViewLoadCommand.cs" />
     <Compile Include="Tapestry\TapestryNode.cs" />

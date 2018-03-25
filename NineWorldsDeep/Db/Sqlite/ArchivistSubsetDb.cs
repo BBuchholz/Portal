@@ -1567,7 +1567,7 @@ namespace NineWorldsDeep.Db.Sqlite
 
         #region ArchivistSourceLocationSubsetEntry
 
-        internal List<ArchivistSourceLocationSubsetEntry> GetAllSourceLocationSubsetEntriesForSourceId(int sourceId)
+        internal List<ArchivistSourceLocationSubsetEntry> GetSourceLocationSubsetEntriesForSourceId(int sourceId, bool filterOutVerifiedMissing)
         {
             List<ArchivistSourceLocationSubsetEntry> lst =
                 new List<ArchivistSourceLocationSubsetEntry>();
@@ -1581,7 +1581,7 @@ namespace NineWorldsDeep.Db.Sqlite
                 {
                     using (var transaction = conn.BeginTransaction())
                     {
-                        lst = SelectSourceLocationSubsetEntriesForSourceId(sourceId, cmd);
+                        lst = SelectSourceLocationSubsetEntriesForSourceId(sourceId, filterOutVerifiedMissing, cmd);
 
                         transaction.Commit();
                     }
@@ -1593,14 +1593,23 @@ namespace NineWorldsDeep.Db.Sqlite
             return lst;
         }
 
-        private List<ArchivistSourceLocationSubsetEntry> SelectSourceLocationSubsetEntriesForSourceId(int sourceId, SQLiteCommand cmd)
+        private List<ArchivistSourceLocationSubsetEntry> SelectSourceLocationSubsetEntriesForSourceId(int sourceId, bool filterOutVerifiedMissing, SQLiteCommand cmd)
         {
             List<ArchivistSourceLocationSubsetEntry> lst =
                 new List<ArchivistSourceLocationSubsetEntry>();
 
             cmd.Parameters.Clear();
-            cmd.CommandText =
-                NwdContract.SELECT_SOURCE_LOCATION_SUBSET_ENTRIES_FOR_SOURCE_ID_X;
+
+            if (!filterOutVerifiedMissing)
+            {
+                cmd.CommandText =
+                    NwdContract.SELECT_SOURCE_LOCATION_SUBSET_ENTRIES_FOR_SOURCE_ID_X;
+            }
+            else
+            {
+                cmd.CommandText =
+                    NwdContract.SELECT_VERIFIED_PRESENT_SOURCE_LOCATION_SUBSET_ENTRIES_FOR_SOURCE_ID_X;
+            }
             
             cmd.Parameters.Add(new SQLiteParameter() { Value = sourceId });
 
@@ -1730,6 +1739,49 @@ namespace NineWorldsDeep.Db.Sqlite
             return id;
         }
 
+        internal void UpdateSourceLocationSubsetEntryTimeStamps(ArchivistSourceLocationSubsetEntry slse)
+        {
+            if(slse.SourceLocationSubsetEntryId < 1)
+            {
+                throw new Exception("attempted to update timestamps with SourceLocationSubsetEntryId not set");
+            }
+
+            using (var conn = new SQLiteConnection(
+                 @"Data Source=" + Configuration.GetSqliteDbPath(DbName)))
+            {
+                conn.Open();
+
+                using (var cmd = new SQLiteCommand(conn))
+                {
+                    using (var transaction = conn.BeginTransaction())
+                    {
+                        UpdateSourceLocationSubsetEntryTimeStamps(slse.SourceLocationSubsetEntryId, slse.VerifiedPresent, slse.VerifiedMissing, cmd);
+                        transaction.Commit();
+                    }
+                }
+
+                conn.Close();
+            }
+        }
+
+        private void UpdateSourceLocationSubsetEntryTimeStamps(int sourceLocationSubsetEntryId, DateTime? verifiedPresent, DateTime? verifiedMissing, SQLiteCommand cmd)
+        {
+            cmd.Parameters.Clear();
+
+            cmd.CommandText = NwdContract.UPDATE_SOURCE_LOCATION_SUBSET_ENTRY_VERIFIED_PRESENT_VERIFIED_MISSING_FOR_ID_X_Y_Z;
+
+            string verifiedPresentString =
+                TimeStamp.To_UTC_YYYY_MM_DD_HH_MM_SS(verifiedPresent);
+            string verifiedMissingString =
+                TimeStamp.To_UTC_YYYY_MM_DD_HH_MM_SS(verifiedMissing);
+
+            cmd.Parameters.Add(new SQLiteParameter() { Value = verifiedPresentString });
+            cmd.Parameters.Add(new SQLiteParameter() { Value = verifiedMissingString });
+            cmd.Parameters.Add(new SQLiteParameter() { Value = sourceLocationSubsetEntryId });
+
+            cmd.ExecuteNonQuery();
+        }
+        
         #endregion
     }
 }
