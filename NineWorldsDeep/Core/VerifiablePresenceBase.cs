@@ -10,6 +10,33 @@ namespace NineWorldsDeep.Core
     {
         public DateTime? VerifiedPresent { get; set; }
         public DateTime? VerifiedMissing { get; set; }
+        public string StatusDetail
+        {
+            get
+            {
+                var status = "Verified";
+
+                if (IsPresent())
+                {
+                    status += " Present";
+                    if(VerifiedPresent != null)
+                    {
+                        status += " " + TimeStamp.To_UTC_YYYY_MM_DD_HH_MM_SS(VerifiedPresent);
+                    }
+                }
+                else
+                {
+                    status += " Missing";
+                    if(VerifiedMissing != null)
+                    {
+                        status += " " + TimeStamp.To_UTC_YYYY_MM_DD_HH_MM_SS(VerifiedMissing);
+                    }
+                }
+
+                return status;
+
+            }
+        }
 
         /// <summary>
         /// 
@@ -70,6 +97,17 @@ namespace NineWorldsDeep.Core
         public void VerifyMissing()
         {
             SetTimeStamps(null, TimeStamp.NowUTC());
+        }
+
+        public bool IsPresent()
+        {
+            if(VerifiedMissing == null)
+            {
+                return true;
+            }
+
+            //if verified missing isn't null, verified present must be larger and not null
+            return VerifiedMissing != null && VerifiedPresent >= VerifiedMissing;                        
         }
     }
 }

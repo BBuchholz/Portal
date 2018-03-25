@@ -472,12 +472,10 @@ namespace NineWorldsDeep.Tapestry.NodeUI
             }
         }
 
-        #endregion
-
         private void btnAddLocationSubsetEntry_Click(object sender, RoutedEventArgs e)
         {
             //check source not null and id is set
-            if(source == null || source.SourceId < 1)
+            if (source == null || source.SourceId < 1)
             {
                 UI.Display.Message("source id unavailable");
                 return;
@@ -495,7 +493,7 @@ namespace NineWorldsDeep.Tapestry.NodeUI
                 {
                     db.EnsureSourceLocationSubsetEntry(
                         source.SourceId,
-                        sourceLocationSubset.SourceLocationSubsetId, 
+                        sourceLocationSubset.SourceLocationSubsetId,
                         subsetEntryValue);
 
                     //RefreshSourceLocationSubsetsForSelectedLocation();
@@ -512,5 +510,7 @@ namespace NineWorldsDeep.Tapestry.NodeUI
                 UI.Display.Message("select source location and subset");
             }
         }
+
+        #endregion
     }
 }

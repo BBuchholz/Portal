@@ -9,10 +9,10 @@
     
     <UserControl.Resources>
         <DataTemplate x:Key="SourceLocationSubsetEntryTemplate">
-            <StackPanel Orientation="Vertical" HorizontalAlignment="Center">
-                <WrapPanel Name="wp" 
-                           HorizontalAlignment="Center"
-                           Margin="5">
+            <StackPanel Orientation="Vertical" 
+                        HorizontalAlignment="Center"
+                        Margin="5">
+                <WrapPanel Name="wp" >
                     <TextBlock Text="SourceLocation: " 
                                FontWeight="Bold"
                                FontSize="10"/>
@@ -21,9 +21,7 @@
                                TextWrapping="Wrap"
                                FontSize="10"/>
                 </WrapPanel>
-                <WrapPanel Name="wpSourceLocationSubset" 
-                           HorizontalAlignment="Center"
-                           Margin="5">
+                <WrapPanel Name="wpSourceLocationSubset" >
                     <TextBlock Text ="Location Subset: " 
                                FontWeight="Bold"
                                FontSize="10"/>
@@ -32,14 +30,21 @@
                                TextWrapping="Wrap"
                                FontSize="10"/>
                 </WrapPanel>
-                <WrapPanel Name="wpSourceLocationSubsetEntry" 
-                           HorizontalAlignment="Center"
-                           Margin="5">
+                <WrapPanel Name="wpSourceLocationSubsetEntry" >
                     <TextBlock Text="Subset Entry: " 
                                FontWeight="Bold"
                                FontSize="10"/>
                     <TextBlock Name="tbSubsetEntry" 
                                Text="{Binding SourceLocationSubsetEntryValue}" 
+                               TextWrapping="Wrap"
+                               FontSize="10"/>
+                </WrapPanel>
+                <WrapPanel Name="wpSourceLocationSubsetEntryStatusDetail" >
+                    <TextBlock Text="Status: " 
+                               FontWeight="Bold"
+                               FontSize="10"/>
+                    <TextBlock Name="tbSubsetEntryStatusDetail" 
+                               Text="{Binding StatusDetail}" 
                                TextWrapping="Wrap"
                                FontSize="10"/>
                 </WrapPanel>
