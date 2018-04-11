@@ -510,19 +510,86 @@ namespace NineWorldsDeep.Db.Sqlite
 
         public int EnsureCore(ArchivistSourceExcerpt excerpt, SQLiteCommand cmd)
         {
+            //int srcId = excerpt.SourceId;
+            //string exVal = excerpt.ExcerptValue;
+
+            //int excerptId = 
+            //    GetExcerptId(srcId, exVal, cmd);
+
+            //if(excerptId < 1)
+            //{
+            //    InsertOrIgnoreExcerpt(srcId, exVal, cmd);
+            //    excerptId = GetExcerptId(srcId, exVal, cmd);
+            //}
+
+            //return excerptId;
+
             int srcId = excerpt.SourceId;
             string exVal = excerpt.ExcerptValue;
+            string beginTime = excerpt.ExcerptBeginTime;
+            string endTime = excerpt.ExcerptEndTime;
+            string pages = excerpt.ExcerptPages;
 
-            int excerptId = 
-                GetExcerptId(srcId, exVal, cmd);
+            int excerptId =
+                GetExcerptId(srcId, exVal, beginTime, endTime, pages, cmd);
 
-            if(excerptId < 1)
+            if (excerptId < 1)
             {
-                InsertOrIgnoreExcerpt(srcId, exVal, cmd);
-                excerptId = GetExcerptId(srcId, exVal, cmd);
+                InsertOrIgnoreExcerpt(srcId, exVal, beginTime, endTime, pages, cmd);
+                excerptId = GetExcerptId(srcId, exVal, beginTime, endTime, pages, cmd);
             }
 
             return excerptId;
+        }
+
+        private void InsertOrIgnoreExcerpt(int sourceId,
+                                           string excerptValue,
+                                           string beginTime,
+                                           string endTime,
+                                           string pages,
+                                           SQLiteCommand cmd)
+        {
+            cmd.Parameters.Clear();
+
+            cmd.CommandText = NwdContract.INSERT_OR_IGNORE_SOURCE_EXCERPT_SRCID_EXVAL_BTIME_ETIME_PGS_V_W_X_Y_Z;
+
+            cmd.Parameters.Add(new SQLiteParameter() { Value = sourceId });
+            cmd.Parameters.Add(new SQLiteParameter() { Value = excerptValue });
+            cmd.Parameters.Add(new SQLiteParameter() { Value = beginTime });
+            cmd.Parameters.Add(new SQLiteParameter() { Value = endTime });
+            cmd.Parameters.Add(new SQLiteParameter() { Value = pages });
+
+            cmd.ExecuteNonQuery();
+        }
+
+        private int GetExcerptId(int sourceId,
+                                 string excerptValue,
+                                 string beginTime,
+                                 string endTime,
+                                 string pages,
+                                 SQLiteCommand cmd)
+        {
+            int id = -1;
+
+            cmd.Parameters.Clear();
+            cmd.CommandText =
+                NwdContract.SELECT_SOURCE_EXCERPT_ID_FOR_SRCID_EXVAL_BTIME_ETIME_PGS_V_W_X_Y_Z;
+
+            cmd.Parameters.Add(new SQLiteParameter() { Value = sourceId });
+            cmd.Parameters.Add(new SQLiteParameter() { Value = excerptValue });
+            cmd.Parameters.Add(new SQLiteParameter() { Value = beginTime });
+            cmd.Parameters.Add(new SQLiteParameter() { Value = endTime });
+            cmd.Parameters.Add(new SQLiteParameter() { Value = pages });
+
+            using (var rdr = cmd.ExecuteReader())
+            {
+                if (rdr.Read())
+                {
+                    id = rdr.GetInt32(0);
+                }
+            }
+
+            return id;
         }
 
         private void InsertOrIgnoreExcerpt(int sourceId, 

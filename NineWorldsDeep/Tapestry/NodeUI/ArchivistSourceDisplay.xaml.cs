@@ -159,10 +159,14 @@ namespace NineWorldsDeep.Tapestry.NodeUI
                 {
                     ExcerptValue = itemValue,
                     //SourceId = sourceNode.Source.SourceId
-                    SourceId = source.SourceId
+                    SourceId = source.SourceId,
+                    ExcerptBeginTime = txtSourceExcerptBeginTime.Text,
+                    ExcerptEndTime = txtSourceExcerptEndTime.Text,
+                    ExcerptPages = txtSourceExcerptPages.Text
                 };
 
                 excerpt.SourceExcerptId = db.EnsureCore(excerpt);
+                
 
                 //sourceNode.Source.Add(excerpt);
                 source.Add(excerpt);

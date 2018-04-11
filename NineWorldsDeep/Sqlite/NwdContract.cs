@@ -410,6 +410,24 @@ namespace NineWorldsDeep.Sqlite
         #region "queries"
 
 
+        internal static readonly string INSERT_OR_IGNORE_SOURCE_EXCERPT_SRCID_EXVAL_BTIME_ETIME_PGS_V_W_X_Y_Z =
+
+            "INSERT OR IGNORE INTO " + TABLE_SOURCE_EXCERPT + " " +
+            "	(" + COLUMN_SOURCE_ID + ", " + COLUMN_SOURCE_EXCERPT_VALUE + ", " + COLUMN_SOURCE_EXCERPT_BEGIN_TIME + ", " + COLUMN_SOURCE_EXCERPT_END_TIME + ", " + COLUMN_SOURCE_EXCERPT_PAGES + ") " +
+            "VALUES  " +
+            "	(?, ?, ?, ?, ?); ";
+
+
+        internal static readonly string SELECT_SOURCE_EXCERPT_ID_FOR_SRCID_EXVAL_BTIME_ETIME_PGS_V_W_X_Y_Z =
+            
+            "SELECT " + COLUMN_SOURCE_EXCERPT_ID + " " +
+            "FROM " + TABLE_SOURCE_EXCERPT + " " +
+            "WHERE " + COLUMN_SOURCE_ID + " = ? " +
+            "AND " + COLUMN_SOURCE_EXCERPT_VALUE + " = ?  " +
+            "AND " + COLUMN_SOURCE_EXCERPT_BEGIN_TIME + " = ? " +
+            "AND " + COLUMN_SOURCE_EXCERPT_END_TIME + " = ? " +
+            "AND " + COLUMN_SOURCE_EXCERPT_PAGES + " = ? ; ";
+
         internal static readonly string SELECT_VERIFIED_PRESENT_SOURCE_LOCATION_SUBSET_ENTRIES_FOR_SOURCE_ID_X =
 
             "SELECT slse." + COLUMN_SOURCE_LOCATION_SUBSET_ENTRY_ID + ", " +
@@ -877,6 +895,7 @@ namespace NineWorldsDeep.Sqlite
             "JOIN MediaDevice md  " +
             "ON mdp." + COLUMN_MEDIA_DEVICE_ID + " = md." + COLUMN_MEDIA_DEVICE_ID + " " +
             "WHERE IFNULL(mtg." + COLUMN_MEDIA_TAGGING_TAGGED_AT + ", '') >= IFNULL(mtg." + COLUMN_MEDIA_TAGGING_UNTAGGED_AT + ", '') ";
+
 
 
 
