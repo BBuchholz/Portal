@@ -175,6 +175,11 @@ namespace NineWorldsDeep.Tapestry.NodeUI
 
                 //for testing
                 //UI.Display.Message("you entered: " + itemValue);
+
+                txtSourceExcerptInput.Text = "";
+                txtSourceExcerptBeginTime.Text = "";
+                txtSourceExcerptEndTime.Text = "";
+                txtSourceExcerptPages.Text = "";
             }
             else
             {
