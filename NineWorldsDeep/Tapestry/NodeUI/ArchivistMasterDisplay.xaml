@@ -33,7 +33,7 @@
     <Grid>
 
         <Grid.RowDefinitions>
-            <RowDefinition Height="40"/>
+            <RowDefinition Height="*"/>
             <RowDefinition Height="40"/>
             <RowDefinition Height="40"/>
             <RowDefinition Height="*"/>
@@ -41,7 +41,7 @@
 
         <Expander Header="Utilites"
                   Grid.Row="0"
-                  IsExpanded="False"
+                  IsExpanded="True"
                   Margin="5"
                   Expanded="Expander_Expanded"
                   Collapsed="Expander_Collapsed">
@@ -64,19 +64,33 @@
                 </Grid.RowDefinitions>
 
                 <Button x:Name="btnImportGerm"
-                    Grid.Row="0"
-                    Grid.Column="0"
-                    Margin="5"
-                    Content="Import GERM"
-                    Click="btnImportTextFiles_Click"/>
+                        Grid.Row="0"
+                        Grid.Column="0"
+                        Margin="5"
+                        Content="Import GERM"
+                        Click="btnImportTextFiles_Click"/>
 
                 <Button x:Name="btnAddSourceType"
-                    Grid.Row="1"
-                    Grid.Column="0"
-                    Margin="5"
-                    Content="Add Source Type"
-                    Click="AddSourceType_Click"/>
+                        Grid.Row="0"
+                        Grid.Column="2"
+                        Margin="5"
+                        Content="Add Source Type"
+                        Click="AddSourceType_Click"/>
 
+                <Button x:Name="btnExportXml"
+                        Grid.Row="2"
+                        Grid.Column="0"
+                        Margin="5"
+                        Content="Export Xml"
+                        Click="ButtonExportXml_Click"/>
+
+                <Button x:Name="btnImportXml"
+                        Grid.Row="2"
+                        Grid.Column="1"
+                        Margin="5"
+                        Content="Import Xml"
+                        Click="ButtonImportXml_Click"/>
+                
                 <StackPanel Grid.Row="5"
                             VerticalAlignment="Bottom"
                             HorizontalAlignment="Left"

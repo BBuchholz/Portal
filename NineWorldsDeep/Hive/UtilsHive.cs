@@ -26,6 +26,21 @@ namespace NineWorldsDeep.Hive
         {
             return db.GetAllHiveRoots();
         }
+
+        public static List<HiveRoot> GetTestRoot()
+        {
+            string testRootName = "test-root";
+            int testRootId = db.EnsureHiveRoot(testRootName);
+
+            var lst = new List<HiveRoot>();
+            lst.Add(new HiveRoot()
+            {
+                HiveRootId = testRootId,
+                HiveRootName = testRootName
+            });
+
+            return lst;
+        }
         
         public static HiveRoot GetLocalHiveRoot()
         {
@@ -148,9 +163,9 @@ namespace NineWorldsDeep.Hive
             return match.Success;
         }
 
-        internal static void EnsureHiveRootName(string hiveRootName)
+        internal static int EnsureHiveRootName(string hiveRootName)
         {
-            db.EnsureHiveRoot(hiveRootName);
+            return db.EnsureHiveRoot(hiveRootName);
         }
 
         internal static void Sync(HiveRoot hr)
@@ -170,6 +185,11 @@ namespace NineWorldsDeep.Hive
         public static void CopyToAllActiveRoots(IEnumerable<string> sourceFilePaths)
         {
             ProcessMovement(sourceFilePaths, GetActiveRoots());
+        }
+
+        public static void CopyToTestRoot(IEnumerable<string> sourceFilePaths)
+        {
+            ProcessMovement(sourceFilePaths, GetTestRoot());
         }
 
         public static void CopyToStaging(List<string> selectedPaths, IAsyncStatusResponsive ui = null)

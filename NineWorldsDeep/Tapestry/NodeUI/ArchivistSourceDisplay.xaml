@@ -501,7 +501,7 @@
                             Grid.Column="1"
                             Margin="5"
                             Content="Add"
-                            Click="btnAddSourceExcerpt_Click"/>
+                            Click="ButtonAddSourceExcerpt_Click"/>
                 </Grid>
             </Grid>
         </Expander>

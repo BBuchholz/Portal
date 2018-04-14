@@ -409,6 +409,27 @@ namespace NineWorldsDeep.Sqlite
 
         #region "queries"
 
+        internal static readonly string SELECT_SOURCE_EXCERPTS_FOR_SOURCE_ID_X =
+
+            "SELECT " + COLUMN_SOURCE_EXCERPT_ID + ", " +
+            "	    " + COLUMN_SOURCE_ID + ", " +
+            "	    " + COLUMN_SOURCE_EXCERPT_VALUE + ", " +
+            "	    " + COLUMN_SOURCE_EXCERPT_PAGES + ", " +
+            "	    " + COLUMN_SOURCE_EXCERPT_BEGIN_TIME + ", " +
+            "	    " + COLUMN_SOURCE_EXCERPT_END_TIME + " " +
+            "FROM " + TABLE_SOURCE_EXCERPT + "  " +
+            "WHERE " + COLUMN_SOURCE_ID + " = ? ; ";
+
+        internal static readonly string SELECT_SOURCE_EXCERPT_TAGGING_WRAPPER_VALS_FOR_EXCERPT_ID_X =
+
+            "SELECT mt." + COLUMN_MEDIA_TAG_VALUE + ", " +
+            "	   setag." + COLUMN_SOURCE_EXCERPT_TAGGING_TAGGED_AT + ", " +
+            "	   setag." + COLUMN_SOURCE_EXCERPT_TAGGING_UNTAGGED_AT + " " +
+            "FROM " + TABLE_SOURCE_EXCERPT_TAGGING + " setag " +
+            "JOIN " + TABLE_MEDIA_TAG + " mt " +
+            "ON setag." + COLUMN_MEDIA_TAG_ID + " = mt." + COLUMN_MEDIA_TAG_ID + " " +
+            "WHERE setag." + COLUMN_SOURCE_EXCERPT_ID + " = ? ; ";
+
 
         internal static readonly string INSERT_OR_IGNORE_SOURCE_EXCERPT_SRCID_EXVAL_BTIME_ETIME_PGS_V_W_X_Y_Z =
 
@@ -608,6 +629,19 @@ namespace NineWorldsDeep.Sqlite
             "	   " + COLUMN_SOURCE_TAG + "  " +
             "FROM " + TABLE_SOURCE + " " +
             "WHERE " + COLUMN_SOURCE_TYPE_ID + " = ?; ";
+
+        internal static readonly string SELECT_SOURCES =
+
+            "SELECT " + COLUMN_SOURCE_ID + ", " +
+            "	   " + COLUMN_SOURCE_TYPE_ID + ", " +
+            "	   " + COLUMN_SOURCE_TITLE + ", " +
+            "	   " + COLUMN_SOURCE_AUTHOR + ", " +
+            "	   " + COLUMN_SOURCE_DIRECTOR + ", " +
+            "	   " + COLUMN_SOURCE_YEAR + ", " +
+            "	   " + COLUMN_SOURCE_URL + ", " +
+            "	   " + COLUMN_SOURCE_RETRIEVAL_DATE + ",  " +
+            "	   " + COLUMN_SOURCE_TAG + "  " +
+            "FROM " + TABLE_SOURCE + " ; ";
 
         internal static readonly string SELECT_SOURCE_W_X_Y_Z =
 
@@ -895,6 +929,8 @@ namespace NineWorldsDeep.Sqlite
             "JOIN MediaDevice md  " +
             "ON mdp." + COLUMN_MEDIA_DEVICE_ID + " = md." + COLUMN_MEDIA_DEVICE_ID + " " +
             "WHERE IFNULL(mtg." + COLUMN_MEDIA_TAGGING_TAGGED_AT + ", '') >= IFNULL(mtg." + COLUMN_MEDIA_TAGGING_UNTAGGED_AT + ", '') ";
+
+
 
 
 

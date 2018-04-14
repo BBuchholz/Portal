@@ -1,4 +1,5 @@
 ﻿using NineWorldsDeep.Archivist;
+using NineWorldsDeep.Core;
 using NineWorldsDeep.Db.Sqlite;
 using NineWorldsDeep.Tapestry.Nodes;
 using System;
@@ -17,6 +18,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Xml.Linq;
 
 namespace NineWorldsDeep.Tapestry.NodeUI
 {
@@ -28,6 +30,7 @@ namespace NineWorldsDeep.Tapestry.NodeUI
         #region fields
 
         private ArchivistSubsetDb db;
+        private Xml.Xml xml;
 
         //async related 
         private readonly SynchronizationContext syncContext;
@@ -71,6 +74,165 @@ namespace NineWorldsDeep.Tapestry.NodeUI
         #endregion
 
         #region event handlers
+        
+        private async void ButtonExportXml_Click(object sender, RoutedEventArgs e)
+        {
+            ///////////////////////////////////////////////////////////////////
+            //mimics MediaMasterDisplay.btnExportXml_Click()
+            ///////////////////////////////////////////////////////////////////
+
+            try
+            {
+                await Task.Run(() =>
+                {
+
+                    string detail = "starting export of mnemosyne subset";
+
+                    StatusDetailUpdate(detail);
+
+                    List<ArchivistSource> allSources = db.GetAllSources();
+
+                    XElement archivistSubsetEl = new XElement(Xml.Xml.TAG_ARCHIVIST_SUBSET);
+
+                    int totalSources = allSources.Count;
+                    int sourceCount = 0;
+                    
+                    foreach (var source in allSources)
+                    {
+                        sourceCount++;
+                        
+
+                        /////////////////////////////////////////////////////////
+                        // just for testing
+                        // will only export a sampling items 
+                        // leave this code here, you want this for testing
+                        // comment out when publishing
+                        //
+                        if (sourceCount > 2)
+                        {
+                            break;
+                        }
+                        //////////////////////////////////////////////////////////
+
+                        
+
+                        //create media tag with attribute set for hash
+                        XElement sourceEl = Xml.Xml.CreateSourceElement(source);
+
+                        archivistSubsetEl.Add(sourceEl);
+
+                        detail = "source " + sourceCount + " of " +
+                            totalSources + ": " + source.ShortName + " processing locations";
+
+                        StatusDetailUpdate(detail);
+
+                        List<ArchivistSourceLocationSubsetEntry> locationEntries =
+                            db.GetSourceLocationSubsetEntriesForSourceId(source.SourceId, false);
+
+                        foreach(var locationEntry in locationEntries)
+                        {
+                            sourceEl.Add(
+                                Xml.Xml.CreateSourceLocationSubsetEntryElement(locationEntry));
+                        }
+
+                        detail = "source " + sourceCount + " of " +
+                            totalSources + ": " + source.ShortName + " processing excerpts";
+                        StatusDetailUpdate(detail);
+
+                        List<ArchivistSourceExcerpt> sourceExcerpts =
+                            db.GetSourceExcerptsForSourceId(source.SourceId);
+                        
+                        int totalSourceExcerpts = sourceExcerpts.Count;
+                        int sourceExcerptCount = 0;
+
+                        foreach (var sourceExcerpt in sourceExcerpts)
+                        {
+                            sourceExcerptCount++;
+                            
+                            detail = "source " + sourceCount + " of " +
+                                totalSources + ": " + source.ShortName + 
+                                " : processing excerpt " + sourceExcerptCount +
+                                " of " + totalSourceExcerpts;
+                            StatusDetailUpdate(detail);
+
+                            var sourceExcerptEl = 
+                                Xml.Xml.CreateSourceExcerptElement(sourceExcerpt);
+
+                            sourceEl.Add(sourceExcerptEl);
+                            
+                            sourceExcerptEl.Add(
+                                Xml.Xml.CreateSourceExcerptValueElement(sourceExcerpt.ExcerptValue));
+
+                            List<ArchivistSourceExcerptAnnotation> excerptAnnotations =
+                                db.GetSourceExcerptAnnotationsBySourceExcerptId(sourceExcerpt.SourceExcerptId);
+
+                            foreach(var annotation in excerptAnnotations)
+                            {
+                                sourceExcerptEl.Add(
+                                    Xml.Xml.CreateSourceExcerptAnnotationElement(annotation));
+                            }
+
+                            List<TaggingXmlWrapper> taggings =
+                                db.GetSourceExcerptTaggingXmlWrappersForExcerptId(sourceExcerpt.SourceExcerptId);
+
+                            foreach(var tagging in taggings)
+                            {
+                                sourceExcerptEl.Add(
+                                    Xml.Xml.CreateSourceExcerptTagElement(tagging));
+                            }
+                        }                       
+                        
+                    }
+
+                    XDocument doc =
+                        new XDocument(
+                            new XElement("nwd", archivistSubsetEl));
+
+                    //here, take doc and save to all sync locations            
+                    string fileName =
+                        NwdUtils.GetTimeStamp_yyyyMMddHHmmss() + "-nwd-archivist-v5.xml";
+
+
+                    //COPIED FROM TaggedMediaDisplay to use new Hive utilities
+                    //write to temp file
+                    var tempFolder = Configuration.TempV5XmlFolder;
+                    var xmlTempFilePath =
+                        System.IO.Path.Combine(tempFolder, fileName);
+
+                    doc.Save(xmlTempFilePath);
+
+                    var filePathInList = new List<string>();
+                    filePathInList.Add(xmlTempFilePath);
+                    
+                    //////////////////////////////////////////////////////////////
+                    //
+                    //
+
+                    //just for testing
+                    Hive.UtilsHive.CopyToTestRoot(filePathInList); 
+                    
+                    //uncomment line below when done testing                  
+                    
+                    //Hive.UtilsHive.CopyToAllActiveRoots(filePathInList);
+
+                    //
+                    //
+                    //////////////////////////////////////////////////////////////
+                                        
+                });
+
+                tbStatusUtilities.Text = "finished.";
+            }
+            catch (Exception ex)
+            {
+                tbStatusUtilities.Text = "Error: " + ex.Message;
+            }
+        }
+
+        private void ButtonImportXml_Click(object sender, RoutedEventArgs e)
+        {
+            UI.Display.Message("awaiting implementation");
+        }
 
         private void AddSourceLocation_Click(object sender, RoutedEventArgs e)
         {
@@ -136,7 +298,7 @@ namespace NineWorldsDeep.Tapestry.NodeUI
 
         private void btnImportTextFiles_Click(object sender, RoutedEventArgs e)
         {
-
+            UI.Display.Message("awaiting implementation");
         }
 
         private void cmbSourceTypes_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -287,6 +449,20 @@ namespace NineWorldsDeep.Tapestry.NodeUI
 
         #region private helper methods
 
+        public void StatusDetailUpdate(string text, bool ensureDisplay = false)
+        {
+            var currentTime = DateTime.Now;
+
+            if (!ensureDisplay && ((DateTime.Now - previousTime).Milliseconds <= 50)) return;
+
+            syncContext.Post(new SendOrPostCallback(s =>
+            {
+                tbStatusUtilities.Text = (string)s;
+            }), text);
+
+            previousTime = currentTime;
+        }
+
         private void RefreshSourceLocations()
         {
             List<ArchivistSourceLocation> lst = db.GetAllSourceLocations();
@@ -416,5 +592,6 @@ namespace NineWorldsDeep.Tapestry.NodeUI
         }
 
         #endregion
+
     }
 }

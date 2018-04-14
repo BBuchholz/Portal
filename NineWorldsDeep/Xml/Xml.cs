@@ -11,6 +11,7 @@ using NineWorldsDeep.Mnemosyne.V5;
 using System.Xml;
 using NineWorldsDeep.Tapestry.NodeUI;
 using NineWorldsDeep.Hierophant;
+using NineWorldsDeep.Archivist;
 
 namespace NineWorldsDeep.Xml
 {
@@ -108,6 +109,7 @@ namespace NineWorldsDeep.Xml
 
             return TimeStamp.YYYY_MM_DD_HH_MM_SS_UTC_ToDateTime(utcDateString);
         }
+
 
         public static XElement Export(SynergyV5List lst)
         {
@@ -867,5 +869,111 @@ namespace NineWorldsDeep.Xml
 
             return semanticDefinitionEl;
         }
+
+
+        #region Archivist
+
+        #region Archivist Tags and Attributes
+        
+        public static string TAG_ARCHIVIST_SUBSET = "archivistSubset";
+        private static readonly string TAG_SOURCE = "source";
+        private static readonly string TAG_SOURCE_LOCATION_SUBSET_ENTRY = "sourceLocationSubsetEntry";
+        private static readonly string TAG_SOURCE_EXCERPT = "sourceExcerpt";
+        private static readonly string TAG_SOURCE_EXCERPT_VALUE = "sourceExcerptValue";
+        private static readonly string TAG_SOURCE_EXCERPT_ANNOTATION = "sourceExcerptAnnotation";
+        private static readonly string TAG_SOURCE_EXCERPT_ANNOTATION_VALUE = "sourceExcerptAnnotationValue";
+
+        private static readonly string ATTRIBUTE_TYPE = "type";
+        private static readonly string ATTRIBUTE_AUTHOR = "author";
+        private static readonly string ATTRIBUTE_DIRECTOR = "director";
+        private static readonly string ATTRIBUTE_TITLE = "title";
+        private static readonly string ATTRIBUTE_YEAR = "year";
+        private static readonly string ATTRIBUTE_URL = "url";
+        private static readonly string ATTRIBUTE_RETRIEVAL_DATE = "retrievalDate";
+        private static readonly string ATTRIBUTE_TAG = "tag";
+        private static readonly string ATTRIBUTE_LOCATION = "location";
+        private static readonly string ATTRIBUTE_LOCATION_SUBSET = "locationSubset";
+        private static readonly string ATTRIBUTE_LOCATION_SUBSET_ENTRY = "locationSubsetEntry";
+        private static readonly string ATTRIBUTE_PAGES = "pages";
+        private static readonly string ATTRIBUTE_BEGIN_TIME = "beginTime";
+        private static readonly string ATTRIBUTE_END_TIME = "endTime";
+        private static readonly string ATTRIBUTE_LINKED_AT = "linkedAt";
+        private static readonly string ATTRIBUTE_UNLINKED_AT = "unlinkedAt";
+
+        #endregion
+
+        internal static XElement CreateSourceElement(ArchivistSource source)
+        {
+            XElement sourceEl = new XElement(TAG_SOURCE);
+
+            //sourceEl.Add(new XAttribute(ATTRIBUTE_SHA1_HASH, hash));
+
+            return sourceEl;
+        }
+        
+        internal static XElement CreateSourceLocationSubsetEntryElement(ArchivistSourceLocationSubsetEntry locationEntry)
+        {
+            XElement sourceLocationSubsetEntryEl =
+                new XElement(TAG_SOURCE_LOCATION_SUBSET_ENTRY);
+
+            //sourceEl.Add(new XAttribute(ATTRIBUTE_SHA1_HASH, hash));
+
+            return sourceLocationSubsetEntryEl;
+        }
+
+        internal static XElement CreateSourceExcerptElement(ArchivistSourceExcerpt sourceExcerpt)
+        {
+            XElement sourceExcerptEl =
+                new XElement(TAG_SOURCE_EXCERPT);
+
+            //sourceEl.Add(new XAttribute(ATTRIBUTE_SHA1_HASH, hash));
+
+            return sourceExcerptEl;
+        }
+        
+        internal static XElement CreateSourceExcerptValueElement(string excerptValue)
+        {
+            XElement sourceExcerptValueEl =
+                new XElement(TAG_SOURCE_EXCERPT_VALUE);
+
+            //sourceEl.Add(new XAttribute(ATTRIBUTE_SHA1_HASH, hash));
+
+            return sourceExcerptValueEl;
+        }
+
+        internal static XElement CreateSourceExcerptTagElement(TaggingXmlWrapper tag)
+        {
+            XElement tagEl = new XElement(TAG_TAG);
+            
+
+            string taggedAt =
+                TimeStamp.To_UTC_YYYY_MM_DD_HH_MM_SS(tag.TaggedAt);
+
+            string untaggedAt =
+                TimeStamp.To_UTC_YYYY_MM_DD_HH_MM_SS(tag.UntaggedAt);
+
+            tagEl.Add(new XAttribute(ATTRIBUTE_TAG_VALUE, tag.MediaTagValue));
+            tagEl.Add(new XAttribute(ATTRIBUTE_TAGGED_AT, taggedAt));
+            tagEl.Add(new XAttribute(ATTRIBUTE_UNTAGGED_AT, untaggedAt));
+
+            return tagEl;
+        }
+        
+        internal static XElement CreateSourceExcerptAnnotationElement(ArchivistSourceExcerptAnnotation annotation)
+        {
+            XElement sourceExcerptAnnotationEl =
+                new XElement(TAG_SOURCE_EXCERPT_ANNOTATION);
+
+            //sourceExcerptAnnotationEl.Add(new XAttribute(ATTRIBUTE_LINKED_AT, annotation.));
+            //sourceExcerptAnnotationEl.Add(new XAttribute(ATTRIBUTE_UNLINKED_AT), annotation.);
+
+            //XElement sourceAnnotationValueEl =
+            //    new XElement(TAG_SOURCE_EXCERPT_ANNOTATION_VALUE);
+
+
+            return sourceExcerptAnnotationEl;
+        }
+
+        #endregion
     }
 }

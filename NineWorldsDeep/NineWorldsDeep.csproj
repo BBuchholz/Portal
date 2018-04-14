@@ -175,6 +175,7 @@
     <Compile Include="Core\ReviewableFragment.cs" />
     <Compile Include="Core\NwdUtils.cs" />
     <Compile Include="Core\TaggingBase.cs" />
+    <Compile Include="Core\TaggingXmlWrapper.cs" />
     <Compile Include="Core\TaggingMatrix.cs" />
     <Compile Include="Core\TimeStamp.cs" />
     <Compile Include="Core\UtilsUi.cs" />

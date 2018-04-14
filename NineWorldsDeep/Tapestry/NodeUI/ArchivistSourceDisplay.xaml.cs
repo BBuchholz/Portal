@@ -69,7 +69,7 @@ namespace NineWorldsDeep.Tapestry.NodeUI
                 //some components load a partial source node, need to refresh actual source from id as well
                 this.source = db.GetSourceById(this.source.SourceId);
 
-                db.LoadSourceExcerptsWithTags(this.source);
+                db.LoadSourceExcerptsWithTaggedTags(this.source);
                 RefreshSourceAndExcerptsFromObject();
             }
             else
@@ -299,7 +299,7 @@ namespace NineWorldsDeep.Tapestry.NodeUI
             }
         }
 
-        private void btnAddSourceExcerpt_Click(object sender, RoutedEventArgs e)
+        private void ButtonAddSourceExcerpt_Click(object sender, RoutedEventArgs e)
         {
             ProcessEntryInput();
         }
