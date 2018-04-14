@@ -423,29 +423,35 @@
             <Grid>
 
                 <Grid.RowDefinitions>
-                    <RowDefinition/>
-                    <RowDefinition/>
+                    <RowDefinition Height="40"/>
+                    <RowDefinition Height="40"/>
                     <RowDefinition/>
                 </Grid.RowDefinitions>
 
                 <Grid Grid.Row="0">
 
                     <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
                         <ColumnDefinition/>
-                        <ColumnDefinition/>
-                        <ColumnDefinition/>
+                        <ColumnDefinition Width="Auto"/>
                         <ColumnDefinition/>
                     </Grid.ColumnDefinitions>
 
                     <TextBlock Text="Begin Time: "
-                               Grid.Column="0"/>
+                               Grid.Column="0"
+                               HorizontalAlignment="Right"
+                               VerticalAlignment="Center"
+                               Margin="5 0 0 0"/>
 
                     <TextBox x:Name="txtSourceExcerptBeginTime"
                              Margin="5"
                              Grid.Column="1"/>
 
                     <TextBlock Text="End Time: "
-                               Grid.Column="2"/>
+                               Grid.Column="2"
+                               HorizontalAlignment="Right"
+                               VerticalAlignment="Center"
+                               Margin="0"/>
 
                     <TextBox x:Name="txtSourceExcerptEndTime"
                              Margin="5"
@@ -456,12 +462,15 @@
                 <Grid Grid.Row="1">
 
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition/>
+                        <ColumnDefinition Width="Auto"/>
                         <ColumnDefinition/>
                     </Grid.ColumnDefinitions>
 
                     <TextBlock Text="Pages: "
-                               Grid.Column="0"/>
+                               Grid.Column="0"
+                               HorizontalAlignment="Right"
+                               VerticalAlignment="Center"
+                               Margin="5 0 0 0"/>
 
                     <TextBox x:Name="txtSourceExcerptPages"
                              Margin="5"
@@ -489,10 +498,10 @@
                     </TextBox>
 
                     <Button x:Name="btnAddSourceExcerpt"
-                    Grid.Column="1"
-                    Margin="5"
-                    Content="Add"
-                    Click="btnAddSourceExcerpt_Click"/>
+                            Grid.Column="1"
+                            Margin="5"
+                            Content="Add"
+                            Click="btnAddSourceExcerpt_Click"/>
                 </Grid>
             </Grid>
         </Expander>
