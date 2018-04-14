@@ -902,11 +902,18 @@ namespace NineWorldsDeep.Xml
 
         #endregion
 
-        internal static XElement CreateSourceElement(ArchivistSource source)
+        internal static XElement CreateSourceElement(ArchivistSource source, string sourceTypeValue)
         {
             XElement sourceEl = new XElement(TAG_SOURCE);
 
-            //sourceEl.Add(new XAttribute(ATTRIBUTE_SHA1_HASH, hash));
+            sourceEl.Add(new XAttribute(ATTRIBUTE_TYPE, sourceTypeValue));
+            sourceEl.Add(new XAttribute(ATTRIBUTE_AUTHOR, source.Author));
+            sourceEl.Add(new XAttribute(ATTRIBUTE_DIRECTOR, source.Director));
+            sourceEl.Add(new XAttribute(ATTRIBUTE_TITLE, source.Title));
+            sourceEl.Add(new XAttribute(ATTRIBUTE_YEAR, source.Year));
+            sourceEl.Add(new XAttribute(ATTRIBUTE_URL, source.Url));
+            sourceEl.Add(new XAttribute(ATTRIBUTE_RETRIEVAL_DATE, source.RetrievalDate));
+            sourceEl.Add(new XAttribute(ATTRIBUTE_TAG, source.SourceTag));
 
             return sourceEl;
         }
@@ -916,7 +923,20 @@ namespace NineWorldsDeep.Xml
             XElement sourceLocationSubsetEntryEl =
                 new XElement(TAG_SOURCE_LOCATION_SUBSET_ENTRY);
 
-            //sourceEl.Add(new XAttribute(ATTRIBUTE_SHA1_HASH, hash));
+            sourceLocationSubsetEntryEl.Add(new XAttribute(ATTRIBUTE_LOCATION, locationEntry.SourceLocationValue));
+            sourceLocationSubsetEntryEl.Add(new XAttribute(ATTRIBUTE_LOCATION_SUBSET, locationEntry.SourceLocationSubsetValue));
+            sourceLocationSubsetEntryEl.Add(new XAttribute(ATTRIBUTE_LOCATION_SUBSET_ENTRY, locationEntry.SourceLocationSubsetEntryValue));
+
+
+            string verifiedPresent =
+                TimeStamp.To_UTC_YYYY_MM_DD_HH_MM_SS(locationEntry.VerifiedPresent);
+
+            string verifiedMissing =
+                TimeStamp.To_UTC_YYYY_MM_DD_HH_MM_SS(locationEntry.VerifiedMissing);
+
+
+            sourceLocationSubsetEntryEl.Add(new XAttribute(ATTRIBUTE_VERIFIED_PRESENT, verifiedPresent));
+            sourceLocationSubsetEntryEl.Add(new XAttribute(ATTRIBUTE_VERIFIED_MISSING, verifiedMissing));
 
             return sourceLocationSubsetEntryEl;
         }
@@ -926,7 +946,9 @@ namespace NineWorldsDeep.Xml
             XElement sourceExcerptEl =
                 new XElement(TAG_SOURCE_EXCERPT);
 
-            //sourceEl.Add(new XAttribute(ATTRIBUTE_SHA1_HASH, hash));
+            sourceExcerptEl.Add(new XAttribute(ATTRIBUTE_PAGES, sourceExcerpt.ExcerptPages));
+            sourceExcerptEl.Add(new XAttribute(ATTRIBUTE_BEGIN_TIME, sourceExcerpt.ExcerptBeginTime));
+            sourceExcerptEl.Add(new XAttribute(ATTRIBUTE_END_TIME, sourceExcerpt.ExcerptEndTime));
 
             return sourceExcerptEl;
         }
@@ -936,7 +958,7 @@ namespace NineWorldsDeep.Xml
             XElement sourceExcerptValueEl =
                 new XElement(TAG_SOURCE_EXCERPT_VALUE);
 
-            //sourceEl.Add(new XAttribute(ATTRIBUTE_SHA1_HASH, hash));
+            sourceExcerptValueEl.SetValue(excerptValue);
 
             return sourceExcerptValueEl;
         }
@@ -963,13 +985,12 @@ namespace NineWorldsDeep.Xml
         {
             XElement sourceExcerptAnnotationEl =
                 new XElement(TAG_SOURCE_EXCERPT_ANNOTATION);
+            
+            XElement sourceAnnotationValueEl =
+                new XElement(TAG_SOURCE_EXCERPT_ANNOTATION_VALUE);
+            sourceAnnotationValueEl.SetValue(annotation.SourceAnnotationValue);
 
-            //sourceExcerptAnnotationEl.Add(new XAttribute(ATTRIBUTE_LINKED_AT, annotation.));
-            //sourceExcerptAnnotationEl.Add(new XAttribute(ATTRIBUTE_UNLINKED_AT), annotation.);
-
-            //XElement sourceAnnotationValueEl =
-            //    new XElement(TAG_SOURCE_EXCERPT_ANNOTATION_VALUE);
-
+            sourceExcerptAnnotationEl.Add(sourceAnnotationValueEl);
 
             return sourceExcerptAnnotationEl;
         }

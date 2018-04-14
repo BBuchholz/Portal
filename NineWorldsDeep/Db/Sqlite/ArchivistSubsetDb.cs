@@ -1466,7 +1466,7 @@ namespace NineWorldsDeep.Db.Sqlite
                     sourceExcerptId = rdr.GetInt32(1);
                     int sourceAnnotationId = rdr.GetInt32(2);
                     string sourceAnnotationValue = DbV5Utils.GetNullableString(rdr, 3);
-
+                    
                     lst.Add(new ArchivistSourceExcerptAnnotation()
                     {
                         SourceExcerptAnnotationId = sourceExcerptAnnotationId,

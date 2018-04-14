@@ -96,28 +96,35 @@ namespace NineWorldsDeep.Tapestry.NodeUI
 
                     int totalSources = allSources.Count;
                     int sourceCount = 0;
-                    
+
+                    Dictionary<int, string> sourceTypeIdsToValues = new Dictionary<int, string>();
+
+                    foreach(var sourceType in db.GetAllSourceTypes())
+                    {
+                        sourceTypeIdsToValues[sourceType.SourceTypeId] = sourceType.SourceTypeValue;
+                    }
+
                     foreach (var source in allSources)
                     {
                         sourceCount++;
                         
 
-                        /////////////////////////////////////////////////////////
-                        // just for testing
-                        // will only export a sampling items 
-                        // leave this code here, you want this for testing
-                        // comment out when publishing
-                        //
-                        if (sourceCount > 2)
-                        {
-                            break;
-                        }
-                        //////////////////////////////////////////////////////////
+                        ///////////////////////////////////////////////////////////
+                        //// just for testing
+                        //// will only export a sampling items 
+                        //// leave this code here, you want this for testing
+                        //// comment out when publishing
+                        ////
+                        //if (sourceCount > 2)
+                        //{
+                        //    break;
+                        //}
+                        ////////////////////////////////////////////////////////////
 
                         
 
                         //create media tag with attribute set for hash
-                        XElement sourceEl = Xml.Xml.CreateSourceElement(source);
+                        XElement sourceEl = Xml.Xml.CreateSourceElement(source, sourceTypeIdsToValues[source.SourceTypeId]);
 
                         archivistSubsetEl.Add(sourceEl);
 
