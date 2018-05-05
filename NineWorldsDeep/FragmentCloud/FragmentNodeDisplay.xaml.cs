@@ -45,9 +45,9 @@ namespace NineWorldsDeep.FragmentCloud
             {
                 FileDetailsControl.Display((FileSystemNode)frg);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                UI.Display.Message("error attempting to display to FileDetailsControl: " + ex.Message);
+                //UI.Display.Message("error attempting to display to FileDetailsControl: " + ex.Message);
             }
 
             try

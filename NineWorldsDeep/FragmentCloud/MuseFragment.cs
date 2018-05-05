@@ -13,7 +13,7 @@ namespace NineWorldsDeep.FragmentCloud
             //AddChild(new StudioMainNode());
             //AddChild(new StudioProjectsNode());
             //AddChild(new StudioLyricsNode());
-            //AddChild(new MuseScalesNode());
+            AddChild(new MuseScalesNode());
             //AddChild(new StudioKeyboardNode());
             //AddChild(new ArpaBetNode());
             AddChild(new ChordProgressionsNode());
