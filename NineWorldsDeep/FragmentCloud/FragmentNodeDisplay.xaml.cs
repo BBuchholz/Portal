@@ -41,9 +41,24 @@ namespace NineWorldsDeep.FragmentCloud
                 MultiLineTextBox.Text = frg.ToMultiLineDetail();
             }
 
-            FileDetailsControl.Display((FileSystemNode)frg);
+            try
+            {
+                FileDetailsControl.Display((FileSystemNode)frg);
+            }
+            catch (Exception ex)
+            {
+                UI.Display.Message("error attempting to display to FileDetailsControl: " + ex.Message);
+            }
 
-            frg.PerformSelectionAction();
+            try
+            {
+                frg.PerformSelectionAction();
+            }
+            catch (Exception ex)
+            {
+                UI.Display.Message("error attempting to perform selection action: " + ex.Message);
+            }
+
         }
     }
 }
