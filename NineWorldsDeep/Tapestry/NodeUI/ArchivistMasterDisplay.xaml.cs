@@ -2,9 +2,11 @@
 using NineWorldsDeep.Core;
 using NineWorldsDeep.Db.Sqlite;
 using NineWorldsDeep.Tapestry.Nodes;
+using NineWorldsDeep.Xml.Archivist;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading;
@@ -25,7 +27,7 @@ namespace NineWorldsDeep.Tapestry.NodeUI
     /// <summary>
     /// Interaction logic for ArchivistMasterDisplay.xaml
     /// </summary>
-    public partial class ArchivistMasterDisplay : UserControl
+    public partial class ArchivistMasterDisplay : UserControl, IAsyncStatusResponsive
     {
         #region fields
 
@@ -197,7 +199,7 @@ namespace NineWorldsDeep.Tapestry.NodeUI
 
                     //here, take doc and save to all sync locations            
                     string fileName =
-                        NwdUtils.GetTimeStamp_yyyyMMddHHmmss() + "-nwd-archivist-v5.xml";
+                        NwdUtils.GetTimeStamp_yyyyMMddHHmmss() + "-" + ConfigArchivist.ARCHIVIST_V5_SUFFIX + ".xml";
 
 
                     //COPIED FROM TaggedMediaDisplay to use new Hive utilities
@@ -236,9 +238,62 @@ namespace NineWorldsDeep.Tapestry.NodeUI
             }
         }
 
-        private void ButtonImportXml_Click(object sender, RoutedEventArgs e)
+        private async void ButtonImportXml_Click(object sender, RoutedEventArgs e)
         {
-            UI.Display.Message("awaiting implementation");
+            /////////////////////////////////////////////////////
+            bool testing = true; /// toggle this for testing
+            /////////////////////////////////////////////////////
+
+            List<string> allPaths;
+
+            if (testing)
+            {
+                allPaths = Hive.ConfigHive.TestingGetHiveArchivistXmlImportFilePaths();
+            }
+            else
+            {
+                allPaths = Hive.ConfigHive.GetHiveArchivistXmlImportFilePaths();
+            }
+            
+            var count = 0;
+            var total = allPaths.Count();
+
+            try
+            {
+                await Task.Run(() =>
+                {
+                    string detail = "starting import of archivist xml files";
+                    StatusDetailUpdate(detail);
+
+                    foreach(string path in allPaths)
+                    {
+                        count++;
+
+                        if (!string.IsNullOrWhiteSpace(path))
+                        {
+
+                            string fileName = System.IO.Path.GetFileName(path);
+
+                            List<ArchivistXmlSource> allSources =
+                                Xml.Xml.RetrieveArchivistSourcesWithReaderAsync(path, this);
+
+                            string prefix = "file " + count + " of " + total;
+                            prefix += " -> ";
+
+                            db.SyncAsync(allSources, this, prefix);
+
+                            if (!testing)
+                            {
+                                File.Delete(path);
+                            }
+                        }
+                    }
+                });
+            }
+            catch (Exception ex)
+            {
+                tbStatusUtilities.Text = "Error: " + ex.Message;
+            }
         }
 
         private void AddSourceLocation_Click(object sender, RoutedEventArgs e)

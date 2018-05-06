@@ -2,6 +2,8 @@
 using NineWorldsDeep.Core;
 using NineWorldsDeep.Mnemosyne.V5;
 using NineWorldsDeep.Sqlite;
+using NineWorldsDeep.Tapestry.NodeUI;
+using NineWorldsDeep.Xml.Archivist;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -78,6 +80,18 @@ namespace NineWorldsDeep.Db.Sqlite
             }
 
             return lst;
+        }
+
+        #endregion
+
+        #region ArchivistXmlSource
+
+        internal void SyncAsync(IEnumerable<ArchivistXmlSource> multipleMediaItems,
+                                IAsyncStatusResponsive ui,
+                                string asyncStatusDetailPrefix = "")
+        {
+            // mimic MediaV5SubsetDb.SyncAsync(multipleMediaItems...)
+            throw new NotImplementedException();
         }
 
         #endregion

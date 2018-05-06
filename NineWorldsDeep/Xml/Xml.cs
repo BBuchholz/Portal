@@ -12,6 +12,7 @@ using System.Xml;
 using NineWorldsDeep.Tapestry.NodeUI;
 using NineWorldsDeep.Hierophant;
 using NineWorldsDeep.Archivist;
+using NineWorldsDeep.Xml.Archivist;
 
 namespace NineWorldsDeep.Xml
 {
@@ -21,6 +22,12 @@ namespace NineWorldsDeep.Xml
 
         //tags -
         private static string TAG_NWD = "nwd";
+
+        //public static string TAG_SOURCE = "source";
+        //public static string TAG_SOURCE_LOCATION_SUBSET_ENTRY = "sourceLocationSubsetEntry";
+        //public static string TAG_SOURCE_EXCERPT = "sourceExcerpt";
+        //public static string TAG_SOURCE_EXCERPT_VALUE = "sourceExcerptValue";
+        //public static string TAG_SOURCE_EXCERPT_ANNOTATION = "sourceExcerptAnnotation";
 
         public static string TAG_MNEMOSYNE_SUBSET = "mnemosyneSubset";
         private static string TAG_MEDIA = "media";
@@ -71,6 +78,148 @@ namespace NineWorldsDeep.Xml
         private static string ATTRIBUTE_FILE_NAME = "fileName";
 
 
+
+        #endregion
+
+        #region Archivist
+
+        internal static List<ArchivistXmlSource> 
+            RetrieveArchivistSourcesWithReaderAsync(
+                string documentPath, 
+                IAsyncStatusResponsive ui)
+        {
+            // mimics Xml.RetrieveMediaWithReaderAsync(...)
+            List<ArchivistXmlSource> allSources = new List<ArchivistXmlSource>();
+
+            //read once first to count elements
+
+            int totalElements = 0;
+            int count = 0;
+
+            using (XmlReader reader = XmlReader.Create(documentPath))
+            {
+                while (reader.ReadToFollowing(TAG_SOURCE))
+                {
+                    totalElements++;
+                }
+            }
+
+            using (XmlReader reader = XmlReader.Create(documentPath))
+            {
+                while (reader.Read())
+                {
+                    if (reader.Name == TAG_SOURCE)
+                    {
+                        count++;
+
+                        XElement sourceEl = (XElement)XNode.ReadFrom(reader);
+
+                        string type = GetAttributeValueIfExists(sourceEl, ATTRIBUTE_TYPE);
+                        string author = GetAttributeValueIfExists(sourceEl, ATTRIBUTE_AUTHOR);
+                        string director = GetAttributeValueIfExists(sourceEl, ATTRIBUTE_DIRECTOR);
+                        string title = GetAttributeValueIfExists(sourceEl, ATTRIBUTE_TITLE);
+                        string year = GetAttributeValueIfExists(sourceEl, ATTRIBUTE_YEAR);
+                        string url = GetAttributeValueIfExists(sourceEl, ATTRIBUTE_URL);
+                        string retrievalDate = GetAttributeValueIfExists(sourceEl, ATTRIBUTE_RETRIEVAL_DATE);
+                        string sourceTag = GetAttributeValueIfExists(sourceEl, ATTRIBUTE_TAG);
+
+                        ui.StatusDetailUpdate(
+                            "processing " + count + " of " +
+                            totalElements + " xml source elements, type is: " +
+                            type);
+
+                        ArchivistXmlSource source = new ArchivistXmlSource()
+                        {
+                            SourceType = type,
+                            Author = author,
+                            Director = director,
+                            Title = title,
+                            Year = year,
+                            Url = url,
+                            RetrievalDate = retrievalDate,
+                            SourceTag = sourceTag
+                        };
+
+                        //get location entries
+                        foreach (XElement slseEl in sourceEl.Elements(TAG_SOURCE_LOCATION_SUBSET_ENTRY))
+                        {
+                            string location = GetAttributeValueIfExists(slseEl, ATTRIBUTE_LOCATION);
+                            string locationSubset = GetAttributeValueIfExists(slseEl, ATTRIBUTE_LOCATION_SUBSET);
+                            string locationSubsetEntry = GetAttributeValueIfExists(slseEl, ATTRIBUTE_LOCATION_SUBSET_ENTRY);
+                            string verifiedPresent = GetAttributeValueIfExists(slseEl, ATTRIBUTE_VERIFIED_PRESENT);
+                            string verifiedMissing = GetAttributeValueIfExists(slseEl, ATTRIBUTE_VERIFIED_MISSING);
+
+                            ArchivistXmlLocationEntry slse = new ArchivistXmlLocationEntry()
+                            {
+                                Location = location,
+                                LocationSubset = locationSubset,
+                                LocationSubsetEntry = locationSubsetEntry,
+                                VerifiedPresent = verifiedPresent,
+                                VerifiedMissing = verifiedMissing
+                            };
+
+                            source.Add(slse);
+                        }
+
+                        //get excerpts
+                        foreach(XElement excerptEl in sourceEl.Elements(TAG_SOURCE_EXCERPT))
+                        {
+                            string pages = GetAttributeValueIfExists(excerptEl, ATTRIBUTE_PAGES);
+                            string beginTime = GetAttributeValueIfExists(excerptEl, ATTRIBUTE_BEGIN_TIME);
+                            string endTime = GetAttributeValueIfExists(excerptEl, ATTRIBUTE_END_TIME);
+
+                            ArchivistXmlSourceExcerpt excerpt = new ArchivistXmlSourceExcerpt()
+                            {
+                                Pages = pages,
+                                BeginTime = beginTime,
+                                EndTime = endTime
+                            };
+
+                            //get annotations
+                            foreach(XElement annotationEl in excerptEl.Elements(TAG_SOURCE_EXCERPT_ANNOTATION))
+                            {
+                                XElement valueEl = annotationEl.Element(TAG_SOURCE_EXCERPT_ANNOTATION_VALUE);
+
+                                if (valueEl != null)
+                                {
+                                    string annotationValue = valueEl.Value;
+
+                                    ArchivistXmlExcerptAnnotation annotation =
+                                        new ArchivistXmlExcerptAnnotation()
+                                        {
+                                            AnnotationValue = annotationValue
+                                        };
+
+                                    excerpt.Add(annotation);
+                                }
+                            }
+
+                            //get tags
+                            foreach(XElement tagEl in excerptEl.Elements(TAG_TAG))
+                            {
+                                string tagValue = GetAttributeValueIfExists(tagEl, ATTRIBUTE_TAG_VALUE);
+                                string taggedAt = GetAttributeValueIfExists(tagEl, ATTRIBUTE_TAGGED_AT);
+                                string untaggedAt = GetAttributeValueIfExists(tagEl, ATTRIBUTE_UNTAGGED_AT);
+
+                                ArchivistXmlTag tag = new ArchivistXmlTag()
+                                {
+                                    TagValue = tagValue,
+                                    TaggedAt = taggedAt,
+                                    UntaggedAt = untaggedAt
+                                };
+
+                                excerpt.Add(tag);
+                            }
+
+                            source.Add(excerpt);
+                        }
+
+                    }
+                }
+            }
+
+            return allSources;
+        }
 
         #endregion
 
@@ -253,6 +402,7 @@ namespace NineWorldsDeep.Xml
             return allMaps;
         }
 
+        
         private static SemanticKey ImportSemanticKey(XElement semanticKeyEl)
         {
             return new SemanticKey(semanticKeyEl.Value);

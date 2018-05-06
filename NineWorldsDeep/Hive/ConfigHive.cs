@@ -1,4 +1,5 @@
-﻿using NineWorldsDeep.Core;
+﻿using NineWorldsDeep.Archivist;
+using NineWorldsDeep.Core;
 using NineWorldsDeep.Hierophant;
 using System;
 using System.Collections.Generic;
@@ -29,6 +30,21 @@ namespace NineWorldsDeep.Hive
         {
             return GetHiveXmlImportFilePathsBySuffix(
                 ConfigHierophant.HIEROPHANT_SUFFIX, 
+                new HiveRoot()
+                {
+                    HiveRootName = "test-root"
+                });
+        }
+
+        public static List<string> GetHiveArchivistXmlImportFilePaths()
+        {
+            return GetHiveXmlImportFilePathsBySuffix(ConfigArchivist.ARCHIVIST_V5_SUFFIX);
+        }
+
+        public static List<string> TestingGetHiveArchivistXmlImportFilePaths()
+        {
+            return GetHiveXmlImportFilePathsBySuffix(
+                ConfigArchivist.ARCHIVIST_V5_SUFFIX,
                 new HiveRoot()
                 {
                     HiveRootName = "test-root"

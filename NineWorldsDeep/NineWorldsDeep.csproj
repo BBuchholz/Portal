@@ -155,6 +155,7 @@
     <Compile Include="Archivist\ArchivistSourceLocationSubset.cs" />
     <Compile Include="Archivist\ArchivistSourceLocationSubsetEntry.cs" />
     <Compile Include="Archivist\ArchivistSourceType.cs" />
+    <Compile Include="Archivist\ConfigArchivist.cs" />
     <Compile Include="Archivist\SourceExcerptTagging.cs" />
     <Compile Include="AudioBrowser\AudioBrowserMainWindow.xaml.cs">
       <DependentUpon>AudioBrowserMainWindow.xaml</DependentUpon>
@@ -663,6 +664,11 @@
     <Compile Include="WorkbenchMenuController.cs" />
     <Compile Include="WorkbenchWindowController.cs" />
     <Compile Include="Xml\Adapters\FragmentXmlAdapter.cs" />
+    <Compile Include="Xml\Archivist\ArchivistXmlExcerptAnnotation.cs" />
+    <Compile Include="Xml\Archivist\ArchivistXmlLocationEntry.cs" />
+    <Compile Include="Xml\Archivist\ArchivistXmlSource.cs" />
+    <Compile Include="Xml\Archivist\ArchivistXmlSourceExcerpt.cs" />
+    <Compile Include="Xml\Archivist\ArchivistXmlTag.cs" />
     <Compile Include="Xml\IXmlTransportable.cs" />
     <Compile Include="Xml\Xml.cs" />
     <Compile Include="Xml\XmlExporter.cs" />
