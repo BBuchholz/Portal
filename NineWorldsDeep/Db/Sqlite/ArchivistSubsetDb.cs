@@ -211,12 +211,34 @@ namespace NineWorldsDeep.Db.Sqlite
         }
 
         private int GetSourceId(int sourceTypeId, ArchivistXmlSource source, SQLiteCommand cmd)
-        {
-            // mimic and slightly modify to query for all fields:
+        {            
+            int id = -1;
 
-            // GetSourceIdByTypeTitleYearAndUrl
+            cmd.Parameters.Clear();
+            
+            cmd.CommandText = 
+                NwdContract.SELECT_SOURCE_FOR_TID_TTL_AUT_DIR_YR_URL_RDT_TG;
 
-            // query needs to mimic SELECT_SOURCE_W_X_Y_Z (see TRIM() usage in that query)
+            cmd.Parameters.Add(ToParm(sourceTypeId));
+            cmd.Parameters.Add(ToNullableParm(source.Title));
+            cmd.Parameters.Add(ToNullableParm(source.Author));
+            cmd.Parameters.Add(ToNullableParm(source.Director));
+            cmd.Parameters.Add(ToNullableParm(source.Year));
+            cmd.Parameters.Add(ToNullableParm(source.Url));
+            cmd.Parameters.Add(ToNullableParm(source.RetrievalDate));
+            cmd.Parameters.Add(ToNullableParm(source.SourceTag));
+            
+            using (var rdr = cmd.ExecuteReader())
+            {
+                if (rdr.Read())
+                {
+                    // query returns entire source record, 
+                    // we just need the id for this method
+                    id = rdr.GetInt32(0);
+                }
+            }
+
+            return id;
         }
 
 
