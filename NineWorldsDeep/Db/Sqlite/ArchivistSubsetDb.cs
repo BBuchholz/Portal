@@ -128,7 +128,7 @@ namespace NineWorldsDeep.Db.Sqlite
         {
             int sourceTypeId = EnsureSourceType(source.SourceType, cmd);
 
-            int sourceId = EnsureSource(source, cmd); // need to write this
+            int sourceId = EnsureSource(sourceTypeId, source, cmd); // need to write this
 
             foreach(var slse in source.LocationEntries)
             {
@@ -168,34 +168,51 @@ namespace NineWorldsDeep.Db.Sqlite
             }            
         }
 
-        private int EnsureSource(ArchivistXmlSource source, SQLiteCommand cmd)
+        private int EnsureSource(int sourceTypeId, ArchivistXmlSource source, SQLiteCommand cmd)
         {
-
-
-            int sourceId = GetSourceId(source, cmd);
+            int sourceId = GetSourceId(sourceTypeId, source, cmd);
 
             if(sourceId < 1)
             {
-                InsertOrIgnoreSource(source, cmd);
-                sourceId = GetSourceId(source, cmd);
+                InsertOrIgnoreSource(sourceTypeId, source, cmd);
+                sourceId = GetSourceId(sourceTypeId, source, cmd);
             }
 
             return sourceId;
         }
 
-        private void InsertOrIgnoreSource(ArchivistXmlSource source, SQLiteCommand cmd)
+        private void InsertOrIgnoreSource(int sourceTypeId, ArchivistXmlSource source, SQLiteCommand cmd)
         {
 
             // mimic and slightly modify:
 
             // InsertOrIgnoreTypeTitleYearAndUrlForSource
 
-            asdf;
+            cmd.Parameters.Clear();
+
+            // T = SourceTypeId
+            // U = SourceTitle
+            // V = SourceAuthor
+            // W = SourceDirector
+            // X = SourceYear
+            // Y = SourceUrl
+            // Z = SourceRetrievalDate
+            cmd.CommandText = NwdContract.INSERT_SOURCE_T_U_V_W_X_Y_Z;
+
+            cmd.Parameters.Add(ToParm(sourceTypeId));
+            cmd.Parameters.Add(ToNullableParm(source.Title));
+            cmd.Parameters.Add(ToNullableParm(source.Author));
+            cmd.Parameters.Add(ToNullableParm(source.Director));
+            cmd.Parameters.Add(ToNullableParm(source.Year));
+            cmd.Parameters.Add(ToNullableParm(source.Url));
+            cmd.Parameters.Add(ToNullableParm(source.RetrievalDate));
+
+            cmd.ExecuteNonQuery();
         }
 
-        private int GetSourceId(ArchivistXmlSource source, SQLiteCommand cmd)
+        private int GetSourceId(int sourceTypeId, ArchivistXmlSource source, SQLiteCommand cmd)
         {
-            // mimic and slightly modify:
+            // mimic and slightly modify to query for all fields:
 
             // GetSourceIdByTypeTitleYearAndUrl
         }
