@@ -86,15 +86,97 @@ namespace NineWorldsDeep.Db.Sqlite
 
         #region ArchivistXmlSource
 
-        internal void SyncAsync(IEnumerable<ArchivistXmlSource> multipleMediaItems,
+        internal void SaveAsync(IEnumerable<ArchivistXmlSource> xmlSources,
                                 IAsyncStatusResponsive ui,
                                 string asyncStatusDetailPrefix = "")
         {
-            // mimic MediaV5SubsetDb.SyncAsync(multipleMediaItems...)
-            throw new NotImplementedException();
+            string detail;
+            int total = xmlSources.Count();
+            int count = 0;
+
+            using (var conn = new SQLiteConnection(
+               @"Data Source=" + Configuration.GetSqliteDbPath(DbName)))
+            {
+                conn.Open();
+
+                using (var cmd = new SQLiteCommand(conn))
+                {
+                    using (var transaction = conn.BeginTransaction())
+                    {
+                        foreach (ArchivistXmlSource source in xmlSources)
+                        {
+                            count++;
+
+                            detail = asyncStatusDetailPrefix +
+                                "saving source " + count + " of " +
+                                total + ", type is " + source.SourceType;
+
+                            ui.StatusDetailUpdate(detail);
+
+                            Save(source, cmd);
+                        }
+
+                        transaction.Commit();
+                    }
+                }
+
+                conn.Close();
+            }
         }
 
+        internal void Save(ArchivistXmlSource source, SQLiteCommand cmd)
+        {
+            int sourceTypeId = EnsureSourceType(source.SourceType, cmd);
+
+            int sourceId = EnsureSource(source, cmd); // need to write this
+
+            foreach(var slse in source.LocationEntries)
+            {
+                //ensure location
+                int locationId = EnsureSourceLocation(slse.Location, cmd);
+
+                //ensure subset
+                int subsetId = EnsureSourceLocationSubset(locationId, slse.LocationSubset, cmd);
+
+                //ensure entry
+                EnsureSourceLocationSubsetEntry(sourceId, subsetId, slse.LocationSubsetEntry);
+            }
+
+            foreach(var se in source.Excerpts)
+            {
+                //fill in values, already written
+                int excerptId = EnsureSourceExcerpt(sourceId,
+                                                    se.ExcerptValue,
+                                                    se.BeginTime,
+                                                    se.EndTime,
+                                                    se.Pages,
+                                                    cmd);
+
+                foreach(var sea in se.Annotations)
+                {
+                    int annotationId = EnsureSourceAnnotation(sea.AnnotationValue, cmd);
+
+                    InsertOrIgnoreSourceExcerptAnnotationRecord(excerptId, annotationId, cmd);
+                }
+
+                foreach(var tag in se.Tags)
+                {
+                    int tagId = mediaDb.EnsureMediaTag(tag.TagValue, cmd);
+
+                    UpsertExcerptTagging(excerptId, tagId, tag.TaggedAt, tag.UntaggedAt, cmd);
+                }
+            }            
+        }
+
+
         #endregion
+
+        private void UpsertExcerptTagging(int excerptId, int tagId, String taggedAt, String untaggedAt, SQLiteCommand cmd)
+        {
+            int taggingId = EnsureExcerptTaggingId(excerptId, tagId, cmd);
+
+            UpdateExcerptTaggingTimestampsById(taggingId, taggedAt, untaggedAt, cmd);
+        }
 
         public void LoadSourceExcerptsWithTaggedTags(ArchivistSource source)
         {
@@ -383,6 +465,47 @@ namespace NineWorldsDeep.Db.Sqlite
                         
         }
 
+        private void UpdateExcerptTaggingTimestampsById(int sourceExcerptTaggingId, String taggedAt, String untaggedAt, SQLiteCommand cmd)
+        {
+            cmd.Parameters.Clear();
+            cmd.CommandText =
+                NwdContract.UPDATE_SOURCE_EXCERPT_TAGGING_TIMESTAMPS_X_Y_Z;
+
+            //// TAGGED PARAM ///////////////////////////////////////////////////
+            SQLiteParameter taggedParam = new SQLiteParameter();
+            
+            if (string.IsNullOrWhiteSpace(taggedAt))
+            {
+                taggedParam.Value = DBNull.Value;
+            }
+            else
+            {
+                taggedParam.Value = taggedAt;
+            }
+            cmd.Parameters.Add(taggedParam);
+
+            //// UNTAGGED PARAM ////////////////////////////////////////////////
+            SQLiteParameter untaggedParam = new SQLiteParameter();
+            
+            if (string.IsNullOrWhiteSpace(untaggedAt))
+            {
+                untaggedParam.Value = DBNull.Value;
+            }
+            else
+            {
+                untaggedParam.Value = untaggedAt;
+            }
+            cmd.Parameters.Add(untaggedParam);
+
+            //// ID PARAM /////////////////////////////////////////////////////
+            cmd.Parameters.Add(new SQLiteParameter()
+            {
+                Value = sourceExcerptTaggingId
+            });
+
+            cmd.ExecuteNonQuery();
+        }
+
         private void UpdateExcerptTaggingTimestampsById(SourceExcerptTagging set, SQLiteCommand cmd)
         {
             cmd.Parameters.Clear();
@@ -427,6 +550,46 @@ namespace NineWorldsDeep.Db.Sqlite
             });
 
             cmd.ExecuteNonQuery();
+        }
+
+        private int EnsureExcerptTaggingId(int sourceExcerptId, int mediaTagId, SQLiteCommand cmd)
+        {
+            int taggingId = GetSourceExcerptTaggingId(sourceExcerptId, mediaTagId, cmd);
+
+            if(taggingId < 1)
+            {
+                InsertOrIgnoreExcerptTagging(sourceExcerptId, mediaTagId, cmd);
+                taggingId = GetSourceExcerptTaggingId(sourceExcerptId, mediaTagId, cmd);
+            }
+
+            return taggingId;
+        }
+
+        private void InsertOrIgnoreExcerptTagging(int sourceExcerptId, int mediaTagId, SQLiteCommand cmd)
+        {           
+
+            if (sourceExcerptId < 1)
+            {
+                throw new Exception("sourceExcerptId not set");
+            }
+
+            if (mediaTagId < 1)
+            {
+                throw new Exception("mediaTagId not set");
+            }
+
+            cmd.Parameters.Clear();
+            cmd.CommandText =
+                NwdContract.INSERT_OR_IGNORE_EXCERPT_TAGGING_X_Y;
+
+            cmd.Parameters.Add(
+                new SQLiteParameter() { Value = sourceExcerptId });
+
+            cmd.Parameters.Add(
+                new SQLiteParameter() { Value = mediaTagId });
+
+            cmd.ExecuteNonQuery();
+
         }
 
         private void InsertOrIgnoreExcerptTagging(SourceExcerptTagging set, SQLiteCommand cmd)
@@ -517,6 +680,25 @@ namespace NineWorldsDeep.Db.Sqlite
                 }
 
                 conn.Close();
+            }
+
+            return excerptId;
+        }
+
+        public int EnsureSourceExcerpt(int srcId, 
+                                       string exVal,
+                                       string beginTime,
+                                       string endTime,
+                                       string pages,
+                                       SQLiteCommand cmd)
+        {
+            int excerptId =
+                GetExcerptId(srcId, exVal, beginTime, endTime, pages, cmd);
+
+            if (excerptId < 1)
+            {
+                InsertOrIgnoreExcerpt(srcId, exVal, beginTime, endTime, pages, cmd);
+                excerptId = GetExcerptId(srcId, exVal, beginTime, endTime, pages, cmd);
             }
 
             return excerptId;

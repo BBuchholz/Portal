@@ -280,7 +280,7 @@ namespace NineWorldsDeep.Tapestry.NodeUI
                             string prefix = "file " + count + " of " + total;
                             prefix += " -> ";
 
-                            db.SyncAsync(allSources, this, prefix);
+                            db.SaveAsync(allSources, this, prefix);
 
                             if (!testing)
                             {

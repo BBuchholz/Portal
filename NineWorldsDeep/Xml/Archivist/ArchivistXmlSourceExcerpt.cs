@@ -13,6 +13,7 @@ namespace NineWorldsDeep.Xml.Archivist
         public string EndTime { get; internal set; }
         public List<ArchivistXmlExcerptAnnotation> Annotations { get; private set; }
         public List<ArchivistXmlTag> Tags { get; private set; }
+        public string ExcerptValue { get; internal set; }
 
         public ArchivistXmlSourceExcerpt()
         {

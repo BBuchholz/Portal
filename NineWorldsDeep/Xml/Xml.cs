@@ -168,12 +168,21 @@ namespace NineWorldsDeep.Xml
                             string beginTime = GetAttributeValueIfExists(excerptEl, ATTRIBUTE_BEGIN_TIME);
                             string endTime = GetAttributeValueIfExists(excerptEl, ATTRIBUTE_END_TIME);
 
+                            XElement excerptValueEl = excerptEl.Element(TAG_SOURCE_EXCERPT_VALUE);
+                            
                             ArchivistXmlSourceExcerpt excerpt = new ArchivistXmlSourceExcerpt()
                             {
                                 Pages = pages,
                                 BeginTime = beginTime,
                                 EndTime = endTime
                             };
+
+                            if (excerptValueEl != null)
+                            {
+                                string excerptValue = excerptValueEl.Value;
+
+                                excerpt.ExcerptValue = excerptValue;
+                            }
 
                             //get annotations
                             foreach(XElement annotationEl in excerptEl.Elements(TAG_SOURCE_EXCERPT_ANNOTATION))
