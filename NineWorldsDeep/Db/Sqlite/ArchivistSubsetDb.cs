@@ -215,6 +215,8 @@ namespace NineWorldsDeep.Db.Sqlite
             // mimic and slightly modify to query for all fields:
 
             // GetSourceIdByTypeTitleYearAndUrl
+
+            // query needs to mimic SELECT_SOURCE_W_X_Y_Z (see TRIM() usage in that query)
         }
 
 
@@ -617,6 +619,38 @@ namespace NineWorldsDeep.Db.Sqlite
         private int GetSourceExcerptTaggingId(int sourceExcerptId, int mediaTagId, SQLiteCommand cmd)
         {
             //just a basic lookup
+            
+            if (sourceExcerptId < 1)
+            {
+                throw new Exception("undefined source excerpt id");
+            }
+
+            if (mediaTagId < 1)
+            {
+                throw new Exception("undefined media tag id");
+            }
+
+            int id = -1;
+
+            cmd.Parameters.Clear();
+            cmd.CommandText =
+                NwdContract.SELECT_SOURCE_EXCERPT_TAGGING_ID_X_Y; 
+
+            cmd.Parameters.Add(
+                new SQLiteParameter() { Value = sourceExcerptId });
+
+            cmd.Parameters.Add(
+                new SQLiteParameter() { Value = mediaTagId });
+
+            using (var rdr = cmd.ExecuteReader())
+            {
+                if (rdr.Read())
+                {
+                    id = rdr.GetInt32(0);
+                }
+            }
+
+            return id;
         }
 
         private void InsertOrIgnoreExcerptTagging(int sourceExcerptId, int mediaTagId, SQLiteCommand cmd)
