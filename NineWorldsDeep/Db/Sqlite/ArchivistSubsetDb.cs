@@ -168,6 +168,38 @@ namespace NineWorldsDeep.Db.Sqlite
             }            
         }
 
+        private int EnsureSource(ArchivistXmlSource source, SQLiteCommand cmd)
+        {
+
+
+            int sourceId = GetSourceId(source, cmd);
+
+            if(sourceId < 1)
+            {
+                InsertOrIgnoreSource(source, cmd);
+                sourceId = GetSourceId(source, cmd);
+            }
+
+            return sourceId;
+        }
+
+        private void InsertOrIgnoreSource(ArchivistXmlSource source, SQLiteCommand cmd)
+        {
+
+            // mimic and slightly modify:
+
+            // InsertOrIgnoreTypeTitleYearAndUrlForSource
+
+            asdf;
+        }
+
+        private int GetSourceId(ArchivistXmlSource source, SQLiteCommand cmd)
+        {
+            // mimic and slightly modify:
+
+            // GetSourceIdByTypeTitleYearAndUrl
+        }
+
 
         #endregion
 
@@ -563,6 +595,11 @@ namespace NineWorldsDeep.Db.Sqlite
             }
 
             return taggingId;
+        }
+
+        private int GetSourceExcerptTaggingId(int sourceExcerptId, int mediaTagId, SQLiteCommand cmd)
+        {
+            //just a basic lookup
         }
 
         private void InsertOrIgnoreExcerptTagging(int sourceExcerptId, int mediaTagId, SQLiteCommand cmd)
