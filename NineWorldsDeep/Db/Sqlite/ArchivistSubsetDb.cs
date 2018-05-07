@@ -168,6 +168,7 @@ namespace NineWorldsDeep.Db.Sqlite
             }            
         }
 
+
         private int EnsureSource(int sourceTypeId, ArchivistXmlSource source, SQLiteCommand cmd)
         {
             int sourceId = GetSourceId(sourceTypeId, source, cmd);
