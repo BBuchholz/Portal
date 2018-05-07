@@ -476,7 +476,7 @@ namespace NineWorldsDeep.Sqlite
 
         internal static readonly string INSERT_OR_IGNORE_INTO_SOURCE_LOCATION_SUBSET_ENTRY_VALUES_SUBSET_ID_SOURCE_ID_ENTRY_VALUE_X_Y_Z =
 
-            "INSERT INTO " + TABLE_SOURCE_LOCATION_SUBSET_ENTRY + " " +
+            "INSERT OR IGNORE INTO " + TABLE_SOURCE_LOCATION_SUBSET_ENTRY + " " +
             "	(" + COLUMN_SOURCE_LOCATION_SUBSET_ID + ", " +
             "	 " + COLUMN_SOURCE_ID + ", " +
             "	 " + COLUMN_SOURCE_LOCATION_SUBSET_ENTRY_VALUE + ") " +
@@ -673,12 +673,12 @@ namespace NineWorldsDeep.Sqlite
             "       " + COLUMN_SOURCE_TAG + " " +
             "FROM " + TABLE_SOURCE + "  " +
             "WHERE " + COLUMN_SOURCE_TYPE_ID + " = ?  " +
-            "AND TRIM(IFNULL(" + COLUMN_SOURCE_TITLE + ", '')) = TRIM(IFNULL(?, '')), " +
-            "AND TRIM(IFNULL(" + COLUMN_SOURCE_AUTHOR + ", '')) = TRIM(IFNULL(?, '')), " +
-            "AND TRIM(IFNULL(" + COLUMN_SOURCE_DIRECTOR + ", '')) = TRIM(IFNULL(?, '')), " +
-            "AND TRIM(IFNULL(" + COLUMN_SOURCE_YEAR + ", '')) = TRIM(IFNULL(?, '')), " +
-            "AND TRIM(IFNULL(" + COLUMN_SOURCE_URL + ", '')) = TRIM(IFNULL(?, '')), " +
-            "AND TRIM(IFNULL(" + COLUMN_SOURCE_RETRIEVAL_DATE + ", '')) = TRIM(IFNULL(?, '')), " +
+            "AND TRIM(IFNULL(" + COLUMN_SOURCE_TITLE + ", '')) = TRIM(IFNULL(?, '')) " +
+            "AND TRIM(IFNULL(" + COLUMN_SOURCE_AUTHOR + ", '')) = TRIM(IFNULL(?, '')) " +
+            "AND TRIM(IFNULL(" + COLUMN_SOURCE_DIRECTOR + ", '')) = TRIM(IFNULL(?, '')) " +
+            "AND TRIM(IFNULL(" + COLUMN_SOURCE_YEAR + ", '')) = TRIM(IFNULL(?, '')) " +
+            "AND TRIM(IFNULL(" + COLUMN_SOURCE_URL + ", '')) = TRIM(IFNULL(?, '')) " +
+            "AND TRIM(IFNULL(" + COLUMN_SOURCE_RETRIEVAL_DATE + ", '')) = TRIM(IFNULL(?, '')) " +
             "AND TRIM(IFNULL(" + COLUMN_SOURCE_TAG + ", '')) = TRIM(IFNULL(?, '')); ";
 
         internal static readonly string SELECT_SOURCE_BY_ID =
@@ -707,6 +707,20 @@ namespace NineWorldsDeep.Sqlite
             "	 " + COLUMN_SOURCE_RETRIEVAL_DATE + ") " +
             "VALUES " +
             "	(?,?,?,?,?,?,?); ";
+
+        internal static readonly string INSERT_SOURCE_TID_TTL_AUT_DIR_YR_URL_RDT_TG =
+
+            "INSERT OR IGNORE INTO " + TABLE_SOURCE + " " +
+            "	(" + COLUMN_SOURCE_TYPE_ID + ", " +
+            "	 " + COLUMN_SOURCE_TITLE + ", " +
+            "	 " + COLUMN_SOURCE_AUTHOR + ", " +
+            "	 " + COLUMN_SOURCE_DIRECTOR + ", " +
+            "	 " + COLUMN_SOURCE_YEAR + ", " +
+            "	 " + COLUMN_SOURCE_URL + ", " +
+            "	 " + COLUMN_SOURCE_RETRIEVAL_DATE + ", " +
+            "	 " + COLUMN_SOURCE_TAG + ") " +
+            "VALUES " +
+            "	(?,?,?,?,?,?,?,?); ";
 
         internal static readonly string SELECT_SOURCE_EXCERPT_ID_X_Y =
 

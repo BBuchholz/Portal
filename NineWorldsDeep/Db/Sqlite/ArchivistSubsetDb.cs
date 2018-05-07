@@ -139,7 +139,7 @@ namespace NineWorldsDeep.Db.Sqlite
                 int subsetId = EnsureSourceLocationSubset(locationId, slse.LocationSubset, cmd);
 
                 //ensure entry
-                EnsureSourceLocationSubsetEntry(sourceId, subsetId, slse.LocationSubsetEntry);
+                EnsureSourceLocationSubsetEntry(sourceId, subsetId, slse.LocationSubsetEntry, cmd);
             }
 
             foreach(var se in source.Excerpts)
@@ -184,21 +184,9 @@ namespace NineWorldsDeep.Db.Sqlite
 
         private void InsertOrIgnoreSource(int sourceTypeId, ArchivistXmlSource source, SQLiteCommand cmd)
         {
-
-            // mimic and slightly modify:
-
-            // InsertOrIgnoreTypeTitleYearAndUrlForSource
-
             cmd.Parameters.Clear();
 
-            // T = SourceTypeId
-            // U = SourceTitle
-            // V = SourceAuthor
-            // W = SourceDirector
-            // X = SourceYear
-            // Y = SourceUrl
-            // Z = SourceRetrievalDate
-            cmd.CommandText = NwdContract.INSERT_SOURCE_T_U_V_W_X_Y_Z;
+            cmd.CommandText = NwdContract.INSERT_SOURCE_TID_TTL_AUT_DIR_YR_URL_RDT_TG;
 
             cmd.Parameters.Add(ToParm(sourceTypeId));
             cmd.Parameters.Add(ToNullableParm(source.Title));
@@ -207,6 +195,7 @@ namespace NineWorldsDeep.Db.Sqlite
             cmd.Parameters.Add(ToNullableParm(source.Year));
             cmd.Parameters.Add(ToNullableParm(source.Url));
             cmd.Parameters.Add(ToNullableParm(source.RetrievalDate));
+            cmd.Parameters.Add(ToNullableParm(source.SourceTag));
 
             cmd.ExecuteNonQuery();
         }

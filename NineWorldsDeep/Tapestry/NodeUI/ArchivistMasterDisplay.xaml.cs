@@ -31,6 +31,10 @@ namespace NineWorldsDeep.Tapestry.NodeUI
     {
         #region fields
 
+        //////////////////////////////////////////////////////////////
+        bool testing = false; // toggle this for testing
+        //////////////////////////////////////////////////////////////
+
         private ArchivistSubsetDb db;
         private Xml.Xml xml;
 
@@ -109,21 +113,19 @@ namespace NineWorldsDeep.Tapestry.NodeUI
                     foreach (var source in allSources)
                     {
                         sourceCount++;
-                        
 
-                        ///////////////////////////////////////////////////////////
-                        //// just for testing
-                        //// will only export a sampling items 
-                        //// leave this code here, you want this for testing
-                        //// comment out when publishing
-                        ////
-                        //if (sourceCount > 2)
-                        //{
-                        //    break;
-                        //}
-                        ////////////////////////////////////////////////////////////
 
-                        
+                        /////////////////////////////////////////////////////////
+                        // will only export a sampling items 
+                        // leave this code here, you want this for testing
+                        //
+                        if (testing && sourceCount > 2)
+                        {
+                            break;
+                        }
+                        //////////////////////////////////////////////////////////
+
+
 
                         //create media tag with attribute set for hash
                         XElement sourceEl = Xml.Xml.CreateSourceElement(source, sourceTypeIdsToValues[source.SourceTypeId]);
@@ -212,22 +214,16 @@ namespace NineWorldsDeep.Tapestry.NodeUI
 
                     var filePathInList = new List<string>();
                     filePathInList.Add(xmlTempFilePath);
-                    
-                    //////////////////////////////////////////////////////////////
-                    //
-                    //
 
-                    //just for testing
-                    Hive.UtilsHive.CopyToTestRoot(filePathInList); 
+                    if (testing)
+                    {
+                        Hive.UtilsHive.CopyToTestRoot(filePathInList);
+                    }
+                    else
+                    {
+                        Hive.UtilsHive.CopyToAllActiveRoots(filePathInList);
+                    }
                     
-                    //uncomment line below when done testing                  
-                    
-                    //Hive.UtilsHive.CopyToAllActiveRoots(filePathInList);
-
-                    //
-                    //
-                    //////////////////////////////////////////////////////////////
-                                        
                 });
 
                 tbStatusUtilities.Text = "finished.";
@@ -240,10 +236,6 @@ namespace NineWorldsDeep.Tapestry.NodeUI
 
         private async void ButtonImportXml_Click(object sender, RoutedEventArgs e)
         {
-            /////////////////////////////////////////////////////
-            bool testing = true; /// toggle this for testing
-            /////////////////////////////////////////////////////
-
             List<string> allPaths;
 
             if (testing)
@@ -288,12 +280,16 @@ namespace NineWorldsDeep.Tapestry.NodeUI
                             }
                         }
                     }
+
                 });
             }
             catch (Exception ex)
             {
                 tbStatusUtilities.Text = "Error: " + ex.Message;
             }
+
+
+            tbStatusUtilities.Text = "finished importing archivist xml files";
         }
 
         private void AddSourceLocation_Click(object sender, RoutedEventArgs e)

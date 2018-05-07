@@ -223,6 +223,7 @@ namespace NineWorldsDeep.Xml
                             source.Add(excerpt);
                         }
 
+                        allSources.Add(source);
                     }
                 }
             }
