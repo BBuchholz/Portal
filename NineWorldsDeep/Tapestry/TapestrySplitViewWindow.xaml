@@ -24,7 +24,10 @@
                           IsCheckable="True"
                           Checked="MenuItem_GlobalLoadLocalCheckChanged"
                           Unchecked="MenuItem_GlobalLoadLocalCheckChanged"/>
-                
+
+                <MenuItem Header="V6 Main Window"
+                          Click="MenuItem_ShowV6MainWindow"/>
+
             </MenuItem>
 
             <Separator/>

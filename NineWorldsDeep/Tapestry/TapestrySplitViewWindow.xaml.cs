@@ -57,6 +57,8 @@ namespace NineWorldsDeep.Tapestry
             TapestryRegistry.MainWindow = this;
         }
 
+
+
         //private void AddBreadCrumbNode(TapestryNode nd)
         //{
         //    if (!headerNameToBreadcrumbMenuItems.ContainsKey(nd.ShortName))
@@ -143,6 +145,39 @@ namespace NineWorldsDeep.Tapestry
                 Header = lc.LeftNode.ShortName + "|" + lc.RightNode;
                 Command = lc;
             }
+        }
+
+        private void MenuItem_ShowV6MainWindow(object sender, RoutedEventArgs e)
+        {
+            // when this becomes the top level app window
+            // this should go in the App.xaml.cs file, OnStartup() method
+            // see demo project 
+            // demo project article: https://msdn.microsoft.com/en-us/magazine/dd419663.aspx
+            // demo project code: https://github.com/djangojazz/JoshSmith_MVVMDemo
+
+            V6Core.View.V6MainWindow window = new V6Core.View.V6MainWindow();
+
+            // Create the ViewModel to which 
+            // the main window binds.
+            var viewModel = new V6Core.ViewModel.MainWindowViewModel();
+
+            // When the ViewModel asks to be closed, 
+            // close the window.
+            EventHandler handler = null;
+            handler = delegate
+            {
+                viewModel.RequestClose -= handler;
+                window.Close();
+            };
+            viewModel.RequestClose += handler;
+
+            // Allow all controls in the window to 
+            // bind to the ViewModel by setting the 
+            // DataContext, which propagates down 
+            // the element tree.
+            window.DataContext = viewModel;
+
+            window.Show();
         }
     }
 

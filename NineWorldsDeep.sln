@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.25420.1
+# Visual Studio 15
+VisualStudioVersion = 15.0.27703.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NineWorldsDeep", "NineWorldsDeep\NineWorldsDeep.csproj", "{97BCED53-A775-4995-9EF3-D55C5CBB3970}"
 EndProject
@@ -12,6 +12,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		cmudict.0.7a.txt = cmudict.0.7a.txt
 		README.md = README.md
 	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PortalUnitTests", "PortalUnitTests\PortalUnitTests.csproj", "{F6293FDC-F03F-4CD1-A316-ECDB5130A9A9}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -27,8 +29,15 @@ Global
 		{474E8731-CC6B-463B-B21E-79FA4BF1ACF1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{474E8731-CC6B-463B-B21E-79FA4BF1ACF1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{474E8731-CC6B-463B-B21E-79FA4BF1ACF1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F6293FDC-F03F-4CD1-A316-ECDB5130A9A9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F6293FDC-F03F-4CD1-A316-ECDB5130A9A9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F6293FDC-F03F-4CD1-A316-ECDB5130A9A9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F6293FDC-F03F-4CD1-A316-ECDB5130A9A9}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {9EA0FD5F-38A9-4129-AA34-49EDE5DB52BE}
 	EndGlobalSection
 EndGlobal

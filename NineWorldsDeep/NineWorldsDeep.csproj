@@ -27,7 +27,7 @@
     <UpdatePeriodically>false</UpdatePeriodically>
     <UpdateRequired>false</UpdateRequired>
     <MapFileExtensions>true</MapFileExtensions>
-    <ApplicationRevision>159</ApplicationRevision>
+    <ApplicationRevision>160</ApplicationRevision>
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <PublishWizardCompleted>true</PublishWizardCompleted>
@@ -164,6 +164,12 @@
     <Compile Include="AudioBrowser\FileElementTagExtractionAction.cs" />
     <Compile Include="AudioBrowser\FileNameTagExtractor.cs" />
     <Compile Include="AudioBrowser\PlayAction.cs" />
+    <Compile Include="V6Core\V6CoreConfig.cs" />
+    <Compile Include="V6Core\RelayCommand.cs" />
+    <Compile Include="V6Core\ViewModel\CommandViewModel.cs" />
+    <Compile Include="V6Core\ViewModel\MainWindowViewModel.cs" />
+    <Compile Include="V6Core\ViewModel\ViewModelBase.cs" />
+    <Compile Include="V6Core\ViewModel\WorkspaceViewModel.cs" />
     <Compile Include="Core\ConfigFile.cs" />
     <Compile Include="Core\Configuration.cs" />
     <Compile Include="Core\DataUpdateManager.cs" />
@@ -639,6 +645,10 @@
     </Compile>
     <Compile Include="UI\Prompt.cs" />
     <Compile Include="UI\Utils.cs" />
+    <Compile Include="V6Core\View\V6MainWindow.xaml.cs">
+      <DependentUpon>V6MainWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="V6Synergy\ViewModel\AllSynergyItemsViewModel.cs" />
     <Compile Include="Warehouse\DisplayNames.cs" />
     <Compile Include="Warehouse\Extensions.cs" />
     <Compile Include="Warehouse\Hashes.cs" />
@@ -951,6 +961,14 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="UI\FileElementBrowserWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="V6Core\View\V6MainWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="V6Core\View\V6MainWindowResources.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
