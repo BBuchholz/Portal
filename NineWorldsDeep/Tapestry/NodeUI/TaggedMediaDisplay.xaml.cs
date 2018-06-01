@@ -484,6 +484,171 @@ namespace NineWorldsDeep.Tapestry.NodeUI
                 Environment.NewLine + pathsAsMultiLineString);
         }
 
+        private async void MenuItemCopyFileNamesWithTagsInBrackets_Click(object sender, RoutedEventArgs e)
+        {
+            List<string> selectedPaths =
+            lvPaths.SelectedItems.Cast<string>()
+                                 .Select(s => s)
+                                 .ToList();
+
+            List<string> singleLineFileNamesAndTags = new List<string>();
+            
+            await Task.Run(() =>
+            {
+                try
+                {
+                    this.StatusDetailUpdate("processing " + selectedPaths.Count() + " paths");
+                    
+                    var fileNamesToMedia = new Dictionary<string, Media>();
+
+                    foreach (string filePath in selectedPaths)
+                    {
+                        string mediaFileName = System.IO.Path.GetFileName(filePath);
+                        MediaListItem mli;
+
+                        if (File.Exists(filePath))
+                        {
+                            this.StatusDetailUpdate("hashing: " + filePath);
+
+                            mli = new MediaListItem(filePath);
+                            mli.HashMedia();
+                        }
+                        else
+                        {
+                            this.StatusDetailUpdate("nonlocal file, retrieving hash from database: " + filePath);
+                            //sync by path
+                            string mediaHash = Configuration.DB.MediaSubset.GetMediaHashByPath(filePath);
+                            string deviceName = Configuration.DB.MediaSubset.GetMediaDeviceNameByPath(filePath);
+                            mli = new MediaListItem(filePath, deviceName, mediaHash);
+                        }
+
+                        fileNamesToMedia[mediaFileName] = mli.Media;
+                    }
+
+                    db.SyncAsync(fileNamesToMedia.Values, this);
+                    
+                    foreach (var fileName in fileNamesToMedia.Keys)
+                    {
+                        var media = fileNamesToMedia[fileName];
+
+                        //foreach (MediaTagging tag in media.MediaTaggings)
+                        //{
+                        //    //create tag element and append to 
+                        //    XElement tagEl = Xml.Xml.CreateTagElement(tag);
+                        //    mediaEl.Add(tagEl);
+                        //}
+
+                        //tags to string
+                        List<string> tagList =
+                            media.MediaTaggings.Select(m => m.MediaTagValue)
+                                               .Distinct()
+                                               .ToList();
+                       
+                        string tagString = string.Join(", ", tagList);
+
+                        string singleLineFileNameAndTags = fileName + " [<[" + tagString + "]>]";
+
+                        singleLineFileNamesAndTags.Add(singleLineFileNameAndTags);
+                    }
+ 
+                }
+                catch (Exception ex)
+                {
+                    var debuggingBreakpoint = ex.Message;
+                }
+            });
+
+            string namesAndTagsAsMultiLineString = string.Join(Environment.NewLine, singleLineFileNamesAndTags);
+
+            Clipboard.SetText(namesAndTagsAsMultiLineString);
+
+            UI.Display.Message("copied to clipboard: " +
+                Environment.NewLine + namesAndTagsAsMultiLineString);
+        }
+
+        private async void MenuItemCopyFileNamesWithTagsTabbedRight_Click(object sender, RoutedEventArgs e)
+        {
+            List<string> selectedPaths =
+            lvPaths.SelectedItems.Cast<string>()
+                                 .Select(s => s)
+                                 .ToList();
+
+            List<string> singleLineFileNamesAndTags = new List<string>();
+
+            await Task.Run(() =>
+            {
+                try
+                {
+                    this.StatusDetailUpdate("processing " + selectedPaths.Count() + " paths");
+
+                    var fileNamesToMedia = new Dictionary<string, Media>();
+
+                    foreach (string filePath in selectedPaths)
+                    {
+                        string mediaFileName = System.IO.Path.GetFileName(filePath);
+                        MediaListItem mli;
+
+                        if (File.Exists(filePath))
+                        {
+                            this.StatusDetailUpdate("hashing: " + filePath);
+
+                            mli = new MediaListItem(filePath);
+                            mli.HashMedia();
+                        }
+                        else
+                        {
+                            this.StatusDetailUpdate("nonlocal file, retrieving hash from database: " + filePath);
+                            //sync by path
+                            string mediaHash = Configuration.DB.MediaSubset.GetMediaHashByPath(filePath);
+                            string deviceName = Configuration.DB.MediaSubset.GetMediaDeviceNameByPath(filePath);
+                            mli = new MediaListItem(filePath, deviceName, mediaHash);
+                        }
+
+                        fileNamesToMedia[mediaFileName] = mli.Media;
+                    }
+
+                    db.SyncAsync(fileNamesToMedia.Values, this);
+
+                    foreach (var fileName in fileNamesToMedia.Keys)
+                    {
+                        var media = fileNamesToMedia[fileName];
+
+                        //foreach (MediaTagging tag in media.MediaTaggings)
+                        //{
+                        //    //create tag element and append to 
+                        //    XElement tagEl = Xml.Xml.CreateTagElement(tag);
+                        //    mediaEl.Add(tagEl);
+                        //}
+
+                        //tags to string
+                        List<string> tagList =
+                            media.MediaTaggings.Select(m => m.MediaTagValue)
+                                               .Distinct()
+                                               .ToList();
+
+                        string tagString = string.Join(", ", tagList);
+                        
+                        string singleLineFileNameAndTags = fileName + "\t" + tagString;
+
+                        singleLineFileNamesAndTags.Add(singleLineFileNameAndTags);
+                    }
+
+                }
+                catch (Exception ex)
+                {
+                    var debuggingBreakpoint = ex.Message;
+                }
+            });
+
+            string namesAndTagsAsMultiLineString = string.Join(Environment.NewLine, singleLineFileNamesAndTags);
+
+            Clipboard.SetText(namesAndTagsAsMultiLineString);
+
+            UI.Display.Message("copied to clipboard: " +
+                Environment.NewLine + namesAndTagsAsMultiLineString);
+        } 
+
         #endregion
+
     }
 }

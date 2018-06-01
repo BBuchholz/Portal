@@ -90,6 +90,10 @@
                               Click="MenuItemSendToTrash_Click"/>
                     <MenuItem Header="Copy Distinct Filenames To Clipboard"
                               Click="MenuItemCopyFileNamesToClipboard_Click"/>
+                    <MenuItem Header="Copy Filenames With Tags In Brackets"
+                              Click="MenuItemCopyFileNamesWithTagsInBrackets_Click"/>
+                    <MenuItem Header="Copy Filenames With Tags Tabbed Right"
+                              Click="MenuItemCopyFileNamesWithTagsTabbedRight_Click"/>
                 </ContextMenu>
             </ListView.ContextMenu>
             <!--<ListView.ItemTemplate>
