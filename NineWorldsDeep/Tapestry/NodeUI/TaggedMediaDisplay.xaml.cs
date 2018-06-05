@@ -158,7 +158,25 @@ namespace NineWorldsDeep.Tapestry.NodeUI
 
             List<string> tags = tm.Tags;
 
-            tags = tags.Where(tag => tag.ToLower().Contains(filter.ToLower())).ToList();
+            var multipleFiltersAreEnabled = chkMultiFilter.IsChecked.Value;
+
+            if (multipleFiltersAreEnabled)
+            {
+                var tagFilters = filter.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries).Select(tagFilter => tagFilter.Trim()).ToList();
+
+                List<string> tempTags = new List<string>();
+
+                foreach(var tagFilter in tagFilters)
+                {
+                    tempTags = tempTags.Union(tags.Where(tag => tag.ToLower().Contains(tagFilter.ToLower())).ToList()).ToList();
+                }
+
+                tags = tempTags;
+            }
+            else
+            {            
+                tags = tags.Where(tag => tag.ToLower().Contains(filter.ToLower())).ToList();
+            }
 
             tags.Sort();
 

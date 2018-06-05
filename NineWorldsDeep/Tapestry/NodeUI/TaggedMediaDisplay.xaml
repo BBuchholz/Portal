@@ -41,6 +41,13 @@
                     Padding="10 0"
                     Click="btnRefreshTaggingMatrix_Click"/>
 
+            <CheckBox x:Name="chkMultiFilter" 
+                      IsChecked="False" 
+                      Margin="5" 
+                      Height="15" 
+                      VerticalAlignment="Center"
+                      HorizontalAlignment="Center">MultiFilter</CheckBox>
+            
             <CheckBox x:Name="chkIncludeNonLocalFiles" 
                       IsChecked="False" 
                       Margin="5" 
