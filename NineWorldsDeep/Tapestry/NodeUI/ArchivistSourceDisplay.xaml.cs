@@ -534,6 +534,12 @@ namespace NineWorldsDeep.Tapestry.NodeUI
                 //verify entry value is not null or whitespace
                 var subsetEntryValue = UI.Prompt.Input("Enter subset entry value (most commonly, a filename):");
 
+                if (string.IsNullOrWhiteSpace(subsetEntryValue))
+                {
+                    UI.Display.Message("entry cannot be empty");
+                    return;
+                }
+
                 try
                 {
                     db.EnsureSourceLocationSubsetEntry(
