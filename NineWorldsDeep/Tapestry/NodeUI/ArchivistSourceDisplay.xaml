@@ -292,8 +292,8 @@
                           HorizontalAlignment="Center"
                           VerticalAlignment="Center"
                           Content="Exclude Missing Entries"
-                          Checked="chkFilterExcludeMissingLocationEntries_CheckChanged"
-                          Unchecked="chkFilterExcludeMissingLocationEntries_CheckChanged"/>
+                          Checked="CheckBoxFilterExcludeMissingLocationEntries_CheckChanged"
+                          Unchecked="CheckBoxFilterExcludeMissingLocationEntries_CheckChanged"/>
 
                 <ListView x:Name="lvSourceLocationEntries"
                           Grid.Row="1"

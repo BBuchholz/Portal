@@ -561,7 +561,7 @@ namespace NineWorldsDeep.Tapestry.NodeUI
             }
         }
 
-        private void chkFilterExcludeMissingLocationEntries_CheckChanged(object sender, RoutedEventArgs e)
+        private void CheckBoxFilterExcludeMissingLocationEntries_CheckChanged(object sender, RoutedEventArgs e)
         {
             RefreshSourceLocationSubsetEntriesFromDb();
         }

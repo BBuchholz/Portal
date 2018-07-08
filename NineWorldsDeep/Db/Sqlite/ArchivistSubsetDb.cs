@@ -2139,17 +2139,20 @@ namespace NineWorldsDeep.Db.Sqlite
 
             cmd.Parameters.Clear();
 
-            if (!filterOutVerifiedMissing)
-            {
-                cmd.CommandText =
-                    NwdContract.SELECT_SOURCE_LOCATION_SUBSET_ENTRIES_FOR_SOURCE_ID_X;
-            }
-            else
-            {
-                cmd.CommandText =
-                    NwdContract.SELECT_VERIFIED_PRESENT_SOURCE_LOCATION_SUBSET_ENTRIES_FOR_SOURCE_ID_X;
-            }
-            
+            //if (!filterOutVerifiedMissing)
+            //{
+            //    cmd.CommandText =
+            //        NwdContract.SELECT_SOURCE_LOCATION_SUBSET_ENTRIES_FOR_SOURCE_ID_X;
+            //}
+            //else
+            //{
+            //    cmd.CommandText =
+            //        NwdContract.SELECT_VERIFIED_PRESENT_SOURCE_LOCATION_SUBSET_ENTRIES_FOR_SOURCE_ID_X;
+            //}
+
+            cmd.CommandText =
+                NwdContract.SELECT_SOURCE_LOCATION_SUBSET_ENTRIES_FOR_SOURCE_ID_X;
+
             cmd.Parameters.Add(new SQLiteParameter() { Value = sourceId });
 
             using (var rdr = cmd.ExecuteReader())
@@ -2183,17 +2186,22 @@ namespace NineWorldsDeep.Db.Sqlite
                     DateTime? verifiedMissing =
                         TimeStamp.YYYY_MM_DD_HH_MM_SS_UTC_ToDateTime(sourceLocationSubsetEntryVerifiedMissing);
 
-                    lst.Add(new ArchivistSourceLocationSubsetEntry()
+                    var aslse = new ArchivistSourceLocationSubsetEntry()
+                                    {
+                                        SourceLocationSubsetEntryId = sourceLocationSubsetEntryId,
+                                        SourceLocationSubsetId = sourceLocationSubsetId,
+                                        SourceId = sourceId,
+                                        SourceLocationValue = sourceLocationValue,
+                                        SourceLocationSubsetValue = sourceLocationSubsetValue,
+                                        SourceLocationSubsetEntryValue = sourceLocationSubsetEntryValue,
+                                        VerifiedPresent = verifiedPresent,
+                                        VerifiedMissing = verifiedMissing
+                                    };
+
+                    if (!filterOutVerifiedMissing || aslse.IsPresent())
                     {
-                        SourceLocationSubsetEntryId = sourceLocationSubsetEntryId,
-                        SourceLocationSubsetId = sourceLocationSubsetId,
-                        SourceId = sourceId,
-                        SourceLocationValue = sourceLocationValue,
-                        SourceLocationSubsetValue = sourceLocationSubsetValue,
-                        SourceLocationSubsetEntryValue = sourceLocationSubsetEntryValue,
-                        VerifiedPresent = verifiedPresent,
-                        VerifiedMissing = verifiedMissing
-                    });
+                        lst.Add(aslse);
+                    }
                 }
             }
 

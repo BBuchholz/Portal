@@ -449,22 +449,23 @@ namespace NineWorldsDeep.Sqlite
             "AND " + COLUMN_SOURCE_EXCERPT_END_TIME + " = ? " +
             "AND " + COLUMN_SOURCE_EXCERPT_PAGES + " = ? ; ";
 
-        internal static readonly string SELECT_VERIFIED_PRESENT_SOURCE_LOCATION_SUBSET_ENTRIES_FOR_SOURCE_ID_X =
+        // //doesn't work as intended, remove after testing
+        //internal static readonly string SELECT_VERIFIED_PRESENT_SOURCE_LOCATION_SUBSET_ENTRIES_FOR_SOURCE_ID_X =
 
-            "SELECT slse." + COLUMN_SOURCE_LOCATION_SUBSET_ENTRY_ID + ", " +
-            "	   slse." + COLUMN_SOURCE_LOCATION_SUBSET_ID + ", " +
-            "	   sl." + COLUMN_SOURCE_LOCATION_VALUE + ", " +
-            "	   sls." + COLUMN_SOURCE_LOCATION_SUBSET_VALUE + ", " +
-            "	   slse." + COLUMN_SOURCE_LOCATION_SUBSET_ENTRY_VALUE + ", " +
-            "	   slse." + COLUMN_SOURCE_LOCATION_SUBSET_ENTRY_VERIFIED_PRESENT_AT + ", " +
-            "	   slse." + COLUMN_SOURCE_LOCATION_SUBSET_ENTRY_VERIFIED_MISSING_AT + "	    " +
-            "FROM " + TABLE_SOURCE_LOCATION + " sl " +
-            "JOIN " + TABLE_SOURCE_LOCATION_SUBSET + " sls " +
-            "ON sl." + COLUMN_SOURCE_LOCATION_ID + " = sls." + COLUMN_SOURCE_LOCATION_ID + " " +
-            "JOIN " + TABLE_SOURCE_LOCATION_SUBSET_ENTRY + " slse " +
-            "ON sls." + COLUMN_SOURCE_LOCATION_SUBSET_ID + " = slse." + COLUMN_SOURCE_LOCATION_SUBSET_ID + " " +
-            "WHERE slse." + COLUMN_SOURCE_ID + " = ? " +
-            "AND slse." + COLUMN_SOURCE_LOCATION_SUBSET_ENTRY_VERIFIED_PRESENT_AT + " >= slse." + COLUMN_SOURCE_LOCATION_SUBSET_ENTRY_VERIFIED_MISSING_AT + " ; ";
+        //    "SELECT slse." + COLUMN_SOURCE_LOCATION_SUBSET_ENTRY_ID + ", " +
+        //    "	   slse." + COLUMN_SOURCE_LOCATION_SUBSET_ID + ", " +
+        //    "	   sl." + COLUMN_SOURCE_LOCATION_VALUE + ", " +
+        //    "	   sls." + COLUMN_SOURCE_LOCATION_SUBSET_VALUE + ", " +
+        //    "	   slse." + COLUMN_SOURCE_LOCATION_SUBSET_ENTRY_VALUE + ", " +
+        //    "	   slse." + COLUMN_SOURCE_LOCATION_SUBSET_ENTRY_VERIFIED_PRESENT_AT + ", " +
+        //    "	   slse." + COLUMN_SOURCE_LOCATION_SUBSET_ENTRY_VERIFIED_MISSING_AT + "	    " +
+        //    "FROM " + TABLE_SOURCE_LOCATION + " sl " +
+        //    "JOIN " + TABLE_SOURCE_LOCATION_SUBSET + " sls " +
+        //    "ON sl." + COLUMN_SOURCE_LOCATION_ID + " = sls." + COLUMN_SOURCE_LOCATION_ID + " " +
+        //    "JOIN " + TABLE_SOURCE_LOCATION_SUBSET_ENTRY + " slse " +
+        //    "ON sls." + COLUMN_SOURCE_LOCATION_SUBSET_ID + " = slse." + COLUMN_SOURCE_LOCATION_SUBSET_ID + " " +
+        //    "WHERE slse." + COLUMN_SOURCE_ID + " = ? " +
+        //    "AND slse." + COLUMN_SOURCE_LOCATION_SUBSET_ENTRY_VERIFIED_PRESENT_AT + " >= slse." + COLUMN_SOURCE_LOCATION_SUBSET_ENTRY_VERIFIED_MISSING_AT + " ; ";
 
 
         internal static readonly string UPDATE_SOURCE_LOCATION_SUBSET_ENTRY_VERIFIED_PRESENT_VERIFIED_MISSING_FOR_ID_X_Y_Z =
