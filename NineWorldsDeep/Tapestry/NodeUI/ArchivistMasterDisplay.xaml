@@ -6,7 +6,7 @@
              xmlns:local="clr-namespace:NineWorldsDeep.Tapestry.NodeUI"
              mc:Ignorable="d" 
              d:DesignHeight="600" d:DesignWidth="500">
-    
+
     <UserControl.Resources>
         <!--<Style x:Key="conditionalDisplayStyle" TargetType="{x:Type TextBlock}">
             <Style.Triggers>
@@ -29,11 +29,11 @@
             </Style.Triggers>
         </Style>
     </UserControl.Resources>
-    
+
     <Grid>
 
         <Grid.RowDefinitions>
-            <RowDefinition Height="*"/>
+            <RowDefinition Height="40"/>
             <RowDefinition Height="40"/>
             <RowDefinition Height="40"/>
             <RowDefinition Height="*"/>
@@ -41,7 +41,7 @@
 
         <Expander Header="Utilites"
                   Grid.Row="0"
-                  IsExpanded="True"
+                  IsExpanded="False"
                   Margin="5"
                   Expanded="Expander_Expanded"
                   Collapsed="Expander_Collapsed">
@@ -49,9 +49,10 @@
             <Grid>
 
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition/>
-                    <ColumnDefinition/>
-                    <ColumnDefinition/>
+                    <ColumnDefinition Width="45*"/>
+                    <ColumnDefinition Width="118*"/>
+                    <ColumnDefinition Width="162*"/>
+                    <ColumnDefinition Width="163*"/>
                 </Grid.ColumnDefinitions>
 
                 <Grid.RowDefinitions>
@@ -68,11 +69,11 @@
                         Grid.Column="0"
                         Margin="5"
                         Content="Import GERM"
-                        Click="btnImportTextFiles_Click"/>
+                        Click="btnImportTextFiles_Click" Grid.ColumnSpan="2"/>
 
                 <Button x:Name="btnAddSourceType"
                         Grid.Row="0"
-                        Grid.Column="2"
+                        Grid.Column="3"
                         Margin="5"
                         Content="Add Source Type"
                         Click="AddSourceType_Click"/>
@@ -82,19 +83,19 @@
                         Grid.Column="0"
                         Margin="5"
                         Content="Export Xml"
-                        Click="ButtonExportXml_Click"/>
+                        Click="ButtonExportXml_Click" Grid.ColumnSpan="2"/>
 
                 <Button x:Name="btnImportXml"
                         Grid.Row="2"
-                        Grid.Column="1"
+                        Grid.Column="2"
                         Margin="5"
                         Content="Import Xml"
                         Click="ButtonImportXml_Click"/>
-                
+
                 <StackPanel Grid.Row="5"
                             VerticalAlignment="Bottom"
                             HorizontalAlignment="Left"
-                            Grid.ColumnSpan="3">
+                            Grid.ColumnSpan="2">
 
                     <TextBlock x:Name="tbStatusUtilities" Text="status update goes here"/>
 
@@ -132,7 +133,7 @@
                        Grid.Column="0"
                        HorizontalAlignment="Right"
                        VerticalAlignment="Center"/>
-                
+
                 <TextBox x:Name="txtAddSourceLocationName"
                          Grid.Row="0"
                          Grid.Column="1"
@@ -147,7 +148,7 @@
                         Margin="5"
                         Content="Add Source Location"
                         Click="AddSourceLocation_Click"/>
-                
+
                 <Label Content="Source Location"
                        Grid.Row="2"
                        Grid.Column="0"
@@ -174,7 +175,7 @@
                          HorizontalAlignment="Stretch"
                          VerticalAlignment="Center"/>
 
-                
+
 
                 <Button x:Name="btnAddSourceLocationSubset"
                         Grid.Row="4"
@@ -186,7 +187,7 @@
             </Grid>
 
         </Expander>
-        
+
         <Expander Header="Add Sources"
                   x:Name="expAddSources"
                   Grid.Row="2"
@@ -312,9 +313,9 @@
                     Click="AddSource_Click"/>
 
             </Grid>
-            
+
         </Expander>
-        
+
         <Expander Header="Sources"
                   x:Name="expSources"
                   Grid.Row="3"
@@ -348,14 +349,14 @@
                 <StackPanel Orientation="Horizontal"
                             Grid.Row="2"
                             HorizontalAlignment="Center">
-                    
+
                     <Button x:Name="btnRefreshSources"
                             Content="Refresh Sources"
                             Margin="5"
                             Click="RefreshSources_Click"/>
-                    
+
                 </StackPanel>
-                
+
                 <ListView x:Name="lvSources"
                           Grid.Row="3"
                           Margin="5"
@@ -456,7 +457,7 @@
                                     <Setter TargetName="wpSourceTag" Property="Visibility" Value="Collapsed"/>
                                 </DataTrigger>
                             </DataTemplate.Triggers>
-                        </DataTemplate>                        
+                        </DataTemplate>
                     </ListView.ItemTemplate>
                 </ListView>
 
@@ -472,7 +473,7 @@
                 </StatusBar>
 
             </Grid>
-            
+
         </Expander>
 
     </Grid>

@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -21,13 +22,18 @@ namespace NineWorldsDeep.Tapestry.NodeUI
     /// <summary>
     /// Interaction logic for ArchivistSourceDisplay.xaml
     /// </summary>
-    public partial class ArchivistSourceDisplay : UserControl, ISourceExcerptDisplay
+    public partial class ArchivistSourceDisplay : UserControl, ISourceExcerptDisplay, IAsyncStatusResponsive
     {
         #region fields
 
         private Db.Sqlite.ArchivistSubsetDb db;
         //private ArchivistSourceNode sourceNode;
         private ArchivistSource source;
+
+
+        //async related 
+        private readonly SynchronizationContext syncContext;
+        private DateTime previousTime = DateTime.Now;
 
         #endregion
 
@@ -36,6 +42,9 @@ namespace NineWorldsDeep.Tapestry.NodeUI
         public ArchivistSourceDisplay()
         {
             InitializeComponent();
+
+            syncContext = SynchronizationContext.Current;
+
             db = new Db.Sqlite.ArchivistSubsetDb();
             Core.DataUpdateManager.Register(this);
         }
@@ -81,6 +90,20 @@ namespace NineWorldsDeep.Tapestry.NodeUI
         #endregion
 
         #region private helper methods
+
+        public void StatusDetailUpdate(string text, bool ensureDisplay = true)
+        {
+            var currentTime = DateTime.Now;
+
+            if (!ensureDisplay && ((DateTime.Now - previousTime).Milliseconds <= 50)) return;
+
+            syncContext.Post(new SendOrPostCallback(s =>
+            {
+                tbStatusSourceDetail.Text = (string)s;
+            }), text);
+
+            previousTime = currentTime;
+        }
 
         private void RefreshSourceLocationsFromDb()
         {
@@ -564,6 +587,113 @@ namespace NineWorldsDeep.Tapestry.NodeUI
         private void CheckBoxFilterExcludeMissingLocationEntries_CheckChanged(object sender, RoutedEventArgs e)
         {
             RefreshSourceLocationSubsetEntriesFromDb();
+        }
+
+        private async void ButtonPurgeSource_Click(object sender, RoutedEventArgs e)
+        {
+            bool confirmed = UI.Prompt.Confirm(
+                "This action is irreversible! It will delete the source " +
+                "and all source excerpts from the database PERMANENTLY! " +
+                "Are you sure you want to do this?", true);
+
+            bool testing = true;
+            int testingSleepMilliseconds = 500;
+
+            if (confirmed)
+            {
+                if(source == null || source.SourceId < 1)
+                {
+                    UI.Display.Message("source or source id is not set, aborting...");
+                    return;
+                }
+
+                try
+                {
+                    await Task.Run(() =>
+                    {
+                        StatusDetailUpdate("purge started...");
+                        if (testing) { Thread.Sleep(testingSleepMilliseconds); }
+
+                        StatusDetailUpdate("retrieving source excerpts...");
+                        if (testing) { Thread.Sleep(testingSleepMilliseconds); }
+
+                        //get source excerpts here
+                        List<ArchivistSourceExcerpt> sourceExcerpts =
+                            db.GetSourceExcerptsForSourceId(source.SourceId);
+
+                        int excerptCount = 0;
+                        int excerptTotal = sourceExcerpts.Count;
+
+                        string purgeMsg;
+                        string msg;
+
+                        //////////////////README/////////////////////////////
+                        //
+                        //  I am stubbing out db methods and commenting them out
+                        //  replacing them with the sleep thread methods to get
+                        //  the order of execution established (mimicking Gauntlet)
+                        //  
+                        //  when done with stubbing, uncomment each, auto-generate it,
+                        //  and HAVE EACH ONE throw a not implemented exception
+                        //  to keep track of where we are as we implement
+                        //
+                        //  remove the thread sleep functions when we add the 
+                        //  not implmented exceptions
+                        //
+                        //////////////////README/////////////////////////////
+
+                        foreach (ArchivistSourceExcerpt ase in sourceExcerpts)
+                        {
+                            excerptCount++;
+
+                            //for each source excerpt
+                            purgeMsg = "processing source excerpt " + excerptCount +
+                                " of " + excerptTotal;
+
+                            msg = purgeMsg + ": purging annotations...";
+                            StatusDetailUpdate(msg);
+                            if (testing) { Thread.Sleep(testingSleepMilliseconds); }
+
+                            //db.DeleteArchivistSourceExcerptAnnotationsByExcerptId(ase.SourceExcerptId);
+
+                            msg = purgeMsg + ": purging tags...";
+                            StatusDetailUpdate(msg);
+                            if (testing) { Thread.Sleep(testingSleepMilliseconds); }
+
+                            //db.deleteArchivistSourceExcerptTaggingsByExcerptId(ase.SourceExcerptId);
+
+                        }
+
+                        StatusDetailUpdate("purging source excerpts...");
+                        if (testing) { Thread.Sleep(testingSleepMilliseconds); }
+                        //db.deleteArchivistSourceExcerptsBySourceId(source.SourceId);
+
+
+                        StatusDetailUpdate("purging source location entries...");
+                        if (testing) { Thread.Sleep(testingSleepMilliseconds); }
+                        //db.deleteArchivistSourceLocationSubsetEntriesBySourceId(source.SourceId);
+
+
+                        StatusDetailUpdate("purging source...");
+                        if (testing) { Thread.Sleep(testingSleepMilliseconds); }
+                        //db.deleteArchivistSourceBySourceId(source.SourceId);
+
+
+
+                    });
+
+                    tbStatusSourceDetail.Text = "Purge Finished.";
+                }
+                catch(Exception ex)
+                {
+                    UI.Display.Exception(ex);
+                }
+            }
+            else
+            {
+                tbStatusSourceDetail.Text = "Purge Cancelled.";
+            }
+
         }
 
         #endregion

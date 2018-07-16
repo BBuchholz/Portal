@@ -5,7 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:NineWorldsDeep.Tapestry.NodeUI"
              mc:Ignorable="d" 
-             d:DesignHeight="800" d:DesignWidth="400">
+             d:DesignHeight="800" d:DesignWidth="600">
     
     <UserControl.Resources>
         <local:VerifiablePresentStatusConverter 
@@ -216,16 +216,16 @@
     <Grid>
 
         <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
             <RowDefinition Height="40"/>
             <RowDefinition Height="*"/>
-            <RowDefinition Height="*"/>
-            <RowDefinition Height="*"/>
+            <RowDefinition Height="40"/>
         </Grid.RowDefinitions>
         
         <Expander Header="Source Details"
                   Grid.Row="0"
                   x:Name="expanderSourceDetails"
-                  IsExpanded="False"
+                  IsExpanded="True"
                   Margin="5"
                   Expanded="Expander_Expanded"
                   Collapsed="Expander_Collapsed">
@@ -265,6 +265,19 @@
                         Padding="5"
                         Click="btnCopySourceTag_Click"/>
 
+                    <Button x:Name="ButtonPurgeSource"
+                        Content="PURGE SOURCE"
+                        Margin="5"
+                        Padding="5"
+                        Click="ButtonPurgeSource_Click"/>
+
+                </StackPanel>
+
+                <StackPanel VerticalAlignment="Bottom"
+                            HorizontalAlignment="Left">
+
+                    <TextBlock x:Name="tbStatusSourceDetail" 
+                               Text="status update goes here"/>
 
                 </StackPanel>
 
@@ -275,7 +288,7 @@
 
         <Expander Header="Source Locations"
                   Grid.Row="1"
-                  IsExpanded="True"
+                  IsExpanded="False"
                   Margin="5"
                   Expanded="Expander_Expanded"
                   Collapsed="Expander_Collapsed">
@@ -415,7 +428,7 @@
 
         <Expander Header="Add Source Excerpt"
                   Grid.Row="3"
-                  IsExpanded="True"
+                  IsExpanded="False"
                   Margin="5"
                   Expanded="Expander_Expanded"
                   Collapsed="Expander_Collapsed">
