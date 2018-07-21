@@ -353,6 +353,12 @@ namespace NineWorldsDeep.Tapestry.NodeUI
 
         private void RefreshSources_Click(object sender, RoutedEventArgs e)
         {
+            if(SelectedSourceType == null)
+            {
+                UI.Display.Message("Select a source type...");
+                return;
+            }
+
             LoadSources();
         }
 
@@ -548,10 +554,6 @@ namespace NineWorldsDeep.Tapestry.NodeUI
             if (SelectedSourceType != null)
             {
                 LoadSources(SelectedSourceType.SourceTypeId);
-            }
-            else
-            {
-                UI.Display.Message("Select a source type...");
             }
         }
 

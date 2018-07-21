@@ -80,7 +80,7 @@ namespace NineWorldsDeep.Tapestry.NodeUI
 
                 if(this.source == null)
                 {
-                    UI.Display.Message("object not found, this should clear interface, implementation in progress");
+                    ClearSourceDisplay();
                     return;
                 }
 
@@ -89,13 +89,25 @@ namespace NineWorldsDeep.Tapestry.NodeUI
             }
             else
             {
-                UI.Display.Message("can't refresh if source is null or source id isn't set");
+                //UI.Display.Message("can't refresh if source is null or source id isn't set");
+                ClearSourceDisplay();
             }
         }
 
         #endregion
 
         #region private helper methods
+
+        public void ClearSourceDisplay()
+        {
+            this.source = null;
+            expanderSourceDetails.Header = "[[[source not set]]]";
+
+            ccSourceDetails.Content = null;
+            lvSourceExcerpts.ItemsSource = null;
+            cmbSourceLocations.ItemsSource = null;
+            lvSourceLocationEntries.ItemsSource = null;
+        }
 
         public void StatusDetailUpdate(string text, bool ensureDisplay = true)
         {
@@ -597,10 +609,17 @@ namespace NineWorldsDeep.Tapestry.NodeUI
 
         private async void ButtonPurgeSource_Click(object sender, RoutedEventArgs e)
         {
-            bool confirmed = UI.Prompt.Confirm(
+            //bool confirmed = UI.Prompt.Confirm(
+            //    "This action is irreversible! It will delete the source " +
+            //    "and all source excerpts from the database PERMANENTLY! " +
+            //    "Are you sure you want to do this?", true);
+
+            string response = UI.Prompt.Input(
                 "This action is irreversible! It will delete the source " +
                 "and all source excerpts from the database PERMANENTLY! " +
-                "Are you sure you want to do this?", true);
+                "Are you sure you want to do this? To verify type \"yes i am sure\"");
+
+            bool confirmed = response.Equals("yes i am sure", StringComparison.CurrentCultureIgnoreCase);
 
             //bool testing = true;
             //int testingSleepMilliseconds = 500;
