@@ -596,8 +596,8 @@ namespace NineWorldsDeep.Tapestry.NodeUI
                 "and all source excerpts from the database PERMANENTLY! " +
                 "Are you sure you want to do this?", true);
 
-            bool testing = true;
-            int testingSleepMilliseconds = 500;
+            //bool testing = true;
+            //int testingSleepMilliseconds = 500;
 
             if (confirmed)
             {
@@ -612,10 +612,10 @@ namespace NineWorldsDeep.Tapestry.NodeUI
                     await Task.Run(() =>
                     {
                         StatusDetailUpdate("purge started...");
-                        if (testing) { Thread.Sleep(testingSleepMilliseconds); }
+                        //if (testing) { Thread.Sleep(testingSleepMilliseconds); }
 
                         StatusDetailUpdate("retrieving source excerpts...");
-                        if (testing) { Thread.Sleep(testingSleepMilliseconds); }
+                        //if (testing) { Thread.Sleep(testingSleepMilliseconds); }
 
                         //get source excerpts here
                         List<ArchivistSourceExcerpt> sourceExcerpts =
@@ -638,7 +638,7 @@ namespace NineWorldsDeep.Tapestry.NodeUI
                         //  to keep track of where we are as we implement
                         //
                         //  remove the thread sleep functions when we add the 
-                        //  not implmented exceptions
+                        //  not implmented exceptions (JUST COMMENT OUT THE "testing" VARIABLE INITIALIZATION AND YOU WILL SEE WHAT NEEDS TO BE REMOVED/COMMENTED OUT)
                         //
                         //////////////////README/////////////////////////////
 
@@ -652,31 +652,31 @@ namespace NineWorldsDeep.Tapestry.NodeUI
 
                             msg = purgeMsg + ": purging annotations...";
                             StatusDetailUpdate(msg);
-                            if (testing) { Thread.Sleep(testingSleepMilliseconds); }
+                            //if (testing) { Thread.Sleep(testingSleepMilliseconds); }
 
-                            //db.DeleteArchivistSourceExcerptAnnotationsByExcerptId(ase.SourceExcerptId);
+                            db.DeleteArchivistSourceExcerptAnnotationsByExcerptId(ase.SourceExcerptId);
 
                             msg = purgeMsg + ": purging tags...";
                             StatusDetailUpdate(msg);
-                            if (testing) { Thread.Sleep(testingSleepMilliseconds); }
+                            //if (testing) { Thread.Sleep(testingSleepMilliseconds); }
 
-                            //db.deleteArchivistSourceExcerptTaggingsByExcerptId(ase.SourceExcerptId);
+                            db.DeleteArchivistSourceExcerptTaggingsByExcerptId(ase.SourceExcerptId);
 
                         }
 
                         StatusDetailUpdate("purging source excerpts...");
-                        if (testing) { Thread.Sleep(testingSleepMilliseconds); }
-                        //db.deleteArchivistSourceExcerptsBySourceId(source.SourceId);
+                        //if (testing) { Thread.Sleep(testingSleepMilliseconds); }
+                        db.DeleteArchivistSourceExcerptsBySourceId(source.SourceId);
 
 
                         StatusDetailUpdate("purging source location entries...");
-                        if (testing) { Thread.Sleep(testingSleepMilliseconds); }
-                        //db.deleteArchivistSourceLocationSubsetEntriesBySourceId(source.SourceId);
+                        //if (testing) { Thread.Sleep(testingSleepMilliseconds); }
+                        db.DeleteArchivistSourceLocationSubsetEntriesBySourceId(source.SourceId);
 
 
                         StatusDetailUpdate("purging source...");
-                        if (testing) { Thread.Sleep(testingSleepMilliseconds); }
-                        //db.deleteArchivistSourceBySourceId(source.SourceId);
+                        //if (testing) { Thread.Sleep(testingSleepMilliseconds); }
+                        db.DeleteArchivistSourceBySourceId(source.SourceId);
 
 
 
