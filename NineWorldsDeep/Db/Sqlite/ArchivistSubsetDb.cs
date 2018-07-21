@@ -711,7 +711,34 @@ namespace NineWorldsDeep.Db.Sqlite
 
         internal void DeleteArchivistSourceExcerptsBySourceId(int sourceId)
         {
-            throw new NotImplementedException();
+            using (var conn = new SQLiteConnection(
+                @"Data Source=" + Configuration.GetSqliteDbPath(DbName)))
+            {
+                conn.Open();
+
+                using (var cmd = new SQLiteCommand(conn))
+                {
+                    using (var transaction = conn.BeginTransaction())
+                    {
+                        DeleteArchivistSourceExcerptsBySourceId(sourceId, cmd);
+                        transaction.Commit();
+                    }
+                }
+
+                conn.Close();
+            }
+        }
+
+        private void DeleteArchivistSourceExcerptsBySourceId(int sourceId,
+                                                             SQLiteCommand cmd)
+        {
+            cmd.Parameters.Clear();
+
+            cmd.CommandText = NwdContract.DELETE_ARCHIVIST_SOURCE_EXCERPTS_FOR_SOURCE_ID;
+
+            cmd.Parameters.Add(new SQLiteParameter() { Value = sourceId });
+
+            cmd.ExecuteNonQuery();
         }
 
         public int EnsureCore(ArchivistSourceExcerpt excerpt)
@@ -973,7 +1000,34 @@ namespace NineWorldsDeep.Db.Sqlite
 
         internal void DeleteArchivistSourceBySourceId(int sourceId)
         {
-            throw new NotImplementedException();
+            using (var conn = new SQLiteConnection(
+                @"Data Source=" + Configuration.GetSqliteDbPath(DbName)))
+            {
+                conn.Open();
+
+                using (var cmd = new SQLiteCommand(conn))
+                {
+                    using (var transaction = conn.BeginTransaction())
+                    {
+                        DeleteArchivistSourceBySourceId(sourceId, cmd);
+                        transaction.Commit();
+                    }
+                }
+
+                conn.Close();
+            }
+        }
+
+        private void DeleteArchivistSourceBySourceId(int sourceId,
+                                                     SQLiteCommand cmd)
+        {
+            cmd.Parameters.Clear();
+
+            cmd.CommandText = NwdContract.DELETE_ARCHIVIST_SOURCE_FOR_SOURCE_ID;
+
+            cmd.Parameters.Add(new SQLiteParameter() { Value = sourceId });
+
+            cmd.ExecuteNonQuery();
         }
 
         internal List<ArchivistSource> GetAllSources()
@@ -1400,7 +1454,34 @@ namespace NineWorldsDeep.Db.Sqlite
 
         internal void DeleteArchivistSourceExcerptAnnotationsByExcerptId(int sourceExcerptId)
         {
-            throw new NotImplementedException();
+            using (var conn = new SQLiteConnection(
+                @"Data Source=" + Configuration.GetSqliteDbPath(DbName)))
+            {
+                conn.Open();
+
+                using (var cmd = new SQLiteCommand(conn))
+                {
+                    using (var transaction = conn.BeginTransaction())
+                    {
+                        DeleteArchivistSourceExcerptAnnotationsByExcerptId(sourceExcerptId, cmd);
+                        transaction.Commit();
+                    }
+                }
+
+                conn.Close();
+            }
+        }        
+
+        private void DeleteArchivistSourceExcerptAnnotationsByExcerptId(int sourceExcerptId,
+                                                                        SQLiteCommand cmd)
+        {
+            cmd.Parameters.Clear();
+
+            cmd.CommandText = NwdContract.DELETE_ARCHIVIST_SOURCE_EXCERPT_ANNOTATIONS_FOR_EXID;
+
+            cmd.Parameters.Add(new SQLiteParameter() { Value = sourceExcerptId });
+
+            cmd.ExecuteNonQuery();
         }
 
         public void InsertSourceExcerptAnnotation(int sourceExcerptId, string annotationValue)
@@ -1825,7 +1906,34 @@ namespace NineWorldsDeep.Db.Sqlite
 
         internal void DeleteArchivistSourceLocationSubsetEntriesBySourceId(int sourceId)
         {
-            throw new NotImplementedException();
+            using (var conn = new SQLiteConnection(
+                @"Data Source=" + Configuration.GetSqliteDbPath(DbName)))
+            {
+                conn.Open();
+
+                using (var cmd = new SQLiteCommand(conn))
+                {
+                    using (var transaction = conn.BeginTransaction())
+                    {
+                        DeleteArchivistSourceLocationSubsetEntriesBySourceId(sourceId, cmd);
+                        transaction.Commit();
+                    }
+                }
+
+                conn.Close();
+            }
+        }
+
+        private void DeleteArchivistSourceLocationSubsetEntriesBySourceId(int sourceId,
+                                                                          SQLiteCommand cmd)
+        {
+            cmd.Parameters.Clear();
+
+            cmd.CommandText = NwdContract.DELETE_ARCHIVIST_SOURCE_LOCATION_SUBSET_ENTRIES_FOR_SOURCE_ID;
+
+            cmd.Parameters.Add(new SQLiteParameter() { Value = sourceId });
+
+            cmd.ExecuteNonQuery();
         }
 
         internal List<ArchivistSourceLocationSubsetEntry> GetSourceLocationSubsetEntriesForSourceId(int sourceId, bool filterOutVerifiedMissing)
@@ -2344,7 +2452,34 @@ namespace NineWorldsDeep.Db.Sqlite
 
         internal void DeleteArchivistSourceExcerptTaggingsByExcerptId(int sourceExcerptId)
         {
-            throw new NotImplementedException();
+            using (var conn = new SQLiteConnection(
+                @"Data Source=" + Configuration.GetSqliteDbPath(DbName)))
+            {
+                conn.Open();
+
+                using (var cmd = new SQLiteCommand(conn))
+                {
+                    using (var transaction = conn.BeginTransaction())
+                    {
+                        DeleteArchivistSourceExcerptTaggingsByExcerptId(sourceExcerptId, cmd);
+                        transaction.Commit();
+                    }
+                }
+
+                conn.Close();
+            }
+        }
+
+        private void DeleteArchivistSourceExcerptTaggingsByExcerptId(int sourceExcerptId,
+                                                                     SQLiteCommand cmd)
+        {
+            cmd.Parameters.Clear();
+
+            cmd.CommandText = NwdContract.DELETE_ARCHIVIST_SOURCE_EXCERPT_TAGGINGS_FOR_EXID;
+
+            cmd.Parameters.Add(new SQLiteParameter() { Value = sourceExcerptId });
+
+            cmd.ExecuteNonQuery();
         }
 
 

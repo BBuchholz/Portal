@@ -165,6 +165,7 @@ namespace NineWorldsDeep.Sqlite
 
         #endregion
 
+        #region queries (unsorted)
 
         public static string SYNERGY_V5_SELECT_ACTIVE_LISTS =
 
@@ -339,11 +340,13 @@ namespace NineWorldsDeep.Sqlite
             "VALUES " +
             "	(?, ?, ?, ?, ?);" ;
 
-        #endregion
+        #endregion // queries (unsorted)
 
-        #region "Archivist Subset"
+        #endregion // Synergy Subset
 
-        #region "naming constants"
+        #region Archivist Subset
+
+        #region naming constants
 
         //SourceType
         public static string TABLE_SOURCE_TYPE = "SourceType";
@@ -407,7 +410,7 @@ namespace NineWorldsDeep.Sqlite
         public static string TABLE_SOURCE_LOCATION_SUBSET_ENTRY = "SourceLocationSubsetEntry";
         #endregion
 
-        #region "queries"
+        #region queries (unsorted)
 
         internal static readonly string SELECT_SOURCE_EXCERPTS_FOR_SOURCE_ID_X =
 
@@ -851,9 +854,41 @@ namespace NineWorldsDeep.Sqlite
 
 
 
-        #endregion
-        
-        #endregion
+        #endregion // queries (unsorted)
+
+        #region queries (deletion)
+
+
+        internal static readonly string DELETE_ARCHIVIST_SOURCE_EXCERPT_ANNOTATIONS_FOR_EXID =
+
+            "DELETE FROM " + TABLE_SOURCE_EXCERPT_ANNOTATION + "  " +
+            "WHERE " + COLUMN_SOURCE_EXCERPT_ID + " = ? ; ";
+
+        internal static readonly string DELETE_ARCHIVIST_SOURCE_EXCERPT_TAGGINGS_FOR_EXID =
+
+            "DELETE FROM " + TABLE_SOURCE_EXCERPT_TAGGING + "  " +
+            "WHERE " + COLUMN_SOURCE_EXCERPT_ID + " = ? ; ";
+
+        internal static readonly string DELETE_ARCHIVIST_SOURCE_EXCERPTS_FOR_SOURCE_ID =
+
+            "DELETE FROM " + TABLE_SOURCE_EXCERPT + "  " +
+            "WHERE " + COLUMN_SOURCE_ID + " = ? ; ";
+
+        internal static readonly string DELETE_ARCHIVIST_SOURCE_LOCATION_SUBSET_ENTRIES_FOR_SOURCE_ID =
+
+            "DELETE FROM " + TABLE_SOURCE_LOCATION_SUBSET_ENTRY + "  " +
+            "WHERE " + COLUMN_SOURCE_ID + " = ? ; ";
+
+        internal static readonly string DELETE_ARCHIVIST_SOURCE_FOR_SOURCE_ID =
+
+            "DELETE FROM " + TABLE_SOURCE + "  " +
+            "WHERE " + COLUMN_SOURCE_ID + " = ? ; ";
+
+
+
+        #endregion // queries (deletion)
+
+        #endregion // Archivist Subset
 
         #region "Hive Subset"
 
@@ -965,15 +1000,10 @@ namespace NineWorldsDeep.Sqlite
             "JOIN MediaDevice md  " +
             "ON mdp." + COLUMN_MEDIA_DEVICE_ID + " = md." + COLUMN_MEDIA_DEVICE_ID + " " +
             "WHERE IFNULL(mtg." + COLUMN_MEDIA_TAGGING_TAGGED_AT + ", '') >= IFNULL(mtg." + COLUMN_MEDIA_TAGGING_UNTAGGED_AT + ", '') ";
+        
+
+        #endregion // Mnemosyne V5 Subset
 
 
-
-
-
-
-
-
-
-        #endregion
     }
 }

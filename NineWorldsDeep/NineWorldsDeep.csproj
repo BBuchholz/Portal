@@ -164,6 +164,7 @@
     <Compile Include="AudioBrowser\FileElementTagExtractionAction.cs" />
     <Compile Include="AudioBrowser\FileNameTagExtractor.cs" />
     <Compile Include="AudioBrowser\PlayAction.cs" />
+    <Compile Include="Tapestry\NodeUI\ISourceListDisplay.cs" />
     <Compile Include="V6Core\V6CoreConfig.cs" />
     <Compile Include="V6Core\RelayCommand.cs" />
     <Compile Include="V6Core\ViewModel\CommandViewModel.cs" />

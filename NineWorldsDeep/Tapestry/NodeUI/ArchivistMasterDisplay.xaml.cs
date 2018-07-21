@@ -27,7 +27,7 @@ namespace NineWorldsDeep.Tapestry.NodeUI
     /// <summary>
     /// Interaction logic for ArchivistMasterDisplay.xaml
     /// </summary>
-    public partial class ArchivistMasterDisplay : UserControl, IAsyncStatusResponsive
+    public partial class ArchivistMasterDisplay : UserControl, IAsyncStatusResponsive, ISourceListDisplay
     {
         #region fields
 
@@ -55,6 +55,8 @@ namespace NineWorldsDeep.Tapestry.NodeUI
             LoadSourceTypes();
             LoadOrderBy();
             RefreshSourceLocations();
+
+            Core.DataUpdateManager.Register(this);
         }
 
         #endregion
@@ -647,6 +649,11 @@ namespace NineWorldsDeep.Tapestry.NodeUI
                 current = VisualTreeHelper.GetParent(current);
             };
             return null;
+        }
+
+        public void RefreshSourcesFromDb()
+        {
+            LoadSources();
         }
 
         #endregion

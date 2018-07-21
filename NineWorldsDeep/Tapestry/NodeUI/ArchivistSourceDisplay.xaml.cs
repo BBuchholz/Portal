@@ -78,6 +78,12 @@ namespace NineWorldsDeep.Tapestry.NodeUI
                 //some components load a partial source node, need to refresh actual source from id as well
                 this.source = db.GetSourceById(this.source.SourceId);
 
+                if(this.source == null)
+                {
+                    UI.Display.Message("object not found, this should clear interface, implementation in progress");
+                    return;
+                }
+
                 db.LoadSourceExcerptsWithTaggedTags(this.source);
                 RefreshSourceAndExcerptsFromObject();
             }
@@ -683,6 +689,9 @@ namespace NineWorldsDeep.Tapestry.NodeUI
                     });
 
                     tbStatusSourceDetail.Text = "Purge Finished.";
+
+                    Core.DataUpdateManager.UpdateSourceExcerptDisplays();
+                    Core.DataUpdateManager.UpdateSourceListDisplays();
                 }
                 catch(Exception ex)
                 {
