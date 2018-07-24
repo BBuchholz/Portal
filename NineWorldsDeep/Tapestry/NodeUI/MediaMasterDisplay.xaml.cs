@@ -698,7 +698,7 @@ namespace NineWorldsDeep.Tapestry.NodeUI
                     filePathInList.Add(xmlTempFilePath);
 
                     //we can do this and all the hive folder magic will happen
-                    Hive.UtilsHive.CopyToAllActiveRoots(filePathInList);
+                    Hive.UtilsHive.CopyToAllActiveRootsExcludingStagingRoot(filePathInList);
 
                 });
 

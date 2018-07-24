@@ -223,7 +223,7 @@ namespace NineWorldsDeep.Tapestry.NodeUI
                     }
                     else
                     {
-                        Hive.UtilsHive.CopyToAllActiveRoots(filePathInList);
+                        Hive.UtilsHive.CopyToAllActiveRootsExcludingStagingRoot(filePathInList);
                     }
                     
                 });

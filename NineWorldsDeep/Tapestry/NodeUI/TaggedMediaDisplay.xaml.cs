@@ -452,7 +452,7 @@ namespace NineWorldsDeep.Tapestry.NodeUI
 
                     //just checked, we can do this and all the hive folder magic will happen
                     //UtilsHive.CopyToStaging(filePathInList, this);
-                    UtilsHive.CopyToAllActiveRoots(filePathInList);
+                    UtilsHive.CopyToAllActiveRootsExcludingStagingRoot(filePathInList);
                 }
                 catch (Exception ex)
                 {

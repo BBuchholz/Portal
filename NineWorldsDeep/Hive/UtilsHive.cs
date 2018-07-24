@@ -182,9 +182,12 @@ namespace NineWorldsDeep.Hive
             }
         }
 
-        public static void CopyToAllActiveRoots(IEnumerable<string> sourceFilePaths)
+        public static void CopyToAllActiveRootsExcludingStagingRoot(IEnumerable<string> sourceFilePaths)
         {
-            ProcessMovement(sourceFilePaths, GetActiveRoots());
+            List<HiveRoot> allButStagingRoot =
+                GetActiveRoots().Where(hr => !IsStagingRoot(hr)).ToList();
+
+            ProcessMovement(sourceFilePaths, allButStagingRoot);
         }
 
         public static void CopyToTestRoot(IEnumerable<string> sourceFilePaths)
