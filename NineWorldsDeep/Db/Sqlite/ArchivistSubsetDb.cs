@@ -220,7 +220,12 @@ namespace NineWorldsDeep.Db.Sqlite
                 int subsetId = EnsureSourceLocationSubset(locationId, slse.LocationSubset, cmd);
 
                 //ensure entry
-                EnsureSourceLocationSubsetEntry(sourceId, subsetId, slse.LocationSubsetEntry, cmd);
+                int entryId = EnsureSourceLocationSubsetEntry(sourceId, subsetId, slse.LocationSubsetEntry, cmd);
+
+                DateTime? verifiedPresent = TimeStamp.YYYY_MM_DD_HH_MM_SS_UTC_ToDateTime(slse.VerifiedPresent);
+                DateTime? verifiedMissing = TimeStamp.YYYY_MM_DD_HH_MM_SS_UTC_ToDateTime(slse.VerifiedMissing);
+                
+                UpdateSourceLocationSubsetEntryTimeStamps(entryId, verifiedPresent, verifiedMissing, cmd);
             }
 
             foreach(var se in source.Excerpts)
