@@ -44,7 +44,8 @@
             <CheckBox x:Name="chkMultiFilter" 
                       IsChecked="False" 
                       Margin="5" 
-                      Height="15" 
+                      Height="15"
+                      ToolTip="Checking this will allow the tag filter box at the top to support multiple, comma seperated tag filters"
                       VerticalAlignment="Center"
                       HorizontalAlignment="Center">MultiFilter</CheckBox>
             
