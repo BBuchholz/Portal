@@ -109,6 +109,10 @@
                              x:Name="tiLurianicTreeOfLife">
                         <hiero:LurianicTreeOfLife x:Name="lurianicTreeOfLifeInstance"/>
                     </TabItem>
+                    <TabItem Header="PreFall"
+                             x:Name="tiTreeOfLifePreFall">
+                        <hiero:TreeOfLifePreFall x:Name="treeOfLifePreFallInstance"/>
+                    </TabItem>
 
                 </TabControl>
 

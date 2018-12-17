@@ -164,6 +164,9 @@
     <Compile Include="AudioBrowser\FileElementTagExtractionAction.cs" />
     <Compile Include="AudioBrowser\FileNameTagExtractor.cs" />
     <Compile Include="AudioBrowser\PlayAction.cs" />
+    <Compile Include="Hierophant\TreeOfLifePreFall.xaml.cs">
+      <DependentUpon>TreeOfLifePreFall.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Tapestry\NodeUI\ISourceListDisplay.cs" />
     <Compile Include="V6Core\V6CoreConfig.cs" />
     <Compile Include="V6Core\RelayCommand.cs" />
@@ -710,6 +713,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Hierophant\SemanticMatrix.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Hierophant\TreeOfLifePreFall.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

@@ -32,6 +32,7 @@ namespace NineWorldsDeep.Tapestry.NodeUI
             InitializeComponent();
             hierophantTreeOfLifeInstance.VertexClicked += TreeOfLife_VertexClicked;
             lurianicTreeOfLifeInstance.VertexClicked += TreeOfLife_VertexClicked;
+            treeOfLifePreFallInstance.VertexClicked += TreeOfLife_VertexClicked;
             semanticMatrix.SemanticMatrixGroupSelected += SemanticMatrix_GroupSelected;
         }
 

@@ -25,7 +25,14 @@ namespace NineWorldsDeep.Tapestry.Nodes
 
         public override string GetShortName()
         {
-            return Coupling.Vertex.NameId;
+            if (Coupling != null && Coupling.Vertex != null && Coupling.Vertex.NameId != null)
+            {
+                return Coupling.Vertex.NameId;
+            }
+            else
+            {
+                return "NULL VERTEX";
+            }
         }
 
         public override bool Parallels(TapestryNode nd)
